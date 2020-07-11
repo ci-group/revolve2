@@ -1,6 +1,6 @@
 import unittest
 
-from pyrevolve.population_ecology.age import Age
+from pyrevolve.ecology import Age
 
 
 class TestAgentIdentifier(unittest.TestCase):

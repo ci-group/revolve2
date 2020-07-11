@@ -1,0 +1,3 @@
+
+class Initialisation:
+    pass

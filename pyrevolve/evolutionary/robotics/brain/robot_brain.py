@@ -1,0 +1,2 @@
+class RobotBrain(object):
+    pass

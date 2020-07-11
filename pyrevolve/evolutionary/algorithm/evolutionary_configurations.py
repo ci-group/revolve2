@@ -35,7 +35,7 @@ class EvolutionaryConfiguration(Configuration):
         self.mutation: Mutation = mutation
         self.mutation_probability: float = mutation_probability
         self.parent_selection: ParentSelection = parent_selection
-        self.survival_selection: SurvivorSelection = survivor_selection
+        self.survivor_selection: SurvivorSelection = survivor_selection
         self.population_size: int = population_size
         self.initialisation: Initialisation = initialisation
         self.termination_condition: TerminationCondition = termination_condition

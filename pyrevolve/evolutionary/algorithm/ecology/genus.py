@@ -1,6 +1,6 @@
 from typing import List
 
-from pyrevolve.ecology import PopulationManagement
+from pyrevolve.evolutionary.algorithm.ecology import PopulationManagement
 
 
 class Genus:

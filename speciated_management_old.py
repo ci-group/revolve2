@@ -2,10 +2,10 @@ from typing import List
 
 from pyrevolve.evolutionary.robotics import Agents
 from pyrevolve.patterns.configurations import SpeciationConfiguration
-from pyrevolve.ecology import Population
-from pyrevolve.ecology import PopulationManagement
+from pyrevolve.evolutionary.algorithm.ecology import Population
+from pyrevolve.evolutionary.algorithm.ecology import PopulationManagement
 from pyrevolve.evolutionary.algorithm import Selection
-from pyrevolve.ecology import Genus
+from pyrevolve.evolutionary.algorithm.ecology import Genus
 
 
 class SpeciatedManagement(PopulationManagement):

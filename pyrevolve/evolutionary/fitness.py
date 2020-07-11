@@ -1,7 +1,7 @@
 import math
 from abc import ABC, abstractmethod
 
-from pyrevolve.evolutionary.things import PerformanceMeasures
+from pyrevolve.evolutionary.things.performance_measures import PerformanceMeasures
 
 
 class Fitness(ABC):

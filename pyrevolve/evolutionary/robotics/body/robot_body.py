@@ -1,2 +1,0 @@
-class RobotBody(object):
-    pass

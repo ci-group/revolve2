@@ -1,7 +1,7 @@
 from typing import List
 
 from pyrevolve.evolutionary.robotics import Agents
-from pyrevolve.ecology import Population
+from pyrevolve.evolutionary.algorithm.ecology import Population
 
 
 class Genus:

@@ -1,48 +1,44 @@
 from typing import List
 
-from pyrevolve.evolutionary.robotics import Agents
-from pyrevolve.evolutionary.robotics import BirthClinic
+from pyrevolve.developmental.developmental_learning import DevelopmentalLearner
+from pyrevolve.evolutionary.algorithm.ecology.population import Population
+from pyrevolve.evolutionary.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
+from pyrevolve.evolutionary.things.birth_clinic import BirthClinic
 from pyrevolve.evolutionary.things.environment import Environment
-from pyrevolve.patterns.configurations import EvoSphereConfiguration
-from pyrevolve.ecology import Population
-from pyrevolve.ecology import PopulationEcology
+from pyrevolve.shared.configurations import EvoSphereConfiguration
+
 from pyrevolve.simulator.simulator import Simulator
 
 
 class EvoSphere:
 
-    def __init__(self, population_ecology: PopulationEcology, environments: List[Environment] = []):
+    def __init__(self,
+                 birth_clinic: BirthClinic,
+                 evolutionary_algorithm: EvolutionaryAlgorithm,
+                 developmental_learner: DevelopmentalLearner,
+                 environments: List[Environment],
+                 simulator: Simulator):
         self.configuration = EvoSphereConfiguration()
 
-        self.birth_clinic: BirthClinic = BirthClinic()
-        self.population_ecology: PopulationEcology = population_ecology
+        self.birth_clinic: BirthClinic = birth_clinic
+
+        self.evolutionary_algorithm: EvolutionaryAlgorithm = evolutionary_algorithm
+        self.developmental_leaner: DevelopmentalLearner = developmental_learner
 
         self.environments: List[Environment] = environments
 
-        self.simulator = Simulator()
-
-    def run(self):
-
-        self.population_ecology.load()
-
-        for _ in range(self.configuration.number_of_generations):
-
-            agents: Agents = self.birth_clinic.create_agents()
-
-            for environment in self.environments:
-                self.population_ecology.create(agents, environment)
-                for population in self.population_ecology.populations():
-                    environment.population = population
-                    self.simulator.evaluate(environment)
-
-            self.population_ecology.select()
-
-            #TODO evolve
-            self.population_ecology.reproduce()
-
-            self.population_ecology.evolve()
-
-            self.population_ecology.export()
+        self.simulator = simulator
 
     def evolve(self, populations: List[Population]):
         pass
+
+
+class DefaultEvoSphere(EvoSphere):
+
+    def __init__(self,
+                 birth_clinic: BirthClinic = BirthClinic(),
+                 evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(),
+                 developmental_learner: DevelopmentalLearner = DevelopmentalLearner(),
+                 environments: List[Environment] = [],
+                 simulator: Simulator = Simulator()):
+        super().__init__(birth_clinic, evolutionary_algorithm, developmental_learner, environments, simulator)

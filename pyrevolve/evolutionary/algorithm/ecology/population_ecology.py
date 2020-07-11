@@ -2,11 +2,10 @@ import os
 import pickle
 from typing import List
 
-from pyrevolve.evolutionary.robotics import Agents
-from pyrevolve.evolutionary.things.environment import Environment
+from pyrevolve.evolutionary.agents import Agents
 from pyrevolve.shared.abstract.memento import Memento
-from pyrevolve.ecology import Population
-from pyrevolve.ecology import PopulationManagement
+from pyrevolve.evolutionary.algorithm.ecology import Population
+from pyrevolve.evolutionary.algorithm.ecology import PopulationManagement
 
 
 class PopulationEcology(Memento):
@@ -15,11 +14,11 @@ class PopulationEcology(Memento):
         super().__init__()
         self.management: PopulationManagement = population_management
 
-    def create(self, agents: Agents, environment: Environment):
+    def create(self, agents: Agents):
         self.management.create(agents)
 
-    def select(self):
-        self.management.select()
+    def select(self, algorithm_function):
+        self.management.select(algorithm_function)
 
     def speciate(self):
         self.management.speciate()

@@ -2,10 +2,10 @@ from typing import List
 
 from pyrevolve.evolutionary.robotics import Agents
 from pyrevolve.shared.configurations import SpeciationConfiguration
-from pyrevolve.ecology import Population
-from pyrevolve.ecology import PopulationManagement
+from pyrevolve.evolutionary.algorithm.ecology.population import Population
+from pyrevolve.evolutionary.algorithm.ecology.population_management import PopulationManagement
 from pyrevolve.evolutionary.algorithm import Selection
-from pyrevolve.ecology import Genus
+from pyrevolve.evolutionary.algorithm.ecology import Genus
 
 
 class SpeciatedManagement(PopulationManagement):
@@ -26,6 +26,18 @@ class SpeciatedManagement(PopulationManagement):
 
         return populations
 
+    def select(self, algorithm_function):
+        if self.genus is None:
+            raise Exception("Genus is uninitialized")
+
+        for species in self.genus.species:
+            species.select(algorithm_function)
+
+    def speciate(self):
+        agents: Agents = self.agents()
+
+        self.create(agents)
+
     def create(self, agents: Agents):
         self.genus = Genus(self.identifier.increment())
 
@@ -38,16 +50,3 @@ class SpeciatedManagement(PopulationManagement):
         if not inserted:
             population_management = PopulationManagement(self.selection)
             self.genus.add(population_management)
-
-    def select(self):
-        if self.genus is None:
-            raise Exception("Genus is uninitialized")
-
-        for specie in self.genus.species:
-            specie.select()
-
-    def speciate(self):
-        agents: Agents = self.agents()
-
-        self.create(agents)
-

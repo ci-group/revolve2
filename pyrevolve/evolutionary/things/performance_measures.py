@@ -1,16 +1,28 @@
 import random
+import string
+from typing import Dict, List
 
 
 class PerformanceMeasures:
 
     def __init__(self):
-        self.velocity: float        = 0.0
-        self.displacement: float    = 0.0
-        self.rotation: float        = 0.0
-        self.balance: float         = 0.0
+        self.measures: Dict[string, float] = {'velocity': 0.0, 'displacement': 0.0, 'rotation': 0.0, 'balance': 0.0}
 
     def test(self):
-        self.velocity       = random.uniform(0.0, 1.0)
-        self.displacement   = random.uniform(0.0, 1.0)
-        self.rotation       = random.uniform(0.0, 1.0)
-        self.balance        = random.uniform(0.0, 1.0)
+        for key in self.measures.keys():
+            self.measures[key] = random.uniform(0.0, 1.0)
+
+    @staticmethod   # TODO List typing
+    def normalize(measures: List):
+        performance_measures: PerformanceMeasures = PerformanceMeasures()
+
+        # add_measures
+        for performance_measure in measures:
+            for (key, value) in performance_measure.measures.items():
+                performance_measures.measures[key] += value
+
+        # normalize measures
+        for key in performance_measures.measures.keys():
+            performance_measures[key] /= len(measures)
+
+        return performance_measures

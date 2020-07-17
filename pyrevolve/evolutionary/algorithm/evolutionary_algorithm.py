@@ -1,54 +1,48 @@
+
 from pyrevolve.evolutionary.algorithm.ecology.population_ecology import PopulationEcology
 from pyrevolve.evolutionary.algorithm.evolutionary_configurations import EvolutionaryConfiguration
+from pyrevolve.evolutionary.algorithm.genome.operators.mutation.mutation_operator import MutationOperator
+from pyrevolve.evolutionary.algorithm.genome.operators.recombination.recombination_operator import RecombinationOperator
+from pyrevolve.evolutionary.algorithm.initialisation import Initialisation
+from pyrevolve.evolutionary.algorithm.selection.selection import ParentSelection, SurvivorSelection
+from pyrevolve.evolutionary.algorithm.special_features import SpecialFeatures
+from pyrevolve.evolutionary.algorithm.termination_condition import TerminationCondition
 
 
 class EvolutionaryAlgorithm:
 
-    def __init__(self, configuration: EvolutionaryConfiguration, population_ecology: PopulationEcology):
+    def __init__(self, configuration: EvolutionaryConfiguration):
         self.configuration: EvolutionaryConfiguration = configuration
-        self.population_ecology: PopulationEcology = population_ecology
 
-        self.parent_selection = self.configuration.parent_selection
-        self.survivor_selection = self.configuration.survivor_selection
+        self.parent_selection: ParentSelection              = self.configuration.parent_selection
+        self.survivor_selection: SurvivorSelection          = self.configuration.survivor_selection
 
-        self.recombination = self.configuration.recombination
-        self.mutation = self.configuration.mutation
+        self.recombination: RecombinationOperator           = self.configuration.recombination
+        self.mutation: MutationOperator                     = self.configuration.mutation
 
-        self.initialisation = self.configuration.initialisation
-        self.termination_condition = self.configuration.termination_condition
-        self.special_features = self.configuration.special_features
+        self.initialisation: Initialisation                 = self.configuration.initialisation
+        self.termination_condition: TerminationCondition    = self.configuration.termination_condition
+        self.special_features: SpecialFeatures              = self.configuration.special_features
 
-    def run(self):
+    def initialize(self, population):
+        self.initialisation.algorithm(population)
 
-        self.population_ecology.load()
+    def run(self, population_ecology: PopulationEcology):
 
-        for _ in range(self.configuration.number_of_generations):
+        if self.termination_condition:
+            return False
 
-            agents: Agents = self.birth_clinic.create_agents()
+        for population in population_ecology.populations():
 
-            for environment in self.environments:
-                self.population_ecology.create(agents, environment)
-                for population in self.population_ecology.populations():
-                    environment.population = population
-                    self.simulator.evaluate(environment)
+            self.parent_selection.algorithm(population)
 
-            self.population_ecology.select()
+            self.recombination.algorithm(population)
 
-            #TODO evolve
-            self.population_ecology.reproduce()
+            self.mutation.algorithm(population)
 
-            self.population_ecology.evolve()
+        return True
 
-            self.population_ecology.export()
+    def survival(self, population_ecology: PopulationEcology):
+        for index, population in enumerate(population_ecology.populations()):
+            self.survivor_selection.algorithm(population)
 
-    def select_parents(self):
-        self.population_ecology.select(self.parent_selection.algorithm)
-
-    def select_survivors(self):
-        self.population_ecology.select(self.survivor_selection.algorithm)
-
-    def recombine_offspring(self):
-        self.population_ecology.variate(self.recombination.algorithm)
-
-    def mutate_offspring(self):
-        self.population_ecology.variate(self.mutation.algorithm)

@@ -31,3 +31,4 @@ class EvoSphereConfiguration(Configuration):
     def __init__(self):
         super().__init__("evosphere.config")
         self.number_of_environments = 1
+        self.number_of_generations = 50

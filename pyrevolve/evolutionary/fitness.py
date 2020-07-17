@@ -1,6 +1,6 @@
 import math
 from abc import ABC, abstractmethod
-
+import random
 from pyrevolve.evolutionary.things.performance_measures import PerformanceMeasures
 
 
@@ -43,7 +43,7 @@ class TestFitness(Fitness):
         super().__init__()
 
     def calculate(self):
-        pass
+        return random.random()
 
 
 class DisplacementFitness(Fitness):

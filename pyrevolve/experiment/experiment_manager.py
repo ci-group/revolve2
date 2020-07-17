@@ -1,7 +1,7 @@
 import string
 
 from pyrevolve.experiment.folder_manager import FolderManager
-from pyrevolve.patterns.abstract.singleton import Singleton
+from pyrevolve.shared.abstract.singleton import Singleton
 
 
 class ExperimentManager(Singleton, FolderManager):

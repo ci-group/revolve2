@@ -33,6 +33,16 @@ class SpeciatedManagement(PopulationManagement):
         for species in self.genus.species:
             species.select(algorithm_function)
 
+
+    def agents(self) -> Agents:
+        all_agents: Agents = Agents()
+
+        for population in self.populations():
+            for agent in population.parents:
+                all_agents.add(agent)
+
+        return all_agents
+
     def speciate(self):
         agents: Agents = self.agents()
 

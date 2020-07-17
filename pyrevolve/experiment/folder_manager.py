@@ -8,9 +8,6 @@ class FolderManager:
     project_path: string = rootpath.detect() #os.path.dirname(os.path.abspath(__file__))
 
     def __init__(self, experiment_name: string):
-        self.initialize(experiment_name)
-
-    def initialize(self, experiment_name: string = "test"):
         self.resources_path = os.path.join(self.project_path, "resources")
         self.log_path = os.path.join(self.project_path, "log")
         self.experiment_path = self.create_folder(self.log_path, experiment_name)
@@ -21,7 +18,8 @@ class FolderManager:
         self.objects_path = os.path.join(self.experiment_path, "objects")
         self.results_path = os.path.join(self.experiment_path, "results")
 
-    def create_folder(self, path, experiment_name):
+    @staticmethod
+    def create_folder(path, experiment_name):
         experiment_path = os.path.join(path, experiment_name)
         if os.path.exists(experiment_name):
             os.mkdir(experiment_name)

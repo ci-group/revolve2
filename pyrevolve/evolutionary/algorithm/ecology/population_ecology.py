@@ -2,10 +2,10 @@ import os
 import pickle
 from typing import List
 
-from pyrevolve.evolutionary.agents import Agents
+from pyrevolve.evolutionary.agents import Agents, Offspring
 from pyrevolve.shared.abstract.memento import Memento
-from pyrevolve.evolutionary.algorithm.ecology import Population
-from pyrevolve.evolutionary.algorithm.ecology import PopulationManagement
+from pyrevolve.evolutionary.algorithm.ecology.population import Population
+from pyrevolve.evolutionary.algorithm.ecology.population_management import PopulationManagement
 
 
 class PopulationEcology(Memento):
@@ -25,6 +25,14 @@ class PopulationEcology(Memento):
 
     def populations(self) -> List[Population]:
         return self.management.populations()
+
+    def offsprings(self) -> List[Offspring]:
+        all_offspring: List[Offspring] = []
+
+        for population in self.populations():
+            all_offspring.append(population.offspring)
+
+        return all_offspring
 
     def export(self):
         with open(self.population_memento_path, "wb") as f:

@@ -1,6 +1,6 @@
 from pyrevolve.evolutionary.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
-from pyrevolve.evolutionary.algorithm.genome.operators.mutation.mutation import Mutation
-from pyrevolve.evolutionary.algorithm.genome.operators.recombination.recombination import Recombination
+from pyrevolve.evolutionary.algorithm.genome.operators.mutation.mutation_operator import MutationOperator
+from pyrevolve.evolutionary.algorithm.genome.operators.recombination.recombination_operator import RecombinationOperator
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation
 from pyrevolve.evolutionary.algorithm.genome.representations.direct.binary_representation import BinaryRepresentation
 from pyrevolve.evolutionary.algorithm.genome.representations.direct.real_valued_representation import \
@@ -19,8 +19,8 @@ class EvolutionaryConfiguration(Configuration):
 
     def __init__(self,
                  representation: Representation,
-                 recombination: Recombination,
-                 mutation: Mutation,
+                 recombination: RecombinationOperator,
+                 mutation: MutationOperator,
                  mutation_probability: float,
                  parent_selection: ParentSelection,
                  survivor_selection: SurvivorSelection,
@@ -31,8 +31,8 @@ class EvolutionaryConfiguration(Configuration):
 
         super().__init__("algorithm.config")
         self.representation: Representation = representation
-        self.recombination: Recombination = recombination
-        self.mutation: Mutation = mutation
+        self.recombination: RecombinationOperator = recombination
+        self.mutation: MutationOperator = mutation
         self.mutation_probability: float = mutation_probability
         self.parent_selection: ParentSelection = parent_selection
         self.survivor_selection: SurvivorSelection = survivor_selection
@@ -83,8 +83,8 @@ class EvolutionaryProgrammingConfiguration(EvolutionaryConfiguration):
 
     def __init__(self,
                  representation: Representation = RealValuedRepresentation(),
-                 recombination: Recombination = None,
-                 mutation: Mutation = GaussianMutation(),
+                 recombination: RecombinationOperator = None,
+                 mutation: MutationOperator = GaussianMutation(),
                  mutation_probability: float = 0.7,
                  parent_selection: ParentSelection = DeterministicSelection(),
                  survivor_selection: SurvivorSelection = ProbabilisticSelection(),
@@ -101,8 +101,8 @@ class GeneticProgrammingConfiguration(EvolutionaryConfiguration):
 
     def __init__(self,
                  representation: Representation = TreeRepresentation(),
-                 recombination: Recombination = SubtreesRecombination(),
-                 mutation: Mutation = RandomTreeMutation(),
+                 recombination: RecombinationOperator = SubtreesRecombination(),
+                 mutation: MutationOperator = RandomTreeMutation(),
                  mutation_probability: float = 0.7,
                  parent_selection: ParentSelection = ProportionalSelection("fitness"),
                  survivor_selection: SurvivorSelection = GenerationalSelection(),
@@ -119,8 +119,8 @@ class DifferentialEvolutionConfiguration(EvolutionaryConfiguration):
 
     def __init__(self,
                  representation: Representation = RealValuedRepresentation(),
-                 recombination: Recombination = UniformCrossover(),
-                 mutation: Mutation = DifferentialMutation(),
+                 recombination: RecombinationOperator = UniformCrossover(),
+                 mutation: MutationOperator = DifferentialMutation(),
                  mutation_probability: float = 0.7,
                  parent_selection: ParentSelection = UniformRandomSelection(),
                  survivor_selection: SurvivorSelection = ElitistReplacement(),

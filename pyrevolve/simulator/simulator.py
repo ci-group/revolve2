@@ -1,6 +1,6 @@
-from pyrevolve.evolutionary.robotics import Agent
+from pyrevolve.evolutionary.agent import Agent
 from pyrevolve.evolutionary.things.environment import Environment
-from pyrevolve.evolutionary.things import PerformanceMeasures
+from pyrevolve.evolutionary.things.performance_measures import PerformanceMeasures
 
 
 class Simulator:
@@ -9,7 +9,7 @@ class Simulator:
         pass
 
     def evaluate(self, environment: Environment):
-        for agent in environment.population.agents.agents:
+        for agent in environment.population.parents.parents:
             agent.fitness.process(self.simulate(agent))
 
     def simulate(self, agent: Agent) -> PerformanceMeasures:

@@ -1,4 +1,4 @@
-from pyrevolve.evolutionary.agent import Agent
+from pyrevolve.evolutionary.individual import Agent
 from pyrevolve.evolutionary.things.environment import Environment
 from pyrevolve.evolutionary.things.performance_measures import PerformanceMeasures
 

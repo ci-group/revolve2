@@ -1,15 +1,29 @@
-from pyrevolve.patterns.abstract.singleton import Singleton
+from pyrevolve.shared.abstract.singleton import Singleton
+
 
 class SequentialIdentifier:
 
     def __init__(self):
-        super().__init__()
         self.index = 0
 
-    def current(self):
+    def id(self):
+        self.index += 1
         return self.index
 
-    def increment(self):
-        self.index += 1
-        return self.current()
 
+class AgentIdentifier(SequentialIdentifier, metaclass=Singleton):
+
+    def __init__(self):
+        super().__init__()
+
+
+class PopulationIdentifier(SequentialIdentifier, metaclass=Singleton):
+
+    def __init__(self):
+        super().__init__()
+
+
+class GenusIdentifier(SequentialIdentifier, metaclass=Singleton):
+
+    def __init__(self):
+        super().__init__()

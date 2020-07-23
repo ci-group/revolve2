@@ -1,17 +1,19 @@
-from random import randint, random
+import random
+from typing import List
 
-from pyrevolve.evolutionary.algorithm.selection import ParentSelection
-from pyrevolve.evolutionary.agent import Agent
-from pyrevolve.evolutionary.agents import Agents
+import numpy as np
+
+from pyrevolve.evolutionary import Individual
+from pyrevolve.evolutionary.algorithm.selection.selection import ParentSelection
 
 
-class RandomSelection(ParentSelection):
+class RandomParentSelection(ParentSelection):
 
     def __init__(self):
         super().__init__()
 
-    def algorithm(self, agents: Agents) -> Agent:
-        return agents[randint(0, len(agents) - 1)]
+    def algorithm(self, individuals: List[Individual]) -> Individual:
+        return random.choice(individuals)
 
 
 class TournamentSelection(ParentSelection):
@@ -19,33 +21,16 @@ class TournamentSelection(ParentSelection):
     def __init__(self):
         super().__init__()
 
-    def algorithm(self, agents: Agents) -> Agent:
-        best_agent: Agent = None
-
-        for _ in range(self.configuration.tournament_size):
-            agent = random.choice(agents)
-            # probability to reconsider choice.
-
-            if (best_agent is None) or (agent.fitness > best_agent.fitness):
-                best_agent = agent
-
-        return best_agent
+    def algorithm(self, individuals: List[Individual]) -> Individual:
+        return max(np.random.choice(individuals, self.configuration.tournament_size), key=lambda x: x.fitness)
 
 
 class RouletteWheelSelection(ParentSelection):
 
-    def __init__(self):
-        super().__init__()
+    def algorithm(self, individuals: List[Individual]) -> Individual:
+        #TODO simplify
+        return random.choices(individuals, weights=[agent.fitness.fitness for agent in individuals])[0]
 
-    def algorithm(self, agents: Agents) -> Agent:
-        best_agent: Agent = None
 
-        for _ in range(self.configuration.tournament_size):
-            agent = random.choice(agents)
-            # probability to reconsider choice.
-
-            if (best_agent is None) or (agent.fitness > best_agent.fitness):
-                best_agent = agent
-
-        return best_agent
-
+class NullParentSelection(RandomParentSelection):
+    pass

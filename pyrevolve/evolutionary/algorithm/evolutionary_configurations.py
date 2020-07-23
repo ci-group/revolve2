@@ -1,4 +1,3 @@
-from pyrevolve.evolutionary.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
 from pyrevolve.evolutionary.algorithm.genome.operators.mutation.mutation_operator import MutationOperator
 from pyrevolve.evolutionary.algorithm.genome.operators.recombination.recombination_operator import RecombinationOperator
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation
@@ -6,16 +5,16 @@ from pyrevolve.evolutionary.algorithm.genome.representations.direct.binary_repre
 from pyrevolve.evolutionary.algorithm.genome.representations.direct.real_valued_representation import \
     RealValuedRepresentation
 from pyrevolve.evolutionary.algorithm.genome.representations.tree_representation import TreeRepresentation
-from pyrevolve.evolutionary.algorithm.initialisation import Initialisation
+from pyrevolve.evolutionary.algorithm.conditions.initialisation import Initialisation
 from pyrevolve.evolutionary.algorithm.selection.parent_selection import RouletteWheelSelection
 from pyrevolve.evolutionary.algorithm.selection.selection import ParentSelection, SurvivorSelection
-from pyrevolve.evolutionary.algorithm.selection.survivor_selection import Elitism
-from pyrevolve.evolutionary.algorithm.special_features import SpecialFeatures
-from pyrevolve.evolutionary.algorithm.termination_condition import TerminationCondition
+from pyrevolve.evolutionary.algorithm.selection.survivor_selection import ElitismSelection
+from pyrevolve.evolutionary.algorithm.conditions.special_features import SpecialFeatures
+from pyrevolve.evolutionary.algorithm.conditions.termination_condition import TerminationCondition
 from pyrevolve.shared.configuration import Configuration
 
 
-class EvolutionaryConfiguration(Configuration):
+class EvolutionConfiguration(Configuration):
 
     def __init__(self,
                  representation: Representation,
@@ -42,7 +41,7 @@ class EvolutionaryConfiguration(Configuration):
         self.special_features: SpecialFeatures = special_features
 
 
-class GeneticAlgorithmConfiguration(EvolutionaryConfiguration):
+class GeneticAlgorithmConfiguration(EvolutionConfiguration):
 
     def __init__(self,
                  representation: BinaryRepresentation = BinaryRepresentation(),
@@ -61,7 +60,7 @@ class GeneticAlgorithmConfiguration(EvolutionaryConfiguration):
             initialisation, termination_condition, special_features)
 
 
-class EvolutionaryStrategiesConfiguration(EvolutionaryConfiguration):
+class EvolutionaryStrategiesConfiguration(EvolutionConfiguration):
 
     def __init__(self,
                  representation=RealValuedRepresentation(),
@@ -69,7 +68,7 @@ class EvolutionaryStrategiesConfiguration(EvolutionaryConfiguration):
                  mutation=GaussianMutation(),
                  mutation_probability: float = 0.7,
                  parent_selection : ParentSelection = UniformRandomSelection(),
-                 survivor_selection: SurvivorSelection = Elitism(),
+                 survivor_selection: SurvivorSelection = ElitismSelection(),
                  population_size: int = 20,
                  initialisation: Initialisation = Initialisation(),
                  termination_condition: TerminationCondition = TerminationCondition(),
@@ -79,7 +78,8 @@ class EvolutionaryStrategiesConfiguration(EvolutionaryConfiguration):
             parent_selection, survivor_selection, population_size,
             initialisation, termination_condition, special_features)
 
-class EvolutionaryProgrammingConfiguration(EvolutionaryConfiguration):
+
+class EvolutionaryProgrammingConfiguration(EvolutionConfiguration):
 
     def __init__(self,
                  representation: Representation = RealValuedRepresentation(),
@@ -97,7 +97,8 @@ class EvolutionaryProgrammingConfiguration(EvolutionaryConfiguration):
             parent_selection, survivor_selection, population_size,
             initialisation, termination_condition, special_features)
 
-class GeneticProgrammingConfiguration(EvolutionaryConfiguration):
+
+class GeneticProgrammingConfiguration(EvolutionConfiguration):
 
     def __init__(self,
                  representation: Representation = TreeRepresentation(),
@@ -115,7 +116,8 @@ class GeneticProgrammingConfiguration(EvolutionaryConfiguration):
             parent_selection, survivor_selection, population_size,
             initialisation, termination_condition, special_features)
 
-class DifferentialEvolutionConfiguration(EvolutionaryConfiguration):
+
+class DifferentialEvolutionConfiguration(EvolutionConfiguration):
 
     def __init__(self,
                  representation: Representation = RealValuedRepresentation(),
@@ -123,7 +125,7 @@ class DifferentialEvolutionConfiguration(EvolutionaryConfiguration):
                  mutation: MutationOperator = DifferentialMutation(),
                  mutation_probability: float = 0.7,
                  parent_selection: ParentSelection = UniformRandomSelection(),
-                 survivor_selection: SurvivorSelection = ElitistReplacement(),
+                 survivor_selection: SurvivorSelection = ElitismSelection(),
                  population_size: int = 20,
                  initialisation: Initialisation = Initialisation(),
                  termination_condition: TerminationCondition = TerminationCondition(),
@@ -133,6 +135,7 @@ class DifferentialEvolutionConfiguration(EvolutionaryConfiguration):
             parent_selection, survivor_selection, population_size,
             initialisation, termination_condition, special_features)
 
-class ParticleSwarmOptimisationConfiguration(EvolutionaryConfiguration):
+
+class ParticleSwarmOptimisationConfiguration(EvolutionConfiguration):
     def __init__(self):
         super().__init__()

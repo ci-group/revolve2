@@ -1,6 +1,6 @@
 import unittest
 
-from pyrevolve.evolutionary.robotics import TestFitness
+from pyrevolve.evolutionary.fitness import TestFitness
 
 
 class TestAgentFitness(unittest.TestCase):

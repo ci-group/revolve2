@@ -22,4 +22,3 @@ class Configuration:
 
     def read(self):
         self.config = self.config_parser.read(self.path)
-

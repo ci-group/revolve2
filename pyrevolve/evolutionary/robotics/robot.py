@@ -1,4 +1,4 @@
-from pyrevolve.evolutionary.agent import Agent
+from pyrevolve.evolutionary.individual import Agent
 from pyrevolve.evolutionary.fitness import Fitness
 from pyrevolve.evolutionary.robotics.morphology.body.body import Body
 from pyrevolve.evolutionary.robotics.morphology.brain.brain import Brain

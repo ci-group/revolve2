@@ -2,7 +2,7 @@ import os
 import string
 
 from pyrevolve.experiment.experiment_manager import ExperimentManager
-from pyrevolve.evolutionary.algorithm.ecology.population import Population
+from pyrevolve.evolutionary.ecology.population import Population
 
 
 class Environment:

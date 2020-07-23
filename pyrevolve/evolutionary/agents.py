@@ -1,74 +1,58 @@
-from typing import List, Iterator
+import random
+from typing import List
+import numpy as np
 
-from pyrevolve.evolutionary.agent import Agent, EvolutionaryAgent
+from pyrevolve.evolutionary.individual import Individual, TestIndividual
 from pyrevolve.evolutionary.fitness import Fitness
+from pyrevolve.shared.abstract.iterator import Iterator
 
 
 class Agents(Iterator):
 
-    def __init__(self, agents: List[Agent] = []):
-        self.agents: List[Agent] = agents
-        self.index = 0
-
-    def add(self, agent: Agent):
-        self.agents.append(agent)
-
-    def remove(self, agent: Agent):
-        self.agents.remove(agent)
-
-    def __len__(self):
-        return len(self.agents)
-
-    def __getitem__(self, index):
-        return self.agents[index]
-
-    def __iter__(self):
-        self.index = 0
-        return self
-
-    def __next__(self) -> Agent:
-        try:
-            agent = self.agents[self.index]
-            self.index += 1
-        except IndexError:
-            raise StopIteration()
-
-        return agent
-
-
-class EvolutionaryAgents(Agents):
-
-    def __init__(self, agents: List[EvolutionaryAgent] = []):
+    def __init__(self, agents: List[Individual] = []):
         super().__init__(agents)
-        self.agents: List[EvolutionaryAgent] = agents
+
+    def add(self, agent: Individual):
+        super().add(agent)
+
+    def remove(self, agent: Individual):
+        super().remove(agent)
+
+    def compound(self, agents):
+        return self.collection.extend(agents.collection)
 
     def get_best(self):
-        best_agent = None
-        best_fitness = Fitness.worst()
+        best_agent: Individual = None
+        best_fitness: Fitness = Fitness.worst()
 
-        for agent in self.agents:
-            if best_fitness > agent.fitness:
-                best_fitness = agent.fitness
-                best_agent = agent
+        for evolutionary_agent in self:
+            if best_fitness > evolutionary_agent.fitness:
+                best_fitness = evolutionary_agent.fitness
+                best_agent = evolutionary_agent
 
         return best_agent
 
     def get_worst(self):
-        worst_agent = None
-        worst_fitness = Fitness.best()
+        worst_agent: Individual = None
+        worst_fitness: Fitness = Fitness.best()
 
-        for agent in self.agents:
+        for agent in self:
             if worst_fitness < agent.fitness:
                 worst_fitness = agent.fitness
                 worst_agent = agent
 
         return worst_agent
 
+    def average_fitness(self):
+        # TODO individual.fitness
+        return np.mean([individual.fitness.fitness if individual.fitness is not None else 0.0 for individual in self])
 
-class Offspring(EvolutionaryAgents):
-
-    def __init__(self, agents: List[EvolutionaryAgent] = []):
-        super().__init__(agents)
-
+    def update_age(self):
+        for agent in self:
+            agent.age.update()
 
 
+class TestAgents(Agents):
+
+    def __init__(self, n: int):
+        super().__init__([TestIndividual() for _ in range(n)])

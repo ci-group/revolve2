@@ -2,21 +2,26 @@ import math
 from abc import ABC, abstractmethod
 import random
 from pyrevolve.evolutionary.things.performance_measures import PerformanceMeasures
+from pyrevolve.simulator.measures import Measures
 
 
 class Fitness(ABC):
 
     def __init__(self):
-        self.measures: PerformanceMeasures = PerformanceMeasures()
         self.fitness: float = 0.0
 
-    def process(self, performance_measures: PerformanceMeasures):
-        self.measures = performance_measures
-        self.fitness = self.calculate()
-
     @abstractmethod
-    def calculate(self):
+    def calculate(self, measures: Measures):
         pass
+
+    def __get__(self, instance, owner) -> float:
+        return self.fitness
+
+    def __gt__(self, other):
+        if self.fitness > other.fitness:
+            return True
+        else:
+            return False
 
     @staticmethod
     def best():
@@ -30,20 +35,14 @@ class Fitness(ABC):
         fitness.fitness = -math.inf
         return fitness
 
-    def __gt__(self, other):
-        if self.fitness > other.fitness:
-            return True
-        else:
-            return False
-
 
 class TestFitness(Fitness):
 
     def __init__(self):
         super().__init__()
 
-    def calculate(self):
-        return random.random()
+    def calculate(self, measures: Measures):
+        self.fitness = random.random()
 
 
 class DisplacementFitness(Fitness):
@@ -51,8 +50,9 @@ class DisplacementFitness(Fitness):
     def __init__(self):
         super().__init__()
 
-    def calculate(self):
-        return self.measures.displacement
+    def calculate(self, measures: Measures):
+        # process
+        self.fitness = measures.displacement
 
 
 class RotationalFitness(Fitness):
@@ -60,5 +60,6 @@ class RotationalFitness(Fitness):
     def __init__(self):
         super().__init__()
 
-    def calculate(self):
-        return self.measures.rotation
+    def calculate(self, measures: Measures):
+        # process
+        self.fitness = measures.rotation

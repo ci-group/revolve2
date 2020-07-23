@@ -1,12 +1,6 @@
-class Singleton:
-    __instance = None
-
-    def __new__(cls):
-        if cls.__instance is None:
-            cls.__instance = super(Singleton, cls).__new__(cls)
-            cls.__instance.__initialized = False
-        return cls.__instance
-
-    def __init__(self):
-        if (self.__initialized): return
-        self.__initialized = True
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]

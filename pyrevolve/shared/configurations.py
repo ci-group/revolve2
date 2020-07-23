@@ -10,6 +10,7 @@ class PopulationConfiguration(Configuration):
         super().__init__(filename)
         self.selection_size: int = 5
         self.tournament_size: int = 2
+        self.population_size: int = 10
 
 
 class SpeciationConfiguration(PopulationConfiguration):
@@ -21,7 +22,14 @@ class SpeciationConfiguration(PopulationConfiguration):
 class RobotConfiguration(Configuration):
 
     def __init__(self):
-        super().__init__("agent.config")
+        super().__init__("evolutionary.config")
+        self.number_of_robots = 10
+
+
+class EvolutionaryConfiguration(Configuration):
+
+    def __init__(self):
+        super().__init__("evolutionary.config")
         self.number_of_robots = 10
         self.fitness = DisplacementFitness()
 

@@ -23,6 +23,6 @@ class PerformanceMeasures:
 
         # normalize measures
         for key in performance_measures.measures.keys():
-            performance_measures[key] /= len(measures)
+            performance_measures.measures[key] /= len(measures)
 
         return performance_measures

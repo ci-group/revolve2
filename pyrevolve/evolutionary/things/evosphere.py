@@ -2,8 +2,8 @@ from typing import List
 
 from pyrevolve.developmental.developmental_learning import DevelopmentalLearner
 from pyrevolve.evolutionary.agents import Agents
-from pyrevolve.evolutionary.algorithm.ecology.population_ecology import PopulationEcology
-from pyrevolve.evolutionary.algorithm.ecology.population_management import PopulationManagement
+from pyrevolve.evolutionary.ecology.population_ecology import PopulationEcology
+from pyrevolve.evolutionary.ecology import PopulationManagement
 from pyrevolve.evolutionary.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
 from pyrevolve.evolutionary.algorithm.evolutionary_configurations import GeneticAlgorithmConfiguration
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation

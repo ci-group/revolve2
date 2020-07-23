@@ -1,4 +1,5 @@
 import os
+import pickle
 import string
 from abc import abstractmethod, ABC
 
@@ -14,9 +15,18 @@ class Memento(ABC):
         self.population_memento_path = os.path.join(self.path, "population_management.pickle")
 
     @abstractmethod
-    def load(self):
+    def load(self, path: string = ""):
         pass
 
     @abstractmethod
-    def export(self):
+    def export(self, path: string = ""):
         pass
+
+    def dump(self, path: string, export_object):
+        with open(path, "wb") as file:
+            pickle.dump(export_object, file, pickle.HIGHEST_PROTOCOL)
+
+    def restore(self, path: string) -> object:
+        if os.path.exists(path):
+            with open(path, "rb") as file:
+                return pickle.load(file)

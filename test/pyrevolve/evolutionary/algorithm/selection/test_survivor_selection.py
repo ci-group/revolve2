@@ -1,5 +1,4 @@
 import unittest
-from typing import List
 
 from pyrevolve.evolutionary import Individual
 from pyrevolve.evolutionary.agents import TestAgents

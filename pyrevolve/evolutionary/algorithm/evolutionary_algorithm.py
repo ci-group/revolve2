@@ -1,7 +1,7 @@
 from pyrevolve.evolutionary.algorithm.evolutionary_configurations import EvolutionConfiguration
 from pyrevolve.evolutionary.ecology.population_ecology import PopulationEcology
-from pyrevolve.evolutionary.algorithm.genome.operators.mutation.mutation_operator import MutationOperator
-from pyrevolve.evolutionary.algorithm.genome.operators.recombination.recombination_operator import RecombinationOperator
+from pyrevolve.evolutionary.algorithm.genome.operators.mutation_operator import MutationOperator
+from pyrevolve.evolutionary.algorithm.genome.operators.recombination_operator import RecombinationOperator
 from pyrevolve.evolutionary.algorithm.conditions.initialisation import Initialisation
 from pyrevolve.evolutionary.algorithm.selection.selection import ParentSelection, SurvivorSelection
 from pyrevolve.evolutionary.algorithm.conditions.special_features import SpecialFeatures

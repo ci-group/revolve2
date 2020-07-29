@@ -1,5 +1,5 @@
-from pyrevolve.evolutionary.algorithm.genome.operators.mutation.mutation_operator import MutationOperator
-from pyrevolve.evolutionary.algorithm.genome.operators.recombination.recombination_operator import RecombinationOperator
+from pyrevolve.evolutionary.algorithm.genome.operators.mutation_operator import MutationOperator
+from pyrevolve.evolutionary.algorithm.genome.operators.recombination_operator import RecombinationOperator
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation
 from pyrevolve.evolutionary.algorithm.genome.representations.direct.binary_representation import BinaryRepresentation
 from pyrevolve.evolutionary.algorithm.genome.representations.direct.real_valued_representation import \

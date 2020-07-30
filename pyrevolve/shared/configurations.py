@@ -11,6 +11,7 @@ class PopulationConfiguration(Configuration):
         self.selection_size: int = 5
         self.tournament_size: int = 2
         self.population_size: int = 10
+        self.number_of_parents: int = 2
 
 
 class SpeciationConfiguration(PopulationConfiguration):
@@ -22,7 +23,7 @@ class SpeciationConfiguration(PopulationConfiguration):
 class RobotConfiguration(Configuration):
 
     def __init__(self):
-        super().__init__("evolutionary.config")
+        super().__init__("robot.config")
         self.number_of_robots = 10
 
 
@@ -45,7 +46,7 @@ class EvoSphereConfiguration(Configuration):
 class RepresentationConfiguration(Configuration):
 
     def __init__(self):
-        super().__init__("robogen.config")
+        super().__init__("representation.config")
         self.genome_size = 10
         self.minimum_value = -1.0
         self.maximum_value = 1.0
@@ -61,3 +62,10 @@ class RecombinationConfiguration(Configuration):
     def __init__(self):
         super().__init__("mutation.config")
         self.recombination_probability = 0.5
+
+
+class InitializationConfiguration(Configuration):
+    def __init__(self):
+        super().__init__("initialization.config")
+        self.min_range = 0.0
+        self.max_range = 1.0

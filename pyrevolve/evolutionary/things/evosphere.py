@@ -2,6 +2,7 @@ from typing import List
 
 from pyrevolve.developmental.developmental_learning import DevelopmentalLearner
 from pyrevolve.evolutionary.agents import Agents
+from pyrevolve.evolutionary.ecology.population import Population
 from pyrevolve.evolutionary.ecology.population_ecology import PopulationEcology
 from pyrevolve.evolutionary.ecology import PopulationManagement
 from pyrevolve.evolutionary.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
@@ -31,40 +32,39 @@ class EvoSphere:
         self.population_ecology: PopulationEcology = population_ecology
 
         self.evolutionary_algorithm: EvolutionaryAlgorithm = evolutionary_algorithm
-        self.developmental_leaner: DevelopmentalLearner = developmental_learner
+        self.developmental_learner: DevelopmentalLearner = developmental_learner
 
         self.environments: List[Environment] = environments
 
         self.simulator = simulator
 
-
     def evolve(self):
         # load and initialize
         self.population_ecology.load()
-        self.evolutionary_algorithm.initialize(self.population_ecology)
+        self.evolutionary_algorithm.initialize(self.population_ecology.populations())
 
         agents: Agents = self.birth_clinic.create_robots()
-        self.population_ecology.create(agents)  # , self.environments)
+        self.population_ecology.initialize(agents)  # , self.environments)
+
+        print("Evaluate population")
+
+        self.evaluate(self.population_ecology.populations())
 
         # Run through iterations
-        for _ in range(self.configuration.number_of_generations):
+        for generation_index in range(self.configuration.number_of_generations):
+            print("Generation ", generation_index)
 
-            for environment in self.environments:
-                for population in self.population_ecology.populations():
-                    environment.agents = population
-                    self.simulator.evaluate(environment)
-
-            done = self.evolutionary_algorithm.run(self.population_ecology)
-
-            if done:
+            if self.evolutionary_algorithm.should_terminate(self.population_ecology.populations()):
                 break
 
-            for environment in self.environments:
-                for offspring in self.population_ecology.offsprings():
-                    environment.agents = offspring
-                    self.simulator.evaluate(environment)
+            self.evolutionary_algorithm.run(self.population_ecology.populations(), self.evaluate)
 
             self.population_ecology.export()
+
+    def evaluate(self, agents: List[Population]):
+        for environment in self.environments:
+            environment.agents = agents
+            self.simulator.evaluate(environment)
 
 
 class DefaultEvoSphere(EvoSphere):

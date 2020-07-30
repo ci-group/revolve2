@@ -1,5 +1,5 @@
 from pyrevolve.shared.sequential_identifier import PopulationIdentifier
-from pyrevolve.evolutionary.age import Age, GenerationalAge
+from pyrevolve.evolutionary.age import GenerationalAge
 
 from .. import Agents
 
@@ -13,7 +13,9 @@ class Population:
         self.age: GenerationalAge = GenerationalAge()
 
         self.individuals: Agents = individuals
-        self.offspring: Agents = None
+
+    def __get__(self):
+        return self.individuals
 
     def next_generation(self, agents: Agents):
         if agents is None:

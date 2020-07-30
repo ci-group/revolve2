@@ -1,16 +1,17 @@
-from pyrevolve.evolutionary.algorithm.genome.operators.mutation_operator import MutationOperator
-from pyrevolve.evolutionary.algorithm.genome.operators.recombination_operator import RecombinationOperator
+from pyrevolve.evolutionary.algorithm.genome.initialization import UniformInitialization
+from pyrevolve.evolutionary.algorithm.genome.operators.mutation_operator import MutationOperator, BitFlipMutation
+from pyrevolve.evolutionary.algorithm.genome.operators.recombination_operator import RecombinationOperator, \
+    OnePointCrossover
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation
-from pyrevolve.evolutionary.algorithm.genome.representations.direct.binary_representation import BinaryRepresentation
-from pyrevolve.evolutionary.algorithm.genome.representations.direct.real_valued_representation import \
+from pyrevolve.evolutionary.algorithm.conditions.initialization import Initialization
+from pyrevolve.evolutionary.algorithm.genome.representations.direct_representation import BinaryRepresentation, \
     RealValuedRepresentation
-from pyrevolve.evolutionary.algorithm.genome.representations.tree_representation import TreeRepresentation
-from pyrevolve.evolutionary.algorithm.conditions.initialisation import Initialisation
 from pyrevolve.evolutionary.algorithm.selection.parent_selection import RouletteWheelSelection
 from pyrevolve.evolutionary.algorithm.selection.selection import ParentSelection, SurvivorSelection
-from pyrevolve.evolutionary.algorithm.selection.survivor_selection import ElitismSelection
+from pyrevolve.evolutionary.algorithm.selection.survivor_selection import ElitismSelection, \
+    GenerationalSteadyStateSelection
 from pyrevolve.evolutionary.algorithm.conditions.special_features import SpecialFeatures
-from pyrevolve.evolutionary.algorithm.conditions.termination_condition import TerminationCondition
+from pyrevolve.evolutionary.algorithm.conditions.termination_condition import TerminationCondition, EvaluationsCondition
 from pyrevolve.shared.configuration import Configuration
 
 
@@ -20,11 +21,9 @@ class EvolutionConfiguration(Configuration):
                  representation: Representation,
                  recombination: RecombinationOperator,
                  mutation: MutationOperator,
-                 mutation_probability: float,
                  parent_selection: ParentSelection,
                  survivor_selection: SurvivorSelection,
-                 population_size,
-                 initialisation: Initialisation,
+                 initialization: Initialization,
                  termination_condition: TerminationCondition,
                  special_features: SpecialFeatures):
 
@@ -32,11 +31,9 @@ class EvolutionConfiguration(Configuration):
         self.representation: Representation = representation
         self.recombination: RecombinationOperator = recombination
         self.mutation: MutationOperator = mutation
-        self.mutation_probability: float = mutation_probability
         self.parent_selection: ParentSelection = parent_selection
         self.survivor_selection: SurvivorSelection = survivor_selection
-        self.population_size: int = population_size
-        self.initialisation: Initialisation = initialisation
+        self.initialization: Initialization = initialization
         self.termination_condition: TerminationCondition = termination_condition
         self.special_features: SpecialFeatures = special_features
 
@@ -45,38 +42,32 @@ class GeneticAlgorithmConfiguration(EvolutionConfiguration):
 
     def __init__(self,
                  representation: BinaryRepresentation = BinaryRepresentation(),
-                 recombination: nPointCrossover = nPointCrossover(1),
+                 recombination: OnePointCrossover = OnePointCrossover(),
                  mutation: BitFlipMutation = BitFlipMutation(),
-                 mutation_probability: float = 0.7,
-                 parent_selection: ParentSelection = RouletteWheelSelection("fitness"),
-                 survivor_selection: SurvivorSelection = GenerationalSelection(),
-                 population_size: int = 20,
-                 initialisation: Initialisation = Initialisation(),
-                 termination_condition: TerminationCondition = TerminationCondition(),
+                 parent_selection: ParentSelection = RouletteWheelSelection(),
+                 survivor_selection: SurvivorSelection = GenerationalSteadyStateSelection(),
+                 initialization: Initialization = UniformInitialization(),
+                 termination_condition: TerminationCondition = EvaluationsCondition(10),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(
-            representation, recombination, mutation, mutation_probability,
-            parent_selection, survivor_selection, population_size,
-            initialisation, termination_condition, special_features)
+            representation, recombination, mutation, parent_selection, survivor_selection,
+            initialization, termination_condition, special_features)
 
-
+"""
 class EvolutionaryStrategiesConfiguration(EvolutionConfiguration):
 
     def __init__(self,
                  representation=RealValuedRepresentation(),
                  recombination=DiscreteCrossover(),
                  mutation=GaussianMutation(),
-                 mutation_probability: float = 0.7,
                  parent_selection : ParentSelection = UniformRandomSelection(),
                  survivor_selection: SurvivorSelection = ElitismSelection(),
-                 population_size: int = 20,
-                 initialisation: Initialisation = Initialisation(),
+                 initialization: Initialization = Initialization(),
                  termination_condition: TerminationCondition = TerminationCondition(),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(
-            representation, recombination, mutation, mutation_probability,
-            parent_selection, survivor_selection, population_size,
-            initialisation, termination_condition, special_features)
+            representation, recombination, mutation, parent_selection, survivor_selection,
+            initialization, termination_condition, special_features)
 
 
 class EvolutionaryProgrammingConfiguration(EvolutionConfiguration):
@@ -85,17 +76,14 @@ class EvolutionaryProgrammingConfiguration(EvolutionConfiguration):
                  representation: Representation = RealValuedRepresentation(),
                  recombination: RecombinationOperator = None,
                  mutation: MutationOperator = GaussianMutation(),
-                 mutation_probability: float = 0.7,
                  parent_selection: ParentSelection = DeterministicSelection(),
                  survivor_selection: SurvivorSelection = ProbabilisticSelection(),
-                 population_size: int = 20,
-                 initialisation: Initialisation = Initialisation(),
+                 initialization: Initialization = Initialization(),
                  termination_condition: TerminationCondition = TerminationCondition(),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(
-            representation, recombination, mutation, mutation_probability,
-            parent_selection, survivor_selection, population_size,
-            initialisation, termination_condition, special_features)
+            representation, recombination, mutation, parent_selection, survivor_selection,
+            initialization, termination_condition, special_features)
 
 
 class GeneticProgrammingConfiguration(EvolutionConfiguration):
@@ -104,17 +92,14 @@ class GeneticProgrammingConfiguration(EvolutionConfiguration):
                  representation: Representation = TreeRepresentation(),
                  recombination: RecombinationOperator = SubtreesRecombination(),
                  mutation: MutationOperator = RandomTreeMutation(),
-                 mutation_probability: float = 0.7,
                  parent_selection: ParentSelection = ProportionalSelection("fitness"),
                  survivor_selection: SurvivorSelection = GenerationalSelection(),
-                 population_size: int = 20,
-                 initialisation: Initialisation = Initialisation(),
+                 initialization: Initialization = Initialization(),
                  termination_condition: TerminationCondition = TerminationCondition(),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(
-            representation, recombination, mutation, mutation_probability,
-            parent_selection, survivor_selection, population_size,
-            initialisation, termination_condition, special_features)
+            representation, recombination, mutation, parent_selection, survivor_selection,
+            initialization, termination_condition, special_features)
 
 
 class DifferentialEvolutionConfiguration(EvolutionConfiguration):
@@ -123,19 +108,17 @@ class DifferentialEvolutionConfiguration(EvolutionConfiguration):
                  representation: Representation = RealValuedRepresentation(),
                  recombination: RecombinationOperator = UniformCrossover(),
                  mutation: MutationOperator = DifferentialMutation(),
-                 mutation_probability: float = 0.7,
                  parent_selection: ParentSelection = UniformRandomSelection(),
                  survivor_selection: SurvivorSelection = ElitismSelection(),
-                 population_size: int = 20,
-                 initialisation: Initialisation = Initialisation(),
+                 initialization: Initialization = Initialization(),
                  termination_condition: TerminationCondition = TerminationCondition(),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(
-            representation, recombination, mutation, mutation_probability,
-            parent_selection, survivor_selection, population_size,
-            initialisation, termination_condition, special_features)
+            representation, recombination, mutation, parent_selection, survivor_selection,
+            initialization, termination_condition, special_features)
 
 
 class ParticleSwarmOptimisationConfiguration(EvolutionConfiguration):
     def __init__(self):
         super().__init__()
+"""

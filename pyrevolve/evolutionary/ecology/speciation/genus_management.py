@@ -18,22 +18,12 @@ class GenusManagement(PopulationManagement):
 
         self.genus: Genus = None
 
-    def populations(self) -> List[Population]:
+    def population(self) -> List[Population]:
         if self.genus is None:
             raise Exception("Genus uninitialized")
 
-        populations: List[Population] = [speciated_population
-                                         for speciated_population in self.genus.species]
-
-        return populations
-
-    def select(self, algorithm_function):
-        if self.genus is None:
-            raise Exception("Genus is uninitialized")
-
-        for species in self.genus.species:
-            species.select(algorithm_function)
-
+        return [speciated_population for speciated_population in self.genus.species]
+    """
     def agents(self) -> Agents:
         all_agents: Agents = Agents()
 
@@ -42,7 +32,7 @@ class GenusManagement(PopulationManagement):
                 all_agents.add(agent)
 
         return all_agents
-
+    """
     def speciate(self):
         agents: Agents = self.agents()
 

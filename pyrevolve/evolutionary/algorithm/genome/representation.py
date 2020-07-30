@@ -4,8 +4,10 @@ from typing import List
 
 import numpy as np
 
-from pyrevolve.evolutionary.algorithm.genome.genome import Genome
+from pyrevolve.evolutionary.algorithm.conditions.initialization import Initialization
 from pyrevolve.shared.configurations import RepresentationConfiguration
+
+Genome = np.array
 
 
 class Representation:
@@ -14,12 +16,9 @@ class Representation:
         self.configuration = RepresentationConfiguration()
         self.genome: Genome = Genome([])
 
-    def init(self, genome: Genome = None):
-        if genome is not None:
-            if self.genome.shape == genome.shape:
-                self.genome = copy.deepcopy(genome)
-            else:
-                raise Exception("New genome does not have the same size as the current genome.")
+    def init(self, initialization: Initialization = None):
+        if initialization is not None:
+            self.genome = initialization.algorithm(self.configuration.genome_size)
         else:
             self._initialize()
 

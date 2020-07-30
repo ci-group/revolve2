@@ -25,13 +25,12 @@ class ParentSelection(Selection, ABC):
     def __init__(self):
         super().__init__()
 
-    def select(self, individuals: Agents):
+    def select(self, individuals: Agents) -> List[Agents]:
         self.check(individuals)
-        # TODO simplify
-        return Agents([self.algorithm(individuals) for _ in range(self.configuration.selection_size)])
+        return [Agents(self.algorithm(individuals)) for _ in range(self.configuration.selection_size)]
 
     @abstractmethod
-    def algorithm(self, individuals: List[Individual]) -> Individual:
+    def algorithm(self, individuals: Agents) -> List[Individual]:
         raise Exception("Parent selection algorithm is not implemented")
 
 
@@ -40,12 +39,12 @@ class SurvivorSelection(Selection, ABC):
     def __init__(self):
         super().__init__()
 
-    def select(self, individuals: Agents):
+    def select(self, individuals: Agents) -> Agents:
         super().check(individuals)
         # TODO simplify collection
         new_individuals: List[Individual] = self.algorithm(individuals) # mmhhh...
         return Agents(new_individuals[:self.configuration.population_size])
 
     @abstractmethod
-    def algorithm(self, individuals: List[Individual]) -> List[Individual]:
+    def algorithm(self, individuals: Agents) -> List[Individual]:
         raise Exception("Survivor selection algorithm is not implemented")

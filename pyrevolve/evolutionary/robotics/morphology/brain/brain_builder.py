@@ -4,8 +4,8 @@ from pyrevolve.evolutionary.robotics.robot_builder import RobotBuilder
 
 
 class BrainBuilder(RobotBuilder):
-    def __init__(self, genome: Representation):
-        super().__init__(genome)
+    def __init__(self, representation: type(Representation)):
+        super().__init__(representation)
 
     def build(self) -> Brain:
         pass

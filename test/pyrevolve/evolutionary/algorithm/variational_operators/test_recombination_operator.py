@@ -19,13 +19,7 @@ class TestRecombinationOperators(unittest.TestCase):
 
         new_representation_1 = copy.deepcopy(representation_1)
         new_representation_2 = copy.deepcopy(representation_2)
-        recombination._execute(new_representation_1, new_representation_2)
-
-        print(representation_1.genome)
-        print(new_representation_1.genome)
-        print()
-        print(representation_2.genome)
-        print(new_representation_2.genome)
+        recombination._execute([new_representation_1, new_representation_2])
 
         self.assertFalse(np.allclose(new_representation_1.genome, representation_1.genome))
         self.assertFalse(np.allclose(new_representation_2.genome, representation_2.genome))

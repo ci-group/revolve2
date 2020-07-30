@@ -4,7 +4,7 @@ from typing import List
 from pyrevolve.evolutionary.individual import Individual
 
 
-class TestAgent(unittest.TestCase):
+class TestIndividual(unittest.TestCase):
 
     def test_compare(self):
 

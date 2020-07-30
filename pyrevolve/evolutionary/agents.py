@@ -1,9 +1,8 @@
-import random
 from typing import List
 import numpy as np
 
-from pyrevolve.evolutionary.individual import Individual, TestIndividual
-from pyrevolve.evolutionary.fitness import Fitness
+from pyrevolve.evolutionary.algorithm.genome.representation import Representation
+from pyrevolve.evolutionary.individual import Individual
 from pyrevolve.shared.abstract.iterator import Iterator
 
 
@@ -18,10 +17,11 @@ class Agents(Iterator):
     def remove(self, agent: Individual):
         super().remove(agent)
 
-    def compound(self, agents):
+    def extend(self, agents):
         return self.collection.extend(agents.collection)
 
-    def get_best(self):
+    """
+    def get_best(self) -> Individual:
         best_agent: Individual = None
         best_fitness: Fitness = Fitness.worst()
 
@@ -32,7 +32,7 @@ class Agents(Iterator):
 
         return best_agent
 
-    def get_worst(self):
+    def get_worst(self) -> Individual:
         worst_agent: Individual = None
         worst_fitness: Fitness = Fitness.best()
 
@@ -42,6 +42,7 @@ class Agents(Iterator):
                 worst_agent = agent
 
         return worst_agent
+    """
 
     def average_fitness(self):
         # TODO individual.fitness
@@ -50,9 +51,3 @@ class Agents(Iterator):
     def update_age(self):
         for agent in self:
             agent.age.update()
-
-
-class TestAgents(Agents):
-
-    def __init__(self, n: int):
-        super().__init__([TestIndividual() for _ in range(n)])

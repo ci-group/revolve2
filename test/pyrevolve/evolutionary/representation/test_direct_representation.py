@@ -9,7 +9,7 @@ from pyrevolve.evolutionary.algorithm.genome.representations.direct_representati
 
 
 class DirectRepresentationTest(unittest.TestCase):
-
+    """
     def test_same(self):
         representation_1 = BinaryRepresentation()
         representation_2 = BinaryRepresentation()
@@ -19,7 +19,8 @@ class DirectRepresentationTest(unittest.TestCase):
 
         compatibility = representation_1.compatibility(representation_2)
         self.assertEqual(compatibility, 0.0)
-
+    """
+    
     def test_binary(self):
         representation_1 = BinaryRepresentation()
         representation_2 = BinaryRepresentation()

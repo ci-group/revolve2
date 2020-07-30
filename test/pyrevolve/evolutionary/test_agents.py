@@ -3,13 +3,14 @@ from typing import List
 
 from pyrevolve.evolutionary.individual import Individual
 from pyrevolve.evolutionary.agents import Agents
+from pyrevolve.evolutionary.individual_factory import IndividualFactory
 
 
 class TestAgents(unittest.TestCase):
 
     def test_compare(self):
 
-        individual_list = [Individual(), Individual(), Individual()]
+        individual_list = IndividualFactory().create(3)
 
         agents = Agents(individual_list)
 
@@ -19,7 +20,7 @@ class TestAgents(unittest.TestCase):
         self.assertEqual(agents.average_fitness(), 0.0)
 
     def test_age(self):
-        individual_list = [Individual(), Individual(), Individual()]
+        individual_list = IndividualFactory().create(3)
 
         agents = Agents(individual_list)
 

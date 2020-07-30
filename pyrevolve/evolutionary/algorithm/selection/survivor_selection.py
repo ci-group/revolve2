@@ -13,7 +13,7 @@ class FitnessSteadyStateSelection(SurvivorSelection):
         return sorted(individuals, key=lambda x: x.fitness, reverse=True)
 
 
-class AgeSteadyStateSelection(SurvivorSelection):
+class GenerationalSteadyStateSelection(SurvivorSelection):
 
     def __init__(self):
         super().__init__()

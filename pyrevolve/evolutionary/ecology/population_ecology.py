@@ -19,16 +19,8 @@ class PopulationEcology(Memento):
     def initialize(self, agents: Agents):
         self.management.create_population(agents)
 
-    def select(self, parent_algorithm):
-        populations: List[Population] = self.management.populations()
-        for population in populations:
-            population.offspring = parent_algorithm(population.individuals)
-
-    def survive(self, survival_algorithm):
-        populations: List[Population] = self.management.populations()
-        for population in populations:
-            new_population = survival_algorithm(population.individuals, population.offspring)
-            population.next_generation(new_population)
+    def populations(self) -> List[Population]:
+        return self.management.populations()
 
     def export(self, path: string = ""):
         path = self.population_memento_path if path == "" else path

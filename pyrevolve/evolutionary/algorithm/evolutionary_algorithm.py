@@ -1,5 +1,6 @@
 from typing import List
 
+from pyrevolve.evolutionary import Individual, Fitness
 from pyrevolve.evolutionary.agents import Agents
 from pyrevolve.evolutionary.algorithm.evolutionary_configurations import EvolutionConfiguration
 from pyrevolve.evolutionary.ecology.population import Population
@@ -13,8 +14,9 @@ from pyrevolve.evolutionary.algorithm.conditions.termination_condition import Te
 
 class EvolutionaryAlgorithm:
 
-    def __init__(self, configuration: EvolutionConfiguration):
+    def __init__(self, configuration: EvolutionConfiguration, fitness_type: type(Fitness)):
         self.configuration: EvolutionConfiguration = configuration
+        self.fitness_type: type(Fitness) = fitness_type
 
         self.parent_selection: ParentSelection = self.configuration.parent_selection
         self.survivor_selection: SurvivorSelection = self.configuration.survivor_selection
@@ -31,26 +33,29 @@ class EvolutionaryAlgorithm:
             for individual in population.individuals:
                 individual.representation.init(self.initialization)
 
-    def should_terminate(self, populations: List[Population]):
-        return self.termination_condition.terminate(populations)
+    def should_terminate(self, population: Population):
+        return self.termination_condition.terminate(population)
 
-    def run(self, populations: List[Population], evaluator):
-        for population in populations:
-            parents_list: List[Agents] = self.parent_selection.select(population.individuals)
+    def run(self, population: Population, evaluator):
+        parents_list: List[Agents] = self.parent_selection.select(population.individuals)
 
-            offspring: Agents = self._create_offspring(parents_list)
+        offspring: Agents = self._create_offspring(parents_list)
 
-            evaluator(offspring)
+        offspring: Agents = evaluator(offspring)
 
-            self.survivor_selection.select(population.individuals.extend(offspring))
+        population.individuals.extend(offspring)
 
-    def _create_offspring(self, parent_list: List[Agents]):
+        population.next_generation(self.survivor_selection.select(population.individuals))
+
+    def _create_offspring(self, parent_list: List[Agents]) -> Agents:
         return Agents(
             [
-                self.mutation.algorithm(
-                    self.recombination.algorithm(parents)
+                Individual(
+                    self.mutation.algorithm(
+                        self.recombination.algorithm(parents), self.initialization
+                    ),
+                    self.fitness_type()
                 )
                 for parents in parent_list
             ]
         )
-

@@ -1,4 +1,3 @@
-import copy
 from abc import abstractmethod
 from typing import List
 
@@ -27,7 +26,7 @@ class Representation:
         pass
 
     @abstractmethod
-    def compatibility(self, other):
+    def compatibility(self, other) -> float:
         pass
 
     def selection_indexes(self, k=2) -> List[int]:

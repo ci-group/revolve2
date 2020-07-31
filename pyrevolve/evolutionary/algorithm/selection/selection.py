@@ -42,7 +42,7 @@ class SurvivorSelection(Selection, ABC):
     def select(self, individuals: Agents) -> Agents:
         super().check(individuals)
         # TODO simplify collection
-        new_individuals: List[Individual] = self.algorithm(individuals) # mmhhh...
+        new_individuals: List[Individual] = self.algorithm(individuals)     # mmhhh...
         return Agents(new_individuals[:self.configuration.population_size])
 
     @abstractmethod

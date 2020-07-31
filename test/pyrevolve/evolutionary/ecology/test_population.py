@@ -23,7 +23,6 @@ class TestPopulation(unittest.TestCase):
 
         self.assertNotEqual(population.individuals, agents_start)
         self.assertEqual(population.individuals, agents_new)
-        self.assertEqual(population.offspring, None)
 
     def test_improvement(self):
         agents1: Agents = IndividualFactory().create(n=3)

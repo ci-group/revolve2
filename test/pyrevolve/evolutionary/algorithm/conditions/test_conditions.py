@@ -15,7 +15,7 @@ class TestTerminationConditions(unittest.TestCase):
 
         termination_condition = FitnessCondition(termination_fitness)
 
-        self.assertTrue(termination_condition.terminate([population]))
+        self.assertTrue(termination_condition.terminate(population))
 
     def test_fitness_condition_continue(self):
         population = Population(IndividualFactory().create(n=3))
@@ -23,7 +23,7 @@ class TestTerminationConditions(unittest.TestCase):
 
         termination_condition = FitnessCondition(0.5)
 
-        self.assertFalse(termination_condition.terminate([population]))
+        self.assertFalse(termination_condition.terminate(population))
 
     def test_generations_condition_stop(self):
         population = Population(IndividualFactory().create(n=3))
@@ -32,7 +32,7 @@ class TestTerminationConditions(unittest.TestCase):
 
         termination_condition = EvaluationsCondition(generations_condition)
 
-        self.assertTrue(termination_condition.terminate([population]))
+        self.assertTrue(termination_condition.terminate(population))
 
     def test_generations_condition_continue(self):
         population = Population(IndividualFactory().create(n=3))
@@ -40,9 +40,9 @@ class TestTerminationConditions(unittest.TestCase):
 
         termination_condition = EvaluationsCondition(10)
 
-        self.assertFalse(termination_condition.terminate([population]))
+        self.assertFalse(termination_condition.terminate(population))
 
-    def test_generations_condition_stop(self):
+    def test_improvements_condition_stop(self):
         population = Population(IndividualFactory().create(n=3))
 
         no_improvements_count = 5
@@ -51,14 +51,14 @@ class TestTerminationConditions(unittest.TestCase):
 
         termination_condition = ImprovementCondition(no_improvements_count)
 
-        self.assertTrue(termination_condition.terminate([population]))
+        self.assertTrue(termination_condition.terminate(population))
 
-    def test_generations_condition_continue(self):
+    def test_improvements_condition_continue(self):
         population = Population(IndividualFactory().create(n=3))
 
         population.age.no_improvement_count = 4
 
         termination_condition = ImprovementCondition(5)
 
-        self.assertFalse(termination_condition.terminate([population]))
+        self.assertFalse(termination_condition.terminate(population))
 

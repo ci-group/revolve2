@@ -1,5 +1,3 @@
-import os
-import pickle
 import string
 from typing import List
 
@@ -17,7 +15,10 @@ class PopulationEcology(Memento):
         self.management: PopulationManagement = population_management
 
     def initialize(self, agents: Agents):
-        self.management.create_population(agents)
+        self.management.initialize(agents)
+
+    def speciate(self):
+        self.management.speciate()
 
     def populations(self) -> List[Population]:
         return self.management.populations()

@@ -1,27 +1,28 @@
 from typing import List
 
+from pyrevolve.evolutionary import Individual
+from pyrevolve.evolutionary.ecology.population import Population
+from pyrevolve.evolutionary.ecology.speciation.compatibility import Compatibility
 from pyrevolve.shared.sequential_identifier import GenusIdentifier
-
-from .speciated_population import SpeciatedPopulation
 
 
 class Genus:
 
     identifier = GenusIdentifier()
 
-    def __init__(self):
+    def __init__(self, compatibility: Compatibility = Compatibility()):
         self.id: int = self.identifier.id()
-        self.species: List[SpeciatedPopulation] = []
+        self.compatibility = compatibility
 
-    def add(self, speciated_population: SpeciatedPopulation):
-        self.species.append(speciated_population)
+        self.species: List[Population] = []
 
-    def remove(self, speciated_population: SpeciatedPopulation):
-        self.species.remove(speciated_population)
+    def add(self, population: Population):
+        self.species.append(population)
 
-    def insert(self, agent):
-        for speciated_population in self.species:
-            if speciated_population.compatible(agent):
+    def insert(self, individual: Individual):
+        for population in self.species:
+            if self.compatibility.compare(population.individuals, individual):
+                population.individuals.add(individual)
                 return True
 
         return False

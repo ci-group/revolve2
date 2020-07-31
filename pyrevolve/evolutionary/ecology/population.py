@@ -26,7 +26,6 @@ class Population:
         agents.update_age()
 
         self.individuals = agents
-        self.offspring = None
 
     def did_improve(self, agents: Agents):
         return agents.average_fitness() > self.individuals.average_fitness()

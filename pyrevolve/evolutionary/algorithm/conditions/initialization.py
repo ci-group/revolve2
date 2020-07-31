@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from pyrevolve.shared.configurations import InitializationConfiguration
 
 
-class Initialization(ABC):
+class Initialization:
 
     def __init__(self):
         self.configuration = InitializationConfiguration()

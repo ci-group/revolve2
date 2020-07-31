@@ -4,14 +4,12 @@ from pyrevolve.evolutionary.algorithm.genome.operators.recombination_operator im
     OnePointCrossover
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation
 from pyrevolve.evolutionary.algorithm.conditions.initialization import Initialization
-from pyrevolve.evolutionary.algorithm.genome.representations.direct_representation import BinaryRepresentation, \
-    RealValuedRepresentation
+from pyrevolve.evolutionary.algorithm.genome.representations.direct_representation import BinaryRepresentation
 from pyrevolve.evolutionary.algorithm.selection.parent_selection import RouletteWheelSelection
 from pyrevolve.evolutionary.algorithm.selection.selection import ParentSelection, SurvivorSelection
-from pyrevolve.evolutionary.algorithm.selection.survivor_selection import ElitismSelection, \
-    GenerationalSteadyStateSelection
 from pyrevolve.evolutionary.algorithm.conditions.special_features import SpecialFeatures
 from pyrevolve.evolutionary.algorithm.conditions.termination_condition import TerminationCondition, EvaluationsCondition
+from pyrevolve.evolutionary.algorithm.selection.survivor_selection import GenerationalSteadyStateSelection
 from pyrevolve.shared.configuration import Configuration
 
 
@@ -52,6 +50,7 @@ class GeneticAlgorithmConfiguration(EvolutionConfiguration):
         super().__init__(
             representation, recombination, mutation, parent_selection, survivor_selection,
             initialization, termination_condition, special_features)
+
 
 """
 class EvolutionaryStrategiesConfiguration(EvolutionConfiguration):

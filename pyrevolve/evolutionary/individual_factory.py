@@ -1,12 +1,8 @@
-from typing import List
 
 from pyrevolve.evolutionary import Individual, Agents
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation
-from pyrevolve.evolutionary.age import Age
 from pyrevolve.evolutionary.algorithm.genome.representations.direct_representation import BinaryRepresentation
-from pyrevolve.evolutionary.fitness import Fitness, TestFitness, DisplacementFitness
-from pyrevolve.shared.configurations import EvolutionaryConfiguration
-from pyrevolve.shared.sequential_identifier import AgentIdentifier
+from pyrevolve.evolutionary.fitness import Fitness, DisplacementFitness
 
 
 class IndividualFactory:

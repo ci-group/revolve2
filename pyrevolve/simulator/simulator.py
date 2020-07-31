@@ -1,4 +1,4 @@
-from pyrevolve.evolutionary.individual import Agent
+from pyrevolve.evolutionary import Individual
 from pyrevolve.evolutionary.things.environment import Environment
 from pyrevolve.evolutionary.things.performance_measures import PerformanceMeasures
 
@@ -9,10 +9,12 @@ class Simulator:
         pass
 
     def evaluate(self, environment: Environment):
-        for agent in environment.population.parents.parents:
-            agent.fitness.process(self.simulate(agent))
+        # todo fix
+        for agents in environment.agents_list:
+            for individual in agents:
+                individual.fitness.process(self.simulate(individual))
 
-    def simulate(self, agent: Agent) -> PerformanceMeasures:
+    def simulate(self, individual: Individual) -> PerformanceMeasures:
         measures = PerformanceMeasures()
         measures.test()
         return measures

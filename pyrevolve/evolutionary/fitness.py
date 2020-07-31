@@ -1,7 +1,7 @@
+from abc import abstractmethod
 import math
-from abc import ABC, abstractmethod
 import random
-from pyrevolve.evolutionary.things.performance_measures import PerformanceMeasures
+
 from pyrevolve.simulator.measures import Measures
 
 
@@ -65,6 +65,7 @@ class DisplacementFitness(Fitness):
 
     def calculate(self, measures: Measures):
         # process
+        # TODO fix
         self.fitness = measures.displacement
 
 
@@ -75,4 +76,5 @@ class RotationalFitness(Fitness):
 
     def calculate(self, measures: Measures):
         # process
+        # TODO fix
         self.fitness = measures.rotation

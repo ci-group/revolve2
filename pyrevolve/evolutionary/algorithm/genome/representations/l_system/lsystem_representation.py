@@ -13,7 +13,6 @@ class LSystemRepresentation(GrammarRepresentation):
         super().__init__(alphabet=alphabet)
         self.rules: Rules = rules
 
-
     def apply_rules(self):
         for index, element in enumerate(self.genome):
             if element in self.rules.keys():

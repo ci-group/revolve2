@@ -1,9 +1,7 @@
-from typing import List
 
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation
 from pyrevolve.evolutionary.age import Age
-from pyrevolve.evolutionary.fitness import Fitness, TestFitness
-from pyrevolve.shared.configurations import EvolutionaryConfiguration
+from pyrevolve.evolutionary.fitness import Fitness
 from pyrevolve.shared.sequential_identifier import AgentIdentifier
 
 

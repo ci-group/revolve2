@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from pyrevolve.evolutionary.algorithm.genome.representation import Representation
-from pyrevolve.evolutionary.algorithm.genome.representation_visitor import RepresentationVisitor
 from pyrevolve.evolutionary.algorithm.genome.representations.l_system.alphabet import Alphabet
 
 
@@ -14,26 +13,26 @@ class DirectRepresentation(Representation, ABC):
         super().__init__()
 
     @abstractmethod
-    def compatibility(self, other):
+    def compatibility(self, other) -> float:
         pass
 
     @abstractmethod
-    def visit(self, visitor: RepresentationVisitor):
+    def visit(self, representation_visitor):
         pass
 
 
-class ValuedRepresentation(Representation, ABC):
+class ValuedRepresentation(DirectRepresentation, ABC):
 
     def __init__(self, data_type: type):
         super().__init__()
         self.data_type = data_type
-        self.init(None)
+        self.init()
 
-    def compatibility(self, other):
+    def compatibility(self, other) -> float:
         return np.linalg.norm(self.genome - other.genome)
 
-    def visit(self, visitor: RepresentationVisitor):
-        visitor.visit_valued_representation(self)
+    def visit(self, representation_visitor):
+        representation_visitor.visit_valued_representation(self)
 
 
 class BinaryRepresentation(ValuedRepresentation):
@@ -70,12 +69,12 @@ class GrammarRepresentation(Representation):
     def __init__(self, alphabet: type(Alphabet)):
         super().__init__()
         self.alphabet: Alphabet = alphabet
-        self.init(None)
+        self.init()
 
     def _initialize(self):
         self.genome = random.choices(self.alphabet.list(), k=self.configuration.genome_size)
 
-    def compatibility(self, other):
+    def compatibility(self, other) -> float:
         differences = 0
 
         for index, element in enumerate(self.genome):
@@ -84,5 +83,5 @@ class GrammarRepresentation(Representation):
 
         return differences
 
-    def visit(self, visitor: RepresentationVisitor):
-        visitor.visit_grammar_representation(self)
+    def visit(self, representation_visitor):
+        representation_visitor.visit_grammar_representation(self)

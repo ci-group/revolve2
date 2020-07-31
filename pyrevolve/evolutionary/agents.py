@@ -1,14 +1,13 @@
 from typing import List
 import numpy as np
 
-from pyrevolve.evolutionary.algorithm.genome.representation import Representation
 from pyrevolve.evolutionary.individual import Individual
 from pyrevolve.shared.abstract.iterator import Iterator
 
 
 class Agents(Iterator):
 
-    def __init__(self, agents: List[Individual] = []):
+    def __init__(self, agents: List[Individual] = None):
         super().__init__(agents)
 
     def add(self, agent: Individual):

@@ -1,11 +1,11 @@
 from typing import List
 
+from pyrevolve.evolutionary.algorithm.selection.parent_selection import TournamentSelection
+from pyrevolve.evolutionary.ecology.population_management import PopulationManagement
 from pyrevolve.evolutionary.things.environment import Environment
 from pyrevolve.evolutionary.things.evosphere import EvoSphere
 from pyrevolve.experiment.experiment_manager import ExperimentManager
 from pyrevolve.evolutionary.ecology import PopulationEcology
-from pyrevolve.evolutionary.ecology import PopulationManagement
-from pyrevolve.evolutionary.algorithm import TournamentSelection
 
 experiment_manager = ExperimentManager()
 

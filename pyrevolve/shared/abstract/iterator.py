@@ -3,7 +3,10 @@ from typing import List
 
 class Iterator:
 
-    def __init__(self, collection: List[object]):
+    def __init__(self, collection: List[object] = None):
+        if collection is None:
+            collection = []
+
         self.collection: List[object] = collection
         self.index = 0
 

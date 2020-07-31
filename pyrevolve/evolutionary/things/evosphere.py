@@ -1,15 +1,20 @@
 from typing import List
 
 from pyrevolve.developmental.developmental_learning import DevelopmentalLearner
+from pyrevolve.evolutionary import Fitness
 from pyrevolve.evolutionary.agents import Agents
+from pyrevolve.evolutionary.algorithm.genome.representations.l_system.lsystem_representation import \
+    LSystemRepresentation
 from pyrevolve.evolutionary.ecology.population import Population
 from pyrevolve.evolutionary.ecology.population_ecology import PopulationEcology
-from pyrevolve.evolutionary.ecology import PopulationManagement
 from pyrevolve.evolutionary.algorithm.evolutionary_algorithm import EvolutionaryAlgorithm
 from pyrevolve.evolutionary.algorithm.evolutionary_configurations import GeneticAlgorithmConfiguration
-from pyrevolve.evolutionary.algorithm.genome.representation import Representation
-from pyrevolve.evolutionary.algorithm.selection.selection import Selection
+from pyrevolve.evolutionary.ecology.population_management import PopulationManagement
 from pyrevolve.evolutionary.robotics.birth_clinic import BirthClinic
+from pyrevolve.evolutionary.robotics.morphology.body.body_builder import BodyBuilder
+from pyrevolve.evolutionary.robotics.morphology.brain.brain_builder import BrainBuilder
+from pyrevolve.evolutionary.robotics.morphology.brain.representation.multineat_representation import \
+    MultiNEATRepresentation
 from pyrevolve.evolutionary.things.environment import Environment
 from pyrevolve.shared.configurations import EvoSphereConfiguration
 
@@ -43,37 +48,44 @@ class EvoSphere:
         self.population_ecology.load()
         self.evolutionary_algorithm.initialize(self.population_ecology.populations())
 
-        agents: Agents = self.birth_clinic.create_robots()
-        self.population_ecology.initialize(agents)  # , self.environments)
+        robots: Agents = self.birth_clinic.create()
+        self.population_ecology.initialize(robots)  # , self.environments)
 
         print("Evaluate population")
 
-        self.evaluate(self.population_ecology.populations())
+        for population in self.population_ecology.populations():
+            self.evaluate(population)
 
         # Run through iterations
         for generation_index in range(self.configuration.number_of_generations):
             print("Generation ", generation_index)
+            for population in self.population_ecology.populations():
+                if self.evolutionary_algorithm.should_terminate(population):
+                    print("Terminated evolution due to termination condition.")
+                    break
 
-            if self.evolutionary_algorithm.should_terminate(self.population_ecology.populations()):
-                break
-
-            self.evolutionary_algorithm.run(self.population_ecology.populations(), self.evaluate)
+                self.evolutionary_algorithm.run(population, self.evaluate)
 
             self.population_ecology.export()
 
-    def evaluate(self, agents: List[Population]):
+            self.population_ecology.speciate()
+
+    def evaluate(self, population: Population):
         for environment in self.environments:
-            environment.agents = agents
+            environment.agents = population.individuals
             self.simulator.evaluate(environment)
 
 
 class DefaultEvoSphere(EvoSphere):
 
     def __init__(self,
-                 birth_clinic: BirthClinic = BirthClinic(Representation(), Representation()),
-                 population_ecology: PopulationEcology = PopulationEcology(PopulationManagement(Selection())),
-                 evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(GeneticAlgorithmConfiguration()),
+                 birth_clinic: BirthClinic = BirthClinic(BodyBuilder(LSystemRepresentation),
+                                                         BrainBuilder(MultiNEATRepresentation), Fitness),
+                 population_ecology: PopulationEcology = PopulationEcology(PopulationManagement()),
+                 evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(GeneticAlgorithmConfiguration(),
+                                                                                       Fitness),
                  developmental_learner: DevelopmentalLearner = DevelopmentalLearner(),
-                 environments: List[Environment] = [],
+                 environments: List[Environment] = None,
                  simulator: Simulator = Simulator()):
-        super().__init__(birth_clinic, population_ecology, evolutionary_algorithm, developmental_learner, environments, simulator)
+        super().__init__(birth_clinic, population_ecology, evolutionary_algorithm,
+                         developmental_learner, environments, simulator)

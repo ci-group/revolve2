@@ -4,6 +4,7 @@ from typing import List
 from pyrevolve.evolutionary import Agents, Individual
 from pyrevolve.evolutionary.algorithm.selection.selection import SurvivorSelection
 
+
 class FitnessSteadyStateSelection(SurvivorSelection):
 
     def __init__(self):

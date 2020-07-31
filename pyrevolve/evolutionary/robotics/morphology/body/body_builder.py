@@ -5,7 +5,7 @@ from pyrevolve.evolutionary.robotics.robot_builder import RobotBuilder
 
 class BodyBuilder(RobotBuilder):
     def __init__(self, representation: type(Representation)):
-        super().__init__(genome)
+        super().__init__(representation)
 
     def build(self) -> Body:
         pass

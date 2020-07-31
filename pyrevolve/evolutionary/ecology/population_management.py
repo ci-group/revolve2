@@ -11,16 +11,17 @@ class PopulationManagement:
         super().__init__()
         self.configuration: PopulationConfiguration = configuration
 
-        self.population: Population = None
+        self.population: Population
 
     def populations(self) -> List[Population]:
-        return [self.population]
+        if self.population is not None:
+            return [self.population]
 
-    def create_population(self, agents: Agents):
+        return None
+
+    def initialize(self, agents: Agents):
+        assert(len(agents) > 0)
         self.population = Population(agents)
 
-
-class TestPopulationManagement(PopulationManagement):
-
-    def __init__(self):
-        super().__init__(PopulationConfiguration())
+    def speciate(self):
+        pass

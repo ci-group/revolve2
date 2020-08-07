@@ -6,7 +6,7 @@ from nca.core.evolution.selection.parent_selection import NullParentSelection
 from nca.core.evolution.selection.survivor_selection import NullSurvivorSelection
 from nca.core.ecology.population import Population
 from nca.core.agent.individual_factory import IndividualFactory
-from nca.experiment.configurations import PopulationConfiguration
+from nca.core.abstract.configurations import PopulationConfiguration
 
 
 class TestSelection(unittest.TestCase):

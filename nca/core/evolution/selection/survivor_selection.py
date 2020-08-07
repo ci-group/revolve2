@@ -1,7 +1,7 @@
 import random
 from typing import List
 
-from nca.core.agent import Agents, Individual
+from nca.core.agent.agents import Agents, Individual
 from nca.core.evolution.selection.selection import SurvivorSelection
 
 

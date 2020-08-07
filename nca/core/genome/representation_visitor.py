@@ -11,6 +11,8 @@ class RepresentationVisitor:
     def visit_valued_representation(self, valued_representation):
         self.mutation.algorithm(valued_representation, self.initialization.algorithm)
 
-
     def visit_grammar_representation(self, grammar_representation):
+        self.mutation.algorithm(grammar_representation, self.initialization.algorithm)
+
+    def visit_tree_representation(self, grammar_representation):
         self.mutation.algorithm(grammar_representation, self.initialization.algorithm)

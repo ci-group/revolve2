@@ -4,9 +4,9 @@ from typing import List
 
 import numpy as np
 
-from nca.core.agent import Agents
+from nca.core.agent.agents import Agents
 from nca.core.genome.representation import Representation
-from nca.experiment.configurations import RecombinationConfiguration
+from nca.core.abstract.configurations import RecombinationConfiguration
 
 
 class RecombinationOperator:
@@ -38,7 +38,7 @@ class OnePointCrossover(RecombinationOperator):
         new_representation: Representation = copy.deepcopy(representations[0])
 
         # TODO make possible to do multiple parents
-        crossover_index = representations[0].selection_indexes(k=1)[0]
+        crossover_index = np.random.choice(len(new_representation.genome) - 1, 1, replace=False)[0] + 1
 
         if crossover_index > round(representations[0].configuration.genome_size / 2):
             crossover_index = crossover_index - representations[0].configuration.genome_size

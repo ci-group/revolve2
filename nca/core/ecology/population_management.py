@@ -1,7 +1,7 @@
 from typing import List
 
 from nca.core.agent.agents import Agents
-from nca.experiment.configurations import PopulationConfiguration
+from nca.core.abstract.configurations import PopulationConfiguration
 from nca.core.ecology.population import Population
 
 

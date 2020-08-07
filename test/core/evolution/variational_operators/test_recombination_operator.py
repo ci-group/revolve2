@@ -15,9 +15,6 @@ class TestRecombinationOperators(unittest.TestCase):
         representation_1 = RealValuedRepresentation()
         representation_2 = RealValuedRepresentation()
 
-        new_representation_1 = copy.deepcopy(representation_1)
-        new_representation_2 = copy.deepcopy(representation_2)
-        recombination._execute([new_representation_1, new_representation_2])
-
-        self.assertFalse(np.allclose(new_representation_1.genome, representation_2.genome))
-        self.assertFalse(np.allclose(new_representation_1.genome, representation_2.genome))
+        new_representation = recombination._execute([representation_1, representation_2])
+        self.assertNotEqual(representation_1.genome, new_representation.genome)
+        self.assertNotEqual(representation_2.genome, new_representation.genome)

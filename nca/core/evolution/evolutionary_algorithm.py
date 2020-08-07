@@ -1,6 +1,6 @@
 from typing import List
 
-from nca.core.agent import Individual, Fitness
+from nca.core.agent.individual import Individual, Fitness
 from nca.core.agent.agents import Agents
 from nca.core.evolution.evolutionary_configurations import EvolutionConfiguration
 from nca.core.ecology.population import Population

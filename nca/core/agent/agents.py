@@ -1,8 +1,8 @@
 from typing import List
 import numpy as np
 
-from nca.core.agent import Individual
-from nca.experiment.abstract.iterator import Iterator
+from nca.core.abstract.iterator import Iterator
+from nca.core.agent.individual import Individual
 
 
 class Agents(Iterator):

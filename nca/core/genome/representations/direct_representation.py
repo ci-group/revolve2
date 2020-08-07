@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from nca.core.genome.representation import Representation
-from nca.core.genome.representations.l_system.alphabet import Alphabet
+from nca.core.genome.grammar.alphabet import Alphabet
 
 
 class DirectRepresentation(Representation, ABC):
@@ -29,7 +29,7 @@ class ValuedRepresentation(DirectRepresentation, ABC):
         self.init()
 
     def compatibility(self, other) -> float:
-        return np.linalg.norm(self.genome - other.genome)
+        return np.linalg.norm(np.array(self.genome) - np.array(other.genome))
 
     def visit(self, representation_visitor):
         representation_visitor.visit_valued_representation(self)
@@ -41,7 +41,7 @@ class BinaryRepresentation(ValuedRepresentation):
         super().__init__(bool)
 
     def _initialize(self):
-        self.genome = np.random.randint(2, size=self.configuration.genome_size)
+        self.genome = np.random.randint(2, size=self.configuration.genome_size).tolist()
 
 
 class IntegerRepresentation(ValuedRepresentation):
@@ -51,7 +51,7 @@ class IntegerRepresentation(ValuedRepresentation):
 
     def _initialize(self):
         self.genome = np.random.randint(self.configuration.minimum_value, self.configuration.maximum_value,
-                                        size=self.configuration.genome_size)
+                                        size=self.configuration.genome_size).tolist()
 
 
 class RealValuedRepresentation(ValuedRepresentation):
@@ -61,7 +61,7 @@ class RealValuedRepresentation(ValuedRepresentation):
 
     def _initialize(self):
         self.genome = np.random.uniform(self.configuration.minimum_value, self.configuration.maximum_value,
-                                        size=self.configuration.genome_size)
+                                        size=self.configuration.genome_size).tolist()
 
 
 class GrammarRepresentation(Representation):

@@ -21,7 +21,7 @@ class TestMutationOperators(unittest.TestCase):
         mutation._execute(new_representation, Initialization())
 
         self.assertTrue(len(representation.genome) > 0)
-        self.assertFalse(np.allclose(new_representation.genome, representation.genome))
+        self.assertNotEqual(representation.genome, new_representation.genome)
 
     def test_inversion_mutation(self):
         mutation = InversionMutation()
@@ -32,7 +32,7 @@ class TestMutationOperators(unittest.TestCase):
         mutation._execute(new_representation, Initialization())
 
         self.assertTrue(len(representation.genome) > 0)
-        self.assertFalse(np.allclose(new_representation.genome, representation.genome))
+        self.assertNotEqual(representation.genome, new_representation.genome)
 
     def test_insert_mutation(self):
         mutation = InsertMutation()
@@ -55,4 +55,4 @@ class TestMutationOperators(unittest.TestCase):
 
         self.assertTrue(len(representation.genome) > 0)
         self.assertTrue(len(new_representation.genome) == len(representation.genome))
-        self.assertFalse(np.allclose(new_representation.genome, representation.genome))
+        self.assertNotEqual(representation.genome, new_representation.genome)

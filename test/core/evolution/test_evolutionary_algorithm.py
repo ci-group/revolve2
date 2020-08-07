@@ -1,6 +1,7 @@
 import unittest
 
-from nca.core.agent import Agents, Fitness
+from nca.core.agent.agents import Agents
+from nca.core.agent.fitness import Fitness
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
 from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
 from nca.core.ecology import PopulationEcology

@@ -10,7 +10,7 @@ from nca.core.evolution.selection.selection import ParentSelection, SurvivorSele
 from nca.core.evolution.conditions.special_features import SpecialFeatures
 from nca.core.evolution.conditions.termination_condition import TerminationCondition, EvaluationsCondition
 from nca.core.evolution.selection.survivor_selection import GenerationalSteadyStateSelection
-from nca.experiment.configuration import Configuration
+from nca.core.abstract.configuration import Configuration
 
 
 class EvolutionConfiguration(Configuration):
@@ -50,6 +50,7 @@ class GeneticAlgorithmConfiguration(EvolutionConfiguration):
         super().__init__(
             representation, recombination, mutation, parent_selection, survivor_selection,
             initialization, termination_condition, special_features)
+
 
 
 """

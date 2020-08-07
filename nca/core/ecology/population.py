@@ -1,7 +1,6 @@
-from nca.experiment.sequential_identifier import PopulationIdentifier
+from nca.core.abstract.sequential_identifier import PopulationIdentifier
 from nca.core.agent.age import GenerationalAge
-
-from nca.core.agent import Agents
+from nca.core.agent.agents import Agents
 
 
 class Population:

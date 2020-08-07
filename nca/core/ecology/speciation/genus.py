@@ -1,8 +1,8 @@
 from typing import List
 
-from nca.core.agent import Individual
+from nca.core.agent.individual import Individual
 from nca.core.ecology.population import Population
-from nca.experiment.sequential_identifier import GenusIdentifier
+from nca.core.abstract.sequential_identifier import GenusIdentifier
 from nca.core.ecology.speciation.compatibility import Compatibility
 
 

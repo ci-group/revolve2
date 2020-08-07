@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from nca.experiment.configurations import InitializationConfiguration
+from nca.core.abstract.configurations import InitializationConfiguration
 
 
 class Initialization:

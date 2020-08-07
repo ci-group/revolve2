@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from nca.core.agent import Individual
+from nca.core.agent.individual import Individual
 from nca.core.ecology.speciation.compatibility import Compatibility
 from nca.core.genome.representations.direct_representation import BinaryRepresentation
 from nca.core.ecology.population import Population

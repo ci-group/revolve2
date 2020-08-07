@@ -3,7 +3,7 @@ from abc import abstractmethod
 
 import numpy as np
 
-from nca.experiment.configurations import MutationConfiguration
+from nca.core.abstract.configurations import MutationConfiguration
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.representation import Representation
 from nca.core.genome.representations.direct_representation import DirectRepresentation, \
@@ -33,7 +33,7 @@ class SwapMutation(MutationOperator):
     def __init__(self):
         super().__init__()
 
-    def _execute(self, representation: DirectRepresentation, initialization: Initialization):
+    def _execute(self, representation: Representation, initialization: Initialization):
         choices = representation.selection_indexes()
         representation.swap_indexes(choices)
 
@@ -43,7 +43,7 @@ class InsertMutation(MutationOperator):
     def __init__(self):
         super().__init__()
 
-    def _execute(self, representation: DirectRepresentation, initialization: Initialization):
+    def _execute(self, representation: Representation, initialization: Initialization):
         index = random.choice(range(len(representation.genome)))
         representation.genome = np.insert(representation.genome, index, initialization.algorithm(1))
 
@@ -53,7 +53,7 @@ class ReplaceMutation(MutationOperator):
     def __init__(self):
         super().__init__()
 
-    def _execute(self, representation: DirectRepresentation, initialization: Initialization):
+    def _execute(self, representation: Representation, initialization: Initialization):
         index = random.choice(range(len(representation.genome)))
         representation.genome[index] = initialization.algorithm(1)
 
@@ -63,7 +63,7 @@ class InversionMutation(MutationOperator):
     def __init__(self):
         super().__init__()
 
-    def _execute(self, representation: DirectRepresentation, initialization: Initialization):
+    def _execute(self, representation: Representation, initialization: Initialization):
         selection_range = representation.range_selection()
         representation.swap_indexes(selection_range)
 
@@ -73,7 +73,7 @@ class DisplacementMutation(MutationOperator):
     def __init__(self):
         super().__init__()
 
-    def _execute(self, representation: DirectRepresentation, initialization: Initialization):
+    def _execute(self, representation: Representation, initialization: Initialization):
         choices = representation.selection_indexes()
         selection_range = representation.range_selection()
 

@@ -1,9 +1,9 @@
 import string
 from typing import List
 
-from nca.experiment.abstract.memento import Memento
+from nca.core.abstract.memento import Memento
 
-from nca.core.agent import Agents
+from nca.core.agent.agents import Agents
 from .population import Population
 from .population_management import PopulationManagement
 

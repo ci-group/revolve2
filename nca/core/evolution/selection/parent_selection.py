@@ -3,7 +3,7 @@ from typing import List
 
 import numpy as np
 
-from nca.core.agent import Individual
+from nca.core.agent.individual import Individual
 from nca.core.evolution.selection.selection import ParentSelection
 
 

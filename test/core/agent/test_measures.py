@@ -1,7 +1,7 @@
 import unittest
 from typing import List
 
-from nca.revolve.evosphere.performance_measures import PerformanceMeasures
+from revolve.evosphere.performance_measures import PerformanceMeasures
 
 
 class TestPerformanceMeasures(unittest.TestCase):

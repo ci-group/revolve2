@@ -5,7 +5,7 @@ import numpy as np
 
 from nca.core.genome.initialization import CategoricalInitialization, UniformInitialization, \
     GaussianInitialization
-from nca.core.genome.representations.l_system.alphabet import TestColorAlphabet
+from test.core.grammar.test_alphabet import TestColorAlphabet
 
 
 class TestInitializations(unittest.TestCase):

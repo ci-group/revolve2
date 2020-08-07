@@ -2,7 +2,7 @@ from abc import abstractmethod
 import math
 import random
 
-from nca.simulation import Measures
+from simulation.measures import Measures
 
 
 class Fitness:
@@ -47,15 +47,6 @@ class Fitness:
         fitness = Fitness()
         fitness.fitness = -math.inf
         return fitness
-
-
-class TestFitness(Fitness):
-
-    def __init__(self):
-        super().__init__()
-
-    def calculate(self, measures: Measures):
-        self.fitness = random.random()
 
 
 class DisplacementFitness(Fitness):

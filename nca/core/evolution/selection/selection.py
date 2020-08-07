@@ -3,9 +3,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from nca.core.agent import Agents, Individual
-from nca.experiment.abstract.command import Command
-from nca.experiment.configurations import PopulationConfiguration
+from nca.core.agent.agents import Agents, Individual
+from nca.core.abstract.command import Command
+from nca.core.abstract.configurations import PopulationConfiguration
 
 
 class Selection(Command, ABC):

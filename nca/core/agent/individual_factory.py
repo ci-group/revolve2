@@ -1,8 +1,8 @@
 
-from nca.core.agent import Individual, Agents
+from nca.core.agent.agents import Individual, Agents
 from nca.core.genome.representation import Representation
 from nca.core.genome.representations.direct_representation import BinaryRepresentation
-from nca.core.agent import Fitness, DisplacementFitness
+from nca.core.agent.fitness import Fitness, DisplacementFitness
 
 
 class IndividualFactory:

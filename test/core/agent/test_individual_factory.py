@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.agent import Fitness
+from nca.core.agent.fitness import Fitness
 from nca.core.agent.agents import Agents
 from nca.core.genome.representation import Representation
 from nca.core.agent.individual_factory import IndividualFactory

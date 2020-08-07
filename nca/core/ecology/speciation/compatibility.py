@@ -1,4 +1,4 @@
-from nca.core.agent import Agents, Individual
+from nca.core.agent.agents import Agents, Individual
 
 
 class Compatibility:

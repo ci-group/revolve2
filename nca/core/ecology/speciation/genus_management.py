@@ -1,8 +1,8 @@
 from typing import List
 
-from nca.experiment.configurations import SpeciationConfiguration
+from nca.core.abstract.configurations import SpeciationConfiguration
 
-from nca.core.agent import Agents, Individual
+from nca.core.agent.agents import Agents, Individual
 
 from nca.core.ecology.population import Population
 from nca.core.ecology.population_management import PopulationManagement

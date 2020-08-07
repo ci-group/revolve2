@@ -4,16 +4,16 @@ from typing import List
 import numpy as np
 
 from nca.core.evolution.conditions.initialization import Initialization
-from nca.experiment.configurations import RepresentationConfiguration
+from nca.core.abstract.configurations import RepresentationConfiguration
 
-Genome = np.array
+Genome: List = []
 
 
 class Representation:
 
     def __init__(self):
         self.configuration = RepresentationConfiguration()
-        self.genome: Genome = Genome([])
+        self.genome: Genome = []
 
     def init(self, initialization: Initialization = None):
         if initialization is not None:
@@ -37,4 +37,6 @@ class Representation:
         return list(range(indexes[0], indexes[1] + 1))
 
     def swap_indexes(self, indexes: List[int]):
-        self.genome[indexes] = self.genome[indexes[::-1]]
+        index1 = indexes[0]
+        index2 = indexes[1]
+        self.genome[index1], self.genome[index2] = self.genome[index2], self.genome[index1]

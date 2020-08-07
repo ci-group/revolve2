@@ -1,7 +1,7 @@
 import unittest
 
-from nca.experiment.configurations import PopulationConfiguration
-from nca.core.agent import Individual
+from nca.core.abstract.configurations import PopulationConfiguration
+from nca.core.agent.individual import Individual
 from nca.core.evolution.selection.survivor_selection import FitnessSteadyStateSelection, \
     ElitismSelection, NullSurvivorSelection, GenerationalSteadyStateSelection
 from nca.core.ecology.population import Population

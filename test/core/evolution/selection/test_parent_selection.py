@@ -1,12 +1,12 @@
 import unittest
 from typing import List
 
-from nca.core.agent import Individual
+from nca.core.agent.individual import Individual
 from nca.core.evolution.selection.parent_selection import TournamentSelection, RandomParentSelection, \
     RouletteWheelSelection
 from nca.core.ecology.population import Population
 from nca.core.agent.individual_factory import IndividualFactory
-from nca.experiment.configurations import PopulationConfiguration
+from nca.core.abstract.configurations import PopulationConfiguration
 
 
 class TestParentSelection(unittest.TestCase):

@@ -52,7 +52,7 @@ class GenusManagementTest(unittest.TestCase):
         agents.get(1).representation.genome = np.array([0, 0, 0, 0])
         agents.get(2).representation.genome = np.array([0, 0, 0, 0])
         population_management.initialize(agents)
-        print(population_management.genus.species)
+
         self.assertEqual(len(population_management.genus.species), 1)
 
         population_management.genus.species[0].individuals.get(0).representation.genome = np.array([0, 2, 0, 0])

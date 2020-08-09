@@ -5,17 +5,17 @@ import numpy as np
 
 from nca.core.genome.initialization import CategoricalInitialization, UniformInitialization, \
     GaussianInitialization
-from test.core.grammar.test_alphabet import TestColorAlphabet
+from test.core.grammar.test_alphabet import TestColorSymbol
 
 
 class TestInitializations(unittest.TestCase):
 
     def test_categorical(self):
-        elements = TestColorAlphabet.list()
+        elements = TestColorSymbol.alphabet()
         initialization = CategoricalInitialization(len(elements))
 
         n = 10
-        result = [TestColorAlphabet(element) for element in initialization.algorithm(n)]
+        result = [TestColorSymbol(element) for element in initialization.algorithm(n)]
 
         self.assertIsInstance(result, List)
         self.assertEqual(len(result), n)

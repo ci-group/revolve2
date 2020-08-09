@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from nca.core.genome.representation import Representation
-from nca.core.genome.grammar.alphabet import Alphabet
 
 
 class DirectRepresentation(Representation, ABC):
@@ -62,26 +61,3 @@ class RealValuedRepresentation(ValuedRepresentation):
     def _initialize(self):
         self.genome = np.random.uniform(self.configuration.minimum_value, self.configuration.maximum_value,
                                         size=self.configuration.genome_size).tolist()
-
-
-class GrammarRepresentation(Representation):
-
-    def __init__(self, alphabet: type(Alphabet)):
-        super().__init__()
-        self.alphabet: Alphabet = alphabet
-        self.init()
-
-    def _initialize(self):
-        self.genome = random.choices(self.alphabet.list(), k=self.configuration.genome_size)
-
-    def compatibility(self, other) -> float:
-        differences = 0
-
-        for index, element in enumerate(self.genome):
-            if self.genome[index] != other.genome[index]:
-                differences += 1
-
-        return differences
-
-    def visit(self, representation_visitor):
-        representation_visitor.visit_grammar_representation(self)

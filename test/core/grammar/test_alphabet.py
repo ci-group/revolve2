@@ -1,10 +1,11 @@
 from enum import auto
+
 import numpy as np
 
-from nca.core.genome.grammar.alphabet import Alphabet
+from nca.core.genome.grammar.grammar import Symbol
 
 
-class TestColorAlphabet(Alphabet):
+class TestColorSymbol(Symbol):
     RED = auto()
     GREEN = auto()
     BLUE = auto()

@@ -1,8 +1,16 @@
-from enum import Enum, auto
-from typing import Dict
+from enum import Enum
 
-from nca.core.abstract.composite import Composite
-from nca.core.genome.representations.tree import Node2D, Orientation
+
+class Orientation(Enum):
+    TOP = (1, 0, 0)
+    RIGHT = (0, 1, 0)
+    DOWN = (-1, 0, 0)
+    LEFT = (0, -1, 0)
+
+
+class Alignment(Orientation, Enum):
+    FRONT = (0, 0, 1)
+    BACK = (0, 0, -1)
 
 
 class Coordinate3D:
@@ -29,32 +37,16 @@ class BiDict(dict):
         super(BiDict, self).__init__(*args, **kwargs)
         self.inverse = {}
         for key, value in self.items():
-            self.inverse.setdefault(value,[]).append(key)
+            self.inverse.setdefault(value, []).append(key)
 
     def __setitem__(self, key, value):
         if key in self:
             self.inverse[self[key]].remove(key)
         super(BiDict, self).__setitem__(key, value)
-        self.inverse.setdefault(value,[]).append(key)
+        self.inverse.setdefault(value, []).append(key)
 
     def __delitem__(self, key):
-        self.inverse.setdefault(self[key],[]).remove(key)
+        self.inverse.setdefault(self[key], []).remove(key)
         if self[key] in self.inverse and not self.inverse[self[key]]:
             del self.inverse[self[key]]
         super(BiDict, self).__delitem__(key)
-
-
-def tree_registry(visited, graph, node: Node2D, used):
-
-    if node not in visited:
-
-        visited.add(node)
-
-        for orientation, child_node in graph[node]:
-
-            new_coordinate = used[node.id] + orientation
-            if new_coordinate not in used.inverse:
-                used[child_node.id] = new_coordinate
-            else:
-                raise Exception("invalid tree")
-            tree_registry(visited, graph, child_node, used)

@@ -1,20 +1,26 @@
-from enum import Enum, auto
 from typing import Dict
 
 from nca.core.abstract.composite import Composite
 from nca.core.abstract.sequential_identifier import NodeIdentifier
+from nca.core.genome.representations.tree_helper import Coordinate3D, BiDict, Alignment, Orientation
 
 
-class Node(Composite):
+class Tree(Composite):
+
     identifier = NodeIdentifier()
 
-    def __init__(self):
+    def __init__(self, root_tree=None):
         super().__init__()
         self.id = self.identifier.id()
+        self.root = root_tree if root_tree is not None else self
+
+    def add(self, tree=None):
+        tree = tree if tree is not None else Tree(self.root)
+        self.children.append(tree)
 
     def graph(self) -> Dict:
         graph = {}
-        explore = [(self, self.children)]
+        explore = [(self.root, self.children)]
 
         for node, children in explore:
             for element in children:
@@ -31,24 +37,33 @@ class Node(Composite):
         return graph
 
 
-class Orientation(Enum):
-    TOP = (1, 0, 0)
-    RIGHT = (0, 1, 0)
-    DOWN = (-1, 0, 0)
-    LEFT = (0, -1, 0)
+class TreeRegistry:
+    def __init__(self, root_id: int):
+        self.registered: BiDict = BiDict()
+        self.registered[root_id] = Coordinate3D(0, 0, 0)
+
+    def register(self, parent_id, child_id, orientation):
+        new_coordinate = self.registered[parent_id] + orientation
+        if new_coordinate not in self.registered.inverse:
+            self.registered[child_id] = new_coordinate
+        else:
+            raise Exception("invalid tree")
 
 
-class Node2D(Node):
+class Tree2D(Tree):
 
-    def __init__(self):
-        super().__init__()
-        self.children: Dict[Orientation, Node2D] = {}
+    def __init__(self, root_tree=None):
+        super().__init__(root_tree)
+        self.children: Dict[Orientation, Tree2D] = {}
+        self.registry = root_tree.registry if root_tree is not None else TreeRegistry(self.id)
 
-    def add(self, node, orientation: Orientation):
+    def add(self, orientation: Orientation, tree=None):
         if orientation in self.children.keys():
             raise Exception("already set orientation for Node2D")
-
-        self.children[orientation] = node
+        tree = tree if tree is not None else self.__class__(self.root)
+        self.children[orientation] = tree
+        self.registry.register(self.id, tree.id, orientation)
+        return tree
 
     def graph(self) -> Dict:
         graph = {}
@@ -68,13 +83,9 @@ class Node2D(Node):
 
         return graph
 
-class Alignment(Orientation, Enum):
-    FRONT = (0, 0, 1)
-    BACK = (0, 0, -1)
 
+class Tree3D(Tree2D):
 
-class Node3D(Node2D):
-
-    def __init__(self):
-        super().__init__()
-        self.children: Dict[Alignment, Node3D] = {}
+    def __init__(self, root_tree=None):
+        super().__init__(root_tree)
+        self.children: Dict[Alignment, Tree3D] = {}

@@ -1,7 +1,6 @@
 from nca.core.agent.agents import Agents
 from nca.core.agent.fitness import Fitness
 from nca.core.genome.representation import Representation
-from nca.core.genome.representations.direct_representation import GrammarRepresentation
 from nca.core.genome.grammar.lsystem_representation import LSystemRepresentation
 from revolve.robot.body.body_builder import BodyBuilder
 from revolve.robot.brain.brain_builder import BrainBuilder
@@ -32,13 +31,7 @@ class BirthClinic:
         return Robot(self.body_builder.build(), self.brain_builder.build(), self.fitness_type())
 
 
-class DefaultMultiNEATCPGClinic(BirthClinic):
-
-    def __init__(self):
-        super().__init__(BodyBuilder(GrammarRepresentation), BrainBuilder(MultiNEATRepresentation))
-
-
-class DefaultLSystemCPGClinic(BirthClinic):
+class DefaultLSystemCPGMultiNEATClinic(BirthClinic):
 
     def __init__(self):
         super().__init__(BodyBuilder(LSystemRepresentation), BrainBuilder(MultiNEATRepresentation))

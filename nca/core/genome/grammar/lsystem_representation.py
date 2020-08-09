@@ -1,26 +1,31 @@
-from typing import Dict, List
+import random
 
-from nca.core.genome.representation import Genome
-from nca.core.genome.grammar.alphabet import Alphabet
-from nca.core.genome.representations.direct_representation import GrammarRepresentation
-
-
-Rules = Dict[Alphabet, List[Alphabet]]
+from nca.core.genome.grammar.grammar import Grammar
+from nca.core.genome.representation import Representation
 
 
-class LSystemRepresentation(GrammarRepresentation):
+class LSystemRepresentation(Representation):
 
-    def __init__(self, alphabet: type(Alphabet), rules: Rules):
-        super().__init__(alphabet=alphabet)
-        self.rules: Rules = rules
+    def __init__(self, grammar: Grammar):
+        super().__init__()
+        self.grammar = grammar
+        self.init()
 
-    def apply_rules(self):
-        new_genome: Genome = []
+    def _initialize(self):
+        self.genome = random.choices(self.grammar.alphabet, k=self.configuration.genome_size)
+
+    def algorithm(self, rule_iterations: int = 1):
+        for _ in range(rule_iterations):
+            self.genome = self.grammar.apply_rules(self.genome)
+
+    def compatibility(self, other) -> float:
+        differences = 0
 
         for index, element in enumerate(self.genome):
-            if element in self.rules.keys():
-                new_genome.extend(self.rules[element])
-            else:
-                new_genome.append(element)
+            if self.genome[index] != other.genome[index]:
+                differences += 1
 
-        self.genome = new_genome
+        return differences
+
+    def visit(self, representation_visitor):
+        representation_visitor.visit_lsystem_representation(self)

@@ -1,8 +1,5 @@
-from enum import Enum, auto
-from typing import Dict
 
-from nca.core.abstract.composite import Composite
-from nca.core.genome.representations.tree import Node2D, Orientation
+from nca.core.genome.representations.tree import Tree2D, Orientation
 
 
 def depth_first_search(visited, graph, node):
@@ -12,13 +9,13 @@ def depth_first_search(visited, graph, node):
             depth_first_search(visited, graph, element)
 
 
-root = Node2D()
-root.add(Node2D(), Orientation.TOP)
+root = Tree2D()
+root.add(Orientation.TOP)
 
-child = Node2D()
-child.add(Node2D(), Orientation.LEFT)
-child.add(Node2D(), Orientation.RIGHT)
-child.add(Node2D(), Orientation.DOWN)
-root.add(child, Orientation.DOWN)
+child = Tree2D()
+child.add(Orientation.LEFT)
+child.add(Orientation.RIGHT)
+child.add(Orientation.DOWN)
+root.add(Orientation.DOWN)
 print(root.graph().keys())
 depth_first_search(set(), root.graph(), root)

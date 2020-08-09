@@ -1,14 +1,13 @@
 from typing import Dict
 
-from nca.core.genome.grammar import LSystemRepresentation
-from revolve.robot.morphology import RobogenAlphabet, RobogenModuleAlphabet
+from nca.core.genome.grammar.grammar import Axiom
+from nca.core.genome.grammar.lsystem_representation import LSystemRepresentation
+from revolve.robot.body.robogen.robogen_grammar import RobogenModule, RobogenGrammar
 
-axiom = RobogenModuleAlphabet.MODULE_CORE_COMPONENT
-
-RobogenRules = Dict[RobogenAlphabet, RobogenAlphabet]
+axiom: Axiom = [RobogenModule.MODULE_CORE_COMPONENT]
 
 
-class RobogenRepresentation(LSystemRepresentation):
+class RobogenRepresentation(LSystemRepresentation, Tree):
 
-    def __init__(self, alphabet: type(RobogenAlphabet) = RobogenAlphabet, rules: RobogenRules = RobogenRules):
-        super().__init__(alphabet=alphabet, rules=rules)
+    def __init__(self, grammar: RobogenGrammar):
+        super().__init__(grammar)

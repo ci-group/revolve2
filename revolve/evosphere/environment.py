@@ -2,7 +2,7 @@ import os
 import string
 from typing import List
 
-from nca.core.agent import Agents
+from nca.core.agent.agents import Agents
 from nca.experiment_manager import ExperimentManager
 
 

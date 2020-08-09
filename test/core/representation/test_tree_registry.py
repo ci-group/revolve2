@@ -3,7 +3,7 @@ import unittest
 from nca.core.genome.representations.tree import Tree2D, Orientation
 
 
-class TreeRepresentationTest(unittest.TestCase):
+class TreeRegistryTest(unittest.TestCase):
 
     def test_overlap(self):
 

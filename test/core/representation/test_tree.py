@@ -4,7 +4,7 @@ from nca.core.genome.representations.tree import Tree, Tree2D, Orientation, Alig
 from nca.core.genome.representations.tree_representation import TreeRepresentation, Tree2DRepresentation
 
 
-class TreeRepresentationTest(unittest.TestCase):
+class TreeTest(unittest.TestCase):
 
     def test_node(self):
         root_node = Tree()

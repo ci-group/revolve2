@@ -1,6 +1,5 @@
 from abc import abstractmethod
 import math
-import random
 
 from simulation.measures import Measures
 

@@ -1,0 +1,3 @@
+
+class Command:
+    pass

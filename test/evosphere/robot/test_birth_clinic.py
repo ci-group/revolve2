@@ -6,7 +6,7 @@ from revolve.robot.birth_clinic import BirthClinic
 from revolve.robot.body.body import Body
 from revolve.robot.body.body_builder import BodyBuilder
 from revolve.robot.brain.brain import Brain
-from revolve.robot.brain.brain_builder import BrainBuilder
+from src.revolve.robot.brain.brain_builder import BrainBuilder
 
 
 class TestBirthClinic(unittest.TestCase):

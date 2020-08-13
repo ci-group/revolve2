@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 from enum import Enum, auto
 
 from nca.core.abstract.sequential_identifier import SimulatorConnectionIdentifier
-from revolve.evosphere.environment import Environment
+from simulation.environment import Environment
 from revolve.robot.robot import Robot
 from src.simulation.simulation_measures import SimulationMeasures
 
@@ -11,6 +11,9 @@ class SimulatorState(Enum):
     STOPPED = auto()
     READY = auto()
     WORKING = auto()
+
+    def __eq__(self, other):
+        return self.value == other.value
 
 
 class SimulatorConnector(ABC):

@@ -9,7 +9,7 @@ from nca.core.genome.initialization import UniformInitialization
 from nca.core.genome.operators.mutation_operator import MutationOperator, BitFlipMutation
 from nca.core.genome.operators.recombination_operator import RecombinationOperator, OnePointCrossover
 from nca.core.genome.representation import Representation
-from nca.core.genome.representations.direct_representation import BinaryRepresentation
+from nca.core.genome.representations.valued_representation import BinaryRepresentation
 
 
 class EvolutionConfiguration(Configuration):

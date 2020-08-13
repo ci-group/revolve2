@@ -7,16 +7,16 @@ from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population import Population
 from nca.core.ecology.population_management import PopulationManagement
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
-from nca.core.genome.grammar.lsystem_representation import LSystemRepresentation
 from revolve.evosphere.configuration import GeneticAlgorithmConfiguration
-from revolve.evosphere.environment import Environment
+from revolve.robot.body.robogen.robogen_representation import RobogenRepresentation
+from simulation.environment import Environment
 from revolve.robot.birth_clinic import BirthClinic
 from revolve.robot.body.body_builder import BodyBuilder
 from revolve.robot.brain.brain_builder import BrainBuilder
 from revolve.robot.brain.representation.multineat_representation import MultiNEATRepresentation
 from revolve.tol.developmental_learning import DevelopmentalLearner
 from simulation.simulation_manager import SimulationManager
-from simulation.simulator.simulator_helper import SimulatorType, RequestCommand
+from simulation.simulator.simulator_helper import SimulateCommand
 
 
 class EvoSphere:
@@ -46,7 +46,8 @@ class EvoSphere:
         self.population_ecology.load()
         self.evolutionary_algorithm.initialize(self.population_ecology.populations())
 
-        robots: Agents = self.birth_clinic.create()
+        #TODO parameterize
+        robots: Agents = self.birth_clinic.create(10)
         self.population_ecology.initialize(robots)  # , self.environments)
 
         print("Evaluate population")
@@ -71,13 +72,13 @@ class EvoSphere:
     def evaluate(self, population: Population):
         for environment in self.environments:
             environment.agents = population.individuals
-            self.simulation.simulate(environment.agents, RequestCommand(environment, SimulatorType.NONE))
+            self.simulation.simulate(environment.agents, SimulateCommand(environment))
 
 
 class DefaultEvoSphere(EvoSphere):
 
     def __init__(self,
-                 birth_clinic: BirthClinic = BirthClinic(BodyBuilder(LSystemRepresentation),
+                 birth_clinic: BirthClinic = BirthClinic(BodyBuilder(RobogenRepresentation),
                                                          BrainBuilder(MultiNEATRepresentation), Fitness),
                  population_ecology: PopulationEcology = PopulationEcology(PopulationManagement()),
                  evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(GeneticAlgorithmConfiguration(),

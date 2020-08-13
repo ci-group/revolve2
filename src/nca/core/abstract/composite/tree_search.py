@@ -1,5 +1,5 @@
-from nca.core.genome.representations.tree import Tree2D
-from nca.core.genome.representations.tree_helper import Orientation
+from nca.core.abstract.composite.tree import Tree2D
+from nca.core.abstract.composite.tree_helper import Orientation
 
 
 def depth_first_search(visited, graph, node):

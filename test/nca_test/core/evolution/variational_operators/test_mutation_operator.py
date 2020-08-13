@@ -4,7 +4,7 @@ import unittest
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.initialization import UniformInitialization
 from nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, ReplaceMutation
-from nca.core.genome.representations.direct_representation import RealValuedRepresentation
+from nca.core.genome.representations.valued_representation import RealValuedRepresentation
 
 
 class TestMutationOperators(unittest.TestCase):

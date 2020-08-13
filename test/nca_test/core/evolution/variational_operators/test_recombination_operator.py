@@ -1,7 +1,7 @@
 import unittest
 
 from nca.core.genome.operators.recombination_operator import OnePointCrossover
-from nca.core.genome.representations.direct_representation import RealValuedRepresentation
+from nca.core.genome.representations.valued_representation import RealValuedRepresentation
 
 
 class TestRecombinationOperators(unittest.TestCase):

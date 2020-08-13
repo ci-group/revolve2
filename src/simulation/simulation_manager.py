@@ -2,7 +2,7 @@ from typing import Dict
 
 from nca.core.abstract.configurations import SimulatorConfiguration
 from nca.core.agent.agents import Agents
-from src.simulation.simulator.simulator_helper import RequestCommand
+from simulation.simulator.simulator_command import SimulateCommand
 from src.simulation.simulation_supervisor import SimulationSupervisor
 
 
@@ -10,15 +10,15 @@ class SimulationManager:
 
     def __init__(self):
         self.configuration = SimulatorConfiguration()
-        self.supervisors: Dict[RequestCommand, SimulationSupervisor] = {}
+        self.supervisors: Dict[SimulateCommand, SimulationSupervisor] = {}
 
-    def simulate(self, robots: Agents, request_command: RequestCommand):
+    def simulate(self, request_command: SimulateCommand):
 
         if request_command not in self.supervisors.keys():
             self.supervisors[request_command] = SimulationSupervisor(request_command)
 
-        for robot in robots:
-            robot.measures = self.supervisors[request_command].work(robot, request_command)
+        for agent in request_command.agents:
+            agent.measures = self.supervisors[request_command].work(agent, request_command)
 
     """
     def _find_available_supervisor(self):

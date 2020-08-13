@@ -2,33 +2,22 @@
 import unittest
 
 from nca.core.agent.agents import Agents
+from revolve.robot.birth_clinic import BirthClinic
+from simulation.simulator.simulator_command import SimulateCommand
 from src.simulation.simulation_manager import SimulationManager
 
-from src.simulation.simulator.simulator_helper import SimulatorType, RequestCommand, TaskPriority
+from src.simulation.simulator.simulator_helper import TaskPriority
 
-from test.evosphere.TestEnvironment import TestEnvironmentB, TestEnvironmentA, TestEnvironmentC
+from evosphere.TestEnvironment import TestEnvironmentB, TestEnvironmentA, TestEnvironmentC
 
 
 class SimulationManagerTest(unittest.TestCase):
 
     def test_supervisor(self):
-        agents_a = Agents()
-        agents_b = Agents()
-        agents_c = Agents()
-
-        request_command_a = RequestCommand(TestEnvironmentA(), SimulatorType.NONE, TaskPriority.MEDIUM)
-        request_command_b = RequestCommand(TestEnvironmentB(), SimulatorType.NONE, TaskPriority.MEDIUM)
-        request_command_c = RequestCommand(TestEnvironmentC(), SimulatorType.NONE, TaskPriority.MEDIUM)
 
         manager = SimulationManager()
-        manager.simulate(agents_a, request_command_a)
-        manager.simulate(agents_b, request_command_b)
-        manager.simulate(agents_c, request_command_c)
-
-        self.assertEqual(len(manager.supervisors.keys()), 3)
-
-        agents_d = Agents()
-        request_command_d = RequestCommand(TestEnvironmentA(), SimulatorType.NONE, TaskPriority.MEDIUM)
-        manager.simulate(agents_d, request_command_d)
+        manager.simulate(SimulateCommand(BirthClinic().create(3), TestEnvironmentA(), TaskPriority.MEDIUM))
+        manager.simulate(SimulateCommand(BirthClinic().create(3), TestEnvironmentB(), TaskPriority.MEDIUM))
+        manager.simulate(SimulateCommand(BirthClinic().create(3), TestEnvironmentC(), TaskPriority.MEDIUM))
 
         self.assertEqual(len(manager.supervisors.keys()), 3)

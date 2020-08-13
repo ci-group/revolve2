@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.genome.representations.direct_representation import BinaryRepresentation, IntegerRepresentation, \
+from nca.core.genome.representations.valued_representation import BinaryRepresentation, IntegerRepresentation, \
     RealValuedRepresentation
 
 

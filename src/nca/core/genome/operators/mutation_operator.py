@@ -6,7 +6,7 @@ import numpy as np
 from nca.core.abstract.configurations import MutationConfiguration
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.representation import Representation
-from nca.core.genome.representations.direct_representation import BinaryRepresentation
+from nca.core.genome.representations.valued_representation import BinaryRepresentation
 
 
 class MutationOperator:

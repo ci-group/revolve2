@@ -1,4 +1,4 @@
-from revolve.evosphere.environment import Environment
+from simulation.environment import Environment
 from revolve.robot.robot import Robot
 
 from src.simulation.simulation_measures import SimulationMeasures

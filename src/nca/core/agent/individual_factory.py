@@ -2,7 +2,7 @@
 from nca.core.agent.individual import Individual
 from nca.core.agent.agents import Agents
 from nca.core.genome.representation import Representation
-from nca.core.genome.representations.direct_representation import BinaryRepresentation
+from nca.core.genome.representations.valued_representation import BinaryRepresentation
 from nca.core.agent.fitness import Fitness, DisplacementFitness
 
 

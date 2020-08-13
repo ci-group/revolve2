@@ -1,9 +1,9 @@
 import unittest
 
 from revolve.robot.robot import Robot
-from src.simulation.simulator.simulation_connector import SimulatorState
-from test.evosphere.TestEnvironment import TestEnvironment
-from test.simulation_test.simulator.test_connector_adapter import TestConnectorAdapter
+from simulation.simulator.simulation_connector import SimulatorState
+from evosphere.TestEnvironment import TestEnvironment
+from simulation_test.simulator.test_connector_adapter import TestConnectorAdapter
 
 
 class TestSimulatorConnector(unittest.TestCase):

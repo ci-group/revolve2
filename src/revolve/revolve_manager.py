@@ -3,7 +3,7 @@ from typing import List
 from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population_management import PopulationManagement
 from nca.core.evolution.selection.parent_selection import TournamentSelection
-from revolve.evosphere.environment import Environment
+from simulation.environment import Environment
 from nca.experiment_manager import ExperimentManager
 from revolve.evosphere.evosphere import EvoSphere
 

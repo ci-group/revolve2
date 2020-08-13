@@ -1,8 +1,8 @@
 from typing import Dict
 
-from nca.core.abstract.composite import Composite
+from nca.core.abstract.composite.composite import Composite
 from nca.core.abstract.sequential_identifier import NodeIdentifier
-from nca.core.genome.representations.tree_helper import Coordinate3D, BiDict, Orientation, Alignment
+from nca.core.abstract.composite.tree_helper import Coordinate3D, BiDict, Orientation, Alignment
 
 
 class Tree(Composite):
@@ -47,7 +47,7 @@ class TreeRegistry:
         if new_coordinate not in self.registered.inverse:
             self.registered[child_id] = new_coordinate
         else:
-            raise Exception("invalid tree")
+            raise Exception("invalid composite")
 
 
 class Tree2D(Tree):

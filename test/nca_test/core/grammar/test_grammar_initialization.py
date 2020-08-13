@@ -2,7 +2,7 @@ import unittest
 
 from nca.core.genome.grammar.grammar_initialization import GrammarInitialization
 from nca.core.genome.representation import Genome
-from test.nca_test.core.grammar.test_alphabet import TestColorSymbol
+from nca_test.core.grammar.test_alphabet import TestColorSymbol
 
 
 class TestGrammarInitialization(unittest.TestCase):

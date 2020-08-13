@@ -6,7 +6,7 @@ from nca.core.evolution.selection.parent_selection import RouletteWheelSelection
 from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection
 from nca.core.evolution.selection.survivor_selection import GenerationalSteadyStateSelection
 from nca.core.genome.initialization import UniformInitialization
-from nca.core.genome.representations.direct_representation import BinaryRepresentation
+from nca.core.genome.representations.valued_representation import BinaryRepresentation
 from revolve.robot.body.robogen.robogen_operators import RobogenRecombination, RobogenMutation
 
 

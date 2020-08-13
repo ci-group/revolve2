@@ -3,29 +3,15 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
+from nca.core.genome.grammar.grammar import Symbol
 from nca.core.genome.representation import Representation
 
 
-class DirectRepresentation(Representation, ABC):
-
-    def __init__(self):
-        super().__init__()
-
-    @abstractmethod
-    def compatibility(self, other) -> float:
-        pass
-
-    @abstractmethod
-    def visit(self, representation_visitor):
-        pass
-
-
-class ValuedRepresentation(DirectRepresentation, ABC):
+class ValuedRepresentation(Representation, ABC):
 
     def __init__(self, data_type: type):
         super().__init__()
         self.data_type = data_type
-        self.init()
 
     def compatibility(self, other) -> float:
         return np.linalg.norm(np.array(self.genome) - np.array(other.genome))
@@ -61,3 +47,4 @@ class RealValuedRepresentation(ValuedRepresentation):
     def _initialize(self):
         self.genome = np.random.uniform(self.configuration.minimum_value, self.configuration.maximum_value,
                                         size=self.configuration.genome_size).tolist()
+

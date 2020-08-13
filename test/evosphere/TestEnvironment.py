@@ -1,10 +1,12 @@
-from revolve.evosphere.environment import Environment
+from simulation.environment import Environment
+from simulation.simulator.simulator_helper import SimulatorType
 
 
 class TestEnvironment(Environment):
 
     def __init__(self, name: str = "test"):
         super().__init__(name)
+        self.simulator_type = SimulatorType.NONE
 
 
 class TestEnvironmentA(TestEnvironment):

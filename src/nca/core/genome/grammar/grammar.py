@@ -1,4 +1,6 @@
 import random
+import numpy as np
+
 from enum import Enum
 from typing import List, Dict
 
@@ -8,6 +10,11 @@ class Symbol(Enum):
     @classmethod
     def alphabet(cls):
         return list(map(lambda c: c, cls))
+
+    def probabilities(cls):
+        number_of_elements = len(cls.alphabet())
+        uniform_value = 1 / number_of_elements
+        return [uniform_value for _ in range(number_of_elements)]
 
 
 Axiom = List[Symbol]
@@ -19,8 +26,8 @@ ReplacementRules = Dict[Symbol, List[List[Symbol]]]
 
 class SemiThueSystem:
 
-    def __init__(self, alphabet: Alphabet, rules: ReplacementRules):
-        self.alphabet = alphabet
+    def __init__(self, symbols_type: type(Symbol), rules: ReplacementRules):
+        self.symbols_type = symbols_type
         self.rules = rules
 
     def apply_rules(self, symbols):

@@ -14,6 +14,7 @@ class Representation:
     def __init__(self):
         self.configuration = RepresentationConfiguration()
         self.genome: Genome = []
+        self.init()
 
     def init(self, initialization: Initialization = None):
         if initialization is not None:
@@ -40,3 +41,11 @@ class Representation:
         index1 = indexes[0]
         index2 = indexes[1]
         self.genome[index1], self.genome[index2] = self.genome[index2], self.genome[index1]
+
+    @abstractmethod
+    def compatibility(self, other) -> float:
+        pass
+
+    @abstractmethod
+    def visit(self, representation_visitor):
+        pass

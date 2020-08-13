@@ -1,5 +1,5 @@
 from nca.core.genome.representation import Representation
-from nca.core.genome.representations.tree import Tree, Tree2D, Tree3D
+from nca.core.abstract.composite.tree import Tree, Tree2D, Tree3D
 
 
 class TreeRepresentation(Representation):

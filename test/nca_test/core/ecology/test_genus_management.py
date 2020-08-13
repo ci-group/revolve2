@@ -6,7 +6,7 @@ from nca.core.agent.agents import Agents
 from nca.core.agent.individual_factory import IndividualFactory
 from nca.core.ecology.speciation.compatibility import Compatibility
 from nca.core.ecology.speciation.genus_management import GenusManagement
-from nca.core.genome.representations.direct_representation import BinaryRepresentation
+from nca.core.genome.representations.valued_representation import BinaryRepresentation
 
 
 class GenusManagementTest(unittest.TestCase):

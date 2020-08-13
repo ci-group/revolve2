@@ -1,15 +1,12 @@
 from enum import auto
 from typing import Dict, List
 
+from nca.core.abstract.composite.tree_helper import Coordinate3D
+from nca.core.abstract.sequential_identifier import NodeIdentifier
 from nca.core.genome.grammar.grammar import Symbol, Grammar
-from nca.core.genome.representations.tree import Tree, Tree2D
 
 
 class RobogenSymbol(Symbol):
-    pass
-
-
-class RobogenModule(RobogenSymbol):
     CORE = auto()
     HORIZONTAL_JOINT = auto()
     VERTICAL_JOINT = auto()
@@ -17,31 +14,29 @@ class RobogenModule(RobogenSymbol):
     SENSOR = auto()
 
     @classmethod
-    def probabilities(self):
+    def probabilities(cls):
         return [0.0, 0.25, 0.25, 0.5, 0.0]
 
 
-class RobogenMounting(RobogenSymbol):
-    RIGHT = auto()
-    FRONT = auto()
-    LEFT = auto()
+class RobogenModule:
 
+    identifier = NodeIdentifier()
+    symbol_type = RobogenSymbol
 
-def RobogenSymbols():
-    symbols = []
-    symbols.extend(RobogenModule.alphabet())
-    symbols.extend(RobogenMounting.alphabet())
-    return symbols
+    def __init__(self, symbol: RobogenSymbol = RobogenSymbol.CORE, coordinate: Coordinate3D = Coordinate3D(0, 0, 0)):
+        self.id = self.identifier.id()
+        self.symbol = symbol
+        self.coordinate: Coordinate3D = coordinate
+
+    def __repr__(self):
+        return "(" + self.symbol.name + ", " + str(self.id) + ", " + str(self.coordinate) + ")"
 
 
 RobogenAlphabet = List[RobogenSymbol]
-RobogenOperators: Dict[str, RobogenAlphabet] = {'module': RobogenModule.alphabet(),
-                                                'mounting': RobogenMounting.alphabet()}
 RobogenRules = Dict[RobogenSymbol, List[RobogenAlphabet]]
 
 
-class RobogenGrammar(Grammar, Tree):
+class RobogenGrammar(Grammar):
 
-    def __init__(self, alphabet: RobogenAlphabet, rules: RobogenRules):
-        super().__init__(alphabet, rules)
-
+    def __init__(self, rules: RobogenRules):
+        super().__init__(RobogenSymbol, rules)

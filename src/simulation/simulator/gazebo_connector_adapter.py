@@ -1,12 +1,12 @@
-from simulation.environment import Environment
+from revolve.evosphere.world import Ecosphere
 from src.simulation.simulation_measures import SimulationMeasures
 from src.simulation.simulator.simulation_connector import SimulatorConnector
 
 
 class GazeboConnectorAdapter(SimulatorConnector):
 
-    def __init__(self, environment: Environment):
-        super().__init__(environment)
+    def __init__(self, ecosphere: Ecosphere):
+        super().__init__(ecosphere)
 
     def start_simulator(self) -> bool:
         return True

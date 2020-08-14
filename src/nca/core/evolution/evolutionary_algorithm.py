@@ -1,13 +1,12 @@
 from typing import List
 
 from nca.core.agent.agents import Agents
-from nca.core.agent.fitness import Fitness
 from nca.core.agent.individual import Individual
 from nca.core.ecology.population import Population
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.evolution.conditions.special_features import SpecialFeatures
-from nca.core.evolution.conditions.termination_condition import TerminationCondition
-from nca.core.evolution.evolutionary_configurations import EvolutionConfiguration
+from nca.core.evolution.conditions.condition import Condition
+from nca.core.evolution.evolutionary_configurations import EvolutionConfiguration, GeneticAlgorithmConfiguration
 from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection
 from nca.core.genome.operators.mutation_operator import MutationOperator
 from nca.core.genome.operators.recombination_operator import RecombinationOperator
@@ -15,9 +14,8 @@ from nca.core.genome.operators.recombination_operator import RecombinationOperat
 
 class EvolutionaryAlgorithm:
 
-    def __init__(self, configuration: EvolutionConfiguration, fitness_type: type(Fitness)):
+    def __init__(self, configuration: EvolutionConfiguration = GeneticAlgorithmConfiguration()):
         self.configuration: EvolutionConfiguration = configuration
-        self.fitness_type: type(Fitness) = fitness_type
 
         self.parent_selection: ParentSelection = self.configuration.parent_selection
         self.survivor_selection: SurvivorSelection = self.configuration.survivor_selection
@@ -26,7 +24,7 @@ class EvolutionaryAlgorithm:
         self.mutation: MutationOperator = self.configuration.mutation
 
         self.initialization: Initialization = self.configuration.initialization
-        self.termination_condition: TerminationCondition = self.configuration.termination_condition
+        self.termination_condition: Condition = self.configuration.condition
         self.special_features: SpecialFeatures = self.configuration.special_features
 
     def initialize(self, populations: List[Population]):
@@ -54,8 +52,7 @@ class EvolutionaryAlgorithm:
                 Individual(
                     self.mutation.algorithm(
                         self.recombination.algorithm(parents), self.initialization
-                    ),
-                    self.fitness_type()
+                    )
                 )
                 for parents in parent_list
             ]

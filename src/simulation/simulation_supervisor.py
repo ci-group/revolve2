@@ -38,5 +38,5 @@ class SimulationSupervisor:
         self.robot_queue: PriorityQueue = PriorityQueue()
         self.simulator_connector: SimulatorConnector = SimulatorFactory(request_command).create()
 
-    def work(self, invididual: Individual, request_command: SimulateCommand):
-        self.robot_queue.insert(invididual, request_command.task_priority.value)
+    def work(self, individual: Individual, request_command: SimulateCommand):
+        self.robot_queue.insert(individual, request_command.task_priority.value)

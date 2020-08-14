@@ -5,15 +5,15 @@ from revolve.robot.robot import Robot
 from simulation.simulator.simulator_command import SimulateCommand
 
 from src.simulation.simulation_supervisor import SimulationSupervisor
-from src.simulation.simulator.simulator_helper import SimulatorType, TaskPriority
+from src.simulation.simulator.simulator_helper import TaskPriority
 
-from evosphere.TestEnvironment import TestEnvironment
+from evosphere.TestEcosphere import TestEcosphere
 
 
 class SimulationSupervisorTest(unittest.TestCase):
 
     def test_manager(self):
-        request_command = SimulateCommand(Agents(), TestEnvironment(), TaskPriority.MEDIUM)
+        request_command = SimulateCommand(Agents(), TestEcosphere(), TaskPriority.MEDIUM)
 
         supervisor = SimulationSupervisor(request_command)
 
@@ -24,9 +24,9 @@ class SimulationSupervisorTest(unittest.TestCase):
         self.assertEqual(supervisor.robot_queue.size(), 1)
 
     def test_priority(self):
-        request_command_high = SimulateCommand(Agents(), TestEnvironment(), TaskPriority.HIGH)
-        request_command_medium = SimulateCommand(Agents(), TestEnvironment(), TaskPriority.MEDIUM)
-        request_command_low = SimulateCommand(Agents(), TestEnvironment(), TaskPriority.LOW)
+        request_command_high = SimulateCommand(Agents(), TestEcosphere(), TaskPriority.HIGH)
+        request_command_medium = SimulateCommand(Agents(), TestEcosphere(), TaskPriority.MEDIUM)
+        request_command_low = SimulateCommand(Agents(), TestEcosphere(), TaskPriority.LOW)
 
         supervisor = SimulationSupervisor(request_command_medium)
 

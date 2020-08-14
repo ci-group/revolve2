@@ -8,14 +8,14 @@ from nca.core.ecology.population import Population
 class TestPopulation(unittest.TestCase):
 
     def test_id(self):
-        population1 = Population(IndividualFactory().create(n=3))
-        population2 = Population(IndividualFactory().create(n=3))
+        population1 = Population(IndividualFactory().create(3))
+        population2 = Population(IndividualFactory().create(3))
 
         self.assertNotEqual(population1.id, population2.id)
 
     def test_generation(self):
-        agents_start = IndividualFactory().create(n=3)
-        agents_new = IndividualFactory().create(n=3)
+        agents_start = IndividualFactory().create(3)
+        agents_new = IndividualFactory().create(3)
 
         population = Population(agents_start)
 
@@ -25,11 +25,11 @@ class TestPopulation(unittest.TestCase):
         self.assertEqual(population.individuals, agents_new)
 
     def test_improvement(self):
-        agents1: Agents = IndividualFactory().create(n=3)
+        agents1: Agents = IndividualFactory().create(3)
 
-        agents2: Agents = IndividualFactory().create(n=3)
+        agents2: Agents = IndividualFactory().create(3)
         for agent in agents2:
-            agent.fitness.fitness = 1.0
+            agent.fitness = 1.0
 
         population1 = Population(agents1)
         population2 = Population(agents2)

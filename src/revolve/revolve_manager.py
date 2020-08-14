@@ -1,24 +1,13 @@
-from typing import List
-
-from nca.core.ecology import PopulationEcology
-from nca.core.ecology.population_management import PopulationManagement
-from nca.core.evolution.selection.parent_selection import TournamentSelection
-from simulation.environment import Environment
 from nca.experiment_manager import ExperimentManager
-from revolve.evosphere.evosphere import EvoSphere
+from revolve.evosphere.evosphere import DefaultEvoSphere
 
 experiment_manager = ExperimentManager()
 
 
-def run():
-
-    population_ecology = PopulationEcology(PopulationManagement(TournamentSelection()))
-    environments: List[Environment] = [Environment("nursery")]#, Environment("arena")]
-
-    evosphere = EvoSphere(population_ecology, environments)
-
-    evosphere.run()
+def run_regular():
+    evosphere = DefaultEvoSphere()
+    evosphere.evolve()
 
 
 if __name__ == "__main__":
-    run()
+    run_regular()

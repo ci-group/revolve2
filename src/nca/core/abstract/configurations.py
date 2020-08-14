@@ -20,20 +20,12 @@ class SpeciationConfiguration(PopulationConfiguration):
         super().__init__("speciation.config")
 
 
-class EvolutionaryConfiguration(Configuration):
-
-    def __init__(self):
-        super().__init__("agent.config")
-        self.number_of_robots = 10
-        self.fitness = DisplacementFitness()
-
-
 class EvoSphereConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("revolve.config")
-        self.number_of_environments = 1
         self.number_of_generations = 50
+        self.number_of_agents = 10
 
 
 class RepresentationConfiguration(Configuration):

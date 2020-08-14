@@ -1,4 +1,4 @@
-from simulation.environment import Environment
+from revolve.evosphere.world import Ecosphere
 from revolve.robot.robot import Robot
 
 from src.simulation.simulation_measures import SimulationMeasures
@@ -7,8 +7,8 @@ from src.simulation.simulator.simulation_connector import SimulatorConnector
 
 class TestConnectorAdapter(SimulatorConnector):
 
-    def __init__(self, environment: Environment):
-        super().__init__(environment)
+    def __init__(self, ecosphere: Ecosphere):
+        super().__init__(ecosphere)
         self.simulator = False
 
     def start_simulator(self) -> bool:

@@ -12,7 +12,7 @@ from nca.core.evolution.selection.survivor_selection import NullSurvivorSelectio
 class TestSelection(unittest.TestCase):
 
     def test_parent_selection(self):
-        population = Population(IndividualFactory().create(n=PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
         parent_selection = NullParentSelection()
 
         selected = parent_selection.select(population.individuals)
@@ -23,7 +23,7 @@ class TestSelection(unittest.TestCase):
         self.assertEqual(len(selected), parent_selection.configuration.selection_size)
 
     def test_survivor_selection(self):
-        population = Population(IndividualFactory().create(n=PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
         survivor_selection = NullSurvivorSelection()
 
         selected = survivor_selection.select(population.individuals)

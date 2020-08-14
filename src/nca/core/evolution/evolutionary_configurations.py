@@ -1,7 +1,7 @@
 from nca.core.abstract.configuration import Configuration
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.evolution.conditions.special_features import SpecialFeatures
-from nca.core.evolution.conditions.termination_condition import TerminationCondition, EvaluationsCondition
+from nca.core.evolution.conditions.condition import Condition, EvaluationsCondition
 from nca.core.evolution.selection.parent_selection import RouletteWheelSelection
 from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection
 from nca.core.evolution.selection.survivor_selection import GenerationalSteadyStateSelection
@@ -21,7 +21,7 @@ class EvolutionConfiguration(Configuration):
                  parent_selection: ParentSelection,
                  survivor_selection: SurvivorSelection,
                  initialization: Initialization,
-                 termination_condition: TerminationCondition,
+                 condition: Condition,
                  special_features: SpecialFeatures):
 
         super().__init__("evolution.config")
@@ -31,7 +31,7 @@ class EvolutionConfiguration(Configuration):
         self.parent_selection: ParentSelection = parent_selection
         self.survivor_selection: SurvivorSelection = survivor_selection
         self.initialization: Initialization = initialization
-        self.termination_condition: TerminationCondition = termination_condition
+        self.condition: Condition = condition
         self.special_features: SpecialFeatures = special_features
 
 
@@ -44,11 +44,11 @@ class GeneticAlgorithmConfiguration(EvolutionConfiguration):
                  parent_selection: ParentSelection = RouletteWheelSelection(),
                  survivor_selection: SurvivorSelection = GenerationalSteadyStateSelection(),
                  initialization: Initialization = UniformInitialization(),
-                 termination_condition: TerminationCondition = EvaluationsCondition(10),
+                 condition: Condition = EvaluationsCondition(10),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(
             representation, recombination, mutation, parent_selection, survivor_selection,
-            initialization, termination_condition, special_features)
+            initialization, condition, special_features)
 
 
 

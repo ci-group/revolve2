@@ -1,3 +1,4 @@
+import math
 import unittest
 
 from nca.core.agent.agents import Agents
@@ -15,7 +16,7 @@ class TestAgents(unittest.TestCase):
         for index, agent in enumerate(agents):
             self.assertEqual(agent, individual_list[index])
 
-        self.assertEqual(agents.average_fitness(), 0.0)
+        self.assertEqual(agents.average_fitness(), -math.inf)
 
     def test_age(self):
         individual_list = IndividualFactory().create(3)

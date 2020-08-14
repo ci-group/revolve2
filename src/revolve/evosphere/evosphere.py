@@ -1,90 +1,56 @@
-from typing import List
-
 from nca.core.abstract.configurations import EvoSphereConfiguration
 from nca.core.agent.agents import Agents
-from nca.core.agent.fitness import Fitness
-from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population import Population
-from nca.core.ecology.population_management import PopulationManagement
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
-from revolve.evosphere.configuration import GeneticAlgorithmConfiguration
-from revolve.robot.body.robogen.robogen_representation import RobogenRepresentation
-from simulation.environment import Environment
-from revolve.robot.birth_clinic import BirthClinic
-from revolve.robot.body.body_builder import BodyBuilder
-from revolve.robot.brain.brain_builder import BrainBuilder
-from revolve.robot.brain.representation.multineat_representation import MultiNEATRepresentation
-from revolve.tol.developmental_learning import DevelopmentalLearner
+from revolve.evosphere.configuration import RevolveGeneticAlgorithmConfiguration
+from revolve.evosphere.world import World, GazeboWorld, Ecosphere
 from simulation.simulation_manager import SimulationManager
-from simulation.simulator.simulator_helper import SimulateCommand
+from simulation.simulator.simulator_command import SimulateCommand
 
 
 class EvoSphere:
 
-    def __init__(self,
-                 birth_clinic: BirthClinic,
-                 population_ecology: PopulationEcology,
+    def __init__(self, biosphere: Biosphere,
                  evolutionary_algorithm: EvolutionaryAlgorithm,
-                 developmental_learner: DevelopmentalLearner,
-                 environments: List[Environment],
                  simulation: SimulationManager):
         self.configuration = EvoSphereConfiguration()
 
-        self.birth_clinic: BirthClinic = birth_clinic
-
-        self.population_ecology: PopulationEcology = population_ecology
+        self.biosphere: Biosphere = biosphere
 
         self.evolutionary_algorithm: EvolutionaryAlgorithm = evolutionary_algorithm
-        self.developmental_learner: DevelopmentalLearner = developmental_learner
-
-        self.environments: List[Environment] = environments
 
         self.simulation = simulation
 
     def evolve(self):
         # load and initialize
-        self.population_ecology.load()
-        self.evolutionary_algorithm.initialize(self.population_ecology.populations())
-
-        #TODO parameterize
-        robots: Agents = self.birth_clinic.create(10)
-        self.population_ecology.initialize(robots)  # , self.environments)
+        self.biosphere.initialize(self.configuration.number_of_agents)
+        self.evolutionary_algorithm.initialize(self.biosphere.populations())
 
         print("Evaluate population")
-
-        for population in self.population_ecology.populations():
-            self.evaluate(population)
+        for population in self.biosphere.populations():
+            self.evaluate(population.individuals)
 
         # Run through iterations
         for generation_index in range(self.configuration.number_of_generations):
             print("Generation ", generation_index)
-            for population in self.population_ecology.populations():
+
+            for population in self.biosphere.populations():
                 if self.evolutionary_algorithm.should_terminate(population):
                     print("Terminated evolution due to termination condition.")
                     break
 
                 self.evolutionary_algorithm.run(population, self.evaluate)
 
-            self.population_ecology.export()
+            self.biosphere.run()
 
-            self.population_ecology.speciate()
-
-    def evaluate(self, population: Population):
-        for environment in self.environments:
-            environment.agents = population.individuals
-            self.simulation.simulate(environment.agents, SimulateCommand(environment))
+    def evaluate(self, agents: Agents):
+        return self.simulation.simulate(SimulateCommand(agents, self.biosphere))
 
 
 class DefaultEvoSphere(EvoSphere):
 
-    def __init__(self,
-                 birth_clinic: BirthClinic = BirthClinic(BodyBuilder(RobogenRepresentation),
-                                                         BrainBuilder(MultiNEATRepresentation), Fitness),
-                 population_ecology: PopulationEcology = PopulationEcology(PopulationManagement()),
-                 evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(GeneticAlgorithmConfiguration(),
-                                                                                       Fitness),
-                 developmental_learner: DevelopmentalLearner = DevelopmentalLearner(),
-                 environments: List[Environment] = None,
+    def __init__(self, world: World = GazeboWorld(),
+                 evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(RevolveGeneticAlgorithmConfiguration()),
                  simulation: SimulationManager = SimulationManager()):
-        super().__init__(birth_clinic, population_ecology, evolutionary_algorithm,
-                         developmental_learner, environments, simulation)
+        super().__init__(world, evolutionary_algorithm, simulation)
+

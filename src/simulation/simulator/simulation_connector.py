@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 from enum import Enum, auto
 
 from nca.core.abstract.sequential_identifier import SimulatorConnectionIdentifier
-from simulation.environment import Environment
+from revolve.evosphere.world import Ecosphere
 from revolve.robot.robot import Robot
 from src.simulation.simulation_measures import SimulationMeasures
 
@@ -20,9 +20,9 @@ class SimulatorConnector(ABC):
 
     port_identifier = SimulatorConnectionIdentifier()
 
-    def __init__(self, environment: Environment):
+    def __init__(self, ecosphere: Ecosphere):
         self.port = self.port_identifier.id()
-        self.environment = environment
+        self.ecosphere = ecosphere
 
         self.state = SimulatorState.STOPPED
 

@@ -10,8 +10,6 @@ class TestIndividual(unittest.TestCase):
     def test_compare(self):
 
         representation = Representation()
-        fitness = Fitness()
-        individual = Individual(representation, fitness)
+        individual = Individual(representation)
 
         self.assertEqual(individual.representation, representation)
-        self.assertEqual(individual.fitness, fitness)

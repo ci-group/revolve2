@@ -1,13 +1,6 @@
 import unittest
 
-from nca.core.agent.fitness import Fitness
-from nca.core.genome.representation import Representation
-from revolve.robot.birth_clinic import BirthClinic
-from revolve.robot.body.body import Body
-from revolve.robot.body.body_builder import BodyBuilder
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol, RobogenModule
-from revolve.robot.brain.brain import Brain
-from src.revolve.robot.brain.brain_builder import BrainBuilder
 
 
 class TestRobogenGrammar(unittest.TestCase):

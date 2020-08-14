@@ -12,13 +12,15 @@ class SimulationManager:
         self.configuration = SimulatorConfiguration()
         self.supervisors: Dict[SimulateCommand, SimulationSupervisor] = {}
 
-    def simulate(self, request_command: SimulateCommand):
+    def simulate(self, request_command: SimulateCommand) -> Agents:
 
         if request_command not in self.supervisors.keys():
             self.supervisors[request_command] = SimulationSupervisor(request_command)
 
         for agent in request_command.agents:
             agent.measures = self.supervisors[request_command].work(agent, request_command)
+
+        return request_command.agents
 
     """
     def _find_available_supervisor(self):

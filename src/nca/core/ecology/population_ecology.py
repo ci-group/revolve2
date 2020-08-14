@@ -1,7 +1,5 @@
 import string
-from typing import List
 
-from .population import Population
 from .population_management import PopulationManagement
 from ..abstract.memento import Memento
 from ..agent.agents import Agents
@@ -9,7 +7,7 @@ from ..agent.agents import Agents
 
 class PopulationEcology(Memento):
 
-    def __init__(self, population_management: PopulationManagement):
+    def __init__(self, population_management: PopulationManagement = PopulationManagement()):
         super().__init__()
         self.management: PopulationManagement = population_management
 
@@ -19,9 +17,6 @@ class PopulationEcology(Memento):
     def speciate(self):
         self.management.speciate()
 
-    def populations(self) -> List[Population]:
-        return self.management.populations()
-
     def export(self, path: string = ""):
         path = self.population_memento_path if path == "" else path
 
@@ -29,5 +24,4 @@ class PopulationEcology(Memento):
 
     def load(self, path: string = ""):
         path = self.population_memento_path if path == "" else path
-
         self.management = self.restore(path)

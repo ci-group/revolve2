@@ -7,12 +7,12 @@ from src.simulation.simulation_measures import SimulationMeasures
 class Fitness:
 
     def __init__(self):
-        self.fitness: float = 0.0
+        pass
 
     @abstractmethod
     def calculate(self, measures: SimulationMeasures):
         pass
-
+    """
     def __gt__(self, other):
         if isinstance(other, self.__class__):
             fitness = other.fitness
@@ -46,7 +46,7 @@ class Fitness:
         fitness = Fitness()
         fitness.fitness = -math.inf
         return fitness
-
+    """
 
 class DisplacementFitness(Fitness):
 
@@ -55,8 +55,7 @@ class DisplacementFitness(Fitness):
 
     def calculate(self, measures: SimulationMeasures):
         # process
-        # TODO fix
-        self.fitness = measures.displacement
+        return measures['distances']
 
 
 class RotationalFitness(Fitness):

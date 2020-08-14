@@ -29,7 +29,7 @@ class TournamentSelection(ParentSelection):
 class RouletteWheelSelection(ParentSelection):
 
     def algorithm(self, individuals: List[Individual]) -> List[Individual]:
-        return random.choices(individuals, weights=[agent.fitness.fitness for agent in individuals],
+        return random.choices(individuals, weights=[agent.fitness for agent in individuals],
                               k=self.configuration.number_of_parents)
 
 

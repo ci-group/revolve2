@@ -11,9 +11,9 @@ class BrainRepresentation(Representation, ABC):
         pass
 
 
-class Brain(Morphology):
+class Brain(Morphology, Representation):
 
-    def __init__(self, genome: BrainRepresentation):
-        super().__init__(genome)
+    def __init__(self, representation: BrainRepresentation):
+        super().__init__(representation)
         self.phenotype = None
 

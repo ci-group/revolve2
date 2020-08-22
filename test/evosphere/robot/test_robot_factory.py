@@ -8,7 +8,7 @@ from simulation_test.test_simulation_manager import MockBodyRepresentation, Mock
 class TestRobotFactory(unittest.TestCase):
 
     def test_create(self):
-        factory = RobotFactory(MockBodyRepresentation, MockBrainRepresentation)
+        factory = RobotFactory(MockBodyRepresentation, MockBrainRepresentation).initialize()
         n = 10
         robots = factory.create(n)
 

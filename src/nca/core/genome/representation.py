@@ -6,6 +6,7 @@ import numpy as np
 from nca.core.abstract.configurations import RepresentationConfiguration
 from nca.core.evolution.conditions.initialization import Initialization
 
+
 Genome: List = []
 
 
@@ -14,24 +15,26 @@ class Representation:
     def __init__(self):
         self.configuration = RepresentationConfiguration()
         self.genome: Genome = []
-        self.init()
+        self.initialization = None
 
-    def init(self, initialization: Initialization = None):
-        if initialization is not None:
-            self.genome = initialization.algorithm(self.configuration.genome_size)
-        else:
-            self._initialize()
+    def initialize(self, initialization):
+        self.initialization = initialization
+        self.genome = self.initialization(self.configuration.genome_size)
+        return self
 
-    @abstractmethod
-    def _initialize(self):
-        pass
+    def random_value(self):
+        return self.initialization(1)[0]
 
     @abstractmethod
     def compatibility(self, other) -> float:
         pass
 
+    @abstractmethod
+    def visit(self, representation_visitor):
+        pass
+
     def selection_indexes(self, k=2) -> List[int]:
-        return np.random.choice(len(self.genome), k, replace=False)
+        return np.random.choice(self.__len__(), k, replace=False)
 
     def range_selection(self) -> List[int]:
         indexes = sorted(self.selection_indexes())
@@ -42,10 +45,8 @@ class Representation:
         index2 = indexes[1]
         self.genome[index1], self.genome[index2] = self.genome[index2], self.genome[index1]
 
-    @abstractmethod
-    def compatibility(self, other) -> float:
-        pass
+    def __str__(self):
+        return str(self.genome)
 
-    @abstractmethod
-    def visit(self, representation_visitor):
-        pass
+    def __len__(self):
+        return len(self.genome)

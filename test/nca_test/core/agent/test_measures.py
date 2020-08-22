@@ -1,22 +1,20 @@
 import unittest
-from typing import List
 
 from revolve.evosphere.performance_measures import PerformanceMeasures
+from simulation_test.simulator.mock_simulation_measures import MockSimulationMeasures
 
 
 class TestPerformanceMeasures(unittest.TestCase):
 
-    def test_compare(self):
+    def test_measures(self):
 
-        measures_1 = PerformanceMeasures()
-        measures_1.test()
+        simulation_measures = MockSimulationMeasures()
+        performance_measures = PerformanceMeasures()
 
-        measures_2 = PerformanceMeasures()
-        measures_2.test()
+        performance_measures.process(simulation_measures)
 
-        measures: List[PerformanceMeasures] = [measures_1, measures_2]
+        for category in performance_measures.categories:
+            self.assertTrue(performance_measures[category] > 0.0)
 
-        measures_sum = PerformanceMeasures.normalize(measures)
-
-        for (key, value) in measures_sum.measures.items():
-            self.assertEqual((measures_1.measures[key] + measures_2.measures[key]) / 2, value)
+        self.assertTrue(performance_measures.velocity > 0.0)
+        self.assertTrue(performance_measures.distance > 0.0)

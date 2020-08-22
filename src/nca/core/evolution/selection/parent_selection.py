@@ -1,3 +1,4 @@
+import math
 import random
 from typing import List
 
@@ -22,15 +23,16 @@ class TournamentSelection(ParentSelection):
         super().__init__()
 
     def algorithm(self, individuals: List[Individual]) -> List[Individual]:
-        return [max(np.random.choice(individuals, self.configuration.tournament_size), key=lambda x: x.fitness)
+        return [max(np.random.choice(individuals, self.configuration.tournament_size),
+                    key=lambda x: x.fitness if x.fitness != -math.inf else 1)
                 for _ in range(self.configuration.number_of_parents)]
 
 
 class RouletteWheelSelection(ParentSelection):
 
     def algorithm(self, individuals: List[Individual]) -> List[Individual]:
-        return random.choices(individuals, weights=[agent.fitness for agent in individuals],
-                              k=self.configuration.number_of_parents)
+        return random.choices(individuals, k=self.configuration.number_of_parents,
+                              weights=[agent.fitness if agent.fitness != -math.inf else 1 for agent in individuals])
 
 
 class NullParentSelection(RandomParentSelection):

@@ -1,4 +1,4 @@
-from nca.core.abstract.factory import Factory
+from nca.core.abstract.creational.factory import Factory
 from simulation.simulator.simulator_command import SimulateCommand
 from simulation.simulator.simulator_helper import SimulatorType
 from simulation_test.simulator.test_connector_adapter import TestConnectorAdapter
@@ -17,5 +17,7 @@ class SimulatorFactory(Factory):
             return GazeboConnectorAdapter(self.simulate_command.ecosphere)
         elif self.simulate_command.ecosphere.simulator_type == SimulatorType.NONE:
             return TestConnectorAdapter(self.simulate_command.ecosphere)
+        elif self.simulate_command.ecosphere.simulator_type == SimulatorType.GENETIC:
+            return None
 
         raise Exception("Unknown Simulator Type")

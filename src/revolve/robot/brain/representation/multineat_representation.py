@@ -1,7 +1,10 @@
 from nca.core.genome.representation import Representation
 
+class NetworkRepresentation(Representation):
+    pass
 
-class MultiNEATRepresentation(Representation):
+
+class MultiNEATRepresentation(NetworkRepresentation):
 
     def __init__(self):
         super().__init__()

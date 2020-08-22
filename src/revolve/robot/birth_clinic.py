@@ -1,6 +1,8 @@
+from nca.core.abstract.creational.builder import Builder
 from nca.core.agent.agents import Agents
 from nca.core.agent.individual import Individual
 from nca.core.agent.individual_factory import ActorFactory
+from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.representation import Representation
 from revolve.robot.body.body import Body, BodyRepresentation
 from revolve.robot.body.body_builder import BodyBuilder
@@ -17,24 +19,28 @@ class RobotFactory(ActorFactory):
         super().__init__()
         self.body_genome_type: type(BodyRepresentation) = body_genome
         self.brain_genome_type: type(BrainRepresentation) = brain_genome
+        self.body_initialization: Initialization = Initialization()
+        self.brain_initialization: Initialization = Initialization()
+
+    def initialize(self, initialization: Initialization = Initialization()):
+        #TODO
+        return self
 
     def create(self, number_of_robots: int) -> Agents:
         agents: Agents = Agents()
 
         for robot_index in range(number_of_robots):
-            body_genome = self.body_genome_type()
-            body_genome.init()
-            brain_genome = self.brain_genome_type()
-            brain_genome.init()
-            agents.add(Robot(Body(body_genome), Brain(brain_genome)))
+            agents.add(Robot(Body(self.body_genome_type().initialize(self.body_initialization)),
+                             Brain(self.brain_genome_type().initialize(self.brain_initialization))))
 
         return agents
 
 
-class BirthClinic:
+class BirthClinic(Builder):
 
     def __init__(self, body_builder: BodyBuilder = BodyBuilder(Representation),
                  brain_builder: BrainBuilder = BrainBuilder(Representation)):
+        super().__init__()
         self.body_builder: BodyBuilder = body_builder
         self.brain_builder: BrainBuilder = brain_builder
 

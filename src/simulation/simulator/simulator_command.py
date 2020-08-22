@@ -1,7 +1,15 @@
-from nca.core.abstract.command import Command
+from enum import Enum, auto
+
+from nca.core.abstract.behavioral.command import Command
 from nca.core.agent.agents import Agents
-from revolve.evosphere.world import Ecosphere
-from simulation.simulator.simulator_helper import TaskPriority
+from revolve.evosphere.biosphere import Ecosphere
+
+
+class TaskPriority(Enum):
+
+    LOW = auto()
+    MEDIUM = auto()
+    HIGH = auto()
 
 
 class SimulateCommand(Command):

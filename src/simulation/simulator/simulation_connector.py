@@ -2,12 +2,13 @@ from abc import abstractmethod, ABC
 from enum import Enum, auto
 
 from nca.core.abstract.sequential_identifier import SimulatorConnectionIdentifier
-from revolve.evosphere.world import Ecosphere
+from revolve.evosphere.biosphere import Ecosphere
 from revolve.robot.robot import Robot
 from src.simulation.simulation_measures import SimulationMeasures
 
 
 class SimulatorState(Enum):
+
     STOPPED = auto()
     READY = auto()
     WORKING = auto()

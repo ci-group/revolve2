@@ -4,7 +4,8 @@ import unittest
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.grammar.grammar import ReplacementRules, Grammar
 from nca.core.genome.initialization import UniformInitialization
-from nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, ReplaceMutation
+from nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, \
+    ReplaceMutation, DeleteMutation
 from nca.core.genome.operators.recombination_operator import OnePointCrossover
 from nca.core.genome.representations.symbolic_representation import LSystemRepresentation
 from nca_test.core.grammar.test_alphabet import TestColorSymbol
@@ -23,7 +24,7 @@ class LSystemRepresentationTest(unittest.TestCase):
         representation.genome = [TestColorSymbol.RED, TestColorSymbol.GREEN, TestColorSymbol.BLUE]
 
         new_representation = copy.deepcopy(representation)
-        mutation._execute(new_representation, Initialization())
+        mutation._mutate(new_representation)
 
         self.assertTrue(len(representation.genome) > 0)
         self.assertNotEqual(representation.genome, new_representation.genome)
@@ -35,7 +36,7 @@ class LSystemRepresentationTest(unittest.TestCase):
         representation.genome = [TestColorSymbol.RED, TestColorSymbol.GREEN, TestColorSymbol.BLUE]
 
         new_representation = copy.deepcopy(representation)
-        mutation._execute(new_representation, Initialization())
+        mutation._mutate(new_representation)
 
         self.assertTrue(len(representation.genome) > 0)
         self.assertNotEqual(representation.genome, new_representation.genome)
@@ -46,7 +47,7 @@ class LSystemRepresentationTest(unittest.TestCase):
         representation = LSystemRepresentation(Grammar(TestColorSymbol, TestRules))
 
         new_representation = copy.deepcopy(representation)
-        mutation._execute(new_representation, UniformInitialization())
+        mutation._mutate(new_representation)
 
         self.assertTrue(len(representation.genome) > 0)
         self.assertTrue(len(new_representation.genome) > len(representation.genome))
@@ -57,10 +58,22 @@ class LSystemRepresentationTest(unittest.TestCase):
         representation = LSystemRepresentation(Grammar(TestColorSymbol, TestRules))
 
         new_representation = copy.deepcopy(representation)
-        mutation._execute(new_representation, UniformInitialization())
+        mutation._mutate(new_representation)
 
         self.assertTrue(len(representation.genome) > 0)
         self.assertTrue(len(new_representation.genome) == len(representation.genome))
+        #self.assertNotEqual(representation.genome, new_representation.genome) # cannot be guaranteed due to replacing with the same symbol.
+
+    def test_delete_mutation(self):
+        mutation = DeleteMutation()
+
+        representation = LSystemRepresentation(Grammar(TestColorSymbol, TestRules))
+
+        new_representation = copy.deepcopy(representation)
+        mutation._mutate(new_representation)
+
+        self.assertTrue(len(representation.genome) > 0)
+        self.assertTrue(len(new_representation.genome) < len(representation.genome))
         self.assertNotEqual(representation.genome, new_representation.genome)
 
     def test_crossover_recombination(self):
@@ -71,7 +84,7 @@ class LSystemRepresentationTest(unittest.TestCase):
         representation_2 = LSystemRepresentation(Grammar(TestColorSymbol, TestRules))
         representation_2.genome = [TestColorSymbol.BLUE, TestColorSymbol.GREEN, TestColorSymbol.RED]
 
-        new_representation = recombination._execute([representation_1, representation_2])
+        new_representation = recombination._recombine([representation_1, representation_2])
 
         self.assertNotEqual(representation_1.genome, new_representation.genome)
         self.assertNotEqual(representation_2.genome, new_representation.genome)

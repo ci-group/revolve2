@@ -10,6 +10,6 @@ class Initialization:
         pass
 
     @abstractmethod
-    def algorithm(self, size: int):
+    def __call__(self, size: int):
         pass
 

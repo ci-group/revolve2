@@ -1,3 +1,5 @@
+import string
+
 from nca.core.abstract.sequential_identifier import PopulationIdentifier
 from nca.core.agent.age import GenerationalAge
 from nca.core.agent.agents import Agents
@@ -28,3 +30,13 @@ class Population:
 
     def did_improve(self, agents: Agents):
         return agents.average_fitness() > self.individuals.average_fitness()
+
+    def __repr__(self):
+        string_representation: string = "Population {"
+
+        for individual in self.individuals:
+            string_representation += repr(individual) + ","
+
+        string_representation += "}"
+
+        return string_representation

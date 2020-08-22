@@ -11,11 +11,11 @@ from nca.core.evolution.selection.survivor_selection import NullSurvivorSelectio
 class TestSurvivorSelection(unittest.TestCase):
 
     def test_random_selection(self):
-        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().initialize().create(PopulationConfiguration().population_size))
 
         steady_state = NullSurvivorSelection()
 
-        selected = steady_state.algorithm(population.individuals)
+        selected = steady_state(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)
@@ -23,11 +23,11 @@ class TestSurvivorSelection(unittest.TestCase):
         self.assertEqual(len(selected), len(population.individuals))
 
     def test_fitness_selection(self):
-        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().initialize().create(PopulationConfiguration().population_size))
 
         steady_state = FitnessSteadyStateSelection()
 
-        selected = steady_state.algorithm(population.individuals)
+        selected = steady_state(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)
@@ -35,11 +35,11 @@ class TestSurvivorSelection(unittest.TestCase):
         self.assertEqual(len(selected), len(population.individuals))
 
     def test_age_selection(self):
-        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().initialize().create(PopulationConfiguration().population_size))
 
         steady_state = GenerationalSteadyStateSelection()
 
-        selected = steady_state.algorithm(population.individuals)
+        selected = steady_state(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)
@@ -47,11 +47,11 @@ class TestSurvivorSelection(unittest.TestCase):
         self.assertEqual(len(selected), len(population.individuals))
 
     def test_elitism_selection(self):
-        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().initialize().create(PopulationConfiguration().population_size))
 
         steady_state = ElitismSelection()
 
-        selected = steady_state.algorithm(population.individuals)
+        selected = steady_state(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)

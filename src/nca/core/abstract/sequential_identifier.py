@@ -1,4 +1,4 @@
-from nca.core.abstract.singleton import Singleton
+from nca.core.abstract.creational.singleton import Singleton
 
 
 class SequentialIdentifier:

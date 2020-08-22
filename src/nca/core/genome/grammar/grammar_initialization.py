@@ -10,5 +10,5 @@ class GrammarInitialization(Initialization):
         super().__init__()
         self.alphabet: type(Alphabet) = alphabet
 
-    def algorithm(self, size: int) -> Genome:
-        return np.random.choice(self.alphabet, size, p=self.alphabet.probabilities())
+    def __call__(self, size: int) -> Genome:
+        return np.random.choice(self.alphabet, size, p=self.alphabet.probabilities()).tolist()

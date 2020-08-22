@@ -1,7 +1,7 @@
 from nca.core.genome.representation import Representation
 from revolve.robot.body.body import Body
-from revolve.robot.body.robogen.robogen_grammar import RobogenGrammar
-from revolve.robot.body.robogen.robogen_representation import RobogenRepresentation
+from revolve.robot.robogen.robogen_grammar import RobogenGrammar
+from revolve.robot.robogen.robogen_representation import RobogenRepresentation
 from revolve.robot.robot_builder import RobotBuilder
 
 

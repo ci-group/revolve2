@@ -10,10 +10,10 @@ class TestGrammarInitialization(unittest.TestCase):
     def test_initialization_probability(self):
         initialization = GrammarInitialization(TestColorSymbol)
 
-        genome: Genome = initialization.algorithm(1000)
+        genome: Genome = initialization(1000)
 
         counters: [TestColorSymbol, int] = {}
-        for element in TestColorSymbol.alphabet():
+        for element in TestColorSymbol:
             counters[element] = 0
 
         for element in genome:

@@ -1,8 +1,9 @@
 import math
+import string
 from typing import List
 import numpy as np
 
-from nca.core.abstract.iterator import Iterator
+from nca.core.abstract.behavioral.iterator import Iterator
 from nca.core.agent.individual import Individual
 
 
@@ -22,6 +23,16 @@ class Agents(Iterator):
 
     def extend(self, agents):
         return self.collection.extend(agents.collection)
+
+    def __repr__(self):
+        string_representation: string = "Agents {"
+
+        for individual in self.collection:
+            string_representation += repr(individual) + ","
+
+        string_representation += "}"
+
+        return string_representation
 
     """
     def get_best(self) -> Individual:

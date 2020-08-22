@@ -7,20 +7,14 @@ from typing import List, Dict
 
 class Symbol(Enum):
 
-    @classmethod
-    def alphabet(cls):
-        return list(map(lambda c: c, cls))
-
     def probabilities(cls):
-        number_of_elements = len(cls.alphabet())
+        number_of_elements = cls.__len__()
         uniform_value = 1 / number_of_elements
         return [uniform_value for _ in range(number_of_elements)]
 
 
 Axiom = List[Symbol]
-
 Alphabet = List[Symbol]
-
 ReplacementRules = Dict[Symbol, List[List[Symbol]]]
 
 

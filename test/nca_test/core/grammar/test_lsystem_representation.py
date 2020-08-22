@@ -2,6 +2,7 @@ import unittest
 
 from nca.core.abstract.configurations import RepresentationConfiguration
 from nca.core.genome.grammar.grammar import ReplacementRules, Grammar
+from nca.core.genome.grammar.grammar_initialization import GrammarInitialization
 from nca.core.genome.representations.symbolic_representation import LSystemRepresentation
 from nca_test.core.grammar.test_alphabet import TestColorSymbol
 
@@ -13,7 +14,7 @@ class LSystemRepresentationTest(unittest.TestCase):
                                   TestColorSymbol.BLUE: [[TestColorSymbol.RED]]}
 
         representation = LSystemRepresentation(Grammar(TestColorSymbol, rules))
-        representation.algorithm()
+        representation()
 
         outcome = [TestColorSymbol.RED for _ in range(RepresentationConfiguration().genome_size)]
         self.assertEqual(representation.genome, outcome)
@@ -23,7 +24,7 @@ class LSystemRepresentationTest(unittest.TestCase):
                                   TestColorSymbol.BLUE: [[TestColorSymbol.RED]]}
 
         representation = LSystemRepresentation(Grammar(TestColorSymbol, rules))
-        representation.algorithm()
+        representation()
 
         outcome = [TestColorSymbol.RED for _ in range(len(representation.genome))]
         self.assertEqual(representation.genome, outcome)

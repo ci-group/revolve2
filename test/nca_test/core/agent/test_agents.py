@@ -3,27 +3,31 @@ import unittest
 
 from nca.core.agent.agents import Agents
 from nca.core.agent.individual_factory import IndividualFactory
+from nca_test.core.representation.mock_representation import MockRepresentation
 
 
 class TestAgents(unittest.TestCase):
 
     def test_compare(self):
+        n = 3
+        agents: Agents = IndividualFactory(MockRepresentation).initialize().create(n)
 
-        individual_list = IndividualFactory().create(3)
+        self.assertEqual(len(agents), n)
 
-        agents = Agents(individual_list)
+        for agent in agents:
+            self.assertIsInstance(agent.representation, MockRepresentation)
+            self.assertEqual(agent.fitness, -math.inf)
 
-        for index, agent in enumerate(agents):
-            self.assertEqual(agent, individual_list[index])
+    def test_id(self):
+        agents: Agents = IndividualFactory(MockRepresentation).initialize().create(2)
 
-        self.assertEqual(agents.average_fitness(), -math.inf)
+        self.assertNotEqual(agents[0].id, agents[1].id)
 
     def test_age(self):
-        individual_list = IndividualFactory().create(3)
+        n = 3
+        agents = IndividualFactory().initialize().create(n)
 
-        agents = Agents(individual_list)
-
-        for index in range(1, 4):
+        for index in range(n):
             agents.update_age()
             for agent in agents:
-                self.assertEqual(agent.age.generations, index)
+                self.assertEqual(agent.age.generations, index+1)

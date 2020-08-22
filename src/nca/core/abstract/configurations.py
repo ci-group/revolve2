@@ -1,6 +1,5 @@
 import string
 
-from nca.core.agent.fitness import DisplacementFitness
 from nca.core.abstract.configuration import Configuration
 
 
@@ -24,7 +23,7 @@ class EvoSphereConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("revolve.config")
-        self.number_of_generations = 50
+        self.number_of_generations = 100
         self.number_of_agents = 10
 
 
@@ -33,27 +32,20 @@ class RepresentationConfiguration(Configuration):
     def __init__(self):
         super().__init__("representation.config")
         self.genome_size = 10
-        self.minimum_value = -1.0
-        self.maximum_value = 1.0
 
 
-class MutationConfiguration(Configuration):
+class OperatorConfiguration(Configuration):
     def __init__(self):
-        super().__init__("mutation.config")
+        super().__init__("operator.config")
         self.mutation_probability = 0.25
-
-
-class RecombinationConfiguration(Configuration):
-    def __init__(self):
-        super().__init__("mutation.config")
-        self.recombination_probability = 0.5
+        self.recombination_probability = 0.25
 
 
 class InitializationConfiguration(Configuration):
     def __init__(self):
         super().__init__("initialization.config")
         self.min_range = 0.0
-        self.max_range = 1.0
+        self.max_range = 2.0
 
 
 class SimulatorConfiguration(Configuration):

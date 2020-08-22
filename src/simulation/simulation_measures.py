@@ -1,14 +1,31 @@
 import string
-from typing import Dict
-
-import numpy as np
+from typing import Dict, List
 
 
-class SimulationMeasures:
+class Measures:
+    def __init__(self, measurements: Dict):
+        self.measurements: Dict[string] = measurements
+
+    def __getitem__(self, item: string):
+        if item not in self.measurements:
+            return None
+
+        return self.measurements[item]
+
+    def __setitem__(self, key, value):
+        self.measurements[key] = value
+
+
+class SimulationMeasures(Measures):
 
     def __init__(self):
-        self.measures: Dict[string] = {'distances': [], 'times': [], 'batteries': [], 'positions': []}
+        self.categories = ['timestep', 'x', 'y', 'angle', 'energy']
+        super().__init__({element: [] for element in self.categories})
+        self.iterations = 0
 
-    def test(self):
-        for key in self.measures.keys():
-            self.measures[key] = np.random.uniform(0.0, 1.0, 10)
+    def add(self, simulation_iteration: List[float]):
+        assert(len(simulation_iteration) == len(self.categories))
+
+        for index, category in self.categories:
+            self[category] = simulation_iteration[index]
+        self.iterations += 1

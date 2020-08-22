@@ -2,20 +2,20 @@ import unittest
 
 from revolve.robot.robot import Robot
 from simulation.simulator.simulation_connector import SimulatorState
-from evosphere.TestEcosphere import TestEcosphere
+from evosphere.mock_ecosphere import MockEcosphere
 from simulation_test.simulator.test_connector_adapter import TestConnectorAdapter
 
 
 class TestSimulatorConnector(unittest.TestCase):
 
     def test_connector_port(self):
-        connector_1 = TestConnectorAdapter(TestEcosphere())
-        connector_2 = TestConnectorAdapter(TestEcosphere())
+        connector_1 = TestConnectorAdapter(MockEcosphere())
+        connector_2 = TestConnectorAdapter(MockEcosphere())
 
         self.assertNotEqual(connector_1.port, connector_2.port)
 
     def test_connector_ready(self):
-        connector = TestConnectorAdapter(TestEcosphere())
+        connector = TestConnectorAdapter(MockEcosphere())
 
         self.assertEqual(connector.state, SimulatorState.READY)
 
@@ -32,7 +32,7 @@ class TestSimulatorConnector(unittest.TestCase):
         self.assertEqual(connector.state, SimulatorState.READY)
 
     def test_connector_robot(self):
-        connector = TestConnectorAdapter(TestEcosphere())
+        connector = TestConnectorAdapter(MockEcosphere())
 
         robot = Robot()
         connector.add_robot(robot)
@@ -42,7 +42,7 @@ class TestSimulatorConnector(unittest.TestCase):
         self.assertTrue(True)
 
     def test_connector_robot_changed(self):
-        connector = TestConnectorAdapter(TestEcosphere())
+        connector = TestConnectorAdapter(MockEcosphere())
 
         robot = Robot()
         connector.add_robot(robot)

@@ -1,16 +1,14 @@
 
 import unittest
 
-from nca.core.agent.agents import Agents
 from revolve.robot.birth_clinic import RobotFactory
 from revolve.robot.body.body import BodyRepresentation
 from revolve.robot.brain.brain import BrainRepresentation
-from simulation.simulator.simulator_command import SimulateCommand
+from simulation.simulator.simulator_command import SimulateCommand, TaskPriority
 from src.simulation.simulation_manager import SimulationManager
 
-from src.simulation.simulator.simulator_helper import TaskPriority
 
-from evosphere.TestEcosphere import TestEcosphereB, TestEcosphereA, TestEcosphereC
+from evosphere.mock_ecosphere import MockEcosphereB, MockEcosphereA, MockEcosphereC
 
 
 class MockBodyRepresentation(BodyRepresentation):
@@ -31,10 +29,10 @@ class SimulationManagerTest(unittest.TestCase):
 
         manager = SimulationManager()
         manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).create(3),
-                                         TestEcosphereA(), TaskPriority.MEDIUM))
+                                         MockEcosphereA(), TaskPriority.MEDIUM))
         manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).create(3),
-                                         TestEcosphereB(), TaskPriority.MEDIUM))
+                                         MockEcosphereB(), TaskPriority.MEDIUM))
         manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).create(3),
-                                         TestEcosphereC(), TaskPriority.MEDIUM))
+                                         MockEcosphereC(), TaskPriority.MEDIUM))
 
         self.assertEqual(len(manager.supervisors.keys()), 3)

@@ -4,29 +4,37 @@ from nca.core.evolution.conditions.initialization import Initialization
 
 
 class CategoricalInitialization(Initialization):
-    def __init__(self, number_of_elements: int):
+    def __init__(self, number_of_elements: int, start: int = 1):
         super().__init__()
         self.number_of_elements: int = number_of_elements
+        self.start = start
 
-    def algorithm(self, size: int):
-        return np.random.randint(1, self.number_of_elements, size)
+    def __call__(self, size: int):
+        return np.random.randint(self.start, self.number_of_elements, size).tolist()
+
+
+class BinaryInitialization(Initialization):
+
+    def __call__(self, length: int):
+        return np.random.randint(2, size=length).tolist()
+
+
+class IntegerInitialization(Initialization):
+
+    def __call__(self, length: int):
+        return np.random.randint(self.configuration.min_range, self.configuration.max_range,
+                                 size=length).tolist()
 
 
 class UniformInitialization(Initialization):
 
-    def __init__(self):
-        super().__init__()
-
-    def algorithm(self, size: int):
-        return np.random.uniform(self.configuration.min_range, self.configuration.max_range, size)
+    def __call__(self, size: int):
+        return np.random.uniform(self.configuration.min_range, self.configuration.max_range, size).tolist()
 
 
 class GaussianInitialization(Initialization):
 
-    def __init__(self):
-        super().__init__()
-
-    def algorithm(self, size: int):
+    def __call__(self, size: int):
         mean = (self.configuration.max_range + self.configuration.min_range) / 2
         scale = (self.configuration.max_range - self.configuration.min_range) / 2
-        return np.random.normal(mean, scale, size)
+        return np.random.normal(mean, scale, size).tolist()

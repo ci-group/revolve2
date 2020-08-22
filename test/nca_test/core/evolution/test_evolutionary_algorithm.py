@@ -5,18 +5,18 @@ from nca.core.agent.individual_factory import IndividualFactory
 from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population_management import PopulationManagement
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
-from revolve.evosphere.configuration import RevolveGeneticAlgorithmConfiguration
+from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
 
 
 class TestEvolutionaryAlgorithm(unittest.TestCase):
 
     def test_initialize(self):
 
-        configuration = RevolveGeneticAlgorithmConfiguration()
+        configuration = GeneticAlgorithmConfiguration()
         evolutionary_algorithm = EvolutionaryAlgorithm(configuration)
 
         population_ecology = PopulationEcology(PopulationManagement())
-        population_ecology.initialize(IndividualFactory().create(10))
+        population_ecology.initialize(IndividualFactory().initialize().create(10))
         evolutionary_algorithm.initialize(population_ecology.management.populations())
 
         for population in population_ecology.management.populations():
@@ -25,11 +25,11 @@ class TestEvolutionaryAlgorithm(unittest.TestCase):
 
     def test_run(self):
 
-        configuration = RevolveGeneticAlgorithmConfiguration()
+        configuration = GeneticAlgorithmConfiguration()
         evolutionary_algorithm = EvolutionaryAlgorithm(configuration)
 
         population_ecology = PopulationEcology(PopulationManagement())
-        population_ecology.initialize(IndividualFactory().create(10))
+        population_ecology.initialize(IndividualFactory().initialize().create(10))
         evolutionary_algorithm.initialize(population_ecology.management.populations())
 
         evolutionary_algorithm.run(population_ecology.management.populations()[0], evaluator)

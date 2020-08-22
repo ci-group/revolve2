@@ -4,7 +4,7 @@ from typing import List
 
 import numpy as np
 
-from nca.core.abstract.configurations import RecombinationConfiguration
+from nca.core.abstract.configurations import OperatorConfiguration
 from nca.core.agent.agents import Agents
 from nca.core.genome.representation import Representation
 
@@ -12,29 +12,27 @@ from nca.core.genome.representation import Representation
 class RecombinationOperator:
 
     def __init__(self):
-        self.configuration = RecombinationConfiguration()
+        self.configuration = OperatorConfiguration()
         pass
 
-    def algorithm(self, parents: Agents) -> Representation:
+    def __call__(self, parents: Agents) -> Representation:
         assert(len(parents) > 0)
 
-        # check if we do not have to do the mutation
-        if self.configuration.recombination_probability < np.random.random():
-            return parents[0].representation
+        new_representation = copy.deepcopy(parents[0].representation)
+        # check if we do have to do the mutation
+        if self.configuration.recombination_probability > np.random.random():
+            new_representation = self._recombine([parent.representation for parent in parents])
 
-        return self._execute([parent.representation for parent in parents])
+        return new_representation
 
     @abstractmethod
-    def _execute(self, representations: List[Representation]) -> Representation:
+    def _recombine(self, representations: List[Representation]) -> Representation:
         pass
 
 
 class OnePointCrossover(RecombinationOperator):
 
-    def __init__(self):
-        super().__init__()
-
-    def _execute(self, representations: List[Representation]) -> Representation:
+    def _recombine(self, representations: List[Representation]) -> Representation:
         new_representation: Representation = copy.deepcopy(representations[0])
 
         # TODO make possible to do multiple parents

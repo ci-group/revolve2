@@ -1,7 +1,7 @@
 import unittest
 
-from nca.core.abstract.composite.tree import Tree, Tree2D, Tree3D
-from nca.core.abstract.composite.tree_helper import Alignment, Orientation
+from nca.core.abstract.structural.tree.tree import Tree, Tree2D, Tree3D
+from nca.core.abstract.structural.tree.tree_helper import Alignment, Orientation
 
 
 class TreeTest(unittest.TestCase):

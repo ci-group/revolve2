@@ -30,7 +30,7 @@ class EvolutionaryAlgorithm:
     def initialize(self, populations: List[Population]):
         for population in populations:
             for individual in population.individuals:
-                individual.representation.init(self.initialization)
+                individual.representation.initialize(self.initialization)
 
     def should_terminate(self, population: Population):
         return self.termination_condition.terminate(population)
@@ -38,22 +38,9 @@ class EvolutionaryAlgorithm:
     def run(self, population: Population, evaluator):
         parents_list: List[Agents] = self.parent_selection.select(population.individuals)
 
-        offspring: Agents = self._create_offspring(parents_list)
+        offspring: Agents = Agents([Individual(self.mutation(self.recombination(parents))) for parents in parents_list])
 
-        offspring: Agents = evaluator(offspring)
+        evaluator(offspring)
 
         population.individuals.extend(offspring)
-
         population.next_generation(self.survivor_selection.select(population.individuals))
-
-    def _create_offspring(self, parent_list: List[Agents]) -> Agents:
-        return Agents(
-            [
-                Individual(
-                    self.mutation.algorithm(
-                        self.recombination.algorithm(parents), self.initialization
-                    )
-                )
-                for parents in parent_list
-            ]
-        )

@@ -1,6 +1,6 @@
 import unittest
 
-from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol, RobogenModule
+from revolve.robot.robogen.robogen_grammar import RobogenSymbol, RobogenModule
 
 
 class TestRobogenGrammar(unittest.TestCase):

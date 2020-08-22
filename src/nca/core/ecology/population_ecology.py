@@ -1,7 +1,7 @@
 import string
 
 from .population_management import PopulationManagement
-from ..abstract.memento import Memento
+from nca.core.abstract.behavioral.memento import Memento
 from ..agent.agents import Agents
 
 

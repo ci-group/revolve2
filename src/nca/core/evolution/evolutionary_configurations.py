@@ -4,18 +4,16 @@ from nca.core.evolution.conditions.special_features import SpecialFeatures
 from nca.core.evolution.conditions.condition import Condition, EvaluationsCondition
 from nca.core.evolution.selection.parent_selection import RouletteWheelSelection
 from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection
-from nca.core.evolution.selection.survivor_selection import GenerationalSteadyStateSelection
+from nca.core.evolution.selection.survivor_selection import GenerationalSteadyStateSelection, \
+    FitnessSteadyStateSelection
 from nca.core.genome.initialization import UniformInitialization
-from nca.core.genome.operators.mutation_operator import MutationOperator, BitFlipMutation
+from nca.core.genome.operators.mutation_operator import MutationOperator, ReplaceMutation
 from nca.core.genome.operators.recombination_operator import RecombinationOperator, OnePointCrossover
-from nca.core.genome.representation import Representation
-from nca.core.genome.representations.valued_representation import BinaryRepresentation
 
 
 class EvolutionConfiguration(Configuration):
 
     def __init__(self,
-                 representation: Representation,
                  recombination: RecombinationOperator,
                  mutation: MutationOperator,
                  parent_selection: ParentSelection,
@@ -25,7 +23,6 @@ class EvolutionConfiguration(Configuration):
                  special_features: SpecialFeatures):
 
         super().__init__("evolution.config")
-        self.representation: Representation = representation
         self.recombination: RecombinationOperator = recombination
         self.mutation: MutationOperator = mutation
         self.parent_selection: ParentSelection = parent_selection
@@ -38,18 +35,15 @@ class EvolutionConfiguration(Configuration):
 class GeneticAlgorithmConfiguration(EvolutionConfiguration):
 
     def __init__(self,
-                 representation: BinaryRepresentation = BinaryRepresentation(),
-                 recombination: OnePointCrossover = OnePointCrossover(),
-                 mutation: BitFlipMutation = BitFlipMutation(),
+                 recombination: RecombinationOperator = OnePointCrossover(),
+                 mutation: MutationOperator = ReplaceMutation(),
                  parent_selection: ParentSelection = RouletteWheelSelection(),
-                 survivor_selection: SurvivorSelection = GenerationalSteadyStateSelection(),
+                 survivor_selection: SurvivorSelection = FitnessSteadyStateSelection(),
                  initialization: Initialization = UniformInitialization(),
                  condition: Condition = EvaluationsCondition(10),
                  special_features: SpecialFeatures = SpecialFeatures()):
-        super().__init__(
-            representation, recombination, mutation, parent_selection, survivor_selection,
-            initialization, condition, special_features)
-
+        super().__init__(recombination, mutation, parent_selection, survivor_selection,
+                         initialization, condition, special_features)
 
 
 """

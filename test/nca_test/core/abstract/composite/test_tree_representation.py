@@ -1,8 +1,8 @@
 import unittest
 
-from nca.core.abstract.composite.tree import Tree, Tree2D, Tree3D
-from nca.core.abstract.composite.tree_helper import Orientation, Alignment
-from nca.core.abstract.composite.tree_representation import TreeRepresentation, Tree2DRepresentation, \
+from nca.core.abstract.structural.tree.tree import Tree, Tree2D, Tree3D
+from nca.core.abstract.structural.tree.tree_helper import Orientation, Alignment
+from nca.core.abstract.structural.tree.tree_representation import TreeRepresentation, Tree2DRepresentation, \
     Tree3DRepresentation
 
 

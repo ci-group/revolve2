@@ -1,11 +1,11 @@
 from nca.experiment_manager import ExperimentManager
-from revolve.evosphere.evosphere import DefaultEvoSphere
+from revolve.evosphere.evosphere import RevolveEvosphere
 
 experiment_manager = ExperimentManager()
 
 
 def run_regular():
-    evosphere = DefaultEvoSphere()
+    evosphere = RevolveEvosphere()
     evosphere.evolve()
 
 

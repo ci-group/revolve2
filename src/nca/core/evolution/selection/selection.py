@@ -3,7 +3,7 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from nca.core.abstract.command import Command
+from nca.core.abstract.behavioral.command import Command
 from nca.core.abstract.configurations import PopulationConfiguration
 from nca.core.agent.agents import Agents
 from nca.core.agent.individual import Individual
@@ -43,9 +43,9 @@ class SurvivorSelection(Selection, ABC):
     def select(self, individuals: Agents) -> Agents:
         super().check(individuals)
         # TODO simplify collection
-        new_individuals: List[Individual] = self.algorithm(individuals)     # mmhhh...
+        new_individuals: List[Individual] = self(individuals)     # mmhhh..
         return Agents(new_individuals[:self.configuration.population_size])
 
     @abstractmethod
-    def algorithm(self, individuals: Agents) -> List[Individual]:
+    def __call__(self, individuals: Agents) -> List[Individual]:
         raise Exception("Survivor selection evolution is not implemented")

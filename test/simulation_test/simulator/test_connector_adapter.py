@@ -1,4 +1,4 @@
-from revolve.evosphere.world import Ecosphere
+from revolve.evosphere.biosphere import Ecosphere
 from revolve.robot.robot import Robot
 
 from src.simulation.simulation_measures import SimulationMeasures

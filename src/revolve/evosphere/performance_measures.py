@@ -1,28 +1,24 @@
-import random
-import string
-from typing import Dict, List
+import math
+
+import numpy as np
+
+from simulation.simulation_measures import Measures, SimulationMeasures
 
 
-class PerformanceMeasures:
+class PerformanceMeasures(Measures):
 
     def __init__(self):
-        self.measures: Dict[string, float] = {'velocity': 0.0, 'displacement': 0.0, 'rotation': 0.0, 'balance': 0.0}
+        self.categories = ['time_duration', 'displacement_x', 'displacement_y', 'rotation', 'energy']
+        super().__init__({element: 0.0 for element in self.categories})
 
-    def test(self):
-        for key in self.measures.keys():
-            self.measures[key] = random.uniform(0.0, 1.0)
+        self.distance = 0.0
+        self.velocity = 0.0
 
-    @staticmethod   # TODO List typing
-    def normalize(measures: List):
-        performance_measures: PerformanceMeasures = PerformanceMeasures()
+    def process(self, measures: SimulationMeasures):
+        for index, category in enumerate(measures.categories):
+            self[self.categories[index]] = measures['x'][-1] - measures[category][0]
 
-        # add_measures
-        for performance_measure in measures:
-            for (key, value) in performance_measure.measures.items():
-                performance_measures.measures[key] += value
-
-        # normalize measures
-        for key in performance_measures.measures.keys():
-            performance_measures.measures[key] /= len(measures)
-
-        return performance_measures
+        self.distance = math.sqrt(self['displacement_x']**2 + self['displacement_y']**2)
+        velocity_x = self['displacement_x'] / self['time_duration']
+        velocity_y = self['displacement_y'] / self['time_duration']
+        self.velocity = math.sqrt(velocity_x**2 + velocity_y**2)

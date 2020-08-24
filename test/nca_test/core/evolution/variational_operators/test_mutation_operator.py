@@ -13,8 +13,7 @@ class TestMutationOperators(unittest.TestCase):
     def test_swap_mutation(self):
         mutation = SwapMutation()
 
-        representation = ValuedRepresentation()
-        representation.initialize(UniformInitialization())
+        representation = ValuedRepresentation(UniformInitialization())
 
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
@@ -25,8 +24,7 @@ class TestMutationOperators(unittest.TestCase):
     def test_delete_mutation(self):
         mutation = DeleteMutation()
 
-        representation = ValuedRepresentation()
-        representation.initialize(UniformInitialization())
+        representation = ValuedRepresentation(UniformInitialization())
 
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
@@ -37,8 +35,7 @@ class TestMutationOperators(unittest.TestCase):
     def test_inversion_mutation(self):
         mutation = InversionMutation()
 
-        representation = ValuedRepresentation()
-        representation.initialize(UniformInitialization())
+        representation = ValuedRepresentation(UniformInitialization())
 
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
@@ -49,8 +46,7 @@ class TestMutationOperators(unittest.TestCase):
     def test_insert_mutation(self):
         mutation = InsertMutation()
 
-        representation = ValuedRepresentation()
-        representation.initialize(UniformInitialization())
+        representation = ValuedRepresentation(UniformInitialization())
 
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
@@ -61,8 +57,7 @@ class TestMutationOperators(unittest.TestCase):
     def test_replace_mutation(self):
         mutation = ReplaceMutation()
 
-        representation = ValuedRepresentation()
-        representation.initialize(UniformInitialization())
+        representation = ValuedRepresentation(UniformInitialization())
 
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)

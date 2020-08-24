@@ -16,7 +16,7 @@ class TestAgents(unittest.TestCase):
 
         for agent in agents:
             self.assertIsInstance(agent.representation, MockRepresentation)
-            self.assertEqual(agent.fitness, -math.inf)
+            self.assertTrue(agent.fitness == 0.0)
 
     def test_id(self):
         agents: Agents = IndividualFactory(MockRepresentation).initialize().create(2)

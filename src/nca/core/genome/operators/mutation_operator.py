@@ -52,7 +52,7 @@ class InsertMutation(ValueMutation):
         super().__init__()
 
     def _mutate(self, representation: Representation):
-        index = random.choice(range(len(representation)))
+        index = representation.random_index()
         representation.genome = np.insert(representation.genome, index, representation.random_value())
 
 

@@ -11,8 +11,8 @@ class TestRecombinationOperators(unittest.TestCase):
         recombination = OnePointCrossover()
         initialization = UniformInitialization()
 
-        representation_1 = ValuedRepresentation().initialize(initialization)
-        representation_2 = ValuedRepresentation().initialize(initialization)
+        representation_1 = ValuedRepresentation(initialization)
+        representation_2 = ValuedRepresentation(initialization)
 
         new_representation = recombination._recombine([representation_1, representation_2])
         self.assertNotEqual(representation_1.genome, new_representation.genome)

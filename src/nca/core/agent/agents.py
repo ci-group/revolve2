@@ -1,4 +1,3 @@
-import math
 import string
 from typing import List
 import numpy as np
@@ -60,7 +59,7 @@ class Agents(Iterator):
 
     def average_fitness(self):
         # TODO individual.fitness
-        return np.mean([individual.fitness if individual.fitness is not -math.inf else 0.0 for individual in self])
+        return np.mean([individual.fitness for individual in self])
 
     def update_age(self):
         for agent in self:

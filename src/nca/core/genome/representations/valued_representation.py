@@ -7,8 +7,8 @@ from nca.core.genome.representation import Representation
 
 class ValuedRepresentation(Representation, ABC):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, initialization):
+        super().__init__(initialization)
 
     def compatibility(self, other) -> float:
         return np.linalg.norm(np.array(self.genome) - np.array(other.genome))

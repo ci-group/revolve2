@@ -1,10 +1,8 @@
-import math
-
 from nca.core.agent.age import Age
 from nca.core.abstract.sequential_identifier import AgentIdentifier
+from nca.core.agent.fitness import Fitness, CombinedFitness
 from nca.core.genome.representation import Representation
 from revolve.robot.brain.brain import Brain
-from simulation.simulation_measures import SimulationMeasures
 
 
 class Individual:
@@ -17,14 +15,14 @@ class Individual:
 
         self.representation: Representation = representation
         self.measures = None
-        self.fitness: float = -math.inf
+        self.fitness: CombinedFitness = CombinedFitness()
 
     def __lt__(self, other):
         return self.id < other.id
 
-    def performance(self, measures: SimulationMeasures, fitness_function):
-        self.measures = measures
-        self.fitness = fitness_function(self)
+    def performance(self, fitness: Fitness):
+        self.fitness.add(fitness(self))
+        self.fitness = self.fitness()  # calculate final/intermediate average
 
     def __repr__(self):
         return str(self.id) + " " + str(self.representation) + " " + str(self.fitness) + "\n"

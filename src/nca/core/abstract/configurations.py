@@ -32,6 +32,7 @@ class RepresentationConfiguration(Configuration):
     def __init__(self):
         super().__init__("representation.config")
         self.genome_size = 10
+        self.number_of_chromosomes = 3
 
 
 class OperatorConfiguration(Configuration):

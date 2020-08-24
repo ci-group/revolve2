@@ -17,7 +17,6 @@ class TestEvolutionaryAlgorithm(unittest.TestCase):
 
         population_ecology = PopulationEcology(PopulationManagement())
         population_ecology.initialize(IndividualFactory().initialize().create(10))
-        evolutionary_algorithm.initialize(population_ecology.management.populations())
 
         for population in population_ecology.management.populations():
             for individual in population.individuals:
@@ -30,7 +29,6 @@ class TestEvolutionaryAlgorithm(unittest.TestCase):
 
         population_ecology = PopulationEcology(PopulationManagement())
         population_ecology.initialize(IndividualFactory().initialize().create(10))
-        evolutionary_algorithm.initialize(population_ecology.management.populations())
 
         evolutionary_algorithm.run(population_ecology.management.populations()[0], evaluator)
 

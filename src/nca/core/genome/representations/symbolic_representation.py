@@ -9,8 +9,7 @@ class SymbolicRepresentation(Representation):
 
     def __init__(self, symbols_type: type(Symbol)):
         self.symbols_type = symbols_type
-        super().__init__()
-        self.initialize(GrammarInitialization(self.symbols_type))
+        super().__init__(GrammarInitialization(self.symbols_type))
 
     def compatibility(self, other) -> float:
         differences = 0

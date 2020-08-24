@@ -1,6 +1,7 @@
 from nca.core.abstract.creational.builder import Builder
-from nca.core.agent.agents import Agents
 from nca.core.agent.individual import Individual
+from nca.core.agent.agents import Agents
+from nca.core.agent.fitness import Fitness
 from nca.core.agent.individual_factory import ActorFactory
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.representation import Representation
@@ -22,16 +23,18 @@ class RobotFactory(ActorFactory):
         self.body_initialization: Initialization = Initialization()
         self.brain_initialization: Initialization = Initialization()
 
-    def initialize(self, initialization: Initialization = Initialization()):
-        #TODO
+    def initialize(self, initialization: Initialization = Initialization(), fitness_type: type(Fitness) = Fitness):
+        self.initialization = initialization
+        self.fitness_type = fitness_type
         return self
 
     def create(self, number_of_robots: int) -> Agents:
         agents: Agents = Agents()
+        # TODO raise when body / brain initialization does not exist.
 
         for robot_index in range(number_of_robots):
-            agents.add(Robot(Body(self.body_genome_type().initialize(self.body_initialization)),
-                             Brain(self.brain_genome_type().initialize(self.brain_initialization))))
+            agents.add(Robot(Body(self.body_genome_type(self.body_initialization)),
+                             Brain(self.brain_genome_type(self.brain_initialization))))
 
         return agents
 

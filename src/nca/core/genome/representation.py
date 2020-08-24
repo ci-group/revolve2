@@ -1,3 +1,4 @@
+import random
 from abc import abstractmethod
 from typing import List
 
@@ -12,15 +13,16 @@ Genome: List = []
 
 class Representation:
 
-    def __init__(self):
+    def __init__(self, initialization):
         self.configuration = RepresentationConfiguration()
-        self.genome: Genome = []
-        self.initialization = None
-
-    def initialize(self, initialization):
         self.initialization = initialization
+        self.genome: Genome = []
+
+        if self.initialization is not None:
+            self.initialize()
+
+    def initialize(self):
         self.genome = self.initialization(self.configuration.genome_size)
-        return self
 
     def random_value(self):
         return self.initialization(1)[0]
@@ -50,3 +52,6 @@ class Representation:
 
     def __len__(self):
         return len(self.genome)
+
+    def random_index(self):
+        return random.choice(range(len(self.genome)))

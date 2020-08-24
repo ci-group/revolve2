@@ -21,7 +21,7 @@ class GenerationalSteadyStateSelection(SurvivorSelection):
         super().__init__()
 
     def __call__(self, individuals: List[Individual]) -> List[Individual]:
-        return sorted(individuals, key=lambda x: x.age.generations, reverse=True)
+        return sorted(individuals, key=lambda x: x.age.generations, reverse=False)
 
 
 class ElitismSelection(SurvivorSelection):

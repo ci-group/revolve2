@@ -1,39 +1,37 @@
 import copy
-import math
 import unittest
 
-from nca.core.agent.fitness import DisplacementFitness
+from nca.core.agent.fitnesses import DisplacementFitness
 from nca.core.agent.individual import Individual
+from nca.core.genome.initialization import UniformInitialization
 from nca.core.genome.representation import Representation
-from nca_test.core.agent.test_measures import MockSimulationMeasures
+from simulation_test.simulator.mock_measures import MockPerformanceMeasures
 
 
 class TestIndividual(unittest.TestCase):
 
     def test_compare(self):
 
-        representation = Representation()
+        representation = Representation(UniformInitialization())
         individual = Individual(representation)
 
         self.assertEqual(individual.representation, representation)
-        self.assertEqual(individual.fitness, -math.inf)
+        self.assertEqual(individual.fitness, 0.0)
 
     def test_id(self):
-        representation = Representation()
+        representation = Representation(UniformInitialization())
         individual1 = Individual(representation)
         individual2 = Individual(representation)
 
         self.assertNotEqual(individual1.id, individual2.id)
 
     def test_performance(self):
-        representation = Representation()
+        representation = Representation(UniformInitialization())
         individual = Individual(representation)
-        measures = MockSimulationMeasures()
-        fitness = DisplacementFitness()
 
         new_individual: Individual = copy.deepcopy(individual)
-        new_individual.performance(measures, fitness)
+        new_individual.measures = MockPerformanceMeasures()
+        new_individual.performance(DisplacementFitness())
 
         self.assertNotEqual(individual.measures, new_individual.measures)
         self.assertNotEqual(individual.fitness, new_individual.fitness)
-

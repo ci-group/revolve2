@@ -28,11 +28,11 @@ class SimulationManagerTest(unittest.TestCase):
     def test_supervisor(self):
 
         manager = SimulationManager()
-        manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).create(3),
+        manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).initialize().create(3),
                                          MockEcosphereA(), TaskPriority.MEDIUM))
-        manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).create(3),
+        manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).initialize().create(3),
                                          MockEcosphereB(), TaskPriority.MEDIUM))
-        manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).create(3),
+        manager.simulate(SimulateCommand(RobotFactory(MockBodyRepresentation, MockBrainRepresentation).initialize().create(3),
                                          MockEcosphereC(), TaskPriority.MEDIUM))
 
         self.assertEqual(len(manager.supervisors.keys()), 3)

@@ -19,6 +19,10 @@ class Condition:
     def filter(self, population: Population) -> Agents:
         pass
 
+    @abstractmethod
+    def __str__(self):
+        pass
+
 
 class FitnessCondition(Condition):
 
@@ -32,6 +36,9 @@ class FitnessCondition(Condition):
                 filtered_individuals.add(individual)
         return filtered_individuals
 
+    def __str__(self):
+        return "FitnessCondition (" + str(self.condition_value) + " fitness value)"
+
 
 class EvaluationsCondition(Condition):
 
@@ -44,6 +51,9 @@ class EvaluationsCondition(Condition):
 
         return Agents()
 
+    def __str__(self):
+        return "EvaluationCondition (" + str(self.condition_value) + " generations)"
+
 
 class ImprovementCondition(Condition):
 
@@ -53,4 +63,8 @@ class ImprovementCondition(Condition):
     def filter(self, population: Population):
         if population.age.no_improvement_count >= self.condition_value:
             return population.individuals
+
         return Agents()
+
+    def __str__(self):
+        return "ImprovementCondition (" + str(self.condition_value) + " generations no improvements)"

@@ -17,20 +17,13 @@ class Evosphere:
         self.configuration = EvoSphereConfiguration()
 
         self.biosphere: Biosphere = biosphere
-
         self.evolutionary_algorithm: EvolutionaryAlgorithm = evolutionary_algorithm
-
-        self.simulation = simulation
+        self.simulation: SimulationManager = simulation
 
         self.debug = debug
         self.terminate = False
 
-        self.initialize()
-
-    def initialize(self):
-        # load and initialize
         self.biosphere.initialize(self.configuration.number_of_agents, self.evolutionary_algorithm.initialization)
-        self.evolutionary_algorithm.initialize(self.biosphere.populations())
 
     def evolve(self):
 
@@ -50,10 +43,12 @@ class Evosphere:
                 self.evolutionary_algorithm.run(population, self.evaluate)
 
             if self.terminate:
-                self.log("Terminated evolution due to termination condition.")
+                self.log("Terminated evolution due to " + str(self.evolutionary_algorithm.termination_condition))
                 break
 
             self.biosphere.run()
+
+        self.log(str(self.biosphere.populations()))
 
     def evaluate(self, agents: Agents):
         for ecosphere in self.biosphere.ecospheres:

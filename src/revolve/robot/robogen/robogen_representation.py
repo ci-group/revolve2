@@ -25,7 +25,6 @@ class RobogenRepresentation(SymbolicRepresentation):
         random_orientation = np.random.choice(Orientation)
         return RobogenModule(self.initialization(1)[0], random_parent.coordinate + random_orientation)
 
-
     def _remove(self, module: RobogenModule):
         self.genome.remove(module)
 

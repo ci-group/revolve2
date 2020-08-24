@@ -27,11 +27,6 @@ class EvolutionaryAlgorithm:
         self.termination_condition: Condition = self.configuration.condition
         self.special_features: SpecialFeatures = self.configuration.special_features
 
-    def initialize(self, populations: List[Population]):
-        for population in populations:
-            for individual in population.individuals:
-                individual.representation.initialize(self.initialization)
-
     def should_terminate(self, population: Population):
         return self.termination_condition.terminate(population)
 

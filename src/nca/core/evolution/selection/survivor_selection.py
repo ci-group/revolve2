@@ -1,8 +1,8 @@
 import random
 from typing import List
 
-from nca.core.agent.agents import Agents
-from nca.core.agent.individual import Individual
+from nca.core.actor.actors import Actors
+from nca.core.actor.individual import Individual
 from nca.core.evolution.selection.selection import SurvivorSelection
 
 
@@ -45,7 +45,7 @@ class RoundRobinTournament(SurvivorSelection):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, individuals: Agents) -> List[Individual]:
+    def __call__(self, individuals: Actors) -> List[Individual]:
         raise Exception("Unimplemented Round Robin Tournament")
         return []
 
@@ -55,7 +55,7 @@ class MuLambdaSelection(SurvivorSelection):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, individuals: Agents) -> List[Individual]:
+    def __call__(self, individuals: Actors) -> List[Individual]:
         raise Exception("Unimplemented Mu Lambda Selection")
         return []
 

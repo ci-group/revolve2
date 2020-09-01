@@ -1,40 +1,32 @@
 from abc import ABC
 from typing import List
 
-from nca.core.agent.fitness import Fitness, CombinedFitness
-from nca.core.agent.fitnesses import OnesFitness
-from nca.core.agent.individual_factory import ActorFactory, IndividualFactory
+from nca.core.actor.individual_factory import IndividualFactory
 from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population import Population
 from nca.core.evolution.conditions.initialization import Initialization
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
-from revolve.evosphere.ecosphere import Ecosphere, GeneticEcosphere, GazeboEcosphere
-from revolve.robot.birth_clinic import RobotFactory
-from revolve.robot.brain.representation.multineat_representation import MultiNEATRepresentation
-from revolve.robot.robogen.robogen_representation import RobogenRepresentation
+from revolve.evosphere.ecosphere import GazeboEcosphere, Ecosphere
+from revolve.robot.birth_clinic import AgentBirthClinic, RobotBirthClinic, BirthClinic
 
 
 class Biosphere(ABC):
 
-    def __init__(self, population_ecology: PopulationEcology, actor_factory: ActorFactory,
+    def __init__(self,
+                 population_ecology: PopulationEcology = PopulationEcology(),
+                 actor_factory: IndividualFactory = IndividualFactory(),
+                 birth_clinic: BirthClinic = None,
                  ecospheres: List[Ecosphere] = None):
         self.population_ecology: PopulationEcology = population_ecology
-        self.actor_factory: ActorFactory = actor_factory
+        self.actor_factory: IndividualFactory = actor_factory
+        self.ecospheres: List[Ecosphere] = ecospheres if ecospheres is not None else [GazeboEcosphere()]
+        self.birth_clinic: BirthClinic = birth_clinic
 
-        self.ecospheres: List[Ecosphere] = ecospheres
-
-        if self.ecospheres is None:
-            if isinstance(self.actor_factory, IndividualFactory):
-                self.ecospheres = [GeneticEcosphere()]
-            elif isinstance(self.actor_factory, RobotFactory):
-                self.ecospheres = [GazeboEcosphere()]
-
-    def initialize(self, number_of_agents, initialization: Initialization):
+    def initialize(self, number_of_actors: int, initialization_type: type(Initialization)):
         if False:  # TODO
             self.population_ecology.load()
         else:
-            self.actor_factory.initialize(initialization)
-            self.population_ecology.initialize(self.actor_factory.create(number_of_agents))
+            self.actor_factory.initialize(initialization_type)
+            self.population_ecology.initialize(self.actor_factory.create(number_of_actors))
 
     def populations(self) -> List[Population]:
         return self.population_ecology.management.populations()
@@ -44,13 +36,21 @@ class Biosphere(ABC):
         self.population_ecology.speciate()
 
 
-class RevolveRobotBiosphere(Biosphere):
+class RobotBiosphere(Biosphere):
 
-    def __init__(self, ecospheres: List[Ecosphere] = None):
-        super().__init__(PopulationEcology(), RobotFactory(RobogenRepresentation, MultiNEATRepresentation), ecospheres)
+    def __init__(self,
+                 population_ecology: PopulationEcology = PopulationEcology(),
+                 actor_factory: IndividualFactory = IndividualFactory(),
+                 birth_clinic: BirthClinic = RobotBirthClinic(),
+                 ecospheres: List[Ecosphere] = None):
+        super().__init__(population_ecology, actor_factory, birth_clinic, ecospheres)
 
 
-class GeneticBiosphere(Biosphere):
+class AgentBiosphere(Biosphere):
 
-    def __init__(self, ecospheres: List[Ecosphere] = None):
-        super().__init__(PopulationEcology(), IndividualFactory(ValuedRepresentation), ecospheres)
+    def __init__(self,
+                 population_ecology: PopulationEcology = PopulationEcology(),
+                 actor_factory: IndividualFactory = IndividualFactory(),
+                 birth_clinic: BirthClinic = AgentBirthClinic(),
+                 ecospheres: List[Ecosphere] = None):
+        super().__init__(population_ecology, actor_factory, birth_clinic, ecospheres)

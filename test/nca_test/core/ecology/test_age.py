@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.agent.age import Age
+from nca.core.actor.age import Age
 
 
 class TestAge(unittest.TestCase):

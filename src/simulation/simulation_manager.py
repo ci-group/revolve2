@@ -2,7 +2,7 @@ from typing import Dict
 
 from evosphere.mock_ecosphere import MockEcosphere
 from nca.core.abstract.configurations import SimulatorConfiguration
-from revolve.evosphere.ecosphere import GeneticEcosphere, SimulationEcosphere
+from revolve.evosphere.ecosphere import Ecosphere
 from simulation.simulation_measures import SimulationMeasures
 from simulation.simulator.simulator_command import SimulateCommand
 from simulation_test.simulator.mock_measures import MockSimulationMeasures
@@ -20,17 +20,15 @@ class SimulationManager:
         if request_command not in self.supervisors.keys():
             self.supervisors[request_command] = SimulationSupervisor(request_command)
 
-        for agent in request_command.agents:
+        actors = request_command.develop()
+        for actor in actors:
 
             if isinstance(request_command.ecosphere, MockEcosphere):
                 return MockSimulationMeasures()
 
-            if isinstance(request_command.ecosphere, GeneticEcosphere):
-                agent.fitness = request_command.ecosphere.fitness(agent)
-
-            if isinstance(request_command.ecosphere, SimulationEcosphere):
-                agent.measures: SimulationMeasures = self.supervisors[request_command].work(agent, request_command)
-                agent.performance(request_command.ecosphere.fitness(agent))
+            if isinstance(request_command.ecosphere, Ecosphere):
+                actor.measures: SimulationMeasures = self.supervisors[request_command].work(actor, request_command)
+                actor.performance(request_command.ecosphere.fitness(actor))
 
 
     """

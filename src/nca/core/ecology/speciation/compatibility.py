@@ -1,5 +1,5 @@
-from nca.core.agent.agents import Agents
-from nca.core.agent.individual import Individual
+from nca.core.actor.actors import Actors
+from nca.core.actor.individual import Individual
 
 
 class Compatibility:
@@ -7,7 +7,7 @@ class Compatibility:
     def __init__(self, limit: float = 1.0):
         self.limit = limit
 
-    def compatible(self, individuals: Agents, other_individual: Individual) -> bool:
+    def compatible(self, individuals: Actors, other_individual: Individual) -> bool:
         sum_difference: float = 0.0
         for individual in individuals:
             sum_difference += individual.representation.compatibility(other_individual.representation)

@@ -1,7 +1,7 @@
 import unittest
+from typing import List
 
 from nca.core.genome.grammar.grammar_initialization import GrammarInitialization
-from nca.core.genome.representation import Genome
 from nca_test.core.grammar.test_alphabet import TestColorSymbol
 
 
@@ -10,7 +10,7 @@ class TestGrammarInitialization(unittest.TestCase):
     def test_initialization_probability(self):
         initialization = GrammarInitialization(TestColorSymbol)
 
-        genome: Genome = initialization(1000)
+        genome: List = initialization(1000)
 
         counters: [TestColorSymbol, int] = {}
         for element in TestColorSymbol:

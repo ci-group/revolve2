@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.agent.age import GenerationalAge
+from nca.core.actor.age import GenerationalAge
 
 
 class TestGenerationalAge(unittest.TestCase):

@@ -1,9 +1,9 @@
 from nca.core.abstract.configurations import EvoSphereConfiguration
-from nca.core.agent.agents import Agents
+from nca.core.actor.actors import Actors
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
-from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
+from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration, EvolutionConfiguration
 
-from revolve.evosphere.biosphere import Biosphere, RevolveRobotBiosphere, GeneticBiosphere
+from revolve.evosphere.biosphere import Biosphere, RobotBiosphere, AgentBiosphere
 
 from simulation.simulation_manager import SimulationManager
 from simulation.simulator.simulator_command import SimulateCommand
@@ -12,18 +12,18 @@ from simulation.simulator.simulator_command import SimulateCommand
 class Evosphere:
 
     def __init__(self, biosphere: Biosphere,
-                 evolutionary_algorithm: EvolutionaryAlgorithm,
-                 simulation: SimulationManager, debug=True):
+                 evolutionary_configuration: EvolutionConfiguration = GeneticAlgorithmConfiguration(),
+                 simulation: SimulationManager = SimulationManager(), debug=True):
         self.configuration = EvoSphereConfiguration()
 
         self.biosphere: Biosphere = biosphere
-        self.evolutionary_algorithm: EvolutionaryAlgorithm = evolutionary_algorithm
+        self.evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(evolutionary_configuration)
         self.simulation: SimulationManager = simulation
 
         self.debug = debug
         self.terminate = False
 
-        self.biosphere.initialize(self.configuration.number_of_agents, self.evolutionary_algorithm.initialization)
+        self.biosphere.initialize(self.configuration.number_of_agents, self.evolutionary_algorithm.initialization_type)
 
     def evolve(self):
 
@@ -50,7 +50,7 @@ class Evosphere:
 
         self.log(str(self.biosphere.populations()))
 
-    def evaluate(self, agents: Agents):
+    def evaluate(self, agents: Actors):
         for ecosphere in self.biosphere.ecospheres:
             self.simulation.simulate(SimulateCommand(agents, ecosphere))
 
@@ -59,17 +59,15 @@ class Evosphere:
             print(string)
 
 
-class RevolveEvosphere(Evosphere):
-
-    def __init__(self, biosphere: Biosphere = RevolveRobotBiosphere(),
-                 evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(GeneticAlgorithmConfiguration()),
-                 simulation: SimulationManager = SimulationManager()):
-        super().__init__(biosphere, evolutionary_algorithm, simulation)
-
-
-class GeneticEvosphere(Evosphere):
-
-    def __init__(self, biosphere: Biosphere = GeneticBiosphere(),
-                 evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(GeneticAlgorithmConfiguration()),
+class RobotEvosphere(Evosphere):
+    def __init__(self, biosphere: Biosphere = RobotBiosphere(),
+                 evolutionary_configuration: EvolutionConfiguration = GeneticAlgorithmConfiguration(),
                  simulation: SimulationManager = SimulationManager(), debug=True):
-        super().__init__(biosphere, evolutionary_algorithm, simulation, debug)
+        super().__init__(biosphere, evolutionary_configuration, simulation, debug)
+
+
+class AgentEvosphere(Evosphere):
+    def __init__(self, biosphere: Biosphere = AgentBiosphere(),
+                 evolutionary_configuration: EvolutionConfiguration = GeneticAlgorithmConfiguration(),
+                 simulation: SimulationManager = SimulationManager(), debug=True):
+        super().__init__(biosphere, evolutionary_configuration, simulation, debug)

@@ -14,8 +14,9 @@ class SymbolicRepresentation(Representation):
     def compatibility(self, other) -> float:
         differences = 0
 
-        for index, element in enumerate(self.genome):
-            if self.genome[index] != other.genome[index]:
+        for index, element in enumerate(self):
+            print(self[index], other[index])
+            if self[index] != other[index]:
                 differences += 1
 
         return differences
@@ -35,4 +36,4 @@ class LSystemRepresentation(SymbolicRepresentation):
 
     def __call__(self, rule_iterations: int = 1):
         for _ in range(rule_iterations):
-            self.genome = self.grammar.apply_rules(self.genome)
+            self.genome = self.grammar.apply_rules(self)

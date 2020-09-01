@@ -2,4 +2,9 @@ from nca.core.genome.representation import Representation
 
 
 class MockRepresentation(Representation):
-    pass
+    def compatibility(self, other) -> float:
+        pass
+
+    def visit(self, representation_visitor):
+        pass
+

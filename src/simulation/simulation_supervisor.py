@@ -2,12 +2,9 @@
 import bisect
 from enum import Enum, auto
 
-from evosphere.mock_ecosphere import MockEcosphere
-from nca.core.agent.individual import Individual
-from revolve.evosphere.ecosphere import GeneticEcosphere
+from nca.core.actor.individual import Individual
 from simulation.simulator.simulator_command import SimulateCommand
 from simulation.simulator.simulator_factory import SimulatorFactory
-from simulation_test.simulator.mock_measures import MockSimulationMeasures
 from src.simulation.simulator.simulation_connector import SimulatorConnector
 
 

@@ -1,8 +1,8 @@
 from enum import Enum, auto
 
 from nca.core.abstract.behavioral.command import Command
-from nca.core.agent.agents import Agents
-from revolve.evosphere.biosphere import Ecosphere
+from nca.core.actor.actors import Actors
+from revolve.evosphere.ecosphere import Ecosphere
 
 
 class TaskPriority(Enum):
@@ -14,8 +14,8 @@ class TaskPriority(Enum):
 
 class SimulateCommand(Command):
 
-    def __init__(self, agents: Agents, ecosphere: Ecosphere, task_priority: TaskPriority = TaskPriority.LOW):
-        self.agents: Agents = agents
+    def __init__(self, agents: Actors, ecosphere: Ecosphere, task_priority: TaskPriority = TaskPriority.LOW):
+        self.agents: Actors = agents
         self.ecosphere: Ecosphere = ecosphere
         self.task_priority: TaskPriority = task_priority
 
@@ -24,3 +24,6 @@ class SimulateCommand(Command):
 
     def __hash__(self):
         return hash((self.agents, self.ecosphere))
+
+    def develop(self):
+        return self.ecosphere.birth_clinic.develop(self.agents)

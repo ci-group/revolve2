@@ -1,18 +1,15 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod, ABC
 
-from nca.core.genome.representation import Representation
-from revolve.robot.morphology import Morphology
+from nca.core.genome.representation import MorphologyRepresentation
+from revolve.evosphere.ecosphere import Ecosphere
 
 
-class BodyRepresentation(Representation, ABC):
+class Body(ABC):
     @abstractmethod
-    def develop(self):
+    def develop(self, representation: MorphologyRepresentation, ecosphere: Ecosphere):
         pass
 
 
-class Body(Morphology):
-
-    def __init__(self, genome: BodyRepresentation):
-        super().__init__(genome)
-        self.phenotype = None
+class RobotBody(Body):
+    pass
 

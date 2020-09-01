@@ -2,7 +2,7 @@ import string
 
 from .population_management import PopulationManagement
 from nca.core.abstract.behavioral.memento import Memento
-from ..agent.agents import Agents
+from ..actor.actors import Actors
 
 
 class PopulationEcology(Memento):
@@ -11,7 +11,7 @@ class PopulationEcology(Memento):
         super().__init__()
         self.management: PopulationManagement = population_management
 
-    def initialize(self, agents: Agents):
+    def initialize(self, agents: Actors):
         self.management.initialize(agents)
 
     def speciate(self):

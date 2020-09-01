@@ -4,7 +4,7 @@ from typing import List
 import numpy as np
 
 from nca.core.abstract.configurations import RepresentationConfiguration
-from nca.core.genome.representation import Representation, Genome
+from nca.core.genome.representation import Representation
 
 
 class ChromosomalRepresentation(Representation):
@@ -12,17 +12,17 @@ class ChromosomalRepresentation(Representation):
     def __init__(self, initialization):
         self.configuration = RepresentationConfiguration()
         self.initialization = initialization
-        self.genome: List[Genome] = []
+        self.genome: List = []
 
     def initialize(self):
-        self.genome: List[Genome] = []
+        self.genome: List = []
         for _ in range(self.configuration.number_of_chromosomes):
             self.genome.append(self.initialization(self.configuration.genome_size))
 
     def selection_indexes(self, k=2) -> List[List[int]]:
         tuples = []
         for chromosome_index in range(self.configuration.number_of_chromosomes):
-            [tuples.append([chromosome_index, value]) for value in np.random.choice(len(self.genome[chromosome_index]), k, replace=False)]
+            [tuples.append([chromosome_index, value]) for value in np.random.choice(len(self[chromosome_index]), k, replace=False)]
         return tuples
 
     def range_selection(self) -> List[int]:
@@ -32,7 +32,7 @@ class ChromosomalRepresentation(Representation):
     def swap_indexes(self, indexes: List[int]):
         index1 = indexes[0]
         index2 = indexes[1]
-        self.genome[index1], self.genome[index2] = self.genome[index2], self.genome[index1]
+        self[index1], self[index2] = self[index2], self[index1]
 
     def __str__(self):
         return str(self.genome)

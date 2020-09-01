@@ -5,8 +5,8 @@ from .genus import Genus
 from ..population import Population
 from ..population_management import PopulationManagement
 from ...abstract.configurations import SpeciationConfiguration
-from ...agent.agents import Agents
-from ...agent.individual import Individual
+from ...actor.actors import Actors
+from ...actor.individual import Individual
 
 
 class GenusManagement(PopulationManagement):
@@ -16,7 +16,7 @@ class GenusManagement(PopulationManagement):
 
         self.genus: Genus = Genus(compatibility)
 
-    def initialize(self, agents: Agents):
+    def initialize(self, agents: Actors):
         self.genus = Genus(self.genus.compatibility)
 
         for agent in agents:
@@ -25,7 +25,7 @@ class GenusManagement(PopulationManagement):
     def assign(self, individual: Individual):
         inserted = self.genus.insert(individual)
         if not inserted:
-            self.genus.add(Population(Agents([individual])))
+            self.genus.add(Population(Actors([individual])))
 
     def speciate(self):
         self.initialize(self.agents())
@@ -35,8 +35,8 @@ class GenusManagement(PopulationManagement):
             raise Exception("Genus uninitialized")
         return [population for population in self.genus.species]
 
-    def agents(self) -> Agents:
-        all_agents: Agents = Agents()
+    def agents(self) -> Actors:
+        all_agents: Actors = Actors()
 
         for population in self.populations():
             for agent in population.individuals:

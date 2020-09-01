@@ -1,12 +1,16 @@
-from nca.core.agent.fitness import Fitness, CombinedFitness
-from nca.core.agent.individual import Individual
+from nca.core.actor.fitness import Fitness
+from nca.core.actor.individual import Actor
 from revolve.robot.body.body import Body
 from revolve.robot.brain.brain import Brain
-from revolve.robot.morphology import MorphologyType
 
 
-class Robot(Individual):
+class Robot(Actor):
 
-    def __init__(self, body: Body = None, brain: Brain = None):
-        super().__init__({MorphologyType.BRAIN: brain, MorphologyType.BODY: body})
+    def __init__(self, actor: Actor):
+        self.actor = actor
+        self.brain: Brain = None
+        self.body: Body = None
+        self.measures = None
 
+    def performance(self, fitness: Fitness):
+        self.actor.performance(fitness)

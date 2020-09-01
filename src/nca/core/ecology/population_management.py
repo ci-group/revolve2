@@ -1,7 +1,7 @@
 from typing import List
 
 from nca.core.abstract.configurations import PopulationConfiguration
-from nca.core.agent.agents import Agents
+from nca.core.actor.actors import Actors
 from nca.core.ecology.population import Population
 
 
@@ -17,7 +17,7 @@ class PopulationManagement:
             raise Exception("PopulationManagement: Not existing population")
         return [self.population]
 
-    def initialize(self, agents: Agents):
+    def initialize(self, agents: Actors):
         assert(len(agents) > 0)
         self.population = Population(agents)
 

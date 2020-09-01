@@ -7,7 +7,6 @@ from revolve.robot.robogen.robogen_grammar import RobogenSymbol
 
 from revolve.robot.robogen.robogen_representation import RobogenRepresentation
 
-
 class TestRobogenManipulation(unittest.TestCase):
 
     def test_swap_mutation(self):
@@ -25,8 +24,8 @@ class TestRobogenManipulation(unittest.TestCase):
         self.assertNotEqual(representation.genome, new_representation.genome)
 
         for index in range(len(representation.genome)):
-            self.assertEqual(representation.genome[index].coordinate, new_representation.genome[index].coordinate)
-            self.assertNotEqual(representation.genome[index].id, new_representation.genome[index].id)
+            self.assertEqual(representation[index].coordinate, new_representation[index].coordinate)
+            self.assertNotEqual(representation[index].id, new_representation[index].id)
 
         self.assertTrue(new_representation.is_valid())
 
@@ -45,8 +44,8 @@ class TestRobogenManipulation(unittest.TestCase):
         self.assertNotEqual(representation.genome, new_representation.genome)
 
         for index in range(len(representation.genome)):
-            self.assertEqual(representation.genome[index].coordinate, new_representation.genome[index].coordinate)
-            self.assertNotEqual(representation.genome[index].id, new_representation.genome[index].id)
+            self.assertEqual(representation[index].coordinate, new_representation[index].coordinate)
+            self.assertNotEqual(representation[index].id, new_representation[index].id)
 
         self.assertTrue(new_representation.is_valid())
 
@@ -81,6 +80,6 @@ class TestRobogenManipulation(unittest.TestCase):
         self.assertNotEqual(representation.genome, new_representation.genome)
 
         #for index in range(len(representation.genome)):
-        #    self.assertEqual(representation.genome[index].coordinate, new_representation.genome[index].coordinate)
+        #    self.assertEqual(representation[index].coordinate, new_representation[index].coordinate)
 
         self.assertTrue(new_representation.is_valid())

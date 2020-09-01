@@ -1,19 +1,32 @@
-from nca.core.genome.representation import Representation
-from revolve.robot.body.body import Body
-from revolve.robot.robogen.robogen_grammar import RobogenGrammar
-from revolve.robot.robogen.robogen_representation import RobogenRepresentation
+from abc import ABC
+
+from evosphere.robot.mock_morphology import MockBody
+from nca.core.actor.individual import Individual
+from revolve.evosphere.ecosphere import Ecosphere
+from revolve.robot.body.body import Body, RobotBody
 from revolve.robot.robot_builder import RobotBuilder
 
 
-class BodyBuilder(RobotBuilder):
-    def __init__(self, representation_type: type(Representation)):
-        super().__init__(representation_type)
+class BodyBuilder(RobotBuilder, ABC):
+    def __init__(self, body_type: type(Body)):
+        super().__init__()
+        self.body_type: type(Body) = body_type
 
-    def build(self) -> Body:
 
-        if self.representation == RobogenRepresentation:
-            grammar: RobogenGrammar = RobogenGrammar()
-            return Body(self.representation(grammar))
+class RobotBodyBuilder(BodyBuilder):
 
-        return Body(self.representation())
+    def __init__(self, body_type: type(Body) = RobotBody):
+        super().__init__(body_type)
 
+    def build(self, individual: Individual, ecosphere: Ecosphere):
+        #genome = individual.express(ecosphere)
+        return self.body_type()
+
+
+class MockBodyBuilder(BodyBuilder):
+
+    def __init__(self, body_type: type(Body) = MockBody):
+        super().__init__(body_type)
+
+    def build(self, individual: Individual, ecosphere: Ecosphere):
+        return self.body_type()

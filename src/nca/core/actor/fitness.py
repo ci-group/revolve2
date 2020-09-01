@@ -26,9 +26,9 @@ class MultiFitness(Fitness):
         super().__init__(initial_value)
         self.fitnesses: List[Fitness] = fitnesses
 
-    def __call__(self, individual):
+    def __call__(self, robot):
         for index, fitness in enumerate(self.fitnesses):
-            self.fitnesses[index] = fitness(individual)
+            self.fitnesses[index] = fitness(robot)
         return MultiFitness(self.fitnesses, float(np.mean(self.fitnesses)))
 
 

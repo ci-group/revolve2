@@ -11,7 +11,7 @@ class DirectRepresentationTest(unittest.TestCase):
         representation_1 = LSystemRepresentation(Grammar(TestColorSymbol, ReplacementRules))
         representation_2 = LSystemRepresentation(Grammar(TestColorSymbol, ReplacementRules))
 
-        self.assertNotEqual(representation_1.genome, representation_2.genome)
+        self.assertNotEqual(representation_1, representation_2)
 
         compatibility = representation_1.compatibility(representation_2)
         self.assertNotEqual(compatibility, 0.0)

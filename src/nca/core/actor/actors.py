@@ -3,15 +3,15 @@ from typing import List
 import numpy as np
 
 from nca.core.abstract.behavioral.iterator import Iterator
-from nca.core.agent.individual import Individual
+from nca.core.actor.individual import Individual
 
 
-class Agents(Iterator):
+class Actors(Iterator):
 
     def __init__(self, agents: List[Individual] = None):
         super().__init__(agents)
 
-    def get(self, index) -> Individual:
+    def _get(self, index) -> Individual:
         return self.collection[index]
 
     def add(self, agent: Individual):
@@ -49,16 +49,15 @@ class Agents(Iterator):
         worst_agent: Individual = None
         worst_fitness: Fitness = Fitness.best()
 
-        for agent in self:
-            if worst_fitness < agent.fitness:
-                worst_fitness = agent.fitness
-                worst_agent = agent
+        for actor in self:
+            if worst_fitness < actor.fitness:
+                worst_fitness = actor.fitness
+                worst_agent = actor
 
         return worst_agent
     """
 
     def average_fitness(self):
-        # TODO individual.fitness
         return np.mean([individual.fitness for individual in self])
 
     def update_age(self):

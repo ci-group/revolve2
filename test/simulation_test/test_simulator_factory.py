@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.agent.agents import Agents
+from nca.core.actor.actors import Actors
 from simulation.simulator.simulator_command import SimulateCommand, TaskPriority
 from simulation.simulator.simulator_factory import SimulatorFactory
 
@@ -11,7 +11,7 @@ from simulation_test.simulator.test_connector_adapter import TestConnectorAdapte
 class SimulationSupervisorTest(unittest.TestCase):
 
     def test_none(self):
-        request_command = SimulateCommand(Agents(), MockEcosphere(), TaskPriority.MEDIUM)
+        request_command = SimulateCommand(Actors(), MockEcosphere(), TaskPriority.MEDIUM)
 
         factory = SimulatorFactory(request_command)
         connector = factory.create()

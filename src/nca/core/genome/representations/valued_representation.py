@@ -2,12 +2,13 @@ from abc import ABC
 
 import numpy as np
 
+from nca.core.evolution.conditions.initialization import ValuedInitialization
 from nca.core.genome.representation import Representation
 
 
 class ValuedRepresentation(Representation, ABC):
 
-    def __init__(self, initialization):
+    def __init__(self, initialization: ValuedInitialization):
         super().__init__(initialization)
 
     def compatibility(self, other) -> float:

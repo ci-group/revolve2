@@ -1,7 +1,7 @@
 import unittest
 
 from evosphere.mock_evosphere import MockEvosphere
-from revolve.evosphere.evosphere import GeneticEvosphere
+from revolve.evosphere.evosphere import RobotEvosphere
 
 
 class TestEvosphere(unittest.TestCase):
@@ -13,6 +13,6 @@ class TestEvosphere(unittest.TestCase):
         self.assertTrue(True)
 
     def test_genetic(self):
-        evosphere = GeneticEvosphere(debug=True)
+        evosphere = RobotEvosphere()
         evosphere.evolve()
         self.assertTrue(True)

@@ -26,5 +26,5 @@ class LSystemRepresentationTest(unittest.TestCase):
         representation = LSystemRepresentation(Grammar(TestColorSymbol, rules))
         representation()
 
-        outcome = [TestColorSymbol.RED for _ in range(len(representation.genome))]
+        outcome = [TestColorSymbol.RED for _ in range(len(representation))]
         self.assertEqual(representation.genome, outcome)

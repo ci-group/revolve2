@@ -1,7 +1,7 @@
 import unittest
 
-from nca.core.agent.agents import Agents
-from nca.core.agent.individual_factory import IndividualFactory
+from nca.core.actor.actors import Actors
+from nca.core.actor.individual_factory import IndividualFactory
 from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population_management import PopulationManagement
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
@@ -16,7 +16,7 @@ class TestEvolutionaryAlgorithm(unittest.TestCase):
         evolutionary_algorithm = EvolutionaryAlgorithm(configuration)
 
         population_ecology = PopulationEcology(PopulationManagement())
-        population_ecology.initialize(IndividualFactory().initialize().create(10))
+        population_ecology.initialize(IndividualFactory().create(10))
 
         for population in population_ecology.management.populations():
             for individual in population.individuals:
@@ -28,7 +28,7 @@ class TestEvolutionaryAlgorithm(unittest.TestCase):
         evolutionary_algorithm = EvolutionaryAlgorithm(configuration)
 
         population_ecology = PopulationEcology(PopulationManagement())
-        population_ecology.initialize(IndividualFactory().initialize().create(10))
+        population_ecology.initialize(IndividualFactory().create(10))
 
         evolutionary_algorithm.run(population_ecology.management.populations()[0], evaluator)
 
@@ -37,5 +37,5 @@ class TestEvolutionaryAlgorithm(unittest.TestCase):
                 self.assertIsNotNone(individual.representation)
 
 
-def evaluator(offspring: Agents):
+def evaluator(offspring: Actors):
     return offspring

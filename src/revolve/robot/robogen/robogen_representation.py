@@ -11,37 +11,34 @@ class RobogenRepresentation(SymbolicRepresentation):
     core: RobogenModule = RobogenModule()
 
     def __init__(self):
-        super().__init__(RobogenModule.symbol_type)
+        super().__init__(symbols_type=RobogenModule.symbol_type)
         self.valid = True
 
-    def _initialize(self):
-        self.genome: List[RobogenModule] = []
-
     def _add(self, parent_module: RobogenModule, symbol: RobogenSymbol, orientation: Orientation):
-        self.genome.append(RobogenModule(symbol, parent_module.coordinate + orientation))
+        self.append(RobogenModule(symbol, parent_module.coordinate + orientation))
 
     def random_value(self):
-        random_parent = np.random.choice(self.genome)
+        random_parent = np.random.choice(self)
         random_orientation = np.random.choice(Orientation)
         return RobogenModule(self.initialization(1)[0], random_parent.coordinate + random_orientation)
 
-    def _remove(self, module: RobogenModule):
-        self.genome.remove(module)
+    def remove(self, module: RobogenModule):
+        self.remove(module)
 
     def swap_indexes(self, indexes: List[int]):
         index1 = indexes[0]
         index2 = indexes[1]
-        self.genome[index1], self.genome[index2] = self.genome[index2], self.genome[index1]
+        self[index1], self[index2] = self[index2], self[index1]
 
-        tmp = self.genome[index1].coordinate
-        self.genome[index1].coordinate = self.genome[index2].coordinate
-        self.genome[index2].coordinate = tmp
+        tmp = self[index1].coordinate
+        self[index1].coordinate = self[index2].coordinate
+        self[index2].coordinate = tmp
 
     def is_valid(self):
         hashmap: Dict[Coordinate3D, RobogenModule] = {}
         self.valid = True
 
-        for element in self.genome:
+        for element in self:
             if element.coordinate not in hashmap.keys():
                 hashmap[element.coordinate] = element
             else:

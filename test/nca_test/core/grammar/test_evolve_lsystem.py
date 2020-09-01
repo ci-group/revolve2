@@ -1,6 +1,7 @@
 import copy
 import unittest
 
+from nca.core.actor.individual import Individual
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.grammar.grammar import ReplacementRules, Grammar
 from nca.core.genome.initialization import UniformInitialization
@@ -21,25 +22,25 @@ class LSystemRepresentationTest(unittest.TestCase):
         mutation = SwapMutation()
 
         representation = LSystemRepresentation(Grammar(TestColorSymbol, TestRules))
-        representation.genome = [TestColorSymbol.RED, TestColorSymbol.GREEN, TestColorSymbol.BLUE]
+        representation.extend([TestColorSymbol.RED, TestColorSymbol.GREEN, TestColorSymbol.BLUE])
 
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
 
-        self.assertTrue(len(representation.genome) > 0)
-        self.assertNotEqual(representation.genome, new_representation.genome)
+        self.assertTrue(len(representation) > 0)
+        self.assertNotEqual(representation, new_representation)
 
     def test_inversion_mutation(self):
         mutation = InversionMutation()
 
         representation = LSystemRepresentation(Grammar(TestColorSymbol, TestRules))
-        representation.genome = [TestColorSymbol.RED, TestColorSymbol.GREEN, TestColorSymbol.BLUE]
+        representation.extend([TestColorSymbol.RED, TestColorSymbol.GREEN, TestColorSymbol.BLUE])
 
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
 
-        self.assertTrue(len(representation.genome) > 0)
-        self.assertNotEqual(representation.genome, new_representation.genome)
+        self.assertTrue(len(representation) > 0)
+        self.assertNotEqual(representation, new_representation)
 
     def test_insert_mutation(self):
         mutation = InsertMutation()
@@ -49,8 +50,8 @@ class LSystemRepresentationTest(unittest.TestCase):
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
 
-        self.assertTrue(len(representation.genome) > 0)
-        self.assertTrue(len(new_representation.genome) > len(representation.genome))
+        self.assertTrue(len(representation) > 0)
+        self.assertTrue(len(new_representation) > len(representation))
 
     def test_replace_mutation(self):
         mutation = ReplaceMutation()
@@ -60,8 +61,8 @@ class LSystemRepresentationTest(unittest.TestCase):
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
 
-        self.assertTrue(len(representation.genome) > 0)
-        self.assertTrue(len(new_representation.genome) == len(representation.genome))
+        self.assertTrue(len(representation) > 0)
+        self.assertTrue(len(new_representation) == len(representation))
         #self.assertNotEqual(representation.genome, new_representation.genome) # cannot be guaranteed due to replacing with the same symbol.
 
     def test_delete_mutation(self):
@@ -72,9 +73,9 @@ class LSystemRepresentationTest(unittest.TestCase):
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
 
-        self.assertTrue(len(representation.genome) > 0)
-        self.assertTrue(len(new_representation.genome) < len(representation.genome))
-        self.assertNotEqual(representation.genome, new_representation.genome)
+        self.assertTrue(len(representation) > 0)
+        self.assertTrue(len(new_representation) < len(representation))
+        self.assertNotEqual(representation, new_representation)
 
     def test_crossover_recombination(self):
         recombination = OnePointCrossover()
@@ -84,7 +85,7 @@ class LSystemRepresentationTest(unittest.TestCase):
         representation_2 = LSystemRepresentation(Grammar(TestColorSymbol, TestRules))
         representation_2.genome = [TestColorSymbol.BLUE, TestColorSymbol.GREEN, TestColorSymbol.RED]
 
-        new_representation = recombination._recombine([representation_1, representation_2])
+        new_representation = recombination._recombine((Individual(representation_1), Individual(representation_2)))
 
-        self.assertNotEqual(representation_1.genome, new_representation.genome)
-        self.assertNotEqual(representation_2.genome, new_representation.genome)
+        self.assertNotEqual(representation_1.genome, new_representation)
+        self.assertNotEqual(representation_2.genome, new_representation)

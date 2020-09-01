@@ -1,6 +1,7 @@
 import copy
 import random
 from abc import abstractmethod, ABC
+from typing import Tuple
 
 import numpy as np
 
@@ -42,7 +43,7 @@ class SwapMutation(LocationMutation):
         super().__init__()
 
     def _mutate(self, representation: Representation):
-        choices = representation.selection_indexes()
+        choices: Tuple[int] = tuple(representation.selection_indexes(k=2))
         representation.swap_indexes(choices)
 
 
@@ -62,9 +63,8 @@ class ReplaceMutation(ValueMutation):
         super().__init__()
 
     def _mutate(self, representation: Representation):
-        index = random.choice(range(len(representation)))
-
-        representation.genome[index] = representation.random_value()
+        index = representation.random_index()
+        representation[index] = representation.random_value()
 
 
 class DeleteMutation(ValueMutation):
@@ -73,7 +73,7 @@ class DeleteMutation(ValueMutation):
         super().__init__()
 
     def _mutate(self, representation: Representation):
-        index = random.choice(range(len(representation)))
+        index = representation.random_index()
         representation.genome = np.delete(representation.genome, index)
 
 
@@ -96,7 +96,7 @@ class DisplacementMutation(LocationMutation):
         choices = representation.selection_indexes()
         selection_range = representation.range_selection()
 
-        shift_index = np.random.choice(range(len(representation)))
+        index = representation.random_index()
         #TODO
         #return ...
 
@@ -107,6 +107,5 @@ class BitFlipMutation(ReplaceMutation):
         super().__init__()
 
     def _mutate(self, representation: ValuedRepresentation):
-        index = random.choice(range(len(representation)))
-
-        representation.genome[index] = not representation.genome[index]
+        index = representation.random_index()
+        representation[index] = not representation[index]

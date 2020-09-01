@@ -1,7 +1,7 @@
 from typing import List
 
-from nca.core.agent.agents import Agents
-from nca.core.agent.individual import Individual
+from nca.core.actor.actors import Actors
+from nca.core.actor.individual import Individual
 from nca.core.ecology.population import Population
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.evolution.conditions.special_features import SpecialFeatures
@@ -23,7 +23,7 @@ class EvolutionaryAlgorithm:
         self.recombination: RecombinationOperator = self.configuration.recombination
         self.mutation: MutationOperator = self.configuration.mutation
 
-        self.initialization: Initialization = self.configuration.initialization
+        self.initialization_type: type(Initialization) = self.configuration.initialization_type
         self.termination_condition: Condition = self.configuration.condition
         self.special_features: SpecialFeatures = self.configuration.special_features
 
@@ -31,9 +31,9 @@ class EvolutionaryAlgorithm:
         return self.termination_condition.terminate(population)
 
     def run(self, population: Population, evaluator):
-        parents_list: List[Agents] = self.parent_selection.select(population.individuals)
+        parents_list: List[Actors] = self.parent_selection.select(population.individuals)
 
-        offspring: Agents = Agents([Individual(self.mutation(self.recombination(parents))) for parents in parents_list])
+        offspring: Actors = Actors([Individual(self.mutation(self.recombination(parents))) for parents in parents_list])
 
         evaluator(offspring)
 

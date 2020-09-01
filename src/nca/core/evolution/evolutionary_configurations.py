@@ -4,8 +4,7 @@ from nca.core.evolution.conditions.special_features import SpecialFeatures
 from nca.core.evolution.conditions.condition import Condition, EvaluationsCondition
 from nca.core.evolution.selection.parent_selection import RouletteWheelSelection
 from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection
-from nca.core.evolution.selection.survivor_selection import GenerationalSteadyStateSelection, \
-    FitnessSteadyStateSelection
+from nca.core.evolution.selection.survivor_selection import FitnessSteadyStateSelection
 from nca.core.genome.initialization import UniformInitialization
 from nca.core.genome.operators.mutation_operator import MutationOperator, ReplaceMutation
 from nca.core.genome.operators.recombination_operator import RecombinationOperator, OnePointCrossover
@@ -18,7 +17,7 @@ class EvolutionConfiguration(Configuration):
                  mutation: MutationOperator,
                  parent_selection: ParentSelection,
                  survivor_selection: SurvivorSelection,
-                 initialization: Initialization,
+                 initialization_type: type(Initialization),
                  condition: Condition,
                  special_features: SpecialFeatures):
 
@@ -27,7 +26,7 @@ class EvolutionConfiguration(Configuration):
         self.mutation: MutationOperator = mutation
         self.parent_selection: ParentSelection = parent_selection
         self.survivor_selection: SurvivorSelection = survivor_selection
-        self.initialization: Initialization = initialization
+        self.initialization_type: type(Initialization) = initialization_type
         self.condition: Condition = condition
         self.special_features: SpecialFeatures = special_features
 
@@ -39,11 +38,12 @@ class GeneticAlgorithmConfiguration(EvolutionConfiguration):
                  mutation: MutationOperator = ReplaceMutation(),
                  parent_selection: ParentSelection = RouletteWheelSelection(),
                  survivor_selection: SurvivorSelection = FitnessSteadyStateSelection(),
-                 initialization: Initialization = UniformInitialization(),
-                 condition: Condition = EvaluationsCondition(10),
+                 initialization_type: type(Initialization) = UniformInitialization,
+                 condition: Condition = EvaluationsCondition(50),
                  special_features: SpecialFeatures = SpecialFeatures()):
-        super().__init__(recombination, mutation, parent_selection, survivor_selection,
-                         initialization, condition, special_features)
+        super().__init__(recombination=recombination, mutation=mutation, parent_selection=parent_selection,
+                         survivor_selection=survivor_selection, initialization_type=initialization_type,
+                         condition=condition, special_features=special_features)
 
 
 """

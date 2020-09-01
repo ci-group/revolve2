@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from nca.core.agent.agents import Agents
+from nca.core.actor.actors import Actors
 from nca.core.ecology.population import Population
 
 
@@ -16,7 +16,7 @@ class Condition:
         return False
 
     @abstractmethod
-    def filter(self, population: Population) -> Agents:
+    def filter(self, population: Population) -> Actors:
         pass
 
     @abstractmethod
@@ -30,7 +30,7 @@ class FitnessCondition(Condition):
         super().__init__(fitness_value, float)
 
     def filter(self, population: Population):
-        filtered_individuals = Agents()
+        filtered_individuals = Actors()
         for individual in population.individuals:
             if individual.fitness >= self.condition_value:
                 filtered_individuals.add(individual)
@@ -49,7 +49,7 @@ class EvaluationsCondition(Condition):
         if population.age.generations >= self.condition_value:
             return population.individuals
 
-        return Agents()
+        return Actors()
 
     def __str__(self):
         return "EvaluationCondition (" + str(self.condition_value) + " generations)"
@@ -64,7 +64,7 @@ class ImprovementCondition(Condition):
         if population.age.no_improvement_count >= self.condition_value:
             return population.individuals
 
-        return Agents()
+        return Actors()
 
     def __str__(self):
         return "ImprovementCondition (" + str(self.condition_value) + " generations no improvements)"

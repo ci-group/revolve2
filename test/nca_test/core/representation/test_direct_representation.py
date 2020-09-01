@@ -12,7 +12,7 @@ class DirectRepresentationTest(unittest.TestCase):
         representation_1 = ValuedRepresentation(initialization)
         representation_2 = ValuedRepresentation(initialization)
 
-        self.assertNotEqual(representation_1.genome, representation_2.genome)
+        self.assertNotEqual(representation_1, representation_2)
 
         compatibility = representation_1.compatibility(representation_2)
         self.assertNotEqual(compatibility, 0.0)
@@ -22,7 +22,7 @@ class DirectRepresentationTest(unittest.TestCase):
         representation_1 = ValuedRepresentation(initialization)
         representation_2 = ValuedRepresentation(initialization)
 
-        self.assertNotEqual(representation_1.genome, representation_2.genome)
+        self.assertNotEqual(representation_1, representation_2)
 
         compatibility = representation_1.compatibility(representation_2)
         self.assertNotEqual(compatibility, 0.0)
@@ -32,7 +32,7 @@ class DirectRepresentationTest(unittest.TestCase):
         representation_1 = ValuedRepresentation(initialization)
         representation_2 = ValuedRepresentation(initialization)
 
-        self.assertNotEqual(representation_1.genome, representation_2.genome)
+        self.assertNotEqual(representation_1, representation_2)
 
         compatibility = representation_1.compatibility(representation_2)
         self.assertNotEqual(compatibility, 0.0)
@@ -42,7 +42,7 @@ class DirectRepresentationTest(unittest.TestCase):
         representation_1 = ValuedRepresentation(initialization)
         representation_2 = ValuedRepresentation(initialization)
 
-        self.assertNotEqual(representation_1.genome, representation_2.genome)
+        self.assertNotEqual(representation_1, representation_2)
 
         compatibility = representation_1.compatibility(representation_2)
         self.assertNotEqual(compatibility, 0.0)

@@ -1,8 +1,8 @@
 import unittest
 
 from nca.core.abstract.configurations import PopulationConfiguration
-from nca.core.agent.individual import Individual
-from nca.core.agent.individual_factory import IndividualFactory
+from nca.core.actor.individual import Individual
+from nca.core.actor.individual_factory import IndividualFactory
 from nca.core.ecology.population import Population
 from nca.core.evolution.selection.survivor_selection import NullSurvivorSelection, FitnessSteadyStateSelection, \
     GenerationalSteadyStateSelection, ElitismSelection
@@ -11,7 +11,7 @@ from nca.core.evolution.selection.survivor_selection import NullSurvivorSelectio
 class TestSurvivorSelection(unittest.TestCase):
 
     def test_random_selection(self):
-        population = Population(IndividualFactory().initialize().create(PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
 
         steady_state = NullSurvivorSelection()
 
@@ -23,7 +23,7 @@ class TestSurvivorSelection(unittest.TestCase):
         self.assertEqual(len(selected), len(population.individuals))
 
     def test_fitness_selection(self):
-        population = Population(IndividualFactory().initialize().create(PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
 
         steady_state = FitnessSteadyStateSelection()
 
@@ -35,7 +35,7 @@ class TestSurvivorSelection(unittest.TestCase):
         self.assertEqual(len(selected), len(population.individuals))
 
     def test_age_selection(self):
-        population = Population(IndividualFactory().initialize().create(PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
 
         steady_state = GenerationalSteadyStateSelection()
 
@@ -47,7 +47,7 @@ class TestSurvivorSelection(unittest.TestCase):
         self.assertEqual(len(selected), len(population.individuals))
 
     def test_elitism_selection(self):
-        population = Population(IndividualFactory().initialize().create(PopulationConfiguration().population_size))
+        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
 
         steady_state = ElitismSelection()
 

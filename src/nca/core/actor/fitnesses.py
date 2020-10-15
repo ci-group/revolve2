@@ -2,7 +2,6 @@ import math
 import numpy as np
 
 from nca.core.actor.fitness import Fitness, MultiFitness
-from revolve.robot import robot
 
 
 class DisplacementFitness(Fitness):

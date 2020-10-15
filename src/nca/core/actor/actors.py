@@ -23,6 +23,14 @@ class Actors(Iterator):
     def extend(self, agents):
         return self.collection.extend(agents.collection)
 
+    def subset(self, indexes):
+        agents: List[Individual] = []
+
+        for index in indexes:
+            agents.append(self.collection[index])
+
+        return self.__class__(agents)
+
     def __repr__(self):
         string_representation: string = "Agents {"
 

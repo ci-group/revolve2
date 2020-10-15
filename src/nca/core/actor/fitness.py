@@ -4,6 +4,10 @@ from abc import abstractmethod
 from typing import List
 
 
+def fitness_key(individual):
+    return individual.fitness
+
+
 class Fitness(float):
 
     def __init__(self, initial_value: float = 0.0):

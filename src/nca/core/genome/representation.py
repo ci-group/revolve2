@@ -85,4 +85,3 @@ class MorphologyRepresentation(Representation):
 
     def visit(self, representation_visitor):
         pass
-

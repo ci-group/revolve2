@@ -6,6 +6,9 @@ from typing import Tuple
 import numpy as np
 
 from nca.core.abstract.configurations import OperatorConfiguration
+from nca.core.evolution.conditions.initialization import Initialization
+from nca.core.genome.initialization import UniformInitialization, GaussianInitialization, BinaryInitialization, \
+    IntegerInitialization
 from nca.core.genome.representation import Representation
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
 
@@ -18,26 +21,130 @@ class MutationOperator(ABC):
 
     def __call__(self, representation: Representation):
         # check if we do have to do the mutation
+        # TODO is this still necessary?
         new_representation = copy.deepcopy(representation)
-        if self.configuration.mutation_probability > np.random.random():
-            self._mutate(new_representation)
+        self._mutate(new_representation)
 
         return new_representation
 
     @abstractmethod
-    def _mutate(self, representation: Representation):
+    def compatibility(self, initialization_type: type(Initialization)):
+        pass
+
+    @abstractmethod
+    def _mutate(self, args):
         pass
 
 
-class LocationMutation(MutationOperator, ABC):
-    pass
-
-
 class ValueMutation(MutationOperator, ABC):
-    pass
+
+    @abstractmethod
+    def _mutate(self, index: int, representation: ValuedRepresentation):
+        pass
 
 
-class SwapMutation(LocationMutation):
+class BitFlipMutation(ValueMutation):
+
+    def __init__(self):
+        super().__init__()
+
+    def compatibility(self, initialization_type: type(Initialization)):
+        if initialization_type != BinaryInitialization:
+            return False
+        return True
+
+    def _mutate(self, index: int, representation: ValuedRepresentation):
+        for index in range(len(representation)):
+            if random.random() > self.configuration.mutation_probability:
+                # TODO do premature check instead of here.
+                if representation.initialization != BinaryInitialization:
+                    raise Exception("Random Resetting Mutation not supported by Initialization strategy")
+
+                representation[index] = not representation[index]
+
+
+class RandomResettingMutation(ValueMutation):
+
+    def __init__(self):
+        super().__init__()
+
+    def compatibility(self, initialization_type: type(Initialization)):
+        if initialization_type != BinaryInitialization:
+            return False
+        return True
+
+    def _mutate(self, index: int, representation: ValuedRepresentation):
+        for index in range(len(representation)):
+            if random.random() > self.configuration.mutation_probability:
+                representation[index] = representation.random_value()
+
+
+class RealValuedMutation(ValueMutation):
+
+    def compatibility(self, initialization_type: type(Initialization)):
+        if initialization_type in [BinaryInitialization, IntegerInitialization]:
+            return False
+        return True
+
+
+class CreepMutation(RealValuedMutation):
+
+    def __init__(self):
+        super().__init__()
+
+    def _mutate(self, index: int, representation: ValuedRepresentation):
+        for index in range(len(representation)):
+            if random.random() > self.configuration.mutation_probability:
+                # TODO integer can create floats?
+                representation[index] += representation.random_value() / 10  # TODO generalize scalar.
+
+
+#TODO duplicate of GaussianMutation
+class UniformMutation(RealValuedMutation):
+
+    def __init__(self):
+        super().__init__()
+        self.random_value_generator = UniformInitialization()
+
+    def _mutate(self, index: int, representation: ValuedRepresentation):
+        random_values = self.random_value_generator(len(representation))  # TODO or not TODO
+        for index in range(len(representation)):
+            if random.random() > self.configuration.mutation_probability:
+                representation[index] += random_values[index]
+
+
+class GaussianMutation(RealValuedMutation):
+
+    def __init__(self):
+        super().__init__()
+        self.random_value_generator = GaussianInitialization()
+
+    def _mutate(self, index: int, representation: ValuedRepresentation):
+        random_values = self.random_value_generator(len(representation)) # TODO or not TODO
+        for index in range(len(representation)):
+            if random.random() > self.configuration.mutation_probability:
+                representation[index] += random_values[index]
+
+
+class SelfAdaptiveMutation(RealValuedMutation):
+
+    def __init__(self):
+        super().__init__()
+        self.mutation_gene_index = 0
+
+    def _mutate(self, index: int, representation: ValuedRepresentation):
+        for index in range(len(representation)):
+            if random.random() > self.configuration.mutation_probability:
+                raise Exception("Not implemented yet")# TODO maybe decorator option?
+
+
+class StructuralMutation(MutationOperator, ABC):
+
+    def compatibility(self, initialization_type: type(Initialization)):
+        return True
+
+
+class SwapMutation(StructuralMutation):
 
     def __init__(self):
         super().__init__()
@@ -47,7 +154,7 @@ class SwapMutation(LocationMutation):
         representation.swap_indexes(choices)
 
 
-class InsertMutation(ValueMutation):
+class InsertMutation(StructuralMutation):
 
     def __init__(self):
         super().__init__()
@@ -57,7 +164,7 @@ class InsertMutation(ValueMutation):
         representation.genome = np.insert(representation.genome, index, representation.random_value())
 
 
-class ReplaceMutation(ValueMutation):
+class ReplaceMutation(StructuralMutation):
 
     def __init__(self):
         super().__init__()
@@ -66,8 +173,7 @@ class ReplaceMutation(ValueMutation):
         index = representation.random_index()
         representation[index] = representation.random_value()
 
-
-class DeleteMutation(ValueMutation):
+class DeleteMutation(StructuralMutation):
 
     def __init__(self):
         super().__init__()
@@ -77,7 +183,7 @@ class DeleteMutation(ValueMutation):
         representation.genome = np.delete(representation.genome, index)
 
 
-class InversionMutation(MutationOperator):
+class InversionMutation(StructuralMutation):
 
     def __init__(self):
         super().__init__()
@@ -87,7 +193,7 @@ class InversionMutation(MutationOperator):
         representation.swap_indexes(selection_range)
 
 
-class DisplacementMutation(LocationMutation):
+class DisplacementMutation(StructuralMutation):
 
     def __init__(self):
         super().__init__()
@@ -101,11 +207,4 @@ class DisplacementMutation(LocationMutation):
         #return ...
 
 
-class BitFlipMutation(ReplaceMutation):
 
-    def __init__(self):
-        super().__init__()
-
-    def _mutate(self, representation: ValuedRepresentation):
-        index = representation.random_index()
-        representation[index] = not representation[index]

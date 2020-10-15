@@ -1,4 +1,5 @@
 import copy
+import random
 from abc import abstractmethod
 from itertools import combinations
 from random import shuffle
@@ -41,6 +42,9 @@ class RecombinationOperator:
     def _recombine(self, representations: Tuple[Individual, Individual]) -> Representation:
         pass
 
+    def compatibility(self, initialization_type):
+        return True
+
 
 class OnePointCrossover(RecombinationOperator):
 
@@ -60,3 +64,60 @@ class OnePointCrossover(RecombinationOperator):
         individuals[1].representation[crossover_index + 1:] = temp
 
         return new_representation
+
+
+class OnePointUniformCrossover(RecombinationOperator):
+
+    def _recombine(self, individuals: Tuple[Individual, Individual]) -> Representation:
+        # Reverse the order of the tuples to keep the base representation random.
+        if np.random.random() > 0.5:
+            individuals = individuals[::-1]
+
+        new_representation = individuals[0].representation
+        crossover_index = new_representation.random_index(offset=1)  # crossover has n-1 options.
+
+        for index in range(crossover_index+1, len(new_representation)):
+            new_representation[index] = (new_representation[index] + individuals[1].representation[index]) / 2
+
+        return new_representation
+
+
+class OneElementCrossover(RecombinationOperator):
+
+    def _recombine(self, individuals: Tuple[Individual, Individual]) -> Representation:
+        # Reverse the order of the tuples to keep the base representation random.
+        if np.random.random() > 0.5:
+            individuals = individuals[::-1]
+
+        new_representation = individuals[0].representation
+
+        random_index = random.randint(0, len(individuals[0].representation)-1)
+        new_representation[random_index] = (new_representation[random_index] + individuals[1].representation[random_index]) / 2
+
+        return new_representation
+
+
+class AllElementCrossover(RecombinationOperator):
+
+    def _recombine(self, individuals: Tuple[Individual, Individual]) -> Representation:
+        # Reverse the order of the tuples to keep the base representation random.
+        new_representation = individuals[0].representation
+        for index in range(len(new_representation)):
+            new_representation[index] = (new_representation[index] + individuals[1].representation[index]) / 2
+        return new_representation
+
+
+class UniformCrossover(RecombinationOperator):
+
+    def _recombine(self, individuals: Tuple[Individual, Individual]) -> Representation:
+        # Reverse the order of the tuples to keep the base representation random.
+        if np.random.random() > 0.5:
+            individuals = individuals[::-1]
+
+        new_representation = individuals[0].representation
+        for index, other_element in enumerate(individuals[1].representation):
+            if random.random() > 0.5:
+                new_representation[index] = other_element
+
+        return new_representation
+

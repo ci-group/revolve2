@@ -1,7 +1,9 @@
 from enum import Enum
 
+from nca.core.genome.grammar.grammar import Symbol
 
-class Orientation(Enum):
+
+class Orientation(Symbol):
     TOP = (1, 0, 0)
     RIGHT = (0, 1, 0)
     DOWN = (-1, 0, 0)
@@ -19,8 +21,11 @@ class Coordinate3D:
         self.y = y
         self.z = z
 
-    def __add__(self, orientation: Orientation):
-        return Coordinate3D(self.x + orientation.value[0], self.y + orientation.value[1], self.z + orientation.value[2])
+    def __add__(self, other):
+        if isinstance(other, Orientation):
+            return Coordinate3D(self.x + other.value[0], self.y + other.value[1], self.z + other.value[2])
+        else:
+            return Coordinate3D(self.x + other.x, self.y + other.y, self.z + other.z)
 
     def __repr__(self):
         return "(" + str(self.x) + " | " + str(self.y) + " | " + str(self.z) + ")"

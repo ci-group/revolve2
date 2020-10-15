@@ -2,6 +2,7 @@ import random
 from typing import List
 
 from nca.core.actor.actors import Actors
+from nca.core.actor.fitness import fitness_key
 from nca.core.actor.individual import Individual
 from nca.core.evolution.selection.selection import SurvivorSelection
 
@@ -30,7 +31,7 @@ class ElitismSelection(SurvivorSelection):
         super().__init__()
 
     def __call__(self, individuals: List[Individual]) -> List[Individual]:
-        sorted_individuals: List[Individual] = sorted(individuals, key=lambda x: x.fitness, reverse=True)
+        sorted_individuals: List[Individual] = sorted(individuals, key=lambda x: x.fitness, reverse=False)
         elite_individuals: List[Individual] = sorted_individuals[:self.configuration.selection_size]
         non_elite_individuals: List[Individual] = sorted_individuals[self.configuration.selection_size:]
 
@@ -46,8 +47,11 @@ class RoundRobinTournament(SurvivorSelection):
         super().__init__()
 
     def __call__(self, individuals: Actors) -> List[Individual]:
-        raise Exception("Unimplemented Round Robin Tournament")
-        return []
+        new_individuals = []
+        for _ in self.configuration.population_size:
+            tournament_individuals = random.choices(individuals, k=2) # TODO parameterize
+            new_individuals.append(max(tournament_individuals, key=fitness_key))
+        return new_individuals
 
 
 class MuLambdaSelection(SurvivorSelection):

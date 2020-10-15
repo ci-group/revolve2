@@ -19,6 +19,12 @@ class BinaryInitialization(ValuedInitialization):
         return np.random.randint(2, size=length).tolist()
 
 
+class GrayCodingInitialization(ValuedInitialization):
+
+    def __call__(self, length: int):
+        raise Exception("Not implemented Gray Coding Initialization")
+
+
 class IntegerInitialization(ValuedInitialization):
 
     def __call__(self, length: int):

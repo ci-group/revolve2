@@ -10,7 +10,7 @@ from nca.core.genome.operators.mutation_operator import MutationOperator, Replac
 from nca.core.genome.operators.recombination_operator import RecombinationOperator, OnePointCrossover
 
 
-class EvolutionConfiguration(Configuration):
+class EvolutionaryConfiguration(Configuration):
 
     def __init__(self,
                  recombination: RecombinationOperator,
@@ -30,8 +30,20 @@ class EvolutionConfiguration(Configuration):
         self.condition: Condition = condition
         self.special_features: SpecialFeatures = special_features
 
+        if not self.compatible():
+            raise Exception("Algorithm not compatible with Individuals")
 
-class GeneticAlgorithmConfiguration(EvolutionConfiguration):
+    def compatible(self) -> bool:
+        # check population compatibility with representation.
+        if not self.mutation.compatibility(self.initialization_type):
+            return False
+
+        if not self.recombination.compatibility(self.initialization_type):
+            return False
+
+        return True
+
+class GeneticAlgorithmConfiguration(EvolutionaryConfiguration):
 
     def __init__(self,
                  recombination: RecombinationOperator = OnePointCrossover(),
@@ -39,7 +51,7 @@ class GeneticAlgorithmConfiguration(EvolutionConfiguration):
                  parent_selection: ParentSelection = RouletteWheelSelection(),
                  survivor_selection: SurvivorSelection = FitnessSteadyStateSelection(),
                  initialization_type: type(Initialization) = UniformInitialization,
-                 condition: Condition = EvaluationsCondition(50),
+                 condition: Condition = EvaluationsCondition(25),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(recombination=recombination, mutation=mutation, parent_selection=parent_selection,
                          survivor_selection=survivor_selection, initialization_type=initialization_type,

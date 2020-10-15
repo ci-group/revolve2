@@ -7,6 +7,7 @@ from nca.core.ecology.population import Population
 from nca.core.evolution.conditions.initialization import Initialization
 from revolve.evosphere.ecosphere import GazeboEcosphere, Ecosphere
 from revolve.robot.birth_clinic import AgentBirthClinic, RobotBirthClinic, BirthClinic
+from simulation.simulator.simulator_command import SimulateCommand
 
 
 class Biosphere(ABC):
@@ -14,12 +15,12 @@ class Biosphere(ABC):
     def __init__(self,
                  population_ecology: PopulationEcology = PopulationEcology(),
                  actor_factory: IndividualFactory = IndividualFactory(),
-                 birth_clinic: BirthClinic = None,
+                 birth_clinic: BirthClinic = BirthClinic(),
                  ecospheres: List[Ecosphere] = None):
         self.population_ecology: PopulationEcology = population_ecology
         self.actor_factory: IndividualFactory = actor_factory
-        self.ecospheres: List[Ecosphere] = ecospheres if ecospheres is not None else [GazeboEcosphere()]
         self.birth_clinic: BirthClinic = birth_clinic
+        self.ecospheres: List[Ecosphere] = ecospheres if ecospheres is not None else [GazeboEcosphere()]
 
     def initialize(self, number_of_actors: int, initialization_type: type(Initialization)):
         if False:  # TODO

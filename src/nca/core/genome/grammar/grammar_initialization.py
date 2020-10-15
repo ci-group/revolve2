@@ -7,9 +7,13 @@ from nca.core.genome.grammar.grammar import Alphabet
 
 
 class GrammarInitialization(Initialization):
-    def __init__(self, alphabet: type(Alphabet)):
+    def __init__(self, alphabet: type(Alphabet), axiom=None):
         super().__init__()
         self.alphabet: type(Alphabet) = alphabet
+        self.axiom = axiom
 
     def __call__(self, size: int) -> List:
-        return np.random.choice(self.alphabet, size, p=self.alphabet.probabilities()).tolist()
+        if self.axiom is None:
+            return np.random.choice(self.alphabet, size, p=self.alphabet.probabilities()).tolist()
+        else:
+            return self.axiom

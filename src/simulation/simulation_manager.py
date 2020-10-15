@@ -3,6 +3,7 @@ from typing import Dict
 from evosphere.mock_ecosphere import MockEcosphere
 from nca.core.abstract.configurations import SimulatorConfiguration
 from revolve.evosphere.ecosphere import Ecosphere
+from revolve.evosphere.evoman import EvomanEcosphere
 from simulation.simulation_measures import SimulationMeasures
 from simulation.simulator.simulator_command import SimulateCommand
 from simulation_test.simulator.mock_measures import MockSimulationMeasures
@@ -16,20 +17,23 @@ class SimulationManager:
         self.supervisors: Dict[SimulateCommand, SimulationSupervisor] = {}
 
     def simulate(self, request_command: SimulateCommand):
-
-        if request_command not in self.supervisors.keys():
-            self.supervisors[request_command] = SimulationSupervisor(request_command)
+        #if request_command not in self.supervisors.keys():
+        #    if not isinstance(request_command.ecosphere, EvomanEcosphere):
+        #        self.supervisors[request_command] = SimulationSupervisor(request_command)
 
         actors = request_command.develop()
+
         for actor in actors:
 
             if isinstance(request_command.ecosphere, MockEcosphere):
                 return MockSimulationMeasures()
 
-            if isinstance(request_command.ecosphere, Ecosphere):
+            elif isinstance(request_command.ecosphere, EvomanEcosphere):
+                request_command.ecosphere.run(actor)
+
+            elif isinstance(request_command.ecosphere, Ecosphere):
                 actor.measures: SimulationMeasures = self.supervisors[request_command].work(actor, request_command)
                 actor.performance(request_command.ecosphere.fitness(actor))
-
 
     """
     def _find_available_supervisor(self):

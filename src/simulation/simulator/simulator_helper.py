@@ -9,5 +9,6 @@ class SimulatorType(Enum):
     V_REP = auto()
     UNITY = auto()
     MALMO = auto()
+    EVOMAN = auto()
 
 

@@ -29,7 +29,6 @@ class AgentBrainBuilder(BrainBuilder):
         return self.brain_type()
 
 
-
 class MockBrainBuilder(BrainBuilder):
     def __init__(self, brain_type: type(Brain) = MockBrain):
         super().__init__(brain_type)

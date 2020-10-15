@@ -11,8 +11,10 @@ class Brain(ABC):
 
 
 class RobotBrain(Brain):
-    pass
+    def develop(self, representation: MorphologyRepresentation, ecosphere: Ecosphere):
+        pass
 
 
 class AgentBrain(Brain):
-    pass
+    def develop(self, representation: MorphologyRepresentation, ecosphere: Ecosphere):
+        pass

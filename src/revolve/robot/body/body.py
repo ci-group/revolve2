@@ -11,5 +11,6 @@ class Body(ABC):
 
 
 class RobotBody(Body):
-    pass
+    def develop(self, representation: MorphologyRepresentation, ecosphere: Ecosphere):
+        pass
 

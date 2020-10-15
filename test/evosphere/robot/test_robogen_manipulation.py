@@ -5,7 +5,7 @@ from nca.core.abstract.structural.tree.tree_helper import Orientation
 from nca.core.genome.operators.mutation_operator import SwapMutation, ReplaceMutation, InversionMutation, InsertMutation
 from revolve.robot.robogen.robogen_grammar import RobogenSymbol
 
-from revolve.robot.robogen.robogen_representation import RobogenRepresentation
+from revolve.robot.body.robogen_body import RobogenRepresentation
 
 class TestRobogenManipulation(unittest.TestCase):
 

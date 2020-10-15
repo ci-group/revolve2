@@ -23,6 +23,7 @@ class Individual(Actor):
         self.representation: Representation = representation
         self.fitness: CombinedFitness = CombinedFitness()
 
+
     def __lt__(self, other):
         return self.id < other.id
 

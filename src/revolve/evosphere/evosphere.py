@@ -1,7 +1,9 @@
+import asyncio
+
 from nca.core.abstract.configurations import EvoSphereConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
-from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration, EvolutionConfiguration
+from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration, EvolutionaryConfiguration
 
 from revolve.evosphere.biosphere import Biosphere, RobotBiosphere, AgentBiosphere
 
@@ -12,7 +14,7 @@ from simulation.simulator.simulator_command import SimulateCommand
 class Evosphere:
 
     def __init__(self, biosphere: Biosphere,
-                 evolutionary_configuration: EvolutionConfiguration = GeneticAlgorithmConfiguration(),
+                 evolutionary_configuration: EvolutionaryConfiguration = GeneticAlgorithmConfiguration(),
                  simulation: SimulationManager = SimulationManager(), debug=True):
         self.configuration = EvoSphereConfiguration()
 
@@ -52,7 +54,7 @@ class Evosphere:
 
     def evaluate(self, agents: Actors):
         for ecosphere in self.biosphere.ecospheres:
-            self.simulation.simulate(SimulateCommand(agents, ecosphere))
+            self.simulation.simulate(SimulateCommand(agents, ecosphere, self.biosphere.birth_clinic))
 
     def log(self, string: str):
         if self.debug:
@@ -61,13 +63,13 @@ class Evosphere:
 
 class RobotEvosphere(Evosphere):
     def __init__(self, biosphere: Biosphere = RobotBiosphere(),
-                 evolutionary_configuration: EvolutionConfiguration = GeneticAlgorithmConfiguration(),
+                 evolutionary_configuration: EvolutionaryConfiguration = GeneticAlgorithmConfiguration(),
                  simulation: SimulationManager = SimulationManager(), debug=True):
         super().__init__(biosphere, evolutionary_configuration, simulation, debug)
 
 
 class AgentEvosphere(Evosphere):
     def __init__(self, biosphere: Biosphere = AgentBiosphere(),
-                 evolutionary_configuration: EvolutionConfiguration = GeneticAlgorithmConfiguration(),
+                 evolutionary_configuration: EvolutionaryConfiguration = GeneticAlgorithmConfiguration(),
                  simulation: SimulationManager = SimulationManager(), debug=True):
         super().__init__(biosphere, evolutionary_configuration, simulation, debug)

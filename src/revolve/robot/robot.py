@@ -13,4 +13,6 @@ class Robot(Actor):
         self.measures = None
 
     def performance(self, fitness: Fitness):
-        self.actor.performance(fitness)
+        self.actor.fitness.add(fitness(self))
+        self.actor.fitness = self.actor.fitness()  # calculate final/intermediate average
+

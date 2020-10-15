@@ -4,6 +4,7 @@ from nca.core.abstract.creational.factory import Factory
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
 from nca.core.evolution.conditions.initialization import Initialization
+from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
 from nca.core.genome.initialization import UniformInitialization
 from nca.core.genome.representation import Representation
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
@@ -25,3 +26,4 @@ class IndividualFactory(Factory):
 
     def initialize(self, initialization_type: type(Initialization)):
         self.initialization_type = initialization_type
+

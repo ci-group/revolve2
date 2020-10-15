@@ -16,12 +16,9 @@ class Ecosphere:
     def __init__(self, filename: string, fitness_type: type(Fitness) = DisplacementFitness,
                  simulator_type: SimulatorType = SimulatorType.NONE):
         self.path: string = os.path.join(self.experiment_manager.world_path, simulator_type.name + "/" + filename)
-        self.fitness: Fitness = fitness_type()
+        if fitness_type is not None:
+            self.fitness: Fitness = fitness_type()
         self.simulator_type: SimulatorType = simulator_type
-        self.birth_clinic = None
-
-    def initialize(self, birth_clinic):
-        self.birth_clinic = birth_clinic
 
 
 class GazeboEcosphere(Ecosphere):

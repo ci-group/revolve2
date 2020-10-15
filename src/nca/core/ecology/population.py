@@ -18,6 +18,9 @@ class Population:
     def __get__(self):
         return self.individuals
 
+    def __len__(self):
+        return len(self.individuals)
+
     def next_generation(self, agents: Actors):
         if agents is None:
             raise Exception("Empty new generation")
@@ -25,6 +28,8 @@ class Population:
         self.age.increment(self.did_improve(agents))
 
         agents.update_age()
+
+        # sort agents
 
         self.individuals = agents
 

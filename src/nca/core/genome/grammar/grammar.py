@@ -14,7 +14,7 @@ class Symbol(Enum):
 
 Axiom = List[Symbol]
 Alphabet = List[Symbol]
-ReplacementRules = Dict[Symbol, List[List[Symbol]]]
+ReplacementRules = Dict[Symbol, List[Alphabet]]
 
 
 class SemiThueSystem:

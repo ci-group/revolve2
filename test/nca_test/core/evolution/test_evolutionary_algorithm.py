@@ -1,5 +1,6 @@
 import unittest
 
+from nca.core.abstract.configurations import PopulationConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual_factory import IndividualFactory
 from nca.core.ecology import PopulationEcology
@@ -28,7 +29,7 @@ class TestEvolutionaryAlgorithm(unittest.TestCase):
         evolutionary_algorithm = EvolutionaryAlgorithm(configuration)
 
         population_ecology = PopulationEcology(PopulationManagement())
-        population_ecology.initialize(IndividualFactory().create(10))
+        population_ecology.initialize(IndividualFactory().create(PopulationConfiguration().population_size))
 
         evolutionary_algorithm.run(population_ecology.management.populations()[0], evaluator)
 

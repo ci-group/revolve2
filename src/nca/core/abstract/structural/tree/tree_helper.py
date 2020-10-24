@@ -4,10 +4,15 @@ from nca.core.genome.grammar.grammar import Symbol
 
 
 class Orientation(Symbol):
-    TOP = (1, 0, 0)
+    TOP = (-1, 0, 0)
     RIGHT = (0, 1, 0)
-    DOWN = (-1, 0, 0)
+    DOWN = (1, 0, 0)
     LEFT = (0, -1, 0)
+    NEUTRAL = (0, 0, 0)
+
+    @classmethod
+    def directions(cls):
+        return [Orientation.TOP, Orientation.RIGHT, Orientation.DOWN, Orientation.LEFT]
 
 
 class Alignment(Orientation, Enum):

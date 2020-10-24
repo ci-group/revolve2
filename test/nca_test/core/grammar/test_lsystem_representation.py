@@ -1,9 +1,9 @@
 import unittest
 
 from nca.core.abstract.configurations import RepresentationConfiguration
-from nca.core.genome.grammar.grammar import ReplacementRules, Grammar
+from nca.core.genome.grammar.grammar import ReplacementRules, RewritingGrammar
 from nca.core.genome.grammar.grammar_initialization import GrammarInitialization
-from nca.core.genome.representations.symbolic_representation import LSystemRepresentation
+from nca.core.genome.representations.symbolic_representation import LSystemAlgorithm
 from nca_test.core.grammar.test_alphabet import TestColorSymbol
 
 
@@ -13,18 +13,17 @@ class LSystemRepresentationTest(unittest.TestCase):
         rules: ReplacementRules = {TestColorSymbol.GREEN: [[TestColorSymbol.RED]],
                                   TestColorSymbol.BLUE: [[TestColorSymbol.RED]]}
 
-        representation = LSystemRepresentation(Grammar(TestColorSymbol, rules))
-        representation()
+        algorithm = LSystemAlgorithm(RewritingGrammar(rules), GrammarInitialization(TestColorSymbol))
+        encoding = algorithm()
 
         outcome = [TestColorSymbol.RED for _ in range(RepresentationConfiguration().genome_size)]
-        self.assertEqual(representation.genome, outcome)
+        self.assertEqual(encoding, outcome)
 
     def test_array(self):
         rules: ReplacementRules = {TestColorSymbol.GREEN: [[TestColorSymbol.RED]],
                                   TestColorSymbol.BLUE: [[TestColorSymbol.RED]]}
 
-        representation = LSystemRepresentation(Grammar(TestColorSymbol, rules))
-        representation()
-
-        outcome = [TestColorSymbol.RED for _ in range(len(representation))]
-        self.assertEqual(representation.genome, outcome)
+        algorithm = LSystemAlgorithm(RewritingGrammar(rules), GrammarInitialization(TestColorSymbol))
+        encoding = algorithm()
+        outcome = [TestColorSymbol.RED for _ in range(len(encoding))]
+        self.assertEqual(encoding, outcome)

@@ -6,10 +6,10 @@ from nca.core.analysis.statistics import Statistics
 
 
 def plot_statistics(statistics: Statistics):
-    plt.plot([individual.fitness for individual in statistics.best_individuals])
+    plt.plot([individual.get_fitness() for individual in statistics.best_individuals])
     plt.plot([fitness for fitness in statistics.mean_fitnesses])
     plt.plot([fitness for fitness in statistics.median_fitnesses])
-    plt.plot([individual.fitness for individual in statistics.worst_individuals])
+    plt.plot([individual.get_fitness() for individual in statistics.worst_individuals])
 
     plt.title('Statistics')
     plt.ylabel('Fitness')

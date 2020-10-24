@@ -8,7 +8,8 @@ from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.evolution.conditions.special_features import SpecialFeatures
 from nca.core.evolution.conditions.condition import Condition
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
-from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection
+from nca.core.evolution.selection.mortality_selection import NullMortalitySelection
+from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection, MortalitySelection
 from nca.core.genome.operators.mutation_operator import MutationOperator
 from nca.core.genome.operators.recombination_operator import RecombinationOperator
 
@@ -20,6 +21,7 @@ class EvolutionaryAlgorithm:
 
         self.parent_selection: ParentSelection = self.configuration.parent_selection
         self.survivor_selection: SurvivorSelection = self.configuration.survivor_selection
+        self.mortality_selection: MortalitySelection = NullMortalitySelection()
 
         self.recombination: RecombinationOperator = self.configuration.recombination
         self.mutation: MutationOperator = self.configuration.mutation
@@ -37,10 +39,11 @@ class EvolutionaryAlgorithm:
 
         # RECOMBINE, then MUTATE resulting recombination to create resulting offspring
         offspring: Actors = Actors([Individual(self.mutation(self.recombination(parents))) for parents in parents_list])
-        population.individuals.extend(offspring)
 
         # EVALUATE the candidates
         evaluator(offspring)
+
+        population.individuals = self.mortality_selection(population.individuals, offspring)
 
         # (SURVIVOR) SELECT individuals for the next generation
         population.next_generation(self.survivor_selection.select(population.individuals))

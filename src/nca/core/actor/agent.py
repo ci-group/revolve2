@@ -1,13 +1,10 @@
-from nca.core.actor.fitness import Fitness
-from nca.core.actor.individual import Individual, Actor
+from nca.core.actor.individual import Individual
+from nca.core.genome.genotype import Genotype
 from revolve.robot.brain.brain import Brain
 
 
-class Agent(Actor):
+class Agent(Individual):
 
-    def __init__(self, individual: Individual, brain: Brain = None):
-        self.individual = individual
+    def __init__(self, genotype: Genotype, brain: Brain = None):
+        super().__init__(genotype)
         self.brain: Brain = brain
-
-    def performance(self, fitness: Fitness):
-        self.individual.performance()

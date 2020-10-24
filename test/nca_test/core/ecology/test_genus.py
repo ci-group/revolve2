@@ -2,7 +2,7 @@ import math
 import unittest
 
 from nca.core.actor.individual import Individual
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.individual_factory import ActorFactory, Characterization
 from nca.core.ecology.population import Population
 from nca.core.ecology.speciation.compatibility import Compatibility
 from nca.core.ecology.speciation.genus import Genus
@@ -17,7 +17,7 @@ class GenusTest(unittest.TestCase):
 
         n = 3
         for _ in range(n):
-            genus.add(Population(IndividualFactory().create(3)))
+            genus.add(Population(ActorFactory().create(3)))
 
         self.assertEqual(len(genus.species), n)
 
@@ -25,7 +25,7 @@ class GenusTest(unittest.TestCase):
         genus = Genus(Compatibility(limit=math.inf))
 
         n = 3
-        factory = IndividualFactory(ValuedRepresentation, BinaryInitialization)
+        factory = ActorFactory(Characterization(ValuedRepresentation, BinaryInitialization))
         genus.add(Population(factory.create(n)))
 
         individual: Individual = factory.create(1)[0]

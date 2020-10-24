@@ -3,7 +3,7 @@ from typing import List
 
 from nca.core.abstract.configurations import PopulationConfiguration
 from nca.core.actor.individual import Individual
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 from nca.core.evolution.selection.parent_selection import RandomParentSelection, TournamentSelection, \
     RouletteWheelSelection
@@ -12,7 +12,7 @@ from nca.core.evolution.selection.parent_selection import RandomParentSelection,
 class TestParentSelection(unittest.TestCase):
 
     def test_random_selection(self):
-        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
+        population = Population(ActorFactory().create(PopulationConfiguration().population_size))
 
         tournament_selection = RandomParentSelection()
 
@@ -23,7 +23,7 @@ class TestParentSelection(unittest.TestCase):
             self.assertIsInstance(individual, Individual)
 
     def test_tournament_selection(self):
-        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
+        population = Population(ActorFactory().create(PopulationConfiguration().population_size))
 
         tournament_selection = TournamentSelection()
 
@@ -34,7 +34,7 @@ class TestParentSelection(unittest.TestCase):
             self.assertIsInstance(individual, Individual)
 
     def test_roulette_selection(self):
-        population = Population(IndividualFactory().create(PopulationConfiguration().population_size))
+        population = Population(ActorFactory().create(PopulationConfiguration().population_size))
 
         tournament_selection = RouletteWheelSelection()
 

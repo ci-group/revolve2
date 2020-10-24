@@ -6,8 +6,8 @@ from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 
 from nca.core.actor.actors import Actors
-from nca.core.actor.fitness import CombinedFitness
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.fitness import Fitness
+from nca.core.actor.individual_factory import ActorFactory
 from nca.core.evolution.selection.selection import SurvivorSelection
 
 
@@ -19,10 +19,10 @@ class NonDominatedSortingSurvival(SurvivorSelection):
 
     def __call__(self, population: Actors) -> Actors:
 
-        objectives = np.zeros((len(population), len(population[0].fitness.fitnesses)))
+        objectives = np.zeros((len(population), max(1, len(population[0].fitness.keys()))))  # TODO fitnesses is 0
 
         for index, individual in enumerate(population):
-            objectives[index, :] = -individual.fitness
+            objectives[index, :] = - individual.get_fitness()
 
         front_no, max_front = self.nd_sort(objectives, np.inf)
         crowd_dis = self.crowding_distance(objectives, front_no)
@@ -77,7 +77,7 @@ class NonDominatedSortingSurvival(SurvivorSelection):
         sorted_objectives = objectives[index, :]
 
         # Prepare inf front for each entry
-        front_no = np.inf * np.ones(n, dtype=np.int)
+        front_no = np.inf * np.ones(number_of_individuals, dtype=np.int)
         max_front: int = 0
 
         # While there are front numbers to assign, continue
@@ -163,7 +163,7 @@ class NonDominatedSortingSurvival(SurvivorSelection):
 
 
 if __name__ == "__main__":
-    individual_factory = IndividualFactory()
+    individual_factory = ActorFactory()
     n = 50
     individuals: Actors = individual_factory.create(n)
     d3_enabled = False
@@ -173,9 +173,9 @@ if __name__ == "__main__":
         r = np.random.uniform(0.5, 1)
 
         if d3_enabled:
-            individual.fitness = CombinedFitness([r * np.cos(theta) * np.cos(omega), r * np.sin(theta), r * np.cos(theta) * np.sin(omega)])
+            individual.fitness = Fitness([r * np.cos(theta) * np.cos(omega), r * np.sin(theta), r * np.cos(theta) * np.sin(omega)])
         else:
-            individual.fitness = CombinedFitness([r * np.cos(theta), r * np.sin(theta)])
+            individual.fitness = Fitness([r * np.cos(theta), r * np.sin(theta)])
 
     survival = NonDominatedSortingSurvival(debug=True)
 

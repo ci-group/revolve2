@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 from nca.core.abstract.creational.builder import Builder
 from nca.core.actor.agent import Agent
-from nca.core.actor.individual import Individual, Actor
+from nca.core.actor.individual import Individual
 from nca.core.actor.actors import Actors
 from revolve.evosphere.ecosphere import Ecosphere
 from revolve.robot.body.body_builder import BodyBuilder, RobotBodyBuilder
@@ -46,7 +46,7 @@ class RobotBirthClinic(BirthClinic):
         self.body_builder: BodyBuilder = RobotBodyBuilder()
 
     def develop(self, individual: Individual, ecosphere: Ecosphere) -> object:
-        robot = Robot(individual)
+        robot = Robot(individual.genotype)
         robot.brain = self.brain_builder.build(individual, ecosphere)
         robot.body = self.body_builder.build(individual, ecosphere)
         return robot

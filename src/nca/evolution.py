@@ -1,8 +1,8 @@
 from nca.core.abstract.configurations import EvolutionConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.fitness import Fitness
-from nca.core.actor.fitnesses import OnesFitness
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.fitnesses import OnesFitness, FitnessEvaluation
+from nca.core.actor.individual_factory import ActorFactory
 from nca.core.analysis.statistics import Statistics
 from nca.core.ecology.population import Population
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
@@ -12,14 +12,14 @@ from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfi
 class Evolution:
 
     def __init__(self, evolutionary_configuration: EvolutionaryConfiguration = GeneticAlgorithmConfiguration(),
-                 fitness: Fitness = OnesFitness(), individual_factory: IndividualFactory = IndividualFactory(),
+                 fitness_evaluation: FitnessEvaluation = OnesFitness(), individual_factory: ActorFactory = ActorFactory(),
                  debug=True):
         self.configuration = EvolutionConfiguration()
 
         self.evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(evolutionary_configuration)
-        self.individual_factory: IndividualFactory = individual_factory
+        self.individual_factory: ActorFactory = individual_factory
 
-        self.fitness: Fitness = fitness
+        self.fitness_evaluation: FitnessEvaluation = fitness_evaluation
 
         self.debug: bool = debug
         self.terminate_run: bool = False
@@ -54,7 +54,7 @@ class Evolution:
 
     def evaluator(self, agents: Actors):
         for individual in agents:
-            individual.performance(self.fitness)
+            self.fitness_evaluation(individual)
 
     def log(self, string: str):
         if self.debug:

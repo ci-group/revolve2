@@ -66,7 +66,7 @@ class Actors(Iterator):
     """
 
     def average_fitness(self):
-        return np.mean([individual.fitness for individual in self])
+        return np.mean([individual.fitness.value() for individual in self])
 
     def update_age(self):
         for agent in self:

@@ -2,13 +2,10 @@ import math
 import matplotlib as mpl
 from matplotlib import pyplot, cm, colors
 
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
 import numpy as np
 
 from nca.core.abstract.structural.tree.tree_helper import Coordinate3D
-from revolve.robot.body.robogen_body import RobogenBody
-from revolve.robot.robogen.robogen_grammar import RobogenSymbol, RobogenModule
+from revolve.robot.robogen.robogen_grammar import RobogenSymbol
 
 
 def generate_matrix(body_modules):
@@ -51,11 +48,11 @@ def show(body_matrix):
     img = pyplot.imshow(body_matrix, interpolation='nearest', cmap=cmap, norm=norm)
 
     # make a color bar
-    cbar = pyplot.colorbar(img, cmap=cmap, norm=norm, boundaries=bounds, )
     module_array = [str(module.name) for module in RobogenSymbol.modules()]
     module_array.insert(0, "Core")
     module_array.insert(0, "Empty")
     module_array.append("")
+    cbar = pyplot.colorbar(img)
 
     cbar.ax.get_yaxis().set_ticks([])
     for j, lab in enumerate(module_array):

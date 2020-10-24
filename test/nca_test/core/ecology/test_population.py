@@ -1,7 +1,8 @@
 import unittest
 
 from nca.core.actor.actors import Actors
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.fitness import Fitness
+from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 
 
@@ -9,14 +10,14 @@ class TestPopulation(unittest.TestCase):
     n = 3
 
     def test_id(self):
-        population1 = Population(IndividualFactory().create(self.n))
-        population2 = Population(IndividualFactory().create(self.n))
+        population1 = Population(ActorFactory().create(self.n))
+        population2 = Population(ActorFactory().create(self.n))
 
         self.assertNotEqual(population1.id, population2.id)
 
     def test_generation(self):
-        agents_start = IndividualFactory().create(self.n)
-        agents_new = IndividualFactory().create(self.n)
+        agents_start = ActorFactory().create(self.n)
+        agents_new = ActorFactory().create(self.n)
 
         population = Population(agents_start)
 
@@ -26,11 +27,11 @@ class TestPopulation(unittest.TestCase):
         self.assertEqual(population.individuals, agents_new)
 
     def test_improvement(self):
-        agents1: Actors = IndividualFactory().create(self.n)
+        agents1: Actors = ActorFactory().create(self.n)
 
-        agents2: Actors = IndividualFactory().create(self.n)
+        agents2: Actors = ActorFactory().create(self.n)
         for agent in agents2:
-            agent.fitness = 1.0
+            agent.fitness = Fitness(1.0)
 
         population1 = Population(agents1)
         population2 = Population(agents2)

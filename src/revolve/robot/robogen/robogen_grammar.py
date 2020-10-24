@@ -1,21 +1,19 @@
 import random
 from enum import auto
-from typing import List, Dict
 
 import numpy as np
 
-from nca.core.abstract.structural.tree.tree_helper import Coordinate3D, Orientation
-from nca.core.abstract.sequential_identifier import NodeIdentifier
-from nca.core.genome.grammar.grammar import Symbol, Grammar, Alphabet
+from nca.core.abstract.structural.tree.tree_helper import Orientation
+from nca.core.genome.grammar.grammar import Symbol, ReplacementRules
 
 
 class RobogenSymbol(Symbol):
 
     MODULE_CORE = auto()
     MODULE_BLOCK = auto()
+
     MODULE_HORIZONTAL_JOINT = auto()
     MODULE_VERTICAL_JOINT = auto()
-    MODULE_SENSOR = auto()
 
     ORIENTATION_TOP = Orientation.TOP
     ORIENTATION_RIGHT = Orientation.RIGHT
@@ -26,56 +24,148 @@ class RobogenSymbol(Symbol):
     BRACKET_POP = auto()
 
     @classmethod
-    def random_words(cls, size: int = 1):
-        sequence = []
-        for i in range(size):
-            orientation = np.random.choice(RobogenSymbol.orientation(), p=[0.25, 0.25, 0.25, 0.25])
-            module = np.random.choice(RobogenSymbol.modules(), p=[0.50, 0.25, 0.25])
-            sequence.append({'orientation': orientation, 'module': module})
-        return sequence
+    def symbols(cls):
+        return [RobogenSymbol.ORIENTATION_TOP, RobogenSymbol.ORIENTATION_RIGHT, RobogenSymbol.ORIENTATION_LEFT,
+                RobogenSymbol.ORIENTATION_DOWN, RobogenSymbol.MODULE_BLOCK, RobogenSymbol.MODULE_HORIZONTAL_JOINT,
+                RobogenSymbol.MODULE_VERTICAL_JOINT]
+
+    @classmethod
+    def joints(cls):
+        return [RobogenSymbol.MODULE_HORIZONTAL_JOINT, RobogenSymbol.MODULE_VERTICAL_JOINT]
 
     @classmethod
     def orientation(cls):
-        return [RobogenSymbol.ORIENTATION_TOP, RobogenSymbol.ORIENTATION_RIGHT, RobogenSymbol.ORIENTATION_LEFT, RobogenSymbol.ORIENTATION_DOWN]
+        return [RobogenSymbol.ORIENTATION_TOP, RobogenSymbol.ORIENTATION_RIGHT, RobogenSymbol.ORIENTATION_LEFT,
+                RobogenSymbol.ORIENTATION_DOWN]
 
     @classmethod
     def modules(cls):
         return [RobogenSymbol.MODULE_BLOCK, RobogenSymbol.MODULE_HORIZONTAL_JOINT, RobogenSymbol.MODULE_VERTICAL_JOINT]
 
     @classmethod
-    def probabilities(cls):
-        probabilities = np.array([0.0, 0.50, 0.25, 0.25, 0.0, 0.25, 0.25, 0.25, 0.25, 0.0, 0.0])
-        return probabilities / sum(probabilities)
+    def brackets(cls):
+        return [RobogenSymbol.BRACKET_STASH, RobogenSymbol.BRACKET_POP]
+
+    @classmethod
+    def generate_axiom(self, max_word_length=3):
+        axiom = []
+
+        for i in range(max_word_length):
+
+            axiom.append(RobogenSymbol.BRACKET_STASH)
+
+            axiom.append(np.random.choice(RobogenSymbol.orientation()))
+            axiom.append(np.random.choice(RobogenSymbol.modules(), p=[0.5, 0.25, 0.25]))
+
+            axiom.append(RobogenSymbol.BRACKET_POP)
+
+        return axiom
+
+    @classmethod
+    def generate_unconstrained_rules(self, max_word_length=4) -> ReplacementRules:
+        replacement_rules: ReplacementRules = {}
+
+        for symbol in RobogenSymbol.symbols():
+            # TODO probabilities
+            replacement_rules[symbol] = [random.choices(RobogenSymbol.symbols(), k=random.randint(1, max_word_length))]
+
+        return replacement_rules
+
+    @classmethod
+    def generate_simple_rules(self, max_word_length=4) -> ReplacementRules:
+        replacement_rules: ReplacementRules = {}
+
+        for symbol in RobogenSymbol.modules():
+            replacement_rules[symbol] = [[]]
+            for i in range(random.randint(1, max_word_length)):
+                replacement_rules[symbol][0].extend([random.choice(RobogenSymbol.modules()),
+                                                  random.choice(RobogenSymbol.orientation())])  # probabilities
+
+        return replacement_rules
 
 
-class RobogenModule:
+class RobogenWord:
 
-    identifier = NodeIdentifier()
-    symbol_type = RobogenSymbol
+    def __init__(self, module: RobogenSymbol, orientation: RobogenSymbol = RobogenSymbol.ORIENTATION_TOP):
+        self.module = module
+        self.orientation = orientation
 
-    def __init__(self, symbol: RobogenSymbol = RobogenSymbol.MODULE_CORE, coordinate: Coordinate3D = Coordinate3D(0, 0, 0)):
-        self.id = self.identifier.id()
-        self.symbol = symbol
-        self.coordinate: Coordinate3D = coordinate
+    def __hash__(self):
+        return hash(hash(self.module) + hash(self.orientation))
+
+    def __eq__(self, other):
+        return self.module == other.module and self.orientation == other.orientation
 
     def __repr__(self):
-        return "(" + self.symbol.name + ", " + str(self.id) + ", " + str(self.coordinate) + ")"
+        return self.module.name + " " + self.orientation.name
 
+    def symbols(self):
+        return [self.orientation, self.module]
 
-RobogenReplacementRules = Dict[Symbol, List[List[Alphabet]]]
+    @classmethod
+    def generate_rules(cls, max_word_length=3) -> ReplacementRules:
+        replacement_rules: ReplacementRules = {}
 
+        for word in RobogenWord.words():
+            replacement_rules[word.module] = [[]]
+            for i in range(random.randint(1, max_word_length)):
+                replacement_rules[word.module][0].extend(cls.random_word())
 
-class RobogenGrammar(Grammar):
+        return replacement_rules
 
-    def __init__(self, rules: RobogenReplacementRules):
-        super().__init__(RobogenSymbol, rules)
+    @classmethod
+    def random_word(cls, orientation=None, module=None, use_brackets: bool = None):
+        sequence = []
 
-    def apply_rules(self, words):
-        new_words = []
-        for index, word in enumerate(words):
-            module = word['module']
-            if module in self.rules.keys():
-                new_words.extend(random.choice(self.rules[module]))
-            else:
-                new_words.append(word)
-        return new_words
+        if use_brackets is None:
+            use_brackets = random.randint(0, 1)
+
+        if use_brackets:
+            sequence.append(RobogenSymbol.BRACKET_STASH)
+
+        if module is None:
+           module = np.random.choice(RobogenSymbol.modules(), p=[0.5, 0.25, 0.25])
+        if orientation is None:
+            orientation = np.random.choice(RobogenSymbol.orientation(), p=[1/4, 1/4, 1/4, 1/4])
+
+        sequence.extend(RobogenWord(module, orientation).symbols())
+
+        if use_brackets:
+            sequence.append(RobogenSymbol.BRACKET_POP)
+
+        return sequence
+
+    @classmethod
+    def generate_axiom(self):
+        axiom = []
+
+        for orientation in RobogenSymbol.orientation():
+            axiom.extend(RobogenWord.random_word(orientation, use_brackets=True))
+
+        return axiom
+
+    @classmethod
+    def words(self):
+        words = []
+        for module in RobogenSymbol.modules():
+            for orientation in RobogenSymbol.orientation():
+                 words.append(RobogenWord(module, orientation))
+        return words
+
+"""
+@classmethod
+def random_root(cls, orientation=None, module=None):
+    sequence = []
+
+    sequence.append({'module': RobogenSymbol.BRACKET_STASH})
+
+    if orientation is None:
+        orientation = np.random.choice(RobogenSymbol.global_orientation(), p=[0.25, 0.25, 0.25, 0.25])
+    if module is None:
+        module = np.random.choice(RobogenSymbol.buildable_modules(), p=[1/2, 1/4, 1/4])
+    sequence.append({'orientation': orientation, 'module': module})
+
+    sequence.append({'module': RobogenSymbol.BRACKET_POP})
+
+    return sequence
+"""

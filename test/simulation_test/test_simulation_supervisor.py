@@ -1,7 +1,7 @@
 import unittest
 
 from nca.core.actor.actors import Actors
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.individual_factory import ActorFactory
 from revolve.robot.robot import Robot
 from simulation.simulator.simulator_command import SimulateCommand, TaskPriority
 
@@ -19,7 +19,7 @@ class SimulationSupervisorTest(unittest.TestCase):
 
         #self.assertEqual(supervisor.robot_queue.size(), 0)
 
-        supervisor.work(Robot(IndividualFactory().create(1)[0]), request_command)
+        supervisor.work(ActorFactory(actor_type=Robot).create(1)[0], request_command)
 
         #self.assertEqual(supervisor.robot_queue.size(), 0)
 
@@ -31,13 +31,10 @@ class SimulationSupervisorTest(unittest.TestCase):
         supervisor = SimulationSupervisor(request_command_medium)
 
         #self.assertEqual(supervisor.robot_queue.size(), 0)
-        individuals = IndividualFactory().create(3)
-        low_robot = Robot(individuals[0])
-        medium_robot = Robot(individuals[1])
-        high_robot = Robot(individuals[2])
-        supervisor.work(low_robot, request_command_low)
-        supervisor.work(medium_robot, request_command_medium)
-        supervisor.work(high_robot, request_command_high)
+        robots = ActorFactory(actor_type=Robot).create(3)
+        supervisor.work(robots[0], request_command_low)
+        supervisor.work(robots[1], request_command_medium)
+        supervisor.work(robots[2], request_command_high)
 
         #self.assertEqual(supervisor.robot_queue.size(), 0)
         

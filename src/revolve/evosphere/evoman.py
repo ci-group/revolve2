@@ -23,6 +23,6 @@ class EvomanEcosphere(Ecosphere):
                               speed="fastest", player_controller=player_controller(10), enemy_controller="static")
 
     def run(self, individual: Individual):
-        f, _, _, _ = self.env.play(pcont=np.array(individual.representation.genome))
+        f, _, _, _ = self.env.play(pcont=np.array(individual.get_representation()))
         individual.fitness = f
         return individual

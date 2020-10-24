@@ -8,7 +8,7 @@ class TreeRepresentation(Representation):
 
     def __init__(self, root: Tree, initialization: Initialization = UniformInitialization()):
         super().__init__(initialization=initialization)
-        self.genome = root
+        #self = root
 
     def _initialize(self):
         pass

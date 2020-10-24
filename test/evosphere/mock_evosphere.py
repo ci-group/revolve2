@@ -1,4 +1,4 @@
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology import PopulationEcology
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
 from revolve.evosphere.evosphere import Evosphere
@@ -10,7 +10,7 @@ from simulation.simulation_manager import SimulationManager
 class MockBiosphere(Biosphere):
 
     def __init__(self):
-        super().__init__(PopulationEcology(), IndividualFactory(), birth_clinic=AgentBirthClinic())
+        super().__init__(PopulationEcology(), ActorFactory(), birth_clinic=AgentBirthClinic())
 
 
 class MockEvosphere(Evosphere):

@@ -1,8 +1,10 @@
 import numpy as np
 
-from nca.core.actor.fitness import fitness_key
 from nca.core.ecology.population import Population
 
+
+def fitness_key(individual):
+    return individual.get_fitness()
 
 
 class Statistics:
@@ -24,10 +26,10 @@ class Statistics:
         self.best_individuals.append(best_individual)
 
     def _calculate_mean_fitness(self, population: Population):
-        self.mean_fitnesses.append(np.mean([individual.fitness for individual in population.individuals]))
+        self.mean_fitnesses.append(np.mean([individual.get_fitness() for individual in population.individuals]))
 
     def _calculate_median_fitness(self, population: Population):
-        self.median_fitnesses.append(np.median([individual.fitness for individual in population.individuals]))
+        self.median_fitnesses.append(np.median([individual.get_fitness() for individual in population.individuals]))
 
     def _find_worst_individual(self, population: Population):
         worst_individual = min(population.individuals, key=fitness_key)

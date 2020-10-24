@@ -1,52 +1,31 @@
-import numpy as np
-
-from abc import abstractmethod
-from typing import List
+from typing import Dict
 
 
-def fitness_key(individual):
-    return individual.fitness
+class Fitness(Dict[str, float]):
 
-
-class Fitness(float):
+    master_key = 'fitness'
 
     def __init__(self, initial_value: float = 0.0):
-        float.__init__(initial_value)
+        super().__init__()
+        self[self.master_key] = initial_value
+        self.clean = True  # changes to fitness dictionary
 
-    @abstractmethod
-    def __call__(self, individual):
-        pass
+    def value(self):
+        if not self.clean:
+            self._average()
+        return self[self.master_key]
 
-    def __new__(cls, initial_value: float = 0.0):
-        return super().__new__(cls, initial_value)
+    def add(self, key: str, value: float):
+        if key in self.keys():
+            raise Exception("Adding duplicate fitness value")
+        self[key] = value
+        self.clean = False
 
-
-class MultiFitness(Fitness):
-
-    def __new__(cls, fitnesses: List[Fitness] = None, initial_value: float = 0.0):
-        return super().__new__(cls, initial_value)
-
-    def __init__(self, fitnesses: List[Fitness], initial_value: float = 0.0):
-        super().__init__(initial_value)
-        self.fitnesses: List[Fitness] = fitnesses
-
-    def __call__(self, robot):
-        for index, fitness in enumerate(self.fitnesses):
-            self.fitnesses[index] = fitness(robot)
-        return MultiFitness(self.fitnesses, float(np.mean(self.fitnesses)))
-
-
-class CombinedFitness(Fitness):
-
-    def __new__(cls, fitnesses: List[Fitness] = None, initial_value: float = 0.0):
-        return super().__new__(cls, initial_value)
-
-    def __init__(self, fitnesses: List[Fitness] = None, initial_value: float = 0.0):
-        super().__init__(initial_value)
-        self.fitnesses: List[Fitness] = fitnesses if fitnesses is not None else []
-
-    def add(self, fitness: Fitness):
-        self.fitnesses.append(fitness)
-
-    def __call__(self):
-        return CombinedFitness(fitnesses=self.fitnesses, initial_value=float(np.mean(self.fitnesses)))
+    def _average(self):
+        sum: float = 0
+        for key in self.keys():
+            if key == self.master_key:
+                continue
+            sum += self[key]
+        self[self.master_key] = sum / self.__len__()
+        self.clean = True

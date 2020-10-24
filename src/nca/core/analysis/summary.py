@@ -2,8 +2,7 @@ from typing import List
 
 import numpy as np
 
-from nca.core.actor.fitness import fitness_key
-from nca.core.analysis.statistics import Statistics
+from nca.core.analysis.statistics import Statistics, fitness_key
 
 
 class Summary(Statistics):

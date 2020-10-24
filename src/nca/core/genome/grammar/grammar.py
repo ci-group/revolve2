@@ -6,6 +6,7 @@ from typing import List, Dict
 
 class Symbol(Enum):
 
+    @classmethod
     def probabilities(cls):
         number_of_elements = cls.__len__()
         uniform_value = 1 / number_of_elements
@@ -13,14 +14,12 @@ class Symbol(Enum):
 
 
 Axiom = List[Symbol]
-Alphabet = List[Symbol]
-ReplacementRules = Dict[Symbol, List[Alphabet]]
+ReplacementRules = Dict[Symbol, List[List[Symbol]]]
 
 
 class SemiThueSystem:
 
-    def __init__(self, symbols_type: type(Symbol), rules: ReplacementRules):
-        self.symbols_type = symbols_type
+    def __init__(self, rules: ReplacementRules):
         self.rules = rules
 
     def apply_rules(self, symbols):
@@ -28,6 +27,7 @@ class SemiThueSystem:
 
         for index, element in enumerate(symbols):
             if element in self.rules.keys():
+                # ability for deterministic and probabilistic rule application
                 new_symbols.extend(random.choice(self.rules[element]))
             else:
                 new_symbols.append(element)
@@ -35,4 +35,4 @@ class SemiThueSystem:
         return new_symbols
 
 
-Grammar = SemiThueSystem
+RewritingGrammar = SemiThueSystem

@@ -12,12 +12,10 @@ class ChromosomalRepresentation(Representation):
     def __init__(self, initialization):
         self.configuration = RepresentationConfiguration()
         self.initialization = initialization
-        self.genome: List = []
 
     def initialize(self):
-        self.genome: List = []
         for _ in range(self.configuration.number_of_chromosomes):
-            self.genome.append(self.initialization(self.configuration.genome_size))
+            self.append(self.initialization(self.configuration.genome_size))
 
     def selection_indexes(self, k=2) -> List[List[int]]:
         tuples = []
@@ -34,11 +32,5 @@ class ChromosomalRepresentation(Representation):
         index2 = indexes[1]
         self[index1], self[index2] = self[index2], self[index1]
 
-    def __str__(self):
-        return str(self.genome)
-
-    def __len__(self):
-        return len(self.genome)
-
     def random_index(self):
-        return random.choice(range(len(self.genome)))
+        return random.choice(range(len(self)))

@@ -26,11 +26,9 @@ class Population:
             raise Exception("Empty new generation")
 
         self.age.increment(self.did_improve(agents))
-
         agents.update_age()
 
         # sort agents
-
         self.individuals = agents
 
     def did_improve(self, agents: Actors):

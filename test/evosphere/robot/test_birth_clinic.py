@@ -2,7 +2,7 @@ import unittest
 
 from evosphere.robot.mock_morphology import MockBody, MockBrain
 from nca.core.actor.individual import Individual
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.individual_factory import ActorFactory
 from revolve.evosphere.ecosphere import Ecosphere
 from revolve.robot.birth_clinic import BirthClinic, RobotBirthClinic
 from revolve.robot.body.body_builder import BodyBuilder
@@ -25,7 +25,7 @@ class TestBirthClinic(unittest.TestCase):
         clinic = MockBirthClinic()
 
         n = 10
-        robots = clinic.build(IndividualFactory().create(n), Ecosphere("test"))
+        robots = clinic.build(ActorFactory().create(n), Ecosphere("test"))
 
         self.assertEqual(len(robots), n)
 

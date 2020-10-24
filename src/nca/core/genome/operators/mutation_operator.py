@@ -1,7 +1,7 @@
 import copy
 import random
 from abc import abstractmethod, ABC
-from typing import Tuple
+from typing import Tuple, Dict
 
 import numpy as np
 
@@ -19,13 +19,14 @@ class MutationOperator(ABC):
         self.configuration = OperatorConfiguration()
         pass
 
-    def __call__(self, representation: Representation):
+    def __call__(self, representations: Dict[str, Representation]):
         # check if we do have to do the mutation
-        # TODO is this still necessary?
-        new_representation = copy.deepcopy(representation)
-        self._mutate(new_representation)
+        new_representations = copy.deepcopy(representations)
+        chosen_representation = np.random.choice(list(representations.keys()))
 
-        return new_representation
+        self._mutate(new_representations[chosen_representation])
+
+        return new_representations
 
     @abstractmethod
     def compatibility(self, initialization_type: type(Initialization)):
@@ -161,7 +162,7 @@ class InsertMutation(StructuralMutation):
 
     def _mutate(self, representation: Representation):
         index = representation.random_index()
-        representation.genome = np.insert(representation.genome, index, representation.random_value())
+        representation[:] = np.insert(representation, index, representation.random_value())
 
 
 class ReplaceMutation(StructuralMutation):
@@ -173,6 +174,7 @@ class ReplaceMutation(StructuralMutation):
         index = representation.random_index()
         representation[index] = representation.random_value()
 
+
 class DeleteMutation(StructuralMutation):
 
     def __init__(self):
@@ -180,7 +182,7 @@ class DeleteMutation(StructuralMutation):
 
     def _mutate(self, representation: Representation):
         index = representation.random_index()
-        representation.genome = np.delete(representation.genome, index)
+        representation[:] = np.delete(representation, index)
 
 
 class InversionMutation(StructuralMutation):
@@ -205,6 +207,3 @@ class DisplacementMutation(StructuralMutation):
         index = representation.random_index()
         #TODO
         #return ...
-
-
-

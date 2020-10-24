@@ -20,4 +20,4 @@ class TestRobogenManipulation(unittest.TestCase):
         new_robot.performance(DisplacementFitness())
 
         self.assertNotEqual(new_robot.measures, robot.measures)
-        self.assertNotEqual(new_robot.actor.fitness, robot.actor.fitness)
+        self.assertNotEqual(new_robot.individual.fitness, robot.individual.fitness)

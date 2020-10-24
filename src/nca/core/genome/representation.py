@@ -9,15 +9,15 @@ from nca.core.abstract.configurations import RepresentationConfiguration
 from nca.core.evolution.conditions.initialization import Initialization
 
 
-class Representation(collections.MutableSequence, ABC):
+class Representation(List, ABC):
 
     def __init__(self, initialization: Initialization):
-        self.genome = []
+        super().__init__()
         self.configuration = RepresentationConfiguration()
         self.initialization: Initialization = initialization
 
         if self.initialization is not None:
-            self.genome.extend(self.initialization(self.configuration.genome_size))
+            self.extend(self.initialization(self.configuration.genome_size))
 
     def random_value(self):
         return self.initialization(1)[0]
@@ -40,35 +40,17 @@ class Representation(collections.MutableSequence, ABC):
     def swap_indexes(self, indexes: Tuple[int]):
         self[indexes[0]], self[indexes[1]] = self[indexes[1]], self[indexes[0]]
 
-    def invert_indexes(self, indexes: List[int]):
-        self[indexes] = self[reversed(indexes)]
+    #def invert_indexes(self, indexes: List[int]):
+    #    self[indexes] = self[reversed(indexes)]
 
     def random_index(self, offset: int = 0):
         return random.choice(range(len(self) - offset))
-
-    def __repr__(self):
-        return str(self.genome)
-
-    def __getitem__(self, item):
-        return self.genome.__getitem__(item)
-
-    def __delitem__(self, item):
-        self.genome.__delitem__(item)
-
-    def __len__(self):
-        return self.genome.__len__()
-
-    def __setitem__(self, key, value):
-        self.genome.__setitem__(key, value)
-
-    def insert(self, index: int, object: object) -> None:
-        self.genome.insert(index, object)
 
 
 class MultiRepresentation(Representation, ABC):
 
     def __init__(self, dictionary: Dict):
-        self.genome = dictionary
+        pass#self.genome = dictionary
 
 
 class BrainRepresentation(Representation):

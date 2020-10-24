@@ -1,16 +1,15 @@
-import numpy as np
+from typing import List
 
-from nca.core.genome.grammar.grammar import Symbol, Grammar
-from nca.core.genome.grammar.grammar_initialization import GrammarInitialization
+from nca.core.evolution.conditions.initialization import Initialization
+from nca.core.genome.grammar.grammar import RewritingGrammar, Symbol
 from nca.core.genome.representation import Representation
 
 
 # Or grammar Representation
 class SymbolicRepresentation(Representation):
 
-    def __init__(self, symbols_type: type(Symbol), axiom=None):
-        self.symbols_type = symbols_type
-        super().__init__(GrammarInitialization(symbols_type, axiom))
+    def __init__(self, initialization: Initialization = None):
+        super().__init__(initialization)
 
     def compatibility(self, other) -> float:
         differences = 0
@@ -25,16 +24,18 @@ class SymbolicRepresentation(Representation):
         representation_visitor.visit_symbolic_representation(self)
 
     def random_value(self):
-        return np.random.choice(self.symbols_type)
+        return self.initialization(1)
 
 
-class LSystemRepresentation(SymbolicRepresentation):
+class LSystemAlgorithm:
 
-    def __init__(self, grammar: Grammar, axiom=None):
-        super().__init__(grammar.symbols_type, axiom)
-        self.grammar = grammar
+    def __init__(self, grammar: RewritingGrammar, initialization: Initialization = None):
+        self.representation = SymbolicRepresentation(initialization)
+        self.grammar: RewritingGrammar = grammar
+        self.encoding: List[Symbol] = []
 
     def __call__(self, rule_iterations: int = 1):
-
+        self.encoding = self.representation
         for _ in range(rule_iterations):
-            self.genome = self.grammar.apply_rules(self)
+            self.encoding = self.grammar.apply_rules(self.encoding)
+        return self.encoding

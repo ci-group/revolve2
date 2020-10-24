@@ -13,12 +13,13 @@ class TestMutationOperators(unittest.TestCase):
         mutation = SwapMutation()
 
         representation = ValuedRepresentation(UniformInitialization())
+        self.assertTrue(len(representation) > 0)
 
         new_representation = copy.deepcopy(representation)
         mutation._mutate(new_representation)
 
-        self.assertTrue(len(representation) > 0)
-        self.assertNotEqual(representation, new_representation)
+        self.assertTrue(len(representation) == len(new_representation))
+        #self.assertNotEqual(representation, new_representation) # can be the same
 
     def test_delete_mutation(self):
         mutation = DeleteMutation()

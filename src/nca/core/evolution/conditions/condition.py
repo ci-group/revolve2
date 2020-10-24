@@ -32,7 +32,7 @@ class FitnessCondition(Condition):
     def filter(self, population: Population):
         filtered_individuals = Actors()
         for individual in population.individuals:
-            if individual.fitness >= self.condition_value:
+            if individual.fitness.value() >= self.condition_value:
                 filtered_individuals.add(individual)
         return filtered_individuals
 

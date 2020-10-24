@@ -1,7 +1,7 @@
 from abc import ABC
 from typing import List
 
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population import Population
 from nca.core.evolution.conditions.initialization import Initialization
@@ -14,11 +14,11 @@ class Biosphere(ABC):
 
     def __init__(self,
                  population_ecology: PopulationEcology = PopulationEcology(),
-                 actor_factory: IndividualFactory = IndividualFactory(),
+                 actor_factory: ActorFactory = ActorFactory(),
                  birth_clinic: BirthClinic = BirthClinic(),
                  ecospheres: List[Ecosphere] = None):
         self.population_ecology: PopulationEcology = population_ecology
-        self.actor_factory: IndividualFactory = actor_factory
+        self.actor_factory: ActorFactory = actor_factory
         self.birth_clinic: BirthClinic = birth_clinic
         self.ecospheres: List[Ecosphere] = ecospheres if ecospheres is not None else [GazeboEcosphere()]
 
@@ -41,7 +41,7 @@ class RobotBiosphere(Biosphere):
 
     def __init__(self,
                  population_ecology: PopulationEcology = PopulationEcology(),
-                 actor_factory: IndividualFactory = IndividualFactory(),
+                 actor_factory: ActorFactory = ActorFactory(),
                  birth_clinic: BirthClinic = RobotBirthClinic(),
                  ecospheres: List[Ecosphere] = None):
         super().__init__(population_ecology, actor_factory, birth_clinic, ecospheres)
@@ -51,7 +51,7 @@ class AgentBiosphere(Biosphere):
 
     def __init__(self,
                  population_ecology: PopulationEcology = PopulationEcology(),
-                 actor_factory: IndividualFactory = IndividualFactory(),
+                 actor_factory: ActorFactory = ActorFactory(),
                  birth_clinic: BirthClinic = AgentBirthClinic(),
                  ecospheres: List[Ecosphere] = None):
         super().__init__(population_ecology, actor_factory, birth_clinic, ecospheres)

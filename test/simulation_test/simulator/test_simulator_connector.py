@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.individual_factory import ActorFactory
 from revolve.robot.robot import Robot
 from simulation.simulator.simulation_connector import SimulatorState
 from evosphere.mock_ecosphere import MockEcosphere
@@ -35,7 +35,7 @@ class TestSimulatorConnector(unittest.TestCase):
     def test_connector_robot(self):
         connector = TestConnectorAdapter(MockEcosphere())
 
-        robot = Robot(IndividualFactory().create(1)[0])
+        robot = ActorFactory(actor_type=Robot).create(1)[0]
         connector.add_robot(robot)
 
         connector.remove_robot(robot)
@@ -45,7 +45,7 @@ class TestSimulatorConnector(unittest.TestCase):
     def test_connector_robot_changed(self):
         connector = TestConnectorAdapter(MockEcosphere())
 
-        robot = Robot(IndividualFactory().create(1)[0])
+        robot = ActorFactory(actor_type=Robot).create(1)[0]
         connector.add_robot(robot)
 
-        self.assertRaises(Exception, connector.remove_robot, Robot(IndividualFactory().create(1)[0]))
+        self.assertRaises(Exception, connector.remove_robot, ActorFactory(actor_type=Robot).create(1)[0])

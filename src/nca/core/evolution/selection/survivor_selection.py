@@ -2,8 +2,8 @@ import random
 from typing import List
 
 from nca.core.actor.actors import Actors
-from nca.core.actor.fitness import fitness_key
 from nca.core.actor.individual import Individual
+from nca.core.analysis.statistics import fitness_key
 from nca.core.evolution.selection.selection import SurvivorSelection
 
 
@@ -13,7 +13,7 @@ class FitnessSteadyStateSelection(SurvivorSelection):
         super().__init__()
 
     def __call__(self, individuals: List[Individual]) -> List[Individual]:
-        return sorted(individuals, key=lambda x: x.fitness, reverse=True)
+        return sorted(individuals, key=lambda x: x.get_fitness(), reverse=True)
 
 
 class GenerationalSteadyStateSelection(SurvivorSelection):

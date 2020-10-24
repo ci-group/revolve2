@@ -10,6 +10,6 @@ class Compatibility:
     def compatible(self, individuals: Actors, other_individual: Individual) -> bool:
         sum_difference: float = 0.0
         for individual in individuals:
-            sum_difference += individual.representation.compatibility(other_individual.representation)
+            sum_difference += individual.genotype.compatibility(other_individual.genotype)
         average_difference = sum_difference / len(individuals)
         return abs(average_difference) < self.limit

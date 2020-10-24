@@ -23,7 +23,7 @@ class TournamentSelection(ParentSelection):
 
     def algorithm(self, individuals: List[Individual]) -> List[Individual]:
         return [max(np.random.choice(individuals, self.configuration.tournament_size),
-                    key=lambda x: x.fitness)
+                    key=lambda x: x.get_fitness())
                 for _ in range(self.configuration.number_of_parents)]
 
 
@@ -32,7 +32,7 @@ class RouletteWheelSelection(ParentSelection):
     def algorithm(self, individuals: List[Individual]) -> List[Individual]:
         return random.choices(individuals,
                               k=self.configuration.number_of_parents,
-                              weights=[agent.fitness for agent in individuals])
+                              weights=[agent.get_fitness() for agent in individuals])
 
 
 class NullParentSelection(RandomParentSelection):

@@ -3,17 +3,13 @@ from typing import List
 import numpy as np
 
 from nca.core.evolution.conditions.initialization import Initialization
-from nca.core.genome.grammar.grammar import Alphabet
+from nca.core.genome.grammar.grammar import Symbol
 
 
 class GrammarInitialization(Initialization):
-    def __init__(self, alphabet: type(Alphabet), axiom=None):
+    def __init__(self, symbol_type: type(Symbol)):
         super().__init__()
-        self.alphabet: type(Alphabet) = alphabet
-        self.axiom = axiom
+        self.symbol_type: type(Symbol) = symbol_type
 
     def __call__(self, size: int) -> List:
-        if self.axiom is None:
-            return np.random.choice(self.alphabet, size, p=self.alphabet.probabilities()).tolist()
-        else:
-            return self.axiom
+        return np.random.choice(self.symbol_type, size, p=self.symbol_type.probabilities()).tolist()

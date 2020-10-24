@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 from nca.core.actor.fitness import Fitness
 from nca.core.actor.fitnesses import OnesFitness
-from nca.core.actor.individual_factory import IndividualFactory
+from nca.core.actor.individual_factory import ActorFactory
 from nca.core.analysis.statistics import Statistics
 from nca.core.analysis.statistics_plotter import plot_statistics_measures_list
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration
@@ -13,11 +13,11 @@ from nca.repeated_evolution import RepeatedEvolution
 class ComparativeEvolution:
 
     def __init__(self, evolutionary_configurations: List[EvolutionaryConfiguration],
-                 fitness: Fitness = OnesFitness(), individual_factory: IndividualFactory = IndividualFactory(),
+                 fitness: Fitness = OnesFitness(), individual_factory: ActorFactory = ActorFactory(),
                  algorithm_names: List[str] = [], repeat=1):
         self.evolutionary_configurations: List[EvolutionaryConfiguration] = evolutionary_configurations
         self.fitness: Fitness = fitness
-        self.individual_factory: IndividualFactory = individual_factory
+        self.individual_factory: ActorFactory = individual_factory
 
         self.statistics_measures: List[Statistics] = []
         self.algorithm_names: List[str] = algorithm_names

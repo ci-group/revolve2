@@ -49,3 +49,15 @@ class SurvivorSelection(Selection, ABC):
     @abstractmethod
     def __call__(self, individuals: Actors) -> List[Individual]:
         raise Exception("Survivor selection evolution is not implemented")
+
+
+class MortalitySelection(Selection, ABC):
+
+    def __init__(self):
+        super().__init__()
+        self.mortality_percentage = 0.05
+
+    @abstractmethod
+    def __call__(self, individuals: Actors, offspring: Actors):
+        raise Exception("Survivor selection evolution is not implemented")
+

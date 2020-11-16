@@ -1,34 +1,20 @@
 import random
 
-from enum import Enum
-from typing import List, Dict
-
-
-class Symbol(Enum):
-
-    @classmethod
-    def probabilities(cls):
-        number_of_elements = cls.__len__()
-        uniform_value = 1 / number_of_elements
-        return [uniform_value for _ in range(number_of_elements)]
-
-
-Axiom = List[Symbol]
-ReplacementRules = Dict[Symbol, List[List[Symbol]]]
 
 
 class SemiThueSystem:
 
-    def __init__(self, rules: ReplacementRules):
-        self.rules = rules
+    def __init__(self, ):
+        pass
 
-    def apply_rules(self, symbols):
+    def apply_rules(self, rules: dict, symbols):
         new_symbols = []
 
         for index, element in enumerate(symbols):
-            if element in self.rules.keys():
+            if element in rules.keys():
                 # ability for deterministic and probabilistic rule application
-                new_symbols.extend(random.choice(self.rules[element]))
+                print(rules[element])
+                new_symbols.extend(rules[element]) # random.choice()
             else:
                 new_symbols.append(element)
 

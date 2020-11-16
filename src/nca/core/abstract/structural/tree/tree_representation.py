@@ -1,6 +1,6 @@
 from nca.core.evolution.conditions.initialization import Initialization
-from nca.core.genome.initialization import UniformInitialization
-from nca.core.genome.representation import Representation
+from nca.core.genome.operators.initialization import UniformInitialization
+from nca.core.genome.representations.representation import Representation
 from nca.core.abstract.structural.tree.tree import Tree, Tree2D, Tree3D
 
 

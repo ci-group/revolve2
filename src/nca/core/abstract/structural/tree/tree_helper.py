@@ -1,6 +1,6 @@
 from enum import Enum
 
-from nca.core.genome.grammar.grammar import Symbol
+from nca.core.genome.grammar.symbol import Symbol
 
 
 class Orientation(Symbol):

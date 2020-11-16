@@ -6,8 +6,7 @@ from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population import Population
 from nca.core.evolution.conditions.initialization import Initialization
 from revolve.evosphere.ecosphere import GazeboEcosphere, Ecosphere
-from revolve.robot.birth_clinic import AgentBirthClinic, RobotBirthClinic, BirthClinic
-from simulation.simulator.simulator_command import SimulateCommand
+from revolve.robot.birth_clinic import RobotBirthClinic, BirthClinic, IndividualBirthClinic
 
 
 class Biosphere(ABC):
@@ -26,7 +25,6 @@ class Biosphere(ABC):
         if False:  # TODO
             self.population_ecology.load()
         else:
-            self.actor_factory.initialize(initialization_type)
             self.population_ecology.initialize(self.actor_factory.create(number_of_actors))
 
     def populations(self) -> List[Population]:
@@ -34,7 +32,7 @@ class Biosphere(ABC):
 
     def run(self):
         self.population_ecology.export()
-        self.population_ecology.speciate()
+        self.population_ecology.process()
 
 
 class RobotBiosphere(Biosphere):
@@ -47,11 +45,11 @@ class RobotBiosphere(Biosphere):
         super().__init__(population_ecology, actor_factory, birth_clinic, ecospheres)
 
 
-class AgentBiosphere(Biosphere):
+class IndividualBiosphere(Biosphere):
 
     def __init__(self,
                  population_ecology: PopulationEcology = PopulationEcology(),
                  actor_factory: ActorFactory = ActorFactory(),
-                 birth_clinic: BirthClinic = AgentBirthClinic(),
+                 birth_clinic: BirthClinic = IndividualBirthClinic(),
                  ecospheres: List[Ecosphere] = None):
         super().__init__(population_ecology, actor_factory, birth_clinic, ecospheres)

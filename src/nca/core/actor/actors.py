@@ -1,69 +1,62 @@
 import string
 from typing import List
+
+import numpy
 import numpy as np
 
 from nca.core.abstract.behavioral.iterator import Iterator
 from nca.core.actor.individual import Individual
 
 
-class Actors(Iterator):
+class Actors(List):
 
     def __init__(self, agents: List[Individual] = None):
-        super().__init__(agents)
-
-    def _get(self, index) -> Individual:
-        return self.collection[index]
+        if agents is None:
+            super().__init__()
+        else:
+            super().__init__(agents)
 
     def add(self, agent: Individual):
-        super().add(agent)
+        super().append(agent)
 
     def remove(self, agent: Individual):
         super().remove(agent)
-
-    def extend(self, agents):
-        return self.collection.extend(agents.collection)
 
     def subset(self, indexes):
         agents: List[Individual] = []
 
         for index in indexes:
-            agents.append(self.collection[index])
+            agents.append(self[index])
 
         return self.__class__(agents)
 
     def __repr__(self):
         string_representation: string = "Agents {"
 
-        for individual in self.collection:
+        for individual in self:
             string_representation += repr(individual) + ","
 
         string_representation += "}"
 
         return string_representation
 
-    """
-    def get_best(self) -> Individual:
-        best_agent: Individual = None
-        best_fitness: Fitness = Fitness.worst()
+    # TODO simplify and congregate with fitness_statistics call
+    def find_typical_individuals(self):
+        fitness_sorted_indexes = np.argsort([individual.fitness.value() for individual in self])
+        number_of_quartiles = 5
+        number_of_individuals = self.__len__()
+        quartile_indexes = [round(percentile / (number_of_quartiles-1) * (number_of_individuals - 1)) for index, percentile in enumerate(range(number_of_quartiles))]
+        labels = ['min', 'first', 'median', 'third', 'max']
+        return {labels[index]: fitness_sorted_indexes[quartile_index]
+                for index, quartile_index in enumerate(quartile_indexes)}
 
-        for evolutionary_agent in self:
-            if best_fitness > evolutionary_agent.fitness:
-                best_fitness = evolutionary_agent.fitness
-                best_agent = evolutionary_agent
+    def fitness_statistics(self):
+        fitness_values: List[float] = [individual.fitness.value() for individual in self]
+        number_of_quartiles = 5
+        labels = ['min', 'first', 'median', 'third', 'max']
 
-        return best_agent
-
-    def get_worst(self) -> Individual:
-        worst_agent: Individual = None
-        worst_fitness: Fitness = Fitness.best()
-
-        for actor in self:
-            if worst_fitness < actor.fitness:
-                worst_fitness = actor.fitness
-                worst_agent = actor
-
-        return worst_agent
-    """
+        return {labels[index]: np.quantile(fitness_values, percentile / (number_of_quartiles-1))
+                for index, percentile in enumerate(range(number_of_quartiles))}
 
     def average_fitness(self):
         return np.mean([individual.fitness.value() for individual in self])

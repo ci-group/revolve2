@@ -1,11 +1,8 @@
 import copy
 import unittest
 
-from nca.core.actor.individual import Individual
-from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.grammar.grammar import ReplacementRules, RewritingGrammar
 from nca.core.genome.grammar.grammar_initialization import GrammarInitialization
-from nca.core.genome.initialization import UniformInitialization
 from nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, \
     ReplaceMutation, DeleteMutation
 from nca.core.genome.operators.recombination_operator import OnePointCrossover
@@ -16,7 +13,7 @@ from nca_test.core.grammar.test_alphabet import TestColorSymbol
 TestRules: ReplacementRules = {TestColorSymbol.GREEN: [[TestColorSymbol.RED, TestColorSymbol.RED]],
                                TestColorSymbol.BLUE: [[TestColorSymbol.RED, TestColorSymbol.RED]]}
 
-
+# TODO refactor
 class LSystemRepresentationTest(unittest.TestCase):
 
     def test_swap_mutation(self):

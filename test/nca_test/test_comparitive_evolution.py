@@ -1,8 +1,6 @@
 import unittest
 from typing import List
 
-
-
 from nca.comparative_evolution import ComparativeEvolution
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
 from nca.core.genome.operators.recombination_operator import OnePointCrossover, UniformCrossover, \

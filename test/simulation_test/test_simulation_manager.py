@@ -20,5 +20,3 @@ class SimulationManagerTest(unittest.TestCase):
         birth_clinic = MockBirthClinic()
         manager.simulate(SimulateCommand(agents, ecosphere, birth_clinic, TaskPriority.MEDIUM))
 
-        #self.assertEqual(len(manager.supervisors.keys()), 3)
-

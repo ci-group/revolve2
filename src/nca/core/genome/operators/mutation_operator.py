@@ -1,15 +1,16 @@
 import copy
 import random
 from abc import abstractmethod, ABC
-from typing import Tuple, Dict
+from typing import Tuple
 
 import numpy as np
 
 from nca.core.abstract.configurations import OperatorConfiguration
 from nca.core.evolution.conditions.initialization import Initialization
-from nca.core.genome.initialization import UniformInitialization, GaussianInitialization, BinaryInitialization, \
+from nca.core.genome.genotype import Genotype
+from nca.core.genome.operators.initialization import UniformInitialization, GaussianInitialization, BinaryInitialization, \
     IntegerInitialization
-from nca.core.genome.representation import Representation
+from nca.core.genome.representations.representation import Representation
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
 
 
@@ -19,14 +20,16 @@ class MutationOperator(ABC):
         self.configuration = OperatorConfiguration()
         pass
 
-    def __call__(self, representations: Dict[str, Representation]):
-        # check if we do have to do the mutation
-        new_representations = copy.deepcopy(representations)
-        chosen_representation = np.random.choice(list(representations.keys()))
+    def __call__(self, genotype: Genotype, debug=False):
+        #genotype = copy.deepcopy(genotype)  # Recombination already creates an unique genotype
+        for key in genotype.keys():
+            # check if we do NOT mutate
+            if random.random() > self.configuration.mutation_probability and not debug:
+                continue
 
-        self._mutate(new_representations[chosen_representation])
+            self._mutate(genotype.get_random_representation(key))
 
-        return new_representations
+        return genotype
 
     @abstractmethod
     def compatibility(self, initialization_type: type(Initialization)):

@@ -10,8 +10,10 @@ class RobogenModule:
     identifier = NodeIdentifier()
     symbol_type = RobogenSymbol
 
-    def __init__(self, symbol: RobogenSymbol = RobogenSymbol.MODULE_CORE, coordinate: Coordinate3D = Coordinate3D(0, 0, 0),
-                 orientation: Orientation = Orientation.TOP, parent_module=None):
+    def __init__(self, symbol: RobogenSymbol = RobogenSymbol.MODULE_CORE,
+                 coordinate: Coordinate3D = Coordinate3D(0, 0, 0),
+                 orientation: Orientation = Orientation.TOP,
+                 parent_module=None,):
         self.id = self.identifier.id()
         self.symbol = symbol
 

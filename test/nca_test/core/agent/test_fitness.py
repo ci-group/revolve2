@@ -2,7 +2,7 @@ import unittest
 
 from nca.core.actor.fitnesses import DisplacementFitness, RotationalFitness, OnesFitness, DisplacementRotationalFitness
 from nca.core.actor.individual import Individual
-from nca.core.genome.initialization import UniformInitialization, BinaryInitialization
+from nca.core.genome.operators.initialization import UniformInitialization, BinaryInitialization
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
 from revolve.robot.robot import Robot
 from simulation_test.simulator.mock_measures import MockPerformanceMeasures

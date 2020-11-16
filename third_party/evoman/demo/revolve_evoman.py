@@ -1,5 +1,3 @@
-from nca.core.ecology import PopulationEcology
-from nca.core.ecology.speciation.genus_management import GenusManagement
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
 from nca.core.genome.operators.mutation_operator import SwapMutation
 from nca.core.genome.operators.recombination_operator import UniformCrossover
@@ -10,6 +8,6 @@ from revolve.robot.birth_clinic import IndividualBirthClinic
 
 evolutionary_configuration: EvolutionaryConfiguration = GeneticAlgorithmConfiguration(recombination=UniformCrossover(),
                                                                                       mutation=SwapMutation())
-biosphere = Biosphere( birth_clinic=IndividualBirthClinic(), ecospheres=[EvomanEcosphere()])
+biosphere = Biosphere(birth_clinic=IndividualBirthClinic(), ecospheres=[EvomanEcosphere()])
 evolution = Evosphere(biosphere=biosphere, evolutionary_configuration=evolutionary_configuration)
 evolution.evolve()

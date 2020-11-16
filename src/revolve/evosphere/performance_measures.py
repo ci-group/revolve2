@@ -1,7 +1,5 @@
 import math
 
-import numpy as np
-
 from simulation.simulation_measures import Measures, SimulationMeasures
 
 

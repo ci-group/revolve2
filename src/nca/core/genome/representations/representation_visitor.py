@@ -1,3 +1,5 @@
+"""
+
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.operators.mutation_operator import MutationOperator
 
@@ -19,3 +21,4 @@ class RepresentationVisitor:
 
     def mutate_grammar_representation(self, grammar_representation):
         self.mutation(grammar_representation)
+"""

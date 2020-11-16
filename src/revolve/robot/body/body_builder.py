@@ -1,7 +1,7 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from evosphere.robot.mock_morphology import MockBody
-from nca.core.actor.individual import Individual
+from nca.core.genome.genotype import Genotype
 from revolve.evosphere.ecosphere import Ecosphere
 from revolve.robot.body.body import Body, RobotBody
 from revolve.robot.robot_builder import RobotBuilder
@@ -12,21 +12,24 @@ class BodyBuilder(RobotBuilder, ABC):
         super().__init__()
         self.body_type: type(Body) = body_type
 
+    @abstractmethod
+    def build(self, genotype: Genotype, ecosphere: Ecosphere):
+        pass
 
-class RobotBodyBuilder(BodyBuilder):
+
+class RobotBodyBuilder(BodyBuilder, ABC):
 
     def __init__(self, body_type: type(Body) = RobotBody):
         super().__init__(body_type)
 
-    def build(self, individual: Individual, ecosphere: Ecosphere):
-        #genome = individual.express(ecosphere)
+    def build(self, genotype: Genotype, ecosphere: Ecosphere):
         return self.body_type()
 
 
-class MockBodyBuilder(BodyBuilder):
+class MockBodyBuilder(BodyBuilder, ABC):
 
     def __init__(self, body_type: type(Body) = MockBody):
         super().__init__(body_type)
 
-    def build(self, individual: Individual, ecosphere: Ecosphere):
+    def build(self, genotype: Genotype, ecosphere: Ecosphere):
         return self.body_type()

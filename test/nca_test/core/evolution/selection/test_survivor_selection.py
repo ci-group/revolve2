@@ -4,7 +4,7 @@ from nca.core.abstract.configurations import PopulationConfiguration
 from nca.core.actor.individual import Individual
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
-from nca.core.evolution.selection.non_dominated_survival import NonDominatedSortingSurvival
+from nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
 from nca.core.evolution.selection.survivor_selection import NullSurvivorSelection, FitnessSteadyStateSelection, \
     GenerationalSteadyStateSelection, ElitismSelection
 
@@ -16,7 +16,7 @@ class TestSurvivorSelection(unittest.TestCase):
 
         steady_state = NullSurvivorSelection()
 
-        selected = steady_state(population.individuals)
+        selected = steady_state.algorithm(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)
@@ -28,7 +28,7 @@ class TestSurvivorSelection(unittest.TestCase):
 
         steady_state = FitnessSteadyStateSelection()
 
-        selected = steady_state(population.individuals)
+        selected = steady_state.algorithm(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)
@@ -40,7 +40,7 @@ class TestSurvivorSelection(unittest.TestCase):
 
         steady_state = GenerationalSteadyStateSelection()
 
-        selected = steady_state(population.individuals)
+        selected = steady_state.algorithm(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)
@@ -52,19 +52,19 @@ class TestSurvivorSelection(unittest.TestCase):
 
         steady_state = ElitismSelection()
 
-        selected = steady_state(population.individuals)
+        selected = steady_state.algorithm(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)
 
         self.assertEqual(len(selected), len(population.individuals))
 
-    def test_elitism_selection(self):
+    def test_non_dominated_selection(self):
         population = Population(ActorFactory().create(PopulationConfiguration().population_size))
 
         steady_state = NonDominatedSortingSurvival()
 
-        selected = steady_state(population.individuals)
+        selected = steady_state.algorithm(population.individuals)
 
         for element in selected:
             self.assertIsInstance(element, Individual)

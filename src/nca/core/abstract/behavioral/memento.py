@@ -10,9 +10,9 @@ class Memento(ABC):
 
     experiment_manager = ExperimentManager()
 
-    def __init__(self):
+    def __init__(self, name: str):
         self.path: string = self.experiment_manager.objects_path
-        self.population_memento_path = os.path.join(self.path, "population_management.pickle")
+        self.population_memento_path = os.path.join(self.path, name + ".pickle")
 
     @abstractmethod
     def load(self, path: string = ""):

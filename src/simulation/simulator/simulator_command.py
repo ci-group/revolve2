@@ -1,11 +1,9 @@
 from enum import Enum, auto
-from typing import List
 
 from nca.core.abstract.behavioral.command import Command
 from nca.core.actor.actors import Actors
 from revolve.evosphere.ecosphere import Ecosphere
 from revolve.robot.birth_clinic import BirthClinic
-from revolve.robot.robot import Robot
 
 
 class TaskPriority(Enum):
@@ -30,4 +28,4 @@ class SimulateCommand(Command):
         return hash((self.agents, self.ecosphere))
 
     def develop(self):
-        return [self.birth_clinic.develop(individual, self.ecosphere) for individual in self.agents]
+        return self.birth_clinic.build(self.agents, self.ecosphere)

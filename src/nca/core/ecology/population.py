@@ -3,6 +3,7 @@ import string
 from nca.core.abstract.sequential_identifier import PopulationIdentifier
 from nca.core.actor.age import GenerationalAge
 from nca.core.actor.actors import Actors
+from nca.core.analysis.statistics import Statistics
 
 
 class Population:
@@ -14,6 +15,7 @@ class Population:
         self.age: GenerationalAge = GenerationalAge()
 
         self.individuals: Actors = individuals
+        self.statistics: Statistics = Statistics()
 
     def __get__(self):
         return self.individuals
@@ -43,3 +45,17 @@ class Population:
         string_representation += "}"
 
         return string_representation
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'age': self.age.no_improvement_count,
+            'individuals': [individual.id for individual in self.individuals],
+            'typical': self.individuals.find_typical_individuals(),
+            'fitness': self.individuals.fitness_statistics(),
+        }
+
+    def log(self):
+        fitnesses = self.individuals.fitness_statistics()
+        self.statistics.log(fitnesses['max'], fitnesses['third'], fitnesses['median'],
+                            fitnesses['first'], fitnesses['min'])

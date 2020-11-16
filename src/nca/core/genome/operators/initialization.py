@@ -1,9 +1,9 @@
 import numpy as np
 
-from nca.core.evolution.conditions.initialization import SymbolicInitialization, ValuedInitialization
+from nca.core.evolution.conditions.initialization import Initialization, ValuedInitialization
 
 
-class CategoricalInitialization(SymbolicInitialization):
+class CategoricalInitialization(Initialization):
     def __init__(self, number_of_elements: int, start: int = 1):
         super().__init__()
         self.number_of_elements: int = number_of_elements

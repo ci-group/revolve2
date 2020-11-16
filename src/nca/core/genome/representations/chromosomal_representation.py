@@ -1,3 +1,4 @@
+"""
 import random
 from typing import List
 
@@ -34,3 +35,4 @@ class ChromosomalRepresentation(Representation):
 
     def random_index(self):
         return random.choice(range(len(self)))
+"""

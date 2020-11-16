@@ -6,7 +6,7 @@ from nca.core.ecology.population_management import PopulationManagement
 
 
 class PopulationManagementTest(unittest.TestCase):
-    n=3
+    n = 3
 
     def test_management(self):
         population_management = PopulationManagement()

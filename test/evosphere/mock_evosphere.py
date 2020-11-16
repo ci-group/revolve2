@@ -3,14 +3,14 @@ from nca.core.ecology import PopulationEcology
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
 from revolve.evosphere.evosphere import Evosphere
 from revolve.evosphere.biosphere import Biosphere
-from revolve.robot.birth_clinic import AgentBirthClinic
+from revolve.robot.birth_clinic import BirthClinic
 from simulation.simulation_manager import SimulationManager
 
 
 class MockBiosphere(Biosphere):
 
     def __init__(self):
-        super().__init__(PopulationEcology(), ActorFactory(), birth_clinic=AgentBirthClinic())
+        super().__init__(PopulationEcology(), ActorFactory(), birth_clinic=BirthClinic())
 
 
 class MockEvosphere(Evosphere):

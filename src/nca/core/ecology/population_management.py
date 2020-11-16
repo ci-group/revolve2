@@ -24,16 +24,10 @@ class PopulationManagement:
     def speciate(self):
         pass
 
-    """
-    def filter(self, condition: Condition):
-        filtered_individuals: Agents = condition.filter(self.population)
-
-        for individual in filtered_individuals:
-            self.population.remove(individual)
-
-        return filtered_individuals
-
-    def transfer(self, agents: Agents):
-        for individual in agents:
-            self.population.add(individual)
-    """
+    def to_json(self):
+        return {
+            'id': 1,
+            'species': [
+                self.population.to_json()
+            ]
+        }

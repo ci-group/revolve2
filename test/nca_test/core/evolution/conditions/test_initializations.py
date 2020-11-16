@@ -1,9 +1,7 @@
 import unittest
 from typing import List
 
-import numpy as np
-
-from src.nca.core.genome.initialization import CategoricalInitialization, UniformInitialization, \
+from nca.core.genome.operators.initialization import CategoricalInitialization, UniformInitialization, \
     GaussianInitialization
 from nca_test.core.grammar.test_alphabet import TestColorSymbol
 

@@ -1,8 +1,8 @@
+import time
 from typing import List
 
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
-from nca.core.analysis.statistics import Statistics
 from nca.core.ecology.population import Population
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.evolution.conditions.special_features import SpecialFeatures
@@ -30,20 +30,28 @@ class EvolutionaryAlgorithm:
         self.termination_condition: Condition = self.configuration.condition
         self.special_features: SpecialFeatures = self.configuration.special_features
 
+        self.duration = []
+
     def should_terminate(self, population: Population):
         return self.termination_condition.terminate(population)
 
     def run(self, population: Population, evaluator):
         # (PARENT) SELECT parents
-        parents_list: List[Actors] = self.parent_selection.select(population.individuals)
+
+        start_time = time.time()
+        parent_combinations: List[List[Individual]] = self.parent_selection.select(population.individuals)
 
         # RECOMBINE, then MUTATE resulting recombination to create resulting offspring
-        offspring: Actors = Actors([Individual(self.mutation(self.recombination(parents))) for parents in parents_list])
+        offspring: Actors = Actors([Individual(self.mutation(self.recombination(parents)), parents)
+                                    for parents in parent_combinations])
 
         # EVALUATE the candidates
         evaluator(offspring)
 
-        population.individuals = self.mortality_selection(population.individuals, offspring)
+        population.individuals = self.mortality_selection.algorithm(population.individuals, offspring)
 
         # (SURVIVOR) SELECT individuals for the next generation
         population.next_generation(self.survivor_selection.select(population.individuals))
+        evolutionary_algorithm_time = time.time() - start_time
+
+        self.duration.append(evolutionary_algorithm_time)

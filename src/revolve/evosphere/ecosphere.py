@@ -1,7 +1,7 @@
 import os
 import string
+from abc import abstractmethod
 
-from nca.core.actor.fitness import Fitness
 from nca.core.actor.fitnesses import DisplacementFitness, FitnessEvaluation
 from nca.core.actor.individual import Individual
 from nca.experiment_manager import ExperimentManager
@@ -15,10 +15,15 @@ class Ecosphere:
 
     def __init__(self, filename: string, fitness_evaluation_type: type(FitnessEvaluation) = DisplacementFitness,
                  simulator_type: SimulatorType = SimulatorType.NONE):
+        super().__init__()
         self.path: string = os.path.join(self.experiment_manager.world_path, simulator_type.name + "/" + filename)
         if fitness_evaluation_type is not None:
             self.fitness_evaluation: FitnessEvaluation = fitness_evaluation_type()
         self.simulator_type: SimulatorType = simulator_type
+
+    @abstractmethod
+    def run(self, *args, **kwargs):
+        pass
 
 
 class GazeboEcosphere(Ecosphere):

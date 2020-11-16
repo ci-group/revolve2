@@ -1,13 +1,22 @@
 import copy
 import unittest
 
-from nca.core.genome.initialization import UniformInitialization
+from nca.core.genome.genotype import Genotype
+from nca.core.genome.operators.initialization import UniformInitialization
 from nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, \
     ReplaceMutation, DeleteMutation
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
 
 
 class TestMutationOperators(unittest.TestCase):
+
+    def test_mutation_operator(self):
+        mutation = SwapMutation()
+
+        genotype = Genotype(ValuedRepresentation(UniformInitialization()))
+        new_genotype = mutation(copy.deepcopy(genotype), debug=True)
+
+        self.assertNotEqual(genotype, new_genotype)
 
     def test_swap_mutation(self):
         mutation = SwapMutation()
@@ -19,7 +28,7 @@ class TestMutationOperators(unittest.TestCase):
         mutation._mutate(new_representation)
 
         self.assertTrue(len(representation) == len(new_representation))
-        #self.assertNotEqual(representation, new_representation) # can be the same
+        self.assertNotEqual(representation, new_representation)
 
     def test_delete_mutation(self):
         mutation = DeleteMutation()

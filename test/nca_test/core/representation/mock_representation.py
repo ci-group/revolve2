@@ -1,4 +1,4 @@
-from nca.core.genome.representation import Representation
+from nca.core.genome.representations.representation import Representation
 
 
 class MockRepresentation(Representation):

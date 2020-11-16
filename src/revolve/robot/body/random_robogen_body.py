@@ -1,9 +1,10 @@
+
 import numpy as np
 
 from nca.core.abstract.structural.tree.tree_helper import Orientation
-from revolve.evosphere.ecosphere import Ecosphere
-from revolve.robot.body.robogen_body import RobogenBody
-from revolve.robot.robogen.robogen_grammar import RobogenSymbol, RobogenModule
+from revolve.robot.body.robogen_body import RobogenBodyBuilder, RobogenBody
+from revolve.robot.robogen.robogen_grammar import RobogenSymbol
+from revolve.robot.robogen.robogen_module import RobogenModule
 from revolve.robot.robogen.robot_visualizer import generate_matrix, show
 
 
@@ -14,12 +15,15 @@ def _get_symbol_from_orientation(chosen_orientation):
     return None
 
 
-class RandomRobogenBody(RobogenBody):
+class RandomRobogenBodyBuilder(RobogenBodyBuilder):
+
+    def __init__(self):
+        super().__init__()
 
     def develop(self):
-        axiom_grammar = RobogenSymbol.generate_axiom()
-        body = RobogenBody()
-        body.develop(axiom_grammar)
+        self._initialize()
+
+        body = RobogenBody(self.current_module)
 
         for i in range(10):
             available = body.expandable_modules()
@@ -34,17 +38,19 @@ class RandomRobogenBody(RobogenBody):
             orientation = _get_symbol_from_orientation(chosen_orientation)
             random_symbol: RobogenSymbol = np.random.choice(RobogenSymbol.modules())
 
-            body.current_module = chosen_parent_module
-            body.process(orientation)
-            body.process(random_symbol)
+            self.current_module = chosen_parent_module
 
-        return body.modules
+            self._process_symbol(orientation)
+            module = self._process_symbol(random_symbol)
+            if module is not None:
+                body.add(module)
+
+        return body
 
 
 if __name__ == "__main__":
-    body = RandomRobogenBody()
-    modules = body.develop()
+    body_builder = RandomRobogenBodyBuilder()
+    random_body = body_builder.develop()
 
-    body_matrix = generate_matrix(modules)
+    body_matrix = generate_matrix(random_body.modules)
     show(body_matrix)
-

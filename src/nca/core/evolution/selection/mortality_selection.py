@@ -9,7 +9,7 @@ class NullMortalitySelection(MortalitySelection):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, individuals: Actors, offspring: Actors):
+    def algorithm(self, individuals: Actors, offspring: Actors):
         individuals.extend(offspring)
         return individuals
 
@@ -19,7 +19,7 @@ class OffspringMortalitySelection(MortalitySelection):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, individuals: Actors, offspring: Actors):
+    def algorithm(self, individuals: Actors, offspring: Actors):
         amount_of_offspring = len(offspring)
         offspring_samples = np.random.sample((amount_of_offspring,))
 
@@ -36,7 +36,7 @@ class PopulationMortalitySelection(MortalitySelection):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, individuals: Actors, offspring: Actors):
+    def algorithm(self, individuals: Actors, offspring: Actors):
         offspring_samples = np.random.sample((len(individuals),))
 
         for index, actor in enumerate(individuals):
@@ -55,7 +55,7 @@ class ConstantMortalitySelection(MortalitySelection):
     def __init__(self):
         super().__init__()
 
-    def __call__(self, individuals: Actors, offspring: Actors):
+    def algorithm(self, individuals: Actors, offspring: Actors):
         individuals.extend(offspring)
         amount_of_actors = len(individuals)
         offspring_samples = np.random.sample((amount_of_actors,))

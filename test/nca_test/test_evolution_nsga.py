@@ -1,7 +1,7 @@
 import unittest
 
 from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
-from nca.core.evolution.selection.non_dominated_survival import NonDominatedSortingSurvival
+from nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
 from nca.evolution import Evolution
 
 

@@ -17,13 +17,14 @@ class SpeciationConfiguration(PopulationConfiguration):
 
     def __init__(self):
         super().__init__("speciation.config")
+        self.number_of_species = 3
 
 
 class EvolutionConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("revolve.config")
-        self.number_of_generations = 250
+        self.number_of_generations = 1000
         self.number_of_agents = 25
 
 
@@ -32,14 +33,14 @@ class EvoSphereConfiguration(Configuration):
     def __init__(self):
         super().__init__("revolve.config")
         self.number_of_generations = 100
-        self.number_of_agents = 100
+        self.number_of_agents = 10
 
 
 class RepresentationConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("representation.config")
-        self.genome_size = 10
+        self.genome_size = 10 #265
         self.number_of_chromosomes = 1
 
 

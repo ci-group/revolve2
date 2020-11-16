@@ -26,3 +26,11 @@ class Genus:
                 return True
 
         return False
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'species': [
+                species.to_json() for species in self.species
+            ]
+        }

@@ -7,6 +7,7 @@ from nca.core.abstract.behavioral.command import Command
 from nca.core.abstract.configurations import PopulationConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
+from nca.core.genome.genotype import Genotype
 
 
 class Selection(Command, ABC):
@@ -16,9 +17,10 @@ class Selection(Command, ABC):
 
     def check(self, individuals: Actors):
         number_of_agents = len(individuals)
-        assert self.configuration.selection_size <= number_of_agents
-        assert self.configuration.population_size <= number_of_agents
-        assert self.configuration.tournament_size <= self.configuration.population_size
+        #print(number_of_agents)
+        #assert self.configuration.selection_size <= number_of_agents
+        #assert self.configuration.population_size <= number_of_agents
+        #assert self.configuration.tournament_size <= self.configuration.population_size
 
 
 class ParentSelection(Selection, ABC):
@@ -26,9 +28,9 @@ class ParentSelection(Selection, ABC):
     def __init__(self):
         super().__init__()
 
-    def select(self, individuals: Actors) -> List[Actors]:
+    def select(self, individuals: Actors) -> List[List[Individual]]:
         self.check(individuals)
-        return [Actors(self.algorithm(individuals)) for _ in range(self.configuration.selection_size)]
+        return [self.algorithm(individuals) for _ in range(self.configuration.selection_size)]
 
     @abstractmethod
     def algorithm(self, individuals: Actors) -> List[Individual]:
@@ -43,11 +45,11 @@ class SurvivorSelection(Selection, ABC):
     def select(self, individuals: Actors) -> Actors:
         super().check(individuals)
         # TODO simplify collection
-        new_individuals: List[Individual] = self(individuals)     # mmhhh..
+        new_individuals: List[Individual] = self.algorithm(individuals)     # mmhhh..
         return Actors(new_individuals[:self.configuration.population_size])
 
     @abstractmethod
-    def __call__(self, individuals: Actors) -> List[Individual]:
+    def algorithm(self, individuals: Actors) -> List[Individual]:
         raise Exception("Survivor selection evolution is not implemented")
 
 
@@ -55,9 +57,9 @@ class MortalitySelection(Selection, ABC):
 
     def __init__(self):
         super().__init__()
-        self.mortality_percentage = 0.05
+        self.mortality_percentage = 0.1
 
     @abstractmethod
-    def __call__(self, individuals: Actors, offspring: Actors):
+    def algorithm(self, individuals: Actors, offspring: Actors):
         raise Exception("Survivor selection evolution is not implemented")
 

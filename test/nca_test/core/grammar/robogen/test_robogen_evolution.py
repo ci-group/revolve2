@@ -3,72 +3,39 @@ import unittest
 
 from nca.core.genome.operators.mutation_operator import SwapMutation, DeleteMutation, InversionMutation, InsertMutation, \
     ReplaceMutation
-from revolve.robot.robogen.robogen_representation import RobogenConstruction
+from revolve.robot.robogen.robogen_genotype import IndirectRobogenGenotype
 
 
 class TestMutationOperators(unittest.TestCase):
 
     def test_swap_mutation(self):
         mutation = SwapMutation()
-
-        algorithm = RobogenConstruction()
-        self.assertTrue(len(algorithm.representation) > 0)
-
-        new_algorithm = copy.deepcopy(algorithm)
-        self.assertEqual(algorithm.representation, new_algorithm.representation)
-
-        mutation._mutate(new_algorithm.representation)
-        self.assertTrue(len(algorithm.representation) == len(new_algorithm.representation))
-        self.assertNotEqual(algorithm.representation, new_algorithm.representation)
+        self.check_mutation(mutation)
 
     def test_delete_mutation(self):
         mutation = DeleteMutation()
-
-        algorithm = RobogenConstruction()
-        self.assertTrue(len(algorithm.representation) > 0)
-
-        new_algorithm = copy.deepcopy(algorithm)
-        self.assertEqual(algorithm.representation, new_algorithm.representation)
-
-        mutation._mutate(new_algorithm.representation)
-        self.assertTrue(len(algorithm.representation) == len(new_algorithm.representation) + 1)
-        self.assertNotEqual(algorithm.representation, new_algorithm.representation)
+        self.check_mutation(mutation)
 
     def test_inversion_mutation(self):
         mutation = InversionMutation()
-
-        algorithm = RobogenConstruction()
-        self.assertTrue(len(algorithm.representation) > 0)
-
-        new_algorithm = copy.deepcopy(algorithm)
-        self.assertEqual(algorithm.representation, new_algorithm.representation)
-
-        mutation._mutate(new_algorithm.representation)
-        self.assertTrue(len(new_algorithm.representation) == len(algorithm.representation))
-        self.assertNotEqual(algorithm.representation, new_algorithm.representation)
+        self.check_mutation(mutation)
 
     def test_insert_mutation(self):
         mutation = InsertMutation()
-
-        algorithm = RobogenConstruction()
-        self.assertTrue(len(algorithm.representation) > 0)
-
-        new_algorithm = copy.deepcopy(algorithm)
-        self.assertEqual(algorithm.representation, new_algorithm.representation)
-
-        mutation._mutate(new_algorithm.representation)
-        self.assertTrue(len(new_algorithm.representation) == len(algorithm.representation) + 1)
-        self.assertNotEqual(algorithm.representation, new_algorithm.representation)
+        self.check_mutation(mutation)
 
     def test_replace_mutation(self):
         mutation = ReplaceMutation()
+        self.check_mutation(mutation)
 
-        algorithm = RobogenConstruction()
-        self.assertTrue(len(algorithm.representation) > 0)
+    def check_mutation(self, mutation):
+        genotype = IndirectRobogenGenotype()
+        representation = genotype.get_random_representation()
+        self.assertTrue(len(genotype) > 0)
 
-        new_algorithm = copy.deepcopy(algorithm)
-        self.assertEqual(algorithm.representation, new_algorithm.representation)
+        new_genotype = copy.deepcopy(genotype)
+        self.assertEqual(genotype, new_genotype)
 
-        mutation._mutate(new_algorithm.representation)
-        self.assertTrue(len(new_algorithm.representation) == len(algorithm.representation))
-        self.assertNotEqual(algorithm.representation, new_algorithm.representation)
+        mutation._mutate(representation)
+        self.assertTrue(len(genotype) == len(new_genotype))
+        self.assertNotEqual(genotype, new_genotype)

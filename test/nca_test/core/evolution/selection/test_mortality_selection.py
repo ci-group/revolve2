@@ -6,7 +6,7 @@ from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 from nca.core.evolution.selection.mortality_selection import OffspringMortalitySelection, PopulationMortalitySelection, \
     ConstantMortalitySelection, NullMortalitySelection
-from nca.core.evolution.selection.non_dominated_survival import NonDominatedSortingSurvival
+from nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
 from nca.core.evolution.selection.survivor_selection import NullSurvivorSelection, FitnessSteadyStateSelection, \
     GenerationalSteadyStateSelection, ElitismSelection
 
@@ -18,7 +18,7 @@ class TestMortalitySelection(unittest.TestCase):
         offspring = ActorFactory().create(int(PopulationConfiguration().population_size / 2))
 
         mortality_selection = NullMortalitySelection()
-        selected = mortality_selection(population.individuals, offspring)
+        selected = mortality_selection.algorithm(population.individuals, offspring)
         for element in selected:
             self.assertIsInstance(element, Individual)
 
@@ -31,7 +31,7 @@ class TestMortalitySelection(unittest.TestCase):
         offspring = ActorFactory().create(int(PopulationConfiguration().population_size / 2))
 
         mortality_selection = OffspringMortalitySelection()
-        selected = mortality_selection(population.individuals, offspring)
+        selected = mortality_selection.algorithm(population.individuals, offspring)
         for element in selected:
             self.assertIsInstance(element, Individual)
 
@@ -43,7 +43,7 @@ class TestMortalitySelection(unittest.TestCase):
         offspring = ActorFactory().create(int(PopulationConfiguration().population_size / 2))
 
         mortality_selection = PopulationMortalitySelection()
-        selected = mortality_selection(population.individuals, offspring)
+        selected = mortality_selection.algorithm(population.individuals, offspring)
         for element in selected:
             self.assertIsInstance(element, Individual)
 
@@ -55,7 +55,7 @@ class TestMortalitySelection(unittest.TestCase):
         offspring = ActorFactory().create(int(PopulationConfiguration().population_size / 2))
 
         mortality_selection = ConstantMortalitySelection()
-        selected = mortality_selection(population.individuals, offspring)
+        selected = mortality_selection.algorithm(population.individuals, offspring)
         for element in selected:
             self.assertIsInstance(element, Individual)
 

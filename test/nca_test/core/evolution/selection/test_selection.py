@@ -3,6 +3,7 @@ from typing import List
 
 from nca.core.abstract.configurations import PopulationConfiguration
 from nca.core.actor.actors import Actors
+from nca.core.actor.individual import Individual
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 from nca.core.evolution.selection.parent_selection import NullParentSelection
@@ -19,7 +20,7 @@ class TestSelection(unittest.TestCase):
 
         self.assertIsInstance(selected, List)
         for members in selected:
-            self.assertIsInstance(members, Actors)
+            self.assertIsInstance(members, List)
         self.assertEqual(len(selected), parent_selection.configuration.selection_size)
 
     def test_survivor_selection(self):

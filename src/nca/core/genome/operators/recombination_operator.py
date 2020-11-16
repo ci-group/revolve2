@@ -3,14 +3,15 @@ import random
 from abc import abstractmethod
 from itertools import combinations
 from random import shuffle
-from typing import List, Tuple, Dict
+from typing import List, Tuple
 
 import numpy as np
 
 from nca.core.abstract.configurations import OperatorConfiguration
-from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
-from nca.core.genome.representation import Representation
+from nca.core.genome.genotype import Genotype
+from nca.core.genome.representations.representation import Representation
+
 
 class RecombinationOperator:
 
@@ -18,109 +19,79 @@ class RecombinationOperator:
         self.configuration = OperatorConfiguration()
         pass
 
-    def __call__(self, parents: Actors) -> Dict[str, Representation]:
-        # TODO refactoring of whole recombination
-        parents = copy.deepcopy(parents) # avoid overwriting the original parents.
-        parent_genotype = [parent.genotype for parent in parents]
-        number_of_parents = len(parents)
-        assert(number_of_parents > 0)
+    def __call__(self, individuals: List[Individual], debug=False) -> Genotype:
+        # avoid overwriting the original parents, shuffle for randomly selecting base genotype later
+        genotypes = copy.deepcopy([individual.genotype for individual in individuals])  # takes a long time
+        shuffle(genotypes)
 
         # Create a random ordering of parent combinations of only one representation in pairs of twos.
-        parent_combinations: List[List[Dict[str, Representation]]] = \
-            [list(representations_combination) for representations_combination in combinations(parent_genotype, 2)]
+        parent_combinations = combinations(genotypes, 2)
 
-        shuffle(parent_combinations)
+        for (genotype_1, genotype_2) in parent_combinations:
+            # check if we do NOT have to do the mutation, then continue to the next.
+            if self.configuration.recombination_probability <= np.random.random() and not debug:
+                continue
 
-        new_genotype = parents[0].genotype
+            representation_1, representation_2 = genotype_1.get_random_representations(genotype_2)
+            self._recombine(representation_1, representation_2)
 
-        # check if we do have to do the mutation # n * (n-1) / 2 = 1 + 2 + 3 + ... + n-1
-        for parent_combination in parent_combinations: #range(int(number_of_parents * (number_of_parents - 1) / 2)):
-            if self.configuration.recombination_probability > np.random.random():
-                selected_key = np.random.choice(list(parent_combination[0].keys()))
-                parent_representations = []
-
-                for parent in parent_combination:
-                    parent_representations.append(parent[selected_key])
-
-                new_genotype[selected_key] = self._recombine(parent_representations)
-
-        return new_genotype
+        # Get the genotype as the basis of recombinations
+        return random.choice(genotypes)
 
     @abstractmethod
-    def _recombine(self, representations: List[Representation]) -> Representation:
+    def _recombine(self, representation_1: Representation, representation_2: Representation):
         pass
-
-    def compatibility(self, initialization_type):
-        return True
 
 
 class OnePointCrossover(RecombinationOperator):
 
-    def _recombine(self, representations: List[Representation]) -> Representation:
-        # Reverse the order of the tuples to keep the base representation random.
-        if np.random.random() > 0.5:
-            representations[:] = representations[::-1]
-
-        crossover_index = representations[0].random_index(offset=1)  # crossover has n-1 options.
-
-        temp = copy.deepcopy(representations[0][crossover_index+1:])
-        representations[0][crossover_index+1:] = representations[1][crossover_index+1:]
-        representations[1][crossover_index+1:] = temp
-
-        return representations[0]
+    def _recombine(self, representation_1: Representation, representation_2: Representation):
+        crossover_index = representation_1.random_index(offset=1)  # crossover has n-1 options.
+        temp = copy.copy(representation_1[crossover_index+1:])
+        representation_1[crossover_index+1:] = representation_2[crossover_index+1:]
+        representation_2[crossover_index+1:] = temp
 
 
 class OnePointUniformCrossover(RecombinationOperator):
 
-    def _recombine(self, representations: List[Representation]) -> Representation:
-        # Reverse the order of the tuples to keep the base representation random.
-        if np.random.random() > 0.5:
-            representations = representations[::-1]
-
-        new_representation: Representation = representations[0]
+    def _recombine(self, representation_1: Representation, representation_2: Representation):
+        new_representation: Representation = random.choice([representation_1, representation_2])
         crossover_index = new_representation.random_index(offset=1)  # crossover has n-1 options.
 
         for index in range(crossover_index+1, len(new_representation)):
-            new_representation[index] = (new_representation[index] + representations[1][index]) / 2
-
-        return new_representation
+            new_representation[index] = (representation_1[index] + representation_2[index]) / 2
 
 
 class OneElementCrossover(RecombinationOperator):
 
-    def _recombine(self, representations: List[Representation]) -> Representation:
-        # Reverse the order of the tuples to keep the base representation random.
-        if np.random.random() > 0.5:
-            representations = representations[::-1]
+    def _recombine(self, representation_1: Representation, representation_2: Representation):
+        new_representation = random.choice([representation_1, representation_2])
 
-        new_representation = representations[0]
-
-        random_index = random.randint(0, len(representations[0])-1)
-        new_representation[random_index] = (new_representation[random_index] + representations[1][random_index]) / 2
-
-        return new_representation
+        random_index = random.randint(0, len(new_representation) - 1)
+        new_representation[random_index] = (representation_1[random_index] + representation_2[random_index]) / 2
 
 
 class AllElementCrossover(RecombinationOperator):
 
-    def _recombine(self, representations: List[Representation]) -> Representation:
-        # Reverse the order of the tuples to keep the base representation random.
-        new_representation = representations[0]
+    def _recombine(self, representation_1: Representation, representation_2: Representation):
+        new_representation = random.choice([representation_1, representation_2])
+
         for index in range(len(new_representation)):
-            new_representation[index] = (new_representation[index] + representations[1][index]) / 2
-        return new_representation
+            new_representation[index] = (representation_1[index] + representation_2[index]) / 2
 
 
 class UniformCrossover(RecombinationOperator):
 
-    def _recombine(self, representations: List[Representation]) -> Representation:
+    def _recombine(self, representation_1: Representation, representation_2: Representation):
         # Reverse the order of the tuples to keep the base representation random.
         if np.random.random() > 0.5:
-            representations = representations[::-1]
+            # TODO mmmhhh...
+            temp = copy.copy(representation_1)
+            representation_1 = representation_2
+            representation_2 = temp
 
-        new_representation = representations[0]
-        for index, other_element in enumerate(representations[1]):
+        new_representation = representation_1
+
+        for index, other_element in enumerate(representation_2):
             if random.random() > 0.5:
                 new_representation[index] = other_element
-
-        return new_representation

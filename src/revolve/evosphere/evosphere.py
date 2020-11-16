@@ -1,11 +1,10 @@
-import asyncio
 
 from nca.core.abstract.configurations import EvoSphereConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
 from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration, EvolutionaryConfiguration
 
-from revolve.evosphere.biosphere import Biosphere, RobotBiosphere, AgentBiosphere
+from revolve.evosphere.biosphere import Biosphere, RobotBiosphere, IndividualBiosphere
 
 from simulation.simulation_manager import SimulationManager
 from simulation.simulator.simulator_command import SimulateCommand
@@ -29,9 +28,8 @@ class Evosphere:
 
     def evolve(self):
 
-        self.log("Evaluate population")
-
         for population in self.biosphere.populations():
+            self.log("Evaluate population " + str(len(population.individuals)))
             self.evaluate(population.individuals)
 
         # Run through iterations
@@ -69,7 +67,7 @@ class RobotEvosphere(Evosphere):
 
 
 class AgentEvosphere(Evosphere):
-    def __init__(self, biosphere: Biosphere = AgentBiosphere(),
+    def __init__(self, biosphere: Biosphere = IndividualBiosphere(),
                  evolutionary_configuration: EvolutionaryConfiguration = GeneticAlgorithmConfiguration(),
                  simulation: SimulationManager = SimulationManager(), debug=True):
         super().__init__(biosphere, evolutionary_configuration, simulation, debug)

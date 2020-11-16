@@ -4,10 +4,10 @@ from typing import List
 
 import numpy as np
 
-from nca.core.genome.grammar.grammar import ReplacementRules
-from revolve.robot.body.robogen_body import RobogenBody
-from revolve.robot.robogen.robogen_grammar import RobogenSymbol, RobogenWord
-from revolve.robot.robogen.robogen_representation import RobogenConstruction
+from revolve.robot.body.robogen_body import RobogenBodyBuilder
+from revolve.robot.robogen.robogen_grammar import RobogenSymbol
+from revolve.robot.robogen.robogen_genotype import IndirectRobogenGenotype
+from revolve.robot.robogen.robogen_word import RobogenWord
 from revolve.robot.robogen.robot_visualizer import generate_matrix, show
 
 
@@ -15,10 +15,10 @@ class RobogenRepresentationTest(unittest.TestCase):
 
     def test_rewritable_grammar(self):
         #for i in range(10):
-        representation = RobogenConstruction()
+        representation = IndirectRobogenGenotype()
         representation(rule_iterations=2)
 
-        body = RobogenBody()
+        body = RobogenBodyBuilder()
         body_modules = body.develop(representation.encoding)
 
         matrix = generate_matrix(body_modules)
@@ -26,10 +26,10 @@ class RobogenRepresentationTest(unittest.TestCase):
 
     def test_rewritable_grammar(self):
         #for i in range(10):
-        representation = RobogenConstruction(RobogenWord.generate_rules(), RobogenWord.generate_axiom())
+        representation = IndirectRobogenGenotype(RobogenWord.generate_rules(), RobogenWord.generate_axiom())
         representation(rule_iterations=2)
 
-        body = RobogenBody()
+        body = RobogenBodyBuilder()
         body_modules = body.develop(representation.encoding)
 
         matrix = generate_matrix(body_modules)
@@ -44,12 +44,12 @@ class RobogenRepresentationTest(unittest.TestCase):
         axiom.extend(joint1_word)
         axiom.extend(block_word)
 
-        replacement_rules: ReplacementRules = {joint1_word[0]: [RobogenWord(RobogenSymbol.MODULE_BLOCK,
+        replacement_rules = {joint1_word[0]: [RobogenWord(RobogenSymbol.MODULE_BLOCK,
                                                                 RobogenSymbol.ORIENTATION_TOP).symbols()]}
-        representation = RobogenConstruction(rules=replacement_rules, axiom=axiom)
+        representation = IndirectRobogenGenotype(rules=replacement_rules, axiom=axiom)
         representation(rule_iterations=1)
 
-        body = RobogenBody()
+        body = RobogenBodyBuilder()
         body_modules = body.develop(representation.encoding)
 
         matrix = generate_matrix(body_modules)
@@ -69,9 +69,9 @@ class RobogenRepresentationTest(unittest.TestCase):
         axiom.extend(joint2_word)
         axiom.extend(block_word)
 
-        algorithm = RobogenConstruction(axiom=axiom)
+        algorithm = IndirectRobogenGenotype(axiom=axiom)
 
-        body = RobogenBody()
+        body = RobogenBodyBuilder()
         body_modules = body.develop(algorithm.representation)
 
         matrix = generate_matrix(body_modules)
@@ -96,9 +96,9 @@ class RobogenRepresentationTest(unittest.TestCase):
         add_limb(RobogenSymbol.ORIENTATION_RIGHT)
         add_limb(RobogenSymbol.ORIENTATION_DOWN)
 
-        algorithm = RobogenConstruction(axiom=axiom)
+        algorithm = IndirectRobogenGenotype(axiom=axiom)
 
-        body = RobogenBody()
+        body = RobogenBodyBuilder()
         body_modules = body.develop(algorithm.representation)
 
         matrix = generate_matrix(body_modules)
@@ -131,9 +131,9 @@ class RobogenRepresentationTest(unittest.TestCase):
 
         axiom.append(RobogenSymbol.BRACKET_POP)
 
-        algorithm = RobogenConstruction(axiom=axiom)
+        algorithm = IndirectRobogenGenotype(axiom=axiom)
 
-        body = RobogenBody()
+        body = RobogenBodyBuilder()
         body_modules = body.develop(algorithm.representation)
 
         matrix = generate_matrix(body_modules)

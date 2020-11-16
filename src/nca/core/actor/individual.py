@@ -1,35 +1,30 @@
+from typing import List
 
 from nca.core.actor.age import Age
 from nca.core.abstract.sequential_identifier import AgentIdentifier
 from nca.core.actor.fitness import Fitness
 from nca.core.genome.genotype import Genotype
-from nca.core.genome.representation import Representation
 
 
 class Individual:
     identifier = AgentIdentifier()
 
-    def __init__(self, genotype):
+    def __init__(self, mapping, parents: List = None):
         self.id: int = self.identifier.id()
         self.age: Age = Age()
-
-        if isinstance(genotype, Representation):
-            genotype = Genotype(genotype)
-
-        if not isinstance(genotype, Genotype):
-            raise Exception("Genotype failure in individual")
-
-        self.genotype: Genotype = genotype
+        self.genotype: Genotype = Genotype.check(mapping)
         self.fitness: Fitness = Fitness()
+
+        if parents is not None:
+            self.parent_ids: List[int] = [parent.id for parent in parents]
+        else:
+            self.parent_ids: List[int] = None
 
     def __lt__(self, other):
         return self.id < other.id
 
     def get_fitness(self):
         return self.fitness.value()
-
-    def get_fitnesses(self):
-        return self.fitness.values()
 
     def get_representation(self):
         if len(self.genotype.keys()) == 1:

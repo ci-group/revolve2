@@ -27,5 +27,5 @@ class Fitness(Dict[str, float]):
             if key == self.master_key:
                 continue
             sum += self[key]
-        self[self.master_key] = sum / self.__len__()
+        self[self.master_key] = sum / (self.__len__() - 1)  # Exclude master key from length calculation
         self.clean = True

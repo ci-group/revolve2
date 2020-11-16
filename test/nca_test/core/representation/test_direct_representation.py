@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.genome.initialization import UniformInitialization, BinaryInitialization, IntegerInitialization, \
+from nca.core.genome.operators.initialization import UniformInitialization, BinaryInitialization, IntegerInitialization, \
     GaussianInitialization
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
 

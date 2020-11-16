@@ -1,4 +1,4 @@
-from nca.core.genome.grammar.grammar import Symbol
+from nca.core.genome.grammar.symbol import Symbol
 
 
 class RobogenBrainSymbol(Symbol):

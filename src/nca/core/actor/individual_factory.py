@@ -1,16 +1,14 @@
+import copy
 from abc import abstractmethod
-from typing import Dict
 
 from nca.core.abstract.creational.factory import Factory
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
 from nca.core.evolution.conditions.initialization import Initialization
-from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
 from nca.core.genome.genotype import Genotype
-from nca.core.genome.initialization import UniformInitialization
-from nca.core.genome.representation import Representation
+from nca.core.genome.operators.initialization import UniformInitialization
+from nca.core.genome.representations.representation import Representation
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
-from revolve.robot.robot import Robot
 
 
 class Characterization:
@@ -23,35 +21,21 @@ class Characterization:
 
 class ActorFactory(Factory):
 
-    def __init__(self, characterizations = None, actor_type: type(Individual) = Individual):
+    def __init__(self, mapping=None, actor_type: type(Individual) = Individual):
         super().__init__()
         self.actor_type = actor_type
 
-        if characterizations is None:
-            characterizations = {'default': Characterization()}
-        elif isinstance(characterizations, Characterization):
-            characterizations = {'default': characterizations}
-        self.characterizations: Dict[str, Characterization] = characterizations
+        if mapping is None:
+            mapping = ValuedRepresentation()
+        self.genotype = Genotype.check(mapping)
+
+
 
     def create_genotype(self):
-        representations = []
-        keys = []
-        for character_key in self.characterizations.keys():
-            characterization = self.characterizations[character_key]
-            if characterization.initialization_type is None:
-                raise Exception(str(self.__class__) + " Factory not initialized yet")
-            keys.append(character_key)
-            representations.append(characterization.representation_type(
-                characterization.initialization_type()))
-
-        genotype: Genotype = Genotype(representations, keys)
-
+        genotype: Genotype = copy.deepcopy(self.genotype)
+        genotype.initialize()
         return genotype
 
     @abstractmethod
     def create(self, number_of_actors: int) -> Actors:
         return Actors([self.actor_type(self.create_genotype()) for _ in range(number_of_actors)])
-
-    def initialize(self, initialization_type: type(Initialization)):
-        self.initialization_type = initialization_type
-

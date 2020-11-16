@@ -21,7 +21,7 @@ class player_controller(Controller):
 			bias1 = controller[:self.n_hidden[0]].reshape(1,self.n_hidden[0])
 			# Weights for the connections from the inputs to the hidden nodes
 			weights1_slice = len(inputs)*self.n_hidden[0] + self.n_hidden[0]
-			weights1 = controller[self.n_hidden[0]:weights1_slice].reshape((len(inputs),self.n_hidden[0]))
+			weights1 = controller[self.n_hidden[0]:weights1_slice].reshape((len(inputs), self.n_hidden[0]))
 
 			# Outputs activation first layer.
 			output1 = sigmoid_activation(inputs.dot(weights1) + bias1)

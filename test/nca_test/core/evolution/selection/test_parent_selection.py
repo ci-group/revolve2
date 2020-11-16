@@ -7,6 +7,7 @@ from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 from nca.core.evolution.selection.parent_selection import RandomParentSelection, TournamentSelection, \
     RouletteWheelSelection
+from nca.core.genome.genotype import Genotype
 
 
 class TestParentSelection(unittest.TestCase):

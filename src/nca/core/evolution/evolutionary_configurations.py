@@ -5,7 +5,7 @@ from nca.core.evolution.conditions.condition import Condition, EvaluationsCondit
 from nca.core.evolution.selection.parent_selection import RouletteWheelSelection
 from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection
 from nca.core.evolution.selection.survivor_selection import FitnessSteadyStateSelection
-from nca.core.genome.initialization import UniformInitialization
+from nca.core.genome.operators.initialization import UniformInitialization
 from nca.core.genome.operators.mutation_operator import MutationOperator, ReplaceMutation
 from nca.core.genome.operators.recombination_operator import RecombinationOperator, OnePointCrossover
 
@@ -38,10 +38,11 @@ class EvolutionaryConfiguration(Configuration):
         if not self.mutation.compatibility(self.initialization_type):
             return False
 
-        if not self.recombination.compatibility(self.initialization_type):
-            return False
+        #if not self.recombination.compatibility(self.initialization_type):
+        #    return False
 
         return True
+
 
 class GeneticAlgorithmConfiguration(EvolutionaryConfiguration):
 
@@ -51,7 +52,7 @@ class GeneticAlgorithmConfiguration(EvolutionaryConfiguration):
                  parent_selection: ParentSelection = RouletteWheelSelection(),
                  survivor_selection: SurvivorSelection = FitnessSteadyStateSelection(),
                  initialization_type: type(Initialization) = UniformInitialization,
-                 condition: Condition = EvaluationsCondition(25),
+                 condition: Condition = EvaluationsCondition(100),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(recombination=recombination, mutation=mutation, parent_selection=parent_selection,
                          survivor_selection=survivor_selection, initialization_type=initialization_type,

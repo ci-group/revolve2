@@ -17,7 +17,7 @@ class NonDominatedSortingSurvival(SurvivorSelection):
         super().__init__()
         self.debug: bool = debug
 
-    def __call__(self, population: Actors) -> Actors:
+    def algorithm(self, population: Actors) -> Actors:
 
         objectives = np.zeros((len(population), max(1, len(population[0].fitness.keys()))))  # TODO fitnesses is 0
 

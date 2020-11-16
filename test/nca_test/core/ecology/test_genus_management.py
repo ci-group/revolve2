@@ -35,10 +35,10 @@ class GenusManagementTest(unittest.TestCase):
 
         factory = ActorFactory()
         agents: Actors = factory.create(3)
-        print(agents._get(0).genotype.keys())
-        agents._get(0).get_representation()[:] = [0, 0, 0, 0]
-        agents._get(1).get_representation()[:] = [0, 0, 0, 0]
-        agents._get(2).get_representation()[:] = [0, 2, 0, 0]
+
+        agents[0].get_representation()[:] = [0, 0, 0, 0]
+        agents[1].get_representation()[:] = [0, 0, 0, 0]
+        agents[2].get_representation()[:] = [0, 2, 0, 0]
         population_management.initialize(agents)
 
         self.assertEqual(len(population_management.genus.species), 2)
@@ -48,14 +48,14 @@ class GenusManagementTest(unittest.TestCase):
 
         factory = ActorFactory()
         agents: Actors = factory.create(3)
-        agents._get(0).get_representation()[:] = [0, 0, 0, 0]
-        agents._get(1).get_representation()[:] = [0, 0, 0, 0]
-        agents._get(2).get_representation()[:] = [0, 0, 0, 0]
+        agents[0].get_representation()[:] = [0, 0, 0, 0]
+        agents[1].get_representation()[:] = [0, 0, 0, 0]
+        agents[2].get_representation()[:] = [0, 0, 0, 0]
         population_management.initialize(agents)
 
         self.assertEqual(len(population_management.genus.species), 1)
 
-        population_management.genus.species[0].individuals._get(0).get_representation()[:] = [0, 2, 0, 0]
+        population_management.genus.species[0].individuals[0].get_representation()[:] = [0, 2, 0, 0]
         population_management.speciate()
-        print(population_management.genus)
+
         self.assertEqual(len(population_management.genus.species), 2)

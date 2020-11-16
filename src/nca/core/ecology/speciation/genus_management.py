@@ -43,3 +43,6 @@ class GenusManagement(PopulationManagement):
                 all_agents.add(agent)
 
         return all_agents
+
+    def to_json(self):
+        return self.genus.to_json()

@@ -6,6 +6,7 @@ from typing import Tuple
 import numpy as np
 
 from nca.core.abstract.configurations import OperatorConfiguration
+
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.genotype import Genotype
 from nca.core.genome.operators.initialization import UniformInitialization, GaussianInitialization, BinaryInitialization, \
@@ -154,7 +155,7 @@ class SwapMutation(StructuralMutation):
         super().__init__()
 
     def _mutate(self, representation: Representation):
-        choices: Tuple[int] = tuple(representation.selection_indexes(k=2))
+        choices: Tuple = tuple(representation.selection_indexes(k=2))
         representation.swap_indexes(choices)
 
 
@@ -184,6 +185,9 @@ class DeleteMutation(StructuralMutation):
         super().__init__()
 
     def _mutate(self, representation: Representation):
+        #if isinstance(representation, ChromosomalRepresentation):
+        #    raise Exception("Unsupported mutation for ChromosomalRepresenation")
+
         index = representation.random_index()
         representation[:] = np.delete(representation, index)
 

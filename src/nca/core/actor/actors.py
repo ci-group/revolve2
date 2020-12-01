@@ -22,13 +22,17 @@ class Actors(List):
     def remove(self, agent: Individual):
         super().remove(agent)
 
-    def subset(self, indexes):
+    def subset(self, indexes, rejected_indexes = []):
         agents: List[Individual] = []
+        rejected_agents: List[Individual] = []
 
         for index in indexes:
             agents.append(self[index])
 
-        return self.__class__(agents)
+        for index in rejected_indexes:
+            rejected_agents.append(self[index])
+
+        return self.__class__(agents, rejected_agents)
 
     def __repr__(self):
         string_representation: string = "Agents {"
@@ -49,14 +53,6 @@ class Actors(List):
         labels = ['min', 'first', 'median', 'third', 'max']
         return {labels[index]: fitness_sorted_indexes[quartile_index]
                 for index, quartile_index in enumerate(quartile_indexes)}
-
-    def fitness_statistics(self):
-        fitness_values: List[float] = [individual.fitness.value() for individual in self]
-        number_of_quartiles = 5
-        labels = ['min', 'first', 'median', 'third', 'max']
-
-        return {labels[index]: np.quantile(fitness_values, percentile / (number_of_quartiles-1))
-                for index, percentile in enumerate(range(number_of_quartiles))}
 
     def average_fitness(self):
         return np.mean([individual.fitness.value() for individual in self])

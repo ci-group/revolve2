@@ -3,18 +3,19 @@ import string
 from nca.core.abstract.sequential_identifier import PopulationIdentifier
 from nca.core.actor.age import GenerationalAge
 from nca.core.actor.actors import Actors
-from nca.core.analysis.statistics import Statistics
+from visualization.analysis.statistics import Statistics
 
 
 class Population:
 
     identifier = PopulationIdentifier()
 
-    def __init__(self, individuals: Actors):
+    def __init__(self, individuals: Actors, rejected_individuals: Actors):
         self.id: int = self.identifier.id()
         self.age: GenerationalAge = GenerationalAge()
 
         self.individuals: Actors = individuals
+        self.rejected_individual: Actors = rejected_individuals
         self.statistics: Statistics = Statistics()
 
     def __get__(self):
@@ -55,7 +56,3 @@ class Population:
             'fitness': self.individuals.fitness_statistics(),
         }
 
-    def log(self):
-        fitnesses = self.individuals.fitness_statistics()
-        self.statistics.log(fitnesses['max'], fitnesses['third'], fitnesses['median'],
-                            fitnesses['first'], fitnesses['min'])

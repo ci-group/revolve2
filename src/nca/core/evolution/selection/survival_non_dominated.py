@@ -19,25 +19,24 @@ class NonDominatedSortingSurvival(SurvivorSelection):
 
     def algorithm(self, population: Actors) -> Actors:
 
-        objectives = np.zeros((len(population), max(1, len(population[0].fitness.keys()))))  # TODO fitnesses is 0
+        objectives = np.zeros((len(population), max(1, len(population[0].get_fitness()))))  # TODO fitnesses is 0
 
         for index, individual in enumerate(population):
-            objectives[index, :] = - individual.get_fitness()
+            objectives[index, :] = individual.get_fitness()
 
         front_no, max_front = self.nd_sort(objectives, np.inf)
         crowd_dis = self.crowding_distance(objectives, front_no)
 
         sorted_fronts = self.sort_fronts(objectives, front_no, crowd_dis)
 
-        new_population = population.subset(sorted_fronts[:self.configuration.population_size])
-        discarded_population = population.subset(sorted_fronts[self.configuration.population_size:])
+        new_population = population.subset(sorted_fronts[:self.configuration.population_size], sorted_fronts[self.configuration.population_size:])
 
         if self.debug:
-            self._visualize(objectives, sorted_fronts, new_population, discarded_population)
+            self._visualize(objectives, sorted_fronts, new_population)
 
         return new_population
 
-    def _visualize(self, objectives, sorted_fronts, new_population, discarded_population):
+    def _visualize(self, objectives, sorted_fronts, new_population):
         number_of_fronts = len(sorted_fronts)
         colors = cm.rainbow(np.linspace(1, 0, number_of_fronts))
 
@@ -52,14 +51,12 @@ class NonDominatedSortingSurvival(SurvivorSelection):
                            color=colors[index])
 
             else:
-                plt.scatter(-objectives[front, 0], -objectives[front, 1], s=50,
+                plt.scatter(objectives[front, 0], objectives[front, 1], s=50,
                             color=colors[index])
 
-        for individual in new_population:
-            plt.scatter(individual.fitness[0], individual.fitness[1], s=5, color='black')
-
-        for individual in discarded_population:
-            plt.scatter(individual.fitness[0], individual.fitness[1], s=5, color='white')
+        #for individual in new_population:
+        #    plt.scatter(-objectives[front, 0], -objectives[front, 1], s=50,
+        #                color=colors[index])
 
     # adapted from https://github.com/ChengHust/NSGA-II/blob/master/nd_sort.py
     def nd_sort(self, objectives, n_sort):
@@ -180,7 +177,7 @@ if __name__ == "__main__":
     survival = NonDominatedSortingSurvival(debug=True)
 
     #front_no, max_front, crowd_dis =
-    survival(individuals)
+    survival.algorithm(individuals)
 
     plt.show()
 

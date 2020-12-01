@@ -11,8 +11,5 @@ class SelfOrganizingRobogenGenotypeTest(unittest.TestCase):
         genotype = SelfOrganizingRobogenGenotype()
         # encoding = genotype()
         # print(encoding)
-
-        print(genotype['symbols'])
         mutation = InsertMutation()
         mutation._mutate(genotype['symbols'])
-        print(genotype['symbols'])

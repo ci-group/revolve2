@@ -40,7 +40,7 @@ class TestPopulationEcology(unittest.TestCase):
 
         recovered_ecology: PopulationEcology = PopulationEcology()
         recovered_ecology.restore("test_recovery.py")
-        print(recovered_ecology.management.populations())
+
         json_data = recovered_ecology.to_json()
         self.assertTrue(json_data['id'] >= 0)
         self.assertTrue(len(json_data['species']) > 0)

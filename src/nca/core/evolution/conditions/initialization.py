@@ -21,7 +21,6 @@ class SymbolicInitialization(Initialization, ABC):
 
     def __init__(self, symbol):
         super().__init__()
-        print(symbol)
         if isinstance(symbol, type(Symbol)):
             self.symbol: type(Symbol) = symbol
             self.elements = None

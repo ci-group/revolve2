@@ -2,10 +2,10 @@ from typing import List
 
 import numpy as np
 
-from nca.core.analysis.statistics import Statistics
+from visualization.analysis.statistics import Statistics
 
 
-class Summary(Statistics):
+class SummaryStatistics(Statistics):
 
     def __init__(self):
         super().__init__()

@@ -26,7 +26,6 @@ class Representation(List, ABC):
         if self.initialization is not None:
             self.extend(self.initialization(self.configuration.genome_size))
 
-
     @abstractmethod
     def compatibility(self, other) -> float:
         pass

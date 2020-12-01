@@ -32,8 +32,6 @@ class SimulationManager:
                 x = threading.Thread(target=request_command.ecosphere.run, args=[actor])
                 x.start()
                 x.join()
-            #for actor in actors:
-
 
         elif isinstance(request_command.ecosphere, Ecosphere):
             for actor in actors:

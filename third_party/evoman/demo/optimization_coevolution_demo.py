@@ -31,7 +31,6 @@ class TrainingEnvironment(Environment):
 
 # runs simulation
 def simulation(env, x):
-	print("shape ", x.shape)
 	f, _, _, _ = env.play(pcont=x)
 	return f
 
@@ -112,7 +111,6 @@ def evolution(pop, fit_pop):
 
 	# selection
 	fit_pop_cp = fit_pop
-	print("fit: ", pop)
 	fit_pop_norm = np.array(list(map(lambda y: norm(y, fit_pop_cp), fit_pop))) # avoiding negative probabilities, as fitness is ranges from negative numbers
 	probs = (fit_pop_norm)/(fit_pop_norm).sum()
 	chosen = np.random.choice(pop.shape[0], npop, p=probs, replace=False)
@@ -141,7 +139,6 @@ ini = time.time()  # sets time marker
 
 # number of weights for multilayer with 10 hidden neurons
 n_vars = (env.get_num_sensors()+1)*n_hidden_neurons + (n_hidden_neurons+1)*5
-print("n vars: ", n_vars)
 
 # genetic algorithm params
 dom_u = 1
@@ -157,8 +154,6 @@ pop_p = np.random.uniform(dom_l, dom_u, (npop, n_vars))
 fit_pop_p = evaluate(pop_p)
 solutions = [pop_p, fit_pop_p]
 env.update_solutions(solutions)
-
-print("fit pop: ", fit_pop_p.shape)
 
 # evolution
 for i in range(1, gens):

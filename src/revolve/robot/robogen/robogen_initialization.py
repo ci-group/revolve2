@@ -28,7 +28,6 @@ class RobogenInitialization(LSystemInitialization):
         for i in range(max_word_length):
 
             axiom.append(self.symbol_type.BRACKET_STASH)
-            print(self.symbol_type.modules(symbols))
             axiom.append(np.random.choice(self.symbol_type.orientation(symbols)))
             axiom.append(np.random.choice(self.symbol_type.modules(symbols)))
 

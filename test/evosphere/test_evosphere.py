@@ -12,7 +12,7 @@ class TestEvosphere(unittest.TestCase):
         evosphere.evolve()
         self.assertTrue(True)
 
-    def test_genetic(self):
+    def test_robot(self):
         evosphere = RobotEvosphere()
         evosphere.evolve()
         self.assertTrue(True)

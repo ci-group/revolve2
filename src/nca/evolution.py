@@ -1,10 +1,13 @@
 from typing import List
 
+import numpy as np
+
 from nca.core.abstract.configurations import EvolutionConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.fitnesses import OnesFitness, FitnessEvaluation
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology import PopulationEcology
+from nca.core.ecology.speciation.genus_management import GenusManagement
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
 from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration, EvolutionaryConfiguration
 
@@ -18,7 +21,7 @@ class Evolution:
 
         self.evolutionary_algorithm: EvolutionaryAlgorithm = EvolutionaryAlgorithm(evolutionary_configuration)
         self.individual_factory: ActorFactory = individual_factory
-        self.population_ecology: PopulationEcology = PopulationEcology()  # population_management=GenusManagement())
+        self.population_ecology: PopulationEcology = PopulationEcology(population_management=GenusManagement())
 
         self.fitness_evaluation: FitnessEvaluation = fitness_evaluation
 
@@ -61,6 +64,7 @@ class Evolution:
     def evaluator(self, agents: Actors):
         for individual in agents:
             self.fitness_evaluation(individual)
+
 
     def log(self, string: str):
         if self.debug:

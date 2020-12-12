@@ -1,8 +1,9 @@
-from typing import List
+from typing import List, Dict
 
 from nca.core.actor.age import Age
 from nca.core.abstract.sequential_identifier import AgentIdentifier
 from nca.core.actor.fitness import Fitness
+from nca.core.actor.measures import Measurement
 from nca.core.genome.genotype import Genotype
 
 
@@ -14,6 +15,7 @@ class Individual:
         self.age: Age = Age()
         self.genotype: Genotype = Genotype.check(mapping)
         self.fitness: Fitness = Fitness()
+        self.measures: Dict[Measurement, List] = dict()
 
         if parents is not None:
             self.parent_ids: List[int] = [parent.id for parent in parents]
@@ -25,6 +27,9 @@ class Individual:
 
     def get_fitness(self):
         return self.fitness.value()
+
+    def get_objectives(self) -> List[float]:
+        return self.fitness.objectives
 
     def get_representation(self):
         if len(self.genotype.keys()) == 1:

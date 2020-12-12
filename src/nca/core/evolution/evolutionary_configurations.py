@@ -2,7 +2,7 @@ from nca.core.abstract.configuration import Configuration
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.evolution.conditions.special_features import SpecialFeatures
 from nca.core.evolution.conditions.condition import Condition, EvaluationsCondition
-from nca.core.evolution.selection.parent_selection import RouletteWheelSelection
+from nca.core.evolution.selection.parent_selection import RouletteWheelSelection, TournamentSelection
 from nca.core.evolution.selection.selection import ParentSelection, SurvivorSelection
 from nca.core.evolution.selection.survivor_selection import FitnessSteadyStateSelection
 from nca.core.genome.operators.initialization import UniformInitialization
@@ -49,7 +49,7 @@ class GeneticAlgorithmConfiguration(EvolutionaryConfiguration):
     def __init__(self,
                  recombination: RecombinationOperator = OnePointCrossover(),
                  mutation: MutationOperator = ReplaceMutation(),
-                 parent_selection: ParentSelection = RouletteWheelSelection(),
+                 parent_selection: ParentSelection = TournamentSelection(),
                  survivor_selection: SurvivorSelection = FitnessSteadyStateSelection(),
                  initialization_type: type(Initialization) = UniformInitialization,
                  condition: Condition = EvaluationsCondition(100),

@@ -47,7 +47,7 @@ class OnePointCrossover(RecombinationOperator):
 
     def _recombine(self, representation_1: Representation, representation_2: Representation):
         crossover_index = representation_1.random_index(offset=1)  # crossover has n-1 options.
-        temp = copy.copy(representation_1[crossover_index+1:])
+        temp = copy.deepcopy(representation_1[crossover_index+1:])
         representation_1[crossover_index+1:] = representation_2[crossover_index+1:]
         representation_2[crossover_index+1:] = temp
 

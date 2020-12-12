@@ -21,6 +21,7 @@ class GenusManagement(PopulationManagement):
 
         for agent in agents:
             self.assign(agent)
+        print(len(self.populations()))
 
     def assign(self, individual: Individual):
         inserted = self.genus.insert(individual)

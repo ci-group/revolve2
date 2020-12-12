@@ -22,18 +22,6 @@ class Actors(List):
     def remove(self, agent: Individual):
         super().remove(agent)
 
-    def subset(self, indexes, rejected_indexes = []):
-        agents: List[Individual] = []
-        rejected_agents: List[Individual] = []
-
-        for index in indexes:
-            agents.append(self[index])
-
-        for index in rejected_indexes:
-            rejected_agents.append(self[index])
-
-        return self.__class__(agents, rejected_agents)
-
     def __repr__(self):
         string_representation: string = "Agents {"
 

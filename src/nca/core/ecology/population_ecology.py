@@ -1,5 +1,6 @@
 import string
 import time
+from typing import Dict, List
 
 from .population_management import PopulationManagement
 from nca.core.abstract.behavioral.memento import Memento

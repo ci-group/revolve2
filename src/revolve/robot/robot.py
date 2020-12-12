@@ -10,6 +10,6 @@ class Robot(Individual):
 
         self.brain: Brain = brain
         self.body: Body = body
-
+        
         self.measures = None
 

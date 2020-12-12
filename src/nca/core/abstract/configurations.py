@@ -7,9 +7,9 @@ class PopulationConfiguration(Configuration):
 
     def __init__(self, filename: string = "population.config"):
         super().__init__(filename)
-        self.selection_size: int = 5
+        self.selection_size: int = 50
         self.tournament_size: int = 2
-        self.population_size: int = 25
+        self.population_size: int = 100
         self.number_of_parents: int = 2
 
 
@@ -24,15 +24,15 @@ class EvolutionConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("revolve.config")
-        self.number_of_generations = 1000
-        self.number_of_agents = 25
+        self.number_of_generations = 10
+        self.number_of_agents = 50
 
 
 class EvoSphereConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("revolve.config")
-        self.number_of_generations = 100
+        self.number_of_generations = 10
         self.number_of_agents = 10
 
 
@@ -56,8 +56,8 @@ class OperatorConfiguration(Configuration):
 class InitializationConfiguration(Configuration):
     def __init__(self):
         super().__init__("initialization.config")
-        self.min_range = -1.0
-        self.max_range = 1.0
+        self.min_range = 0.5
+        self.max_range = 1.5
 
 
 class SimulatorConfiguration(Configuration):

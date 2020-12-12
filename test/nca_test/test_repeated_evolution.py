@@ -1,6 +1,5 @@
 import unittest
 
-from nca.core.analysis.statistics_plotter import plot_statistics
 from nca.evolution import Evolution
 from nca.repeated_evolution import RepeatedEvolution
 

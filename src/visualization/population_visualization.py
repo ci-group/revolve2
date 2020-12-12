@@ -8,23 +8,28 @@ from visualization.visualization import plt
 
 class PopulationVisualization:
 
-    def __init__(self, population: Population, x_axis, y_axis):
+    def __init__(self, population: Population, x_axis="x", y_axis="y"):
         super().__init__("Population", x_axis=x_axis, y_axis=y_axis)
-        self.population = population
+        self.population: Population = population
 
 
-class PopulationFitnessVisualization(StatisticsVisualization, PopulationVisualization):
+
+class PopulationFitnessVisualization(PopulationVisualization, StatisticsVisualization):
 
     def prepare(self):
-        fitness_values: List[float] = [individual.fitness.value() for individual in self.population]
-        self.set_statistics(fitness_values)
+        self.x_axis = "generation"
+        self.y_axis = "fitness"
+        self.statistics = self.population.generational_statistics['fitness']
 
 
 class PopulationAgeVisualization(StatisticsVisualization, PopulationVisualization):
 
     def prepare(self):
-        age_values: List[float] = [individual.age for individual in self.population]
-        self.set_statistics(age_values)
+        self.statistics = self.population.generational_statistics['age']
+
+
+class SpeciationVisualization(StatisticsVisualization, PopulationVisualization):
+    pass
 
 
 class NSGA2Visualization(Visualization, PopulationVisualization):
@@ -34,13 +39,8 @@ class NSGA2Visualization(Visualization, PopulationVisualization):
 
     def visualize(self):
 
-        number_of_fronts = len(sorted_fronts)
-        colors = cm.rainbow(np.linspace(1, 0, number_of_fronts))
-
         for index, individual in enumerate(self.population.individuals):
-            plt.scatter(individual.objectives, s=50, color=colors[index])
+            plt.scatter(individual.objectives, s=50, color="green")
 
         for index, individual in enumerate(self.population.rejected_individuals):
-            plt.scatter(individual.objectives, s=50, color=colors[index])
-
-        plt.show()
+            plt.scatter(individual.objectives, s=50, color="red")

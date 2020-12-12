@@ -1,13 +1,15 @@
-from typing import Dict
+from typing import Dict, List
 
 
 class Fitness(Dict[str, float]):
 
     master_key = 'fitness'
+    objectives_key = 'objectives'
 
     def __init__(self, initial_value: float = 0.0):
         super().__init__()
         self[self.master_key] = initial_value
+        self.objectives: List[float] = []
         self.clean = True  # changes to fitness dictionary
 
     def value(self):
@@ -26,6 +28,11 @@ class Fitness(Dict[str, float]):
         for key in self.keys():
             if key == self.master_key:
                 continue
-            sum += self[key]
+            if not(type(self[key]) is list):
+                sum += self[key]
+                self.objectives.append(self[key])
+            else:
+                sum += self[key][0]
+                self.objectives.extend(self[key])
         self[self.master_key] = sum / (self.__len__() - 1)  # Exclude master key from length calculation
         self.clean = True

@@ -1,5 +1,8 @@
 import math
 
+import copy
+from typing import List
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
@@ -7,102 +10,167 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from nca.core.actor.actors import Actors
 from nca.core.actor.fitness import Fitness
+from nca.core.actor.individual import Individual
 from nca.core.actor.individual_factory import ActorFactory
+from nca.core.ecology.population import Population
+from nca.core.evolution.selection.parent_selection import TournamentSelection
 from nca.core.evolution.selection.selection import SurvivorSelection
+from nca.core.genome.genotype import Genotype
+from nca.core.genome.operators.mutation_operator import ReplaceMutation
+from nca.core.genome.operators.recombination_operator import OnePointCrossover
 
+
+def get_circular_fitness(individual: Individual, d3_enabled: bool = False):
+    theta = np.random.uniform(0, math.pi / 2)
+    omega = np.random.uniform(0, math.pi / 2)
+    r = np.random.uniform(0.5, 1)
+    fitness = Fitness()
+    if d3_enabled:
+        fitness.objectives = [r * np.cos(theta) * np.cos(omega), r * np.sin(theta), r * np.cos(theta) * np.sin(omega)]
+    else:
+        fitness.objectives = [r * np.cos(theta), r * np.sin(theta)]
+    return fitness
+
+
+def get_random_fitness(individual: Individual, d3_enabled: bool = False):
+    theta = np.random.normal(-0.5, 0.2)
+    omega = np.random.normal(-9, 3)
+    fitness = Fitness()
+    fitness.objectives = [omega, theta]
+    return fitness
+
+
+def get_max_fitness(individual: Individual, d3_enabled: bool = False):
+    fitness = Fitness()
+    omega = np.random.normal(-9, 3)
+    fitness.objectives = [omega, omega]
+    return fitness
+
+
+def get_ones_fitness(individual: Individual):
+    fitness = Fitness()
+    representation = [copy.deepcopy(element) for element in individual.get_representation()]
+    number_of_elements = len(representation)
+
+    difference = np.sum(np.abs(np.ones(number_of_elements) - np.array(representation)))
+    fitness.objectives = [-difference, np.random.random()]
+    return fitness
+
+
+def create_individuals(n: int = 10):
+    individual_factory = ActorFactory()
+    individuals: Actors = individual_factory.create(n)
+
+    return individuals
+
+def evaluate(individuals):
+    for individual in individuals:
+        individual.fitness = get_ones_fitness(individual)
 
 class NonDominatedSortingSurvival(SurvivorSelection):
 
-    def __init__(self, debug: bool = False):
+    def __init__(self, minimization: bool = True, debug: bool = False):
         super().__init__()
+        self.minimization: bool = minimization
         self.debug: bool = debug
 
-    def algorithm(self, population: Actors) -> Actors:
+    def order(self, individuals, indexes):
+        agents: List[Individual] = []
 
-        objectives = np.zeros((len(population), max(1, len(population[0].get_fitness()))))  # TODO fitnesses is 0
+        for index in indexes:
+            agents.append(individuals[index])
 
-        for index, individual in enumerate(population):
-            objectives[index, :] = individual.get_fitness()
+        return Actors(agents)
+
+    def algorithm(self, population_individuals: Actors) -> List[Individual]:
+
+        objectives = np.zeros((len(population_individuals), max(1, len(population_individuals[0].get_objectives()))))  # TODO fitnesses is 0
+
+        for index, individual in enumerate(population_individuals):
+            if self.minimization:
+                objectives[index, :] = individual.get_objectives()
+            else:
+                objectives[index, :] = [-objective for objective in individual.get_objectives()]
 
         front_no, max_front = self.nd_sort(objectives, np.inf)
         crowd_dis = self.crowding_distance(objectives, front_no)
 
         sorted_fronts = self.sort_fronts(objectives, front_no, crowd_dis)
 
-        new_population = population.subset(sorted_fronts[:self.configuration.population_size], sorted_fronts[self.configuration.population_size:])
-
         if self.debug:
-            self._visualize(objectives, sorted_fronts, new_population)
+            self._visualize(objectives, sorted_fronts, front_no)
 
-        return new_population
+        return [population_individuals[sort_index] for sort_index in sorted_fronts]
 
-    def _visualize(self, objectives, sorted_fronts, new_population):
-        number_of_fronts = len(sorted_fronts)
+    def _visualize(self, objectives, sorted_fronts, front_no):
+        number_of_fronts = int(max(front_no))
         colors = cm.rainbow(np.linspace(1, 0, number_of_fronts))
+
+        if not self.minimization:   # Correct Maximization trick.
+            objectives = - objectives
 
         ax = None
         if objectives.shape[1] == 3:
             fig = plt.figure()
             ax = fig.add_subplot(111, projection='3d')
 
-        for index, front in enumerate(sorted_fronts):
+        for individual_index in sorted_fronts:
+            front_number = int(front_no[individual_index]) - 1
             if objectives.shape[1] == 3:
-                ax.scatter(objectives[front, 0], objectives[front, 1], objectives[front, 2], s=100,
-                           color=colors[index])
+                ax.scatter(objectives[individual_index, 0], objectives[individual_index, 1], objectives[individual_index, 2], s=10*(number_of_fronts-front_number),
+                           color=colors[front_number])
 
             else:
-                plt.scatter(objectives[front, 0], objectives[front, 1], s=50,
-                            color=colors[index])
+                plt.scatter(objectives[individual_index, 0], objectives[individual_index, 1], s=5*(number_of_fronts-front_number),
+                            color=colors[front_number])
 
-        #for individual in new_population:
-        #    plt.scatter(-objectives[front, 0], -objectives[front, 1], s=50,
-        #                color=colors[index])
+        #for objective in enumerate(objectives[:self.configuration.selection_size]):
+        #    plt.scatter(objective[0], objective[1], s=10,
+        #                color='white')
+        plt.show()
 
-    # adapted from https://github.com/ChengHust/NSGA-II/blob/master/nd_sort.py
-    def nd_sort(self, objectives, n_sort):
-        """
-        :rtype:
-        :param n_sort:
-        :param pop_obj: objective vectors
-        :return: [FrontNo, MaxFNo]
-        """
-        number_of_individuals, number_of_objectives = np.shape(objectives)
-        _, inverse_sorted_population = np.unique(objectives[:, 0], return_inverse=True)
+    # Programmed By Yang Shang shang  Email：yangshang0308@gmail.com  GitHub: https://github.com/DevilYangS/codes
+    def sortrows(self, objectives, order="ascend"):
+        objectives_temp = objectives[:, ::-1]
+        objectives_row = objectives_temp.T
+        if self.minimization:
+            rank = np.lexsort(-objectives_row)
+        else:
+            rank = np.lexsort(objectives_row)
+        sorted_objectives = objectives[rank, :]  # Matrix[rank] 也可以
+        return sorted_objectives, rank
 
-        # sorted first objective from high to low
-        index = objectives[:, 0].argsort()
-        sorted_objectives = objectives[index, :]
+    # adapted from https://www.programmersought.com/article/6084850621/
+    def nd_sort(self, objectives, max_range):
+        number_of_individuals, number_of_objectives = objectives.shape[0], objectives.shape[1]
 
-        # Prepare inf front for each entry
-        front_no = np.inf * np.ones(number_of_individuals, dtype=np.int)
-        max_front: int = 0
+        sorted_matrix = np.lexsort(objectives[:,::-1].T)  # loc1 is the position of the new matrix element in the old matrix, sorted from the first column in order
+        sorted_objectives = objectives[sorted_matrix]
+        inverse_sorted_indexes = sorted_matrix.argsort()  # loc2 is the position of the old matrix element in the new matrix
+        frontno = np.ones(number_of_individuals) * (np.inf)  # Initialize all levels to np.inf
 
-        # While there are front numbers to assign, continue
-        while np.sum(front_no < np.inf) < min(n_sort, len(inverse_sorted_population)):
-            max_front += 1
-
-            # for each individual in population
-            for current_individual in range(number_of_individuals):
-                # Check that its front number is not assigned yet.
-                if front_no[current_individual] == np.inf:
-                    dominated = False
-
-                    # Count down from the individual index to the last one available.
-                    for other_individual in range(current_individual - 1, -1, -1):
-
-                        # compare against others with the same front.
-                        if front_no[other_individual] == max_front:
-                            # for each objective that is dominating the other candidate
-                            m = np.sum(sorted_objectives[current_individual, :] >= sorted_objectives[other_individual, :])
-                            dominated = m == number_of_objectives
-                            if dominated:
+        maxfno = 0  # 0
+        while (np.sum(frontno < np.inf) < min(max_range, number_of_individuals)):  # The number of individuals assigned to the rank does not exceed the number of individuals to be sorted
+            maxfno = maxfno + 1
+            for i in range(number_of_individuals):
+                if (frontno[i] == np.inf):
+                    dominated = 0
+                    for j in range(i):
+                        if (frontno[j] == maxfno):
+                            m = 0
+                            flag = 0
+                            while (m < number_of_objectives and sorted_objectives[i, m] >= sorted_objectives[j, m]):
+                                if (sorted_objectives[i, m] == sorted_objectives[j, m]):  # does not constitute a dominant relationship
+                                    flag = flag + 1
+                                m = m + 1
+                            if (m >= number_of_objectives and flag < number_of_objectives):
+                                dominated = 1
                                 break
+                    if dominated == 0:
+                        frontno[i] = maxfno
 
-                    # If it is not dominated, set the current front.
-                    if not dominated:
-                        front_no[current_individual] = max_front
-
-        return front_no[inverse_sorted_population], max_front
+        frontno = frontno[inverse_sorted_indexes]
+        return frontno, maxfno
 
     # adapted from https://github.com/ChengHust/NSGA-II/blob/master/crowding_distance.py
     def crowding_distance(self, objectives, front_number):
@@ -149,96 +217,44 @@ class NonDominatedSortingSurvival(SurvivorSelection):
             else:
                 front_dict[front_no[objective_index]].append((crowd_dis[objective_index], objective_index))
 
-        sorted_fronts = []
+        sorted_fronts: list[int] = []
         sorted_keys = sorted(front_dict.keys())
         for key in sorted_keys:
             front_dict[key].sort(key=lambda x: x[0], reverse=True)
             for element in front_dict[key]:
-                sorted_fronts.append(element[1])
+                sorted_fronts.append(int(element[1]))
 
         return sorted_fronts
 
 
 if __name__ == "__main__":
-    individual_factory = ActorFactory()
-    n = 50
-    individuals: Actors = individual_factory.create(n)
-    d3_enabled = False
-    for individual in individuals:
-        theta = np.random.uniform(0, math.pi/2)
-        omega = np.random.uniform(0, math.pi/2)
-        r = np.random.uniform(0.5, 1)
 
-        if d3_enabled:
-            individual.fitness = Fitness([r * np.cos(theta) * np.cos(omega), r * np.sin(theta), r * np.cos(theta) * np.sin(omega)])
-        else:
-            individual.fitness = Fitness([r * np.cos(theta), r * np.sin(theta)])
+    survival = NonDominatedSortingSurvival(minimization=False, debug=True)
+    tournament = TournamentSelection()
+    mutation = ReplaceMutation()
+    recombination = OnePointCrossover()
 
-    survival = NonDominatedSortingSurvival(debug=True)
+    population = Population(create_individuals())
 
-    #front_no, max_front, crowd_dis =
-    survival.algorithm(individuals)
+    evaluate(population.individuals)
 
-    plt.show()
+    for i in range(10):
+        new_individuals = [copy.deepcopy(individual) for individual in population.individuals]
+        parent_combinations: List[List[Individual]] = tournament.select(new_individuals)
 
-    """
-    def pareto_sort(self, population):
+        offspring: Actors = Actors([Individual(mutation(recombination(parents)), parents)
+                                    for parents in parent_combinations])
 
-        number_of_objectives = population.shape[1]
-        population = list(population)
+        evaluate(offspring)
 
-        fronts = []
-        front = []
+        for off, individual in zip(offspring, population.individuals):
+            off.genotype = individual.genotype
 
-        dominated = False
-        for population_index in range(0, len(population)):
-            for other_index in range(0, len(population)):
+        new_individuals.extend(offspring)
 
-                for front_element in front:
-                    m = np.sum(other_index <= front_element)
-                    dominated = m == number_of_objectives
-                    if dominated:
+        accepted_individuals, rejected_individuals = survival.select(new_individuals)
+        #for individual in new_individuals[:5]:
+        #    print(individual.get_objectives())
+        #print()
 
-                        front = np.array(front)
-
-
-                        sorted_front = front[rank[:, 0]]
-                        area = sorted_front[0] - sorted_front[-1]
-
-                        crowding_distance = []
-                        for j in range(1, len(front) - 1):
-                            crowding_distance.append(np.sum((sorted_front[j-1] - sorted_front[j+1]) / area))
-
-                        print("sort", sorted_front)
-                        print("crowding", crowding_distance)
-
-                        fronts.append(front)
-
-                        front = [population_element]
-
-                        break
-
-                if not dominated:
-                    front.append(population_element)
-                    print("not dominated")
-                else:
-                    print("dominated")
-
-        if len(front) > 0:
-            fronts.append(front)
-
-
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-
-        number_of_fronts = len(fronts)
-        colors = cm.rainbow(np.linspace(1, 0, number_of_fronts))
-        print(colors)
-        index = 0
-        for front_index, front in enumerate(fronts):
-            front = np.array(front)
-            ax.scatter(front[:, 0], front[:, 1], front[:, 2], s=100,
-                        color=[colors[front_index] for _ in range(len(front))])
-            index += len(front) - 1
-        plt.show()
-    """
+        population.next_generation(accepted_individuals, rejected_individuals)

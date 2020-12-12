@@ -4,7 +4,7 @@ from nca.core.actor.individual import Individual
 
 class Compatibility:
 
-    def __init__(self, limit: float = 1.0):
+    def __init__(self, limit: float = 5.0):
         self.limit = limit
 
     def compatible(self, individuals: Actors, other_individual: Individual) -> bool:

@@ -2,8 +2,9 @@ from typing import List
 
 from nca.core.actor.fitnesses import OnesFitness, FitnessEvaluation
 from nca.core.actor.individual_factory import ActorFactory
-from nca.core.analysis.statistics import Statistics
-from nca.core.analysis.summary import Summary
+from nca.core.ecology import PopulationEcology
+from visualization.analysis.statistics import Statistics
+from visualization.analysis.statistics_summary import SummaryStatistics
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
 from nca.evolution import Evolution
 
@@ -17,8 +18,8 @@ class RepeatedEvolution(Evolution):
         self.repetitions: int = repetitions
 
     def evolve(self):
-        statistics_list: List[Statistics] = []
+        results: List[PopulationEcology] = []
         for _ in range(self.repetitions):
-            statistics_list.append(super().evolve())
+            results.append(super().evolve())
 
         #return Summary().analyze(statistics_list)

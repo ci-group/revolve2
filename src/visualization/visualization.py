@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import List
+from typing import List, Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -12,6 +12,24 @@ class Visualization:
     @abstractmethod
     def visualize(self):
         pass
+
+
+class TimeSeriesVisualization:
+
+    def __init__(self, values: Dict[str, List]):
+        self.values: Dict[str, List] = values
+
+    def visualize(self):
+        for value_series_key in self.values.keys():
+            print(value_series_key, self.values[value_series_key])
+            plt.plot(self.values[value_series_key])
+        plt.legend(self.values.keys())
+        plt.show()
+
+
+def time_series_visualization(values: Dict[str, List]):
+    ts_visualization = TimeSeriesVisualization(values)
+    ts_visualization.visualize()
 
 
 class StatisticsVisualization:
@@ -28,22 +46,18 @@ class StatisticsVisualization:
     def prepare(self):
         pass
 
-    def set_statistics(self, values):
-        number_of_quartiles = 5
-        labels = ['min', 'first', 'median', 'third', 'max']
-
-        value_dictionary = {labels[index]: np.quantile(values, percentile / (number_of_quartiles-1))
-                for index, percentile in enumerate(range(number_of_quartiles))}
-
-        self.statistics.log(value_dictionary['max'], value_dictionary['third'], value_dictionary['median'],
-                            value_dictionary['first'], value_dictionary['min'])
-
     def visualize(self):
-        plt.plot(self.statistics.maximum_value)
-        plt.plot(self.statistics.upper_quartile)
-        plt.plot(self.statistics.median_value)
-        plt.plot(self.statistics.lower_quartile)
-        plt.plot(self.statistics.minimum_value)
+        plt.plot(self.statistics.maximum_value, color="red", alpha=0.75)
+        #plt.plot(self.statistics.upper_quartile)
+        plt.plot(self.statistics.median_value, color="green", alpha=0.5)
+        #plt.plot(self.statistics.lower_quartile)
+        plt.plot(self.statistics.minimum_value, color="blue", alpha=0.75)
+
+        plt.grid(b=True, which='major', color='#666666', linestyle='-', alpha=0.5)
+
+        # Show the minor grid lines with very faint and almost transparent grey lines
+        plt.minorticks_on()
+        plt.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.25)
 
         plt.title(self.title)
 
@@ -53,5 +67,6 @@ class StatisticsVisualization:
         if self.y_axis is not None:
             plt.ylabel(self.y_axis)
 
-        plt.legend(["Maximum", "Upper Quartile", "Median", "Lower Quartile", 'Minimum'])
+        plt.fill_between(range(100), self.statistics.lower_quartile, self.statistics.upper_quartile, alpha=0.5, color="khaki")
+        plt.legend(["Maximum", "Median", 'Minimum', 'IQR'])
         plt.show()

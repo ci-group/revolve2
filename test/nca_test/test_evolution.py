@@ -1,9 +1,9 @@
 import unittest
 
-from nca.core.actor.individual_factory import IndividualFactory
-from nca.core.genome.representations.chromosomal_representation import ChromosomalRepresentation
-from nca.core.genome.initialization import IntegerInitialization
+from nca.core.actor.individual_factory import ActorFactory
 from nca.evolution import Evolution
+from visualization.population_visualization import PopulationVisualization, PopulationFitnessVisualization
+from visualization.visualization import time_series_visualization
 
 
 class TestEvolution(unittest.TestCase):
@@ -13,8 +13,12 @@ class TestEvolution(unittest.TestCase):
         evolution.evolve()
         self.assertTrue(True)
 
-    def test_chromosomes(self):
-        evolution = Evolution(individual_factory=IndividualFactory(representation_type=ChromosomalRepresentation,
-                                                                   initialization_type=IntegerInitialization))
-        evolution.evolve()
-        self.assertTrue(True)
+    def test_metrics(self):
+        evolution = Evolution(debug=True)
+        population_ecology = evolution.evolve()
+        print(population_ecology.management.population.population_metrics)
+        print(population_ecology.management.population.individual_metrics)
+        time_series_visualization(population_ecology.management.population.population_metrics)
+        viz = PopulationFitnessVisualization(population_ecology.management.population)
+        viz.prepare()
+        viz.visualize()

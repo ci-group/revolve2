@@ -14,10 +14,10 @@ class Genotype(Dict[str, Representation]):
         if representations is None:
             return
 
-        if isinstance(representations, Representation):
-            self._initialize_single_representation(representations, keys)
-        else:
-            self._initialize_multiple_representations(representations, keys)
+        #if isinstance(representations, Representation):
+        self._initialize_single_representation(representations, keys)
+        #else:
+        #    self._initialize_multiple_representations(representations, keys)
 
     def initialize(self):
         for key in self.keys():

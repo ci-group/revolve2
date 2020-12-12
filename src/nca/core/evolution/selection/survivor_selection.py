@@ -30,10 +30,9 @@ class ElitismSelection(SurvivorSelection):
         super().__init__()
 
     def algorithm(self, individuals: List[Individual]) -> List[Individual]:
-        sorted_individuals: List[Individual] = sorted(individuals, key=lambda x: x.get_fitness(), reverse=False)
+        sorted_individuals: List[Individual] = sorted(individuals, key=lambda x: x.get_fitness(), reverse=True)
         elite_individuals: List[Individual] = sorted_individuals[:self.configuration.selection_size]
         non_elite_individuals: List[Individual] = sorted_individuals[self.configuration.selection_size:]
-
         new_individuals = elite_individuals
         random.shuffle(non_elite_individuals)
         new_individuals.extend(non_elite_individuals)
@@ -47,10 +46,20 @@ class RoundRobinTournament(SurvivorSelection):
 
     def algorithm(self, individuals: Actors) -> List[Individual]:
         new_individuals = []
-        for _ in self.configuration.population_size:
+        for _ in range(self.configuration.population_size + self.configuration.selection_size):
             tournament_individuals = random.choices(individuals, k=2) # TODO parameterize
-            new_individuals.append(max(tournament_individuals, key=lambda x: x.fitness.value()))
+            new_individuals.append(max(tournament_individuals, key=lambda x: x.get_fitness()))
         return new_individuals
+
+
+class RandomSurvivorSelection(SurvivorSelection):
+
+    def __init__(self):
+        super().__init__()
+
+    def algorithm(self, individuals: Actors) -> List[Individual]:
+        random.shuffle(individuals)
+        return individuals
 
 
 class MuLambdaSelection(SurvivorSelection):

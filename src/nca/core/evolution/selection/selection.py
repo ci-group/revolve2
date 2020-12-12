@@ -42,11 +42,11 @@ class SurvivorSelection(Selection, ABC):
     def __init__(self):
         super().__init__()
 
-    def select(self, individuals: Actors) -> Actors:
+    def select(self, individuals: Actors) -> (Actors, Actors):
         super().check(individuals)
         # TODO simplify collection
         new_individuals: List[Individual] = self.algorithm(individuals)     # mmhhh..
-        return Actors(new_individuals[:self.configuration.population_size])
+        return Actors(new_individuals[:self.configuration.population_size]), Actors(new_individuals[self.configuration.population_size:])
 
     @abstractmethod
     def algorithm(self, individuals: Actors) -> List[Individual]:

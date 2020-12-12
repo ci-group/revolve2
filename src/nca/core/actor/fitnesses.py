@@ -1,3 +1,4 @@
+import copy
 import math
 from abc import abstractmethod
 
@@ -57,5 +58,15 @@ class OnesFitness(FitnessEvaluation):
     def calculate(self, individual: Individual):
         representation = individual.get_representation()
         number_of_elements = len(representation)
+
         difference = np.sum(np.abs(np.ones(number_of_elements) - np.array(representation)))
-        return number_of_elements - difference
+        return -difference
+
+
+class OnesNSGAFitness(FitnessEvaluation):
+
+    def calculate(self, individual: Individual):
+        representation = individual.get_representation()
+        number_of_elements = len(representation)
+        difference = np.sum(np.abs(np.ones(number_of_elements) - np.array(representation)))
+        return [difference, individual.id, ]

@@ -1,7 +1,7 @@
 import unittest
 
 from nca.core.genome.operators.mutation_operator import InsertMutation
-from revolve.robot.robogen.robogen_genotype import SelfOrganizingRobogenGenotype, IndirectRobogenGenotype
+from revolve.robot.body.robogen.robogen_genotype import SelfOrganizingRobogenGenotype
 
 
 class SelfOrganizingRobogenGenotypeTest(unittest.TestCase):

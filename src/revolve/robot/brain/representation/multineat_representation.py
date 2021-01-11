@@ -1,14 +1,28 @@
+from typing import List
+
+from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.representations.representation import Representation
+from revolve.robot.body.body_blueprint import BodyBlueprint
+
+
+class NetworkInitialization(Initialization):
+
+    def __init__(self, body_blueprint: BodyBlueprint, network_architecture: List):
+        super().__init__()
+        self.body_blueprint: BodyBlueprint = body_blueprint
+        self.network_architecture: List = network_architecture
 
 
 class NetworkRepresentation(Representation):
-    pass
+
+    def __init__(self, network_initialization: NetworkInitialization):
+        super().__init__(network_initialization)
 
 
 class MultiNEATRepresentation(NetworkRepresentation):
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, network_initialization: NetworkInitialization):
+        super().__init__(network_initialization)
 
     def _initialize(self):
         pass

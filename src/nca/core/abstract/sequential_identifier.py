@@ -35,6 +35,12 @@ class NodeIdentifier(SequentialIdentifier, metaclass=Singleton):
         super().__init__()
 
 
+class SimulatorRequestIdentifier(SequentialIdentifier, metaclass=Singleton):
+
+    def __init__(self):
+        super().__init__()
+
+
 class SimulatorConnectionIdentifier(SequentialIdentifier, metaclass=Singleton):
 
     def __init__(self, start_index: int = 1000):

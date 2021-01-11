@@ -1,14 +1,15 @@
 import os
 import string
-
 import numpy as np
 
-from demo_controller import player_controller
-from environment import Environment
 from nca.core.actor.fitness import Fitness
 from nca.core.actor.individual import Individual
+
 from revolve.evosphere.ecosphere import Ecosphere
 from simulation.simulator.simulator_helper import SimulatorType
+
+from third_party.evoman.demo.demo_controller import player_controller
+from third_party.evoman.environment import Environment
 
 
 class EvomanEcosphere(Ecosphere):

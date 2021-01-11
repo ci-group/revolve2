@@ -5,8 +5,14 @@ class Brain(ABC):
     pass
 
 
-class RobotBrain(Brain):
+class BrainDevelopmentalMeasures:
     pass
+
+
+class RobotBrain(Brain):
+
+    def __init__(self):
+        self.developmental_measures: BrainDevelopmentalMeasures = None
 
 
 class AgentBrain(Brain):

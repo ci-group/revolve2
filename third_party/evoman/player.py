@@ -21,9 +21,9 @@ root_path = os.path.join(rootpath.detect(), 'third_party', 'evoman')
 image_path = os.path.join(root_path, 'images')
 sounds_path = os.path.join(root_path, 'sounds')
 
+
 # player proctile
 class Bullet_p(pygame.sprite.Sprite):
-
 
     image = pygame.image.load(image_path + '/bullet_r.png')
 

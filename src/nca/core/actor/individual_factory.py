@@ -29,8 +29,6 @@ class ActorFactory(Factory):
             mapping = ValuedRepresentation()
         self.genotype = Genotype.check(mapping)
 
-
-
     def create_genotype(self):
         genotype: Genotype = copy.deepcopy(self.genotype)
         genotype.initialize()

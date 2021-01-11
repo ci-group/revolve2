@@ -3,7 +3,7 @@ import random
 from abc import abstractmethod
 from itertools import combinations
 from random import shuffle
-from typing import List, Tuple
+from typing import List
 
 import numpy as np
 
@@ -41,6 +41,30 @@ class RecombinationOperator:
     @abstractmethod
     def _recombine(self, representation_1: Representation, representation_2: Representation):
         pass
+
+
+class NoCrossover(RecombinationOperator):
+
+    def _recombine(self, representation_1: Representation, representation_2: Representation):
+        pass
+
+
+
+class UniqueElementCrossover(RecombinationOperator):
+
+    def _recombine(self, representation_1: Representation,
+                   representation_2: Representation):
+        size_1 = len(representation_1)
+        size_2 = len(representation_2)
+
+        all_elements = copy.copy(representation_1)
+        all_elements.extend(representation_2)
+
+        # Remove duplicates
+        unique_elements = list(dict.fromkeys(all_elements))
+
+        representation_1[:] = np.random.choice(unique_elements, size_1, replace=False)
+        representation_2[:] = np.random.choice(unique_elements, size_2, replace=False)
 
 
 class OnePointCrossover(RecombinationOperator):

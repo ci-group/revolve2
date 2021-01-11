@@ -2,6 +2,8 @@ from abc import abstractmethod, ABC
 from enum import Enum, auto
 
 from nca.core.abstract.sequential_identifier import SimulatorConnectionIdentifier
+from nca.core.actor.agent import Agent
+from nca.core.actor.individual import Individual
 from revolve.evosphere.biosphere import Ecosphere
 from revolve.robot.robot import Robot
 from src.simulation.simulation_measures import SimulationMeasures
@@ -57,30 +59,62 @@ class SimulatorConnector(ABC):
     def stop_simulator(self) -> bool:
         pass
 
-    def execute_robot(self, element: object) -> SimulationMeasures:
+    @abstractmethod
+    def _simulate(self) -> SimulationMeasures:
+        pass
+
+    @abstractmethod
+    def execute(self, individual: Individual) -> SimulationMeasures:
+        pass
+
+
+class RobotSimulatorConnector(SimulatorConnector, ABC):
+
+    def execute(self, robot: Robot) -> SimulationMeasures:
         if self.state != SimulatorState.READY:
             raise Exception("Simulator is not ready")
 
         self.state = SimulatorState.WORKING
-        self.add_robot(element)
+        self._add_robot(robot)
 
         # wait for results
-        measures = self.simulate()
+        measures = self._simulate()
 
-        self.remove_robot(element)
+        self._remove_robot(robot)
         self.state = SimulatorState.READY
 
         return measures
 
     @abstractmethod
-    def add_robot(self, element: object):
+    def _add_robot(self, robot: Robot):
         pass
 
     @abstractmethod
-    def remove_robot(self, element: object):
+    def _remove_robot(self, robot: Robot):
+        pass
+
+
+class AgentSimulatorConnector(SimulatorConnector, ABC):
+
+    def execute(self, agent: Agent) -> SimulationMeasures:
+        if self.state != SimulatorState.READY:
+            raise Exception("Simulator is not ready")
+
+        self.state = SimulatorState.WORKING
+        self._add_agent(agent)
+
+        # wait for results
+        measures = self._simulate()
+
+        self._remove_agent(agent)
+        self.state = SimulatorState.READY
+
+        return measures
+
+    @abstractmethod
+    def _add_agent(self, agent: Agent):
         pass
 
     @abstractmethod
-    def simulate(self) -> SimulationMeasures:
+    def _remove_agent(self, agent: Agent):
         pass
-

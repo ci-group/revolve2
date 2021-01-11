@@ -3,23 +3,6 @@ from enum import Enum
 from nca.core.genome.grammar.symbol import Symbol
 
 
-class Orientation(Symbol):
-    TOP = (-1, 0, 0)
-    RIGHT = (0, 1, 0)
-    DOWN = (1, 0, 0)
-    LEFT = (0, -1, 0)
-    NEUTRAL = (0, 0, 0)
-
-    @classmethod
-    def directions(cls):
-        return [Orientation.TOP, Orientation.RIGHT, Orientation.DOWN, Orientation.LEFT]
-
-
-class Alignment(Orientation, Enum):
-    FRONT = (0, 0, 1)
-    BACK = (0, 0, -1)
-
-
 class Coordinate3D:
     def __init__(self, x: int, y: int, z: int):
         self.x = x
@@ -27,10 +10,13 @@ class Coordinate3D:
         self.z = z
 
     def __add__(self, other):
-        if isinstance(other, Orientation):
-            return Coordinate3D(self.x + other.value[0], self.y + other.value[1], self.z + other.value[2])
-        else:
-            return Coordinate3D(self.x + other.x, self.y + other.y, self.z + other.z)
+        return Coordinate3D(self.x + other.x, self.y + other.y, self.z + other.z)
+
+    def __sub__(self, other):
+        return Coordinate3D(self.x - other.x, self.y - other.y, self.z - other.z)
+
+    def __truediv__(self, other):
+        return Coordinate3D(self.x / other, self.y / other, self.z / other)
 
     def __repr__(self):
         return "(" + str(self.x) + " | " + str(self.y) + " | " + str(self.z) + ")"
@@ -40,6 +26,23 @@ class Coordinate3D:
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y and self.z == other.z
+
+
+class Orientation(Symbol):
+    TOP = Coordinate3D(1, 0, 0)
+    RIGHT = Coordinate3D(0, 1, 0)
+    DOWN = Coordinate3D(-1, 0, 0)
+    LEFT = Coordinate3D(0, -1, 0)
+    NEUTRAL = Coordinate3D(0, 0, 0)
+
+    @classmethod
+    def directions(cls):
+        return [Orientation.TOP, Orientation.RIGHT, Orientation.DOWN, Orientation.LEFT]
+
+
+class Alignment(Enum):
+    FRONT = Coordinate3D(0, 0, 1)
+    BACK = Coordinate3D(0, 0, -1)
 
 
 class BiDict(dict):

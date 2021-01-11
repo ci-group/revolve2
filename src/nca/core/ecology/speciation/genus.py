@@ -22,7 +22,7 @@ class Genus:
     def insert(self, individual: Individual):
         for population in self.species:
             if self.compatibility.compatible(population.individuals, individual):
-                population.individuals.add(individual)
+                population.individuals.append(individual)
                 return True
 
         return False

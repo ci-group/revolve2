@@ -8,8 +8,8 @@ from nca.core.genome.grammar.symbol import Symbol
 
 class Initialization(ABC):
 
-    def __init__(self):
-        self.configuration = InitializationConfiguration()
+    def __init__(self, configuration: InitializationConfiguration = InitializationConfiguration()):
+        self.configuration = configuration
         pass
 
     @abstractmethod

@@ -1,12 +1,11 @@
 import string
-from enum import Enum
 from typing import List, Dict
 
 from nca.core.abstract.sequential_identifier import PopulationIdentifier
 from nca.core.actor.actors import Actors
 from nca.core.actor.age import GenerationalAge
 from nca.core.actor.measures import BehavioralMeasurement, MorphologicalMeasurement, EpigeneticMeasurement, Measurement
-from visualization.analysis.statistics import Statistics, MeasurementStatistics
+from visualization.analysis.statistics import MeasurementStatistics
 
 
 class Reporter:

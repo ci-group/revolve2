@@ -1,10 +1,8 @@
 import string
 from typing import List
 
-import numpy
 import numpy as np
 
-from nca.core.abstract.behavioral.iterator import Iterator
 from nca.core.actor.individual import Individual
 
 
@@ -16,7 +14,7 @@ class Actors(List):
         else:
             super().__init__(agents)
 
-    def add(self, agent: Individual):
+    def append(self, agent: Individual):
         super().append(agent)
 
     def remove(self, agent: Individual):

@@ -5,6 +5,7 @@ from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology import PopulationEcology
 from nca.core.ecology.population import Population
 from nca.core.evolution.conditions.initialization import Initialization
+
 from revolve.evosphere.ecosphere import GazeboEcosphere, Ecosphere
 from revolve.robot.birth_clinic import RobotBirthClinic, BirthClinic, IndividualBirthClinic
 
@@ -14,7 +15,7 @@ class Biosphere(ABC):
     def __init__(self,
                  population_ecology: PopulationEcology = PopulationEcology(),
                  actor_factory: ActorFactory = ActorFactory(),
-                 birth_clinic: BirthClinic = BirthClinic(),
+                 birth_clinic: BirthClinic = IndividualBirthClinic(),
                  ecospheres: List[Ecosphere] = None):
         self.population_ecology: PopulationEcology = population_ecology
         self.actor_factory: ActorFactory = actor_factory

@@ -21,7 +21,6 @@ class TimeSeriesVisualization:
 
     def visualize(self):
         for value_series_key in self.values.keys():
-            print(value_series_key, self.values[value_series_key])
             plt.plot(self.values[value_series_key])
         plt.legend(self.values.keys())
         plt.show()
@@ -67,6 +66,7 @@ class StatisticsVisualization:
         if self.y_axis is not None:
             plt.ylabel(self.y_axis)
 
-        plt.fill_between(range(100), self.statistics.lower_quartile, self.statistics.upper_quartile, alpha=0.5, color="khaki")
+        plt.fill_between(range(len(self.statistics.lower_quartile)),
+                         self.statistics.lower_quartile, self.statistics.upper_quartile, alpha=0.5, color="khaki")
         plt.legend(["Maximum", "Median", 'Minimum', 'IQR'])
         plt.show()

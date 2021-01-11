@@ -69,7 +69,6 @@ class MuLambdaSelection(SurvivorSelection):
 
     def algorithm(self, individuals: Actors) -> List[Individual]:
         raise Exception("Unimplemented Mu Lambda Selection")
-        return []
 
 
 class NullSurvivorSelection(FitnessSteadyStateSelection):

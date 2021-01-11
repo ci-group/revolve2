@@ -1,5 +1,3 @@
-from abc import ABC
-from typing import List
 
 from nca.core.ecology.population import Population
 from visualization.visualization import StatisticsVisualization, Visualization
@@ -11,7 +9,6 @@ class PopulationVisualization:
     def __init__(self, population: Population, x_axis="x", y_axis="y"):
         super().__init__("Population", x_axis=x_axis, y_axis=y_axis)
         self.population: Population = population
-
 
 
 class PopulationFitnessVisualization(PopulationVisualization, StatisticsVisualization):

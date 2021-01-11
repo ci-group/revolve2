@@ -58,20 +58,16 @@ class EvolutionaryAlgorithm:
         offspring: Actors = Actors([Individual(self.mutation(self.recombination(parents)), parents)
                                     for parents in parent_combinations])
 
-        offspring2: Actors = Actors([Individual(self.mutation(copy.deepcopy(individual.genotype))) for individual in population.individuals])
-
         # EVALUATE the candidates
         evaluation_time = time.time()
         evaluator(offspring)
-        evaluator(offspring2)
 
         mortality_time = time.time()
-        #population.individuals = self.mortality_selection.algorithm(population.individuals, offspring)
+        population.individuals = self.mortality_selection.algorithm(population.individuals, offspring)
 
         # (SURVIVOR) SELECT individuals for the next generation
         survivor_time = time.time()
-        individuals = copy.deepcopy(population.individuals)
-        new_individuals, rejected_individuals = self.survivor_selection.select(offspring)
+        new_individuals, rejected_individuals = self.survivor_selection.select(population.individuals)
         population.next_generation(new_individuals, rejected_individuals)
 
         final_time = time.time()

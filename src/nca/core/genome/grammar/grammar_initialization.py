@@ -4,7 +4,7 @@ import numpy as np
 
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.grammar.symbol import Symbol
-from revolve.robot.robogen.robogen_module import RobogenModule
+from revolve.robot.body.robogen.robogen_module import RobogenModule
 
 RobogenAxiom = List[RobogenModule]
 

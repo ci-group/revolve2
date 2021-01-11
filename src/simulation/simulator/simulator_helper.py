@@ -10,5 +10,3 @@ class SimulatorType(Enum):
     UNITY = auto()
     MALMO = auto()
     EVOMAN = auto()
-
-

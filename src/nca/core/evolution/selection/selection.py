@@ -1,5 +1,3 @@
-
-# Multiple Selection
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -7,7 +5,6 @@ from nca.core.abstract.behavioral.command import Command
 from nca.core.abstract.configurations import PopulationConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
-from nca.core.genome.genotype import Genotype
 
 
 class Selection(Command, ABC):

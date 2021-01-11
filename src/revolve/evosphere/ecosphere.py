@@ -2,9 +2,10 @@ import os
 import string
 from abc import abstractmethod
 
-from nca.core.actor.fitnesses import DisplacementFitness, FitnessEvaluation
+from nca.core.actor.fitness_evaluation import FitnessEvaluation
 from nca.core.actor.individual import Individual
 from nca.experiment_manager import ExperimentManager
+from revolve.evosphere.fitness_evaluation import DisplacementFitness
 from revolve.evosphere.performance_measures import PerformanceMeasures
 from simulation.simulator.simulator_helper import SimulatorType
 

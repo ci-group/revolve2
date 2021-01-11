@@ -8,7 +8,7 @@
 # imports framework
 import sys
 sys.path.insert(0, '..')
-from environment import Environment
+from third_party.evoman.environment import Environment
 from demo_controller import player_controller, enemy_controller
 
 # imports other libs

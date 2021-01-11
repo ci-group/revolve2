@@ -7,5 +7,5 @@ class Builder:
         pass
 
     @abstractmethod
-    def build(self, *args, **kwargs) -> object:
+    def create(self, *args, **kwargs) -> object:
         pass

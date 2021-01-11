@@ -41,7 +41,7 @@ class GenusManagement(PopulationManagement):
 
         for population in self.populations():
             for agent in population.individuals:
-                all_agents.add(agent)
+                all_agents.append(agent)
 
         return all_agents
 

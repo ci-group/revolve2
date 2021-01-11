@@ -1,4 +1,4 @@
-from controller import Controller
+from third_party.evoman.controller import Controller
 import numpy as np
 
 def sigmoid_activation(x):

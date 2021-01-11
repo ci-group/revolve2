@@ -1,6 +1,5 @@
 
-from nca.core.evolution.conditions.initialization import Initialization, SymbolicInitialization
-from nca.core.genome.grammar.symbol import Symbol
+from nca.core.evolution.conditions.initialization import SymbolicInitialization
 from nca.core.genome.representations.representation import Representation
 
 

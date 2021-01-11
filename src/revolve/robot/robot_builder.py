@@ -1,9 +1,8 @@
 from abc import abstractmethod, ABC
 
 from nca.core.abstract.creational.builder import Builder
-from nca.core.actor.individual import Individual
-from nca.core.genome.genotype import Genotype
-from revolve.evosphere.ecosphere import Ecosphere
+from revolve.robot.brain.brain import Brain
+from revolve.robot.development_request import DevelopmentRequest, BrainDevelopmentRequest
 
 
 class RobotBuilder(Builder, ABC):
@@ -12,6 +11,5 @@ class RobotBuilder(Builder, ABC):
         super().__init__()
 
     @abstractmethod
-    def build(self, genotype: Genotype, ecosphere: Ecosphere):
+    def create(self, brain_development_request: BrainDevelopmentRequest) -> Brain:
         pass
-

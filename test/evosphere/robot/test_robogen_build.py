@@ -1,7 +1,7 @@
 import unittest
 
-from revolve.robot.body.robogen_body import RobogenBodyBuilder, RobogenBody
-from revolve.robot.robogen.robogen_genotype import IndirectRobogenGenotype, DirectRobogenGenotype
+from revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype, DirectRobogenGenotype
+from revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder, RobogenBody
 
 
 class TestRobogenBuild(unittest.TestCase):
@@ -10,7 +10,7 @@ class TestRobogenBuild(unittest.TestCase):
         builder = RobogenBodyBuilder()
         genotype = IndirectRobogenGenotype()
 
-        body = builder.build(genotype)
+        body = builder.create(genotype)
         self.assertIsInstance(body, RobogenBody)
         self.assertTrue(len(body.modules) > 0)
 
@@ -18,7 +18,7 @@ class TestRobogenBuild(unittest.TestCase):
         builder = RobogenBodyBuilder()
         genotype = DirectRobogenGenotype()
 
-        body = builder.build(genotype)
+        body = builder.create(genotype)
         self.assertIsInstance(body, RobogenBody)
         self.assertTrue(len(body.modules) > 0)
 

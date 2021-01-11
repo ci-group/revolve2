@@ -7,7 +7,7 @@ from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfi
 from revolve.evosphere.biosphere import Biosphere, RobotBiosphere, IndividualBiosphere
 
 from simulation.simulation_manager import SimulationManager
-from simulation.simulator.simulator_command import SimulateCommand
+from simulation.simulator.simulator_command import SimulationRequest
 
 
 class Evosphere:
@@ -52,7 +52,7 @@ class Evosphere:
 
     def evaluate(self, agents: Actors):
         for ecosphere in self.biosphere.ecospheres:
-            self.simulation.simulate(SimulateCommand(agents, ecosphere, self.biosphere.birth_clinic))
+            self.simulation.simulate(SimulationRequest(agents, ecosphere, self.biosphere.birth_clinic))
 
     def log(self, string: str):
         if self.debug:

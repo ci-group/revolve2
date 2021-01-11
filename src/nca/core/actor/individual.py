@@ -31,11 +31,16 @@ class Individual:
     def get_objectives(self) -> List[float]:
         return self.fitness.objectives
 
-    def get_representation(self):
+    def get_representation(self, key=None):
         if len(self.genotype.keys()) == 1:
             return self.genotype[list(self.genotype.keys())[0]]
-        else:
+
+        if key is None:
             return self.genotype
+        elif key in self.genotype:
+            return self.genotype[key]
+
+        raise Exception("Key not in genotype to get representation.")
 
     def __repr__(self):
         return str(self.id) + " " + str(self.genotype) + " " + str(self.fitness) + "\n"

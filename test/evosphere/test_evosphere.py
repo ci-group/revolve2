@@ -1,6 +1,6 @@
 import unittest
 
-from evosphere.mock_evosphere import MockEvosphere
+from test.evosphere.mock_evosphere import MockEvosphere
 from revolve.evosphere.evosphere import RobotEvosphere
 
 

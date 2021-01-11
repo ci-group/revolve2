@@ -1,10 +1,8 @@
 from typing import List
 
-from nca.core.actor.fitnesses import OnesFitness, FitnessEvaluation
+from nca.core.actor.fitness_evaluation import OnesFitness, FitnessEvaluation
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology import PopulationEcology
-from visualization.analysis.statistics import Statistics
-from visualization.analysis.statistics_summary import SummaryStatistics
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
 from nca.evolution import Evolution
 

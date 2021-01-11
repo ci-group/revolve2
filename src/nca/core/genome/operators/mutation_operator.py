@@ -1,4 +1,3 @@
-import copy
 import random
 from abc import abstractmethod, ABC
 from typing import Tuple
@@ -171,18 +170,25 @@ class InsertMutation(StructuralMutation):
 
 class ReplaceMutation(StructuralMutation):
 
-    def __init__(self):
-        super().__init__()
-
     def _mutate(self, representation: Representation):
         index = representation.random_index()
         representation[index] = representation.random_value()
 
 
-class DeleteMutation(StructuralMutation):
+class UniqueReplaceMutation(StructuralMutation):
 
-    def __init__(self):
-        super().__init__()
+    def _mutate(self, representation: Representation):
+        index = representation.random_index()
+
+        while True:
+            new_value = representation.random_value()
+            if new_value not in representation:
+                break
+
+        representation[index] = new_value
+
+
+class DeleteMutation(StructuralMutation):
 
     def _mutate(self, representation: Representation):
         #if isinstance(representation, ChromosomalRepresentation):
@@ -192,10 +198,13 @@ class DeleteMutation(StructuralMutation):
         representation[:] = np.delete(representation, index)
 
 
-class InversionMutation(StructuralMutation):
+class NoMutation(StructuralMutation):
 
-    def __init__(self):
-        super().__init__()
+    def _mutate(self, representation: Representation):
+        pass
+
+
+class InversionMutation(StructuralMutation):
 
     def _mutate(self, representation: Representation):
         selection_range = representation.range_selection()
@@ -203,9 +212,6 @@ class InversionMutation(StructuralMutation):
 
 
 class DisplacementMutation(StructuralMutation):
-
-    def __init__(self):
-        super().__init__()
 
     def _mutate(self, representation: Representation):
         choices = representation.selection_indexes()

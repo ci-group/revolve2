@@ -32,6 +32,14 @@ class IntegerInitialization(ValuedInitialization):
                                  size=length).tolist()
 
 
+class UniqueIntegerInitialization(ValuedInitialization):
+
+    def __call__(self, length: int):
+        return (np.random.choice(self.configuration.max_range - self.configuration.min_range,
+                                 size=length, replace=False) + self.configuration.min_range).tolist()
+
+
+
 class UniformInitialization(ValuedInitialization):
 
     def __call__(self, size: int):

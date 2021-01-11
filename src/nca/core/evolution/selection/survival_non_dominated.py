@@ -15,7 +15,6 @@ from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 from nca.core.evolution.selection.parent_selection import TournamentSelection
 from nca.core.evolution.selection.selection import SurvivorSelection
-from nca.core.genome.genotype import Genotype
 from nca.core.genome.operators.mutation_operator import ReplaceMutation
 from nca.core.genome.operators.recombination_operator import OnePointCrossover
 
@@ -119,7 +118,6 @@ class NonDominatedSortingSurvival(SurvivorSelection):
             if objectives.shape[1] == 3:
                 ax.scatter(objectives[individual_index, 0], objectives[individual_index, 1], objectives[individual_index, 2], s=10*(number_of_fronts-front_number),
                            color=colors[front_number])
-
             else:
                 plt.scatter(objectives[individual_index, 0], objectives[individual_index, 1], s=5*(number_of_fronts-front_number),
                             color=colors[front_number])
@@ -129,46 +127,42 @@ class NonDominatedSortingSurvival(SurvivorSelection):
         #                color='white')
         plt.show()
 
-    # Programmed By Yang Shang shang  Email：yangshang0308@gmail.com  GitHub: https://github.com/DevilYangS/codes
-    def sortrows(self, objectives, order="ascend"):
-        objectives_temp = objectives[:, ::-1]
-        objectives_row = objectives_temp.T
-        if self.minimization:
-            rank = np.lexsort(-objectives_row)
-        else:
-            rank = np.lexsort(objectives_row)
-        sorted_objectives = objectives[rank, :]  # Matrix[rank] 也可以
-        return sorted_objectives, rank
-
     # adapted from https://www.programmersought.com/article/6084850621/
-    def nd_sort(self, objectives, max_range):
+    # adapted from https://www.programmersought.com/article/6084850621/
+    def nd_sort(self, objectives: np.ndarray, max_range: float) -> (List[int], int):
+        """
+        Non-dominated Sorting algorithm
+        :param objectives: objective matrix
+        :param max_range:
+        :return: (front numbers, biggest front number)
+        """
         number_of_individuals, number_of_objectives = objectives.shape[0], objectives.shape[1]
-
-        sorted_matrix = np.lexsort(objectives[:,::-1].T)  # loc1 is the position of the new matrix element in the old matrix, sorted from the first column in order
+        sorted_matrix = np.lexsort(objectives[:,
+                                   ::-1].T)  # loc1 is the position of the new matrix element in the old matrix, sorted from the first column in order
         sorted_objectives = objectives[sorted_matrix]
         inverse_sorted_indexes = sorted_matrix.argsort()  # loc2 is the position of the old matrix element in the new matrix
-        frontno = np.ones(number_of_individuals) * (np.inf)  # Initialize all levels to np.inf
-
+        frontno = np.ones(number_of_individuals) * np.inf  # Initialize all levels to np.inf
         maxfno = 0  # 0
-        while (np.sum(frontno < np.inf) < min(max_range, number_of_individuals)):  # The number of individuals assigned to the rank does not exceed the number of individuals to be sorted
+        while np.sum(frontno < np.inf) < min(max_range,
+                                             number_of_individuals):  # The number of individuals assigned to the rank does not exceed the number of individuals to be sorted
             maxfno = maxfno + 1
             for i in range(number_of_individuals):
-                if (frontno[i] == np.inf):
-                    dominated = 0
+                if frontno[i] == np.inf:
+                    dominated = False
                     for j in range(i):
-                        if (frontno[j] == maxfno):
+                        if frontno[j] == maxfno:
                             m = 0
                             flag = 0
-                            while (m < number_of_objectives and sorted_objectives[i, m] >= sorted_objectives[j, m]):
-                                if (sorted_objectives[i, m] == sorted_objectives[j, m]):  # does not constitute a dominant relationship
+                            while m < number_of_objectives and sorted_objectives[i, m] >= sorted_objectives[j, m]:
+                                if sorted_objectives[i, m] == sorted_objectives[
+                                    j, m]:  # does not constitute a dominant relationship
                                     flag = flag + 1
                                 m = m + 1
-                            if (m >= number_of_objectives and flag < number_of_objectives):
-                                dominated = 1
+                            if m >= number_of_objectives and flag < number_of_objectives:
+                                dominated = True
                                 break
-                    if dominated == 0:
+                    if not dominated:
                         frontno[i] = maxfno
-
         frontno = frontno[inverse_sorted_indexes]
         return frontno, maxfno
 

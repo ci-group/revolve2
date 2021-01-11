@@ -1,12 +1,11 @@
 import copy
 import unittest
 
-from nca.core.actor.fitnesses import DisplacementFitness
-from nca.core.actor.individual import Individual
 from nca.core.genome.operators.initialization import UniformInitialization
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve.evosphere.fitness_evaluation import DisplacementFitness
 from revolve.robot.robot import Robot
-from simulation_test.simulator.mock_measures import MockPerformanceMeasures
+from test.simulation.simulator.mock_measures import MockPerformanceMeasures
 
 
 class TestRobogenManipulation(unittest.TestCase):
@@ -18,7 +17,7 @@ class TestRobogenManipulation(unittest.TestCase):
 
         new_robot: Robot = copy.deepcopy(robot)
         new_robot.measures = MockPerformanceMeasures()
-        fitness(new_robot)
+        new_robot.fitness.add('DisplacementFitness', fitness.calculate(new_robot))
 
         self.assertNotEqual(new_robot.measures, robot.measures)
-        self.assertNotEqual(new_robot.fitness, robot.fitness)
+        self.assertNotEqual(new_robot.fitness.value(), robot.fitness.value())

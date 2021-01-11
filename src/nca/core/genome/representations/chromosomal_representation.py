@@ -17,7 +17,7 @@ class ChromosomalRepresentation(Representation):
 =======
         self.genome: List = []
         self.initialize()
->>>>>>> Stashed changes:src/nca/core/genome/chromosomal_representation.py
+
 
     def initialize(self):
         for _ in range(self.configuration.number_of_chromosomes):
@@ -54,5 +54,5 @@ class ChromosomalRepresentation(Representation):
 
     def visit(self, representation_visitor):
         pass
->>>>>>> Stashed changes:src/nca/core/genome/chromosomal_representation.py
+
 """

@@ -5,7 +5,7 @@ from nca.core.genome.grammar.grammar import RewritingGrammar
 from nca.core.genome.grammar.grammar_initialization import LSystemInitialization
 from nca.core.genome.grammar.symbol import Symbol
 from nca.core.genome.representations.symbolic_representation import SymbolicRepresentation
-from revolve.robot.robogen.robogen_grammar import RobogenSymbol
+from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 
 
 class LSystemGenotype(Genotype):
@@ -47,6 +47,7 @@ class SelfOrganizingLSystemGenotype(Genotype):
     def initialize(self):
         self.clear()
         symbols = SymbolicRepresentation(self.initialization.symbol_type)
+
         representations = [symbols,
                            self.initialization.axiom_initialization(symbols, 0),
                            self.initialization.rules_initialization(symbols, 0)]

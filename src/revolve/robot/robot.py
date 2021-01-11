@@ -12,4 +12,3 @@ class Robot(Individual):
         self.body: Body = body
         
         self.measures = None
-

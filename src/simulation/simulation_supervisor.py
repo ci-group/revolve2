@@ -1,9 +1,8 @@
-
 import bisect
 from enum import Enum, auto
 
 from nca.core.actor.individual import Individual
-from simulation.simulator.simulator_command import SimulateCommand
+from simulation.simulator.simulator_command import SimulationRequest
 from simulation.simulator.simulator_factory import SimulatorFactory
 from src.simulation.simulator.simulation_connector import SimulatorConnector
 
@@ -33,14 +32,14 @@ class RequestPriority(Enum):
 
 class SimulationSupervisor:
 
-    def __init__(self, simulate_command: SimulateCommand, number_of_simulator_workers: int = 4):
-        self.number_of_simulator_workers: int = number_of_simulator_workers
+    def __init__(self, simulation_request: SimulationRequest):
         self.robot_queue: PriorityQueue = PriorityQueue()
-        self.simulator_connector: SimulatorConnector = SimulatorFactory(simulate_command).create()
+        self.simulation_request: SimulationRequest = simulation_request
+        self.simulator_connector: SimulatorConnector = SimulatorFactory(simulation_request).create()
+        self.simulator_connector.start_simulator()
 
-    def work(self, individual: Individual, request_command: SimulateCommand):
-
-        #self.robot_queue.insert(individual, request_command.task_priority.value)
-
+    def work(self, individual: Individual):
+        #self.robot_queue.insert(individual, self.simulation_request.task_priority.value)
+        self.simulator_connector.simulate(individual)
         #if isinstance(request_command.ecosphere, SimulationEcosphere):
         pass

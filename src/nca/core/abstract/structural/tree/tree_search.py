@@ -4,17 +4,17 @@ from nca.core.abstract.structural.tree.tree_helper import Orientation
 
 def depth_first_search(visited, graph, node):
     if node not in visited:
-        visited.add(node)
+        visited.append(node)
         for neighbour, element in graph[node]:
             depth_first_search(visited, graph, element)
 
 
 root = Tree2D()
-root.add(Orientation.TOP)
+root.append(Orientation.TOP)
 
 child = Tree2D()
-child.add(Orientation.LEFT)
-child.add(Orientation.RIGHT)
-child.add(Orientation.DOWN)
-root.add(Orientation.DOWN)
+child.append(Orientation.LEFT)
+child.append(Orientation.RIGHT)
+child.append(Orientation.DOWN)
+root.append(Orientation.DOWN)
 depth_first_search(set(), root.graph(), root)

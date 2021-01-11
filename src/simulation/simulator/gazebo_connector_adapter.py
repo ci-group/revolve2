@@ -1,9 +1,10 @@
 from revolve.evosphere.biosphere import Ecosphere
+from revolve.robot.robot import Robot
 from src.simulation.simulation_measures import SimulationMeasures
-from src.simulation.simulator.simulation_connector import SimulatorConnector
+from src.simulation.simulator.simulation_connector import RobotSimulatorConnector
 
 
-class GazeboConnectorAdapter(SimulatorConnector):
+class GazeboConnectorAdapter(RobotSimulatorConnector):
 
     def __init__(self, ecosphere: Ecosphere):
         super().__init__(ecosphere)
@@ -14,11 +15,11 @@ class GazeboConnectorAdapter(SimulatorConnector):
     def stop_simulator(self) -> bool:
         return True
 
-    def add_robot(self, element: object):
+    def _add_robot(self, robot: Robot):
         pass
 
-    def remove_robot(self, element: object):
+    def _remove_robot(self, robot: Robot):
         pass
 
-    def simulate(self) -> SimulationMeasures:
+    def _simulate(self) -> SimulationMeasures:
         pass

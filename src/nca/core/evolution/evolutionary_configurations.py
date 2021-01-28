@@ -52,7 +52,7 @@ class GeneticAlgorithmConfiguration(EvolutionaryConfiguration):
                  parent_selection: ParentSelection = TournamentSelection(),
                  survivor_selection: SurvivorSelection = FitnessSteadyStateSelection(),
                  initialization_type: type(Initialization) = UniformInitialization,
-                 condition: Condition = EvaluationsCondition(100),
+                 condition: Condition = EvaluationsCondition(500),
                  special_features: SpecialFeatures = SpecialFeatures()):
         super().__init__(recombination=recombination, mutation=mutation, parent_selection=parent_selection,
                          survivor_selection=survivor_selection, initialization_type=initialization_type,

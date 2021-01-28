@@ -34,15 +34,29 @@ class Orientation(Symbol):
     DOWN = Coordinate3D(-1, 0, 0)
     LEFT = Coordinate3D(0, -1, 0)
     NEUTRAL = Coordinate3D(0, 0, 0)
+    FRONT = Coordinate3D(0, 0, 1)
+    BACK = Coordinate3D(0, 0, -1)
+
+    def opposite(self):
+        if self == self.TOP:
+            return self.DOWN
+        elif self == self.RIGHT:
+            return self.LEFT
+        elif self == self.DOWN:
+            return self.TOP
+        elif self == self.LEFT:
+            return self.RIGHT
+        elif self == self.NEUTRAL:
+            return self.NEUTRAL
+        elif self == self.FRONT:
+            return self.BACK
+        elif self == self.BACK:
+            return self.FRONT
+        raise Exception("Orientation unknown")
 
     @classmethod
     def directions(cls):
         return [Orientation.TOP, Orientation.RIGHT, Orientation.DOWN, Orientation.LEFT]
-
-
-class Alignment(Enum):
-    FRONT = Coordinate3D(0, 0, 1)
-    BACK = Coordinate3D(0, 0, -1)
 
 
 class BiDict(dict):

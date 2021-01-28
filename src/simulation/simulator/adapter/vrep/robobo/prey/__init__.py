@@ -1,0 +1,1 @@
+from .prey_controller import Prey

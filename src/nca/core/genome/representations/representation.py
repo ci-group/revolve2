@@ -15,7 +15,7 @@ class Representation(List, ABC):
         self.configuration = RepresentationConfiguration()
 
         if initialization is None:
-            raise Exception("Invalid Initializer")
+            print("Invalid Initializer")
 
         self.initialization: Initialization = initialization
 

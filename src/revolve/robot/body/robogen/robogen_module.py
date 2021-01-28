@@ -25,13 +25,16 @@ class RobogenModule:
         if parent_module is not None:
             self.children[Orientation.DOWN] = parent_module
 
+    def next_coordinate(self):
+        return self.coordinate + self.next_orientation.value
+
     def add_child(self, symbol: RobogenSymbol):
-        robogen_module = RobogenModule(symbol, self.coordinate + self.next_orientation.value, self.next_orientation)
+        robogen_module = RobogenModule(symbol, self.next_coordinate(), self.next_orientation)
         self.children[self.next_orientation] = robogen_module
         return robogen_module
 
     def move_pointer(self, pointer_orientation: Orientation):
-        if self.symbol in RobogenSymbol.joints():
+        if self.symbol in RobogenSymbol.actuators():
             return  # cannot change the orientation point for joints, only one is possible.
 
         self.next_orientation = pointer_orientation

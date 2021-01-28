@@ -82,13 +82,13 @@ class RobogenBodyBuilder(RobotBodyBuilder):
             return None
 
         # Symbol in RobogenSymbol.modules():
-        module = self.current_module.add_child(symbol)
-
-        if module.coordinate not in self.hashmap.keys():
+        coordinate = self.current_module.next_coordinate()
+        if coordinate not in self.hashmap.keys():
+            module = self.current_module.add_child(symbol)
             self.current_module = module
-            self.hashmap[module.coordinate] = self.current_module
+            self.hashmap[coordinate] = self.current_module
             return module
         else:
-            self.current_module = self.hashmap[module.coordinate]
+            self.current_module = self.hashmap[coordinate]
             print("intersection limits ability to create module")
             return None

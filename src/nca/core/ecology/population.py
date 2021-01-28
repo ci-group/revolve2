@@ -1,10 +1,11 @@
 import string
-from typing import List, Dict
+from typing import Dict, List
 
 from nca.core.abstract.sequential_identifier import PopulationIdentifier
 from nca.core.actor.actors import Actors
 from nca.core.actor.age import GenerationalAge
-from nca.core.actor.measures import BehavioralMeasurement, MorphologicalMeasurement, EpigeneticMeasurement, Measurement
+from nca.core.actor.individual import Individual
+from nca.core.ecology.metrics import PopulationMetrics, IndividualMetrics
 from visualization.analysis.statistics import MeasurementStatistics
 
 
@@ -17,67 +18,6 @@ class Reporter:
         pass
 
 
-class Metrics:
-    def __init__(self):
-        pass
-
-
-class IndividualMetrics:
-
-    def __init__(self):
-        self.measures: Dict[Measurement, List] = dict()
-
-        self.initialize()
-
-    def initialize(self):
-        for measurement_type in [BehavioralMeasurement, EpigeneticMeasurement, MorphologicalMeasurement]:
-            for measurement in measurement_type:
-                self.measures[measurement] = []
-
-    def log(self, individuals):
-        for individual in individuals:
-            for measure_key in individual.measures.keys():
-                self.measures[measure_key].append(individual.measures[measure_key])
-
-
-class PopulationMetrics(Dict[str, List]):
-
-    def __init__(self):
-        super().__init__()
-        self["rejection_rate"] = []
-        self["acceptance_rate"] = []
-        self.old_individual_ids = []
-
-    def log(self, individuals, rejected_individuals):
-        total_individuals: int = len(individuals)
-        total_offspring: int = len(rejected_individuals)
-
-        count_rejection: int = 0
-        count_acceptance: int = 0
-
-        for individual in individuals:
-            if individual.id not in self.old_individual_ids:
-                count_acceptance += 1
-                self.old_individual_ids.append(individual.id)
-
-        for individual in rejected_individuals:
-            if individual.id in self.old_individual_ids:
-                self.old_individual_ids.remove(individual.id)
-                count_rejection += 1
-
-        self["acceptance_rate"].append(count_acceptance / total_individuals)
-        if total_offspring > 0:
-            self["rejection_rate"].append(count_rejection / total_offspring)
-        else:
-            self["rejection_rate"].append(0.0)
-
-    def __repr__(self):
-        output = ""
-        output += "rejection: " + str(self["rejection_rate"]) + "\n"
-        output += "acceptance: " + str(self["acceptance_rate"]) + "\n"
-        return output
-
-
 class Population:
 
     identifier = PopulationIdentifier()
@@ -85,6 +25,7 @@ class Population:
     def __init__(self, individuals: Actors, rejected_individuals: Actors = None):
         self.id: int = self.identifier.id()
         self.age: GenerationalAge = GenerationalAge()
+        self.history: List[Dict[int, Individual]] = []
 
         self.individuals: Actors = individuals
         self.rejected_individual: Actors = rejected_individuals if not(rejected_individuals is None) else []
@@ -93,6 +34,8 @@ class Population:
 
         self.population_metrics: PopulationMetrics = PopulationMetrics()
         self.individual_metrics: IndividualMetrics = IndividualMetrics()
+
+        self._update_history()
 
     def __get__(self):
         return self.individuals
@@ -110,6 +53,18 @@ class Population:
         # sort agents
         self.individuals = new_agents
         self.rejected_individual = rejected_agents
+
+        self._update_history()
+        #self._update_history(rejected_agents)
+
+    def _update_history(self):
+        generation_history: Dict[int, Individual] = {}
+
+        for individual in self.individuals:
+            if individual.id not in generation_history:
+                generation_history[individual.id] = individual
+
+        self.history.append(generation_history)
 
     def did_improve(self, agents: Actors):
         return agents.average_fitness() > self.individuals.average_fitness()

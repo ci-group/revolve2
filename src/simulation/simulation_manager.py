@@ -1,50 +1,46 @@
 from typing import Dict
-import threading
 
+from simulation.simulation_measures import SimulationMeasures
 from test.evosphere.mock_ecosphere import MockEcosphere
 from nca.core.abstract.configurations import SimulatorConfiguration
 from revolve.evosphere.ecosphere import Ecosphere
-#from revolve.evosphere.evoman import EvomanEcosphere
 from simulation.simulator.simulator_command import SimulationRequest
 from simulation.simulator.simulator_factory import SimulatorFactory
 from test.simulation.simulator.mock_measures import MockSimulationMeasures
-from src.simulation.simulation_supervisor import SimulationSupervisor
+from src.simulation.simulation_supervisor import SimulationSupervisor, ThreadedSimulationSupervisor
 
 
 class SimulationManager:
 
-    def __init__(self):
+    def __init__(self, threaded: bool = False):
         self.configuration = SimulatorConfiguration()
-        self.supervisors: Dict[int, SimulationSupervisor] = {}
+
+        if threaded:
+            self.supervisor_type = ThreadedSimulationSupervisor
+        else:
+            self.supervisor_type = SimulationSupervisor
+
+        self.supervisors: Dict[int, self.supervisor_type] = {}
 
     def simulate(self, request_command: SimulationRequest):
-        #if request_command not in self.supervisors.keys():
-        #    if not isinstance(request_command.ecosphere, EvomanEcosphere):
-        #        self.supervisors[request_command] = SimulationSupervisor(request_command)
-
         actors = request_command.birth_clinic.create(request_command.agents, request_command.ecosphere)
 
         simulator = SimulatorFactory(request_command).create()
 
         if simulator is None:
-
             if isinstance(request_command.ecosphere, MockEcosphere):
                 for actor in actors:
                     actor.measures = MockSimulationMeasures()
 
         if isinstance(request_command.ecosphere, Ecosphere):
+            if request_command.id not in self.supervisors:
+                self.supervisors[request_command.id] = self.supervisor_type(request_command)
             for actor in actors:
-                actor.measures = self.supervisors[request_command.id].work(actor, request_command)
-                actor.performance(request_command.ecosphere.fitness(actor))
+                actor.measures = self.supervisors[request_command.id].work(actor)
 
-
-        """
-            elif isinstance(request_command.ecosphere, EvomanEcosphere):
-                for actor in actors:
-                    x = threading.Thread(target=request_command.ecosphere.run, args=[actor])
-                    x.start()
-                    x.join()
-        """
+            results: Dict[int, SimulationMeasures] = self.supervisors[request_command.id].manager()
+            for actor in actors:
+                actor.fitness.add("ecosphere " + str(request_command.id), 0.0) # results[actor.id].fitness
 
     """
     def _find_available_supervisor(self):

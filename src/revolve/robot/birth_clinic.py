@@ -6,7 +6,7 @@ from nca.core.actor.individual import Individual
 from nca.core.actor.actors import Actors
 
 from revolve.robot.body.body_builder import BodyBuilder, RobotBodyBuilder
-from revolve.robot.brain.brain_builder import BrainBuilder, RobotBrainBuilder
+from revolve.robot.brain.brain_builder import BrainBuilder, RobotBrainBuilder, AgentBrainBuilder
 from revolve.robot.development_request import DevelopmentRequest
 from revolve.robot.robot import Robot
 
@@ -39,7 +39,7 @@ class IndividualBirthClinic(BirthClinic):
 
 
 class AgentBirthClinic(BirthClinic):
-    def __init__(self, brain_builder: BrainBuilder = RobotBrainBuilder()):
+    def __init__(self, brain_builder: BrainBuilder = AgentBrainBuilder()):
         super().__init__()
         self.brain_builder: BrainBuilder = brain_builder
 

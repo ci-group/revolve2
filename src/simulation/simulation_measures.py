@@ -22,6 +22,7 @@ class SimulationMeasures(Measures):
         self.categories = ['timestep', 'x', 'y', 'angle', 'energy']
         super().__init__({element: [] for element in self.categories})
         self.iterations = 0
+        self.fitness = 0.0
 
     def add(self, simulation_iteration: List[float]):
         assert(len(simulation_iteration) == len(self.categories))

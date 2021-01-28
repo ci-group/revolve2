@@ -35,6 +35,9 @@ class Statistics:
                 self.lower_quartile[-1],
                 self.minimum_value[-1]]
 
+    def __repr__(self):
+        return str(self.latest())
+
 
 class MeasurementStatistics(Dict[str, Statistics]):
 

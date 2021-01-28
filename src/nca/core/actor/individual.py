@@ -20,7 +20,7 @@ class Individual:
         if parents is not None:
             self.parent_ids: List[int] = [parent.id for parent in parents]
         else:
-            self.parent_ids: List[int] = None
+            self.parent_ids: List[int] = []
 
     def __lt__(self, other):
         return self.id < other.id

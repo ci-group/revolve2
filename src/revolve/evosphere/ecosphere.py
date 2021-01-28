@@ -7,7 +7,7 @@ from nca.core.actor.individual import Individual
 from nca.experiment_manager import ExperimentManager
 from revolve.evosphere.fitness_evaluation import DisplacementFitness
 from revolve.evosphere.performance_measures import PerformanceMeasures
-from simulation.simulator.simulator_helper import SimulatorType
+from simulation.simulator.simulator_type import SimulatorType
 
 
 class Ecosphere:
@@ -41,9 +41,9 @@ class UnityEcosphere(Ecosphere):
         super().__init__(filename, fitness_evaluation_type, SimulatorType.Unity)
 
 
-class VREPEcosphere(Ecosphere):
+class CoppeliaEcosphere(Ecosphere):
     def __init__(self, filename: string, fitness_evaluation_type: type(FitnessEvaluation) = DisplacementFitness):
-        super().__init__(filename, fitness_evaluation_type, SimulatorType.V_REP)
+        super().__init__(filename, fitness_evaluation_type, SimulatorType.COPPELIA)
 
 
 class MalmoEcosphere(Ecosphere):

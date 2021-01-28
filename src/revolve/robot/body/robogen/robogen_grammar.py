@@ -40,10 +40,6 @@ class RobogenSymbol(Symbol):
         return []
 
     @classmethod
-    def joints(cls):
-        return [cls.MODULE_HORIZONTAL_JOINT, cls.MODULE_VERTICAL_JOINT]
-
-    @classmethod
     def orientation(cls, elements=None):
         possibilities = [cls.ORIENTATION_TOP, cls.ORIENTATION_RIGHT, cls.ORIENTATION_LEFT,
                     cls.ORIENTATION_DOWN]

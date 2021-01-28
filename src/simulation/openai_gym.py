@@ -1,14 +1,36 @@
 
 import gym
-env = gym.make("CartPole-v1")
 
-observation = env.reset()
-for _ in range(1000):
-  env.render()
-  action = env.action_space.sample()  # your agent here (this takes random actions)
-  observation, reward, done, info = env.step(action)
 
-  if done:
-    observation = env.reset()
+class GymTemplate(gym.Env):
 
-env.close()
+    def __init__(self):
+        self.done = False
+
+    def reset(self):
+        self.done = False
+
+        return self.state()
+
+    def step(self, action):
+
+        return self.state()
+
+    def state(self):
+        return self._observation(), self._reward(), self._stop_condition(), self._info()
+
+    def render(self, mode='human'):
+        pass
+
+    def _observation(self):
+        return None
+
+    def _reward(self):
+        return None
+
+    def _stop_condition(self):
+        self.done = False
+        return self.done
+
+    def _info(self):
+        return None

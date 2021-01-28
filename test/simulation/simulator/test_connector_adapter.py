@@ -1,11 +1,11 @@
 from revolve.evosphere.biosphere import Ecosphere
 from revolve.robot.robot import Robot
+from simulation.simulator.adapter.simulation_adapters import SimulatorAdapter
 
 from src.simulation.simulation_measures import SimulationMeasures
-from src.simulation.simulator.simulation_connector import SimulatorConnector
 
 
-class TestConnectorAdapter(SimulatorConnector):
+class TestConnectorAdapter(SimulatorAdapter):
 
     def __init__(self, ecosphere: Ecosphere):
         super().__init__(ecosphere)

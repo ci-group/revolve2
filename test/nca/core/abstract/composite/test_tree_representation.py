@@ -1,10 +1,11 @@
 import unittest
 
-from nca.core.abstract.structural.tree.tree import Tree, Tree2D, Tree3D
-from nca.core.abstract.structural.tree.tree_helper import Orientation, Alignment
-from nca.core.abstract.structural.tree.tree_representation import TreeRepresentation, Tree2DRepresentation, \
-    Tree3DRepresentation
-"""
+from nca.core.abstract.structural.tree.tree import Tree, CoordinateTree
+from nca.core.abstract.structural.tree.tree_helper import Orientation
+from nca.core.genome.operators.recombination_operator import OnePointTreeCrossover
+from nca.core.genome.representations.tree_representation import TreeRepresentation, CoordinateTreeRepresentation
+
+
 class TreeRepresentationTest(unittest.TestCase):
 
     def test_tree(self):
@@ -15,29 +16,35 @@ class TreeRepresentationTest(unittest.TestCase):
         representation = TreeRepresentation(root_node)
 
         self.assertIsInstance(representation, TreeRepresentation)
-        self.assertIsInstance(representation, Tree)
+        self.assertIsInstance(representation[0], Tree)
 
-    def test_tree_2d(self):
-        root_node = Tree2D()
+    def test_coordinate_tree(self):
+        root_node = CoordinateTree()
 
-        representation = Tree2DRepresentation(root_node)
+        representation = CoordinateTreeRepresentation(root_node)
 
         root_node.add(Orientation.TOP)
         root_node.add(Orientation.DOWN)
 
-        self.assertIsInstance(representation, Tree2D)
-        for key, element in representation.children.items():
-            self.assertIsInstance(element, Tree2D)
+        self.assertIsInstance(representation[0], CoordinateTree)
+        for key, element in representation[0].children.items():
+            self.assertIsInstance(element, CoordinateTree)
 
-    def test_tree_3d(self):
-        root_node = Tree3D()
+    def test_recombination_tree(self):
 
-        representation = Tree3DRepresentation(root_node)
+        coordinate_tree_1 = CoordinateTree()
+        coordinate_tree_1.add(Orientation.TOP)
+        coordinate_tree_1.add(Orientation.LEFT)
+        representation_1 = CoordinateTreeRepresentation(coordinate_tree_1)
 
-        root_node.add(Alignment.TOP)
-        root_node.add(Alignment.BACK)
+        coordinate_tree_2 = CoordinateTree()
+        coordinate_tree_2.add(Orientation.DOWN)
+        coordinate_tree_2.add(Orientation.RIGHT)
+        representation_2 = CoordinateTreeRepresentation(coordinate_tree_2)
 
-        self.assertIsInstance(representation, Tree3D)
-        for key, element in representation.children.items():
-            self.assertIsInstance(element, Tree3D)
-"""
+        recombination = OnePointTreeCrossover()
+        recombination._recombine(representation_1, representation_2)
+
+        self.assertIsInstance(representation_1[0], CoordinateTree)
+        self.assertIsInstance(representation_2[0], CoordinateTree)
+

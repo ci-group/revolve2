@@ -1,6 +1,7 @@
 import unittest
 
 from nca.core.actor.individual_factory import ActorFactory
+from nca.core.ecology.population import PhylogenyMetrics
 from nca.evolution import Evolution
 from visualization.population_visualization import PopulationVisualization, PopulationFitnessVisualization
 from visualization.visualization import time_series_visualization
@@ -10,7 +11,8 @@ class TestEvolution(unittest.TestCase):
 
     def test_create(self):
         evolution = Evolution()
-        evolution.evolve()
+        population_ecology = evolution.evolve()
+
         self.assertTrue(True)
 
     def test_metrics(self):

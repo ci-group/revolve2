@@ -1,15 +1,40 @@
 import os
 import string
-import numpy as np
+from typing import List
 
+from nca.core.actor.agent import Agent
 from nca.core.actor.fitness import Fitness
-from nca.core.actor.individual import Individual
+from nca.core.actor.individual_factory import ActorFactory
+from nca.core.ecology import PopulationEcology
+from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
+from revolve.evosphere.biosphere import Biosphere, IndividualBiosphere
 
 from revolve.evosphere.ecosphere import Ecosphere
-from simulation.simulator.simulator_helper import SimulatorType
+from revolve.evosphere.evosphere import AgentEvosphere
+from revolve.robot.birth_clinic import BirthClinic, AgentBirthClinic
+from revolve.robot.brain.brain import Brain
+from revolve.robot.brain.brain_builder import BrainBuilder, AgentBrainBuilder
+from revolve.robot.brain.neural_network_brain import NeuralNetworkBrain
+from revolve.robot.development_request import BrainDevelopmentRequest
+from simulation.simulation_manager import SimulationManager
+from simulation.simulator.simulator_type import SimulatorType
 
-from third_party.evoman.demo.demo_controller import player_controller
-from third_party.evoman.environment import Environment
+
+class EvomanBrainBuilder(AgentBrainBuilder):
+    def __init__(self, brain_type: type(Brain) = NeuralNetworkBrain):
+        super().__init__(brain_type)
+
+    def create(self, brain_development_request: BrainDevelopmentRequest) -> Brain:
+        return self.brain_type()
+
+
+class EvomanBirthClinic(AgentBirthClinic):
+    def __init__(self, brain_builder: BrainBuilder = EvomanBrainBuilder()):
+        super().__init__()
+        self.brain_builder: BrainBuilder = brain_builder
+
+    def _create(self, development_request: BrainDevelopmentRequest) -> object:
+        return Agent(development_request.genotype, self.brain_builder.create(development_request))
 
 
 class EvomanEcosphere(Ecosphere):
@@ -22,10 +47,21 @@ class EvomanEcosphere(Ecosphere):
 
         self.filename = filename
 
-        self.env = Environment(experiment_name=self.filename, enemies=[2], playermode="ai", level=2,
-                          speed="fastest", player_controller=player_controller(10), enemy_controller="static")
 
-    def run(self, individual: Individual):
-        fitness_value, _, _, _ = self.env.play(pcont=np.array(individual.get_representation()))
-        individual.fitness.add("evoman", fitness_value)
+class EvomanBiosphere(IndividualBiosphere):
 
+    def __init__(self,
+                 population_ecology: PopulationEcology = PopulationEcology(),
+                 actor_factory: ActorFactory = ActorFactory(),
+                 birth_clinic: BirthClinic = EvomanBirthClinic(),
+                 ecospheres: List[Ecosphere] = None):
+        if ecospheres is None:
+            ecospheres = [EvomanEcosphere()]
+        super().__init__(population_ecology, actor_factory, birth_clinic, ecospheres)
+
+
+class EvomanEvosphere(AgentEvosphere):
+    def __init__(self, biosphere: Biosphere = EvomanBiosphere(),
+                 evolutionary_configuration: EvolutionaryConfiguration = GeneticAlgorithmConfiguration(),
+                 simulation: SimulationManager = SimulationManager(), debug=True):
+        super().__init__(biosphere, evolutionary_configuration, simulation, debug)

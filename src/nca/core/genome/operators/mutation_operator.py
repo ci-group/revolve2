@@ -11,6 +11,7 @@ from nca.core.genome.genotype import Genotype
 from nca.core.genome.operators.initialization import UniformInitialization, GaussianInitialization, BinaryInitialization, \
     IntegerInitialization
 from nca.core.genome.representations.representation import Representation
+from nca.core.genome.representations.tree_representation import TreeRepresentation, CoordinateTreeRepresentation
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
 
 
@@ -198,6 +199,26 @@ class DeleteMutation(StructuralMutation):
         representation[:] = np.delete(representation, index)
 
 
+class DeleteSubtreeMutation(StructuralMutation):
+
+    def _mutate(self, representation: CoordinateTreeRepresentation):
+        parent, child, orientation = representation.random_element()
+        del parent.children[orientation]
+
+
+class DuplicateSubtreeMutation(StructuralMutation):
+
+    def _mutate(self, representation: CoordinateTreeRepresentation):
+        parent1, child1, orientation1 = representation.random_element()
+
+        parent2, child2, orientation2 = representation.random_element()
+
+        del parent1[orientation1]
+        del child2[orientation2.opposite()]
+
+        parent1[orientation1] = child2
+
+
 class NoMutation(StructuralMutation):
 
     def _mutate(self, representation: Representation):
@@ -220,3 +241,4 @@ class DisplacementMutation(StructuralMutation):
         index = representation.random_index()
         #TODO
         #return ...
+

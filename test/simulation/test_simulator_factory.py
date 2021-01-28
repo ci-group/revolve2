@@ -3,7 +3,7 @@ import unittest
 from test.evosphere.robot.test_birth_clinic import MockBirthClinic
 from nca.core.actor.actors import Actors
 from revolve.evosphere.ecosphere import GazeboEcosphere
-from simulation.simulator.gazebo_connector_adapter import GazeboConnectorAdapter
+from simulation.simulator.adapter.gazebo_simulator_adapter import GazeboConnectorAdapter
 from simulation.simulator.simulator_command import SimulationRequest, TaskPriority
 from simulation.simulator.simulator_factory import SimulatorFactory
 

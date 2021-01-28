@@ -24,23 +24,23 @@ class EvolutionConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("revolve.config")
-        self.number_of_generations = 50
-        self.number_of_agents = 50
+        self.number_of_generations = 500
+        self.number_of_agents = 100
 
 
 class EvoSphereConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("revolve.config")
-        self.number_of_generations = 10
-        self.number_of_agents = 10
+        self.number_of_generations = 20
+        self.number_of_agents = 20
 
 
 class RepresentationConfiguration(Configuration):
 
     def __init__(self):
         super().__init__("representation.config")
-        self.genome_size = 6 #265
+        self.genome_size = 265
         self.number_of_chromosomes = 1
 
 
@@ -54,7 +54,7 @@ class OperatorConfiguration(Configuration):
 
 
 class InitializationConfiguration(Configuration):
-    def __init__(self, min_range: float = 0.5, max_range: float = 1.5):
+    def __init__(self, min_range: float = -1, max_range: float = 1):
         super().__init__("initialization.config")
         self.min_range: float = min_range
         self.max_range: float = max_range

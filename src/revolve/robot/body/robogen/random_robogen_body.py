@@ -1,4 +1,7 @@
+from typing import List
 
+import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
 
 from nca.core.abstract.structural.tree.tree_helper import Orientation
@@ -40,13 +43,36 @@ class RandomRobogenBodyBuilder(RobogenBodyBuilder):
 
             self.current_module = chosen_parent_module
 
-            self._process_symbol(orientation)
+            O = self._process_symbol(orientation)
             module = self._process_symbol(random_symbol)
-            print("adding ", module)
+            print(module)
             if module is not None:
+                print(module.id)
                 body.add(module)
 
+        print(body)
+
         return body
+
+
+def generate_graph(modules: List[RobogenModule]):
+    n = len(modules)
+    adjacency_matrix = np.zeros((n, n))
+
+    id_list = [module.id for module in modules]
+    print(n, id_list)
+
+    for module in modules:
+        module_index = id_list.index(module.id)
+        for child_key in module.children.keys():
+            print(module.children[child_key].id)
+            child_index = id_list.index(module.children[child_key].id)
+            adjacency_matrix[module_index, child_index] = 1
+            adjacency_matrix[child_index, module_index] = 1
+
+    print(adjacency_matrix)
+    D = nx.DiGraph(adjacency_matrix)
+    return D
 
 
 if __name__ == "__main__":
@@ -55,5 +81,9 @@ if __name__ == "__main__":
     random_body = body_builder.develop()
     print(random_body.modules)
 
+
     body_matrix, connections, length, height = generate_matrix(random_body.modules)
+    print(body_matrix)
     show(body_matrix, connections, length, height)
+
+    generate_graph(random_body.modules)

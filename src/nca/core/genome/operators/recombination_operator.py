@@ -11,6 +11,7 @@ from nca.core.abstract.configurations import OperatorConfiguration
 from nca.core.actor.individual import Individual
 from nca.core.genome.genotype import Genotype
 from nca.core.genome.representations.representation import Representation
+from nca.core.genome.representations.tree_representation import CoordinateTreeRepresentation
 
 
 class RecombinationOperator:
@@ -74,6 +75,15 @@ class OnePointCrossover(RecombinationOperator):
         temp = copy.deepcopy(representation_1[crossover_index+1:])
         representation_1[crossover_index+1:] = representation_2[crossover_index+1:]
         representation_2[crossover_index+1:] = temp
+
+
+class SwapTreeCrossover(RecombinationOperator):
+
+    def _recombine(self, representation_1: CoordinateTreeRepresentation, representation_2: CoordinateTreeRepresentation):
+        parent_1, child_1, orientation_1 = representation_1.random_element()
+        parent_2, child_2, orientation_2 = representation_2.random_element()
+        parent_1.connect(child_2, orientation_1)
+        parent_2.connect(child_1, orientation_2)
 
 
 class OnePointUniformCrossover(RecombinationOperator):

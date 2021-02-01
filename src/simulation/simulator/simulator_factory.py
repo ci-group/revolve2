@@ -2,7 +2,7 @@ from nca.core.abstract.creational.factory import Factory
 from simulation.simulator.adapter.evoman_simulator_adapter import EvomanSimulatorAdapter
 from simulation.simulator.adapter.gazebo_simulator_adapter import GazeboSimulatorAdapter
 from simulation.simulator.adapter.simulation_adapters import SimulatorAdapter
-from simulation.simulator.adapter.vrep.vrep_simulator_adapter import CoppeliaSimulatorAdapter
+from simulation.simulator.adapter.vrep.coppelia_simulator_adapter import CoppeliaSimulatorAdapter
 from simulation.simulator.simulator_command import SimulationRequest
 from simulation.simulator.simulator_type import SimulatorType
 from test.simulation.simulator.test_connector_adapter import TestConnectorAdapter

@@ -1,8 +1,8 @@
 from typing import List
 
 
-from revolve.robot.brain.cpg_helper import symmetrize
-from revolve.robot.brain.differential_cpg import DifferentialCPG
+from revolve.robot.brain.oscillators.cpg_helper import symmetrize
+from revolve.robot.brain.oscillators.differential_cpg import DifferentialCPG
 
 import numpy as np
 
@@ -32,13 +32,11 @@ class CPGNetwork:
                 if self.adjacency_matrix[i, j] == 0:
                     continue
 
-                input_values_x[i, j] = first_node.x_value * self.weight_matrix[i, j] * dt
-                input_values_y[i, j] = first_node.y_value * -self.weight_matrix[i, j] * dt
+                input_values_x[i, j] = first_node.x * self.weight_matrix[i, j] * dt
 
         for index, node in enumerate(self.nodes):
             inputs_x = sum(input_values_x[index, :])
-            inputs_y = sum(input_values_y[index, :])
-            node.step(dt, inputs_x, inputs_y)
+            node.step(dt, inputs_x)
 
 
 if __name__ == "__main__":
@@ -46,7 +44,6 @@ if __name__ == "__main__":
         simple_network = CPGNetwork(n=5)
 
         import matplotlib.pyplot as plt
-        from mpl_toolkits.mplot3d import Axes3D
 
         fig = plt.figure()
         #ax = fig.add_subplot(111, projection='3d')
@@ -55,11 +52,11 @@ if __name__ == "__main__":
         y_results = []
         z_results = []
 
-        for _ in range(250):
-            x_results.append(simple_network.nodes[0].activation_value)
-            y_results.append(simple_network.nodes[1].activation_value)
-            z_results.append(simple_network.nodes[2].activation_value)
-            simple_network.step(0.4)
+        for _ in range(2500):
+            x_results.append(simple_network.nodes[0].output)
+            y_results.append(simple_network.nodes[1].output)
+            z_results.append(simple_network.nodes[2].output)
+            simple_network.step(0.1)
 
         plt.plot(x_results, c="red")
         plt.plot(y_results, c="green")

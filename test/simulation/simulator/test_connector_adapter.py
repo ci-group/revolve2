@@ -1,3 +1,7 @@
+import time
+import numpy as np
+
+from nca.core.actor.individual import Individual
 from revolve.evosphere.biosphere import Ecosphere
 from revolve.robot.robot import Robot
 from simulation.simulator.adapter.simulation_adapters import SimulatorAdapter
@@ -7,24 +11,46 @@ from src.simulation.simulation_measures import SimulationMeasures
 
 class TestConnectorAdapter(SimulatorAdapter):
 
+    def _connect(self) -> bool:
+        pass
+
+    def _disconnect(self) -> bool:
+        pass
+
+    def _pause_simulation(self) -> bool:
+        pass
+
+    def _start_simulation(self) -> bool:
+        pass
+
+    def _stop_simulation(self) -> bool:
+        pass
+
+    def get_simulation_time(self):
+        pass
+
+    def execute(self, individual: Individual) -> SimulationMeasures:
+        time.sleep(np.random.random()*3)
+        return SimulationMeasures()
+
     def __init__(self, ecosphere: Ecosphere):
         super().__init__(ecosphere)
         self.simulator = False
 
-    def start_simulator(self) -> bool:
+    def _start_simulator(self) -> bool:
         self.simulator = True
         return True
 
-    def stop_simulator(self) -> bool:
+    def _stop_simulator(self) -> bool:
         self.simulator = False
         return True
 
-    def add_robot(self, robot: Robot):
+    def _add_robot(self, robot: Robot):
         self.robot = robot
 
         return True
 
-    def remove_robot(self, robot: Robot):
+    def _remove_robot(self, robot: Robot):
         if robot == self.robot:
             self.robot = None
         else:
@@ -32,5 +58,5 @@ class TestConnectorAdapter(SimulatorAdapter):
 
         return True
 
-    def simulate(self) -> SimulationMeasures:
+    def _simulate(self) -> SimulationMeasures:
         return SimulationMeasures().test()

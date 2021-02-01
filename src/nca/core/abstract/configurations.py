@@ -38,10 +38,10 @@ class EvoSphereConfiguration(Configuration):
 
 class RepresentationConfiguration(Configuration):
 
-    def __init__(self):
+    def __init__(self, size: int = 10, chromosomes: int = 1):
         super().__init__("representation.config")
-        self.genome_size = 265
-        self.number_of_chromosomes = 1
+        self.genome_size = size
+        self.number_of_chromosomes = chromosomes
 
 
 class OperatorConfiguration(Configuration):

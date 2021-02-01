@@ -10,9 +10,9 @@ from nca.core.evolution.conditions.initialization import Initialization
 
 class Representation(List, ABC):
 
-    def __init__(self, initialization: Initialization):
+    def __init__(self, initialization: Initialization, configuration=RepresentationConfiguration()):
         super().__init__()
-        self.configuration = RepresentationConfiguration()
+        self.configuration = configuration
 
         if initialization is None:
             print("Invalid Initializer")

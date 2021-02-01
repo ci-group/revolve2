@@ -1,6 +1,5 @@
 from nca.core.actor.agent import Agent
 from revolve.evosphere.biosphere import Ecosphere
-from revolve.robot.robot import Robot
 from simulation.simulator.adapter.simulation_adapters import AgentSimulatorAdapter
 from src.simulation.simulation_measures import SimulationMeasures
 from third_party.evoman.evoman_environment import EvomanEnvironment

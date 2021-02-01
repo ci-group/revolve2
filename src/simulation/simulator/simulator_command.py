@@ -5,6 +5,8 @@ from nca.core.abstract.sequential_identifier import SimulatorRequestIdentifier
 from nca.core.actor.actors import Actors
 from revolve.evosphere.ecosphere import Ecosphere
 from revolve.robot.birth_clinic import BirthClinic
+from test.evosphere.mock_ecosphere import MockEcosphere
+from test.evosphere.robot.test_birth_clinic import MockBirthClinic
 
 
 class TaskPriority(Enum):
@@ -31,3 +33,9 @@ class SimulationRequest(Command):
 
     def __hash__(self):
         return hash(self.id)
+
+
+class MockSimulationRequest(SimulationRequest):
+
+    def __init__(self):
+        super().__init__(Actors([]), MockEcosphere(), MockBirthClinic(), number_of_workers=8)

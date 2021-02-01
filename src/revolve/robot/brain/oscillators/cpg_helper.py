@@ -1,5 +1,6 @@
 import numpy as np
 
+
 # https://stackoverflow.com/questions/2572916/numpy-smart-symmetric-matrix
 def symmetrize(a):
     """

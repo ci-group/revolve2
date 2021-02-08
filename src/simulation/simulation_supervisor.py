@@ -64,7 +64,7 @@ class ThreadedSimulationSupervisor(SimulationSupervisor):
         super().__init__(simulation_request)
 
         self.number_of_threads = simulation_request.number_of_workers
-        self.threads = [None for i in range(self.number_of_threads)]
+        self.threads = [None for _ in range(self.number_of_threads)]
         self.active_threads_count = 0
         self.adapters = [self._prepare_adapter() for i in range(self.number_of_threads)]
 

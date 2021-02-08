@@ -12,8 +12,7 @@ from nca.core.genome.representations.valued_representation import ValuedRepresen
 from simulation.AEGIS.animal import Animal
 from simulation.AEGIS.decision_model import decide_all
 from simulation.AEGIS.scape_environment import ScapeEnvironment
-
-import imageio
+from visualization.image_animation import ImageAnimator
 
 
 class AgentAEGIS(unittest.TestCase):
@@ -43,11 +42,7 @@ class AgentAEGIS(unittest.TestCase):
 
         scape_env.close()
 
-        images = []
-        for filename in filenames:
-            images.append(imageio.imread(filename))
-
-        imageio.mimsave("../../../log/aegis/animation.gif", images)
+        ImageAnimator().from_files(filenames, "../../../log/aegis/animation.gif")
 
         plt.close()
 

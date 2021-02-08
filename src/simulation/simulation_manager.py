@@ -17,10 +17,10 @@ class SimulationManager:
 
         if threaded:
             self.supervisor_type = ThreadedSimulationSupervisor
+            self.supervisors: Dict[int, ThreadedSimulationSupervisor] = {}
         else:
             self.supervisor_type = SimulationSupervisor
-
-        self.supervisors: Dict[int, self.supervisor_type] = {}
+            self.supervisors: Dict[int, SimulationSupervisor] = {}
 
     def simulate(self, request_command: SimulationRequest):
         actors = request_command.birth_clinic.create(request_command.agents, request_command.ecosphere)
@@ -40,19 +40,4 @@ class SimulationManager:
 
             results: Dict[int, SimulationMeasures] = self.supervisors[request_command.id].manager()
             for actor in actors:
-                actor.fitness.add("ecosphere " + str(request_command.id), 0.0) # results[actor.id].fitness
-
-    """
-    def _find_available_supervisor(self):
-        selected_supervisor = None
-
-        for supervisor in self.supervisors:
-            if selected_supervisor is None:
-                selected_supervisor = supervisor
-                continue
-
-            if selected_supervisor.workload() > supervisor.workload():
-                selected_supervisor = supervisor
-
-        return selected_supervisor
-    """
+                actor.fitness.add("ecosphere " + str(request_command.id), results[actor.id].fitness)

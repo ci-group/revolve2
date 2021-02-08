@@ -1,12 +1,12 @@
-import string
+
 from typing import Dict, List
 
 
 class Measures:
     def __init__(self, measurements: Dict):
-        self.measurements: Dict[string] = measurements
+        self.measurements: Dict[str] = measurements
 
-    def __getitem__(self, item: string):
+    def __getitem__(self, item: str):
         if item not in self.measurements:
             return None
 

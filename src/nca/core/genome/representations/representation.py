@@ -4,7 +4,7 @@ from typing import List, Tuple
 
 import numpy as np
 
-from nca.core.abstract.configurations import RepresentationConfiguration
+from abstract.configurations import RepresentationConfiguration
 from nca.core.evolution.conditions.initialization import Initialization
 
 

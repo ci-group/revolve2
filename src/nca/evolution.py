@@ -1,4 +1,4 @@
-from nca.core.abstract.configurations import EvolutionConfiguration
+from abstract.configurations import EvolutionConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.fitness_evaluation import OnesFitness, FitnessEvaluation
 from nca.core.actor.individual_factory import ActorFactory
@@ -59,7 +59,7 @@ class Evolution:
 
     def evaluator(self, agents: Actors):
         for individual in agents:
-            individual.fitness.add("evaluation", self.fitness_evaluation(individual))
+            individual.fitness.add(self.fitness_evaluation(individual))
 
     def log(self, string: str):
         if self.debug:

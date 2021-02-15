@@ -7,6 +7,7 @@ from nca.core.actor.fitness import Fitness
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology import PopulationEcology
 from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
+from nca.core.genome.genotype import Genotype
 from revolve.evosphere.biosphere import Biosphere, IndividualBiosphere
 
 from revolve.evosphere.ecosphere import Ecosphere
@@ -34,7 +35,10 @@ class EvomanBirthClinic(AgentBirthClinic):
         self.brain_builder: BrainBuilder = brain_builder
 
     def _create(self, development_request: BrainDevelopmentRequest) -> object:
-        return Agent(development_request.genotype, self.brain_builder.create(development_request))
+        brain: NeuralNetworkBrain = self.brain_builder.create(development_request)
+        genotype = Genotype(brain.representation())
+        agent = Agent.create(development_request.individual, genotype, brain)
+        return agent
 
 
 class EvomanEcosphere(Ecosphere):

@@ -25,9 +25,9 @@ def get_circular_fitness(individual: Individual, d3_enabled: bool = False):
     r = np.random.uniform(0.5, 1)
     fitness = Fitness()
     if d3_enabled:
-        fitness.objectives = [r * np.cos(theta) * np.cos(omega), r * np.sin(theta), r * np.cos(theta) * np.sin(omega)]
+        fitness.objectives = {"1": r * np.cos(theta) * np.cos(omega), "2": r * np.sin(theta), "3": r * np.cos(theta) * np.sin(omega)}
     else:
-        fitness.objectives = [r * np.cos(theta), r * np.sin(theta)]
+        fitness.objectives = {"1": r * np.cos(theta), "2": r * np.sin(theta)}
     return fitness
 
 
@@ -35,14 +35,14 @@ def get_random_fitness(individual: Individual, d3_enabled: bool = False):
     theta = np.random.normal(-0.5, 0.2)
     omega = np.random.normal(-9, 3)
     fitness = Fitness()
-    fitness.objectives = [omega, theta]
+    fitness.objectives = {"omega": omega, "theta": theta}
     return fitness
 
 
 def get_max_fitness(individual: Individual, d3_enabled: bool = False):
     fitness = Fitness()
     omega = np.random.normal(-9, 3)
-    fitness.objectives = [omega, omega]
+    fitness.objectives = {"1": omega, "2": omega}
     return fitness
 
 
@@ -52,7 +52,7 @@ def get_ones_fitness(individual: Individual):
     number_of_elements = len(representation)
 
     difference = np.sum(np.abs(np.ones(number_of_elements) - np.array(representation)))
-    fitness.objectives = [-difference, np.random.random()]
+    fitness.objectives = {"1": -difference, "2": np.random.random()}
     return fitness
 
 
@@ -62,9 +62,11 @@ def create_individuals(n: int = 10):
 
     return individuals
 
+
 def evaluate(individuals):
     for individual in individuals:
-        individual.fitness = get_ones_fitness(individual)
+        individual.value = get_ones_fitness(individual)
+
 
 class NonDominatedSortingSurvival(SurvivorSelection):
 
@@ -247,8 +249,5 @@ if __name__ == "__main__":
         new_individuals.extend(offspring)
 
         accepted_individuals, rejected_individuals = survival.select(new_individuals)
-        #for individual in new_individuals[:5]:
-        #    print(individual.get_objectives())
-        #print()
 
         population.next_generation(accepted_individuals, rejected_individuals)

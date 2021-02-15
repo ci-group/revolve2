@@ -12,19 +12,19 @@ from src.simulation.simulation_measures import SimulationMeasures
 class TestConnectorAdapter(SimulatorAdapter):
 
     def _connect(self) -> bool:
-        pass
+        return True
 
     def _disconnect(self) -> bool:
-        pass
+        return True
 
     def _pause_simulation(self) -> bool:
-        pass
+        return True
 
     def _start_simulation(self) -> bool:
-        pass
+        return True
 
     def _stop_simulation(self) -> bool:
-        pass
+        return True
 
     def get_simulation_time(self):
         pass

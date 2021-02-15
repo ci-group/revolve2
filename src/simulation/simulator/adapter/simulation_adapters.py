@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from nca.core.abstract.sequential_identifier import SimulatorConnectionIdentifier
+from abstract.sequential_identifier import SimulatorConnectionIdentifier
 from nca.core.actor.agent import Agent
 from nca.core.actor.individual import Individual
 

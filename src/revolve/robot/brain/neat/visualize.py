@@ -15,7 +15,7 @@ def plot_stats(statistics, ylog=False, view=False, filename='avg_fitness.svg'):
         return
 
     generation = range(len(statistics.most_fit_genomes))
-    best_fitness = [c.fitness for c in statistics.most_fit_genomes]
+    best_fitness = [c.value for c in statistics.most_fit_genomes]
     avg_fitness = np.array(statistics.get_fitness_mean())
     stdev_fitness = np.array(statistics.get_fitness_stdev())
 

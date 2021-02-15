@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.abstract.configurations import PopulationConfiguration
+from abstract.configurations import PopulationConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology import PopulationEcology

@@ -1,13 +1,13 @@
 from abc import abstractmethod, ABC
 
-from nca.core.abstract.creational.factory import Factory
+from abstract.creational.factory import Factory
 from nca.core.actor.agent import Agent
 from nca.core.actor.individual import Individual
 from nca.core.actor.actors import Actors
 
 from revolve.robot.body.body_builder import BodyBuilder, RobotBodyBuilder
 from revolve.robot.brain.brain_builder import BrainBuilder, RobotBrainBuilder, AgentBrainBuilder
-from revolve.robot.development_request import DevelopmentRequest
+from revolve.robot.development_request import DevelopmentRequest, BrainDevelopmentRequest
 from revolve.robot.robot import Robot
 
 
@@ -20,7 +20,7 @@ class BirthClinic(Factory, ABC):
         robots: Actors = Actors()
 
         for individual in agents:
-            robots.append(self._create(DevelopmentRequest(individual.genotype, ecosphere)))
+            robots.append(self._create(DevelopmentRequest(individual.id, individual.genotype, ecosphere)))
 
         return robots
 
@@ -43,10 +43,8 @@ class AgentBirthClinic(BirthClinic):
         super().__init__()
         self.brain_builder: BrainBuilder = brain_builder
 
-    def _create(self, development_request: DevelopmentRequest) -> object:
-        agent = Agent(development_request.genotype, self.brain_builder.create(development_request))
-
-        return agent
+    def _create(self, development_request: BrainDevelopmentRequest) -> object:
+        return Agent(development_request.genotype, self.brain_builder.create(development_request))
 
 
 class RobotBirthClinic(BirthClinic):

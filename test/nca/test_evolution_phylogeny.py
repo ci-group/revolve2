@@ -1,22 +1,26 @@
+import os
 import pickle
 import unittest
 
 from nca.core.ecology import PopulationEcology
 from nca.core.ecology.metrics import PhylogenyMetrics
 from nca.evolution import Evolution
+from nca.experiment_manager import ExperimentManager
 
 
 class TestPhylogeny(unittest.TestCase):
-    file_name = 'test_evolution.pkl'
+    experiment_manager = ExperimentManager()
+    file_name = 'test/test_evolution.pkl'
 
     def test_phylogeny(self):
         evolution = Evolution()
         population_ecology = evolution.evolve()
-        with open(self.file_name, 'wb') as output:
+        with open(os.path.join(self.experiment_manager.folders.log_path, self.file_name), 'wb') as output:
             pickle.dump(population_ecology, output, pickle.HIGHEST_PROTOCOL)
 
     def __initialize(self):
-        with open(self.file_name, 'rb') as input:
+        with open(os.path.join(self.experiment_manager.folders.log_path, self.file_name), 'rb') as input:
+            print(input)
             population_ecology: PopulationEcology = pickle.load(input)
 
         phylogeny = PhylogenyMetrics(population_ecology.management.population.history)

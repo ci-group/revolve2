@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from nca.core.abstract.behavioral.command import Command
-from nca.core.abstract.configurations import PopulationConfiguration
+from abstract.behavioral.command import Command
+from abstract.configurations import PopulationConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
 

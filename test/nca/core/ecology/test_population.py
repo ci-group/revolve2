@@ -23,7 +23,7 @@ class TestPopulation(unittest.TestCase):
 
         population = Population(agents_start)
 
-        population.next_generation(agents_new)
+        population.next_generation(agents_new, None)
 
         self.assertNotEqual(population.individuals, agents_start)
         self.assertEqual(population.individuals, agents_new)
@@ -33,7 +33,7 @@ class TestPopulation(unittest.TestCase):
 
         agents2: Actors = ActorFactory().create(self.n)
         for agent in agents2:
-            agent.fitness = Fitness(1.0)
+            agent.value = Fitness(1.0)
 
         population1 = Population(agents1)
         population2 = Population(agents2)
@@ -45,11 +45,11 @@ class TestPopulation(unittest.TestCase):
         population = Population(ActorFactory().create(self.n))
 
         for individual in population.individuals:
-            individual.fitness.append("test", np.random.randint(0, 100))
+            individual.fitness.add(np.random.randint(0, 100))
 
         json_data = population.to_json()
 
         self.assertTrue(json_data['id'] >= 0)
         self.assertTrue(json_data['age'] >= 0)
-        self.assertTrue(len(json_data['individuals']) == self.n)
-        self.assertTrue(len(json_data['fitness']) == 5)
+        self.assertEqual(len(json_data['individuals']), self.n)
+        self.assertEqual(len(json_data['fitness']), 2)

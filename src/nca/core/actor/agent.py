@@ -9,3 +9,9 @@ class Agent(Individual):
         super().__init__(genotype)
         self.brain: Brain = brain
         self.brain.update(genotype.get_random_representation())
+
+    @staticmethod
+    def create(individual: Individual, genotype: Genotype, brain: Brain):
+        agent = Agent(genotype, brain)
+        agent.id = individual.id
+        return agent

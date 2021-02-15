@@ -1,11 +1,12 @@
 from typing import List
 
-import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-from nca.core.abstract.structural.tree.tree_helper import Orientation
+from abstract.structural.tree.tree_helper import Orientation
+from revolve.robot.body.robogen.body_measures import SymbolicMeasureCalculator
 from revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder, RobogenBody
+from revolve.robot.body.robogen.symbolic_measures import MorphologicalMeasureCalculator
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 from revolve.robot.body.robogen.robogen_module import RobogenModule
 from revolve.robot.body.robogen.robot_visualizer import generate_matrix, show
@@ -43,14 +44,13 @@ class RandomRobogenBodyBuilder(RobogenBodyBuilder):
 
             self.current_module = chosen_parent_module
 
-            O = self._process_symbol(orientation)
+            _ = self._process_symbol(orientation)
             module = self._process_symbol(random_symbol)
-            print(module)
             if module is not None:
-                print(module.id)
                 body.add(module)
 
-        print(body)
+        body.morphological_measures = MorphologicalMeasureCalculator.measure_morphology(body.modules)
+        body.symbolic_measures = SymbolicMeasureCalculator.measure_symbols(body.modules)
 
         return body
 
@@ -81,9 +81,6 @@ if __name__ == "__main__":
     random_body = body_builder.develop()
     print(random_body.modules)
 
-
-    body_matrix, connections, length, height = generate_matrix(random_body.modules)
-    print(body_matrix)
-    show(body_matrix, connections, length, height)
+    random_body.visualize()
 
     generate_graph(random_body.modules)

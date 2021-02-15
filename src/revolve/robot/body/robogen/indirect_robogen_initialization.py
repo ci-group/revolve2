@@ -1,5 +1,4 @@
 import random
-
 import numpy as np
 
 from nca.core.genome.grammar.grammar_initialization import LSystemInitialization
@@ -74,11 +73,11 @@ class RobogenWordInitialization(RobogenInitialization):
     @classmethod
     def generate_rules(cls, size: int):
         replacement_rules = {}
-        max_word_length = 3
+        max_word_length = 5
 
         for word in RobogenWord.words():
             replacement_rules[word.module] = [[]]
-            for i in range(random.randint(1, max_word_length)):
+            for i in range(random.randint(3, max_word_length)):
                 replacement_rules[word.module][0].extend(cls.random_word())
 
         return replacement_rules
@@ -106,11 +105,9 @@ class RobogenWordInitialization(RobogenInitialization):
         return sequence
 
     @classmethod
-    def generate_axiom(cls, size: int):
+    def generate_axiom(cls, symbol, size: int):
         axiom = []
-
-        for orientation in RobogenSymbol.orientation():
-            axiom.extend(RobogenWordInitialization.random_word(size, orientation, use_brackets=True))
-
+        for i in range(15):
+            axiom.extend(cls.random_word(size, use_brackets=True))
         return axiom
 

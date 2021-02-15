@@ -13,7 +13,7 @@ class TestTerminationConditions(unittest.TestCase):
     def test_fitness_condition_stop(self):
         population = Population(ActorFactory().create(self.n))
         termination_fitness = 0.5
-        population.individuals[1].fitness = Fitness(termination_fitness)
+        population.individuals[1].value = Fitness(termination_fitness)
 
         termination_condition = FitnessCondition(termination_fitness)
 
@@ -21,7 +21,7 @@ class TestTerminationConditions(unittest.TestCase):
 
     def test_fitness_condition_continue(self):
         population = Population(ActorFactory().create(self.n))
-        population.individuals[1].fitness = Fitness(0.4)
+        population.individuals[1].value = Fitness(0.4)
 
         termination_condition = FitnessCondition(0.5)
 

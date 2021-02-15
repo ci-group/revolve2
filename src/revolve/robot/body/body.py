@@ -1,7 +1,7 @@
 from abc import ABC
 
 from revolve.robot.body.body_blueprint import BodyBlueprint
-from revolve.robot.body.robogen.robogen_body_measures import MorphologicalMeasures
+from revolve.robot.body.robogen.symbolic_measures import MorphologicalMeasures
 
 
 class Body(ABC):

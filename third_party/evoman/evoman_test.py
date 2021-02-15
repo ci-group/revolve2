@@ -28,8 +28,6 @@ class Simulation:
             done, fitness, observation = self.environment.step(actions)
             self.environment.render()
 
-        print(fitness)
-
     def close(self):
         self.environment.close()
 

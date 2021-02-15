@@ -1,14 +1,15 @@
+import os
 import unittest
 
-import numpy as np
 import matplotlib.pyplot as plt
 
-from nca.core.abstract.configurations import InitializationConfiguration
+from abstract.configurations import InitializationConfiguration
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 from nca.core.genome.genotype import Genotype
 from nca.core.genome.operators.initialization import UniformInitialization
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
+from nca.experiment_manager import ExperimentManager
 from simulation.AEGIS.animal import Animal
 from simulation.AEGIS.decision_model import decide_all
 from simulation.AEGIS.scape_environment import ScapeEnvironment
@@ -42,7 +43,7 @@ class AgentAEGIS(unittest.TestCase):
 
         scape_env.close()
 
-        ImageAnimator().from_files(filenames, "../../../log/aegis/animation.gif")
+        ImageAnimator().from_files(filenames, os.path.join(ExperimentManager().folders.log_path, "aegis/animation.gif"))
 
         plt.close()
 

@@ -7,7 +7,7 @@ from typing import List
 
 import numpy as np
 
-from nca.core.abstract.configurations import OperatorConfiguration
+from abstract.configurations import OperatorConfiguration
 from nca.core.actor.individual import Individual
 from nca.core.genome.genotype import Genotype
 from nca.core.genome.representations.representation import Representation

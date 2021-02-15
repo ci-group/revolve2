@@ -14,11 +14,11 @@ xor_outputs = [   (0.0,),     (1.0,),     (1.0,),     (0.0,)]
 
 def eval_genomes(genomes, config):
     for genome_id, genome in genomes:
-        genome.fitness = 4.0
+        genome.value = 4.0
         net = neat.nn.FeedForwardNetwork.create(genome, config)
         for xi, xo in zip(xor_inputs, xor_outputs):
             output = net.activate(xi)
-            genome.fitness -= (output[0] - xo[0]) ** 2
+            genome.value -= (output[0] - xo[0]) ** 2
 
 
 def run(config_file):

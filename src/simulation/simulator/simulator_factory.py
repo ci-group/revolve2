@@ -1,4 +1,4 @@
-from nca.core.abstract.creational.factory import Factory
+from abstract.creational.factory import Factory
 from simulation.simulator.adapter.evoman_simulator_adapter import EvomanSimulatorAdapter
 from simulation.simulator.adapter.gazebo_simulator_adapter import GazeboSimulatorAdapter
 from simulation.simulator.adapter.simulation_adapters import SimulatorAdapter

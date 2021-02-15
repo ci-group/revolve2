@@ -2,10 +2,10 @@ import copy
 
 import numpy as np
 
-from nca.core.abstract.structural.tree.tree_helper import Orientation
+from abstract.structural.tree.tree_helper import Orientation
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.representations.representation import Representation
-from nca.core.abstract.structural.tree.tree import Tree, CoordinateTree
+from abstract.structural.tree.tree import Tree, CoordinateTree
 
 
 class TreeRepresentation(Representation):

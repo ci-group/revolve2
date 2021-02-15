@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.abstract.sequential_identifier import SequentialIdentifier
+from abstract.sequential_identifier import SequentialIdentifier
 
 
 class TestAgentIdentifier(unittest.TestCase):

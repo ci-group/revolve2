@@ -1,5 +1,3 @@
-from enum import Enum
-
 from nca.core.genome.grammar.symbol import Symbol
 
 

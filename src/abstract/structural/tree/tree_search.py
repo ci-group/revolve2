@@ -1,5 +1,5 @@
-from nca.core.abstract.structural.tree import Tree2D
-from nca.core.abstract.structural.tree.tree_helper import Orientation
+from abstract.structural.tree import Tree2D
+from abstract.structural.tree.tree_helper import Orientation
 
 
 def depth_first_search(visited, graph, node):

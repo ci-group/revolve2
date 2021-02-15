@@ -1,6 +1,7 @@
 from nca.core.genome.genotype import Genotype
 from nca.core.genome.grammar.lindenmayer_system import LSystemGenotype, SelfOrganizingLSystemGenotype
 from nca.core.genome.representations.symbolic_representation import SymbolicRepresentation
+
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 from revolve.robot.body.robogen.indirect_robogen_initialization import RobogenInitialization
 

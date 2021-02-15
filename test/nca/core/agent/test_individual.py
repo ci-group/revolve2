@@ -2,6 +2,7 @@ import copy
 import unittest
 from typing import List
 
+from nca.core.actor.fitness import Fitness
 from nca.core.actor.fitness_evaluation import OnesFitness
 from nca.core.actor.individual import Individual
 from nca.core.genome.genotype import Genotype
@@ -40,9 +41,9 @@ class TestIndividual(unittest.TestCase):
         individual: Individual = Individual(representation)
 
         new_individual: Individual = copy.deepcopy(individual)
-        fitness = OnesFitness()(new_individual)
+        new_individual.fitness = Fitness(OnesFitness()(new_individual))
 
-        self.assertNotEqual(fitness, 0.0)
+        self.assertNotEqual(new_individual.fitness.value(), 0.0)
         self.assertNotEqual(individual.get_fitness(), new_individual.get_fitness())
 
     def test_parents(self):

@@ -104,7 +104,6 @@ class EvomanEnvironment(gym.Env):
         self.tilemap.layers.append(sprite_player)
 
     def reset(self):
-        self.configuration.print_logs("Reset Evoman")
         self.time = 0
         self.ends = 0
 

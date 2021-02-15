@@ -1,16 +1,10 @@
-from typing import Dict
-
-import numpy as np
 from matplotlib.mathtext import List
 
-from nca.core.abstract.structural.tree.tree_helper import Orientation, Coordinate3D
 from nca.core.evolution.conditions.initialization import Initialization
 
 from revolve.robot.body.robogen.random_robogen_body import _get_symbol_from_orientation, RandomRobogenBodyBuilder
-
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 from revolve.robot.body.robogen.robogen_module import RobogenModule
-
 
 
 class DirectRepresentationInitialization(Initialization):

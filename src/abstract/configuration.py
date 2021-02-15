@@ -10,7 +10,7 @@ class Configuration:
     experiment_manager = ExperimentManager()
 
     def __init__(self, file: string):
-        self.path: string = os.path.join(self.experiment_manager.configuration_path, file)
+        self.path: string = os.path.join(self.experiment_manager.folders.configuration_path, file)
         self.config_parser: ConfigParser = ConfigParser()
 
         self.config = None

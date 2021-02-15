@@ -10,8 +10,9 @@ from nca.core.genome.representations.symbolic_representation import SymbolicRepr
 from test.nca.core.grammar.test_alphabet import TestColorSymbol
 
 
-TestRules: ReplacementRules = {TestColorSymbol.GREEN: [[TestColorSymbol.RED, TestColorSymbol.RED]],
+TestRules: dict = {TestColorSymbol.GREEN: [[TestColorSymbol.RED, TestColorSymbol.RED]],
                                TestColorSymbol.BLUE: [[TestColorSymbol.RED, TestColorSymbol.RED]]}
+
 
 # TODO refactor
 class LSystemRepresentationTest(unittest.TestCase):

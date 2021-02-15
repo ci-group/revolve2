@@ -43,6 +43,10 @@ class Simulator(ABC):
             success = self._connect()
             if success:
                 self.state = SimulatorState.READY
+        elif self.state == SimulatorState.PAUSED:
+            success = self._start_simulation()
+            if success:
+                self.state = SimulatorState.READY
 
         if self.state == SimulatorState.READY:
             success = self._start_simulation()

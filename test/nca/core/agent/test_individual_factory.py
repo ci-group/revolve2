@@ -15,4 +15,4 @@ class TestIndividualFactory(unittest.TestCase):
         self.assertIsInstance(individuals, Actors)
         self.assertTrue(len(individuals), n)
         self.assertNotEqual(individuals[0].get_representation(), individuals[1].get_representation())
-        self.assertEqual(individuals[0].fitness, individuals[1].fitness)
+        self.assertEqual(individuals[0].fitness.value(), individuals[1].fitness.value())

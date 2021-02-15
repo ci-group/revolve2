@@ -1,9 +1,7 @@
 import unittest
 
-from nca.core.actor.individual_factory import ActorFactory
-from nca.core.ecology.population import PhylogenyMetrics
 from nca.evolution import Evolution
-from visualization.population_visualization import PopulationVisualization, PopulationFitnessVisualization
+from visualization.population_visualization import PopulationFitnessVisualization
 from visualization.visualization import time_series_visualization
 
 

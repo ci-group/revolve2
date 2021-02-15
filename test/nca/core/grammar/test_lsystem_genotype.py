@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.abstract.configurations import RepresentationConfiguration
+from abstract.configurations import RepresentationConfiguration
 from nca.core.genome.grammar.grammar import RewritingGrammar
 from nca.core.genome.grammar.grammar_initialization import LSystemInitialization
 from nca.core.genome.grammar.lindenmayer_system import LSystemGenotype

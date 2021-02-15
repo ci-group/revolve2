@@ -15,16 +15,11 @@ class RobogenGenotypeFactory:
         body_builder = RandomRobogenBodyBuilder()
         random_body = body_builder.develop()
         self.graph = generate_graph(random_body.modules)
-        nx.draw_networkx(self.graph)
-
-        plt.draw()
-        plt.show()
-        pass
 
 
 if __name__ == "__main__":
     factory = RobogenGenotypeFactory()
-    a = np.random.randint(0, 2, size=(3, 3))
+    a = np.random.randint(0, 2, size=(5, 5))
     print(a)
     D = nx.DiGraph(a)
 

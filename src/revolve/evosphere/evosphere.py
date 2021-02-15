@@ -1,5 +1,6 @@
+from typing import Dict
 
-from nca.core.abstract.configurations import EvoSphereConfiguration
+from abstract.configurations import EvoSphereConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.evolution.evolutionary_algorithm import EvolutionaryAlgorithm
 from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration, EvolutionaryConfiguration
@@ -7,6 +8,7 @@ from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfi
 from revolve.evosphere.biosphere import Biosphere, RobotBiosphere, IndividualBiosphere
 
 from simulation.simulation_manager import SimulationManager
+from simulation.simulation_measures import SimulationMeasures
 from simulation.simulator.simulator_command import SimulationRequest
 
 
@@ -49,10 +51,14 @@ class Evosphere:
             self.biosphere.run()
 
         self.log(str(self.biosphere.populations()))
+        return self.biosphere.population_ecology
 
     def evaluate(self, agents: Actors):
         for ecosphere in self.biosphere.ecospheres:
-            self.simulation.simulate(SimulationRequest(agents, ecosphere, self.biosphere.birth_clinic))
+            results: Dict[int, SimulationMeasures] = self.simulation.simulate(SimulationRequest(agents, ecosphere, self.biosphere.birth_clinic))
+            for agent in agents:
+                agent.fitness.add(results[agent.id].fitness)
+                print(agent.fitness.value(), agent.fitness.objectives)
 
     def log(self, string: str):
         if self.debug:

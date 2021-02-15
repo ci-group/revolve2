@@ -17,28 +17,29 @@ class TestSimulatorConnector(unittest.TestCase):
 
     def test_connector_ready(self):
         connector = TestConnectorAdapter(MockEcosphere())
+        self.assertEqual(connector.state, SimulatorState.WAITING)
 
-        self.assertEqual(connector.state, SimulatorState.READY)
+        connector.play()
+        print(connector.state)
+        self.assertEqual(connector.state, SimulatorState.RUNNING)
+
+        connector.pause()
+        self.assertEqual(connector.state, SimulatorState.PAUSED)
+
+        connector.play()
+        self.assertEqual(connector.state, SimulatorState.RUNNING)
 
         connector.stop()
-
-        self.assertEqual(connector.state, SimulatorState.STOPPED)
-
-        connector.restart()
-
         self.assertEqual(connector.state, SimulatorState.READY)
 
-        connector.restart()
-
-        self.assertEqual(connector.state, SimulatorState.READY)
+        connector.play()
+        self.assertEqual(connector.state, SimulatorState.RUNNING)
 
     def test_connector_robot(self):
         connector = TestConnectorAdapter(MockEcosphere())
 
         robot = ActorFactory(actor_type=Robot).create(1)[0]
-        connector.add_robot(robot)
-
-        connector.remove_robot(robot)
+        connector.execute(robot)
 
         self.assertTrue(True)
 
@@ -46,6 +47,4 @@ class TestSimulatorConnector(unittest.TestCase):
         connector = TestConnectorAdapter(MockEcosphere())
 
         robot = ActorFactory(actor_type=Robot).create(1)[0]
-        connector.add_robot(robot)
-
-        self.assertRaises(Exception, connector.remove_robot, ActorFactory(actor_type=Robot).create(1)[0])
+        connector.execute(robot)

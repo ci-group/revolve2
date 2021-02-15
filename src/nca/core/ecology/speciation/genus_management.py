@@ -4,7 +4,7 @@ from .compatibility import Compatibility
 from .genus import Genus
 from ..population import Population
 from ..population_management import PopulationManagement
-from ...abstract.configurations import SpeciationConfiguration
+from abstract.configurations import SpeciationConfiguration
 from ...actor.actors import Actors
 from ...actor.individual import Individual
 

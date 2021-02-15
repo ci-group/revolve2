@@ -11,7 +11,7 @@ class Memento(ABC):
     experiment_manager = ExperimentManager()
 
     def __init__(self, name: str):
-        self.path: string = self.experiment_manager.objects_path
+        self.path: string = self.experiment_manager.folders.objects_path
         self.population_memento_path = os.path.join(self.path, name + ".pickle")
 
     @abstractmethod
@@ -23,7 +23,7 @@ class Memento(ABC):
         pass
 
     def dump(self, path: string, export_object):
-        with open(path, "wb") as file:
+        with open(os.path.join(self.experiment_manager.folders.log_path, path), "wb") as file:
             pickle.dump(export_object, file, pickle.HIGHEST_PROTOCOL)
 
     def restore(self, path: string) -> object:

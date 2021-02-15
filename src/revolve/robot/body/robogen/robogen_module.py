@@ -1,7 +1,8 @@
 from typing import Dict
 
-from nca.core.abstract.sequential_identifier import NodeIdentifier
-from nca.core.abstract.structural.tree.tree_helper import Orientation, Coordinate3D
+from abstract.sequential_identifier import NodeIdentifier
+from abstract.structural.tree.tree_helper import Orientation, Coordinate3D
+
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 
 
@@ -14,8 +15,8 @@ class RobogenModule:
                  coordinate: Coordinate3D = Coordinate3D(0, 0, 0),
                  orientation: Orientation = Orientation.TOP,
                  parent_module=None,):
-        self.id = self.identifier.id()
-        self.symbol = symbol
+        self.id: int = self.identifier.id()
+        self.symbol: RobogenSymbol = symbol
 
         self.coordinate: Coordinate3D = coordinate
         self.orientation: Orientation = orientation
@@ -40,7 +41,7 @@ class RobogenModule:
         self.next_orientation = pointer_orientation
 
     def __repr__(self):
-        return "(" + self.symbol.name + ", " + str(self.id) + ", " + str(self.coordinate) + ", " + str(self.orientation) + ")"
+        return "(%s, %d, %s, %s)" % (self.symbol.name, self.id, str(self.coordinate), str(self.orientation))
 
     def neighbor_orientations(self):
         return list(set(Orientation.directions()) - set(self.children.keys()))

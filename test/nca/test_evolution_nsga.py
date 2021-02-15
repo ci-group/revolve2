@@ -9,6 +9,6 @@ from nca.evolution import Evolution
 class TestEvolution(unittest.TestCase):
 
     def test_create(self):
-        evolution = Evolution(evolutionary_configuration=GeneticAlgorithmConfiguration(survivor_selection=NonDominatedSortingSurvival(minimization=False, debug=True)), fitness_evaluation=OnesNSGAFitness())
+        evolution = Evolution(evolutionary_configuration=GeneticAlgorithmConfiguration(survivor_selection=NonDominatedSortingSurvival(minimization=False, debug=False)), fitness_evaluation=OnesNSGAFitness())
         evolution.evolve()
         self.assertTrue(True)

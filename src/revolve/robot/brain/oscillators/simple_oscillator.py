@@ -1,8 +1,8 @@
 import math
 import matplotlib.pyplot as plt
 
-from nca.core.abstract.configurations import RepresentationConfiguration
-from nca.core.abstract.sequential_identifier import SequentialIdentifier
+from abstract.configurations import RepresentationConfiguration
+from abstract.sequential_identifier import SequentialIdentifier
 from nca.core.genome.operators.initialization import GaussianInitialization
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
 

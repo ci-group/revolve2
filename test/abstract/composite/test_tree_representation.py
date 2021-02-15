@@ -1,8 +1,8 @@
 import unittest
 
-from nca.core.abstract.structural.tree.tree import Tree, CoordinateTree
-from nca.core.abstract.structural.tree.tree_helper import Orientation
-from nca.core.genome.operators.recombination_operator import OnePointTreeCrossover
+from abstract.structural.tree.tree import Tree, CoordinateTree
+from abstract.structural.tree.tree_helper import Orientation
+from nca.core.genome.operators.recombination_operator import SwapTreeCrossover
 from nca.core.genome.representations.tree_representation import TreeRepresentation, CoordinateTreeRepresentation
 
 
@@ -42,7 +42,7 @@ class TreeRepresentationTest(unittest.TestCase):
         coordinate_tree_2.add(Orientation.RIGHT)
         representation_2 = CoordinateTreeRepresentation(coordinate_tree_2)
 
-        recombination = OnePointTreeCrossover()
+        recombination = SwapTreeCrossover()
         recombination._recombine(representation_1, representation_2)
 
         self.assertIsInstance(representation_1[0], CoordinateTree)

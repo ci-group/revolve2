@@ -1,11 +1,12 @@
 from typing import List, Dict
 
-from nca.core.abstract.structural.tree.tree_helper import Coordinate3D, Orientation
+from abstract.structural.tree.tree_helper import Coordinate3D, Orientation
 from revolve.robot.body.body import RobotBody
 from revolve.robot.body.body_builder import RobotBodyBuilder
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 from revolve.robot.body.robogen.robogen_module import RobogenModule
-from revolve.robot.body.robogen.robogen_body_measures import MorphologicalMeasureCalculator
+from revolve.robot.body.robogen.symbolic_measures import MorphologicalMeasureCalculator
+from revolve.robot.body.robogen.robot_visualizer import show, generate_matrix
 from revolve.robot.development_request import BodyDevelopmentRequest
 
 
@@ -31,6 +32,10 @@ class RobogenBody(RobotBody):
                 available_modules.append(module)
 
         return available_modules
+
+    def visualize(self):
+        body_matrix, connections, length, height = generate_matrix(self.modules)
+        show(body_matrix, connections, length, height)
 
 
 class RobogenBodyBuilder(RobotBodyBuilder):
@@ -71,8 +76,9 @@ class RobogenBodyBuilder(RobotBodyBuilder):
             return True
 
         if symbol is RobogenSymbol.BRACKET_POP:
-            self.current_module = self.module_stack.pop()
-            return True
+            if len(self.module_stack) > 0:
+                self.current_module = self.module_stack.pop()
+                return True
 
         return False
 
@@ -90,5 +96,5 @@ class RobogenBodyBuilder(RobotBodyBuilder):
             return module
         else:
             self.current_module = self.hashmap[coordinate]
-            print("intersection limits ability to create module")
+            # print("intersection limits ability to create module")
             return None

@@ -29,6 +29,9 @@ class Statistics:
                             value_dictionary['first'], value_dictionary['min'])
 
     def latest(self):
+        if len(self.maximum_value) == 0:
+            return [None, None, None, None, None]
+
         return [self.maximum_value[-1],
                 self.upper_quartile[-1],
                 self.median_value[-1],

@@ -1,5 +1,5 @@
 import bisect
-import threading
+from threading import Thread
 import time
 import matplotlib.pyplot as plt
 import numpy as np
@@ -55,7 +55,7 @@ class SimulationSupervisor:
         return self.results
 
     def work(self, individual: Individual) -> SimulationMeasures:
-        return self.adapter.execute(individual)
+        self.results[individual.id] = self.adapter.execute(individual)
 
 
 class ThreadedSimulationSupervisor(SimulationSupervisor):
@@ -64,7 +64,7 @@ class ThreadedSimulationSupervisor(SimulationSupervisor):
         super().__init__(simulation_request)
 
         self.number_of_threads = simulation_request.number_of_workers
-        self.threads = [None for _ in range(self.number_of_threads)]
+        self.threads: List[Thread] = [None for _ in range(self.number_of_threads)]
         self.active_threads_count = 0
         self.adapters = [self._prepare_adapter() for i in range(self.number_of_threads)]
 
@@ -73,25 +73,28 @@ class ThreadedSimulationSupervisor(SimulationSupervisor):
     def work(self, individual: Individual):
         self.robot_queue.insert(individual, self.simulation_request.task_priority.value)
 
-    def _run(self, index):
+    def _run(self, adapter_index):
         priority, individual = self.robot_queue.get()
-        self.results[individual.id] = self.adapters[index].execute(individual)
+        self.results[individual.id] = self.adapters[adapter_index].execute(individual)
+        self.threads[adapter_index] = None
+        self.active_threads_count -= 1
+        print("Finished ", individual.id)
 
     def manager(self):
+        print("simulating robot: ", self.robot_queue.size())
         while self.robot_queue.size() > 0:
             self.logger.add(self.active_threads_count)
             if self.active_threads_count < self.number_of_threads:
-                index = self.threads.index(None)
-                thread: threading.Thread = threading.Thread(target=self._run, args=(index, ))
+                if None not in self.threads:
+                    continue
+                adapter_index = self.threads.index(None)
                 self.active_threads_count += 1
-                self.threads[index] = thread
-                thread.start()
-            else:
-                for index, thread in enumerate(self.threads):
-                    if not thread.is_alive():
-                        self.active_threads_count -= 1
-                        self.threads[index] = None
+                self.threads[adapter_index]: Thread = Thread(target=self._run, args=(adapter_index, ))
+                self.threads[adapter_index].start()
 
+            time.sleep(0.1)
+
+        while self.active_threads_count > 0:
             time.sleep(0.1)
 
         return self.results

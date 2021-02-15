@@ -15,6 +15,9 @@ class Measures:
     def __setitem__(self, key, value):
         self.measurements[key] = value
 
+    def values(self):
+        return list(self.measurements.values())
+
 
 class SimulationMeasures(Measures):
 

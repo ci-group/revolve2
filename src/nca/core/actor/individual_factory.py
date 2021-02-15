@@ -1,7 +1,7 @@
 import copy
 from abc import abstractmethod
 
-from nca.core.abstract.creational.factory import Factory
+from abstract.creational.factory import Factory
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
 from nca.core.evolution.conditions.initialization import Initialization

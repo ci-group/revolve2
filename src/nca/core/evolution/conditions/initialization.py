@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 
 import numpy as np
 
-from nca.core.abstract.configurations import InitializationConfiguration
+from abstract.configurations import InitializationConfiguration
 from nca.core.genome.grammar.symbol import Symbol
 
 

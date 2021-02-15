@@ -1,14 +1,11 @@
 import unittest
 
-from nca.core.abstract.configurations import PopulationConfiguration
+from abstract.configurations import PopulationConfiguration
 from nca.core.actor.individual import Individual
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 from nca.core.evolution.selection.mortality_selection import OffspringMortalitySelection, PopulationMortalitySelection, \
     ConstantMortalitySelection, NullMortalitySelection
-from nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
-from nca.core.evolution.selection.survivor_selection import NullSurvivorSelection, FitnessSteadyStateSelection, \
-    GenerationalSteadyStateSelection, ElitismSelection
 
 
 class TestMortalitySelection(unittest.TestCase):

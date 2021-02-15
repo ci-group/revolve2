@@ -21,8 +21,10 @@ class LSystemGenotype(Genotype):
 
     def initialize(self):
         self.clear()
-        representations = [self.initialization.axiom_initialization(RobogenSymbol, 0) if self.initialization.axiom_initialization is not None else GrammarInitialization(self.initialization.symbol_type)(),
+        representations = [self.initialization.axiom_initialization(RobogenSymbol, 0) if self.initialization.axiom_initialization is not None else GrammarInitialization(self.initialization.symbol_type)(0),
                            self.initialization.rules_initialization(RobogenSymbol, 0) if self.initialization.rules_initialization is not None else None,]
+        print(self.initialization.rules_initialization(RobogenSymbol, 0))
+
         self._initialize_multiple_representations(representations, ['axiom', 'rules'])
 
     def __call__(self, rule_iterations: int = 1, rules=None) -> List[Symbol]:

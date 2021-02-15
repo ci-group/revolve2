@@ -1,7 +1,7 @@
 import string
 from typing import Dict, List
 
-from nca.core.abstract.sequential_identifier import PopulationIdentifier
+from abstract.sequential_identifier import PopulationIdentifier
 from nca.core.actor.actors import Actors
 from nca.core.actor.age import GenerationalAge
 from nca.core.actor.individual import Individual

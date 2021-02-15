@@ -1,7 +1,7 @@
 import os
 import time
 
-from nca.core.abstract.sequential_identifier import SequentialIdentifier
+from abstract.sequential_identifier import SequentialIdentifier
 from resources import vrep
 from sys import platform
 import subprocess

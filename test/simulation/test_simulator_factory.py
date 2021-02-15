@@ -1,9 +1,9 @@
 import unittest
 
+from simulation.simulator.adapter.gazebo_simulator_adapter import GazeboSimulatorAdapter
 from test.evosphere.robot.test_birth_clinic import MockBirthClinic
 from nca.core.actor.actors import Actors
 from revolve.evosphere.ecosphere import GazeboEcosphere
-from simulation.simulator.adapter.gazebo_simulator_adapter import GazeboConnectorAdapter
 from simulation.simulator.simulator_command import SimulationRequest, TaskPriority
 from simulation.simulator.simulator_factory import SimulatorFactory
 
@@ -27,4 +27,4 @@ class SimulationSupervisorTest(unittest.TestCase):
         factory = SimulatorFactory(request_command)
         connector = factory.create()
 
-        self.assertIsInstance(connector, GazeboConnectorAdapter)
+        self.assertIsInstance(connector, GazeboSimulatorAdapter)

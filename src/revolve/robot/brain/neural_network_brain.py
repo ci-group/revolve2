@@ -2,10 +2,10 @@ from typing import List
 
 import numpy as np
 
-from nca.core.evolution.conditions.initialization import ValuedInitialization
+from abstract.configurations import RepresentationConfiguration
 from nca.core.genome.operators.initialization import GaussianInitialization
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
-from revolve.robot.brain.brain import Brain, AgentBrain
+from revolve.robot.brain.brain import AgentBrain
 
 
 def sigmoid_activation(x):
@@ -39,7 +39,8 @@ class NeuralNetworkBrain(AgentBrain):
         self.parameters: List[float] = []
 
     def representation(self):
-        return ValuedRepresentation(GaussianInitialization())
+        return ValuedRepresentation(GaussianInitialization(),
+                                    configuration=RepresentationConfiguration(size=self.size()))
 
     def size(self):
         return self.number_hidden_units + (self.number_inputs * self.number_hidden_units) + \
@@ -49,7 +50,6 @@ class NeuralNetworkBrain(AgentBrain):
         self.parameters = np.array(parameters)
 
     def activate(self, inputs):
-
         inputs = self.normalization_function(inputs)
 
         if self.number_hidden_units > 0:

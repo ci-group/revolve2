@@ -1,7 +1,7 @@
 from typing import List, Dict
 
 from nca.core.actor.age import Age
-from nca.core.abstract.sequential_identifier import AgentIdentifier
+from abstract.sequential_identifier import AgentIdentifier
 from nca.core.actor.fitness import Fitness
 from nca.core.actor.measures import Measurement
 from nca.core.genome.genotype import Genotype
@@ -29,7 +29,7 @@ class Individual:
         return self.fitness.value()
 
     def get_objectives(self) -> List[float]:
-        return self.fitness.objectives
+        return list(self.fitness.objectives.values())
 
     def get_representation(self, key=None):
         if len(self.genotype.keys()) == 1:

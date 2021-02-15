@@ -77,7 +77,6 @@ class PhylogenyMetrics:
                     G.add_edge(individual.id, parent_id)
 
         nx.draw(G, node_size=25, node_color=range(len(self.complete_history)), cmap=plt.cm.viridis, pos=graphviz_layout(G))
-        #plt.savefig("name.svg")
         plt.show()
         #app = Viewer(G)
         #app.mainloop()

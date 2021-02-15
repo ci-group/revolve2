@@ -2,18 +2,18 @@ import unittest
 
 import numpy as np
 
-from nca.core.abstract.configurations import InitializationConfiguration
+from abstract.configurations import InitializationConfiguration, RepresentationConfiguration
+from experiments.selection_experiment.measures_read import get_robot_measures
+from experiments.selection_experiment.plot_measures import plot_measures
 from nca.core.actor.fitness_evaluation import FitnessEvaluation
 from nca.core.actor.individual import Individual
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
 from nca.core.genome.operators.initialization import UniqueIntegerInitialization
 from nca.core.genome.operators.mutation_operator import UniqueReplaceMutation
-from nca.core.genome.operators.recombination_operator import NoCrossover, UniqueElementCrossover
+from nca.core.genome.operators.recombination_operator import UniqueElementCrossover
 from nca.core.genome.representations.valued_representation import ValuedRepresentation
 from nca.evolution import Evolution
-from test.nca.selection_experiment.measures_read import get_robot_measures
-from test.nca.selection_experiment.plot_measures import plot_measures
 from visualization.population_visualization import PopulationFitnessVisualization
 from visualization.visualization import time_series_visualization
 
@@ -21,7 +21,7 @@ number_of_robots = 20
 
 measures = ['joints', 'proportion', 'hinge_count', 'size', 'branching', 'limbs', 'coverage', 'symmetry']
 number_of_objectives = len(measures)
-number_of_selected_robots = 6
+number_of_selected_robots = 9
 
 
 class RobotSelectionFitness(FitnessEvaluation):
@@ -33,7 +33,6 @@ class RobotSelectionFitness(FitnessEvaluation):
             self.measure_values = np.random.random((number_of_robots, number_of_objectives))
 
     def __call__(self, individual: Individual):
-        print(individual.get_representation())
         robot_indexes = individual.get_representation()
         return sum(np.std(self.measure_values[robot_indexes], axis=0))
 
@@ -50,7 +49,7 @@ class TestRobotSelection(unittest.TestCase):
                                                                 initialization_type=representation_initialization)
 
         # Create the evolutionary framework based on the EA configuration and representation.
-        representation = ValuedRepresentation(representation_initialization)
+        representation = ValuedRepresentation(representation_initialization, configuration=RepresentationConfiguration(size=number_of_selected_robots))
         individual_factory = ActorFactory(representation)
         evolution = Evolution(evolutionary_configuration=algorithm_configuration,
                               fitness_evaluation=RobotSelectionFitness(robot_samples=True),

@@ -45,7 +45,7 @@ class StatisticsVisualization:
     def prepare(self):
         pass
 
-    def visualize(self):
+    def visualize(self, show=False):
         plt.plot(self.statistics.maximum_value, color="red", alpha=0.75)
         #plt.plot(self.statistics.upper_quartile)
         plt.plot(self.statistics.median_value, color="green", alpha=0.5)
@@ -69,4 +69,7 @@ class StatisticsVisualization:
         plt.fill_between(range(len(self.statistics.lower_quartile)),
                          self.statistics.lower_quartile, self.statistics.upper_quartile, alpha=0.5, color="khaki")
         plt.legend(["Maximum", "Median", 'Minimum', 'IQR'])
-        plt.show()
+        if show:
+            plt.show()
+
+        plt.close()

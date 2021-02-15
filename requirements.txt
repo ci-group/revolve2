@@ -1,6 +1,12 @@
 numpy
+gym
 rootpath
 pytest
 matplotlib
-imageio
 networkx
+pydot
+imageio
+pygame
+opencv-python
+torch
+scikit-learn

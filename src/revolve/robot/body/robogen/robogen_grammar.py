@@ -1,6 +1,6 @@
 from enum import auto
 
-from nca.core.abstract.structural.tree.tree_helper import Orientation
+from abstract.structural.tree.tree_helper import Orientation
 from nca.core.genome.grammar.symbol import Symbol
 
 

@@ -3,7 +3,7 @@ import time
 from typing import Dict, List
 
 from .population_management import PopulationManagement
-from nca.core.abstract.behavioral.memento import Memento
+from abstract.behavioral.memento import Memento
 from ..actor.actors import Actors
 
 
@@ -34,13 +34,13 @@ class PopulationEcology(Memento):
     def export(self, path: string = ""):
         start_time = time.time()
         path = self.population_memento_path if path == "" else path
-        self.dump(path, self.management)
+        self.dump(path+".pkl", self.management)
         logging_time = time.time() - start_time
         self.logging_duration.append(logging_time)
 
     def load(self, path: string = ""):
         path = self.population_memento_path if path == "" else path
-        self.management = self.restore(path)
+        self.management = self.restore(path+".pkl")
 
     def to_json(self):
         return self.management.to_json()

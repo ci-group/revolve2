@@ -3,7 +3,7 @@ from math import sqrt
 
 import matplotlib.pyplot as plt
 
-from nca.core.abstract.sequential_identifier import SequentialIdentifier
+from abstract.sequential_identifier import SequentialIdentifier
 from revolve.robot.brain.oscillators.cpg_helper import tanh_activation
 
 

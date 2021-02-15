@@ -1,6 +1,6 @@
 from typing import List
 
-from nca.core.abstract.sequential_identifier import GenusIdentifier
+from abstract.sequential_identifier import GenusIdentifier
 from nca.core.actor.individual import Individual
 from nca.core.ecology.population import Population
 from nca.core.ecology.speciation.compatibility import Compatibility

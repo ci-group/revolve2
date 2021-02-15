@@ -4,7 +4,7 @@ from typing import Tuple
 
 import numpy as np
 
-from nca.core.abstract.configurations import OperatorConfiguration
+from abstract.configurations import OperatorConfiguration
 
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.genome.genotype import Genotype

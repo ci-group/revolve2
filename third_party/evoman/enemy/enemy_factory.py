@@ -1,4 +1,4 @@
-from nca.core.abstract.creational.factory import Factory
+from abstract.creational.factory import Factory
 from third_party.evoman.enemy.enemy import Enemy
 from third_party.evoman.projectile.enemy_bullet import EnemyBullet, EnemyProjectile
 

@@ -1,12 +1,13 @@
 import unittest
 
-from nca.core.abstract.configurations import PopulationConfiguration
+from abstract.configurations import PopulationConfiguration
 from nca.core.actor.individual import Individual
 from nca.core.actor.individual_factory import ActorFactory
 from nca.core.ecology.population import Population
 from nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
 from nca.core.evolution.selection.survivor_selection import NullSurvivorSelection, FitnessSteadyStateSelection, \
     GenerationalSteadyStateSelection, ElitismSelection
+import numpy as np
 
 
 class TestSurvivorSelection(unittest.TestCase):
@@ -61,6 +62,10 @@ class TestSurvivorSelection(unittest.TestCase):
 
     def test_non_dominated_selection(self):
         population = Population(ActorFactory().create(PopulationConfiguration().population_size))
+
+        for individual in population.individuals:
+            individual.fitness.add("test1", np.random.random())
+            individual.fitness.add("test2", np.random.random())
 
         steady_state = NonDominatedSortingSurvival()
 

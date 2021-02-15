@@ -1,9 +1,9 @@
 from typing import Dict, List
 import numpy as np
 
-from nca.core.abstract.structural.composite import Composite
-from nca.core.abstract.sequential_identifier import NodeIdentifier
-from nca.core.abstract.structural.tree.tree_helper import Coordinate3D, BiDict, Orientation
+from abstract.structural.composite import Composite
+from abstract.sequential_identifier import NodeIdentifier
+from abstract.structural.tree.tree_helper import Coordinate3D, BiDict, Orientation
 
 
 class Tree(Composite):

@@ -1,6 +1,6 @@
 from abc import abstractmethod, ABC
 
-from nca.core.abstract.creational.builder import Builder
+from abstract.creational.builder import Builder
 from revolve.robot.brain.brain import Brain
 from revolve.robot.development_request import DevelopmentRequest, BrainDevelopmentRequest
 

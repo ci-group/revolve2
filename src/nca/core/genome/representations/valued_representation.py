@@ -2,7 +2,7 @@ from abc import ABC
 
 import numpy as np
 
-from nca.core.abstract.configurations import RepresentationConfiguration
+from abstract.configurations import RepresentationConfiguration
 from nca.core.evolution.conditions.initialization import ValuedInitialization
 from nca.core.genome.operators.initialization import UniformInitialization
 from nca.core.genome.representations.representation import Representation

@@ -9,11 +9,11 @@ class BrainDevelopmentalMeasures:
     pass
 
 
-class RobotBrain(Brain):
+class RobotBrain(Brain, ABC):
 
     def __init__(self):
         self.developmental_measures: BrainDevelopmentalMeasures = None
 
 
-class AgentBrain(Brain):
+class AgentBrain(Brain, ABC):
     pass

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import pygame
 
-from nca.core.abstract.sequential_identifier import SequentialIdentifier
+from abstract.sequential_identifier import SequentialIdentifier
 from third_party.evoman.path import projectile_image_path
 
 

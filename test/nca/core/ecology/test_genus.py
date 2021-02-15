@@ -42,7 +42,7 @@ class GenusTest(unittest.TestCase):
         for _ in range(self.number_of_species):
             population = Population(ActorFactory().create(self.number_of_individuals))
             for individual in population.individuals:
-                individual.fitness.append("test", np.random.randint(0, 100))
+                individual.fitness.add(np.random.randint(0, 100))
             genus.add(population)
 
         json = genus.to_json()

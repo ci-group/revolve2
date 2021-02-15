@@ -4,7 +4,7 @@ from typing import List
 
 import numpy as np
 
-from nca.core.abstract.configurations import RepresentationConfiguration
+from abstract.configurations import RepresentationConfiguration
 from nca.core.genome.representation import Representation
 
 

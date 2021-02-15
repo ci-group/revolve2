@@ -1,7 +1,7 @@
 import unittest
 from typing import List
 
-from nca.core.abstract.configurations import PopulationConfiguration
+from abstract.configurations import PopulationConfiguration
 from nca.core.actor.actors import Actors
 from nca.core.actor.individual import Individual
 from nca.core.actor.individual_factory import ActorFactory
@@ -28,6 +28,4 @@ class TestSelection(unittest.TestCase):
         survivor_selection = NullSurvivorSelection()
 
         selected = survivor_selection.select(population.individuals)
-
-        self.assertIsInstance(selected, Actors)
-        self.assertEqual(len(selected), survivor_selection.configuration.population_size)
+        self.assertEqual(len(selected), 2)

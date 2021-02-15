@@ -1,7 +1,7 @@
 from enum import Enum, auto
 
-from nca.core.abstract.behavioral.command import Command
-from nca.core.abstract.sequential_identifier import SimulatorRequestIdentifier
+from abstract.behavioral.command import Command
+from abstract.sequential_identifier import SimulatorRequestIdentifier
 from nca.core.actor.actors import Actors
 from revolve.evosphere.ecosphere import Ecosphere
 from revolve.robot.birth_clinic import BirthClinic

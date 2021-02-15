@@ -1,4 +1,4 @@
-from nca.core.abstract.configuration import Configuration
+from abstract.configuration import Configuration
 from nca.core.evolution.conditions.initialization import Initialization
 from nca.core.evolution.conditions.special_features import SpecialFeatures
 from nca.core.evolution.conditions.condition import Condition, EvaluationsCondition

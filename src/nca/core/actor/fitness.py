@@ -1,38 +1,31 @@
-from typing import Dict, List
+from typing import Dict
 
 
-class Fitness(Dict[str, float]):
-
-    master_key = 'fitness'
-    objectives_key = 'objectives'
+class Fitness:
 
     def __init__(self, initial_value: float = 0.0):
         super().__init__()
-        self[self.master_key] = initial_value
-        self.objectives: List[float] = []
-        self.clean = True  # changes to fitness dictionary
+        self.fitness = initial_value
+        self.objectives: Dict[str, float] = {}
 
     def value(self):
-        if not self.clean:
-            self._average()
-        return self[self.master_key]
+        return self.fitness
 
-    def add(self, key: str, value: float):
-        if key in self.keys():
+    def _add(self, key, value):
+        if key in self.objectives.keys():
             raise Exception("Adding duplicate fitness value")
-        self[key] = value
-        self.clean = False
+        self.objectives[key] = value
+        self._average()
+
+    def add(self, value):
+        if isinstance(value, dict):
+            for key in value.keys():
+                self._add(key, value[key])
+        else:
+            self._add("evaluation", value)
 
     def _average(self):
-        sum: float = 0
-        for key in self.keys():
-            if key == self.master_key:
-                continue
-            if not(type(self[key]) is list):
-                sum += self[key]
-                self.objectives.append(self[key])
-            else:
-                sum += self[key][0]
-                self.objectives.extend(self[key])
-        self[self.master_key] = sum / (self.__len__() - 1)  # Exclude master key from length calculation
-        self.clean = True
+        value: float = 0.0
+        for key in self.objectives.keys():
+            value += self.objectives[key]
+        self.fitness = value / self.objectives.__len__()

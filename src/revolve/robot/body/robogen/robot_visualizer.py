@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-from nca.core.abstract.structural.tree.tree_helper import Coordinate3D
+from abstract.structural.tree.tree_helper import Coordinate3D
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 
 

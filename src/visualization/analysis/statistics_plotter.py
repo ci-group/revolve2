@@ -25,13 +25,13 @@ def plot_statistics_measures_list(statistics_list: List[Statistics], algorithm_n
     axes[0, 1].legend(algorithm_names)
 
     for statistics in statistics_list:
-        axes[1, 0].plot([individual.fitness for individual in statistics.maximum_value])
+        axes[1, 0].plot([individual.value for individual in statistics.maximum_value])
 
     axes[1, 0].set(title='Best')
     axes[1, 0].legend(algorithm_names)
 
     for statistics in statistics_list:
-        axes[1, 1].plot([individual.fitness for individual in statistics.minimum_value])
+        axes[1, 1].plot([individual.value for individual in statistics.minimum_value])
 
     axes[1, 1].set(title='Worst')
     axes[1, 1].legend(algorithm_names)

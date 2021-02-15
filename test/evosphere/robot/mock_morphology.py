@@ -2,8 +2,6 @@ from revolve.robot.body.body import Body
 from revolve.robot.brain.brain import Brain
 
 
-
-
 class MockBody(Body):
     def develop(self):
         pass

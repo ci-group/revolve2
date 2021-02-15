@@ -9,7 +9,7 @@ from simulation.simulation_measures import Measures
 
 class MorphologicalMeasures(Measures):
 
-    def __init__(self, branching: float, limbs: float, length_of_limbs: float, coverage: float = 0.0,
+    def __init__(self, branching: float = 0.0, limbs: float = 0.0, length_of_limbs: float = 0.0, coverage: float = 0.0,
                  joints: float = 0.0, proportion: float = 0.0, symmetry: float = 0.0, size: float = 0.0):
         measurements: dict = {'branching': branching, 'limbs': limbs, 'length_of_limbs': length_of_limbs,
                               'coverage': coverage, 'joints': joints, 'proportion': proportion, 'symmetry': symmetry,

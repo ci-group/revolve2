@@ -10,3 +10,6 @@ pygame
 opencv-python
 torch
 scikit-learn
+pandas
+seaborn
+statsmodels

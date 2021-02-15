@@ -18,6 +18,9 @@ class Measures:
     def values(self):
         return list(self.measurements.values())
 
+    def keys(self):
+        return list(self.measurements.keys())
+
 
 class SimulationMeasures(Measures):
 

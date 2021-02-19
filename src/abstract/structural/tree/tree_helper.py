@@ -19,6 +19,9 @@ class Coordinate3D:
     def __repr__(self):
         return "(" + str(self.x) + " | " + str(self.y) + " | " + str(self.z) + ")"
 
+    def tuple(self):
+        return (self.x, self.y, self.z)
+
     def __hash__(self):
         return hash((self.x, self.y, self.z))
 

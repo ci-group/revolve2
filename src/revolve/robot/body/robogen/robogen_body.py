@@ -3,16 +3,16 @@ from typing import List, Dict
 from abstract.structural.tree.tree_helper import Coordinate3D, Orientation
 from revolve.robot.body.body import RobotBody
 from revolve.robot.body.body_builder import RobotBodyBuilder
+from revolve.robot.body.robogen.helper.robot_visualizer import generate_matrix, show
+from revolve.robot.body.robogen.helper.symbolic_measures import MorphologicalMeasureCalculator
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 from revolve.robot.body.robogen.robogen_module import RobogenModule
-from revolve.robot.body.robogen.symbolic_measures import MorphologicalMeasureCalculator
-from revolve.robot.body.robogen.robot_visualizer import show, generate_matrix
 from revolve.robot.development_request import BodyDevelopmentRequest
 
 
 class RobogenBody(RobotBody):
 
-    def __init__(self, axiom: RobogenModule):
+    def __init__(self, axiom: RobogenModule = RobogenModule()):
         super().__init__()
         self.modules: List[RobogenModule] = [axiom]
 
@@ -33,9 +33,9 @@ class RobogenBody(RobotBody):
 
         return available_modules
 
-    def visualize(self):
+    def visualize(self, path=None):
         body_matrix, connections, length, height = generate_matrix(self.modules)
-        show(body_matrix, connections, length, height)
+        show(body_matrix, connections, length, height, path)
 
 
 class RobogenBodyBuilder(RobotBodyBuilder):

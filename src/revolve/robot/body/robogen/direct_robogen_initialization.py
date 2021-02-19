@@ -16,7 +16,6 @@ class DirectRepresentationInitialization(Initialization):
         body_builder = RandomRobogenBodyBuilder()
 
         body = body_builder.develop(size)
-        print("original body: ", body.modules)
         stack = body.modules
         starting = stack.pop(0)
         return self._get_encoding(starting, [])

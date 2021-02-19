@@ -25,12 +25,12 @@ def normalize_minmax(inputs):
 
 class NeuralNetworkBrain(AgentBrain):
 
-    def __init__(self, number_inputs: int = 20, hidden_units: int = 10, number_actions: int = 5,
+    def __init__(self, number_inputs: int = 20, hidden_units: int = 10, number_outputs: int = 5,
                  activation_function=sigmoid_activation, classification_function=binary_activation,
                  normalization_function=normalize_minmax):
         self.number_inputs = number_inputs
         self.number_hidden_units = hidden_units
-        self.number_actions = number_actions
+        self.number_outputs = number_outputs
 
         self.activation_function = activation_function
         self.classification_function = classification_function
@@ -38,13 +38,9 @@ class NeuralNetworkBrain(AgentBrain):
 
         self.parameters: List[float] = []
 
-    def representation(self):
-        return ValuedRepresentation(GaussianInitialization(),
-                                    configuration=RepresentationConfiguration(size=self.size()))
-
     def size(self):
         return self.number_hidden_units + (self.number_inputs * self.number_hidden_units) + \
-               self.number_actions + (self.number_hidden_units * self.number_actions)
+               self.number_outputs + (self.number_hidden_units * self.number_outputs)
 
     def update(self, parameters):
         self.parameters = np.array(parameters)
@@ -73,9 +69,9 @@ class NeuralNetworkBrain(AgentBrain):
         output1 = self.activation_function(inputs.dot(weights1) + bias1)
 
         # Preparing the weights and biases from the controller of layer 2
-        bias2 = parameters[weights1_slice:weights1_slice + self.number_actions].reshape(1, self.number_actions)
-        weights2 = parameters[weights1_slice + self.number_actions:].reshape(
-            (self.number_hidden_units, self.number_actions))
+        bias2 = parameters[weights1_slice:weights1_slice + self.number_outputs].reshape(1, self.number_outputs)
+        weights2 = parameters[weights1_slice + self.number_outputs:].reshape(
+            (self.number_hidden_units, self.number_outputs))
 
         # Outputting activated second layer. Each entry in the output is an action
         return self.activation_function(output1.dot(weights2) + bias2)[0]
@@ -83,7 +79,17 @@ class NeuralNetworkBrain(AgentBrain):
     def activate_inputs(self, inputs, parameters):
         assert len(parameters) == self.size()
 
-        bias = parameters[:self.number_actions].reshape(1, self.number_actions)
-        weights = parameters[self.number_actions:].reshape((len(inputs), self.number_actions))
+        bias = parameters[:self.number_outputs].reshape(1, self.number_outputs)
+        weights = parameters[self.number_outputs:].reshape((len(inputs), self.number_outputs))
 
         return self.activation_function(inputs.dot(weights) + bias)[0]
+
+
+class NeuralNetworkRepresentation(ValuedRepresentation):
+
+    def __init__(self, brain: NeuralNetworkBrain):
+        self.brain: NeuralNetworkBrain = brain
+        super().__init__(GaussianInitialization(), configuration=RepresentationConfiguration(size=self.brain.size()))
+        
+    def compatibility(self, other) -> float:
+        return 0.0

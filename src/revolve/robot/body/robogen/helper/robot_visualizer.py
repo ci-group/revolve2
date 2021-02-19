@@ -38,14 +38,11 @@ def generate_matrix(body_modules):
         body_matrix[coordinate.x, coordinate.y] = body_element.symbol.value
         if body_element.symbol is not RobogenSymbol.MODULE_CORE:
             connection_coordinate = coordinate - (body_element.orientation.value / 2.0)
-            print(body_element, coordinate, connection_coordinate)
             connections.append([connection_coordinate.x, connection_coordinate.y])
-        else:
-            print(body_element, coordinate)
     return body_matrix, np.array(connections), height, length
 
 
-def show(body_matrix, connections, length, height):
+def show(body_matrix, connections, length, height, path=None):
     # make a color map of fixed colors
     number_of_modules = len(RobogenSymbol.modules()) + 2
     cmap = colors.ListedColormap(['white', 'yellow', 'blue', 'red', 'pink'])
@@ -79,7 +76,11 @@ def show(body_matrix, connections, length, height):
 
     # Gridlines based on minor ticks
     ax.grid(which='minor', color="white", linewidth=1)
+    if len(connections) > 0:
+        plt.scatter(connections[:, 1], connections[:, 0], color="black")
 
-    plt.scatter(connections[:, 1], connections[:, 0], color="black")
-
-    plt.show()
+    if path is None:
+        plt.show()
+    else:
+        plt.savefig(path)
+        plt.close()

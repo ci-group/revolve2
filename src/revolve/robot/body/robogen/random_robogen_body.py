@@ -4,12 +4,11 @@ import networkx as nx
 import numpy as np
 
 from abstract.structural.tree.tree_helper import Orientation
-from revolve.robot.body.robogen.body_measures import SymbolicMeasureCalculator
+from revolve.robot.body.robogen.helper.body_measures import SymbolicMeasureCalculator
+from revolve.robot.body.robogen.helper.symbolic_measures import MorphologicalMeasureCalculator
 from revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder, RobogenBody
-from revolve.robot.body.robogen.symbolic_measures import MorphologicalMeasureCalculator
 from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
 from revolve.robot.body.robogen.robogen_module import RobogenModule
-from revolve.robot.body.robogen.robot_visualizer import generate_matrix, show
 
 
 def _get_symbol_from_orientation(chosen_orientation):

@@ -14,6 +14,7 @@ class FolderManager:
 
         self.configuration_path = os.path.join(self.resources_path, "configuration")
         self.world_path = os.path.join(self.resources_path, "world")
+        self.config_path = os.path.join(self.resources_path, "config")
 
         self.objects_path = os.path.join(self.experiment_path, "objects")
         self.results_path = os.path.join(self.experiment_path, "results")

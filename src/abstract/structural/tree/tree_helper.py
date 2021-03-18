@@ -19,6 +19,10 @@ class Coordinate3D:
     def __repr__(self):
         return "(" + str(self.x) + " | " + str(self.y) + " | " + str(self.z) + ")"
 
+    def __mul__(self, other):
+        return Coordinate3D(self.x * other, self.y * other, self.z * other)
+
+
     def tuple(self):
         return (self.x, self.y, self.z)
 

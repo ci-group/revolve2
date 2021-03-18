@@ -39,7 +39,7 @@ class RandomCPPNRobogenBodyBuilder(RobogenBodyBuilder):
             chosen_parent_module: RobogenModule = np.random.choice(available)
             chosen_orientation: Orientation = np.random.choice(chosen_parent_module.neighbor_orientations())
 
-            output = cppn.activate((chosen_orientation.value + chosen_parent_module.coordinate).tuple())
+            output = cppn.activate(((chosen_orientation.value + chosen_parent_module.coordinate)*10).tuple())
             chosen_symbol = cppn.classify(output, [RobogenSymbol.MODULE_BLOCK,
                                                    RobogenSymbol.MODULE_BLOCK,
                                                    RobogenSymbol.MODULE_HORIZONTAL_JOINT,
@@ -89,7 +89,7 @@ class DFSCPPNRobogenBodyBuilder(RobogenBodyBuilder):
             chosen_parent_module: RobogenModule = available_modules.pop(0)
             for chosen_orientation in chosen_parent_module.neighbor_orientations():
 
-                output = cppn.activate((chosen_orientation.value + chosen_parent_module.coordinate).tuple())
+                output = cppn.activate(((chosen_orientation.value + chosen_parent_module.coordinate)*10).tuple())
                 chosen_symbol = cppn.classify(output, [RobogenSymbol.MODULE_BLOCK,
                                                        RobogenSymbol.MODULE_BLOCK,
                                                        RobogenSymbol.MODULE_HORIZONTAL_JOINT,

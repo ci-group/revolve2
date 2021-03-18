@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
+from abstract.creational.builder import Builder
 from revolve.robot.body.body import Body, RobotBody
 from revolve.robot.development_request import BodyDevelopmentRequest
-from revolve.robot.robot_builder import RobotBuilder
 
 
-class BodyBuilder(RobotBuilder, ABC):
+class BodyBuilder(Builder, ABC):
     def __init__(self, body_type: type(Body)):
         super().__init__()
         self.body_type: type(Body) = body_type

@@ -1,5 +1,6 @@
 import unittest
 
+from revolve.robot.body.robogen.helper.robot_visualizer import generate_matrix, show
 from test.evosphere.mock_body_builder import MockBodyBuilder
 from test.evosphere.robot.mock_morphology import MockBody, MockBrain
 from nca.core.actor.actors import Actors
@@ -7,7 +8,6 @@ from nca.core.actor.individual_factory import ActorFactory
 from revolve.evosphere.ecosphere import Ecosphere
 from revolve.robot.birth_clinic import RobotBirthClinic
 from revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype, SelfOrganizingRobogenGenotype
-from revolve.robot.body.robogen.robot_visualizer import generate_matrix, show
 from revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder, RobogenBody
 from revolve.robot.brain.brain import RobotBrain
 from revolve.robot.brain.brain_builder import MockBrainBuilder

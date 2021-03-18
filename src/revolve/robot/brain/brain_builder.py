@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
 
+from abstract.creational.builder import Builder
 from test.evosphere.robot.mock_morphology import MockBrain
 from revolve.robot.brain.brain import Brain, RobotBrain, AgentBrain
 from revolve.robot.development_request import BrainDevelopmentRequest
-from revolve.robot.robot_builder import RobotBuilder
 
 
-class BrainBuilder(RobotBuilder, ABC):
+
+class BrainBuilder(Builder, ABC):
     def __init__(self, brain_type: type(Brain)):
         super().__init__()
         self.brain_type: type(Brain) = brain_type

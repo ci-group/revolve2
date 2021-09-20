@@ -1,7 +1,7 @@
 import unittest
 
-from nca.core.actor.actors import Actors
-from nca.core.actor.individual_factory import ActorFactory
+from revolve2.nca.core.actor.actors import Actors
+from revolve2.nca.core.actor.individual_factory import ActorFactory
 
 
 class TestIndividualFactory(unittest.TestCase):

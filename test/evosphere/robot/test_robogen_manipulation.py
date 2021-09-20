@@ -1,8 +1,8 @@
 import copy
 import unittest
 
-from nca.core.genome.operators.mutation_operator import SwapMutation, ReplaceMutation, InversionMutation, InsertMutation
-from revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype
+from revolve2.nca.core.genome.operators.mutation_operator import SwapMutation, ReplaceMutation, InversionMutation, InsertMutation
+from revolve2.revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype
 
 
 class TestRobogenManipulation(unittest.TestCase):

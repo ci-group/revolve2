@@ -1,12 +1,12 @@
 import copy
 import unittest
 
-from nca.core.genome.grammar.grammar import RewritingGrammar
-from nca.core.genome.grammar.grammar_initialization import GrammarInitialization
-from nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, \
+from revolve2.nca.core.genome.grammar.grammar import RewritingGrammar
+from revolve2.nca.core.genome.grammar.grammar_initialization import GrammarInitialization
+from revolve2.nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, \
     ReplaceMutation, DeleteMutation
-from nca.core.genome.operators.recombination_operator import OnePointCrossover
-from nca.core.genome.representations.symbolic_representation import SymbolicRepresentation
+from revolve2.nca.core.genome.operators.recombination_operator import OnePointCrossover
+from revolve2.nca.core.genome.representations.symbolic_representation import SymbolicRepresentation
 from test.nca.core.grammar.test_alphabet import TestColorSymbol
 
 

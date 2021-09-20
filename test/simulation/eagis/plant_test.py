@@ -2,8 +2,8 @@
 import unittest
 import matplotlib.pyplot as plt
 
-from nca.core.ecology.population import Population
-from simulation.AEGIS.scape_environment import ScapeEnvironment
+from revolve2.nca.core.ecology.population import Population
+from revolve2.simulation.AEGIS.scape_environment import ScapeEnvironment
 
 import imageio
 

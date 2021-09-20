@@ -1,8 +1,8 @@
 import unittest
 
-from nca.core.genome.operators.initialization import UniformInitialization, BinaryInitialization, IntegerInitialization, \
+from revolve2.nca.core.genome.operators.initialization import UniformInitialization, BinaryInitialization, IntegerInitialization, \
     GaussianInitialization
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
 
 
 class DirectRepresentationTest(unittest.TestCase):

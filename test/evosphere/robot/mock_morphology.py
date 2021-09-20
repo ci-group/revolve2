@@ -1,5 +1,5 @@
-from revolve.robot.body.body import Body
-from revolve.robot.brain.brain import Brain
+from revolve2.revolve.robot.body.body import Body
+from revolve2.revolve.robot.brain.brain import Brain
 
 
 class MockBody(Body):

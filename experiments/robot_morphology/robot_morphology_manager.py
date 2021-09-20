@@ -1,15 +1,15 @@
 import numpy as np
 
-from nca.core.genome.operators.mutation_operator import SwapMutation, InsertMutation
-from nca.experiment_manager import ExperimentManager
-from revolve.robot.body.robogen.indirect_robogen_initialization import RobogenWordInitialization
-from revolve.robot.body.robogen.random_robogen_body import RandomRobogenBodyBuilder
+from revolve2.nca.core.genome.operators.mutation_operator import SwapMutation, InsertMutation
+from revolve2.nca.experiment_manager import ExperimentManager
+from revolve2.revolve.robot.body.robogen.indirect_robogen_initialization import RobogenWordInitialization
+from revolve2.revolve.robot.body.robogen.random_robogen_body import RandomRobogenBodyBuilder
 
-from revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder
-from revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype, DirectRobogenGenotype
-from revolve.robot.body.robogen.symbolic_measures import MorphologicalMeasures
-from revolve.robot.development_request import BodyDevelopmentRequest
-from revolve.robot.robot import Robot
+from revolve2.revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder
+from revolve2.revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype, DirectRobogenGenotype
+from revolve2.revolve.robot.body.robogen.symbolic_measures import MorphologicalMeasures
+from revolve2.revolve.robot.development_request import BodyDevelopmentRequest
+from revolve2.revolve.robot.robot import Robot
 from analysis.clustering.binning import MultiDimensionalBinning
 from analysis.dimensionality_reduction.pca import PCAReduction
 

@@ -1,4 +1,4 @@
-from nca.core.genome.representations.representation import Representation
+from revolve2.nca.core.genome.representations.representation import Representation
 
 
 class MockRepresentation(Representation):

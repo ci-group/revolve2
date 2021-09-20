@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.actor.age import GenerationalAge
+from revolve2.nca.core.actor.age import GenerationalAge
 
 
 class TestGenerationalAge(unittest.TestCase):

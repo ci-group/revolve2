@@ -2,10 +2,10 @@ import unittest
 
 import numpy as np
 
-from nca.core.actor.actors import Actors
-from nca.core.actor.individual_factory import ActorFactory
-from nca.core.ecology.speciation.compatibility import Compatibility
-from nca.core.ecology.speciation.genus_management import GenusManagement
+from revolve2.nca.core.actor.actors import Actors
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.nca.core.ecology.speciation.compatibility import Compatibility
+from revolve2.nca.core.ecology.speciation.genus_management import GenusManagement
 
 
 class GenusManagementTest(unittest.TestCase):

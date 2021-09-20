@@ -1,5 +1,5 @@
-from revolve.evosphere.biosphere import Ecosphere
-from simulation.simulator.simulator_type import SimulatorType
+from revolve2.revolve.evosphere.biosphere import Ecosphere
+from revolve2.simulation.simulator.simulator_type import SimulatorType
 
 
 class MockEcosphere(Ecosphere):

@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.actor.age import Age
+from revolve2.nca.core.actor.age import Age
 
 
 class TestAge(unittest.TestCase):

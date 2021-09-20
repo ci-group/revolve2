@@ -1,8 +1,8 @@
 import time
 
-from revolve.evosphere.coppelia import CoppeliaEvosphere
-from revolve.evosphere.ecosphere import CoppeliaEcosphere
-from simulation.simulator.adapter.vrep.coppelia_simulator_adapter import CoppeliaSimulatorAdapter
+from revolve2.revolve.evosphere.coppelia import CoppeliaEvosphere
+from revolve2.revolve.evosphere.ecosphere import CoppeliaEcosphere
+from revolve2.simulation.simulator.adapter.vrep.coppelia_simulator_adapter import CoppeliaSimulatorAdapter
 
 if __name__ == "__main__":
 

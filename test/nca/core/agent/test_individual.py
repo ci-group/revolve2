@@ -2,12 +2,12 @@ import copy
 import unittest
 from typing import List
 
-from nca.core.actor.fitness import Fitness
-from nca.core.actor.fitness_evaluation import OnesFitness
-from nca.core.actor.individual import Individual
-from nca.core.genome.genotype import Genotype
-from nca.core.genome.operators.initialization import UniformInitialization, IntegerInitialization
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.nca.core.actor.fitness import Fitness
+from revolve2.nca.core.actor.fitness_evaluation import OnesFitness
+from revolve2.nca.core.actor.individual import Individual
+from revolve2.nca.core.genome.genotype import Genotype
+from revolve2.nca.core.genome.operators.initialization import UniformInitialization, IntegerInitialization
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
 
 
 class TestIndividual(unittest.TestCase):

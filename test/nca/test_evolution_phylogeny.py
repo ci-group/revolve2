@@ -2,10 +2,10 @@ import os
 import pickle
 import unittest
 
-from nca.core.ecology import PopulationEcology
-from nca.core.ecology.metrics import PhylogenyMetrics
-from nca.evolution import Evolution
-from nca.experiment_manager import ExperimentManager
+from revolve2.nca.core.ecology import PopulationEcology
+from revolve2.nca.core.ecology.metrics import PhylogenyMetrics
+from revolve2.nca.evolution import Evolution
+from revolve2.nca.experiment_manager import ExperimentManager
 
 
 class TestPhylogeny(unittest.TestCase):

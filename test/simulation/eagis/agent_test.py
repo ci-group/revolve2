@@ -3,16 +3,16 @@ import unittest
 
 import matplotlib.pyplot as plt
 
-from abstract.configurations import InitializationConfiguration
-from nca.core.actor.individual_factory import ActorFactory
-from nca.core.ecology.population import Population
-from nca.core.genome.genotype import Genotype
-from nca.core.genome.operators.initialization import UniformInitialization
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
-from nca.experiment_manager import ExperimentManager
-from simulation.AEGIS.animal import Animal
-from simulation.AEGIS.decision_model import decide_all
-from simulation.AEGIS.scape_environment import ScapeEnvironment
+from revolve2.abstract.configurations import InitializationConfiguration
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.nca.core.ecology.population import Population
+from revolve2.nca.core.genome.genotype import Genotype
+from revolve2.nca.core.genome.operators.initialization import UniformInitialization
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.nca.experiment_manager import ExperimentManager
+from revolve2.simulation.AEGIS.animal import Animal
+from revolve2.simulation.AEGIS.decision_model import decide_all
+from revolve2.simulation.AEGIS.scape_environment import ScapeEnvironment
 from visualization.image_animation import ImageAnimator
 
 

@@ -1,11 +1,11 @@
 import unittest
 
-from nca.core.actor.fitness_evaluation import OnesFitness
-from nca.core.actor.individual import Individual
-from nca.core.genome.operators.initialization import UniformInitialization, BinaryInitialization
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
-from revolve.evosphere.fitness_evaluation import DisplacementFitnessEvaluation, RotationalFitnessEvaluation, DisplacementRotationalFitnessEvaluations
-from revolve.robot.robot import Robot
+from revolve2.nca.core.actor.fitness_evaluation import OnesFitness
+from revolve2.nca.core.actor.individual import Individual
+from revolve2.nca.core.genome.operators.initialization import UniformInitialization, BinaryInitialization
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.revolve.evosphere.fitness_evaluation import DisplacementFitnessEvaluation, RotationalFitnessEvaluation, DisplacementRotationalFitnessEvaluations
+from revolve2.revolve.robot.robot import Robot
 from test.simulation.simulator.mock_measures import MockPerformanceMeasures
 
 

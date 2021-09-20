@@ -1,6 +1,6 @@
 import unittest
 
-from abstract.structural.tree.tree_helper import Orientation
+from revolve2.abstract.structural.tree.tree_helper import Orientation
 
 
 class TreeRegistryTest(unittest.TestCase):

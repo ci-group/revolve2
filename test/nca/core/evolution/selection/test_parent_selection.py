@@ -1,13 +1,13 @@
 import unittest
 from typing import List
 
-from abstract.configurations import PopulationConfiguration
-from nca.core.actor.individual import Individual
-from nca.core.actor.individual_factory import ActorFactory
-from nca.core.ecology.population import Population
-from nca.core.evolution.selection.parent_selection import RandomParentSelection, TournamentSelection, \
+from revolve2.abstract.configurations import PopulationConfiguration
+from revolve2.nca.core.actor.individual import Individual
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.nca.core.ecology.population import Population
+from revolve2.nca.core.evolution.selection.parent_selection import RandomParentSelection, TournamentSelection, \
     RouletteWheelSelection
-from nca.core.genome.genotype import Genotype
+from revolve2.nca.core.genome.genotype import Genotype
 
 
 class TestParentSelection(unittest.TestCase):

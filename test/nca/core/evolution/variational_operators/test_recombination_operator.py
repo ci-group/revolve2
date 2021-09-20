@@ -1,11 +1,11 @@
 import copy
 import unittest
 
-from nca.core.actor.individual import Individual
-from nca.core.genome.genotype import Genotype
-from nca.core.genome.operators.initialization import UniformInitialization
-from nca.core.genome.operators.recombination_operator import OnePointCrossover
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.nca.core.actor.individual import Individual
+from revolve2.nca.core.genome.genotype import Genotype
+from revolve2.nca.core.genome.operators.initialization import UniformInitialization
+from revolve2.nca.core.genome.operators.recombination_operator import OnePointCrossover
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
 
 
 class TestRecombinationOperators(unittest.TestCase):

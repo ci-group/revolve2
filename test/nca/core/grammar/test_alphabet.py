@@ -2,7 +2,7 @@ from enum import auto
 
 import numpy as np
 
-from nca.core.genome.grammar.symbol import Symbol
+from revolve2.nca.core.genome.grammar.symbol import Symbol
 
 
 class TestColorSymbol(Symbol):

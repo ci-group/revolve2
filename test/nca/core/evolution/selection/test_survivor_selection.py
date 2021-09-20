@@ -1,11 +1,11 @@
 import unittest
 
-from abstract.configurations import PopulationConfiguration
-from nca.core.actor.individual import Individual
-from nca.core.actor.individual_factory import ActorFactory
-from nca.core.ecology.population import Population
-from nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
-from nca.core.evolution.selection.survivor_selection import NullSurvivorSelection, FitnessSteadyStateSelection, \
+from revolve2.abstract.configurations import PopulationConfiguration
+from revolve2.nca.core.actor.individual import Individual
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.nca.core.ecology.population import Population
+from revolve2.nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
+from revolve2.nca.core.evolution.selection.survivor_selection import NullSurvivorSelection, FitnessSteadyStateSelection, \
     GenerationalSteadyStateSelection, ElitismSelection
 import numpy as np
 

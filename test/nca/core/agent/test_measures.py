@@ -1,6 +1,6 @@
 import unittest
 
-from revolve.evosphere.performance_measures import PerformanceMeasures
+from revolve2.revolve.evosphere.performance_measures import PerformanceMeasures
 from test.simulation.simulator.mock_measures import MockSimulationMeasures
 
 

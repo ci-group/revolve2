@@ -1,8 +1,8 @@
 from abc import ABC
 
-from revolve.robot.body.body import Body
-from revolve.robot.body.body_builder import BodyBuilder
-from revolve.robot.development_request import DevelopmentRequest
+from revolve2.revolve.robot.body.body import Body
+from revolve2.revolve.robot.body.body_builder import BodyBuilder
+from revolve2.revolve.robot.development_request import DevelopmentRequest
 from test.evosphere.robot.mock_morphology import MockBody
 
 

@@ -1,10 +1,10 @@
 import copy
 import unittest
 
-from nca.core.genome.operators.initialization import UniformInitialization
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
-from revolve.evosphere.fitness_evaluation import DisplacementFitnessEvaluation
-from revolve.robot.robot import Robot
+from revolve2.nca.core.genome.operators.initialization import UniformInitialization
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.revolve.evosphere.fitness_evaluation import DisplacementFitnessEvaluation
+from revolve2.revolve.robot.robot import Robot
 from test.simulation.simulator.mock_measures import MockPerformanceMeasures
 
 

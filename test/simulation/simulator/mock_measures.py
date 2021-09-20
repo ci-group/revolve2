@@ -1,7 +1,7 @@
 import numpy as np
 
-from revolve.evosphere.performance_measures import PerformanceMeasures
-from simulation.simulation_measures import SimulationMeasures
+from revolve2.revolve.evosphere.performance_measures import PerformanceMeasures
+from revolve2.simulation.simulation_measures import SimulationMeasures
 
 
 class MockSimulationMeasures(SimulationMeasures):

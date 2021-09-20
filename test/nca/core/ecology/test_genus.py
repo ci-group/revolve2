@@ -3,13 +3,13 @@ import unittest
 
 import numpy as np
 
-from nca.core.actor.individual import Individual
-from nca.core.actor.individual_factory import ActorFactory, Characterization
-from nca.core.ecology.population import Population
-from nca.core.ecology.speciation.compatibility import Compatibility
-from nca.core.ecology.speciation.genus import Genus
-from nca.core.genome.operators.initialization import BinaryInitialization
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.nca.core.actor.individual import Individual
+from revolve2.nca.core.actor.individual_factory import ActorFactory, Characterization
+from revolve2.nca.core.ecology.population import Population
+from revolve2.nca.core.ecology.speciation.compatibility import Compatibility
+from revolve2.nca.core.ecology.speciation.genus import Genus
+from revolve2.nca.core.genome.operators.initialization import BinaryInitialization
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
 
 
 class GenusTest(unittest.TestCase):

@@ -1,8 +1,8 @@
 import unittest
 
-from revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype, DirectRobogenGenotype
-from revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder, RobogenBody
-from revolve.robot.development_request import BodyDevelopmentRequest
+from revolve2.revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype, DirectRobogenGenotype
+from revolve2.revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder, RobogenBody
+from revolve2.revolve.robot.development_request import BodyDevelopmentRequest
 
 
 class TestRobogenBuild(unittest.TestCase):

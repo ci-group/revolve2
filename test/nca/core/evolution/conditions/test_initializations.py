@@ -1,7 +1,7 @@
 import unittest
 from typing import List
 
-from nca.core.genome.operators.initialization import CategoricalInitialization, UniformInitialization, \
+from revolve2.nca.core.genome.operators.initialization import CategoricalInitialization, UniformInitialization, \
     GaussianInitialization
 from test.nca.core.grammar.test_alphabet import TestColorSymbol
 

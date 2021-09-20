@@ -1,6 +1,6 @@
 import unittest
 
-from nca.core.genome.operators.initialization import BinaryInitialization, IntegerInitialization, UniformInitialization, \
+from revolve2.nca.core.genome.operators.initialization import BinaryInitialization, IntegerInitialization, UniformInitialization, \
     GaussianInitialization
 
 """

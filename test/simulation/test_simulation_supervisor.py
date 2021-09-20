@@ -1,10 +1,10 @@
 import unittest
 
 from test.evosphere.robot.test_birth_clinic import MockBirthClinic
-from nca.core.actor.actors import Actors
-from nca.core.actor.individual_factory import ActorFactory
-from revolve.robot.robot import Robot
-from simulation.simulator.simulator_command import SimulationRequest, TaskPriority
+from revolve2.nca.core.actor.actors import Actors
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.revolve.robot.robot import Robot
+from revolve2.simulation.simulator.simulator_command import SimulationRequest, TaskPriority
 
 from src.simulation.simulation_supervisor import SimulationSupervisor
 

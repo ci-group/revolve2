@@ -1,9 +1,9 @@
 import unittest
 
-from nca.core.actor.fitness_evaluation import OnesNSGAFitness
-from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
-from nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
-from nca.evolution import Evolution
+from revolve2.nca.core.actor.fitness_evaluation import OnesNSGAFitness
+from revolve2.nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
+from revolve2.nca.core.evolution.selection.survival_non_dominated import NonDominatedSortingSurvival
+from revolve2.nca.evolution import Evolution
 
 
 class TestEvolution(unittest.TestCase):

@@ -2,18 +2,18 @@ import unittest
 
 import numpy as np
 
-from abstract.configurations import InitializationConfiguration, RepresentationConfiguration
+from revolve2.abstract.configurations import InitializationConfiguration, RepresentationConfiguration
 from experiments.selection_experiment.measures_read import get_robot_measures
 from experiments.selection_experiment.plot_measures import plot_measures
-from nca.core.actor.fitness_evaluation import FitnessEvaluation
-from nca.core.actor.individual import Individual
-from nca.core.actor.individual_factory import ActorFactory
-from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
-from nca.core.genome.operators.initialization import UniqueIntegerInitialization
-from nca.core.genome.operators.mutation_operator import UniqueReplaceMutation
-from nca.core.genome.operators.recombination_operator import UniqueElementCrossover
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
-from nca.evolution import Evolution
+from revolve2.nca.core.actor.fitness_evaluation import FitnessEvaluation
+from revolve2.nca.core.actor.individual import Individual
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
+from revolve2.nca.core.genome.operators.initialization import UniqueIntegerInitialization
+from revolve2.nca.core.genome.operators.mutation_operator import UniqueReplaceMutation
+from revolve2.nca.core.genome.operators.recombination_operator import UniqueElementCrossover
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.nca.evolution import Evolution
 from visualization.population_visualization import PopulationFitnessVisualization
 from visualization.visualization import time_series_visualization
 

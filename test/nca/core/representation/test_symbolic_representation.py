@@ -1,7 +1,7 @@
 import unittest
 
-from nca.core.genome.grammar.grammar_initialization import GrammarInitialization, LSystemInitialization
-from nca.core.genome.grammar.lindenmayer_system import LSystemGenotype
+from revolve2.nca.core.genome.grammar.grammar_initialization import GrammarInitialization, LSystemInitialization
+from revolve2.nca.core.genome.grammar.lindenmayer_system import LSystemGenotype
 from test.nca.core.grammar.test_alphabet import TestColorSymbol
 
 

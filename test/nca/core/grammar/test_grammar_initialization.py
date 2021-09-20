@@ -1,7 +1,7 @@
 import unittest
 from typing import List
 
-from nca.core.genome.grammar.grammar_initialization import GrammarInitialization
+from revolve2.nca.core.genome.grammar.grammar_initialization import GrammarInitialization
 from test.nca.core.grammar.test_alphabet import TestColorSymbol
 
 

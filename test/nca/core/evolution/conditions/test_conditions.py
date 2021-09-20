@@ -1,9 +1,9 @@
 import unittest
 
-from nca.core.actor.fitness import Fitness
-from nca.core.actor.individual_factory import ActorFactory
-from nca.core.ecology.population import Population
-from nca.core.evolution.conditions.condition import FitnessCondition, EvaluationsCondition, \
+from revolve2.nca.core.actor.fitness import Fitness
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.nca.core.ecology.population import Population
+from revolve2.nca.core.evolution.conditions.condition import FitnessCondition, EvaluationsCondition, \
     ImprovementCondition
 
 

@@ -1,6 +1,6 @@
 import unittest
 
-from nca.evolution import Evolution
+from revolve2.nca.evolution import Evolution
 from visualization.population_visualization import PopulationFitnessVisualization
 
 

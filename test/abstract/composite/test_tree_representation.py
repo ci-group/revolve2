@@ -1,9 +1,9 @@
 import unittest
 
-from abstract.structural.tree.tree import Tree, CoordinateTree
-from abstract.structural.tree.tree_helper import Orientation
-from nca.core.genome.operators.recombination_operator import SwapTreeCrossover
-from nca.core.genome.representations.tree_representation import TreeRepresentation, CoordinateTreeRepresentation
+from revolve2.abstract.structural.tree.tree import Tree, CoordinateTree
+from revolve2.abstract.structural.tree.tree_helper import Orientation
+from revolve2.nca.core.genome.operators.recombination_operator import SwapTreeCrossover
+from revolve2.nca.core.genome.representations.tree_representation import TreeRepresentation, CoordinateTreeRepresentation
 
 
 class TreeRepresentationTest(unittest.TestCase):

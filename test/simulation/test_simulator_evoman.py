@@ -1,18 +1,18 @@
 import unittest
 
-from nca.core.actor.agent import Agent
-from nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
-from nca.core.genome.genotype import Genotype
-from nca.evolution import Evolution
-from revolve.evosphere.biosphere import Biosphere
-from revolve.evosphere.evoman import EvomanEcosphere, EvomanBiosphere
-from revolve.evosphere.evosphere import Evosphere
-from revolve.robot.brain.neural_network_brain import NeuralNetworkBrain
-from simulation.simulation_manager import SimulationManager
-from simulation.simulation_supervisor import ThreadedSimulationSupervisor
+from revolve2.nca.core.actor.agent import Agent
+from revolve2.nca.core.evolution.evolutionary_configurations import GeneticAlgorithmConfiguration
+from revolve2.nca.core.genome.genotype import Genotype
+from revolve2.nca.evolution import Evolution
+from revolve2.revolve.evosphere.biosphere import Biosphere
+from revolve2.revolve.evosphere.evoman import EvomanEcosphere, EvomanBiosphere
+from revolve2.revolve.evosphere.evosphere import Evosphere
+from revolve2.revolve.robot.brain.neural_network_brain import NeuralNetworkBrain
+from revolve2.simulation.simulation_manager import SimulationManager
+from revolve2.simulation.simulation_supervisor import ThreadedSimulationSupervisor
 from test.evosphere.robot.test_birth_clinic import MockBirthClinic
-from nca.core.actor.actors import Actors
-from simulation.simulator.simulator_command import SimulationRequest, TaskPriority
+from revolve2.nca.core.actor.actors import Actors
+from revolve2.simulation.simulator.simulator_command import SimulationRequest, TaskPriority
 from visualization.population_visualization import PopulationFitnessVisualization
 
 

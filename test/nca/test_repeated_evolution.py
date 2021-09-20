@@ -1,7 +1,7 @@
 import unittest
 
-from nca.evolution import Evolution
-from nca.repeated_evolution import RepeatedEvolution
+from revolve2.nca.evolution import Evolution
+from revolve2.nca.repeated_evolution import RepeatedEvolution
 
 
 class TestRepeatedEvolution(unittest.TestCase):

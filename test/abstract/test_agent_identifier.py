@@ -1,6 +1,6 @@
 import unittest
 
-from abstract.sequential_identifier import SequentialIdentifier
+from revolve2.abstract.sequential_identifier import SequentialIdentifier
 
 
 class TestAgentIdentifier(unittest.TestCase):

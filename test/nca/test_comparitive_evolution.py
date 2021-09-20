@@ -1,9 +1,9 @@
 import unittest
 from typing import List
 
-from nca.comparative_evolution import ComparativeEvolution
-from nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
-from nca.core.genome.operators.recombination_operator import OnePointCrossover, UniformCrossover, \
+from revolve2.nca.comparative_evolution import ComparativeEvolution
+from revolve2.nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration, GeneticAlgorithmConfiguration
+from revolve2.nca.core.genome.operators.recombination_operator import OnePointCrossover, UniformCrossover, \
     OnePointUniformCrossover, OneElementCrossover, AllElementCrossover
 
 

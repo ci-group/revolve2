@@ -1,10 +1,10 @@
 import copy
 import unittest
 
-from nca.core.genome.operators.initialization import UniformInitialization
-from nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, \
+from revolve2.nca.core.genome.operators.initialization import UniformInitialization
+from revolve2.nca.core.genome.operators.mutation_operator import SwapMutation, InversionMutation, InsertMutation, \
     ReplaceMutation, DeleteMutation
-from nca.core.genome.representations.valued_representation import ValuedRepresentation
+from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
 
 """
 class TestMutationOperators(unittest.TestCase):

@@ -1,9 +1,9 @@
 import unittest
 
-from abstract.configurations import RepresentationConfiguration
-from nca.core.genome.grammar.grammar import RewritingGrammar
-from nca.core.genome.grammar.grammar_initialization import LSystemInitialization
-from nca.core.genome.grammar.lindenmayer_system import LSystemGenotype
+from revolve2.abstract.configurations import RepresentationConfiguration
+from revolve2.nca.core.genome.grammar.grammar import RewritingGrammar
+from revolve2.nca.core.genome.grammar.grammar_initialization import LSystemInitialization
+from revolve2.nca.core.genome.grammar.lindenmayer_system import LSystemGenotype
 from test.nca.core.grammar.test_alphabet import TestColorSymbol
 
 

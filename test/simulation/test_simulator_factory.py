@@ -1,11 +1,11 @@
 import unittest
 
-from simulation.simulator.adapter.gazebo_simulator_adapter import GazeboSimulatorAdapter
+from revolve2.simulation.simulator.adapter.gazebo_simulator_adapter import GazeboSimulatorAdapter
 from test.evosphere.robot.test_birth_clinic import MockBirthClinic
-from nca.core.actor.actors import Actors
-from revolve.evosphere.ecosphere import GazeboEcosphere
-from simulation.simulator.simulator_command import SimulationRequest, TaskPriority
-from simulation.simulator.simulator_factory import SimulatorFactory
+from revolve2.nca.core.actor.actors import Actors
+from revolve2.revolve.evosphere.ecosphere import GazeboEcosphere
+from revolve2.simulation.simulator.simulator_command import SimulationRequest, TaskPriority
+from revolve2.simulation.simulator.simulator_factory import SimulatorFactory
 
 from test.evosphere.mock_ecosphere import MockEcosphere
 from test.simulation.simulator.test_connector_adapter import TestConnectorAdapter

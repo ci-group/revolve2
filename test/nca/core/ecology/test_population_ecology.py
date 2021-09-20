@@ -1,8 +1,8 @@
 import unittest
 
-from nca.core.actor.individual_factory import ActorFactory
-from nca.core.ecology import PopulationEcology
-from nca.core.ecology.speciation.genus_management import GenusManagement
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.nca.core.ecology import PopulationEcology
+from revolve2.nca.core.ecology.speciation.genus_management import GenusManagement
 
 
 class TestPopulationEcology(unittest.TestCase):

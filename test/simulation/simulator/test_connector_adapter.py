@@ -1,10 +1,10 @@
 import time
 import numpy as np
 
-from nca.core.actor.individual import Individual
-from revolve.evosphere.biosphere import Ecosphere
-from revolve.robot.robot import Robot
-from simulation.simulator.adapter.simulation_adapters import SimulatorAdapter
+from revolve2.nca.core.actor.individual import Individual
+from revolve2.revolve.evosphere.biosphere import Ecosphere
+from revolve2.revolve.robot.robot import Robot
+from revolve2.simulation.simulator.adapter.simulation_adapters import SimulatorAdapter
 
 from src.simulation.simulation_measures import SimulationMeasures
 

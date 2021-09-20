@@ -1,10 +1,10 @@
 import unittest
 
-from revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype
-from revolve.robot.body.robogen.robogen_word import RobogenWord
-from revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder
-from revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
-from revolve.robot.body.robogen.robot_visualizer import generate_matrix
+from revolve2.revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype
+from revolve2.revolve.robot.body.robogen.robogen_word import RobogenWord
+from revolve2.revolve.robot.body.robogen.robogen_body import RobogenBodyBuilder
+from revolve2.revolve.robot.body.robogen.robogen_grammar import RobogenSymbol
+from revolve2.revolve.robot.body.robogen.robot_visualizer import generate_matrix
 
 
 class RobogenRepresentationTest(unittest.TestCase):

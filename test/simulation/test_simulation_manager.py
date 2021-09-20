@@ -2,8 +2,8 @@
 import unittest
 
 from test.evosphere.robot.test_birth_clinic import MockBirthClinic
-from nca.core.actor.individual_factory import ActorFactory
-from simulation.simulator.simulator_command import SimulationRequest, TaskPriority
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.simulation.simulator.simulator_command import SimulationRequest, TaskPriority
 from src.simulation.simulation_manager import SimulationManager
 
 

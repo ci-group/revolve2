@@ -1,9 +1,9 @@
 import copy
 import unittest
 
-from nca.core.genome.operators.mutation_operator import SwapMutation, DeleteMutation, InversionMutation, InsertMutation, \
+from revolve2.nca.core.genome.operators.mutation_operator import SwapMutation, DeleteMutation, InversionMutation, InsertMutation, \
     ReplaceMutation
-from revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype
+from revolve2.revolve.robot.body.robogen.robogen_genotype import IndirectRobogenGenotype
 
 
 class TestMutationOperators(unittest.TestCase):

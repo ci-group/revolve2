@@ -1,6 +1,6 @@
 import unittest
 
-from simulation.simulator.simulator_command import SimulationRequest
+from revolve2.simulation.simulator.simulator_command import SimulationRequest
 
 
 class TestSimulatorConnector(unittest.TestCase):

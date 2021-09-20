@@ -1,8 +1,8 @@
 import unittest
 
-from nca.core.actor.individual_factory import ActorFactory
-from revolve.robot.robot import Robot
-from simulation.simulator.adapter.simulation_adapters import SimulatorState
+from revolve2.nca.core.actor.individual_factory import ActorFactory
+from revolve2.revolve.robot.robot import Robot
+from revolve2.simulation.simulator.adapter.simulation_adapters import SimulatorState
 from test.evosphere.mock_ecosphere import MockEcosphere
 from test.simulation.simulator.test_connector_adapter import TestConnectorAdapter
 

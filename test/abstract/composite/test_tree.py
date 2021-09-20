@@ -1,6 +1,6 @@
 import unittest
 
-from abstract.structural.tree.tree import Tree
+from revolve2.abstract.structural.tree.tree import Tree
 
 
 class TreeTest(unittest.TestCase):

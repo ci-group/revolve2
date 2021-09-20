@@ -1,7 +1,7 @@
 import unittest
 
 from test.evosphere.mock_evosphere import MockEvosphere
-from revolve.evosphere.evosphere import RobotEvosphere
+from revolve2.revolve.evosphere.evosphere import RobotEvosphere
 
 
 class TestEvosphere(unittest.TestCase):

@@ -1,4 +1,4 @@
-from visualization.visualization import StatisticsVisualization
+from revolve2.visualization.visualization import StatisticsVisualization
 
 
 class ExperimentVisualization(StatisticsVisualization):

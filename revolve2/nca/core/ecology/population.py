@@ -6,7 +6,7 @@ from revolve2.nca.core.actor.actors import Actors
 from revolve2.nca.core.actor.age import GenerationalAge
 from revolve2.nca.core.actor.individual import Individual
 from revolve2.nca.core.ecology.metrics import PopulationMetrics, IndividualMetrics
-from visualization.analysis.statistics import MeasurementStatistics
+from revolve2.analysis.statistics import MeasurementStatistics
 
 
 class Reporter:

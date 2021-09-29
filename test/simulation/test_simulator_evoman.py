@@ -13,7 +13,7 @@ from revolve2.simulation.simulation_supervisor import ThreadedSimulationSupervis
 from test.evosphere.robot.test_birth_clinic import MockBirthClinic
 from revolve2.nca.core.actor.actors import Actors
 from revolve2.simulation.simulator.simulator_command import SimulationRequest, TaskPriority
-from visualization.population_visualization import PopulationFitnessVisualization
+from revolve2.visualization.population_visualization import PopulationFitnessVisualization
 
 
 class SimulationSupervisorTest(unittest.TestCase):

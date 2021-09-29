@@ -2,7 +2,7 @@ from typing import List
 
 import matplotlib.pyplot as plt
 
-from visualization.analysis.statistics import Statistics
+from revolve2.analysis.statistics import Statistics
 
 
 def plot_statistics_measures_list(statistics_list: List[Statistics], algorithm_names: List[str], ):

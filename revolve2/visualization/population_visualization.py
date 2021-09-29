@@ -1,7 +1,7 @@
 
 from revolve2.nca.core.ecology.population import Population
-from visualization.visualization import StatisticsVisualization, Visualization
-from visualization.visualization import plt
+from revolve2.visualization.visualization import StatisticsVisualization, Visualization
+from revolve2.visualization.visualization import plt
 
 
 class PopulationVisualization:

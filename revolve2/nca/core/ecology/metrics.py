@@ -1,15 +1,17 @@
 import math
-from typing import List, Dict
 import statistics
+from typing import Dict, List
 
-import networkx as nx
-from networkx.drawing.nx_pydot import graphviz_layout
 import matplotlib.pyplot as plt
+import networkx as nx
 import numpy as np
-
+from networkx.drawing.nx_pydot import graphviz_layout
+from revolve2.analysis.statistics import Statistics
 from revolve2.nca.core.actor.individual import Individual
-from revolve2.nca.core.actor.measures import BehavioralMeasurement, EpigeneticMeasurement, MorphologicalMeasurement, Measurement
-from visualization.analysis.statistics import Statistics
+from revolve2.nca.core.actor.measures import (BehavioralMeasurement,
+                                              EpigeneticMeasurement,
+                                              Measurement,
+                                              MorphologicalMeasurement)
 
 
 class Metrics:

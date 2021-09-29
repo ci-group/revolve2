@@ -14,8 +14,8 @@ from revolve2.nca.core.genome.operators.mutation_operator import UniqueReplaceMu
 from revolve2.nca.core.genome.operators.recombination_operator import UniqueElementCrossover
 from revolve2.nca.core.genome.representations.valued_representation import ValuedRepresentation
 from revolve2.nca.evolution import Evolution
-from visualization.population_visualization import PopulationFitnessVisualization
-from visualization.visualization import time_series_visualization
+from revolve2.visualization.population_visualization import PopulationFitnessVisualization
+from revolve2.visualization.visualization import time_series_visualization
 
 number_of_robots = 20
 

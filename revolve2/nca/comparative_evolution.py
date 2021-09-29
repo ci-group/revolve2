@@ -3,8 +3,8 @@ from revolve2.nca.core.actor.fitness_evaluation import OnesFitness, FitnessEvalu
 from revolve2.nca.core.actor.individual_factory import ActorFactory
 from revolve2.nca.core.evolution.evolutionary_configurations import EvolutionaryConfiguration
 from revolve2.nca.repeated_evolution import RepeatedEvolution
-from visualization.analysis.statistics import Statistics
-from visualization.analysis.statistics_plotter import plot_statistics_measures_list
+from revolve2.analysis.statistics import Statistics
+from revolve2.analysis.statistics_plotter import plot_statistics_measures_list
 
 
 class ComparativeEvolution:

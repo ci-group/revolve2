@@ -4,7 +4,7 @@ from typing import List, Dict
 import matplotlib.pyplot as plt
 import numpy as np
 
-from visualization.analysis.statistics import Statistics
+from revolve2.analysis.statistics import Statistics
 
 
 class Visualization:

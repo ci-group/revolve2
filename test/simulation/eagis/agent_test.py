@@ -13,7 +13,7 @@ from revolve2.nca.experiment_manager import ExperimentManager
 from revolve2.simulation.AEGIS.animal import Animal
 from revolve2.simulation.AEGIS.decision_model import decide_all
 from revolve2.simulation.AEGIS.scape_environment import ScapeEnvironment
-from visualization.image_animation import ImageAnimator
+from revolve2.visualization.image_animation import ImageAnimator
 
 
 class AgentAEGIS(unittest.TestCase):

@@ -1,6 +1,6 @@
 from revolve2.nca.core.actor.individual import Individual
 from revolve2.revolve.robot.robot import Robot
-from visualization.visualization import StatisticsVisualization, Visualization
+from revolve2.visualization.visualization import StatisticsVisualization, Visualization
 
 
 class IndividualVisualization(StatisticsVisualization):

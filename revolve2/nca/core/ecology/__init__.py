@@ -1,1 +1,0 @@
-from .population_ecology import PopulationEcology

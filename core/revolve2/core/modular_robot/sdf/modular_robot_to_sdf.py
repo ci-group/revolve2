@@ -10,8 +10,7 @@ import numpy as np
 import regex
 import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
-from revolve2.core.modular_robot import (ActiveHinge, Brick, Core,
-                                         ModularRobot, Module)
+from revolve2.core.modular_robot import ActiveHinge, Brick, Core, ModularRobot, Module
 
 
 def modular_robot_to_sdf(
@@ -197,7 +196,7 @@ class _ModularRobotToSdf:
         )
         xml.SubElement(core_link, "self_collide").text = "False"
         self._links.append(self._Link("core", core_link))
-        self.make_module(
+        self._make_module(
             robot.body.core,
             self._links[0],
             "core",
@@ -209,7 +208,7 @@ class _ModularRobotToSdf:
             xml.tostring(sdf, encoding="unicode", method="xml")
         ).toprettyxml(indent="    ")
 
-    def make_module(
+    def _make_module(
         self,
         module: Module,
         link: _ModularRobotToSdf._Link,
@@ -218,19 +217,19 @@ class _ModularRobotToSdf:
         forward: _Rotation,
     ) -> None:
         if module.type == module.Type.CORE:
-            self.make_core(cast(Core, module), link, name_prefix)
+            self._make_core(cast(Core, module), link, name_prefix)
         elif module.type == module.Type.BRICK:
-            self.make_brick(
+            self._make_brick(
                 cast(Brick, module), link, name_prefix, attachment_offset, forward
             )
         elif module.type == module.type.ACTIVE_HINGE:
-            self.make_active_hinge(
+            self._make_active_hinge(
                 cast(ActiveHinge, module), link, name_prefix, attachment_offset, forward
             )
         else:
             raise NotImplementedError("Module type not implemented")
 
-    def make_module_directed(
+    def _make_module_directed(
         self,
         module: Module,
         link: _ModularRobotToSdf._Link,
@@ -242,7 +241,7 @@ class _ModularRobotToSdf:
     ) -> None:
         rotation = parent_orientation * normal
 
-        self.make_module(
+        self._make_module(
             module,
             link,
             name_prefix,
@@ -250,7 +249,7 @@ class _ModularRobotToSdf:
             rotation,
         )
 
-    def make_core(
+    def _make_core(
         self, module: Core, link: _ModularRobotToSdf._Link, name_prefix: str
     ) -> None:
         sizexy = 0.089
@@ -259,7 +258,7 @@ class _ModularRobotToSdf:
         position = Vector3()
         orientation = _Rotation()
 
-        self.add_visual(
+        self._add_visual(
             link.element,
             f"{name_prefix}_core_visual",
             position,
@@ -268,7 +267,7 @@ class _ModularRobotToSdf:
             "model://rg_robot/meshes/CoreComponent.dae",
         )
 
-        self.add_box_collision(
+        self._add_box_collision(
             link.element,
             f"{name_prefix}_core_collision",
             position,
@@ -277,7 +276,7 @@ class _ModularRobotToSdf:
         )
 
         if module.front is not None:
-            self.make_module_directed(
+            self._make_module_directed(
                 module.front.module,
                 link,
                 f"{name_prefix}_front",
@@ -287,7 +286,7 @@ class _ModularRobotToSdf:
                 _Rotation(0, 0, 0) * _Rotation(module.front.rotation, 0, 0),
             )
         if module.back is not None:
-            self.make_module_directed(
+            self._make_module_directed(
                 module.back.module,
                 link,
                 f"{name_prefix}_back",
@@ -298,7 +297,7 @@ class _ModularRobotToSdf:
                 * _Rotation(module.back.rotation, 0, 0),
             )
         if module.left is not None:
-            self.make_module_directed(
+            self._make_module_directed(
                 module.left.module,
                 link,
                 f"{name_prefix}_left",
@@ -309,7 +308,7 @@ class _ModularRobotToSdf:
                 * _Rotation(module.left.rotation, 0, 0),
             )
         if module.right is not None:
-            self.make_module_directed(
+            self._make_module_directed(
                 module.right.module,
                 link,
                 f"{name_prefix}_right",
@@ -320,7 +319,7 @@ class _ModularRobotToSdf:
                 * _Rotation(module.right.rotation, 0, 0),
             )
 
-    def make_brick(
+    def _make_brick(
         self,
         module: Brick,
         link: _ModularRobotToSdf._Link,
@@ -333,7 +332,7 @@ class _ModularRobotToSdf:
 
         position = attachment_offset + orientation * Vector3([sizexy / 2.0, 0.0, 0.0])
 
-        self.add_visual(
+        self._add_visual(
             link.element,
             f"{name_prefix}_brick_visual",
             position,
@@ -342,7 +341,7 @@ class _ModularRobotToSdf:
             "model://rg_robot/meshes/FixedBrick.dae",
         )
 
-        self.add_box_collision(
+        self._add_box_collision(
             link.element,
             f"{name_prefix}_brick_collision",
             position,
@@ -351,7 +350,7 @@ class _ModularRobotToSdf:
         )
 
         if module.front is not None:
-            self.make_module_directed(
+            self._make_module_directed(
                 module.front.module,
                 link,
                 f"{name_prefix}_front",
@@ -361,7 +360,7 @@ class _ModularRobotToSdf:
                 _Rotation(0, 0, 0) * _Rotation(module.front.rotation, 0, 0),
             )
         if module.back is not None:
-            self.make_module_directed(
+            self._make_module_directed(
                 module.back.module,
                 link,
                 f"{name_prefix}_back",
@@ -372,7 +371,7 @@ class _ModularRobotToSdf:
                 * _Rotation(module.back.rotation, 0, 0),
             )
         if module.left is not None:
-            self.make_module_directed(
+            self._make_module_directed(
                 module.left.module,
                 link,
                 f"{name_prefix}_left",
@@ -383,7 +382,7 @@ class _ModularRobotToSdf:
                 * _Rotation(module.left.rotation, 0, 0),
             )
         if module.right is not None:
-            self.make_module_directed(
+            self._make_module_directed(
                 module.right.module,
                 link,
                 f"{name_prefix}_right",
@@ -394,7 +393,7 @@ class _ModularRobotToSdf:
                 * _Rotation(module.right.rotation, 0, 0),
             )
 
-    def make_active_hinge(
+    def _make_active_hinge(
         self,
         module: ActiveHinge,
         link: _ModularRobotToSdf._Link,
@@ -404,7 +403,7 @@ class _ModularRobotToSdf:
     ) -> None:
         pass
 
-    def add_visual(
+    def _add_visual(
         self,
         element: xml.Element,
         name: str,
@@ -429,7 +428,7 @@ class _ModularRobotToSdf:
         mesh = xml.SubElement(geometry, "mesh")
         xml.SubElement(mesh, "uri").text = model
 
-    def add_box_collision(
+    def _add_box_collision(
         self,
         element: xml.Element,
         name: str,

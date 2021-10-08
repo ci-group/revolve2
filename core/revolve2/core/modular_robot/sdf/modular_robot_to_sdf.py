@@ -36,29 +36,38 @@ def modular_robot_to_sdf(
     )
 
 
-# TODO this can be a lot simpler
+# TODO currently only 90 degree angles are supported
+#      upgrade to any degree angles
+#      in the process, upgrade the rotation matrix implementation
+#      to quaternions
+#      a quick attempt was already made but for some reason
+#      there were precious errors, so take care.
 class _Rotation:
     _matrix: np.ndarray
 
-    def __init__(self, x: int = 0, y: int = 0, z: int = 0):
+    def __init__(self, x: float = 0, y: float = 0, z: float = 0):
+        xint = self._float_rotation_to_discrete(x)
+        yint = self._float_rotation_to_discrete(y)
+        zint = self._float_rotation_to_discrete(z)
+
         self._matrix = np.ndarray(shape=(3, 3), dtype=int)
-        self._matrix[0][0] = self._cos(z) * self._cos(y)
-        self._matrix[0][1] = self._cos(z) * self._sin(y) * self._sin(x) - self._sin(
-            z
-        ) * self._cos(x)
-        self._matrix[0][2] = self._cos(z) * self._sin(y) * self._cos(x) + self._sin(
-            z
-        ) * self._sin(x)
-        self._matrix[1][0] = self._sin(z) * self._cos(y)
-        self._matrix[1][1] = self._sin(z) * self._sin(y) * self._sin(x) + self._cos(
-            z
-        ) * self._cos(x)
-        self._matrix[1][2] = self._sin(z) * self._sin(y) * self._cos(x) - self._cos(
-            z
-        ) * self._sin(x)
-        self._matrix[2][0] = -self._sin(y)
-        self._matrix[2][1] = self._cos(y) * self._sin(x)
-        self._matrix[2][2] = self._cos(y) * self._cos(x)
+        self._matrix[0][0] = self._cos(zint) * self._cos(yint)
+        self._matrix[0][1] = self._cos(zint) * self._sin(yint) * self._sin(
+            xint
+        ) - self._sin(zint) * self._cos(xint)
+        self._matrix[0][2] = self._cos(zint) * self._sin(yint) * self._cos(
+            xint
+        ) + self._sin(zint) * self._sin(xint)
+        self._matrix[1][0] = self._sin(zint) * self._cos(yint)
+        self._matrix[1][1] = self._sin(zint) * self._sin(yint) * self._sin(
+            xint
+        ) + self._cos(zint) * self._cos(xint)
+        self._matrix[1][2] = self._sin(zint) * self._sin(yint) * self._cos(
+            xint
+        ) - self._cos(zint) * self._sin(xint)
+        self._matrix[2][0] = -self._sin(yint)
+        self._matrix[2][1] = self._cos(yint) * self._sin(xint)
+        self._matrix[2][2] = self._cos(yint) * self._cos(xint)
 
     @staticmethod
     def _cos(val: int) -> int:
@@ -77,6 +86,17 @@ class _Rotation:
             return -1
         else:
             return 0
+
+    @staticmethod
+    def _float_rotation_to_discrete(rotation: float) -> int:
+        if not np.isclose(rotation % (math.pi / 2.0), 0.0):
+            raise NotImplementedError(
+                "Angles in modular robot can currently only be multiples of half pi(90 degrees)."
+            )
+
+        # see rotation class. works with integers that are multiples of pi/2
+        print(rotation, ((int(round(rotation / (math.pi / 2.0))) % 4) + 4) % 4)
+        return ((int(round(rotation / (math.pi / 2.0))) % 4) + 4) % 4
 
     def __mul__(self, other: Union[_Rotation, Vector3]) -> Union[_Rotation, Vector3]:
         if isinstance(other, _Rotation):
@@ -133,8 +153,8 @@ class _ModularRobotToSdf:
 
         return roll_x, pitch_y, yaw_z
 
-    @classmethod
-    def _make_pose(cls, position: Vector3, orientation: _Rotation) -> xml.Element:
+    @staticmethod
+    def _make_pose(position: Vector3, orientation: _Rotation) -> xml.Element:
         pose = xml.Element("pose")
         pose.text = "{:e} {:e} {:e} {:e} {:e} {:e}".format(
             *position,
@@ -142,7 +162,6 @@ class _ModularRobotToSdf:
                 "xyz"
             ),
         )
-        print(pose.text)
         return pose
 
     def modular_robot_to_sdf(
@@ -272,7 +291,8 @@ class _ModularRobotToSdf:
                 position,
                 orientation,
                 sizexy / 2.0,
-                _Rotation(0, 0, 2) * _Rotation(module.back.rotation, 0, 0),
+                _Rotation(0, 0, 2 * math.pi / 2.0)
+                * _Rotation(module.back.rotation, 0, 0),
             )
         if module.left is not None:
             self.make_module_directed(
@@ -282,7 +302,8 @@ class _ModularRobotToSdf:
                 position,
                 orientation,
                 sizexy / 2.0,
-                _Rotation(0, 0, 1) * _Rotation(module.left.rotation, 0, 0),
+                _Rotation(0, 0, 1 * math.pi / 2.0)
+                * _Rotation(module.left.rotation, 0, 0),
             )
         if module.right is not None:
             self.make_module_directed(
@@ -292,7 +313,8 @@ class _ModularRobotToSdf:
                 position,
                 orientation,
                 sizexy / 2.0,
-                _Rotation(0, 0, 3) * _Rotation(module.right.rotation, 0, 0),
+                _Rotation(0, 0, 3 * math.pi / 2.0)
+                * _Rotation(module.right.rotation, 0, 0),
             )
 
     def make_brick(
@@ -343,7 +365,8 @@ class _ModularRobotToSdf:
                 position,
                 orientation,
                 sizexy / 2.0,
-                _Rotation(0, 0, 2) * _Rotation(module.back.rotation, 0, 0),
+                _Rotation(0, 0, 2 * math.pi / 2.0)
+                * _Rotation(module.back.rotation, 0, 0),
             )
         if module.left is not None:
             self.make_module_directed(
@@ -353,7 +376,8 @@ class _ModularRobotToSdf:
                 position,
                 orientation,
                 sizexy / 2.0,
-                _Rotation(0, 0, 1) * _Rotation(module.left.rotation, 0, 0),
+                _Rotation(0, 0, 1 * math.pi / 2.0)
+                * _Rotation(module.left.rotation, 0, 0),
             )
         if module.right is not None:
             self.make_module_directed(
@@ -363,7 +387,8 @@ class _ModularRobotToSdf:
                 position,
                 orientation,
                 sizexy / 2.0,
-                _Rotation(0, 0, 3) * _Rotation(module.right.rotation, 0, 0),
+                _Rotation(0, 0, 3 * math.pi / 2.0)
+                * _Rotation(module.right.rotation, 0, 0),
             )
 
     def make_active_hinge(

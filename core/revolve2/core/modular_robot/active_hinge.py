@@ -9,7 +9,7 @@ class ActiveHinge(Module):
     attachment: Optional[Slot] = None
 
     def __init__(self):
-        super.__init__(Module.Type.ACTIVE_HINGE)
+        super().__init__(Module.Type.ACTIVE_HINGE)
 
     def serialize(self) -> Serialized:
         """

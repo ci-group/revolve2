@@ -188,13 +188,13 @@ class _ModularRobotToSdf:
             )
         )
 
-        core_link = xml.SubElement(model, "link", {"name": "core"})
+        core_link = xml.Element("link", {"name": "core"})
         core_link.append(
             _ModularRobotToSdf._make_pose(
                 Vector3([0.0, 0.0, 0.1]), _Rotation()
             )  # TODO remove z
         )
-        xml.SubElement(core_link, "self_collide").text = "False"
+        xml.SubElement(core_link, "self_collide").text = "True"
         self._links.append(self._Link("core", core_link))
         self._make_module(
             robot.body.core,
@@ -203,6 +203,9 @@ class _ModularRobotToSdf:
             Vector3([0.0, 0.0, 0.0]),
             _Rotation(),
         )
+
+        for link in self._links:
+            model.append(link.element)
 
         return minidom.parseString(
             xml.tostring(sdf, encoding="unicode", method="xml")
@@ -399,9 +402,74 @@ class _ModularRobotToSdf:
         link: _ModularRobotToSdf._Link,
         name_prefix: str,
         attachment_offset: Vector3,
-        forward: _Rotation,
+        orientation: _Rotation,
     ) -> None:
-        pass
+        sizex = 0.022
+        sizey = 0.03575
+        sizez = 0.01
+
+        attachment_sizex = 0.026
+        attachment_sizey = 0.02575
+        attachment_sizez = 0.015
+
+        position = attachment_offset + orientation * Vector3([sizex / 2.0, 0.0, 0.0])
+        position_attachment = attachment_offset + orientation * Vector3(
+            [sizex / 2.0 + attachment_sizex / 2.0, 0.0, 0.0]
+        )
+
+        self._add_visual(
+            link.element,
+            f"{name_prefix}_active_hinge_visual",
+            position,
+            orientation,
+            (0.0, 1.0, 0.0, 1.0),
+            "model://rg_robot/meshes/ActiveHinge_Frame.dae",
+        )
+
+        self._add_box_collision(
+            link.element,
+            f"{name_prefix}_active_hinge_collision",
+            position,
+            orientation,
+            (sizex, sizey, sizez),
+        )
+
+        next_link = xml.Element("link", {"name": f"{name_prefix}_active_hinge"})
+        next_link.append(
+            _ModularRobotToSdf._make_pose(
+                position_attachment + Vector3([0.0, 0.0, 0.1]), orientation
+            )  # TODO remove z offset
+        )
+        xml.SubElement(next_link, "self_collide").text = "True"
+        self._links.append(self._Link(f"{name_prefix}_active_hinge", next_link))
+
+        self._add_visual(
+            self._links[-1].element,
+            f"{name_prefix}_active_hinge_attachment_visual",
+            Vector3(),
+            _Rotation(),
+            (0.0, 1.0, 0.0, 1.0),
+            "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
+        )
+
+        self._add_box_collision(
+            self._links[-1].element,
+            f"{name_prefix}_active_hinge_attachment_collision",
+            Vector3(),
+            _Rotation(),
+            (attachment_sizex, attachment_sizey, attachment_sizez),
+        )
+
+        if module.attachment is not None:
+            self._make_module_directed(
+                module.attachment.module,
+                self._links[-1],
+                f"{name_prefix}_attachment",
+                Vector3(),
+                _Rotation(),
+                attachment_sizex / 2.0,
+                _Rotation(0, 0, 0) * _Rotation(module.attachment.rotation, 0, 0),
+            )
 
     def _add_visual(
         self,

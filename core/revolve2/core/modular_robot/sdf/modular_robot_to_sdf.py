@@ -10,7 +10,8 @@ import numpy as np
 import regex
 import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
-from revolve2.core.modular_robot import ActiveHinge, Brick, Core, ModularRobot, Module
+from revolve2.core.modular_robot import (ActiveHinge, Brick, Core,
+                                         ModularRobot, Module)
 
 
 def modular_robot_to_sdf(
@@ -108,6 +109,11 @@ class _Rotation:
         else:
             raise NotImplementedError()
 
+    def as_euler(self) -> Tuple[float, float, float]:
+        return scipy.spatial.transform.Rotation.from_matrix(self._matrix).as_euler(
+            "xyz"
+        )
+
 
 class _ModularRobotToSdf:
     @dataclass
@@ -157,9 +163,7 @@ class _ModularRobotToSdf:
         pose = xml.Element("pose")
         pose.text = "{:e} {:e} {:e} {:e} {:e} {:e}".format(
             *position,
-            *scipy.spatial.transform.Rotation.from_matrix(orientation._matrix).as_euler(
-                "xyz"
-            ),
+            *orientation.as_euler(),
         )
         return pose
 

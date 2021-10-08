@@ -4,9 +4,11 @@ import math
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
 from dataclasses import dataclass
-from typing import List, Tuple, cast
+from typing import List, Tuple, Union, cast
 
+import numpy as np
 import regex
+import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
 from revolve2.core.modular_robot import ActiveHinge, Brick, Core, ModularRobot, Module
 
@@ -34,6 +36,60 @@ def modular_robot_to_sdf(
     )
 
 
+# TODO this can be a lot simpler
+class _Rotation:
+    _matrix: np.ndarray
+
+    def __init__(self, x: int = 0, y: int = 0, z: int = 0):
+        self._matrix = np.ndarray(shape=(3, 3), dtype=int)
+        self._matrix[0][0] = self._cos(z) * self._cos(y)
+        self._matrix[0][1] = self._cos(z) * self._sin(y) * self._sin(x) - self._sin(
+            z
+        ) * self._cos(x)
+        self._matrix[0][2] = self._cos(z) * self._sin(y) * self._cos(x) + self._sin(
+            z
+        ) * self._sin(x)
+        self._matrix[1][0] = self._sin(z) * self._cos(y)
+        self._matrix[1][1] = self._sin(z) * self._sin(y) * self._sin(x) + self._cos(
+            z
+        ) * self._cos(x)
+        self._matrix[1][2] = self._sin(z) * self._sin(y) * self._cos(x) - self._cos(
+            z
+        ) * self._sin(x)
+        self._matrix[2][0] = -self._sin(y)
+        self._matrix[2][1] = self._cos(y) * self._sin(x)
+        self._matrix[2][2] = self._cos(y) * self._cos(x)
+
+    @staticmethod
+    def _cos(val: int) -> int:
+        if val == 0:
+            return 1
+        elif val == 2:
+            return -1
+        else:
+            return 0
+
+    @staticmethod
+    def _sin(val: int) -> int:
+        if val == 1:
+            return 1
+        elif val == 3:
+            return -1
+        else:
+            return 0
+
+    def __mul__(self, other: Union[_Rotation, Vector3]) -> Union[_Rotation, Vector3]:
+        if isinstance(other, _Rotation):
+            newrot = _Rotation(0, 0, 0)
+            newrot._matrix = np.matmul(self._matrix, other._matrix)
+            return newrot
+        elif isinstance(other, Vector3):
+            res = np.matmul(self._matrix, other)
+            return Vector3([res[0], res[1], res[2]])
+        else:
+            raise NotImplementedError()
+
+
 class _ModularRobotToSdf:
     @dataclass
     class _Link:
@@ -50,6 +106,7 @@ class _ModularRobotToSdf:
     def __init__(self):
         self._links = []
 
+    @staticmethod
     def _euler_from_quaternion(quaternion: Quaternion):
         """
         Quaternion to euler angles. xyz, right handed
@@ -77,11 +134,15 @@ class _ModularRobotToSdf:
         return roll_x, pitch_y, yaw_z
 
     @classmethod
-    def _make_pose(cls, position: Vector3, orientation: Quaternion) -> xml.Element:
+    def _make_pose(cls, position: Vector3, orientation: _Rotation) -> xml.Element:
         pose = xml.Element("pose")
         pose.text = "{:e} {:e} {:e} {:e} {:e} {:e}".format(
-            *position, *cls._euler_from_quaternion(orientation)
+            *position,
+            *scipy.spatial.transform.Rotation.from_matrix(orientation._matrix).as_euler(
+                "xyz"
+            ),
         )
+        print(pose.text)
         return pose
 
     def modular_robot_to_sdf(
@@ -100,12 +161,16 @@ class _ModularRobotToSdf:
         # make basic sdf structure with model
         sdf = xml.Element("sdf", {"version": "1.6"})
         model = xml.SubElement(sdf, "model", {"name": model_name})
-        model.append(_ModularRobotToSdf._make_pose(position, orientation))
+        model.append(
+            _ModularRobotToSdf._make_pose(
+                position, _Rotation(*self._euler_from_quaternion(orientation))
+            )
+        )
 
         core_link = xml.SubElement(model, "link", {"name": "core"})
         core_link.append(
             _ModularRobotToSdf._make_pose(
-                Vector3([0.0, 0.0, 0.1]), Quaternion()
+                Vector3([0.0, 0.0, 0.1]), _Rotation()
             )  # TODO remove z
         )
         xml.SubElement(core_link, "self_collide").text = "False"
@@ -115,7 +180,7 @@ class _ModularRobotToSdf:
             self._links[0],
             "core",
             Vector3([0.0, 0.0, 0.0]),
-            Quaternion(),
+            _Rotation(),
         )
 
         return minidom.parseString(
@@ -128,7 +193,7 @@ class _ModularRobotToSdf:
         link: _ModularRobotToSdf._Link,
         name_prefix: str,
         attachment_offset: Vector3,
-        forward: Quaternion,
+        forward: _Rotation,
     ) -> None:
         if module.type == module.Type.CORE:
             self.make_core(cast(Core, module), link, name_prefix)
@@ -143,17 +208,40 @@ class _ModularRobotToSdf:
         else:
             raise NotImplementedError("Module type not implemented")
 
+    def make_module_directed(
+        self,
+        module: Module,
+        link: _ModularRobotToSdf._Link,
+        name_prefix: str,
+        parent_position: Vector3,
+        parent_orientation: _Rotation,
+        radius: float,
+        normal: _Rotation,
+    ) -> None:
+        rotation = parent_orientation * normal
+
+        self.make_module(
+            module,
+            link,
+            name_prefix,
+            parent_position + rotation * Vector3([radius, 0.0, 0.0]),
+            rotation,
+        )
+
     def make_core(
         self, module: Core, link: _ModularRobotToSdf._Link, name_prefix: str
     ) -> None:
         sizexy = 0.089
         sizez = 0.045
 
+        position = Vector3()
+        orientation = _Rotation()
+
         self.add_visual(
             link.element,
             f"{name_prefix}_core_visual",
-            Vector3([0.0, 0.0, 0.0]),
-            Quaternion(),
+            position,
+            orientation,
             (1.0, 1.0, 0.0, 1.0),
             "model://rg_robot/meshes/CoreComponent.dae",
         )
@@ -161,42 +249,50 @@ class _ModularRobotToSdf:
         self.add_box_collision(
             link.element,
             f"{name_prefix}_core_collision",
-            Vector3([0.0, 0.0, 0.0]),
-            Quaternion(),
+            position,
+            orientation,
             (sizexy, sizexy, sizez),
         )
 
         if module.front is not None:
-            self.make_module(
+            self.make_module_directed(
                 module.front.module,
                 link,
                 f"{name_prefix}_front",
-                Vector3([sizexy / 2.0, 0.0, 0.0]),
-                Quaternion(),
+                position,
+                orientation,
+                sizexy / 2.0,
+                _Rotation(0, 0, 0) * _Rotation(module.front.rotation, 0, 0),
             )
         if module.back is not None:
-            self.make_module(
+            self.make_module_directed(
                 module.back.module,
                 link,
                 f"{name_prefix}_back",
-                Vector3([-sizexy / 2.0, 0.0, 0.0]),
-                Quaternion.from_z_rotation(math.pi),
+                position,
+                orientation,
+                sizexy / 2.0,
+                _Rotation(0, 0, 2) * _Rotation(module.back.rotation, 0, 0),
             )
         if module.left is not None:
-            self.make_module(
+            self.make_module_directed(
                 module.left.module,
                 link,
                 f"{name_prefix}_left",
-                Vector3([0.0, sizexy / 2.0, 0.0]),
-                Quaternion.from_z_rotation(math.pi / 2.0),
+                position,
+                orientation,
+                sizexy / 2.0,
+                _Rotation(0, 0, 1) * _Rotation(module.left.rotation, 0, 0),
             )
         if module.right is not None:
-            self.make_module(
+            self.make_module_directed(
                 module.right.module,
                 link,
                 f"{name_prefix}_right",
-                Vector3([0.0, -sizexy / 2.0, 0.0]),
-                Quaternion.from_z_rotation(math.pi / 2.0 * 3.0),
+                position,
+                orientation,
+                sizexy / 2.0,
+                _Rotation(0, 0, 3) * _Rotation(module.right.rotation, 0, 0),
             )
 
     def make_brick(
@@ -205,13 +301,12 @@ class _ModularRobotToSdf:
         link: _ModularRobotToSdf._Link,
         name_prefix: str,
         attachment_offset: Vector3,
-        forward: Quaternion,
+        orientation: _Rotation,
     ) -> None:
         sizexy = 0.041
         sizez = 0.0355
 
-        position = attachment_offset + forward * Vector3([sizexy / 2.0, 0.0, 0.0])
-        orientation = forward
+        position = attachment_offset + orientation * Vector3([sizexy / 2.0, 0.0, 0.0])
 
         self.add_visual(
             link.element,
@@ -231,48 +326,44 @@ class _ModularRobotToSdf:
         )
 
         if module.front is not None:
-            self.make_module(
+            self.make_module_directed(
                 module.front.module,
                 link,
                 f"{name_prefix}_front",
-                position
-                + Quaternion.from_z_rotation(0.0)
-                * forward
-                * Vector3([sizexy / 2.0, 0.0, 0.0]),
-                Quaternion.from_z_rotation(0.0) * forward,
+                position,
+                orientation,
+                sizexy / 2.0,
+                _Rotation(0, 0, 0) * _Rotation(module.front.rotation, 0, 0),
             )
         if module.back is not None:
-            self.make_module(
+            self.make_module_directed(
                 module.back.module,
                 link,
                 f"{name_prefix}_back",
-                position
-                + Quaternion.from_z_rotation(math.pi)
-                * forward
-                * Vector3([sizexy / 2.0, 0.0, 0.0]),
-                Quaternion.from_z_rotation(math.pi) * forward,
+                position,
+                orientation,
+                sizexy / 2.0,
+                _Rotation(0, 0, 2) * _Rotation(module.back.rotation, 0, 0),
             )
         if module.left is not None:
-            self.make_module(
+            self.make_module_directed(
                 module.left.module,
                 link,
                 f"{name_prefix}_left",
-                position
-                + Quaternion.from_z_rotation(math.pi / 2.0)
-                * forward
-                * Vector3([sizexy / 2.0, 0.0, 0.0]),
-                Quaternion.from_z_rotation(math.pi / 2.0) * forward,
+                position,
+                orientation,
+                sizexy / 2.0,
+                _Rotation(0, 0, 1) * _Rotation(module.left.rotation, 0, 0),
             )
         if module.right is not None:
-            self.make_module(
+            self.make_module_directed(
                 module.right.module,
                 link,
                 f"{name_prefix}_right",
-                position
-                + Quaternion.from_z_rotation(math.pi / 2.0 * 3.0)
-                * forward
-                * Vector3([sizexy / 2.0, 0.0, 0.0]),
-                Quaternion.from_z_rotation(math.pi / 2.0 * 3.0) * forward,
+                position,
+                orientation,
+                sizexy / 2.0,
+                _Rotation(0, 0, 3) * _Rotation(module.right.rotation, 0, 0),
             )
 
     def make_active_hinge(
@@ -281,7 +372,7 @@ class _ModularRobotToSdf:
         link: _ModularRobotToSdf._Link,
         name_prefix: str,
         attachment_offset: Vector3,
-        forward: Quaternion,
+        forward: _Rotation,
     ) -> None:
         pass
 
@@ -290,7 +381,7 @@ class _ModularRobotToSdf:
         element: xml.Element,
         name: str,
         position: Vector3,
-        orientation: Quaternion,
+        orientation: _Rotation,
         color: Tuple[float, float, float, float],
         model: str,
     ) -> None:
@@ -315,7 +406,7 @@ class _ModularRobotToSdf:
         element: xml.Element,
         name: str,
         position: Vector3,
-        orientation: Quaternion,
+        orientation: _Rotation,
         box_size: Vector3,
     ):
         collision = xml.SubElement(element, "collision", {"name": name})

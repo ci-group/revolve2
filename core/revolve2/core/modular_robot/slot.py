@@ -4,9 +4,9 @@ from .serialized import Serialized
 
 class Slot:
     module: Module
-    rotation: float
+    rotation: int
 
-    def __init__(self, module: Module, rotation: float):
+    def __init__(self, module: Module, rotation: int):
         self.module = module
         self.rotation = rotation
 

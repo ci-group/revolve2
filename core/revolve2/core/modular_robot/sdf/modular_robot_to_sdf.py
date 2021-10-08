@@ -95,7 +95,6 @@ class _Rotation:
             )
 
         # see rotation class. works with integers that are multiples of pi/2
-        print(rotation, ((int(round(rotation / (math.pi / 2.0))) % 4) + 4) % 4)
         return ((int(round(rotation / (math.pi / 2.0))) % 4) + 4) % 4
 
     def __mul__(self, other: Union[_Rotation, Vector3]) -> Union[_Rotation, Vector3]:

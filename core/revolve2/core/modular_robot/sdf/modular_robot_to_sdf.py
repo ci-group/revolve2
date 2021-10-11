@@ -10,7 +10,8 @@ import numpy as np
 import regex
 import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
-from revolve2.core.modular_robot import ActiveHinge, Brick, Core, ModularRobot, Module
+from revolve2.core.modular_robot import (ActiveHinge, Brick, Core,
+                                         ModularRobot, Module)
 
 
 def modular_robot_to_sdf(
@@ -124,14 +125,18 @@ class _ModularRobotToSdf:
     class _Joint:
         parent: _ModularRobotToSdf._Link
         child: _ModularRobotToSdf._Link
+        position: Vector3
+        orientation: _Rotation
 
     _links: List[_Link]
+    _joints = List[_Joint]
 
     def __init__(self):
         self._links = []
+        self._joints = []
 
     @staticmethod
-    def _euler_from_quaternion(quaternion: Quaternion):
+    def _euler_from_quaternion(quaternion: Quaternion) -> Tuple[float, float, float]:
         """
         Quaternion to euler angles. xyz, right handed
 
@@ -206,6 +211,26 @@ class _ModularRobotToSdf:
 
         for link in self._links:
             model.append(link.element)
+
+        for joint in self._joints:
+            el = xml.SubElement(
+                model,
+                "joint",
+                {"name": f"{joint.parent.name}_joint", "type": "revolute"},
+            )
+            el.append(self._make_pose(joint.position, joint.orientation))
+            xml.SubElement(el, "parent").text = joint.parent.name
+            xml.SubElement(el, "child").text = joint.child.name
+            axis = xml.SubElement(el, "axis")
+            xml.SubElement(axis, "xyz").text = "{:e} {:e} {:e}".format(
+                *(joint.orientation * Vector3([0.0, 1.0, 0.0]))
+            )
+            xml.SubElement(axis, "use_parent_model_frame").text = "0"
+            limit = xml.SubElement(axis, "limit")
+            xml.SubElement(limit, "lower").text = "-7.853982e-01"
+            xml.SubElement(limit, "upper").text = "7.853982e-01"
+            xml.SubElement(limit, "effort").text = "1.765800e-01"
+            xml.SubElement(limit, "velocity").text = "5.235988e+00"
 
         return minidom.parseString(
             xml.tostring(sdf, encoding="unicode", method="xml")
@@ -416,6 +441,9 @@ class _ModularRobotToSdf:
         position_attachment = attachment_offset + orientation * Vector3(
             [sizex / 2.0 + attachment_sizex / 2.0, 0.0, 0.0]
         )
+        middle = orientation * Vector3(
+            [-attachment_sizex / 2.0, 0.0, 0.0] asodiasod # TODO offset is incorrect
+        )  # attachment_offset + orientation * Vector3([sizex / 2.0, 0.0, 0.0])
 
         self._add_visual(
             link.element,
@@ -442,6 +470,8 @@ class _ModularRobotToSdf:
         )
         xml.SubElement(next_link, "self_collide").text = "True"
         self._links.append(self._Link(f"{name_prefix}_active_hinge", next_link))
+
+        self._joints.append(self._Joint(link, self._links[-1], middle, orientation))
 
         self._add_visual(
             self._links[-1].element,

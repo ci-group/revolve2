@@ -6,6 +6,6 @@ from .rigid_body import RigidBody
 
 
 @dataclass
-class Robot:
+class PhysicsRobot:
     bodies: List[RigidBody]
     joints: List[Joint]

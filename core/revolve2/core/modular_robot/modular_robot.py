@@ -1,10 +1,9 @@
 from typing import Dict
 
-from ..physics_robot import Robot
+from ..physics_robot import PhysicsRobot
 from .body import Body
 from .brain import Brain
 from .serialized import Serialized
-from .to_physics_robot import to_physics_robot
 
 
 class ModularRobot:
@@ -24,5 +23,7 @@ class ModularRobot:
 
         return {"body": self.body.serialize(), "brain": self.brain.serialize()}
 
-    def to_physics_robot(self) -> Robot:
+    def to_physics_robot(self) -> PhysicsRobot:
+        from .to_physics_robot import to_physics_robot
+
         return to_physics_robot(self)

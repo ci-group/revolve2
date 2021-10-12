@@ -1,12 +1,12 @@
 import math
 from typing import cast
 
-from pyrr import Quaternion, Vector3
+from pyrr import Quaternion, Vector3, vector
 from revolve2.core.physics_robot.joint import Joint
 from revolve2.core.physics_robot.rigid_body import RigidBody
 from revolve2.core.physics_robot.rigid_part import RigidPart
 
-from ..physics_robot import RigidBody, Robot
+from ..physics_robot import PhysicsRobot, RigidBody
 from .active_hinge import ActiveHinge
 from .brick import Brick
 from .core import Core
@@ -14,21 +14,21 @@ from .modular_robot import ModularRobot
 from .module import Module
 
 
-def to_physics_robot(modular_robot: ModularRobot) -> Robot:
+def to_physics_robot(modular_robot: ModularRobot) -> PhysicsRobot:
     return _PhysicsRobotBuilder().build(modular_robot)
 
 
 class _PhysicsRobotBuilder:
-    robot: Robot
+    robot: PhysicsRobot
 
-    def build(self, modular_robot: ModularRobot) -> Robot:
-        self.robot = Robot([], [])
+    def build(self, modular_robot: ModularRobot) -> PhysicsRobot:
+        self.robot = PhysicsRobot([], [])
 
-        core_body = RigidBody()
-        self.robot.bodies.append(core_body)
+        origin_body = RigidBody("origin", Vector3(), Quaternion())
+        self.robot.bodies.append(origin_body)
 
         self._make_module(
-            modular_robot.body.core, core_body, "origin", Vector3(), Quaternion()
+            modular_robot.body.core, origin_body, "origin", Vector3(), Quaternion()
         )
 
         return self.robot
@@ -72,11 +72,18 @@ class _PhysicsRobotBuilder:
         sizez = 0.045
         mass = 1.0
 
-        position = attachment_offset + orientation * Vector3([sizexy / 2.0, 0.0, 0.0])
+        # core is always at origin
+        position = attachment_offset
 
         body.parts.append(
             RigidPart(
-                position, orientation, mass, "core_visual_todo", "core_collision_todo"
+                f"{name_prefix}_core",
+                position,
+                orientation,
+                mass,
+                "model://rg_robot/meshes/CoreComponent.dae",
+                (1.0, 1.0, 0.0, 1.0),
+                Vector3([sizexy, sizexy, sizez]),
             )
         )
 
@@ -88,19 +95,7 @@ class _PhysicsRobotBuilder:
                 position,
                 orientation,
                 sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 0])
-                * Quaternion.from_eulers([module.front.rotation, 0, 0]),
-            )
-
-        if module.front is not None:
-            self._make_module_directed(
-                module.front.module,
-                body,
-                f"{name_prefix}_front",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 0])
+                Quaternion.from_eulers([0.0, 0.0, 0.0])
                 * Quaternion.from_eulers([module.front.rotation, 0, 0]),
             )
         if module.back is not None:
@@ -111,7 +106,7 @@ class _PhysicsRobotBuilder:
                 position,
                 orientation,
                 sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 2 * math.pi / 2.0])
+                Quaternion.from_eulers([0.0, 0.0, 2 * math.pi / 2.0])
                 * Quaternion.from_eulers([module.back.rotation, 0, 0]),
             )
         if module.left is not None:
@@ -122,7 +117,7 @@ class _PhysicsRobotBuilder:
                 position,
                 orientation,
                 sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 1 * math.pi / 2.0])
+                Quaternion.from_eulers([0.0, 0.0, 1 * math.pi / 2.0])
                 * Quaternion.from_eulers([module.left.rotation, 0, 0]),
             )
         if module.right is not None:
@@ -133,7 +128,7 @@ class _PhysicsRobotBuilder:
                 position,
                 orientation,
                 sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 3 * math.pi / 2.0])
+                Quaternion.from_eulers([0.0, 0.0, 3 * math.pi / 2.0])
                 * Quaternion.from_eulers([module.right.rotation, 0, 0]),
             )
 
@@ -153,7 +148,13 @@ class _PhysicsRobotBuilder:
 
         body.parts.append(
             RigidPart(
-                position, orientation, mass, "brick_visual_todo", "brick_collision_todo"
+                f"{name_prefix}_brick",
+                position,
+                orientation,
+                mass,
+                "model://rg_robot/meshes/FixedBrick.dae",
+                (1.0, 0.0, 0.0, 1.0),
+                Vector3([sizexy, sizexy, sizez]),
             )
         )
 
@@ -210,55 +211,74 @@ class _PhysicsRobotBuilder:
         attachment_offset: Vector3,
         orientation: Quaternion,
     ) -> None:
-        sizex = 0.022
-        sizey = 0.03575
-        sizez = 0.01
-        mass = 1.0
+        frame_sizex = 0.022
+        frame_sizey = 0.03575
+        frame_sizez = 0.01
+        frame_mass = 1.0
 
-        attachment_sizex = 0.026
-        attachment_sizey = 0.02575
-        attachment_sizez = 0.015
+        motor_sizex = 0.026
+        motor_sizey = 0.02575
+        motor_sizez = 0.015
+        motor_mass = 1.0
 
-        position = attachment_offset + orientation * Vector3([sizex / 2.0, 0.0, 0.0])
-        position_attachment = attachment_offset + orientation * Vector3(
-            [sizex / 2.0 + attachment_sizex / 2.0, 0.0, 0.0]
+        new_body_offset = Vector3([frame_sizex + 0.00215, 0.0, 0.0])
+        joint_offset = Vector3([-0.0085, 0.0, 0.0])
+
+        frame_position = attachment_offset + orientation * Vector3(
+            [frame_sizex / 2.0, 0.0, 0.0]
         )
-        middle = orientation * Vector3(
-            [-attachment_sizex / 2.0, 0.0, 0.0]  # TODO offset is incorrect
-        )  # attachment_offset + orientation * Vector3([sizex / 2.0, 0.0, 0.0])
+
+        new_body_position = attachment_offset + orientation * new_body_offset
+
+        joint_position = joint_offset
 
         body.parts.append(
             RigidPart(
-                position,
+                f"{name_prefix}_activehingeframe",
+                frame_position,
                 orientation,
-                mass,
-                "active_hinge_visual_todo",
-                "active_hinge_collision_todo",
+                frame_mass,
+                "model://rg_robot/meshes/ActiveHinge_Frame.dae",
+                (0.0, 1.0, 0.0, 1.0),
+                Vector3([frame_sizex, frame_sizey, frame_sizez]),
             )
         )
 
-        next_body = RigidBody()
+        next_body = RigidBody(
+            f"{name_prefix}_activehinge", new_body_position, orientation
+        )
         self.robot.bodies.append(next_body)
-        self.robot.joints.append(Joint(body, next_body))
+        self.robot.joints.append(
+            Joint(
+                f"{name_prefix}_activehinge",
+                body,
+                next_body,
+                joint_position,
+                orientation,
+                Vector3([0.0, 1.0, 0.0]),
+            )
+        )
 
-        body.parts.append(
+        next_body.parts.append(
             RigidPart(
+                f"{name_prefix}_activehingemotor",
                 Vector3(),
                 Quaternion(),
-                mass,
-                "active_hinge_attachment_visual_todo",
-                "active_hinge_attachment_collision_todo",
+                motor_mass,
+                "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
+                (0.0, 1.0, 0.0, 1.0),
+                Vector3([motor_sizex, motor_sizey, motor_sizez]),
             )
         )
 
         if module.attachment is not None:
             self._make_module_directed(
                 module.attachment.module,
-                body,
+                next_body,
                 f"{name_prefix}_attachment",
                 Vector3(),
                 Quaternion(),
-                attachment_sizex / 2.0,
+                motor_sizex / 2.0,
                 Quaternion()
                 * Quaternion.from_eulers([module.attachment.rotation, 0, 0]),
             )

@@ -1,559 +1,143 @@
-from __future__ import annotations
-
-import math
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
-from dataclasses import dataclass
-from typing import List, Tuple, Union, cast
+from typing import Tuple, cast
 
-import numpy as np
-import regex
-import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
-from revolve2.core.modular_robot import (ActiveHinge, Brick, Core,
-                                         ModularRobot, Module)
+from revolve2.core.modular_robot import ModularRobot
+from revolve2.core.physics_robot import PhysicsRobot
 
 
 def modular_robot_to_sdf(
-    robot: ModularRobot,
-    model_name: str,
+    robot: ModularRobot, model_name: str, position: Vector3, orientation: Quaternion
+) -> str:
+    physbot: PhysicsRobot = robot.to_physics_robot()
+
+    sdf = xml.Element("sdf", {"version": "1.6"})
+    model = xml.SubElement(sdf, "model", {"name": model_name})
+    model.append(_make_pose(position, orientation))
+
+    for body in physbot.bodies:
+        link = xml.SubElement(model, "link", {"name": body.name})
+        link.append(_make_pose(body.position, body.orientation))
+        xml.SubElement(link, "self_collide").text = "True"
+
+        for part in body.parts:
+            link.append(
+                _make_visual(
+                    f"{part.name}_visual",
+                    part.position,
+                    part.orientation,
+                    part.visual_color,
+                    part.visual_model,
+                )
+            )
+
+            link.append(
+                _make_box_collision(
+                    f"{part.name}_collision",
+                    part.position,
+                    part.orientation,
+                    part.collision_size,
+                )
+            )
+
+    for joint in physbot.joints:
+        el = xml.SubElement(
+            model,
+            "joint",
+            {"name": f"{joint.name}", "type": "revolute"},
+        )
+        el.append(_make_pose(joint.position, joint.orientation))
+        xml.SubElement(el, "parent").text = joint.body1.name
+        xml.SubElement(el, "child").text = joint.body2.name
+        axis = xml.SubElement(el, "axis")
+        xml.SubElement(axis, "xyz").text = "{:e} {:e} {:e}".format(
+            *(joint.orientation * joint.axis)
+        )
+        xml.SubElement(axis, "use_parent_model_frame").text = "0"
+        limit = xml.SubElement(axis, "limit")
+        xml.SubElement(limit, "lower").text = "-7.853982e-01"
+        xml.SubElement(limit, "upper").text = "7.853982e-01"
+        xml.SubElement(limit, "effort").text = "1.765800e-01"
+        xml.SubElement(limit, "velocity").text = "5.235988e+00"
+
+    return minidom.parseString(
+        xml.tostring(sdf, encoding="unicode", method="xml")
+    ).toprettyxml(indent="    ")
+
+
+def _quaternion_to_euler(quaternion: Quaternion) -> Tuple[float, float, float]:
+    from scipy.spatial.transform import Rotation
+
+    euler = Rotation.from_quat(
+        [quaternion.x, quaternion.y, quaternion.z, quaternion.w]
+    ).as_euler("xyz")
+    return (cast(float, euler[0]), cast(float, euler[1]), cast(float, euler[2]))
+
+
+def _make_pose(position: Vector3, orientation: Quaternion) -> xml.Element:
+    pose = xml.Element("pose")
+    pose.text = "{:e} {:e} {:e} {:e} {:e} {:e}".format(
+        *position,
+        *_quaternion_to_euler(orientation),
+    )
+    return pose
+
+
+def _make_visual(
+    name: str,
     position: Vector3,
     orientation: Quaternion,
-) -> str:
-    """
-    Create the sdf representation of a modular robot.
+    color: Tuple[float, float, float, float],
+    model: str,
+):
+    visual = xml.Element("visual", {"name": name})
+    visual.append(_make_pose(position, orientation))
 
-    :param robot: The robot
-    :param model_name: Model_name to use in the sdf.
-        Must consist only of letters, numbers, and underscores.
-        Must start with a letter.
-    :param position: Position of the robot.
-    :param orientation: Orientation of the robot.
-        Euler angles. XYZ. Extrinsic.
-    :raises NotImplementedError: If uninmplemented module is encountered.
-    """
-    return _ModularRobotToSdf().modular_robot_to_sdf(
-        robot, model_name, position, orientation
-    )
+    material = xml.SubElement(visual, "material")
+    xml.SubElement(
+        material, "ambient"
+    ).text = f"{color[0]} {color[1]} {color[2]} {color[3]}"
+    xml.SubElement(
+        material, "diffuse"
+    ).text = f"{color[0]} {color[1]} {color[2]} {color[3]}"
+    xml.SubElement(material, "specular").text = "0.1 0.1 0.1 1.0"
 
+    geometry = xml.SubElement(visual, "geometry")
+    mesh = xml.SubElement(geometry, "mesh")
+    xml.SubElement(mesh, "uri").text = model
 
-# TODO currently only 90 degree angles are supported
-#      upgrade to any degree angles
-#      in the process, upgrade the rotation matrix implementation
-#      to quaternions
-#      a quick attempt was already made but for some reason
-#      there were precious errors, so take care.
-class _Rotation:
-    _matrix: np.ndarray
-
-    def __init__(self, x: float = 0, y: float = 0, z: float = 0):
-        xint = self._float_rotation_to_discrete(x)
-        yint = self._float_rotation_to_discrete(y)
-        zint = self._float_rotation_to_discrete(z)
-
-        self._matrix = np.ndarray(shape=(3, 3), dtype=int)
-        self._matrix[0][0] = self._cos(zint) * self._cos(yint)
-        self._matrix[0][1] = self._cos(zint) * self._sin(yint) * self._sin(
-            xint
-        ) - self._sin(zint) * self._cos(xint)
-        self._matrix[0][2] = self._cos(zint) * self._sin(yint) * self._cos(
-            xint
-        ) + self._sin(zint) * self._sin(xint)
-        self._matrix[1][0] = self._sin(zint) * self._cos(yint)
-        self._matrix[1][1] = self._sin(zint) * self._sin(yint) * self._sin(
-            xint
-        ) + self._cos(zint) * self._cos(xint)
-        self._matrix[1][2] = self._sin(zint) * self._sin(yint) * self._cos(
-            xint
-        ) - self._cos(zint) * self._sin(xint)
-        self._matrix[2][0] = -self._sin(yint)
-        self._matrix[2][1] = self._cos(yint) * self._sin(xint)
-        self._matrix[2][2] = self._cos(yint) * self._cos(xint)
-
-    @staticmethod
-    def _cos(val: int) -> int:
-        if val == 0:
-            return 1
-        elif val == 2:
-            return -1
-        else:
-            return 0
-
-    @staticmethod
-    def _sin(val: int) -> int:
-        if val == 1:
-            return 1
-        elif val == 3:
-            return -1
-        else:
-            return 0
-
-    @staticmethod
-    def _float_rotation_to_discrete(rotation: float) -> int:
-        if not np.isclose(rotation % (math.pi / 2.0), 0.0):
-            raise NotImplementedError(
-                "Angles in modular robot can currently only be multiples of half pi(90 degrees)."
-            )
-
-        # see rotation class. works with integers that are multiples of pi/2
-        return ((int(round(rotation / (math.pi / 2.0))) % 4) + 4) % 4
-
-    def __mul__(self, other: Union[_Rotation, Vector3]) -> Union[_Rotation, Vector3]:
-        if isinstance(other, _Rotation):
-            newrot = _Rotation(0, 0, 0)
-            newrot._matrix = np.matmul(self._matrix, other._matrix)
-            return newrot
-        elif isinstance(other, Vector3):
-            res = np.matmul(self._matrix, other)
-            return Vector3([res[0], res[1], res[2]])
-        else:
-            raise NotImplementedError()
-
-    def as_euler(self) -> Tuple[float, float, float]:
-        return scipy.spatial.transform.Rotation.from_matrix(self._matrix).as_euler(
-            "xyz"
-        )
+    return visual
 
 
-class _ModularRobotToSdf:
-    @dataclass
-    class _Link:
-        name: str
-        element: xml.Element
+def _make_box_collision(
+    name: str,
+    position: Vector3,
+    orientation: Quaternion,
+    box_size: Vector3,
+):
+    collision = xml.Element("collision", {"name": name})
+    collision.append(_make_pose(position, orientation))
 
-    @dataclass
-    class _Joint:
-        parent: _ModularRobotToSdf._Link
-        child: _ModularRobotToSdf._Link
-        position: Vector3
-        orientation: _Rotation
+    surface = xml.SubElement(collision, "surface")
 
-    _links: List[_Link]
-    _joints = List[_Joint]
+    contact = xml.SubElement(surface, "contact")
+    ode = xml.SubElement(contact, "ode")
+    xml.SubElement(ode, "kd").text = "{:e}".format(10000000.0 / 3.0)
+    xml.SubElement(ode, "kp").text = "{:e}".format(90000)
 
-    def __init__(self):
-        self._links = []
-        self._joints = []
+    friction = xml.SubElement(surface, "friction")
+    ode = xml.SubElement(friction, "ode")
+    xml.SubElement(ode, "mu").text = "{:e}".format(1.0)
+    xml.SubElement(ode, "mu2").text = "{:e}".format(1.0)
+    xml.SubElement(ode, "slip1").text = "{:e}".format(0.01)
+    xml.SubElement(ode, "slip2").text = "{:e}".format(0.01)
+    bullet = xml.SubElement(friction, "bullet")
+    xml.SubElement(bullet, "friction").text = "{:e}".format(1.0)
+    xml.SubElement(bullet, "friction2").text = "{:e}".format(1.0)
 
-    @staticmethod
-    def _euler_from_quaternion(quaternion: Quaternion) -> Tuple[float, float, float]:
-        """
-        Quaternion to euler angles. xyz, right handed
+    geometry = xml.SubElement(collision, "geometry")
+    box = xml.SubElement(geometry, "box")
+    xml.SubElement(box, "size").text = "{:e} {:e} {:e}".format(*box_size)
 
-        source: https://automaticaddison.com/how-to-convert-a-quaternion-into-euler-angles-in-python/
-        """
-        x = quaternion.x
-        y = quaternion.y
-        z = quaternion.z
-        w = quaternion.w
-
-        t0 = +2.0 * (w * x + y * z)
-        t1 = +1.0 - 2.0 * (x * x + y * y)
-        roll_x = math.atan2(t0, t1)
-
-        t2 = +2.0 * (w * y - z * x)
-        t2 = +1.0 if t2 > +1.0 else t2
-        t2 = -1.0 if t2 < -1.0 else t2
-        pitch_y = math.asin(t2)
-
-        t3 = +2.0 * (w * z + x * y)
-        t4 = +1.0 - 2.0 * (y * y + z * z)
-        yaw_z = math.atan2(t3, t4)
-
-        return roll_x, pitch_y, yaw_z
-
-    @staticmethod
-    def _make_pose(position: Vector3, orientation: _Rotation) -> xml.Element:
-        pose = xml.Element("pose")
-        pose.text = "{:e} {:e} {:e} {:e} {:e} {:e}".format(
-            *position,
-            *orientation.as_euler(),
-        )
-        return pose
-
-    def modular_robot_to_sdf(
-        self,
-        robot: ModularRobot,
-        model_name: str,
-        position: Vector3,
-        orientation: Quaternion,
-    ) -> str:
-        assert len(model_name) > 0, "model name must be at least one character."
-        assert model_name[0].isalpha(), "model_name must start with a letter."
-        assert not bool(
-            regex.compile(r"[^a-zA-Z0-9_]").search(model_name)
-        ), "model_name must consist only of letters, numbers, and underscores."
-
-        # make basic sdf structure with model
-        sdf = xml.Element("sdf", {"version": "1.6"})
-        model = xml.SubElement(sdf, "model", {"name": model_name})
-        model.append(
-            _ModularRobotToSdf._make_pose(
-                position, _Rotation(*self._euler_from_quaternion(orientation))
-            )
-        )
-
-        core_link = xml.Element("link", {"name": "core"})
-        core_link.append(
-            _ModularRobotToSdf._make_pose(
-                Vector3([0.0, 0.0, 0.1]), _Rotation()
-            )  # TODO remove z
-        )
-        xml.SubElement(core_link, "self_collide").text = "True"
-        self._links.append(self._Link("core", core_link))
-        self._make_module(
-            robot.body.core,
-            self._links[0],
-            "core",
-            Vector3([0.0, 0.0, 0.0]),
-            _Rotation(),
-        )
-
-        for link in self._links:
-            model.append(link.element)
-
-        for joint in self._joints:
-            el = xml.SubElement(
-                model,
-                "joint",
-                {"name": f"{joint.parent.name}_joint", "type": "revolute"},
-            )
-            el.append(self._make_pose(joint.position, joint.orientation))
-            xml.SubElement(el, "parent").text = joint.parent.name
-            xml.SubElement(el, "child").text = joint.child.name
-            axis = xml.SubElement(el, "axis")
-            xml.SubElement(axis, "xyz").text = "{:e} {:e} {:e}".format(
-                *(joint.orientation * Vector3([0.0, 1.0, 0.0]))
-            )
-            xml.SubElement(axis, "use_parent_model_frame").text = "0"
-            limit = xml.SubElement(axis, "limit")
-            xml.SubElement(limit, "lower").text = "-7.853982e-01"
-            xml.SubElement(limit, "upper").text = "7.853982e-01"
-            xml.SubElement(limit, "effort").text = "1.765800e-01"
-            xml.SubElement(limit, "velocity").text = "5.235988e+00"
-
-        return minidom.parseString(
-            xml.tostring(sdf, encoding="unicode", method="xml")
-        ).toprettyxml(indent="    ")
-
-    def _make_module(
-        self,
-        module: Module,
-        link: _ModularRobotToSdf._Link,
-        name_prefix: str,
-        attachment_offset: Vector3,
-        forward: _Rotation,
-    ) -> None:
-        if module.type == module.Type.CORE:
-            self._make_core(cast(Core, module), link, name_prefix)
-        elif module.type == module.Type.BRICK:
-            self._make_brick(
-                cast(Brick, module), link, name_prefix, attachment_offset, forward
-            )
-        elif module.type == module.type.ACTIVE_HINGE:
-            self._make_active_hinge(
-                cast(ActiveHinge, module), link, name_prefix, attachment_offset, forward
-            )
-        else:
-            raise NotImplementedError("Module type not implemented")
-
-    def _make_module_directed(
-        self,
-        module: Module,
-        link: _ModularRobotToSdf._Link,
-        name_prefix: str,
-        parent_position: Vector3,
-        parent_orientation: _Rotation,
-        radius: float,
-        normal: _Rotation,
-    ) -> None:
-        rotation = parent_orientation * normal
-
-        self._make_module(
-            module,
-            link,
-            name_prefix,
-            parent_position + rotation * Vector3([radius, 0.0, 0.0]),
-            rotation,
-        )
-
-    def _make_core(
-        self, module: Core, link: _ModularRobotToSdf._Link, name_prefix: str
-    ) -> None:
-        sizexy = 0.089
-        sizez = 0.045
-
-        position = Vector3()
-        orientation = _Rotation()
-
-        self._add_visual(
-            link.element,
-            f"{name_prefix}_core_visual",
-            position,
-            orientation,
-            (1.0, 1.0, 0.0, 1.0),
-            "model://rg_robot/meshes/CoreComponent.dae",
-        )
-
-        self._add_box_collision(
-            link.element,
-            f"{name_prefix}_core_collision",
-            position,
-            orientation,
-            (sizexy, sizexy, sizez),
-        )
-
-        if module.front is not None:
-            self._make_module_directed(
-                module.front.module,
-                link,
-                f"{name_prefix}_front",
-                position,
-                orientation,
-                sizexy / 2.0,
-                _Rotation(0, 0, 0) * _Rotation(module.front.rotation, 0, 0),
-            )
-        if module.back is not None:
-            self._make_module_directed(
-                module.back.module,
-                link,
-                f"{name_prefix}_back",
-                position,
-                orientation,
-                sizexy / 2.0,
-                _Rotation(0, 0, 2 * math.pi / 2.0)
-                * _Rotation(module.back.rotation, 0, 0),
-            )
-        if module.left is not None:
-            self._make_module_directed(
-                module.left.module,
-                link,
-                f"{name_prefix}_left",
-                position,
-                orientation,
-                sizexy / 2.0,
-                _Rotation(0, 0, 1 * math.pi / 2.0)
-                * _Rotation(module.left.rotation, 0, 0),
-            )
-        if module.right is not None:
-            self._make_module_directed(
-                module.right.module,
-                link,
-                f"{name_prefix}_right",
-                position,
-                orientation,
-                sizexy / 2.0,
-                _Rotation(0, 0, 3 * math.pi / 2.0)
-                * _Rotation(module.right.rotation, 0, 0),
-            )
-
-    def _make_brick(
-        self,
-        module: Brick,
-        link: _ModularRobotToSdf._Link,
-        name_prefix: str,
-        attachment_offset: Vector3,
-        orientation: _Rotation,
-    ) -> None:
-        sizexy = 0.041
-        sizez = 0.0355
-
-        position = attachment_offset + orientation * Vector3([sizexy / 2.0, 0.0, 0.0])
-
-        self._add_visual(
-            link.element,
-            f"{name_prefix}_brick_visual",
-            position,
-            orientation,
-            (1.0, 0.0, 0.0, 1.0),
-            "model://rg_robot/meshes/FixedBrick.dae",
-        )
-
-        self._add_box_collision(
-            link.element,
-            f"{name_prefix}_brick_collision",
-            position,
-            orientation,
-            (sizexy, sizexy, sizez),
-        )
-
-        if module.front is not None:
-            self._make_module_directed(
-                module.front.module,
-                link,
-                f"{name_prefix}_front",
-                position,
-                orientation,
-                sizexy / 2.0,
-                _Rotation(0, 0, 0) * _Rotation(module.front.rotation, 0, 0),
-            )
-        if module.back is not None:
-            self._make_module_directed(
-                module.back.module,
-                link,
-                f"{name_prefix}_back",
-                position,
-                orientation,
-                sizexy / 2.0,
-                _Rotation(0, 0, 2 * math.pi / 2.0)
-                * _Rotation(module.back.rotation, 0, 0),
-            )
-        if module.left is not None:
-            self._make_module_directed(
-                module.left.module,
-                link,
-                f"{name_prefix}_left",
-                position,
-                orientation,
-                sizexy / 2.0,
-                _Rotation(0, 0, 1 * math.pi / 2.0)
-                * _Rotation(module.left.rotation, 0, 0),
-            )
-        if module.right is not None:
-            self._make_module_directed(
-                module.right.module,
-                link,
-                f"{name_prefix}_right",
-                position,
-                orientation,
-                sizexy / 2.0,
-                _Rotation(0, 0, 3 * math.pi / 2.0)
-                * _Rotation(module.right.rotation, 0, 0),
-            )
-
-    def _make_active_hinge(
-        self,
-        module: ActiveHinge,
-        link: _ModularRobotToSdf._Link,
-        name_prefix: str,
-        attachment_offset: Vector3,
-        orientation: _Rotation,
-    ) -> None:
-        sizex = 0.022
-        sizey = 0.03575
-        sizez = 0.01
-
-        attachment_sizex = 0.026
-        attachment_sizey = 0.02575
-        attachment_sizez = 0.015
-
-        position = attachment_offset + orientation * Vector3([sizex / 2.0, 0.0, 0.0])
-        position_attachment = attachment_offset + orientation * Vector3(
-            [sizex / 2.0 + attachment_sizex / 2.0, 0.0, 0.0]
-        )
-        middle = orientation * Vector3(
-            [-attachment_sizex / 2.0, 0.0, 0.0] asodiasod # TODO offset is incorrect
-        )  # attachment_offset + orientation * Vector3([sizex / 2.0, 0.0, 0.0])
-
-        self._add_visual(
-            link.element,
-            f"{name_prefix}_active_hinge_visual",
-            position,
-            orientation,
-            (0.0, 1.0, 0.0, 1.0),
-            "model://rg_robot/meshes/ActiveHinge_Frame.dae",
-        )
-
-        self._add_box_collision(
-            link.element,
-            f"{name_prefix}_active_hinge_collision",
-            position,
-            orientation,
-            (sizex, sizey, sizez),
-        )
-
-        next_link = xml.Element("link", {"name": f"{name_prefix}_active_hinge"})
-        next_link.append(
-            _ModularRobotToSdf._make_pose(
-                position_attachment + Vector3([0.0, 0.0, 0.1]), orientation
-            )  # TODO remove z offset
-        )
-        xml.SubElement(next_link, "self_collide").text = "True"
-        self._links.append(self._Link(f"{name_prefix}_active_hinge", next_link))
-
-        self._joints.append(self._Joint(link, self._links[-1], middle, orientation))
-
-        self._add_visual(
-            self._links[-1].element,
-            f"{name_prefix}_active_hinge_attachment_visual",
-            Vector3(),
-            _Rotation(),
-            (0.0, 1.0, 0.0, 1.0),
-            "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
-        )
-
-        self._add_box_collision(
-            self._links[-1].element,
-            f"{name_prefix}_active_hinge_attachment_collision",
-            Vector3(),
-            _Rotation(),
-            (attachment_sizex, attachment_sizey, attachment_sizez),
-        )
-
-        if module.attachment is not None:
-            self._make_module_directed(
-                module.attachment.module,
-                self._links[-1],
-                f"{name_prefix}_attachment",
-                Vector3(),
-                _Rotation(),
-                attachment_sizex / 2.0,
-                _Rotation(0, 0, 0) * _Rotation(module.attachment.rotation, 0, 0),
-            )
-
-    def _add_visual(
-        self,
-        element: xml.Element,
-        name: str,
-        position: Vector3,
-        orientation: _Rotation,
-        color: Tuple[float, float, float, float],
-        model: str,
-    ) -> None:
-        visual = xml.SubElement(element, "visual", {"name": name})
-        visual.append(self._make_pose(position, orientation))
-
-        material = xml.SubElement(visual, "material")
-        xml.SubElement(
-            material, "ambient"
-        ).text = f"{color[0]} {color[1]} {color[2]} {color[3]}"
-        xml.SubElement(
-            material, "diffuse"
-        ).text = f"{color[0]} {color[1]} {color[2]} {color[3]}"
-        xml.SubElement(material, "specular").text = "0.1 0.1 0.1 1.0"
-
-        geometry = xml.SubElement(visual, "geometry")
-        mesh = xml.SubElement(geometry, "mesh")
-        xml.SubElement(mesh, "uri").text = model
-
-    def _add_box_collision(
-        self,
-        element: xml.Element,
-        name: str,
-        position: Vector3,
-        orientation: _Rotation,
-        box_size: Vector3,
-    ):
-        collision = xml.SubElement(element, "collision", {"name": name})
-        collision.append(self._make_pose(position, orientation))
-
-        surface = xml.SubElement(collision, "surface")
-
-        contact = xml.SubElement(surface, "contact")
-        ode = xml.SubElement(contact, "ode")
-        xml.SubElement(ode, "kd").text = "{:e}".format(10000000.0 / 3.0)
-        xml.SubElement(ode, "kp").text = "{:e}".format(90000)
-
-        friction = xml.SubElement(surface, "friction")
-        ode = xml.SubElement(friction, "ode")
-        xml.SubElement(ode, "mu").text = "{:e}".format(1.0)
-        xml.SubElement(ode, "mu2").text = "{:e}".format(1.0)
-        xml.SubElement(ode, "slip1").text = "{:e}".format(0.01)
-        xml.SubElement(ode, "slip2").text = "{:e}".format(0.01)
-        bullet = xml.SubElement(friction, "bullet")
-        xml.SubElement(bullet, "friction").text = "{:e}".format(1.0)
-        xml.SubElement(bullet, "friction2").text = "{:e}".format(1.0)
-
-        geometry = xml.SubElement(collision, "geometry")
-        box = xml.SubElement(geometry, "box")
-        xml.SubElement(box, "size").text = "{:e} {:e} {:e}".format(*box_size)
+    return collision

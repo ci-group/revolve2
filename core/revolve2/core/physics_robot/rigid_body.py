@@ -1,14 +1,21 @@
 from typing import List
 
 from pyrr import Vector3, matrix33
+from pyrr.objects.quaternion import Quaternion
 
 from .rigid_part import RigidPart
 
 
 class RigidBody:
+    name: str
+    position: Vector3
+    orientation: Quaternion
     parts: List[RigidPart]
 
-    def __init__(self):
+    def __init__(self, name: str, position: Vector3, orientation: Quaternion):
+        self.name = name
+        self.position = position
+        self.orientation = orientation
         self.parts = []
 
     def mass(self) -> float:

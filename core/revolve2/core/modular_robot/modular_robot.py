@@ -1,10 +1,10 @@
-from __future__ import annotations
-
 from typing import Dict
 
+from ..physics_robot import Robot
 from .body import Body
 from .brain import Brain
 from .serialized import Serialized
+from .to_physics_robot import to_physics_robot
 
 
 class ModularRobot:
@@ -23,3 +23,6 @@ class ModularRobot:
         """
 
         return {"body": self.body.serialize(), "brain": self.brain.serialize()}
+
+    def to_physics_robot(self) -> Robot:
+        return to_physics_robot(self)

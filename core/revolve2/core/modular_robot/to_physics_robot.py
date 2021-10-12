@@ -228,7 +228,9 @@ class _PhysicsRobotBuilder:
             [frame_sizex / 2.0, 0.0, 0.0]
         )
 
-        new_body_position = attachment_offset + orientation * new_body_offset
+        new_body_position = (
+            body.position + attachment_offset + orientation * new_body_offset
+        )
 
         joint_position = joint_offset
 

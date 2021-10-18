@@ -1,10 +1,8 @@
 import math
 from typing import cast
 
-from pyrr import Quaternion, Vector3, vector
-from revolve2.core.physics_robot.joint import Joint
-from revolve2.core.physics_robot.rigid_body import RigidBody
-from revolve2.core.physics_robot.rigid_part import RigidPart
+from pyrr import Quaternion, Vector3
+from revolve2.core.physics_robot import Collision, Joint, RigidBody, Visual
 
 from ..physics_robot import PhysicsRobot, RigidBody
 from .active_hinge import ActiveHinge
@@ -75,15 +73,22 @@ class _PhysicsRobotBuilder:
         # attachment position is always at center of core
         position = attachment_point
 
-        body.parts.append(
-            RigidPart(
-                f"{name_prefix}_core",
+        body.collisions.append(
+            Collision(
+                f"{name_prefix}_core_collision",
                 position,
                 orientation,
                 MASS,
+                BOUNDING_BOX,
+            )
+        )
+        body.visuals.append(
+            Visual(
+                f"{name_prefix}_core_visual",
+                position,
+                orientation,
                 "model://rg_robot/meshes/CoreComponent.dae",
                 (1.0, 1.0, 0.0, 1.0),
-                BOUNDING_BOX,
             )
         )
 
@@ -124,15 +129,22 @@ class _PhysicsRobotBuilder:
             [BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
         )
 
-        body.parts.append(
-            RigidPart(
-                f"{name_prefix}_brick",
+        body.collisions.append(
+            Collision(
+                f"{name_prefix}_brick_collision",
                 position,
                 orientation,
                 MASS,
+                BOUNDING_BOX,
+            )
+        )
+        body.visuals.append(
+            Visual(
+                f"{name_prefix}_brick_visual",
+                position,
+                orientation,
                 "model://rg_robot/meshes/FixedBrick.dae",
                 (1.0, 0.0, 0.0, 1.0),
-                BOUNDING_BOX,
             )
         )
 
@@ -190,15 +202,22 @@ class _PhysicsRobotBuilder:
         )
         joint_orientation = body.orientation * orientation
 
-        body.parts.append(
-            RigidPart(
-                f"{name_prefix}_activehingeframe",
+        body.collisions.append(
+            Collision(
+                f"{name_prefix}_activehingeframe_collision",
                 frame_position,
                 orientation,
                 FRAME_MASS,
+                FRAME_BOUNDING_BOX,
+            )
+        )
+        body.visuals.append(
+            Visual(
+                f"{name_prefix}_activehingeframe_visual",
+                frame_position,
+                orientation,
                 "model://rg_robot/meshes/ActiveHinge_Frame.dae",
                 (0.0, 1.0, 0.0, 1.0),
-                FRAME_BOUNDING_BOX,
             )
         )
 
@@ -219,15 +238,22 @@ class _PhysicsRobotBuilder:
             )
         )
 
-        next_body.parts.append(
-            RigidPart(
-                f"{name_prefix}_activehingemotor",
+        next_body.collisions.append(
+            Collision(
+                f"{name_prefix}_activehingemotor_collision",
                 Vector3(),
                 Quaternion(),
                 SERVO1_MASS,
-                "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
-                (0.0, 1.0, 0.0, 1.0),
                 SERVO1_BOUNDING_BOX,
+            )
+        )
+        next_body.visuals.append(
+            Visual(
+                f"{name_prefix}_activehingemotor_visual",
+                Vector3(),
+                Quaternion(),
+                "model://rg_robot/meshes/ActiveHinge_Frame.dae",
+                (0.0, 1.0, 0.0, 1.0),
             )
         )
 

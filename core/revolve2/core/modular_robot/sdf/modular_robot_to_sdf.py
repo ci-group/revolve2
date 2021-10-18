@@ -4,7 +4,7 @@ from typing import Tuple, cast
 
 from pyrr import Quaternion, Vector3, quaternion
 from revolve2.core.modular_robot import ModularRobot
-from revolve2.core.physics_robot import PhysicsRobot
+from revolve2.core.physics_robot import PhysicsRobot, collision
 
 
 def modular_robot_to_sdf(
@@ -21,23 +21,24 @@ def modular_robot_to_sdf(
         link.append(_make_pose(body.position, body.orientation))
         xml.SubElement(link, "self_collide").text = "True"
 
-        for part in body.parts:
+        for collision in body.collisions:
             link.append(
-                _make_visual(
-                    f"{part.name}_visual",
-                    part.position,
-                    part.orientation,
-                    part.visual_color,
-                    part.visual_model,
+                _make_box_collision(
+                    collision.name,
+                    collision.position,
+                    collision.orientation,
+                    collision.bounding_box,
                 )
             )
 
+        for visual in body.visuals:
             link.append(
-                _make_box_collision(
-                    f"{part.name}_collision",
-                    part.position,
-                    part.orientation,
-                    part.collision_size,
+                _make_visual(
+                    visual.name,
+                    visual.position,
+                    visual.orientation,
+                    visual.color,
+                    visual.model,
                 )
             )
 

@@ -5,11 +5,9 @@ from pyrr import Quaternion, Vector3
 
 
 @dataclass
-class RigidPart:
+class Collision:
     name: str
     position: Vector3
     orientation: Quaternion
     mass: float
-    visual_model: str
-    visual_color: Tuple[float, float, float]
-    collision_size: Vector3
+    bounding_box: Vector3

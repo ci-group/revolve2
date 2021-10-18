@@ -1,28 +1,26 @@
+from dataclasses import dataclass, field
 from typing import List
 
 from pyrr import Vector3, matrix33
 from pyrr.objects.quaternion import Quaternion
 
-from .rigid_part import RigidPart
+from .collision import Collision
+from .visual import Visual
 
 
+@dataclass
 class RigidBody:
     name: str
     position: Vector3
     orientation: Quaternion
-    parts: List[RigidPart]
-
-    def __init__(self, name: str, position: Vector3, orientation: Quaternion):
-        self.name = name
-        self.position = position
-        self.orientation = orientation
-        self.parts = []
+    collisions: List[Collision] = field(default_factory=list, init=False)
+    visuals: List[Visual] = field(default_factory=list, init=False)
 
     def mass(self) -> float:
-        return sum(part.mass for part in self.parts)
+        return sum(part.mass for part in self.collisions)
 
     def center_of_mass(self) -> Vector3:
-        return sum(part.mass * part.position for part in self.parts) / self.mass()
+        return sum(part.mass * part.position for part in self.collisions) / self.mass()
 
     def inertia_tensor(self) -> matrix33:
         raise NotImplementedError()  # TODO

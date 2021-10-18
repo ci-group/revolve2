@@ -201,6 +201,9 @@ class _PhysicsRobotBuilder:
             frame_position + orientation * Vector3([JOINT_OFFSET, 0.0, 0.0])
         )
         joint_orientation = body.orientation * orientation
+        servo_bbox2_position = Vector3(
+            [SERVO1_BOUNDING_BOX[0] / 2.0 + SERVO2_BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
+        )
 
         body.collisions.append(
             Collision(
@@ -240,11 +243,20 @@ class _PhysicsRobotBuilder:
 
         next_body.collisions.append(
             Collision(
-                f"{name_prefix}_activehingemotor_collision",
+                f"{name_prefix}_activehingemotor_collision1",
                 Vector3(),
                 Quaternion(),
                 SERVO1_MASS,
                 SERVO1_BOUNDING_BOX,
+            )
+        )
+        next_body.collisions.append(
+            Collision(
+                f"{name_prefix}_activehingemotor_collision2",
+                servo_bbox2_position,
+                Quaternion(),
+                SERVO2_MASS,
+                SERVO2_BOUNDING_BOX,
             )
         )
         next_body.visuals.append(

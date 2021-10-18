@@ -93,11 +93,18 @@ def modular_robot_to_sdf(
 
 
 def _quaternion_to_euler(quaternion: Quaternion) -> Tuple[float, float, float]:
+    import warnings
+
     from scipy.spatial.transform import Rotation
 
-    euler = Rotation.from_quat(
-        [quaternion.x, quaternion.y, quaternion.z, quaternion.w]
-    ).as_euler("xyz")
+    with warnings.catch_warnings():
+        warnings.simplefilter(
+            "ignore", UserWarning
+        )  # ignore gimbal lock warning. it is irrelevant for us.
+        euler = Rotation.from_quat(
+            [quaternion.x, quaternion.y, quaternion.z, quaternion.w]
+        ).as_euler("xyz")
+
     return (cast(float, euler[0]), cast(float, euler[1]), cast(float, euler[2]))
 
 

@@ -44,10 +44,8 @@ def modular_robot_to_sdf(
 
         mass = body.mass()
 
-        # TODO
-        """
-        inertia = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-        center_of_mass = [1, 2, 3]
+        inertia = body.inertia_tensor()
+        center_of_mass = body.center_of_mass()
 
         inertial = xml.SubElement(link, "inertial")
         inertial.append(_make_pose(center_of_mass, Quaternion()))
@@ -62,7 +60,6 @@ def modular_robot_to_sdf(
         xml.SubElement(inertia_el, "izx").text = "{:e}".format(inertia[2][0])
         xml.SubElement(inertia_el, "izy").text = "{:e}".format(inertia[2][1])
         xml.SubElement(inertia_el, "izz").text = "{:e}".format(inertia[2][2])
-        """
 
     for joint in physbot.joints:
         el = xml.SubElement(

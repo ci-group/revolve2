@@ -188,6 +188,10 @@ class _PhysicsRobotBuilder:
         SERVO_OFFSET = 0.0299  # meter. distance from frame to servo
         JOINT_OFFSET = 0.0119  # meter. distance from frame to joint
 
+        SERVO_BBOX2_POSITION = Vector3(
+            [SERVO1_BOUNDING_BOX[0] / 2.0 + SERVO2_BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
+        )
+
         ATTACHMENT_OFFSET = SERVO1_BOUNDING_BOX[0] / 2.0 + SERVO2_BOUNDING_BOX[0]
 
         frame_position = attachment_point + orientation * Vector3(
@@ -201,9 +205,6 @@ class _PhysicsRobotBuilder:
             frame_position + orientation * Vector3([JOINT_OFFSET, 0.0, 0.0])
         )
         joint_orientation = body.orientation * orientation
-        servo_bbox2_position = Vector3(
-            [SERVO1_BOUNDING_BOX[0] / 2.0 + SERVO2_BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
-        )
 
         body.collisions.append(
             Collision(
@@ -253,7 +254,7 @@ class _PhysicsRobotBuilder:
         next_body.collisions.append(
             Collision(
                 f"{name_prefix}_activehingemotor_collision2",
-                servo_bbox2_position,
+                SERVO_BBOX2_POSITION,
                 Quaternion(),
                 SERVO2_MASS,
                 SERVO2_BOUNDING_BOX,

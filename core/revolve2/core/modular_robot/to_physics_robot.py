@@ -241,23 +241,3 @@ class _PhysicsRobotBuilder:
                 rotation * Vector3([ATTACHMENT_OFFSET, 0.0, 0.0]),
                 rotation,
             )
-
-    def _make_slot(
-        self,
-        module: Module,
-        body: RigidBody,
-        name_prefix: str,
-        parent_position: Vector3,
-        parent_orientation: Quaternion,
-        slot_offset: float,
-        slot_rotation: Quaternion,
-    ) -> None:
-        rotation = parent_orientation * slot_rotation
-
-        self._make_module(
-            module,
-            body,
-            name_prefix,
-            parent_position + rotation * Vector3([slot_offset, 0.0, 0.0]),
-            rotation,
-        )

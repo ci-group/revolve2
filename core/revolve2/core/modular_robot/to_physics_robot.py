@@ -65,189 +65,147 @@ class _PhysicsRobotBuilder:
         module: Core,
         body: RigidBody,
         name_prefix: str,
-        attachment_offset: Vector3,
+        attachment_point: Vector3,
         orientation: Quaternion,
     ) -> None:
-        sizexy = 0.089
-        sizez = 0.045
-        mass = 1.0
+        BOUNDING_BOX = Vector3([0.089, 0.089, 0.0603])  # meter
+        MASS = 0.250  # kg
+        SLOT_OFFSET = 0.089 / 2.0  # meter
 
-        # core is always at origin
-        position = attachment_offset
+        # attachment position is always at center of core
+        position = attachment_point
 
         body.parts.append(
             RigidPart(
                 f"{name_prefix}_core",
                 position,
                 orientation,
-                mass,
+                MASS,
                 "model://rg_robot/meshes/CoreComponent.dae",
                 (1.0, 1.0, 0.0, 1.0),
-                Vector3([sizexy, sizexy, sizez]),
+                BOUNDING_BOX,
             )
         )
 
-        if module.front is not None:
-            self._make_module_directed(
-                module.front.module,
-                body,
-                f"{name_prefix}_front",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0.0, 0.0, 0.0])
-                * Quaternion.from_eulers([module.front.rotation, 0, 0]),
-            )
-        if module.back is not None:
-            self._make_module_directed(
-                module.back.module,
-                body,
-                f"{name_prefix}_back",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0.0, 0.0, 2 * math.pi / 2.0])
-                * Quaternion.from_eulers([module.back.rotation, 0, 0]),
-            )
-        if module.left is not None:
-            self._make_module_directed(
-                module.left.module,
-                body,
-                f"{name_prefix}_left",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0.0, 0.0, 1 * math.pi / 2.0])
-                * Quaternion.from_eulers([module.left.rotation, 0, 0]),
-            )
-        if module.right is not None:
-            self._make_module_directed(
-                module.right.module,
-                body,
-                f"{name_prefix}_right",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0.0, 0.0, 3 * math.pi / 2.0])
-                * Quaternion.from_eulers([module.right.rotation, 0, 0]),
-            )
+        for (name_suffix, slot, angle) in [
+            ("front", module.front, 0.0),
+            ("back", module.back, math.pi),
+            ("left", module.left, math.pi / 2.0),
+            ("right", module.right, math.pi / 2.0 * 3),
+        ]:
+            if slot is not None:
+                rotation = (
+                    orientation
+                    * Quaternion.from_eulers([0.0, 0.0, angle])
+                    * Quaternion.from_eulers([slot.rotation, 0, 0])
+                )
+
+                self._make_module(
+                    slot.module,
+                    body,
+                    f"{name_prefix}_{name_suffix}",
+                    position + rotation * Vector3([SLOT_OFFSET, 0.0, 0.0]),
+                    rotation,
+                )
 
     def _make_brick(
         self,
         module: Brick,
         body: RigidBody,
         name_prefix: str,
-        attachment_offset: Vector3,
+        attachment_point: Vector3,
         orientation: Quaternion,
     ) -> None:
-        sizexy = 0.041
-        sizez = 0.0355
-        mass = 1.0
+        BOUNDING_BOX = Vector3([0.06288625, 0.06288625, 0.0603])  # meter
+        MASS = 0.030  # kg
+        SLOT_OFFSET = 0.06288625 / 2.0  # meter
 
-        position = attachment_offset + orientation * Vector3([sizexy / 2.0, 0.0, 0.0])
+        position = attachment_point + orientation * Vector3(
+            [BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
+        )
 
         body.parts.append(
             RigidPart(
                 f"{name_prefix}_brick",
                 position,
                 orientation,
-                mass,
+                MASS,
                 "model://rg_robot/meshes/FixedBrick.dae",
                 (1.0, 0.0, 0.0, 1.0),
-                Vector3([sizexy, sizexy, sizez]),
+                BOUNDING_BOX,
             )
         )
 
-        if module.front is not None:
-            self._make_module_directed(
-                module.front.module,
-                body,
-                f"{name_prefix}_front",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 0])
-                * Quaternion.from_eulers([module.front.rotation, 0, 0]),
-            )
-        if module.back is not None:
-            self._make_module_directed(
-                module.back.module,
-                body,
-                f"{name_prefix}_back",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 2 * math.pi / 2.0])
-                * Quaternion.from_eulers([module.back.rotation, 0, 0]),
-            )
-        if module.left is not None:
-            self._make_module_directed(
-                module.left.module,
-                body,
-                f"{name_prefix}_left",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 1 * math.pi / 2.0])
-                * Quaternion.from_eulers([module.left.rotation, 0, 0]),
-            )
-        if module.right is not None:
-            self._make_module_directed(
-                module.right.module,
-                body,
-                f"{name_prefix}_right",
-                position,
-                orientation,
-                sizexy / 2.0,
-                Quaternion.from_eulers([0, 0, 3 * math.pi / 2.0])
-                * Quaternion.from_eulers([module.right.rotation, 0, 0]),
-            )
+        for (name_suffix, slot, angle) in [
+            ("front", module.front, 0.0),
+            ("back", module.back, math.pi),
+            ("left", module.left, math.pi / 2.0),
+            ("right", module.right, math.pi / 2.0 * 3),
+        ]:
+            if slot is not None:
+                rotation = (
+                    orientation
+                    * Quaternion.from_eulers([0.0, 0.0, angle])
+                    * Quaternion.from_eulers([slot.rotation, 0, 0])
+                )
+
+                self._make_module(
+                    slot.module,
+                    body,
+                    f"{name_prefix}_{name_suffix}",
+                    position + rotation * Vector3([SLOT_OFFSET, 0.0, 0.0]),
+                    rotation,
+                )
 
     def _make_active_hinge(
         self,
         module: ActiveHinge,
         body: RigidBody,
         name_prefix: str,
-        attachment_offset: Vector3,
+        attachment_point: Vector3,
         orientation: Quaternion,
     ) -> None:
-        frame_sizex = 0.022
-        frame_sizey = 0.03575
-        frame_sizez = 0.01
-        frame_mass = 1.0
+        FRAME_BOUNDING_BOX = Vector3([0.04525, 0.053, 0.0165891])  # meter
+        SERVO1_BOUNDING_BOX = Vector3([0.0583, 0.0512, 0.020])  # meter
+        SERVO2_BOUNDING_BOX = Vector3([0.002, 0.053, 0.053])  # meter
 
-        motor_sizex = 0.026
-        motor_sizey = 0.02575
-        motor_sizez = 0.015
-        motor_mass = 1.0
+        FRAME_MASS = 0.011  # kg
+        SERVO1_MASS = 0.058  # kg
+        SERVO2_MASS = 0.0  # kg. we simplify by only using the weight of the first box
 
-        new_body_offset = Vector3([frame_sizex + 0.00215, 0.0, 0.0])
-        joint_offset = Vector3([-0.0085, 0.0, 0.0])
+        SERVO_OFFSET = 0.0299  # meter. distance from frame to servo
+        JOINT_OFFSET = 0.0119  # meter. distance from frame to joint
 
-        frame_position = attachment_offset + orientation * Vector3(
-            [frame_sizex / 2.0, 0.0, 0.0]
+        ATTACHMENT_OFFSET = SERVO1_BOUNDING_BOX[0] / 2.0 + SERVO2_BOUNDING_BOX[0]
+
+        frame_position = attachment_point + orientation * Vector3(
+            [FRAME_BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
         )
-
-        new_body_position = (
-            body.position + attachment_offset + orientation * new_body_offset
+        servo_body_position = body.position + body.orientation * (
+            frame_position + orientation * Vector3([SERVO_OFFSET, 0.0, 0.0])
         )
-
-        joint_position = joint_offset
+        servo_body_orientation = body.orientation * orientation
+        joint_position = body.position + body.orientation * (
+            frame_position + orientation * Vector3([JOINT_OFFSET, 0.0, 0.0])
+        )
+        joint_orientation = body.orientation * orientation
 
         body.parts.append(
             RigidPart(
                 f"{name_prefix}_activehingeframe",
                 frame_position,
                 orientation,
-                frame_mass,
+                FRAME_MASS,
                 "model://rg_robot/meshes/ActiveHinge_Frame.dae",
                 (0.0, 1.0, 0.0, 1.0),
-                Vector3([frame_sizex, frame_sizey, frame_sizez]),
+                FRAME_BOUNDING_BOX,
             )
         )
 
         next_body = RigidBody(
-            f"{name_prefix}_activehinge", new_body_position, orientation
+            f"{name_prefix}_activehinge",
+            servo_body_position,
+            servo_body_orientation,
         )
         self.robot.bodies.append(next_body)
         self.robot.joints.append(
@@ -256,7 +214,7 @@ class _PhysicsRobotBuilder:
                 body,
                 next_body,
                 joint_position,
-                orientation,
+                joint_orientation,
                 Vector3([0.0, 1.0, 0.0]),
             )
         )
@@ -266,41 +224,40 @@ class _PhysicsRobotBuilder:
                 f"{name_prefix}_activehingemotor",
                 Vector3(),
                 Quaternion(),
-                motor_mass,
+                SERVO1_MASS,
                 "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
                 (0.0, 1.0, 0.0, 1.0),
-                Vector3([motor_sizex, motor_sizey, motor_sizez]),
+                SERVO1_BOUNDING_BOX,
             )
         )
 
         if module.attachment is not None:
-            self._make_module_directed(
+            rotation = Quaternion.from_eulers([module.attachment.rotation, 0.0, 0.0])
+
+            self._make_module(
                 module.attachment.module,
                 next_body,
                 f"{name_prefix}_attachment",
-                Vector3(),
-                Quaternion(),
-                motor_sizex / 2.0,
-                Quaternion()
-                * Quaternion.from_eulers([module.attachment.rotation, 0, 0]),
+                rotation * Vector3([ATTACHMENT_OFFSET, 0.0, 0.0]),
+                rotation,
             )
 
-    def _make_module_directed(
+    def _make_slot(
         self,
         module: Module,
         body: RigidBody,
         name_prefix: str,
         parent_position: Vector3,
         parent_orientation: Quaternion,
-        radius: float,
-        normal: Quaternion,
+        slot_offset: float,
+        slot_rotation: Quaternion,
     ) -> None:
-        rotation = parent_orientation * normal
+        rotation = parent_orientation * slot_rotation
 
         self._make_module(
             module,
             body,
             name_prefix,
-            parent_position + rotation * Vector3([radius, 0.0, 0.0]),
+            parent_position + rotation * Vector3([slot_offset, 0.0, 0.0]),
             rotation,
         )

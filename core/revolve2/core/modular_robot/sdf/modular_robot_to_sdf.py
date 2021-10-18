@@ -2,7 +2,7 @@ import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
 from typing import Tuple, cast
 
-from pyrr import Quaternion, Vector3
+from pyrr import Quaternion, Vector3, quaternion
 from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.physics_robot import PhysicsRobot
 
@@ -41,19 +41,45 @@ def modular_robot_to_sdf(
                 )
             )
 
+        mass = body.mass()
+
+        # TODO
+        """
+        inertia = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        center_of_mass = [1, 2, 3]
+
+        inertial = xml.SubElement(link, "inertial")
+        inertial.append(_make_pose(center_of_mass, Quaternion()))
+        xml.SubElement(inertial, "mass").text = "{:e}".format(mass)
+        inertia_el = xml.SubElement(inertial, "inertia")
+        xml.SubElement(inertia_el, "ixx").text = "{:e}".format(inertia[0][0])
+        xml.SubElement(inertia_el, "ixy").text = "{:e}".format(inertia[0][1])
+        xml.SubElement(inertia_el, "ixz").text = "{:e}".format(inertia[0][2])
+        xml.SubElement(inertia_el, "iyx").text = "{:e}".format(inertia[1][0])
+        xml.SubElement(inertia_el, "iyy").text = "{:e}".format(inertia[1][1])
+        xml.SubElement(inertia_el, "iyz").text = "{:e}".format(inertia[1][2])
+        xml.SubElement(inertia_el, "izx").text = "{:e}".format(inertia[2][0])
+        xml.SubElement(inertia_el, "izy").text = "{:e}".format(inertia[2][1])
+        xml.SubElement(inertia_el, "izz").text = "{:e}".format(inertia[2][2])
+        """
+
     for joint in physbot.joints:
         el = xml.SubElement(
             model,
             "joint",
             {"name": f"{joint.name}", "type": "revolute"},
         )
-        el.append(_make_pose(joint.position, joint.orientation))
+        el.append(
+            _make_pose(
+                joint.body2.orientation.inverse
+                * (joint.position - joint.body2.position),
+                joint.body2.orientation.inverse * joint.orientation,
+            )  # joint position & orientation are relative to child frame
+        )
         xml.SubElement(el, "parent").text = joint.body1.name
         xml.SubElement(el, "child").text = joint.body2.name
         axis = xml.SubElement(el, "axis")
-        xml.SubElement(axis, "xyz").text = "{:e} {:e} {:e}".format(
-            *(joint.orientation * joint.axis)
-        )
+        xml.SubElement(axis, "xyz").text = "{:e} {:e} {:e}".format(0.0, 1.0, 0.0)
         xml.SubElement(axis, "use_parent_model_frame").text = "0"
         limit = xml.SubElement(axis, "limit")
         xml.SubElement(limit, "lower").text = "-7.853982e-01"

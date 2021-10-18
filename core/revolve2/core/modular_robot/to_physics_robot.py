@@ -264,7 +264,7 @@ class _PhysicsRobotBuilder:
                 f"{name_prefix}_activehingemotor_visual",
                 Vector3(),
                 Quaternion(),
-                "model://rg_robot/meshes/ActiveHinge_Frame.dae",
+                "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
                 (0.0, 1.0, 0.0, 1.0),
             )
         )

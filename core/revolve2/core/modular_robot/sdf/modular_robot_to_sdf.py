@@ -54,11 +54,11 @@ def modular_robot_to_sdf(
         xml.SubElement(inertia_el, "ixx").text = "{:e}".format(inertia[0][0])
         xml.SubElement(inertia_el, "ixy").text = "{:e}".format(inertia[0][1])
         xml.SubElement(inertia_el, "ixz").text = "{:e}".format(inertia[0][2])
-        xml.SubElement(inertia_el, "iyx").text = "{:e}".format(inertia[1][0])
+        # xml.SubElement(inertia_el, "iyx").text = "{:e}".format(inertia[1][0])
         xml.SubElement(inertia_el, "iyy").text = "{:e}".format(inertia[1][1])
         xml.SubElement(inertia_el, "iyz").text = "{:e}".format(inertia[1][2])
-        xml.SubElement(inertia_el, "izx").text = "{:e}".format(inertia[2][0])
-        xml.SubElement(inertia_el, "izy").text = "{:e}".format(inertia[2][1])
+        # xml.SubElement(inertia_el, "izx").text = "{:e}".format(inertia[2][0])
+        # xml.SubElement(inertia_el, "izy").text = "{:e}".format(inertia[2][1])
         xml.SubElement(inertia_el, "izz").text = "{:e}".format(inertia[2][2])
 
     for joint in physbot.joints:

@@ -1,1 +1,0 @@
-from .modular_robot_to_sdf import modular_robot_to_sdf

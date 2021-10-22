@@ -2,21 +2,21 @@ import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
 from typing import Tuple, cast
 
-from pyrr import Quaternion, Vector3, quaternion
-from revolve2.core.modular_robot import ModularRobot
-from revolve2.core.physics_robot import PhysicsRobot, collision
+from pyrr import Quaternion, Vector3
+from revolve2.core.physics_robot import PhysicsRobot
 
 
-def modular_robot_to_sdf(
-    robot: ModularRobot, model_name: str, position: Vector3, orientation: Quaternion
+def to_sdf(
+    physics_robot: PhysicsRobot,
+    model_name: str,
+    position: Vector3,
+    orientation: Quaternion,
 ) -> str:
-    physbot: PhysicsRobot = robot.to_physics_robot()
-
     sdf = xml.Element("sdf", {"version": "1.6"})
     model = xml.SubElement(sdf, "model", {"name": model_name})
     model.append(_make_pose(position, orientation))
 
-    for body in physbot.bodies:
+    for body in physics_robot.bodies:
         link = xml.SubElement(model, "link", {"name": body.name})
         link.append(_make_pose(body.position, body.orientation))
         xml.SubElement(link, "self_collide").text = "True"
@@ -61,7 +61,7 @@ def modular_robot_to_sdf(
         # xml.SubElement(inertia_el, "izy").text = "{:e}".format(inertia[2][1])
         xml.SubElement(inertia_el, "izz").text = "{:e}".format(inertia[2][2])
 
-    for joint in physbot.joints:
+    for joint in physics_robot.joints:
         el = xml.SubElement(
             model,
             "joint",

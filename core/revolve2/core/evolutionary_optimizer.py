@@ -26,7 +26,9 @@ class EvolutionaryOptimizer(ABC, Optimizer, Generic[Individual, Evaluation]):
             self._first_generation = initial_population
 
     @abstractmethod
-    def _evaluate(self, individual: Individual) -> Evaluation:
+    async def _evaluate_generation(
+        self, individuals: List[Individual]
+    ) -> List[Evaluation]:
         """
         Evaluate an individual.
 
@@ -64,27 +66,25 @@ class EvolutionaryOptimizer(ABC, Optimizer, Generic[Individual, Evaluation]):
         :return: The new individual.
         """
 
-    def run_until_completion(self) -> None:
-        while self.process_next_generation():
+    async def run_until_completion(self) -> None:
+        while await self.process_next_generation():
             pass
 
-    def evaluate_first_generation(self) -> None:
+    async def evaluate_first_generation(self) -> None:
         if self._first_generation is not None:
-            evaluation = [
-                self._evaluate(individual) for individual in self._first_generation
-            ]
+            evaluation = await self._evaluate_generation(self._first_generation)
             self._generations.append(list(zip(self._first_generation, evaluation)))
             self._first_generation = None
 
-    def process_next_generation(self) -> bool:
-        self.evaluate_first_generation()
+    async def process_next_generation(self) -> bool:
+        await self.evaluate_first_generation()
         parent_selections: List[List[Individual]] = self._select_parents(
             self._generations[-1]
         )
         offspring = [
             self._mutate(self._crossover(selection)) for selection in parent_selections
         ]
-        evaluation = [self._evaluate(individual) for individual in offspring]
+        evaluation = await self._evaluate_generation(offspring)
         self._generations.append(list(zip(offspring, evaluation)))
         return False  # TODO stop condition
 

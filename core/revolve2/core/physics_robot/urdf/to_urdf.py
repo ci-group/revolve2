@@ -39,11 +39,9 @@ def to_urdf(
     for el in _make_node(root, tree, Vector3()):
         urdf.append(el)
 
-    out = minidom.parseString(
+    return minidom.parseString(
         xml.tostring(urdf, encoding="unicode", method="xml")
     ).toprettyxml(indent="    ")
-    print(out)
-    return out
 
 
 def _make_node(

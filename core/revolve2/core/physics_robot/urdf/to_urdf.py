@@ -55,6 +55,33 @@ def _make_node(
     link = xml.Element("link", {"name": node.name})
     elements.append(link)
 
+    com_xyz = joint_ori.inverse * (node.position + node.center_of_mass() - joint_pos)
+    com_rpy = _quaternion_to_euler(joint_ori.inverse * node.orientation)
+    inertia = node.inertia_tensor()
+
+    inertial = xml.SubElement(link, "inertial")
+    xml.SubElement(
+        inertial,
+        "origin",
+        {
+            "rpy": f"{com_rpy[0]} {com_rpy[1]} {com_rpy[2]}",
+            "xyz": f"{com_xyz[0]} {com_xyz[1]} {com_xyz[2]}",
+        },
+    )
+    xml.SubElement(inertial, "mass", {"value": "{:e}".format(node.mass())})
+    inertia_el = xml.SubElement(
+        inertial,
+        "inertia",
+        {
+            "ixx": "{:e}".format(inertia[0][0]),
+            "ixy": "{:e}".format(inertia[0][1]),
+            "ixz": "{:e}".format(inertia[0][2]),
+            "iyy": "{:e}".format(inertia[1][1]),
+            "iyz": "{:e}".format(inertia[1][2]),
+            "izz": "{:e}".format(inertia[2][2]),
+        },
+    )
+
     for collision in node.collisions:
         el = xml.SubElement(link, "collision")
         geometry = xml.SubElement(el, "geometry")

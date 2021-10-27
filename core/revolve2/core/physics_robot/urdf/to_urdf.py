@@ -36,7 +36,7 @@ def to_urdf(
                 )
             root = body
 
-    for el in _make_node(root, tree, Vector3()):
+    for el in _make_node(root, tree, Vector3(), Quaternion()):
         urdf.append(el)
 
     return minidom.parseString(
@@ -45,7 +45,10 @@ def to_urdf(
 
 
 def _make_node(
-    node: RigidBody, tree: Mapping[str, List[Joint]], offset: Vector3
+    node: RigidBody,
+    tree: Mapping[str, List[Joint]],
+    joint_pos: Vector3,
+    joint_ori: Quaternion,
 ) -> List[xml.Element]:
     elements = []
 
@@ -62,8 +65,12 @@ def _make_node(
                 "size": f"{collision.bounding_box[0]} {collision.bounding_box[1]} {collision.bounding_box[2]}"
             },
         )
-        xyz = collision.position + offset
-        rpy = _quaternion_to_euler(collision.orientation)
+        xyz = joint_ori.inverse * (
+            node.position - joint_pos + node.orientation * collision.position
+        )
+        rpy = _quaternion_to_euler(
+            joint_ori.inverse * node.orientation * collision.orientation
+        )
         xml.SubElement(
             el,
             "origin",
@@ -78,8 +85,8 @@ def _make_node(
             el = xml.Element("joint", name=joint.name, type="revolute")
             xml.SubElement(el, "parent", {"link": node.name})
             xml.SubElement(el, "child", {"link": joint.body2.name})
-            xyz = node.orientation.inverse * (joint.position + offset - node.position)
-            rpy = _quaternion_to_euler(node.orientation.inverse * joint.orientation)
+            xyz = joint_ori.inverse * (joint.position - joint_pos)
+            rpy = _quaternion_to_euler(joint_ori.inverse * joint.orientation)
             xml.SubElement(
                 el,
                 "origin",
@@ -103,7 +110,8 @@ def _make_node(
             elements += _make_node(
                 joint.body2,
                 tree,
-                joint.orientation.inverse * (joint.body2.position - joint.position),
+                joint.position,
+                joint.orientation,
             )
 
     # visual = xml.SubElement(link, "visual")

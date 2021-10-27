@@ -3,11 +3,12 @@ import xml.etree.ElementTree as xml
 from typing import Tuple, cast
 
 from pyrr import Quaternion, Vector3
-from revolve2.core.physics_robot import PhysicsRobot
+
+from ..actor import Actor
 
 
 def to_sdf(
-    physics_robot: PhysicsRobot,
+    physics_robot: Actor,
     model_name: str,
     position: Vector3,
     orientation: Quaternion,
@@ -54,11 +55,8 @@ def to_sdf(
         xml.SubElement(inertia_el, "ixx").text = "{:e}".format(inertia[0][0])
         xml.SubElement(inertia_el, "ixy").text = "{:e}".format(inertia[0][1])
         xml.SubElement(inertia_el, "ixz").text = "{:e}".format(inertia[0][2])
-        # xml.SubElement(inertia_el, "iyx").text = "{:e}".format(inertia[1][0])
         xml.SubElement(inertia_el, "iyy").text = "{:e}".format(inertia[1][1])
         xml.SubElement(inertia_el, "iyz").text = "{:e}".format(inertia[1][2])
-        # xml.SubElement(inertia_el, "izx").text = "{:e}".format(inertia[2][0])
-        # xml.SubElement(inertia_el, "izy").text = "{:e}".format(inertia[2][1])
         xml.SubElement(inertia_el, "izz").text = "{:e}".format(inertia[2][2])
 
     for joint in physics_robot.joints:

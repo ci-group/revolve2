@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Tuple
 
 from pyrr import Quaternion, Vector3
 

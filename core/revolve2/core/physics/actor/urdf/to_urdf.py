@@ -3,12 +3,14 @@ import xml.etree.ElementTree as xml
 from typing import List, Mapping, Optional, Tuple, cast
 
 from pyrr import Quaternion, Vector3
-from revolve2.core.physics_robot import Joint, PhysicsRobot
-from revolve2.core.physics_robot.rigid_body import RigidBody
+
+from ..actor import Actor
+from ..joint import Joint
+from ..rigid_body import RigidBody
 
 
 def to_urdf(
-    physics_robot: PhysicsRobot,
+    physics_robot: Actor,
     name: str,
     position: Vector3,
     orientation: Quaternion,
@@ -36,7 +38,7 @@ def to_urdf(
                 )
             root = body
 
-    for el in _make_node(root, tree, Vector3(), Quaternion()):
+    for el in _make_node(root, tree, position, orientation):
         urdf.append(el)
 
     return minidom.parseString(

@@ -2,9 +2,8 @@ import math
 from typing import cast
 
 from pyrr import Quaternion, Vector3
-from revolve2.core.physics_robot import Collision, Joint, RigidBody, Visual
+from revolve2.core.physics.actor import Actor, Collision, Joint, RigidBody, Visual
 
-from ..physics_robot import PhysicsRobot, RigidBody
 from .active_hinge import ActiveHinge
 from .brick import Brick
 from .core import Core
@@ -12,15 +11,15 @@ from .modular_robot import ModularRobot
 from .module import Module
 
 
-def to_physics_robot(modular_robot: ModularRobot) -> PhysicsRobot:
+def to_physics_robot(modular_robot: ModularRobot) -> Actor:
     return _PhysicsRobotBuilder().build(modular_robot)
 
 
 class _PhysicsRobotBuilder:
-    robot: PhysicsRobot
+    robot: Actor
 
-    def build(self, modular_robot: ModularRobot) -> PhysicsRobot:
-        self.robot = PhysicsRobot([], [])
+    def build(self, modular_robot: ModularRobot) -> Actor:
+        self.robot = Actor([], [])
 
         origin_body = RigidBody("origin", Vector3(), Quaternion())
         self.robot.bodies.append(origin_body)

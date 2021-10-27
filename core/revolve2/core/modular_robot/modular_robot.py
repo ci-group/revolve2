@@ -1,6 +1,7 @@
 from typing import Dict
 
-from ..physics_robot import PhysicsRobot
+from revolve2.core.physics.actor import Actor
+
 from .body import Body
 from .brain import Brain
 from .serialized import Serialized
@@ -23,7 +24,7 @@ class ModularRobot:
 
         return {"body": self.body.serialize(), "brain": self.brain.serialize()}
 
-    def to_physics_robot(self) -> PhysicsRobot:
+    def to_physics_robot(self) -> Actor:
         from .to_physics_robot import to_physics_robot
 
         return to_physics_robot(self)

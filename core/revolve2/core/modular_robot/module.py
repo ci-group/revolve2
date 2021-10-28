@@ -23,4 +23,4 @@ class Module:
         which in turn will only contain these data types as well.
         """
 
-        return {"type": str(self.type)}
+        return {"type": self.type.value}

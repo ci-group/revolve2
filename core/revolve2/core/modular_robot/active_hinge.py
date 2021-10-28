@@ -19,6 +19,8 @@ class ActiveHinge(Module):
         """
 
         serialized = super().serialize()
-        serialized["attachment"] = self.attachment.serialize()
+
+        if self.attachment is not None:
+            serialized["attachment"] = self.attachment.serialize()
 
         return serialized

@@ -146,11 +146,6 @@ class LocalRunner(Runner):
                         env_handle = self._gymenvs[env_index].env
                         actor_handle = self._gymenvs[env_index].actors[actor_index]
 
-                        dof_dict = self._gym.get_actor_dof_dict(
-                            env_handle,
-                            actor_handle,
-                        )
-
                         if len(targets) != len(
                             self._batch.environments[env_index]
                             .actors[actor_index]

@@ -11,11 +11,11 @@ from .modular_robot import ModularRobot
 from .module import Module
 
 
-def to_physics_robot(modular_robot: ModularRobot) -> Actor:
-    return _PhysicsRobotBuilder().build(modular_robot)
+def to_actor(modular_robot: ModularRobot) -> Actor:
+    return _ActorBuilder().build(modular_robot)
 
 
-class _PhysicsRobotBuilder:
+class _ActorBuilder:
     robot: Actor
 
     def build(self, modular_robot: ModularRobot) -> Actor:

@@ -21,8 +21,10 @@ class LocalRunner(Runner):
     class Simulator:
         @dataclass
         class GymEnv:
-            env: gymapi.Env
-            actors: Mapping[str, int]
+            env: gymapi.Env  # environment handle
+            actors: List[
+                int
+            ]  # actor handles, in same order as provided by environment description
 
         _gym: gymapi.Gym
         _batch: Batch
@@ -30,7 +32,9 @@ class LocalRunner(Runner):
         _sim: gymapi.Sim
         _viewer: gymapi.Viewer
         _simulation_time: int
-        _gymenvs: List[GymEnv]
+        _gymenvs: List[
+            GymEnv
+        ]  # environments, in same order as provided by batch description
 
         def __init__(self, gym: gymapi.Gym, batch: Batch):
             self._gym = gym
@@ -71,7 +75,7 @@ class LocalRunner(Runner):
             plane_params.restitution = 0
             self._gym.add_ground(self._sim, plane_params)
 
-            for env_name, env_descr in self._batch.environments.items():
+            for env_descr in self._batch.environments:
                 env = self._gym.create_env(
                     self._sim,
                     gymapi.Vec3(-25.0, -25.0, 0.0),
@@ -79,15 +83,15 @@ class LocalRunner(Runner):
                     1,
                 )
 
-                gymenv = self.GymEnv(env, {})
+                gymenv = self.GymEnv(env, [])
 
-                for actor_name, actor_descr in env_descr.actors.items():
+                for actor_index, actor_descr in enumerate(env_descr.actors):
                     botfile = tempfile.NamedTemporaryFile(
                         mode="r+", delete=False, suffix=".urdf"
                     )
                     botfile.writelines(
                         physbot_to_urdf(
-                            actor_descr, f"robot_{actor_name}", Vector3(), Quaternion()
+                            actor_descr, f"robot_{actor_index}", Vector3(), Quaternion()
                         )
                     )
                     botfile.close()
@@ -103,7 +107,7 @@ class LocalRunner(Runner):
                     pose.p = gymapi.Vec3(0, 0, 0.5)
                     pose.r = gymapi.Quat(0, 0, 0.0, 0.707107)
                     actor_handle = self._gym.create_actor(
-                        env, actor_asset, pose, f"robot_{actor_name}", 0, 0
+                        env, actor_asset, pose, f"robot_{actor_index}", 0, 0
                     )
 
                     props = self._gym.get_actor_dof_properties(env, actor_handle)
@@ -112,7 +116,7 @@ class LocalRunner(Runner):
                     props["damping"].fill(600.0)
                     self._gym.set_actor_dof_properties(env, actor_handle, props)
 
-                    gymenv.actors[actor_name] = actor_handle
+                    gymenv.actors.append(actor_handle)
 
                 gymenvs.append(gymenv)
 
@@ -134,37 +138,30 @@ class LocalRunner(Runner):
             while (
                 time := self._gym.get_sim_time(self._sim)
             ) < self._batch.simulation_time:
-                if time % 0.2:  # TODO
+                if time % 0.2:  # TODO timing as variable
                     control = ActorControl()
                     self._batch.control(0.2, control)
 
-                    # TODO this is a temporary implementation just as an MVP
-                    for env_index, (env_name, env) in enumerate(
-                        self._batch.environments.items()
-                    ):
-                        if env_name in control._position_targets:
-                            for actor_name, targets in control._position_targets[
-                                env_name
-                            ].items():
-                                dof_dict = self._gym.get_actor_dof_dict(
-                                    self._gymenvs[env_index].env,
-                                    self._gymenvs[env_index].actors[actor_name],
-                                )
+                    for (env_index, actor_index, targets) in control._dof_targets:
+                        env_handle = self._gymenvs[env_index].env
+                        actor_handle = self._gymenvs[env_index].actors[actor_index]
 
-                                targets_list = [None] * len(dof_dict)
+                        dof_dict = self._gym.get_actor_dof_dict(
+                            env_handle,
+                            actor_handle,
+                        )
 
-                                for dof_name, dof_index in dof_dict.items():
-                                    if dof_name not in targets:
-                                        raise RuntimeError(
-                                            "Not all targets are set for actor."
-                                        )
-                                    targets_list[dof_index] = targets[dof_name]
-
-                                self._gym.set_actor_dof_position_targets(
-                                    self._gymenvs[env_index].env,
-                                    self._gymenvs[env_index].actors[actor_name],
-                                    targets_list,
-                                )
+                        if len(targets) != len(
+                            self._batch.environments[env_index]
+                            .actors[actor_index]
+                            .joints
+                        ):
+                            raise RuntimeError("Need to set a target for every dof")
+                        self._gym.set_actor_dof_position_targets(
+                            env_handle,
+                            actor_handle,
+                            targets,
+                        )
 
                 self._gym.simulate(self._sim)
                 self._gym.fetch_results(self._sim, True)
@@ -184,7 +181,7 @@ class LocalRunner(Runner):
 
             for gymenv in self._gymenvs:
                 state.envs.append(EnvironmentState([]))
-                for actor_index, _ in enumerate(gymenv.actors.items()):
+                for actor_index, _ in enumerate(gymenv.actors):
                     pose = self._gym.get_actor_rigid_body_states(
                         gymenv.env, actor_index, gymapi.STATE_POS
                     )["pose"]

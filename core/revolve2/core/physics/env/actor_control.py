@@ -1,16 +1,14 @@
-from typing import Mapping
+from typing import List, Tuple
 
 
 # TODO extend functionality and add error checking
 class ActorControl:
-    _position_targets: Mapping[str, Mapping[str, Mapping[str, float]]]
+    _dof_targets: List[Tuple[int, int, List[float]]]
 
     def __init__(self):
-        self._position_targets = {}
+        self._dof_targets = []
 
-    def set_position_targets(
-        self, environment: str, actor: str, targets: Mapping[str, float]
+    def set_dof_targets(
+        self, environment: int, actor: int, targets: List[float]
     ) -> None:
-        if environment not in self._position_targets:
-            self._position_targets[environment] = {}
-        self._position_targets[environment][actor] = targets
+        self._dof_targets.append((environment, actor, targets))

@@ -6,10 +6,10 @@ from .slot import Slot
 
 
 class ActiveHinge(Module):
-    attachment: Optional[Slot] = None
+    ATTACHMENT_INDEX = 0
 
     def __init__(self):
-        super().__init__(Module.Type.ACTIVE_HINGE)
+        super().__init__(Module.Type.ACTIVE_HINGE, 1)
 
     def serialize(self) -> Serialized:
         """
@@ -24,3 +24,11 @@ class ActiveHinge(Module):
             serialized["attachment"] = self.attachment.serialize()
 
         return serialized
+
+    @property
+    def attachment(self) -> Optional[Slot]:
+        return self.get_child(self.ATTACHMENT_INDEX)
+
+    @attachment.setter
+    def attachment(self, slot: Slot) -> None:
+        self.set_child(self.ATTACHMENT_INDEX, slot)

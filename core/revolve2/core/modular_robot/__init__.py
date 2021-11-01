@@ -1,4 +1,6 @@
 from .active_hinge import ActiveHinge
+from .analyzer import Analyzer
+from .analyzer_module import AnalyzerModule
 from .body import Body
 from .brain import Brain
 from .brick import Brick

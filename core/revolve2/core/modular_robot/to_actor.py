@@ -1,54 +1,68 @@
 import math
-from typing import cast
+from typing import List, Tuple, cast
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.physics.actor import Actor, Collision, Joint, RigidBody, Visual
 
 from .active_hinge import ActiveHinge
+from .analyzer import Analyzer
+from .analyzer_module import AnalyzerModule
 from .brick import Brick
 from .core import Core
-from .modular_robot import ModularRobot
 from .module import Module
 
 
-def to_actor(modular_robot: ModularRobot) -> Actor:
-    return _ActorBuilder().build(modular_robot)
+def to_actor(analyzer: Analyzer) -> Tuple[Actor, List[AnalyzerModule]]:
+    """
+    Create actor from analyzer
+
+    :returns: (the actor, analyzer modules matching the joints in the actor)
+    """
+    return _ActorBuilder().build(analyzer)
 
 
 class _ActorBuilder:
     robot: Actor
+    dof_ids: List[AnalyzerModule]
 
-    def build(self, modular_robot: ModularRobot) -> Actor:
+    def build(self, analyzer: Analyzer) -> Tuple[Actor, List[AnalyzerModule]]:
         self.robot = Actor([], [])
+        self.dof_ids = []
 
         origin_body = RigidBody("origin", Vector3(), Quaternion())
         self.robot.bodies.append(origin_body)
 
-        self._make_module(
-            modular_robot.body.core, origin_body, "origin", Vector3(), Quaternion()
-        )
+        self._make_module(analyzer.core, origin_body, "origin", Vector3(), Quaternion())
 
-        return self.robot
+        return (self.robot, self.dof_ids)
 
     def _make_module(
         self,
-        module: Module,
+        module: AnalyzerModule,
         body: RigidBody,
         name_prefix: str,
         attachment_offset: Vector3,
         orientation: Quaternion,
     ) -> None:
-        if module.type == module.Type.CORE:
+        if module.type == Module.Type.CORE:
             self._make_core(
-                cast(Core, module), body, name_prefix, attachment_offset, orientation
+                module,
+                body,
+                name_prefix,
+                attachment_offset,
+                orientation,
             )
-        elif module.type == module.Type.BRICK:
+        elif module.type == Module.Type.BRICK:
             self._make_brick(
-                cast(Brick, module), body, name_prefix, attachment_offset, orientation
+                module,
+                body,
+                name_prefix,
+                attachment_offset,
+                orientation,
             )
-        elif module.type == module.type.ACTIVE_HINGE:
+        elif module.type == Module.Type.ACTIVE_HINGE:
             self._make_active_hinge(
-                cast(ActiveHinge, module),
+                module,
                 body,
                 name_prefix,
                 attachment_offset,
@@ -59,7 +73,7 @@ class _ActorBuilder:
 
     def _make_core(
         self,
-        module: Core,
+        analyzer_module: AnalyzerModule,
         body: RigidBody,
         name_prefix: str,
         attachment_point: Vector3,
@@ -68,6 +82,8 @@ class _ActorBuilder:
         BOUNDING_BOX = Vector3([0.089, 0.089, 0.0603])  # meter
         MASS = 0.250  # kg
         SLOT_OFFSET = 0.089 / 2.0  # meter
+
+        module = cast(Core, analyzer_module.module)
 
         # attachment position is always at center of core
         position = attachment_point
@@ -91,12 +107,13 @@ class _ActorBuilder:
             )
         )
 
-        for (name_suffix, slot, angle) in [
-            ("front", module.front, 0.0),
-            ("back", module.back, math.pi),
-            ("left", module.left, math.pi / 2.0),
-            ("right", module.right, math.pi / 2.0 * 3),
+        for (name_suffix, child_index, angle) in [
+            ("front", Core.FRONT, 0.0),
+            ("back", Core.BACK, math.pi),
+            ("left", Core.LEFT, math.pi / 2.0),
+            ("right", Core.RIGHT, math.pi / 2.0 * 3),
         ]:
+            slot = module.get_child(child_index)
             if slot is not None:
                 rotation = (
                     orientation
@@ -105,7 +122,7 @@ class _ActorBuilder:
                 )
 
                 self._make_module(
-                    slot.module,
+                    analyzer_module.get_child(child_index),
                     body,
                     f"{name_prefix}_{name_suffix}",
                     position + rotation * Vector3([SLOT_OFFSET, 0.0, 0.0]),
@@ -114,7 +131,7 @@ class _ActorBuilder:
 
     def _make_brick(
         self,
-        module: Brick,
+        analyzer_module: AnalyzerModule,
         body: RigidBody,
         name_prefix: str,
         attachment_point: Vector3,
@@ -123,6 +140,8 @@ class _ActorBuilder:
         BOUNDING_BOX = Vector3([0.06288625, 0.06288625, 0.0603])  # meter
         MASS = 0.030  # kg
         SLOT_OFFSET = 0.06288625 / 2.0  # meter
+
+        module = cast(Brick, analyzer_module.module)
 
         position = attachment_point + orientation * Vector3(
             [BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
@@ -147,12 +166,13 @@ class _ActorBuilder:
             )
         )
 
-        for (name_suffix, slot, angle) in [
-            ("front", module.front, 0.0),
-            ("back", module.back, math.pi),
-            ("left", module.left, math.pi / 2.0),
-            ("right", module.right, math.pi / 2.0 * 3),
+        for (name_suffix, child_index, angle) in [
+            ("front", Brick.FRONT, 0.0),
+            ("back", Brick.BACK, math.pi),
+            ("left", Brick.LEFT, math.pi / 2.0),
+            ("right", Brick.RIGHT, math.pi / 2.0 * 3),
         ]:
+            slot = module.get_child(child_index)
             if slot is not None:
                 rotation = (
                     orientation
@@ -161,7 +181,7 @@ class _ActorBuilder:
                 )
 
                 self._make_module(
-                    slot.module,
+                    analyzer_module.get_child(child_index),
                     body,
                     f"{name_prefix}_{name_suffix}",
                     position + rotation * Vector3([SLOT_OFFSET, 0.0, 0.0]),
@@ -170,7 +190,7 @@ class _ActorBuilder:
 
     def _make_active_hinge(
         self,
-        module: ActiveHinge,
+        analyzer_module: AnalyzerModule,
         body: RigidBody,
         name_prefix: str,
         attachment_point: Vector3,
@@ -192,6 +212,8 @@ class _ActorBuilder:
         )
 
         ATTACHMENT_OFFSET = SERVO1_BOUNDING_BOX[0] / 2.0 + SERVO2_BOUNDING_BOX[0]
+
+        module = cast(ActiveHinge, analyzer_module.module)
 
         frame_position = attachment_point + orientation * Vector3(
             [FRAME_BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
@@ -240,6 +262,7 @@ class _ActorBuilder:
                 Vector3([0.0, 1.0, 0.0]),
             )
         )
+        self.dof_ids.append(analyzer_module)
 
         next_body.collisions.append(
             Collision(
@@ -269,11 +292,12 @@ class _ActorBuilder:
             )
         )
 
-        if module.attachment is not None:
-            rotation = Quaternion.from_eulers([module.attachment.rotation, 0.0, 0.0])
+        slot = module.get_child(ActiveHinge.ATTACHMENT_INDEX)
+        if slot is not None:
+            rotation = Quaternion.from_eulers([slot.rotation, 0.0, 0.0])
 
             self._make_module(
-                module.attachment.module,
+                analyzer_module.get_child(ActiveHinge.ATTACHMENT_INDEX),
                 next_body,
                 f"{name_prefix}_attachment",
                 rotation * Vector3([ATTACHMENT_OFFSET, 0.0, 0.0]),

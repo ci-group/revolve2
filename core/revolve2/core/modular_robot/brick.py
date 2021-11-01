@@ -6,13 +6,13 @@ from .slot import Slot
 
 
 class Brick(Module):
-    front: Optional[Slot] = None
-    back: Optional[Slot] = None
-    left: Optional[Slot] = None
-    right: Optional[Slot] = None
+    FRONT = 0
+    RIGHT = 1
+    BACK = 2
+    LEFT = 3
 
     def __init__(self):
-        super().__init__(Module.Type.BRICK)
+        super().__init__(Module.Type.BRICK, 4)
 
     def serialize(self) -> Serialized:
         """
@@ -33,3 +33,35 @@ class Brick(Module):
             serialized["right"] = self.right.serialize()
 
         return serialized
+
+    @property
+    def front(self) -> Optional[Slot]:
+        return self.get_child(self.FRONT)
+
+    @front.setter
+    def front(self, slot: Slot) -> None:
+        self.set_child(self.FRONT, slot)
+
+    @property
+    def right(self) -> Optional[Slot]:
+        return self.get_child(self.RIGHT)
+
+    @right.setter
+    def right(self, slot: Slot) -> None:
+        self.set_child(self.RIGHT, slot)
+
+    @property
+    def back(self) -> Optional[Slot]:
+        return self.get_child(self.BACK)
+
+    @back.setter
+    def back(self, slot: Slot) -> None:
+        self.set_child(self.BACK, slot)
+
+    @property
+    def left(self) -> Optional[Slot]:
+        return self.get_child(self.LEFT)
+
+    @left.setter
+    def left(self, slot: Slot) -> None:
+        self.set_child(self.LEFT, slot)

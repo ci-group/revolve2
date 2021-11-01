@@ -1,8 +1,14 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import TYPE_CHECKING, List, Optional
 
 from .serialized import Serialized
+
+# solve cyclic dependency by only importing when type type checking
+# and forward declaring
+if TYPE_CHECKING:
+    from .slot import Slot
 
 
 class Module:
@@ -12,9 +18,12 @@ class Module:
         ACTIVE_HINGE = "active_hinge"
 
     type: Type
+    _children: List[Optional["Slot"]]
 
-    def __init__(self, type: Type):
+    def __init__(self, type: Type, num_children: int):
         self.type = type
+        self._id = None
+        self._children = [None] * num_children
 
     def serialize(self) -> Serialized:
         """
@@ -24,3 +33,13 @@ class Module:
         """
 
         return {"type": self.type.value}
+
+    @property
+    def num_children(self) -> int:
+        return len(self._children)
+
+    def get_child(self, index: int) -> Optional["Slot"]:
+        return self._children[index]
+
+    def set_child(self, index: int, slot: "Slot") -> None:
+        self._children[index] = slot

@@ -26,8 +26,10 @@ class ModularRobot:
         return {"body": self.body.serialize(), "brain": self.brain.serialize()}
 
     def make_actor_and_controller(self) -> Tuple[Actor, Controller]:
+        from .analyzer import Analyzer
         from .to_actor import to_actor
 
-        actor = to_actor(self)
-        controller = self.brain.make_controller(self.body, actor)
+        analyzer = Analyzer(self.body)
+        actor, dof_ids = to_actor(analyzer)
+        controller = self.brain.make_controller(analyzer, actor, dof_ids)
         return (actor, controller)

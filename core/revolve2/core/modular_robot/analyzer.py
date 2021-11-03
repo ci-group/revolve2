@@ -11,12 +11,16 @@ class Analyzer:
 
     def __init__(self, body: Body):
         self._active_hinges = []
-        (self._core, _) = self._init_tree_node(body.core, 0, None)
+        (self._core, _) = self._init_tree_node(body.core, 0, None, None)
 
     def _init_tree_node(
-        self, module: Module, next_id: int, parent: Optional[AnalyzerModule]
+        self,
+        module: Module,
+        next_id: int,
+        parent: Optional[AnalyzerModule],
+        parent_child_index: Optional[int],
     ) -> Tuple[AnalyzerModule, int]:
-        analyzer_module = AnalyzerModule(module, next_id, parent)
+        analyzer_module = AnalyzerModule(module, next_id, parent, parent_child_index)
         next_id += 1
 
         if module.type == Module.Type.ACTIVE_HINGE:
@@ -26,7 +30,7 @@ class Analyzer:
             child = module.get_child(child_index)
             if child is not None:
                 (analyzer_child, next_id) = self._init_tree_node(
-                    child.module, next_id, analyzer_module
+                    child.module, next_id, analyzer_module, child_index
                 )
                 analyzer_module.set_child(child_index, analyzer_child)
 

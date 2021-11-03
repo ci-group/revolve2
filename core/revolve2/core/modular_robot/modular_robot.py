@@ -1,10 +1,10 @@
 from typing import Dict, Tuple
 
 from revolve2.core.physics.actor import Actor
+from revolve2.core.physics.control import Controller
 
 from .body import Body
 from .brain import Brain
-from .controller import Controller
 from .serialized import Serialized
 
 

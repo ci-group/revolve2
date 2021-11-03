@@ -2,9 +2,9 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, List
 
 from revolve2.core.physics.actor import Actor
+from revolve2.core.physics.control import Controller
 
 from .analyzer import Analyzer, AnalyzerModule
-from .controller import Controller
 from .serialized import Serialized
 
 

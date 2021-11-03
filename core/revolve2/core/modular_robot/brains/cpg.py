@@ -20,7 +20,7 @@ class Cpg(Brain, ABC):
         self, analyzer: Analyzer, actor: Actor, dof_ids: List[AnalyzerModule]
     ) -> Controller:
         active_hinges = analyzer.active_hinges
-        connections = self.find_connections(analyzer)
+        connections = self._find_connections(analyzer)
         (internal_weights, external_weights) = self._make_weights(
             active_hinges, connections
         )
@@ -63,7 +63,7 @@ class Cpg(Brain, ABC):
         """
 
     @staticmethod
-    def find_connections(
+    def _find_connections(
         analyzer: Analyzer,
     ) -> List[Tuple[AnalyzerModule, AnalyzerModule]]:
         active_hinges = analyzer.active_hinges

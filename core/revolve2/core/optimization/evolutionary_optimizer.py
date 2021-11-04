@@ -1,13 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import Generic, List, Optional, Tuple, TypeVar
 
-from .optimizer import Optimizer
-
 Individual = TypeVar("Individual")
 Evaluation = TypeVar("Evaluation")
 
 
-class EvolutionaryOptimizer(ABC, Optimizer, Generic[Individual, Evaluation]):
+class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
     _EvaluatedIndividual = Tuple[Individual, Evaluation]
     _Generation = List[_EvaluatedIndividual]
 

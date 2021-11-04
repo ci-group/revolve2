@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 
-class Controller(ABC):
+class ActorController(ABC):
     @abstractmethod
     def step(self, dt: float) -> None:
         pass

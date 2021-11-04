@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, List
+from typing import List
 
 from revolve2.core.physics.actor import Actor
-from revolve2.core.physics.control import Controller
+from revolve2.core.physics.control import ActorController
 
 from .analyzer import Analyzer, AnalyzerModule
 from .serialized import Serialized
@@ -12,7 +12,7 @@ class Brain(ABC):
     @abstractmethod
     def make_controller(
         self, analyzer: Analyzer, actor: Actor, dof_ids: List[AnalyzerModule]
-    ) -> Controller:
+    ) -> ActorController:
         """
         Create a controller for the provided body
 

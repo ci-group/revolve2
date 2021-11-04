@@ -1,11 +1,12 @@
 from typing import List
 
 import numpy as np
-from revolve2.core.physics.control import Controller
 from scipy.integrate import solve_ivp
 
+from ..actor_controller import ActorController
 
-class Cpg(Controller):
+
+class Cpg(ActorController):
     _weight_matrix: np.ndarray  # nxn matrix matching number of neurons
     _num_output_neurons: int
     _state: np.ndarray

@@ -1,1 +1,1 @@
-from .controller import Controller
+from .actor_controller import ActorController

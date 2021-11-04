@@ -11,14 +11,14 @@ from revolve2.core.modular_robot import (
     Serialized,
 )
 from revolve2.core.physics.actor import Actor
-from revolve2.core.physics.control import Controller
-from revolve2.core.physics.control.controllers import Cpg as ControllerCpg
+from revolve2.core.physics.control import ActorController
+from revolve2.core.physics.control.actor_controllers import Cpg as ControllerCpg
 
 
 class Cpg(Brain, ABC):
     def make_controller(
         self, analyzer: Analyzer, actor: Actor, dof_ids: List[AnalyzerModule]
-    ) -> Controller:
+    ) -> ActorController:
         active_hinges = analyzer.active_hinges
         connections = self._find_connections(analyzer)
         (internal_weights, external_weights) = self._make_weights(

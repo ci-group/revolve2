@@ -62,6 +62,10 @@ class Cpg(Brain, ABC):
                  The lists should match the order of the input parameters.
         """
 
+    @abstractmethod
+    def serialize(self) -> Serialized:
+        pass
+
     @staticmethod
     def _find_connections(
         analyzer: Analyzer,
@@ -83,6 +87,3 @@ class Cpg(Brain, ABC):
             connections += zip([active_hinge] * len(neighbours), neighbours)
 
         return connections
-
-    def serialize(self) -> Serialized:
-        return []  # TODO

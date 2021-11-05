@@ -14,6 +14,25 @@ from .bodybrain_base import BodybrainBase
 
 
 class BodyGenotypeV1(BodyGenotype, BodybrainBase):
+    @classmethod
+    def random(
+        cls,
+        innov_db: multineat.InnovationDatabase,
+        rng: multineat.RNG,
+        multineat_params: multineat.Parameters,
+        output_activation_func: multineat.ActivationFunction,
+        num_initial_mutations: int,
+    ) -> BodybrainBase:
+        return super(BodyGenotypeV1, cls).random(
+            innov_db,
+            rng,
+            multineat_params,
+            output_activation_func,
+            5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
+            5,  # empty, brick, activehinge, rot0, rot90
+            num_initial_mutations,
+        )
+
     @dataclass
     class _Module:
         position: Tuple[int, int, int]

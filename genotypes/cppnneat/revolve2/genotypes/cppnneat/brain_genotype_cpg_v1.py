@@ -7,7 +7,7 @@ from .bodybrain_base import BodybrainBase
 from .brain_cpg_v1 import BrainCpgV1
 
 
-class BrainGenotypeCpgV1(BrainGenotype, BodybrainBase):
+class BrainGenotypeCpgV1(BrainGenotype, BodybrainBase["BrainGenotypeCpgV1"]):
     @classmethod
     def random(
         cls,

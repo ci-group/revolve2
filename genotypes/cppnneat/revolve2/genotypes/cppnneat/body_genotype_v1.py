@@ -13,7 +13,7 @@ from revolve2.core.optimization.ea.modular_robot import BodyGenotype
 from .bodybrain_base import BodybrainBase
 
 
-class BodyGenotypeV1(BodyGenotype, BodybrainBase):
+class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"]):
     @classmethod
     def random(
         cls,

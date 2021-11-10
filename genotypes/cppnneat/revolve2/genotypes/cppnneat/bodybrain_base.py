@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Generic, TypeVar
 
 import multineat
+from revolve2.core.modular_robot.body import Body
+
+Child = TypeVar("Child")
 
 
 @dataclass
-class BodybrainBase:
+class BodybrainBase(Generic[Child]):
     _genotype: multineat.Genome
 
     @classmethod
@@ -43,3 +47,38 @@ class BodybrainBase:
             )
 
         return cls(genotype)
+
+    def mutate(
+        self,
+        multineat_params: multineat.Parameters,
+        innov_db: multineat.InnovationDatabase,
+        rng: multineat.RNG,
+    ) -> Child:
+        new_genotype = multineat.Genome(self._genotype)
+        new_genotype.Mutate(
+            False,
+            multineat.SearchMode.COMPLEXIFYING,
+            innov_db,
+            multineat_params,
+            rng,
+        )
+        return type(self)(new_genotype)
+
+    @classmethod
+    def crossover(
+        cls,
+        parent1: BodybrainBase,
+        parent2: BodybrainBase,
+        multineat_params: multineat.Parameters,
+        rng: multineat.RNG,
+        mate_average: bool,
+        interspecies_crossover: bool,
+    ) -> Child:
+        new_genotype = parent1._genotype.Mate(
+            parent2._genotype,
+            mate_average,
+            interspecies_crossover,
+            rng,
+            multineat_params,
+        )
+        return cls(new_genotype)

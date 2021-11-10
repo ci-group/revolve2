@@ -19,6 +19,7 @@ class ActiveHinge(Module):
         """
 
         serialized = super().serialize()
+        assert type(serialized) == dict
 
         if self.attachment is not None:
             serialized["attachment"] = self.attachment.serialize()

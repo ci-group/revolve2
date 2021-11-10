@@ -1,8 +1,11 @@
 from random import Random
-from typing import List, Tuple, TypeVar
+from typing import TYPE_CHECKING, List, Tuple, TypeVar
+
+if TYPE_CHECKING:
+    from _typeshed import SupportsLessThan
 
 Individual = TypeVar("Individual")
-Fitness = TypeVar("Fitness")
+Fitness = TypeVar("Fitness", bound=SupportsLessThan)
 
 
 def tournament(

@@ -67,7 +67,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
     @abstractmethod
     def _select_parents(
         self, generation: List[Tuple[Individual, Evaluation]], num_parents: int
-    ) -> List[List[Individual]]:
+    ) -> List[List[Tuple[Individual, Evaluation]]]:
         """
         Select sets of parents from the given generation
         that will make children for the next generation.

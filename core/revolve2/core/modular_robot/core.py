@@ -22,6 +22,7 @@ class Core(Module):
         """
 
         serialized = super().serialize()
+        assert type(serialized) == dict
 
         if self.front is not None:
             serialized["front"] = self.front.serialize()

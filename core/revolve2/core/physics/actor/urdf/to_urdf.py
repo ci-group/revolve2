@@ -1,6 +1,6 @@
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
-from typing import List, Mapping, Optional, Tuple, cast
+from typing import Dict, List, Optional, Tuple, cast
 
 from pyrr import Quaternion, Vector3
 
@@ -17,7 +17,7 @@ def to_urdf(
 ) -> str:
     urdf = xml.Element("robot", {"name": name})
 
-    tree: Mapping[str, List[Joint]] = {}  # parent to children
+    tree: Dict[str, List[Joint]] = {}  # parent to children
     seen_children = set()
     for joint in physics_robot.joints:
         if joint.body2.name in seen_children:
@@ -37,6 +37,10 @@ def to_urdf(
                     "Physics robot cannot be converted to urdf. Cannot be represented as tree structure. Some parts of the robot are detached; no single root body."
                 )
             root = body
+    if root is None:
+        raise RuntimeError(
+            "Physics robot cannot be converted to urdf. Require at least one body."
+        )
 
     for el in _make_node(root, tree, position, orientation):
         urdf.append(el)
@@ -48,7 +52,7 @@ def to_urdf(
 
 def _make_node(
     node: RigidBody,
-    tree: Mapping[str, List[Joint]],
+    tree: Dict[str, List[Joint]],
     joint_pos: Vector3,
     joint_ori: Quaternion,
 ) -> List[xml.Element]:

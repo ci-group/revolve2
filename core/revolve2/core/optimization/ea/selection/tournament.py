@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from _typeshed import SupportsLessThan
 
 Individual = TypeVar("Individual")
-Fitness = TypeVar("Fitness", bound=SupportsLessThan)
+Fitness = TypeVar("Fitness", bound="SupportsLessThan")
 
 
 def tournament(

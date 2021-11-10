@@ -117,19 +117,15 @@ def _make_visual(
     name: str,
     position: Vector3,
     orientation: Quaternion,
-    color: Tuple[float, float, float, float],
+    color: Tuple[float, float, float],
     model: str,
 ):
     visual = xml.Element("visual", {"name": name})
     visual.append(_make_pose(position, orientation))
 
     material = xml.SubElement(visual, "material")
-    xml.SubElement(
-        material, "ambient"
-    ).text = f"{color[0]} {color[1]} {color[2]} {color[3]}"
-    xml.SubElement(
-        material, "diffuse"
-    ).text = f"{color[0]} {color[1]} {color[2]} {color[3]}"
+    xml.SubElement(material, "ambient").text = f"{color[0]} {color[1]} {color[2]} {1}"
+    xml.SubElement(material, "diffuse").text = f"{color[0]} {color[1]} {color[2]} {1}"
     xml.SubElement(material, "specular").text = "0.1 0.1 0.1 1.0"
 
     geometry = xml.SubElement(visual, "geometry")

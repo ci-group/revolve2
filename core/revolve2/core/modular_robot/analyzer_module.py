@@ -29,6 +29,10 @@ class AnalyzerModule:
         self._module = module
         self._id = id
         self._children = [None] * module.num_children
+
+        assert (parent is None and parent_child_index is None) or (
+            parent is not None and parent_child_index is not None
+        )
         self._parent = parent
         self._parent_child_index = parent_child_index
 
@@ -48,7 +52,7 @@ class AnalyzerModule:
 
         parent = self._parent
         child_index = self._parent_child_index
-        while parent is not None:
+        while parent is not None and child_index is not None:
             slot = parent.module.get_child(child_index)
             assert slot is not None
             assert np.isclose(slot.rotation % (math.pi / 2.0), 0.0)

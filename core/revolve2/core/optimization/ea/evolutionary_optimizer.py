@@ -1,11 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar
 
+from revolve2.core.database import Database
+
+from ..recoverable_process import RecoverableProcess
+
 Individual = TypeVar("Individual")
 Evaluation = TypeVar("Evaluation")
 
 
-class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
+class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluation]):
     # Types of individual and evaluation are stored as soon as they are available.
     # Used to type check the return values of user functions.
     _individual_type: Type
@@ -115,11 +119,11 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         :returns: True if it must.
         """
 
-    async def run_until_completion(self) -> None:
-        while await self.process_next_generation():
+    async def run(self) -> None:
+        while await self._process_next_generation():
             pass
 
-    async def evaluate_first_generation(self) -> None:
+    async def _evaluate_first_generation(self) -> None:
         """
         Evaluate first generation if this is not yet done.
         """
@@ -140,23 +144,13 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
             self._generations.append(list(zip(self._first_generation, evaluation)))
             self._first_generation = None
 
-    async def process_next_generation(self) -> bool:
+    async def _process_next_generation(self) -> bool:
         # evaluate first generation if this is not yet done
-        await self.evaluate_first_generation()
+        await self._evaluate_first_generation()
 
         # let user select parents
-        parent_selections: List[
-            List[Tuple[Individual, Evaluation]]
-        ] = self._select_parents(self._generations[-1], self._offspring_size)
-
-        # assert user return value
-        assert type(parent_selections) == list
-        assert all(type(s) == list for s in parent_selections)
-        assert all(
-            [
-                all(self._is_tuple_individual_evaluation(p) for p in s)
-                for s in parent_selections
-            ]
+        parent_selections = self._safe_select_parents(
+            self._generations[-1], self._offspring_size
         )
 
         # ignore user returned evaluation.
@@ -167,46 +161,80 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
         # let user create offspring
         offspring = [
-            self._mutate(self._crossover(selection))
+            self._safe_mutate(self._safe_crossover(selection))
             for selection in parent_selections_only_individuals
         ]
 
-        # assert user return value
-        assert type(offspring) == list
-        assert len(offspring) == self._offspring_size
-        assert all(type(o) == self._individual_type for o in offspring)
-
         # let user evaluate offspring
-        evaluation = await self._evaluate_generation(offspring)
-
-        # assert user return value
-        assert type(evaluation) == list
-        assert len(evaluation) == len(offspring)
-        assert all(type(e) == self._evaluation_type for e in evaluation)
+        evaluation = await self._safe_evaluate_generation(offspring)
 
         # combine individuals and evaluation
         evaluated_individuals = list(zip(offspring, evaluation))
 
         # let user select survivors between old and new individuals
-        survivors = self._select_survivors(
+        survivors = self._safe_select_survivors(
             evaluated_individuals, self._generations[-1], self._population_size
         )
-
-        # assert user return type
-        assert type(survivors) == list
-        assert len(survivors) == self._population_size
-        assert all(self._is_tuple_individual_evaluation(s) for s in survivors)
 
         # set survivors as the next generation
         self._generations.append(survivors)
 
         # let user decide if optimizer must continue with another generation
-        must_continue = self._must_do_next_gen()
+        return self._safe_must_do_next_gen()
 
-        # assert user return type
-        assert type(must_continue) == bool
+    def _safe_select_parents(
+        self, generation: List[Tuple[Individual, Evaluation]], num_parents: int
+    ) -> List[List[Tuple[Individual, Evaluation]]]:
+        parent_selections = self._select_parents(
+            self._generations[-1], self._offspring_size
+        )
+        assert type(parent_selections) == list
+        assert all(type(s) == list for s in parent_selections)
+        assert all(
+            [
+                all(self._is_tuple_individual_evaluation(p) for p in s)
+                for s in parent_selections
+            ]
+        )
+        return parent_selections
 
-        return must_continue
+    def _safe_crossover(self, parents: List[Individual]) -> Individual:
+        individual = self._crossover(parents)
+        assert type(individual) == self._individual_type
+        return individual
+
+    def _safe_mutate(self, individual: Individual) -> Individual:
+        individual = self._mutate(individual)
+        assert type(individual) == self._individual_type
+        return individual
+
+    async def _safe_evaluate_generation(
+        self, individuals: List[Individual]
+    ) -> List[Evaluation]:
+        evaluations = await self._evaluate_generation(individuals)
+        assert type(evaluations) == list
+        assert len(evaluations) == len(individuals)
+        assert all(type(e) == self._evaluation_type for e in evaluations)
+        return evaluations
+
+    def _safe_select_survivors(
+        self,
+        old_individuals: List[Tuple[Individual, Evaluation]],
+        new_individuals: List[Tuple[Individual, Evaluation]],
+        num_survivors: int,
+    ) -> List[Tuple[Individual, Evaluation]]:
+        survivors = self._select_survivors(
+            old_individuals, new_individuals, num_survivors
+        )
+        assert type(survivors) == list
+        assert len(survivors) == self._population_size
+        assert all(self._is_tuple_individual_evaluation(s) for s in survivors)
+        return survivors
+
+    def _safe_must_do_next_gen(self) -> bool:
+        must_do = self._must_do_next_gen()
+        assert type(must_do) == bool
+        return must_do
 
     def _is_tuple_individual_evaluation(self, item: Any) -> bool:
         """

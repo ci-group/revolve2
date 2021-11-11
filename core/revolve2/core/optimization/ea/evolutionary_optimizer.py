@@ -120,8 +120,39 @@ class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluat
         """
 
     async def run(self) -> None:
-        while await self._process_next_generation():
-            pass
+        await self._evaluate_first_generation()
+
+        while self._safe_must_do_next_gen():
+            # let user select parents
+            parent_selections = self._safe_select_parents(
+                self._generations[-1], self._offspring_size
+            )
+
+            # ignore user returned evaluation.
+            # was only there to make it more convenient for the user
+            parent_selections_only_individuals = [
+                [p[0] for p in s] for s in parent_selections
+            ]
+
+            # let user create offspring
+            offspring = [
+                self._safe_mutate(self._safe_crossover(selection))
+                for selection in parent_selections_only_individuals
+            ]
+
+            # let user evaluate offspring
+            evaluation = await self._safe_evaluate_generation(offspring)
+
+            # combine individuals and evaluation
+            evaluated_individuals = list(zip(offspring, evaluation))
+
+            # let user select survivors between old and new individuals
+            survivors = self._safe_select_survivors(
+                evaluated_individuals, self._generations[-1], self._population_size
+            )
+
+            # set survivors as the next generation
+            self._generations.append(survivors)
 
     async def _evaluate_first_generation(self) -> None:
         """
@@ -129,7 +160,7 @@ class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluat
         """
 
         if self._first_generation is not None:
-            # let user evaluate
+            # let user evaluate. use unsafe version because we don't know evaluation type yet.
             evaluation = await self._evaluate_generation(self._first_generation)
 
             # assert user return value
@@ -143,44 +174,6 @@ class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluat
             # combine provided individuals and new evaluation to create the first generation
             self._generations.append(list(zip(self._first_generation, evaluation)))
             self._first_generation = None
-
-    async def _process_next_generation(self) -> bool:
-        # evaluate first generation if this is not yet done
-        await self._evaluate_first_generation()
-
-        # let user select parents
-        parent_selections = self._safe_select_parents(
-            self._generations[-1], self._offspring_size
-        )
-
-        # ignore user returned evaluation.
-        # was only there to make it more convenient for the user
-        parent_selections_only_individuals = [
-            [p[0] for p in s] for s in parent_selections
-        ]
-
-        # let user create offspring
-        offspring = [
-            self._safe_mutate(self._safe_crossover(selection))
-            for selection in parent_selections_only_individuals
-        ]
-
-        # let user evaluate offspring
-        evaluation = await self._safe_evaluate_generation(offspring)
-
-        # combine individuals and evaluation
-        evaluated_individuals = list(zip(offspring, evaluation))
-
-        # let user select survivors between old and new individuals
-        survivors = self._safe_select_survivors(
-            evaluated_individuals, self._generations[-1], self._population_size
-        )
-
-        # set survivors as the next generation
-        self._generations.append(survivors)
-
-        # let user decide if optimizer must continue with another generation
-        return self._safe_must_do_next_gen()
 
     def _safe_select_parents(
         self, generation: List[Tuple[Individual, Evaluation]], num_parents: int

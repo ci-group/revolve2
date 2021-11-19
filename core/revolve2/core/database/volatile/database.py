@@ -2,12 +2,18 @@ import logging
 from dataclasses import dataclass
 from typing import cast
 
+from ..database import Database as DatabaseBase
 from ..path import Path as PathBase
 from .db_item import DbItem
 from .path import Path
 
 
-class Database:
+class Database(DatabaseBase):
+    """
+    In memory implementation of database.
+    Not optimized at all. Meant for debugging.
+    """
+
     _db: DbItem
 
     def __init__(self):
@@ -100,6 +106,95 @@ class Database:
         newitem = DbItem(None, False)
         castpath.item.item[key] = newitem
         return Path(newitem)
+
+    def is_none(self, path: Path) -> bool:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        return path.item.item is None
+
+    def is_int(self, path: Path) -> bool:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        return type(path.item.item) == int
+
+    def is_float(self, path: Path) -> bool:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        return type(path.item.item) == float
+
+    def is_string(self, path: Path) -> bool:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        return type(path.item.item) == str
+
+    def is_bytes(self, path: Path) -> bool:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        return type(path.item.item) == bytes
+
+    def is_list(self, path: Path) -> bool:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        return type(path.item.item) == list
+
+    def is_dict(self, path: Path) -> bool:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        return type(path.item.item) == dict
+
+    def get_int(self, path: Path) -> int:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        assert self.is_int(path), "Trying to get int, but type does not match."
+        return castpath.item.item
+
+    def get_float(self, path: Path) -> float:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        assert self.is_float(path), "Trying to get float, but type does not match."
+        return castpath.item.item
+
+    def get_string(self, path: Path) -> str:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        assert self.is_string(path), "Trying to get string, but type does not match."
+        return castpath.item.item
+
+    def get_bytes(self, path: Path) -> bytes:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        assert self.is_bytes(path), "Trying to get bytes, but type does not match."
+        return castpath.item.item
+
+    def list_length(self, path: Path) -> int:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        assert self.is_list(path), "Trying to length of list, but type does not match."
+        return len(castpath.item.item)
+
+    def list_index(self, path: Path, index: int) -> Path:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        assert self.is_list(path), "Trying to index list, but type does not match."
+        assert index < len(castpath.item.item), "Trying to index list out of bounds."
+        return Path(castpath.item.item[index])
+
+    def dict_has_key(self, path: Path, index: str) -> bool:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        assert self.is_dict(
+            path
+        ), "Trying check if dict has key, but type does not match."
+        return index in castpath.item.item
+
+    def dict_index(self, path: Path, index: str) -> Path:
+        castpath = self._cast_path(path)
+        self._assert_not_deleted(castpath.item)
+        assert self.is_dict(path), "Trying to index dict, but type does not match."
+        assert self.dict_has_key(
+            path, index
+        ), "Trying to index dict, but key not in dict."
+        return Path(castpath.item.item[index])
 
     @staticmethod
     def _cast_path(path: PathBase) -> Path:

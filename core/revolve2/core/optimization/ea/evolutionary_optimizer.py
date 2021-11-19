@@ -229,15 +229,105 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
         self._database.commit_transaction()
 
-        print(self._database)
-
     async def load_checkpoint(self) -> bool:
         """
         Deserialize from the database.
+        Can leave this class partially initialized if load unsuccessful.
 
         :returns: True if checkpoint could be loaded and everything is initialized from the database.
         """
-        return False  # TODO
+        if not self._database.is_dict(self._dbbranch):
+            return False
+
+        if not self._database.dict_has_key(self._dbbranch, "_individual_type"):
+            return False
+        individual_type = self._database.dict_index(self._dbbranch, "_individual_type")
+        if not self._database.is_bytes(individual_type):
+            return False
+        try:
+            self._individual_type = pickle.loads(
+                self._database.get_bytes(individual_type)
+            )
+        except:
+            return False
+
+        if not self._database.dict_has_key(self._dbbranch, "_evaluation_type"):
+            return False
+        evaluation_type = self._database.dict_index(self._dbbranch, "_evaluation_type")
+        if not self._database.is_bytes(evaluation_type):
+            return False
+        try:
+            self._evaluation_type = pickle.loads(
+                self._database.get_bytes(evaluation_type)
+            )
+        except:
+            return False
+
+        if not self._database.dict_has_key(self._dbbranch, "population_size"):
+            return False
+        population_size = self._database.dict_index(self._dbbranch, "population_size")
+        if not self._database.is_int(population_size):
+            return False
+        self._population_size = self._database.get_int(population_size)
+
+        if not self._database.dict_has_key(self._dbbranch, "offspring_size"):
+            return False
+        offspring_size = self._database.dict_index(self._dbbranch, "offspring_size")
+        if not self._database.is_int(offspring_size):
+            return False
+        self._offspring_size = self._database.get_int(offspring_size)
+
+        if not self._database.dict_has_key(self._dbbranch, "generations"):
+            return False
+        generations = self._database.dict_index(self._dbbranch, "generations")
+        if not self._database.is_list(generations):
+            return False
+        self._generations = []
+        for gen_i in range(self._database.list_length(generations)):
+            generation = self._database.list_index(generations, gen_i)
+            if not self._database.is_list(generation):
+                return False
+            self._generations.append([])
+            for ind_i in range(self._database.list_length(generation)):
+                individual = self._database.list_index(generation, ind_i)
+                if not self._database.is_bytes(individual):
+                    return False
+                try:
+                    individual_loaded = pickle.loads(
+                        self._database.get_bytes(individual)
+                    )
+                except:
+                    return False
+                if not self._is_tuple_individual_evaluation(individual_loaded):
+                    return False
+                self._generations[-1].append(individual_loaded)
+
+        if not self._database.dict_has_key(self._dbbranch, "_initial_population"):
+            return False
+        initial_population = self._database.dict_index(
+            self._dbbranch, "_initial_population"
+        )
+        if self._database.is_list(initial_population):
+            self._initial_population = []
+            for ind_i in range(self._database.list_length(initial_population)):
+                individual = self._database.list_index(initial_population, ind_i)
+                if not self._database.is_bytes(individual):
+                    return False
+                try:
+                    individual_loaded = pickle.loads(
+                        self._database.get_bytes(individual)
+                    )
+                except:
+                    return False
+                if not type(individual_loaded) == self._individual_type:
+                    return False
+                self._initial_population.append(individual_loaded)
+        elif self._database.is_none(initial_population):
+            self._initial_population = None
+        else:
+            return False
+
+        return True
 
     def _safe_select_parents(
         self, generation: List[Tuple[Individual, Evaluation]], num_parents: int

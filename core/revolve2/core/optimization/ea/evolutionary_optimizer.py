@@ -1,15 +1,22 @@
+from __future__ import annotations
+
+import pickle
 from abc import ABC, abstractmethod
 from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar
 
-from revolve2.core.database import Database
-
-from ..recoverable_process import RecoverableProcess
+from asyncinit import asyncinit
+from revolve2.core import database
+from revolve2.core.database import Database, Path
 
 Individual = TypeVar("Individual")
 Evaluation = TypeVar("Evaluation")
 
 
-class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluation]):
+@asyncinit
+class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
+    _database: Database
+    _dbbranch: Path
+
     # Types of individual and evaluation are stored as soon as they are available.
     # Used to type check the return values of user functions.
     _individual_type: Type
@@ -19,43 +26,51 @@ class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluat
     _offspring_size: int
 
     _generations: List[List[Tuple[Individual, Evaluation]]]
-    _first_generation: Optional[List[Individual]]
+    _initial_population: Optional[List[Individual]]
 
-    def __init__(
+    async def __init__(
         self,
+        database: Database,
+        dbbranch: Path,
         population_size: int,
         offspring_size: int,
         initial_population: List[Individual],
         initial_evaluation: Optional[List[Evaluation]],
-    ) -> None:
-        assert type(population_size) == int
-        self._population_size = population_size
+    ):
+        self._database = database
+        self._dbbranch = dbbranch
 
-        assert type(offspring_size) == int
-        self._offspring_size = offspring_size
+        if not await self.load_checkpoint():
+            assert type(population_size) == int
+            self._population_size = population_size
 
-        assert type(initial_population) == list
-        assert len(initial_population) == self._population_size
-        assert len(initial_population) >= 1
+            assert type(offspring_size) == int
+            self._offspring_size = offspring_size
 
-        # save individual type so we can type check things later
-        self._individual_type = type(initial_population[0])
+            assert type(initial_population) == list
+            assert len(initial_population) == self._population_size
+            assert len(initial_population) >= 1
 
-        if initial_evaluation is not None:
-            assert type(initial_evaluation) == list
-            assert len(initial_evaluation) == self._population_size
-            self._generations = [list(zip(initial_population, initial_evaluation))]
-            self._first_generation = None
+            # save individual type so we can type check things later
+            self._individual_type = type(initial_population[0])
 
-            # save evaluation type so we can type check things later
-            self._evaluation_type = type(initial_evaluation[0])
-        else:
-            self._first_generation = initial_population
-            self._generations = []
+            if initial_evaluation is not None:
+                assert type(initial_evaluation) == list
+                assert len(initial_evaluation) == self._population_size
+                self._generations = [list(zip(initial_population, initial_evaluation))]
+                self._initial_population = None
 
-            # set evaluation type to None
-            # we will set it when evaluating the first generation later
-            self._evaluation_type = None
+                # save evaluation type so we can type check things later
+                self._evaluation_type = type(initial_evaluation[0])
+            else:
+                self._initial_population = initial_population
+                self._generations = []
+
+                # set evaluation type to None
+                # we will set it when evaluating the first generation later
+                self._evaluation_type = None
+
+            await self.save_checkpoint()
 
     @abstractmethod
     async def _evaluate_generation(
@@ -72,9 +87,8 @@ class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluat
     def _select_parents(
         self, generation: List[Tuple[Individual, Evaluation]], num_parents: int
     ) -> List[List[Tuple[Individual, Evaluation]]]:
-        """
-        Select sets of parents from the given generation
-        that will make children for the next generation.
+        """self._database = database
+        self._dbbranch = dbbranchneration.
 
         :param population: The generation to select sets of parents from. Must not be altered.
         :return: The selected sets of parents.
@@ -120,7 +134,23 @@ class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluat
         """
 
     async def run(self) -> None:
-        await self._evaluate_first_generation()
+        if self._initial_population is not None:
+            # let user evaluate. use unsafe version because we don't know evaluation type yet.
+            evaluation = await self._evaluate_generation(self._initial_population)
+
+            # assert user return value
+            assert type(evaluation) == list
+            assert len(evaluation) == len(self._initial_population)
+            assert all(type(e) == type(evaluation[0]) for e in evaluation)
+
+            # save evaluation type so we can type check things later
+            self._evaluation_type = type(evaluation[0])
+
+            # combine provided individuals and new evaluation to create the first generation
+            self._generations.append(list(zip(self._initial_population, evaluation)))
+            self._initial_population = None
+
+            await self.save_checkpoint()
 
         while self._safe_must_do_next_gen():
             # let user select parents
@@ -154,26 +184,60 @@ class EvolutionaryOptimizer(RecoverableProcess, ABC, Generic[Individual, Evaluat
             # set survivors as the next generation
             self._generations.append(survivors)
 
-    async def _evaluate_first_generation(self) -> None:
+            await self.save_checkpoint()
+
+    async def save_checkpoint(self) -> None:
         """
-        Evaluate first generation if this is not yet done.
+        Serialize process to the database.
         """
 
-        if self._first_generation is not None:
-            # let user evaluate. use unsafe version because we don't know evaluation type yet.
-            evaluation = await self._evaluate_generation(self._first_generation)
+        # In this first test we do not do incremental, but overwrite everything instead.
+        self._database.begin_transaction()
+        self._database.set_dict(self._dbbranch)
 
-            # assert user return value
-            assert type(evaluation) == list
-            assert len(evaluation) == len(self._first_generation)
-            assert all(type(e) == type(evaluation[0]) for e in evaluation)
+        individual_type = self._database.insert_dict(self._dbbranch, "_individual_type")
+        self._database.set_bytes(individual_type, pickle.dumps(self._individual_type))
 
-            # save evaluation type so we can type check things later
-            self._evaluation_type = type(evaluation[0])
+        evaluation_type = self._database.insert_dict(self._dbbranch, "_evaluation_type")
+        self._database.set_bytes(evaluation_type, pickle.dumps(self._evaluation_type))
 
-            # combine provided individuals and new evaluation to create the first generation
-            self._generations.append(list(zip(self._first_generation, evaluation)))
-            self._first_generation = None
+        population_size = self._database.insert_dict(self._dbbranch, "population_size")
+        self._database.set_int(population_size, self._population_size)
+
+        offspring_size = self._database.insert_dict(self._dbbranch, "offspring_size")
+        self._database.set_int(offspring_size, self._offspring_size)
+
+        generations = self._database.insert_dict(self._dbbranch, "generations")
+        self._database.set_list(generations)
+        for generation in self._generations:
+            gen_path = self._database.append_list(generations)
+            self._database.set_list(gen_path)
+            for individual in generation:
+                ind_path = self._database.append_list(gen_path)
+                self._database.set_bytes(ind_path, pickle.dumps(individual))
+
+        initial_population = self._database.insert_dict(
+            self._dbbranch, "_initial_population"
+        )
+        if self._initial_population is None:
+            self._database.set_none(initial_population)
+        else:
+            self._database.set_list(initial_population)
+            for individual in self._initial_population:
+                ind_path = self._database.append_list(initial_population)
+                self._database.set_bytes(ind_path, pickle.dumps(individual))
+
+        self._database.commit_transaction()
+
+        print(self._database)
+
+    async def load_checkpoint(self) -> bool:
+        """
+        Deserialize from the database.
+
+        :returns: True if checkpoint could be loaded and everything is initialized from the database.
+        """
+        return False  # TODO
 
     def _safe_select_parents(
         self, generation: List[Tuple[Individual, Evaluation]], num_parents: int

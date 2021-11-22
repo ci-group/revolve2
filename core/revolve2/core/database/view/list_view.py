@@ -16,6 +16,10 @@ class ListView:
         self._path = path
 
     def __getitem__(self, index: int) -> AnyView:
+        if index < 0:
+            index %= len(self)
+        if index < 0:
+            index += len(self)
         return AnyView(self._database, self._database.list_index(self._path, index))
 
     def clear(self) -> None:

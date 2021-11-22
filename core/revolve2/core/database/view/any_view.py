@@ -2,8 +2,6 @@ from typing import TYPE_CHECKING
 
 from ..database import Database
 from ..path import Path
-from .bytes_view import BytesView
-from .int_view import IntView
 
 if TYPE_CHECKING:
     from .dict_view import DictView
@@ -19,12 +17,36 @@ class AnyView:
         self._path = path
 
     @property
-    def int(self) -> IntView:
-        return IntView(self._database, self._path)
+    def int(self) -> int:
+        return self._database.get_int(self._path)
+
+    @int.setter
+    def int(self, value: int) -> None:
+        self._database.set_int(self._path, value)
 
     @property
-    def bytes(self) -> BytesView:
-        return BytesView(self._database, self._path)
+    def float(self) -> float:
+        return self._database.get_float(self._path)
+
+    @int.setter
+    def float(self, value: float) -> None:
+        self._database.set_float(self._path, value)
+
+    @property
+    def string(self) -> str:
+        return self._database.get_string(self._path)
+
+    @int.setter
+    def string(self, value: str) -> None:
+        self._database.set_string(self._path, value)
+
+    @property
+    def bytes(self) -> bytes:
+        return self._database.get_bytes(self._path)
+
+    @int.setter
+    def bytes(self, value: bytes) -> None:
+        self._database.set_bytes(self._path, value)
 
     @property
     def list(self) -> "ListView":

@@ -5,10 +5,8 @@ from abc import ABC, abstractmethod
 from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar
 
 from asyncinit import asyncinit
-from revolve2.core import database
 from revolve2.core.database import Database, Path
-from revolve2.core.database.view import BytesView, DictView, IntView, ListView
-from revolve2.core.database.view.bytes_view import BytesView
+from revolve2.core.database.view import DictView
 
 Individual = TypeVar("Individual")
 Evaluation = TypeVar("Evaluation")
@@ -201,10 +199,10 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         root = DictView(self._database, self._dbbranch)
         root.clear()
 
-        root.insert("_individual_type").bytes.val = pickle.dumps(self._individual_type)
-        root.insert("_evaluation_type").bytes.val = pickle.dumps(self._evaluation_type)
-        root.insert("population_size").int.val = pickle.dumps(self._population_size)
-        root.insert("offspring_size").int.val = pickle.dumps(self._offspring_size)
+        root.insert("_individual_type").bytes = pickle.dumps(self._individual_type)
+        root.insert("_evaluation_type").bytes = pickle.dumps(self._evaluation_type)
+        root.insert("population_size").int = pickle.dumps(self._population_size)
+        root.insert("offspring_size").int = pickle.dumps(self._offspring_size)
 
         generations = root.insert("generations").list
         generations.clear()
@@ -212,7 +210,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
             db_gen = generations.append().list
             db_gen.clear()
             for individual in generation:
-                db_gen.append().bytes.val = pickle.dumps(individual)
+                db_gen.append().bytes = pickle.dumps(individual)
 
         initial_population = root.insert("_initial_population")
         if self._initial_population is None:
@@ -220,7 +218,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         else:
             initial_population.list.clear()
             for individual in self._initial_population:
-                initial_population.list.append().bytes.val = pickle.dumps(individual)
+                initial_population.list.append().bytes = pickle.dumps(individual)
 
         self._database.commit_transaction()
 
@@ -235,15 +233,15 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         try:
             root = DictView(self._database, self._dbbranch)
 
-            self._individual_type = pickle.loads(root["_individual_type"].bytes.val)
-            self._evaluation_type = pickle.loads(root["_evaluation_type"].bytes.val)
-            self._population_size = root["population_size"].int.val
-            self._offspring_size = root["offspring_size"].int.val
+            self._individual_type = pickle.loads(root["_individual_type"].bytes)
+            self._evaluation_type = pickle.loads(root["_evaluation_type"].bytes)
+            self._population_size = root["population_size"].int
+            self._offspring_size = root["offspring_size"].int
 
             for generation in root["generations"].list:
                 self._generations.append([])
                 for individual in generation.list:
-                    individual_loaded = pickle.loads(individual.bytes.val)
+                    individual_loaded = pickle.loads(individual.bytes)
                     if not self._is_tuple_individual_evaluation(individual_loaded):
                         return False
                     self._generations[-1].append(individual_loaded)
@@ -251,7 +249,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
             initial_population = root["_initial_population"]
             if initial_population.is_list():
                 for individual in initial_population.list:
-                    individual_loaded = pickle.loads(individual.bytes.val)
+                    individual_loaded = pickle.loads(individual.bytes)
                     if not self._is_tuple_individual_evaluation(individual_loaded):
                         return False
                     self._generations[-1].append(individual_loaded)

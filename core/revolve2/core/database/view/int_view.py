@@ -2,7 +2,7 @@ from ..database import Database
 from ..path import Path
 
 
-class Int:
+class IntView:
     _database: Database
     _path: Path
 

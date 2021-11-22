@@ -7,11 +7,8 @@ from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar
 from asyncinit import asyncinit
 from revolve2.core import database
 from revolve2.core.database import Database, Path
-from revolve2.core.database.view import Bytes as BytesView
-from revolve2.core.database.view import Dict as DictView
-from revolve2.core.database.view import Int as IntView
-from revolve2.core.database.view import List as ListView
-from revolve2.core.database.view.bytes import Bytes
+from revolve2.core.database.view import BytesView, DictView, IntView, ListView
+from revolve2.core.database.view.bytes_view import BytesView
 
 Individual = TypeVar("Individual")
 Evaluation = TypeVar("Evaluation")
@@ -199,41 +196,31 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         Serialize process to the database.
         """
 
-        # In this first test we do not do incremental, but overwrite everything instead.
         self._database.begin_transaction()
-        self._database.set_dict(self._dbbranch)
 
-        individual_type = self._database.insert_dict(self._dbbranch, "_individual_type")
-        self._database.set_bytes(individual_type, pickle.dumps(self._individual_type))
+        root = DictView(self._database, self._dbbranch)
+        root.clear()
 
-        evaluation_type = self._database.insert_dict(self._dbbranch, "_evaluation_type")
-        self._database.set_bytes(evaluation_type, pickle.dumps(self._evaluation_type))
+        root.insert("_individual_type").bytes.val = pickle.dumps(self._individual_type)
+        root.insert("_evaluation_type").bytes.val = pickle.dumps(self._evaluation_type)
+        root.insert("population_size").int.val = pickle.dumps(self._population_size)
+        root.insert("offspring_size").int.val = pickle.dumps(self._offspring_size)
 
-        population_size = self._database.insert_dict(self._dbbranch, "population_size")
-        self._database.set_int(population_size, self._population_size)
-
-        offspring_size = self._database.insert_dict(self._dbbranch, "offspring_size")
-        self._database.set_int(offspring_size, self._offspring_size)
-
-        generations = self._database.insert_dict(self._dbbranch, "generations")
-        self._database.set_list(generations)
+        generations = root.insert("generations").list
+        generations.clear()
         for generation in self._generations:
-            gen_path = self._database.append_list(generations)
-            self._database.set_list(gen_path)
+            db_gen = generations.append().list
+            db_gen.clear()
             for individual in generation:
-                ind_path = self._database.append_list(gen_path)
-                self._database.set_bytes(ind_path, pickle.dumps(individual))
+                db_gen.append().bytes.val = pickle.dumps(individual)
 
-        initial_population = self._database.insert_dict(
-            self._dbbranch, "_initial_population"
-        )
+        initial_population = root.insert("_initial_population")
         if self._initial_population is None:
-            self._database.set_none(initial_population)
+            initial_population.make_none()
         else:
-            self._database.set_list(initial_population)
+            initial_population.list.clear()
             for individual in self._initial_population:
-                ind_path = self._database.append_list(initial_population)
-                self._database.set_bytes(ind_path, pickle.dumps(individual))
+                initial_population.list.append().bytes.val = pickle.dumps(individual)
 
         self._database.commit_transaction()
 
@@ -244,60 +231,31 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
         :returns: True if checkpoint could be loaded and everything is initialized from the database.
         """
+
         try:
-            self._individual_type = pickle.loads(
-                BytesView(
-                    self._database,
-                    self._database.dict_index(self._dbbranch, "_individual_type"),
-                ).val
-            )
+            root = DictView(self._database, self._dbbranch)
 
-            self._evaluation_type = pickle.loads(
-                BytesView(
-                    self._database,
-                    self._database.dict_index(self._dbbranch, "_evaluation_type"),
-                ).val
-            )
+            self._individual_type = pickle.loads(root["_individual_type"].bytes.val)
+            self._evaluation_type = pickle.loads(root["_evaluation_type"].bytes.val)
+            self._population_size = root["population_size"].int.val
+            self._offspring_size = root["offspring_size"].int.val
 
-            self._population_size = IntView(
-                self._database,
-                self._database.dict_index(self._dbbranch, "population_size"),
-            ).val
-
-            self._offspring_size = IntView(
-                self._database,
-                self._database.dict_index(self._dbbranch, "offspring_size"),
-            ).val
-
-            generations_path = self._database.dict_index(self._dbbranch, "generations")
-            generations = ListView.typed(ListView.typed(BytesView))(
-                self._database, generations_path
-            )
-            self._generations = []
-            for generation in generations:
+            for generation in root["generations"].list:
                 self._generations.append([])
-                for individual in generation:
-                    individual_loaded = pickle.loads(individual.val)
+                for individual in generation.list:
+                    individual_loaded = pickle.loads(individual.bytes.val)
                     if not self._is_tuple_individual_evaluation(individual_loaded):
                         return False
                     self._generations[-1].append(individual_loaded)
 
-            initial_population_path = self._database.dict_index(
-                self._dbbranch, "_initial_population"
-            )
-            if self._database.is_list(initial_population_path):
-                initial_population = ListView.typed(BytesView)(
-                    self._database,
-                    initial_population_path,
-                )
-
-                self._initial_population = []
-                for individual in initial_population:
-                    individual_loaded = pickle.loads(individual.val)
-                    if not type(individual_loaded) == self._individual_type:
+            initial_population = root["_initial_population"]
+            if initial_population.is_list():
+                for individual in initial_population.list:
+                    individual_loaded = pickle.loads(individual.bytes.val)
+                    if not self._is_tuple_individual_evaluation(individual_loaded):
                         return False
-                    self._initial_population.append(individual_loaded)
-            elif self._database.is_none(initial_population_path):
+                    self._generations[-1].append(individual_loaded)
+            elif initial_population.is_none():
                 self._initial_population = None
             else:
                 return False

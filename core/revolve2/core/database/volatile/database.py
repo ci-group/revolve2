@@ -88,21 +88,22 @@ class Database(DatabaseBase):
     def append_list(self, path: PathBase) -> PathBase:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert (
-            type(castpath.item.item) == list
-        ), "Trying to append to database item that is not a list."
+        if not type(castpath.item.item) == list:
+            raise RuntimeError("Trying to append to database item that is not a list.")
         castpath.item.item.append(DbItem(None, False))
         return Path(castpath.item.item[-1])
 
     def insert_dict(self, path: PathBase, key: str) -> PathBase:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert (
-            type(castpath.item.item) == dict
-        ), "Trying to insert into database item that is not a dict."
-        assert (
-            key not in castpath.item.item
-        ), "Key already in dict. Overwriting items not yet supported."
+        if not type(castpath.item.item) == dict:
+            raise RuntimeError(
+                "Trying to insert into database item that is not a dict."
+            )
+        if key in castpath.item.item:
+            raise RuntimeError(
+                "Key already in dict. Overwriting items not yet supported."
+            )
         newitem = DbItem(None, False)
         castpath.item.item[key] = newitem
         return Path(newitem)
@@ -145,67 +146,73 @@ class Database(DatabaseBase):
     def get_int(self, path: Path) -> int:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert self.is_int(path), "Trying to get int, but type does not match."
+        if not self.is_int(path):
+            raise RuntimeError("Trying to get int, but type does not match.")
         return castpath.item.item
 
     def get_float(self, path: Path) -> float:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert self.is_float(path), "Trying to get float, but type does not match."
+        if not self.is_float(path):
+            raise RuntimeError("Trying to get float, but type does not match.")
         return castpath.item.item
 
     def get_string(self, path: Path) -> str:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert self.is_string(path), "Trying to get string, but type does not match."
+        if not self.is_string(path):
+            raise RuntimeError("Trying to get string, but type does not match.")
         return castpath.item.item
 
     def get_bytes(self, path: Path) -> bytes:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert self.is_bytes(path), "Trying to get bytes, but type does not match."
+        if not self.is_bytes(path):
+            raise RuntimeError("Trying to get bytes, but type does not match.")
         return castpath.item.item
 
     def list_length(self, path: Path) -> int:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert self.is_list(path), "Trying to length of list, but type does not match."
+        if not self.is_list(path):
+            raise RuntimeError("Trying to length of list, but type does not match.")
         return len(castpath.item.item)
 
     def list_index(self, path: Path, index: int) -> Path:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert self.is_list(path), "Trying to index list, but type does not match."
-        assert index < len(castpath.item.item), "Trying to index list out of bounds."
+        if not self.is_list(path):
+            raise RuntimeError("Trying to index list, but type does not match.")
+        if not index < len(castpath.item.item):
+            raise RuntimeError("Trying to index list out of bounds.")
         return Path(castpath.item.item[index])
 
     def dict_has_key(self, path: Path, index: str) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert self.is_dict(
-            path
-        ), "Trying check if dict has key, but type does not match."
+        if not self.is_dict(path):
+            raise RuntimeError("Trying check if dict has key, but type does not match.")
         return index in castpath.item.item
 
     def dict_index(self, path: Path, index: str) -> Path:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        assert self.is_dict(path), "Trying to index dict, but type does not match."
-        assert self.dict_has_key(
-            path, index
-        ), "Trying to index dict, but key not in dict."
+        if not self.is_dict(path):
+            raise RuntimeError("Trying to index dict, but type does not match.")
+        if not self.dict_has_key(path, index):
+            raise RuntimeError("Trying to index dict, but key not in dict.")
         return Path(castpath.item.item[index])
 
     @staticmethod
     def _cast_path(path: PathBase) -> Path:
-        assert type(path) == Path, "Path must be Path typecorresponding to database."
+        if not type(path) == Path:
+            raise RuntimeError("Path must be Path typecorresponding to database.")
         return path
 
     @staticmethod
     def _assert_not_deleted(item: DbItem):
-        assert (
-            not item.deleted
-        ), "Part of path has been deleted, invalidating this path."
+        if item.deleted:
+            raise RuntimeError("Part of path has been deleted, invalidating this path.")
 
     @classmethod
     def _delete_item(cls, item: DbItem):

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pickle
 from abc import ABC, abstractmethod
+from random import Random
 from typing import Any, Generic, List, Optional, Tuple, Type, TypeVar
 
 from asyncinit import asyncinit
@@ -16,6 +17,8 @@ Evaluation = TypeVar("Evaluation")
 class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
     _database: Database
     _dbbranch: Path
+
+    _rng: Random
 
     # Types of individual and evaluation are stored as soon as they are available.
     # Used to type check the return values of user functions.
@@ -33,6 +36,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         self,
         database: Database,
         dbbranch: Path,
+        random: Random,
         population_size: int,
         offspring_size: int,
         initial_population: List[Individual],
@@ -40,6 +44,8 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
     ):
         self._database = database
         self._dbbranch = dbbranch
+
+        self._rng = random
 
         if not await self.load_checkpoint():
             assert type(population_size) == int
@@ -155,7 +161,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
             self._initial_population = None
 
             await self._init_checkpoints()
-            await self._save_generation()
+            await self._save_checkpoint()
 
         while self._safe_must_do_next_gen():
             # let user select parents
@@ -190,7 +196,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
             self._last_generation = survivors
             self._generation_index += 1
 
-            await self._save_generation()
+            await self._save_checkpoint()
 
     async def _init_checkpoints(self) -> None:
         """
@@ -202,6 +208,8 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         root = DictView(self._database, self._dbbranch)
         root.clear()
 
+        root.insert("random").make_none()
+
         root.insert("_individual_type").bytes = pickle.dumps(self._individual_type)
         root.insert("_evaluation_type").bytes = pickle.dumps(self._evaluation_type)
         root.insert("population_size").int = pickle.dumps(self._population_size)
@@ -212,14 +220,16 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
         self._database.commit_transaction()
 
-    async def _save_generation(self) -> None:
+    async def _save_checkpoint(self) -> None:
         """
-        Save(append) the last generation to the checkpoint database.
+        Saves current random object and append the last generation to the checkpoint database.
         """
 
         self._database.begin_transaction()
 
         root = DictView(self._database, self._dbbranch)
+
+        root["random"].bytes = pickle.dumps(self._rng.getstate())
 
         generation = root["generations"].list.append().list
         generation.clear()
@@ -238,6 +248,8 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
         try:
             root = DictView(self._database, self._dbbranch)
+
+            self._rng.setstate(pickle.loads(root["random"].bytes))
 
             self._individual_type = pickle.loads(root["_individual_type"].bytes)
             self._evaluation_type = pickle.loads(root["_evaluation_type"].bytes)

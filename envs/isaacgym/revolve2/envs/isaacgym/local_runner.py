@@ -60,6 +60,9 @@ class LocalRunner(Runner):
         def _create_envs(self) -> List[GymEnv]:
             gymenvs: List[self.GymEnv] = []
 
+            # TODO this is only temporary. When we switch to the new isaac sim it should be easily possible to
+            # let the user create static object, rendering the group plane redundant.
+            # But for now we keep it because it's easy for our first test release.
             plane_params = gymapi.PlaneParams()
             plane_params.normal = gymapi.Vec3(0, 0, 1)
             plane_params.distance = 0
@@ -71,20 +74,25 @@ class LocalRunner(Runner):
             for env_descr in self._batch.environments:
                 env = self._gym.create_env(
                     self._sim,
-                    gymapi.Vec3(-25.0, -25.0, 0.0),
+                    gymapi.Vec3(-25.0, -25.0, 0.0),  # TODO make these configurable
                     gymapi.Vec3(25.0, 25.0, 25.0),
                     1,
                 )
 
                 gymenv = self.GymEnv(env, [])
 
-                for actor_index, actor_descr in enumerate(env_descr.actors):
+                for actor_index, posed_actor in enumerate(env_descr.actors):
+                    # sadly isaac gym can only read robot descriptions from a file,
+                    # so we create a temporary file.
                     botfile = tempfile.NamedTemporaryFile(
                         mode="r+", delete=False, suffix=".urdf"
                     )
                     botfile.writelines(
                         physbot_to_urdf(
-                            actor_descr, f"robot_{actor_index}", Vector3(), Quaternion()
+                            posed_actor.actor,
+                            f"robot_{actor_index}",
+                            Vector3(),
+                            Quaternion(),
                         )
                     )
                     botfile.close()
@@ -97,12 +105,22 @@ class LocalRunner(Runner):
                         raise RuntimeError()
 
                     pose = gymapi.Transform()
-                    pose.p = gymapi.Vec3(0, 0, 0.5)
-                    pose.r = gymapi.Quat(0, 0, 0.0, 0.707107)
+                    pose.p = gymapi.Vec3(
+                        posed_actor.position.x,
+                        posed_actor.position.y,
+                        posed_actor.position.z,
+                    )
+                    pose.r = gymapi.Quat(
+                        posed_actor.orientation.x,
+                        posed_actor.orientation.y,
+                        posed_actor.orientation.z,
+                        posed_actor.orientation.w,
+                    )
                     actor_handle = self._gym.create_actor(
                         env, actor_asset, pose, f"robot_{actor_index}", 0, 0
                     )
 
+                    # TODO make all this configurable.
                     props = self._gym.get_actor_dof_properties(env, actor_handle)
                     props["driveMode"].fill(gymapi.DOF_MODE_POS)
                     props["stiffness"].fill(1000.0)
@@ -116,6 +134,7 @@ class LocalRunner(Runner):
             return gymenvs
 
         def _create_viewer(self) -> gymapi.Viewer:
+            # TODO provide some sensible default and make configurable
             viewer = self._gym.create_viewer(self._sim, gymapi.CameraProperties())
             if viewer is None:
                 raise RuntimeError()
@@ -126,12 +145,12 @@ class LocalRunner(Runner):
             return viewer
 
         def run(self) -> List[Tuple[float, State]]:
-            states: List[Tuple[float, State]] = []
+            states: List[Tuple[float, State]] = []  # (time, state)
 
             while (
                 time := self._gym.get_sim_time(self._sim)
             ) < self._batch.simulation_time:
-                if time % 0.2:  # TODO timing as variable
+                if time % 0.2:  # TODO make control timing configurable
                     control = ActorControl()
                     self._batch.control(0.2, control)
 
@@ -142,7 +161,7 @@ class LocalRunner(Runner):
                         if len(targets) != len(
                             self._batch.environments[env_index]
                             .actors[actor_index]
-                            .joints
+                            .actor.joints
                         ):
                             raise RuntimeError("Need to set a target for every dof")
                         self._gym.set_actor_dof_position_targets(
@@ -216,7 +235,7 @@ class LocalRunner(Runner):
 
     async def run_batch(self, batch: Batch) -> List[Tuple[float, State]]:
         simulator = self.Simulator(self._gym, batch, self._sim_params)
-        states = simulator.run()
+        states = simulator.run()  # TODO this is not async
         simulator.cleanup()
 
         return states

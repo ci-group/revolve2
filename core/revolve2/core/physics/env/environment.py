@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from ..actor import Actor
+from .posed_actor import PosedActor
 
 
 @dataclass
 class Environment:
-    actors: List[Actor] = field(default_factory=list, init=False)
+    actors: List[PosedActor] = field(default_factory=list, init=False)

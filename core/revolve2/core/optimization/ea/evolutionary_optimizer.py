@@ -258,7 +258,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
             generations = root["generations"].list
             individuals = [
-                pickle.loads(individual.bytes) for individual in generations[-1]
+                pickle.loads(individual.bytes) for individual in generations[-1].list
             ]
             if not all(
                 [

@@ -208,12 +208,12 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         root = DictView(self.__database, self.__dbbranch)
         root.clear()
 
-        root.insert("random").make_none()
+        root.insert(".rng").make_none()
 
-        root.insert("__individual_type").bytes = pickle.dumps(self.__individual_type)
-        root.insert("__evaluation_type").bytes = pickle.dumps(self.__evaluation_type)
-        root.insert("population_size").int = pickle.dumps(self.__population_size)
-        root.insert("offspring_size").int = pickle.dumps(self.__offspring_size)
+        root.insert(".individual_type").bytes = pickle.dumps(self.__individual_type)
+        root.insert(".evaluation_type").bytes = pickle.dumps(self.__evaluation_type)
+        root.insert("population_size").int = self.__population_size
+        root.insert("offspring_size").int = self.__offspring_size
 
         generations = root.insert("generations").list
         generations.clear()
@@ -229,7 +229,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
         root = DictView(self.__database, self.__dbbranch)
 
-        root["random"].bytes = pickle.dumps(self._rng.getstate())
+        root[".rng"].bytes = pickle.dumps(self._rng.getstate())
 
         generation = root["generations"].list.append().list
         generation.clear()
@@ -249,10 +249,10 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
         try:
             root = DictView(self.__database, self.__dbbranch)
 
-            self._rng.setstate(pickle.loads(root["random"].bytes))
+            self._rng.setstate(pickle.loads(root[".rng"].bytes))
 
-            self.__individual_type = pickle.loads(root["__individual_type"].bytes)
-            self.__evaluation_type = pickle.loads(root["__evaluation_type"].bytes)
+            self.__individual_type = pickle.loads(root[".individual_type"].bytes)
+            self.__evaluation_type = pickle.loads(root[".evaluation_type"].bytes)
             self.__population_size = root["population_size"].int
             self.__offspring_size = root["offspring_size"].int
 
@@ -269,7 +269,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
                 return False
             self.__last_generation = individuals
             self.__generation_index = len(generations) - 1  # first generation is 0
-        except (RuntimeError, pickle.PickleError):
+        except (IndexError, pickle.PickleError):
             return False
 
         self.__initial_population = None

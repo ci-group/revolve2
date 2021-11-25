@@ -1,0 +1,2 @@
+from .body_genotype_v1 import BodyGenotypeV1
+from .brain_genotype_cpg_v1 import BrainGenotypeCpgV1

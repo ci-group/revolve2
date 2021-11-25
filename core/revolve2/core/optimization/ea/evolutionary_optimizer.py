@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import pickle
 from abc import ABC, abstractmethod
 from random import Random
@@ -47,7 +48,15 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
         self._rng = random
 
-        if not await self.load_checkpoint():
+        logging.info("Attempting to load checkpoint..")
+        if await self.load_checkpoint():
+            logging.info(
+                f"Checkpoint found. Last complete generation was {self.__generation_index}."
+            )
+        else:
+            logging.info(
+                f"No checkpoint has been made yet or if it has, database incompatible or corrupted. Starting with generation 0."
+            )
             assert type(population_size) == int
             self.__population_size = population_size
 

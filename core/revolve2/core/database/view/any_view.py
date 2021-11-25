@@ -28,7 +28,7 @@ class AnyView:
     def float(self) -> float:
         return self._database.get_float(self._path)
 
-    @int.setter
+    @float.setter
     def float(self, value: float) -> None:
         self._database.set_float(self._path, value)
 
@@ -36,7 +36,7 @@ class AnyView:
     def string(self) -> str:
         return self._database.get_string(self._path)
 
-    @int.setter
+    @string.setter
     def string(self, value: str) -> None:
         self._database.set_string(self._path, value)
 
@@ -44,7 +44,7 @@ class AnyView:
     def bytes(self) -> bytes:
         return self._database.get_bytes(self._path)
 
-    @int.setter
+    @bytes.setter
     def bytes(self, value: bytes) -> None:
         self._database.set_bytes(self._path, value)
 

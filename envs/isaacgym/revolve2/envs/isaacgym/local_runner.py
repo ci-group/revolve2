@@ -1,7 +1,7 @@
 import os
 import tempfile
 from dataclasses import dataclass
-from typing import List, Mapping, Tuple
+from typing import List, Optional, Tuple
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
@@ -36,27 +36,20 @@ class LocalRunner(Runner):
             GymEnv
         ]  # environments, in same order as provided by batch description
 
-        def __init__(self, gym: gymapi.Gym, batch: Batch):
+        def __init__(
+            self,
+            gym: gymapi.Gym,
+            batch: Batch,
+            sim_params: gymapi.SimParams,
+        ):
             self._gym = gym
             self._batch = batch
 
-            self._sim = self._create_sim()
+            self._sim = self._create_sim(sim_params)
             self._gymenvs = self._create_envs()
             self._viewer = self._create_viewer()
 
-        def _create_sim(self) -> gymapi.Sim:
-            sim_params = gymapi.SimParams()
-            sim_params.dt = 0.02
-            sim_params.substeps = 2
-            sim_params.up_axis = gymapi.UP_AXIS_Z
-            sim_params.gravity = gymapi.Vec3(0.0, 0.0, -9.81)
-
-            sim_params.physx.solver_type = 1
-            sim_params.physx.num_position_iterations = 4
-            sim_params.physx.num_velocity_iterations = 1
-            sim_params.physx.num_threads = 1
-            sim_params.physx.use_gpu = False
-
+        def _create_sim(self, sim_params: gymapi.SimParams) -> gymapi.Sim:
             sim = self._gym.create_sim(type=gymapi.SIM_PHYSX, params=sim_params)
 
             if sim is None:
@@ -199,12 +192,30 @@ class LocalRunner(Runner):
             return state
 
     _gym = gymapi.Gym
+    _sim_params: gymapi.SimParams
 
-    def __init__(self):
+    def __init__(self, sim_params: gymapi.SimParams):
         self._gym = gymapi.acquire_gym()
+        self._sim_params = sim_params
+
+    @staticmethod
+    def SimParams() -> gymapi.SimParams:
+        sim_params = gymapi.SimParams()
+        sim_params.dt = 0.02
+        sim_params.substeps = 2
+        sim_params.up_axis = gymapi.UP_AXIS_Z
+        sim_params.gravity = gymapi.Vec3(0.0, 0.0, -9.81)
+
+        sim_params.physx.solver_type = 1
+        sim_params.physx.num_position_iterations = 4
+        sim_params.physx.num_velocity_iterations = 1
+        sim_params.physx.num_threads = 1
+        sim_params.physx.use_gpu = False
+
+        return sim_params
 
     async def run_batch(self, batch: Batch) -> List[Tuple[float, State]]:
-        simulator = self.Simulator(self._gym, batch)
+        simulator = self.Simulator(self._gym, batch, self._sim_params)
         states = simulator.run()
         simulator.cleanup()
 

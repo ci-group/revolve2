@@ -168,7 +168,6 @@ class _ActorBuilder:
 
         for (name_suffix, child_index, angle) in [
             ("front", Brick.FRONT, 0.0),
-            ("back", Brick.BACK, math.pi),
             ("left", Brick.LEFT, math.pi / 2.0),
             ("right", Brick.RIGHT, math.pi / 2.0 * 3),
         ]:

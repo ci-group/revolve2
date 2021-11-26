@@ -7,8 +7,7 @@ from .serialized import Serialized
 class Brick(Module):
     FRONT = 0
     RIGHT = 1
-    BACK = 2
-    LEFT = 3
+    LEFT = 2
 
     def __init__(self, rotation: float):
         super().__init__(Module.Type.BRICK, 4, rotation)
@@ -25,8 +24,6 @@ class Brick(Module):
 
         if self.front is not None:
             serialized["front"] = self.front.serialize()
-        if self.back is not None:
-            serialized["back"] = self.back.serialize()
         if self.left is not None:
             serialized["left"] = self.left.serialize()
         if self.right is not None:
@@ -49,14 +46,6 @@ class Brick(Module):
     @right.setter
     def right(self, module: Module) -> None:
         self.children[self.RIGHT] = module
-
-    @property
-    def back(self) -> Optional[Module]:
-        return self.children[self.BACK]
-
-    @back.setter
-    def back(self, module: Module) -> None:
-        self.children[self.BACK] = module
 
     @property
     def left(self) -> Optional[Module]:

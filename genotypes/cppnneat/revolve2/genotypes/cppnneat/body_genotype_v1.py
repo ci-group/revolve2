@@ -69,7 +69,6 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"]):
             elif module.module_reference.type == Module.Type.BRICK:
                 children.append((Brick.FRONT, 0))
                 children.append((Brick.LEFT, 1))
-                children.append((Brick.BACK, 2))
                 children.append((Brick.RIGHT, 3))
             elif module.module_reference.type == Module.Type.ACTIVE_HINGE:
                 children.append((ActiveHinge.ATTACHMENT_INDEX, 0))

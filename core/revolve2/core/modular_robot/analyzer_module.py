@@ -74,8 +74,6 @@ class AnalyzerModule:
                     rotation = Quaternion.from_eulers((0.0, 0.0, 0.0))
                 elif child_index == Brick.LEFT:
                     rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 1))
-                elif child_index == Brick.BACK:
-                    rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 2))
                 elif child_index == Brick.RIGHT:
                     rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 3))
                 else:

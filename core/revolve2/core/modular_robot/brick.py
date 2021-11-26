@@ -2,7 +2,6 @@ from typing import Optional
 
 from .module import Module
 from .serialized import Serialized
-from .slot import Slot
 
 
 class Brick(Module):
@@ -11,8 +10,8 @@ class Brick(Module):
     BACK = 2
     LEFT = 3
 
-    def __init__(self):
-        super().__init__(Module.Type.BRICK, 4)
+    def __init__(self, rotation: float):
+        super().__init__(Module.Type.BRICK, 4, rotation)
 
     def serialize(self) -> Serialized:
         """
@@ -36,33 +35,33 @@ class Brick(Module):
         return serialized
 
     @property
-    def front(self) -> Optional[Slot]:
-        return self.get_child(self.FRONT)
+    def front(self) -> Optional[Module]:
+        return self.children[self.FRONT]
 
     @front.setter
-    def front(self, slot: Slot) -> None:
-        self.set_child(self.FRONT, slot)
+    def front(self, module: Module) -> None:
+        self.children[self.FRONT] = module
 
     @property
-    def right(self) -> Optional[Slot]:
-        return self.get_child(self.RIGHT)
+    def right(self) -> Optional[Module]:
+        return self.children[self.RIGHT]
 
     @right.setter
-    def right(self, slot: Slot) -> None:
-        self.set_child(self.RIGHT, slot)
+    def right(self, module: Module) -> None:
+        self.children[self.RIGHT] = module
 
     @property
-    def back(self) -> Optional[Slot]:
-        return self.get_child(self.BACK)
+    def back(self) -> Optional[Module]:
+        return self.children[self.BACK]
 
     @back.setter
-    def back(self, slot: Slot) -> None:
-        self.set_child(self.BACK, slot)
+    def back(self, module: Module) -> None:
+        self.children[self.BACK] = module
 
     @property
-    def left(self) -> Optional[Slot]:
-        return self.get_child(self.LEFT)
+    def left(self) -> Optional[Module]:
+        return self.children[self.LEFT]
 
     @left.setter
-    def left(self, slot: Slot) -> None:
-        self.set_child(self.LEFT, slot)
+    def left(self, module: Module) -> None:
+        self.children[self.LEFT] = module

@@ -2,14 +2,13 @@ from typing import Optional
 
 from .module import Module
 from .serialized import Serialized
-from .slot import Slot
 
 
 class ActiveHinge(Module):
     ATTACHMENT_INDEX = 0
 
-    def __init__(self):
-        super().__init__(Module.Type.ACTIVE_HINGE, 1)
+    def __init__(self, rotation: float):
+        super().__init__(Module.Type.ACTIVE_HINGE, 1, rotation)
 
     def serialize(self) -> Serialized:
         """
@@ -27,9 +26,9 @@ class ActiveHinge(Module):
         return serialized
 
     @property
-    def attachment(self) -> Optional[Slot]:
-        return self.get_child(self.ATTACHMENT_INDEX)
+    def attachment(self) -> Optional[Module]:
+        return self.children[self.ATTACHMENT_INDEX]
 
     @attachment.setter
-    def attachment(self, slot: Slot) -> None:
-        self.set_child(self.ATTACHMENT_INDEX, slot)
+    def attachment(self, module: Module) -> None:
+        self.children[self.ATTACHMENT_INDEX] = module

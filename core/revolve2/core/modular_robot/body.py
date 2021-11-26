@@ -6,7 +6,7 @@ class Body:
     core: Core
 
     def __init__(self):
-        self.core = Core()
+        self.core = Core(0.0)
 
     def serialize(self) -> Serialized:
         """

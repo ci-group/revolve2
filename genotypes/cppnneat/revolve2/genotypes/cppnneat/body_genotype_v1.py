@@ -7,7 +7,7 @@ import multineat
 from revolve2.core.modular_robot import ActiveHinge
 from revolve2.core.modular_robot import Body
 from revolve2.core.modular_robot import Body as ModularRobotBody
-from revolve2.core.modular_robot import Brick, Core, Module, Slot
+from revolve2.core.modular_robot import Brick, Core, Module
 from revolve2.core.optimization.ea.modular_robot import BodyGenotype
 
 from .bodybrain_base import BodybrainBase
@@ -50,11 +50,9 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"]):
         to_explore: Queue[self.Module] = Queue()
         grid: Set[Tuple(int, int, int)] = set()
 
-        core_module = Core()
+        body = Body()
 
-        to_explore.put(
-            self._Module((0, 0, 0), (0, -1, 0), (0, 0, 1), 0, core_module)
-        )  # forward is always slot 1
+        to_explore.put(self._Module((0, 0, 0), (0, -1, 0), (0, 0, 1), 0, body.core))
         grid.add((0, 0, 0))
         part_count = 1
 
@@ -85,8 +83,6 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"]):
                         to_explore.put(child)
                         part_count += 1
 
-        body = Body()
-        body.core = core_module
         return body
 
     @staticmethod
@@ -140,10 +136,8 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"]):
             return None
         up = cls._rotate(module.up, forward, orientation)
 
-        child = child_type()
-        module.module_reference.set_child(
-            child_index, Slot(child, orientation * (math.pi / 2.0))
-        )
+        child = child_type(orientation * (math.pi / 2.0))
+        module.module_reference.children[child_index] = child
 
         return cls._Module(
             position,

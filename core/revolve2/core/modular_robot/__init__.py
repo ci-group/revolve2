@@ -8,4 +8,3 @@ from .core import Core
 from .modular_robot import ModularRobot
 from .module import Module
 from .serialized import Serialized
-from .slot import Slot

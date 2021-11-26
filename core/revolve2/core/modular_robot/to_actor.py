@@ -81,7 +81,7 @@ class _ActorBuilder:
     ) -> None:
         BOUNDING_BOX = Vector3([0.089, 0.089, 0.0603])  # meter
         MASS = 0.250  # kg
-        SLOT_OFFSET = 0.089 / 2.0  # meter
+        CHILD_OFFSET = 0.089 / 2.0  # meter
 
         module = cast(Core, analyzer_module.module)
 
@@ -113,19 +113,19 @@ class _ActorBuilder:
             ("left", Core.LEFT, math.pi / 2.0),
             ("right", Core.RIGHT, math.pi / 2.0 * 3),
         ]:
-            slot = module.get_child(child_index)
-            if slot is not None:
+            child = module.children[child_index]
+            if child is not None:
                 rotation = (
                     orientation
                     * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Quaternion.from_eulers([slot.rotation, 0, 0])
+                    * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
 
                 self._make_module(
-                    analyzer_module.get_child(child_index),
+                    analyzer_module.children[child_index],
                     body,
                     f"{name_prefix}_{name_suffix}",
-                    position + rotation * Vector3([SLOT_OFFSET, 0.0, 0.0]),
+                    position + rotation * Vector3([CHILD_OFFSET, 0.0, 0.0]),
                     rotation,
                 )
 
@@ -139,7 +139,7 @@ class _ActorBuilder:
     ) -> None:
         BOUNDING_BOX = Vector3([0.06288625, 0.06288625, 0.0603])  # meter
         MASS = 0.030  # kg
-        SLOT_OFFSET = 0.06288625 / 2.0  # meter
+        CHILD_OFFSET = 0.06288625 / 2.0  # meter
 
         module = cast(Brick, analyzer_module.module)
 
@@ -172,19 +172,19 @@ class _ActorBuilder:
             ("left", Brick.LEFT, math.pi / 2.0),
             ("right", Brick.RIGHT, math.pi / 2.0 * 3),
         ]:
-            slot = module.get_child(child_index)
-            if slot is not None:
+            child = module.children[child_index]
+            if child is not None:
                 rotation = (
                     orientation
                     * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Quaternion.from_eulers([slot.rotation, 0, 0])
+                    * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
 
                 self._make_module(
-                    analyzer_module.get_child(child_index),
+                    analyzer_module.children[child_index],
                     body,
                     f"{name_prefix}_{name_suffix}",
-                    position + rotation * Vector3([SLOT_OFFSET, 0.0, 0.0]),
+                    position + rotation * Vector3([CHILD_OFFSET, 0.0, 0.0]),
                     rotation,
                 )
 
@@ -292,12 +292,12 @@ class _ActorBuilder:
             )
         )
 
-        slot = module.get_child(ActiveHinge.ATTACHMENT_INDEX)
-        if slot is not None:
-            rotation = Quaternion.from_eulers([slot.rotation, 0.0, 0.0])
+        child = module.children[ActiveHinge.ATTACHMENT_INDEX]
+        if child is not None:
+            rotation = Quaternion.from_eulers([child.rotation, 0.0, 0.0])
 
             self._make_module(
-                analyzer_module.get_child(ActiveHinge.ATTACHMENT_INDEX),
+                analyzer_module.children[ActiveHinge.ATTACHMENT_INDEX],
                 next_body,
                 f"{name_prefix}_attachment",
                 rotation * Vector3([ATTACHMENT_OFFSET, 0.0, 0.0]),

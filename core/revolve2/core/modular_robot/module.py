@@ -5,11 +5,6 @@ from typing import TYPE_CHECKING, List, Optional
 
 from .serialized import Serialized
 
-# solve cyclic dependency by only importing when type type checking
-# and forward declaring
-if TYPE_CHECKING:
-    from .slot import Slot
-
 
 class Module:
     class Type(Enum):
@@ -17,13 +12,15 @@ class Module:
         BRICK = "brick"
         ACTIVE_HINGE = "active_hinge"
 
-    type: Type
-    _children: List[Optional["Slot"]]
+    _type: Type
+    _children: List[Optional[Module]]
+    _rotation: float
 
-    def __init__(self, type: Type, num_children: int):
-        self.type = type
+    def __init__(self, type: Type, num_children: int, rotation: float):
+        self._type = type
         self._id = None
         self._children = [None] * num_children
+        self._rotation = rotation
 
     def serialize(self) -> Serialized:
         """
@@ -35,11 +32,13 @@ class Module:
         return {"type": self.type.value}
 
     @property
-    def num_children(self) -> int:
-        return len(self._children)
+    def type(self) -> Type:
+        return self._type
 
-    def get_child(self, index: int) -> Optional["Slot"]:
-        return self._children[index]
+    @property
+    def children(self) -> List[Optional[Module]]:
+        return self._children
 
-    def set_child(self, index: int, slot: "Slot") -> None:
-        self._children[index] = slot
+    @property
+    def rotation(self) -> float:
+        return self._rotation

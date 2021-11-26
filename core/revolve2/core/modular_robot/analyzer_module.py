@@ -28,7 +28,7 @@ class AnalyzerModule:
     ):
         self._module = module
         self._id = id
-        self._children = [None] * module.num_children
+        self._children = [None] * len(module.children)
 
         assert (parent is None and parent_child_index is None) or (
             parent is not None and parent_child_index is not None
@@ -36,28 +36,26 @@ class AnalyzerModule:
         self._parent = parent
         self._parent_child_index = parent_child_index
 
-    def get_child(self, index: int) -> Optional[AnalyzerModule]:
-        return self._children[index]
-
-    def set_child(self, index: int, module: AnalyzerModule) -> None:
-        self._children[index] = module
+    @property
+    def children(self) -> List[Optional[AnalyzerModule]]:
+        return self._children
 
     def grid_position(self) -> Vector3:
         """
         Calculate the position of this module in a 3d grid with the core as center.
         The distance between all modules is assumed to be one grid cell.
-        All slot angles must be multiples of 90 degrees.
+        All module angles must be multiples of 90 degrees.
         """
         position = Vector3()
 
         parent = self._parent
         child_index = self._parent_child_index
         while parent is not None and child_index is not None:
-            slot = parent.module.get_child(child_index)
-            assert slot is not None
-            assert np.isclose(slot.rotation % (math.pi / 2.0), 0.0)
+            child = parent.module.children[child_index]
+            assert child is not None
+            assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
 
-            position = Quaternion.from_eulers((slot.rotation, 0.0, 0.0)) * position
+            position = Quaternion.from_eulers((child.rotation, 0.0, 0.0)) * position
             position += Vector3([1, 0, 0])
             rotation: Quaternion
             if parent.type == Module.Type.CORE:
@@ -96,10 +94,6 @@ class AnalyzerModule:
             parent = parent._parent
 
         return position
-
-    @property
-    def num_children(self) -> int:
-        return len(self._children)
 
     @property
     def parent(self) -> Optional[AnalyzerModule]:

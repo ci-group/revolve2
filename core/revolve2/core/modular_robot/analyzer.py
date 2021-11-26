@@ -26,13 +26,12 @@ class Analyzer:
         if module.type == Module.Type.ACTIVE_HINGE:
             self._active_hinges.append(analyzer_module)
 
-        for child_index in range(module.num_children):
-            child = module.get_child(child_index)
+        for child_index, child in enumerate(module.children):
             if child is not None:
                 (analyzer_child, next_id) = self._init_tree_node(
-                    child.module, next_id, analyzer_module, child_index
+                    child, next_id, analyzer_module, child_index
                 )
-                analyzer_module.set_child(child_index, analyzer_child)
+                analyzer_module.children[child_index] = analyzer_child
 
         return (analyzer_module, next_id)
 
@@ -57,10 +56,7 @@ class Analyzer:
             for (open_node, came_from) in open_nodes:
                 neighbours = [
                     mod
-                    for mod in [
-                        open_node.get_child(i) for i in range(open_node.num_children)
-                    ]
-                    + [open_node.parent]
+                    for mod in open_node.children + [open_node.parent]
                     if mod is not None
                     and (came_from is None or mod.id is not came_from.id)
                 ]

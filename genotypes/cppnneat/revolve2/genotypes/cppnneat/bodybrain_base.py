@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import Generic, TypeVar
 
 import multineat
-from revolve2.core.modular_robot.body import Body
 
 Child = TypeVar("Child")
 

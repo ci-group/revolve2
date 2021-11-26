@@ -17,13 +17,9 @@ def multiple_unique(
     :param selection_function:
     """
     if len(population) < selection_size:
-        print(
-            "selection problem: population "
-            + str(len(population))
-            + " - selection size "
-            + str(selection_size)
-        )
-        assert len(population) >= selection_size
+        assert (
+            len(population) >= selection_size
+        ), f"Population size({len(population)}) cannot be smaller than selection size({selection_size})"
 
     selected_individuals = []
     for _ in range(selection_size):

@@ -2,17 +2,15 @@ from typing import Optional
 
 from .module import Module
 from .serialized import Serialized
-from .slot import Slot
 
 
 class Brick(Module):
     FRONT = 0
     RIGHT = 1
-    BACK = 2
-    LEFT = 3
+    LEFT = 2
 
-    def __init__(self):
-        super().__init__(Module.Type.BRICK, 4)
+    def __init__(self, rotation: float):
+        super().__init__(Module.Type.BRICK, 4, rotation)
 
     def serialize(self) -> Serialized:
         """
@@ -26,8 +24,6 @@ class Brick(Module):
 
         if self.front is not None:
             serialized["front"] = self.front.serialize()
-        if self.back is not None:
-            serialized["back"] = self.back.serialize()
         if self.left is not None:
             serialized["left"] = self.left.serialize()
         if self.right is not None:
@@ -36,33 +32,25 @@ class Brick(Module):
         return serialized
 
     @property
-    def front(self) -> Optional[Slot]:
-        return self.get_child(self.FRONT)
+    def front(self) -> Optional[Module]:
+        return self.children[self.FRONT]
 
     @front.setter
-    def front(self, slot: Slot) -> None:
-        self.set_child(self.FRONT, slot)
+    def front(self, module: Module) -> None:
+        self.children[self.FRONT] = module
 
     @property
-    def right(self) -> Optional[Slot]:
-        return self.get_child(self.RIGHT)
+    def right(self) -> Optional[Module]:
+        return self.children[self.RIGHT]
 
     @right.setter
-    def right(self, slot: Slot) -> None:
-        self.set_child(self.RIGHT, slot)
+    def right(self, module: Module) -> None:
+        self.children[self.RIGHT] = module
 
     @property
-    def back(self) -> Optional[Slot]:
-        return self.get_child(self.BACK)
-
-    @back.setter
-    def back(self, slot: Slot) -> None:
-        self.set_child(self.BACK, slot)
-
-    @property
-    def left(self) -> Optional[Slot]:
-        return self.get_child(self.LEFT)
+    def left(self) -> Optional[Module]:
+        return self.children[self.LEFT]
 
     @left.setter
-    def left(self, slot: Slot) -> None:
-        self.set_child(self.LEFT, slot)
+    def left(self, module: Module) -> None:
+        self.children[self.LEFT] = module

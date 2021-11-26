@@ -28,12 +28,12 @@ class Database(DatabaseBase):
     def begin_transaction(self):
         logging.warning(
             "Transaction not implemented for files database. Continuing without transaction.."
-        )
+        )  # TODO
 
     def commit_transaction(self):
         logging.warning(
             "Transaction not implemented for files database. Commit transaction ignored."
-        )
+        )  # TODO
 
     def set_none(self, path: PathBase) -> None:
         castpath = self._cast_path(path)

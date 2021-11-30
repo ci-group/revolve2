@@ -14,6 +14,8 @@ setup(
         "rootpath>=0.1.1",
         "matplotlib>=3.4.3",
         "scipy>=1.7.1",
+        "pyrr>=0.10.3",
+        "asyncinit>=0.2.4",
     ],
     zip_safe=False,
 )

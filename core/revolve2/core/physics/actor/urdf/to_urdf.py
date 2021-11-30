@@ -75,7 +75,7 @@ def _make_node(
         },
     )
     xml.SubElement(inertial, "mass", {"value": "{:e}".format(node.mass())})
-    inertia_el = xml.SubElement(
+    xml.SubElement(
         inertial,
         "inertia",
         {
@@ -132,11 +132,18 @@ def _make_node(
             xml.SubElement(
                 el,
                 "limit",
-                {
-                    "lower": "-7.853982e-01",
-                    "upper": "7.853982e-01",
-                    "effort": "1.765800e-01",
-                    "velocity": "5.235988e+00",
+                {  # TODO move this to Actor as parameters
+                    # 60 degrees to each side
+                    "lower": "-1.047197551",
+                    "upper": "1.047197551",
+                    # motor specs: 9.4 kgfcm at 4.8V or 11 kgfcm at 6.0V
+                    # about 9.6667 kgfcm at 5.0V, our operating voltage
+                    # 9.6667 * 9.807 / 100
+                    "effort": "0.948013269",
+                    # motor specs: 0.17 s/60deg at 4.8V or 0.14 s/60deg at 6.0V
+                    # about 0.1652 s/60deg at 5.0V, our operating voltage
+                    # 1 / 0.1652 * 60 / 360 * 2pi
+                    "velocity": "6.338968228",
                 },
             )
             elements.append(el)

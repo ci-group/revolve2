@@ -30,7 +30,7 @@ class LocalRunner(Runner):
         _batch: Batch
 
         _sim: gymapi.Sim
-        _viewer: gymapi.Viewer
+        _viewer: Optional[gymapi.Viewer]
         _simulation_time: int
         _gymenvs: List[
             GymEnv
@@ -41,13 +41,18 @@ class LocalRunner(Runner):
             gym: gymapi.Gym,
             batch: Batch,
             sim_params: gymapi.SimParams,
+            headless: bool,
         ):
             self._gym = gym
             self._batch = batch
 
             self._sim = self._create_sim(sim_params)
             self._gymenvs = self._create_envs()
-            self._viewer = self._create_viewer()
+
+            if headless:
+                self._viewer = None
+            else:
+                self._viewer = self._create_viewer()
 
         def _create_sim(self, sim_params: gymapi.SimParams) -> gymapi.Sim:
             sim = self._gym.create_sim(type=gymapi.SIM_PHYSX, params=sim_params)
@@ -173,14 +178,17 @@ class LocalRunner(Runner):
                 self._gym.simulate(self._sim)
                 self._gym.fetch_results(self._sim, True)
                 self._gym.step_graphics(self._sim)
-                self._gym.draw_viewer(self._viewer, self._sim, False)
+
+                if self._viewer is not None:
+                    self._gym.draw_viewer(self._viewer, self._sim, False)
 
                 states.append((time, self._get_state()))
 
             return states
 
         def cleanup(self) -> None:
-            self._gym.destroy_viewer(self._viewer)
+            if self._viewer is not None:
+                self._gym.destroy_viewer(self._viewer)
             self._gym.destroy_sim(self._sim)
 
         def _get_state(self) -> State:
@@ -213,9 +221,10 @@ class LocalRunner(Runner):
     _gym = gymapi.Gym
     _sim_params: gymapi.SimParams
 
-    def __init__(self, sim_params: gymapi.SimParams):
+    def __init__(self, sim_params: gymapi.SimParams, headless: bool = False):
         self._gym = gymapi.acquire_gym()
         self._sim_params = sim_params
+        self._headless = headless
 
     @staticmethod
     def SimParams() -> gymapi.SimParams:
@@ -234,7 +243,7 @@ class LocalRunner(Runner):
         return sim_params
 
     async def run_batch(self, batch: Batch) -> List[Tuple[float, State]]:
-        simulator = self.Simulator(self._gym, batch, self._sim_params)
+        simulator = self.Simulator(self._gym, batch, self._sim_params, self._headless)
         states = simulator.run()  # TODO this is not async
         simulator.cleanup()
 

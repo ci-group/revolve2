@@ -198,7 +198,7 @@ class EvolutionaryOptimizer(ABC, Generic[Individual, Evaluation]):
 
             # let user select survivors between old and new individuals
             survivors = self._safe_select_survivors(
-                evaluated_individuals, self.__last_generation, self.__population_size
+                self.__last_generation, evaluated_individuals, self.__population_size
             )
 
             # set survivors as the next generation

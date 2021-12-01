@@ -1,7 +1,6 @@
 from typing import List
 
 import numpy as np
-from scipy.integrate import solve_ivp
 
 from ..actor_controller import ActorController
 
@@ -30,12 +29,17 @@ class Cpg(ActorController):
         self._state = initial_state
 
     def step(self, dt: float) -> None:
-        self._state = solve_ivp(
-            lambda _, state: np.matmul(self._weight_matrix, state),
-            (0.0, dt),
-            self._state,
-            method="RK45",
-        ).y[:, -1]
+        self._state = self._rk45(self._state, self._weight_matrix, dt)
+
+    @staticmethod
+    def _rk45(state, A, dt):
+        # TODO The scipy implementation of this function is very slow for some reason.
+        # investigate the performance and accuracy differences
+        A1 = np.matmul(A, state)
+        A2 = np.matmul(A, (state + dt / 2 * A1))
+        A3 = np.matmul(A, (state + dt / 2 * A2))
+        A4 = np.matmul(A, (state + dt * A3))
+        return state + dt / 6 * (A1 + 2 * (A2 + A3) + A4)
 
     def get_dof_targets(self) -> List[float]:
         return list(self._state[0 : self._num_output_neurons])

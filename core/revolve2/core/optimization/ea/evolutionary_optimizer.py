@@ -277,7 +277,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
 
         individuals = root["individuals"].list
         for individual in new_individuals:
-            individuals.append().bytes = pickle.dumps(individual)
+            individual.to_database(individuals.append())
 
         self.__database.commit_transaction()
 
@@ -303,10 +303,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
             individual_ids = [individual.int for individual in generations[-1].list]
             individuals_list = root["individuals"].list
             individuals = [
-                pickle.loads(individuals_list[id].bytes) for id in individual_ids
+                Individual[Genotype, Evaluation].from_database(individuals_list[id])
+                for id in individual_ids
             ]
-            if not all([type(individual) == Individual for individual in individuals]):
-                return False
             self.__last_generation = individuals
             self.__next_id = len(individuals_list)
             self.__generation_index = len(generations) - 1  # first generation is 0

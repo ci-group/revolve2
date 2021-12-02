@@ -252,6 +252,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
         generations = root.insert("generations").list
         generations.clear()
 
+        individuals = root.insert("individuals").list
+        individuals.clear()
+
         self.__database.commit_transaction()
 
     async def _save_checkpoint(
@@ -270,7 +273,11 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
         generation = root["generations"].list.append().list
         generation.clear()
         for individual in self.__last_generation:
-            generation.append().bytes = pickle.dumps(individual)
+            generation.append().int = individual.id
+
+        individuals = root["individuals"].list
+        for individual in new_individuals:
+            individuals.append().bytes = pickle.dumps(individual)
 
         self.__database.commit_transaction()
 
@@ -293,12 +300,15 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
             self.__offspring_size = root["offspring_size"].int
 
             generations = root["generations"].list
+            individual_ids = [individual.int for individual in generations[-1].list]
+            individuals_list = root["individuals"].list
             individuals = [
-                pickle.loads(individual.bytes) for individual in generations[-1].list
+                pickle.loads(individuals_list[id].bytes) for id in individual_ids
             ]
             if not all([type(individual) == Individual for individual in individuals]):
                 return False
             self.__last_generation = individuals
+            self.__next_id = len(individuals_list)
             self.__generation_index = len(generations) - 1  # first generation is 0
         except (IndexError, pickle.PickleError):
             return False

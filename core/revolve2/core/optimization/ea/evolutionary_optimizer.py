@@ -8,12 +8,13 @@ from typing import Any, Generic, List, Optional, Type, TypeVar
 
 from asyncinit import asyncinit
 from revolve2.core.database import Database, Path
+from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.view import DictView
 
 from .individual import Individual
 
-Genotype = TypeVar("Genotype")
-Evaluation = TypeVar("Evaluation")
+Genotype = TypeVar("Genotype", bound=Serializable)
+Evaluation = TypeVar("Evaluation", bound=Serializable)
 
 
 @asyncinit

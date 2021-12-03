@@ -83,7 +83,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
                 assert len(initial_evaluation) == self.__population_size
                 self.__last_generation = [
                     Individual[Genotype, Evaluation](
-                        self._get_next_id(), genotype, evaluation
+                        self._get_next_id(), genotype, evaluation, None
                     )
                     for genotype, evaluation in zip(
                         initial_population, initial_evaluation
@@ -178,7 +178,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
             # combine provided genotypes and new evaluation to create the first generation
             self.__last_generation = [
                 Individual[Genotype, Evaluation](
-                    self._get_next_id(), genotype, evaluation
+                    self._get_next_id(), genotype, evaluation, None
                 )
                 for genotype, evaluation in zip(self.__initial_population, evaluation)
             ]
@@ -194,16 +194,10 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
                 self.__last_generation, self.__offspring_size
             )
 
-            # ignore user returned evaluation.
-            # was only there to make it more convenient for the user
-            parent_selections_only_individuals = [
-                [p.genotype for p in s] for s in parent_selections
-            ]
-
             # let user create offspring
             offspring = [
-                self._safe_mutate(self._safe_crossover(selection))
-                for selection in parent_selections_only_individuals
+                self._safe_mutate(self._safe_crossover(genotype))
+                for genotype in [[p.genotype for p in s] for s in parent_selections]
             ]
 
             # let user evaluate offspring
@@ -212,9 +206,14 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
             # combine to create list of individuals
             new_individuals = [
                 Individual[Genotype, Evaluation](
-                    self._get_next_id(), genotype, evaluation
+                    self._get_next_id(),
+                    genotype,
+                    evaluation,
+                    [parent.id for parent in parents],
                 )
-                for genotype, evaluation in zip(offspring, evaluation)
+                for parents, genotype, evaluation in zip(
+                    parent_selections, offspring, evaluation
+                )
             ]
 
             # let user select survivors between old and new individuals
@@ -263,6 +262,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
     ) -> None:
         """
         Saves current random object and append the last generation to the checkpoint database.
+
+        :param new_individuals: Individuals borns during last generation
         """
 
         self.__database.begin_transaction()

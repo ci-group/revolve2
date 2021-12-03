@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pickle
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import Generic, List, Optional, TypeVar
 
 from revolve2.core.database.serialize import Serializable, SerializeError
 from revolve2.core.database.view import AnyView
@@ -16,6 +16,7 @@ class Individual(Generic[Genotype, Evaluation], Serializable):
     id: int
     genotype: Genotype
     evaluation: Evaluation
+    parent_ids: Optional[List[int]]  # None means this is from the initial population
 
     def to_database(self, db_view: AnyView) -> None:
         root = db_view.dict
@@ -32,6 +33,15 @@ class Individual(Generic[Genotype, Evaluation], Serializable):
             evaluation.float = self.evaluation
         else:
             self.evaluation.to_database(evaluation)
+
+        parents = root.insert("parents")
+        if self.parent_ids is None:
+            parents.make_none()
+        else:
+            parents_list = parents.list
+            parents_list.clear()
+            for parent in self.parent_ids:
+                parents_list.append().int = parent
 
     @classmethod
     def from_database(cls, db_view: AnyView) -> Individual[Genotype, Evaluation]:
@@ -52,4 +62,10 @@ class Individual(Generic[Genotype, Evaluation], Serializable):
         else:
             raise SerializeError("Loaded evaluation type is not Serializable.")
 
-        return Individual(id, genotype, evaluation)
+        parents_db = root["parents"]
+        if parents_db.is_none():
+            parents = None
+        else:
+            parents = [parent.int for parent in parents_db.list]
+
+        return Individual(id, genotype, evaluation, parents)

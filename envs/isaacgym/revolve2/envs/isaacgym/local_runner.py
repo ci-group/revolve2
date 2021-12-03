@@ -152,10 +152,18 @@ class LocalRunner(Runner):
         def run(self) -> List[Tuple[float, State]]:
             states: List[Tuple[float, State]] = []  # (time, state)
 
+            control_step = 1 / self._batch.control_frequency
+            sample_step = 1 / self._batch.sampling_frequency
+
+            last_control_time = 0
+            last_sample_time = 0
+
             while (
                 time := self._gym.get_sim_time(self._sim)
             ) < self._batch.simulation_time:
-                if time % 0.2:  # TODO make control timing configurable
+                if time >= last_control_time + control_step:
+                    print(time)
+                    last_control_time = int(time / control_step) * control_step
                     control = ActorControl()
                     self._batch.control(0.2, control)
 

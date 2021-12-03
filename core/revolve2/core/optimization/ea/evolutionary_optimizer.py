@@ -14,11 +14,11 @@ from revolve2.core.database.view import DictView
 from .individual import Individual
 
 Genotype = TypeVar("Genotype", bound=Serializable)
-Evaluation = TypeVar("Evaluation", bound=Serializable)
+Fitness = TypeVar("Fitness", bound=Serializable)
 
 
 @asyncinit
-class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
+class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __database: Database
     __dbbranch: Path
 
@@ -27,16 +27,16 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
     # next id to give to a new individual
     __next_id: int
 
-    # Types of genotype and evaluation are stored as soon as they are available.
+    # Types of genotype and fitness are stored as soon as they are available.
     # Used to type check the return values of user functions.
     __genotype_type: Type
-    __evaluation_type: Optional[Type]
+    __fitness_type: Optional[Type]
 
     __population_size: int
     __offspring_size: int
 
     __generation_index: Optional[int]
-    __last_generation: Optional[List[Individual[Genotype, Evaluation]]]
+    __last_generation: Optional[List[Individual[Genotype, Fitness]]]
     __initial_population: Optional[List[Genotype]]
 
     async def __init__(
@@ -47,7 +47,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
         population_size: int,
         offspring_size: int,
         initial_population: List[Genotype],
-        initial_evaluation: Optional[List[Evaluation]],
+        initial_fitness: Optional[List[Fitness]],
     ):
         self.__database = database
         self.__dbbranch = dbbranch
@@ -78,44 +78,42 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
             # save genotype type so we can type check things later
             self.__genotype_type = type(initial_population[0])
 
-            if initial_evaluation is not None:
-                assert type(initial_evaluation) == list
-                assert len(initial_evaluation) == self.__population_size
+            if initial_fitness is not None:
+                assert type(initial_fitness) == list
+                assert len(initial_fitness) == self.__population_size
                 self.__last_generation = [
-                    Individual[Genotype, Evaluation](
-                        self._get_next_id(), genotype, evaluation, None
+                    Individual[Genotype, Fitness](
+                        self._get_next_id(), genotype, fitness, None
                     )
-                    for genotype, evaluation in zip(
-                        initial_population, initial_evaluation
-                    )
+                    for genotype, fitness in zip(initial_population, initial_fitness)
                 ]
                 self.__generation_index = 0
                 self.__initial_population = None
 
-                # save evaluation type so we can type check things later
-                self.__evaluation_type = type(initial_evaluation[0])
+                # save fitness type so we can type check things later
+                self.__fitness_type = type(initial_fitness[0])
             else:
                 self.__initial_population = initial_population
                 self.__last_generation = None
                 self.__generation_index = None
 
-                # set evaluation type to None
+                # set fitness type to None
                 # we will set it when evaluating the first generation later
-                self.__evaluation_type = None
+                self.__fitness_type = None
 
     @abstractmethod
-    async def _evaluate_generation(self, genotypes: List[Genotype]) -> List[Evaluation]:
+    async def _evaluate_generation(self, genotypes: List[Genotype]) -> List[Fitness]:
         """
         Evaluate a genotype.
 
         :param genotypes: The genotypes to evaluate. Must not be altered.
-        :return: The evaluation result.
+        :return: The fitness result.
         """
 
     @abstractmethod
     def _select_parents(
-        self, generation: List[Individual[Genotype, Evaluation]], num_parents: int
-    ) -> List[List[Individual[Genotype, Evaluation]]]:
+        self, generation: List[Individual[Genotype, Fitness]], num_parents: int
+    ) -> List[List[Individual[Genotype, Fitness]]]:
         """
         Select groups of parents that will create offspring.
 
@@ -125,10 +123,10 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
 
     def _select_survivors(
         self,
-        old_individuals: List[Individual[Genotype, Evaluation]],
-        new_individuals: List[Individual[Genotype, Evaluation]],
+        old_individuals: List[Individual[Genotype, Fitness]],
+        new_individuals: List[Individual[Genotype, Fitness]],
         num_survivors: int,
-    ) -> List[Individual[Genotype, Evaluation]]:
+    ) -> List[Individual[Genotype, Fitness]]:
         """
         Select survivors from a group of individuals. These will form the next generation.
 
@@ -164,23 +162,23 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
 
     async def run(self) -> None:
         if self.__initial_population is not None:
-            # let user evaluate. use unsafe version because we don't know evaluation type yet.
-            evaluation = await self._evaluate_generation(self.__initial_population)
+            # let user evaluate. use unsafe version because we don't know fitness type yet.
+            fitness = await self._evaluate_generation(self.__initial_population)
 
             # assert user return value
-            assert type(evaluation) == list
-            assert len(evaluation) == len(self.__initial_population)
-            assert all(type(e) == type(evaluation[0]) for e in evaluation)
+            assert type(fitness) == list
+            assert len(fitness) == len(self.__initial_population)
+            assert all(type(e) == type(fitness[0]) for e in fitness)
 
-            # save evaluation type so we can type check things later
-            self.__evaluation_type = type(evaluation[0])
+            # save fitness type so we can type check things later
+            self.__fitness_type = type(fitness[0])
 
-            # combine provided genotypes and new evaluation to create the first generation
+            # combine provided genotypes and new fitness to create the first generation
             self.__last_generation = [
-                Individual[Genotype, Evaluation](
-                    self._get_next_id(), genotype, evaluation, None
+                Individual[Genotype, Fitness](
+                    self._get_next_id(), genotype, fitness, None
                 )
-                for genotype, evaluation in zip(self.__initial_population, evaluation)
+                for genotype, fitness in zip(self.__initial_population, fitness)
             ]
             self.__generation_index = 0
             self.__initial_population = None
@@ -201,18 +199,18 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
             ]
 
             # let user evaluate offspring
-            evaluation = await self._safe_evaluate_generation(offspring)
+            fitness = await self._safe_evaluate_generation(offspring)
 
             # combine to create list of individuals
             new_individuals = [
-                Individual[Genotype, Evaluation](
+                Individual[Genotype, Fitness](
                     self._get_next_id(),
                     genotype,
-                    evaluation,
+                    fitness,
                     [parent.id for parent in parents],
                 )
-                for parents, genotype, evaluation in zip(
-                    parent_selections, offspring, evaluation
+                for parents, genotype, fitness in zip(
+                    parent_selections, offspring, fitness
                 )
             ]
 
@@ -245,7 +243,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
         root.insert(".rng").make_none()
 
         root.insert(".genotype_type").bytes = pickle.dumps(self.__genotype_type)
-        root.insert(".evaluation_type").bytes = pickle.dumps(self.__evaluation_type)
+        root.insert(".fitness_type").bytes = pickle.dumps(self.__fitness_type)
         root.insert("population_size").int = self.__population_size
         root.insert("offspring_size").int = self.__offspring_size
 
@@ -258,7 +256,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
         self.__database.commit_transaction()
 
     async def _save_checkpoint(
-        self, new_individuals: List[Individual[Genotype, Evaluation]]
+        self, new_individuals: List[Individual[Genotype, Fitness]]
     ) -> None:
         """
         Saves current random object and append the last generation to the checkpoint database.
@@ -297,7 +295,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
             self._rng.setstate(pickle.loads(root[".rng"].bytes))
 
             self.__genotype_type = pickle.loads(root[".genotype_type"].bytes)
-            self.__evaluation_type = pickle.loads(root[".evaluation_type"].bytes)
+            self.__fitness_type = pickle.loads(root[".fitness_type"].bytes)
             self.__population_size = root["population_size"].int
             self.__offspring_size = root["offspring_size"].int
 
@@ -305,7 +303,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
             individual_ids = [individual.int for individual in generations[-1].list]
             individuals_list = root["individuals"].list
             individuals = [
-                Individual[Genotype, Evaluation].from_database(individuals_list[id])
+                Individual[Genotype, Fitness].from_database(individuals_list[id])
                 for id in individual_ids
             ]
             self.__last_generation = individuals
@@ -319,8 +317,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
         return True
 
     def _safe_select_parents(
-        self, generation: List[Individual[Genotype, Evaluation]], num_parents: int
-    ) -> List[List[Individual[Genotype, Evaluation]]]:
+        self, generation: List[Individual[Genotype, Fitness]], num_parents: int
+    ) -> List[List[Individual[Genotype, Fitness]]]:
         parent_selections = self._select_parents(generation, num_parents)
         assert type(parent_selections) == list
         assert all(type(s) == list for s in parent_selections)
@@ -339,19 +337,19 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
 
     async def _safe_evaluate_generation(
         self, genotypes: List[Genotype]
-    ) -> List[Evaluation]:
-        evaluations = await self._evaluate_generation(genotypes)
-        assert type(evaluations) == list
-        assert len(evaluations) == len(genotypes)
-        assert all(type(e) == self.__evaluation_type for e in evaluations)
-        return evaluations
+    ) -> List[Fitness]:
+        fitnesss = await self._evaluate_generation(genotypes)
+        assert type(fitnesss) == list
+        assert len(fitnesss) == len(genotypes)
+        assert all(type(e) == self.__fitness_type for e in fitnesss)
+        return fitnesss
 
     def _safe_select_survivors(
         self,
-        old_individuals: List[Individual[Genotype, Evaluation]],
-        new_individuals: List[Individual[Genotype, Evaluation]],
+        old_individuals: List[Individual[Genotype, Fitness]],
+        new_individuals: List[Individual[Genotype, Fitness]],
         num_survivors: int,
-    ) -> List[Individual[Genotype, Evaluation]]:
+    ) -> List[Individual[Genotype, Fitness]]:
         survivors = self._select_survivors(
             old_individuals, new_individuals, num_survivors
         )
@@ -383,7 +381,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Evaluation]):
         return self.__generation_index
 
     @property
-    def last_generation(self) -> List[Individual[Genotype, Evaluation]]:
+    def last_generation(self) -> List[Individual[Genotype, Fitness]]:
         """
         Get the last generation.
         """

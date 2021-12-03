@@ -8,14 +8,14 @@ from revolve2.core.database.serialize import Serializable, SerializeError
 from revolve2.core.database.view import AnyView
 
 Genotype = TypeVar("Genotype", bound=Serializable)
-Evaluation = TypeVar("Evaluation", bound=Serializable)
+Fitness = TypeVar("Fitness", bound=Serializable)
 
 
 @dataclass
-class Individual(Generic[Genotype, Evaluation], Serializable):
+class Individual(Generic[Genotype, Fitness], Serializable):
     id: int
     genotype: Genotype
-    evaluation: Evaluation
+    fitness: Fitness
     parent_ids: Optional[List[int]]  # None means this is from the initial population
 
     def to_database(self, db_view: AnyView) -> None:
@@ -26,13 +26,13 @@ class Individual(Generic[Genotype, Evaluation], Serializable):
         root.insert(".genotype_type").bytes = pickle.dumps(type(self.genotype))
         self.genotype.to_database(root.insert("genotype"))
 
-        root.insert(".evaluation_type").bytes = pickle.dumps(type(self.evaluation))
-        evaluation = root.insert("evaluation")
+        root.insert(".fitness_type").bytes = pickle.dumps(type(self.fitness))
+        fitness = root.insert("fitness")
         # TODO support more types in a more generic way throughout this codebase
-        if type(self.evaluation) == float:
-            evaluation.float = self.evaluation
+        if type(self.fitness) == float:
+            fitness.float = self.fitness
         else:
-            self.evaluation.to_database(evaluation)
+            self.fitness.to_database(fitness)
 
         parents = root.insert("parents")
         if self.parent_ids is None:
@@ -44,7 +44,7 @@ class Individual(Generic[Genotype, Evaluation], Serializable):
                 parents_list.append().int = parent
 
     @classmethod
-    def from_database(cls, db_view: AnyView) -> Individual[Genotype, Evaluation]:
+    def from_database(cls, db_view: AnyView) -> Individual[Genotype, Fitness]:
         root = db_view.dict
 
         id = root["id"].int
@@ -53,14 +53,14 @@ class Individual(Generic[Genotype, Evaluation], Serializable):
             raise SerializeError("Loaded genotype type is not Serializable.")
         genotype = genotype_type.from_database(root["genotype"])
 
-        evaluation_type = pickle.loads(root[".evaluation_type"].bytes)
-        evaluation = root["evaluation"]
-        if evaluation_type == float:
-            evaluation = evaluation.float
-        elif issubclass(evaluation_type, Serializable):
-            evaluation = evaluation_type.from_database(evaluation)
+        fitness_type = pickle.loads(root[".fitness_type"].bytes)
+        fitness = root["fitness"]
+        if fitness_type == float:
+            fitness = fitness.float
+        elif issubclass(fitness_type, Serializable):
+            fitness = fitness_type.from_database(fitness)
         else:
-            raise SerializeError("Loaded evaluation type is not Serializable.")
+            raise SerializeError("Loaded fitness type is not Serializable.")
 
         parents_db = root["parents"]
         if parents_db.is_none():
@@ -68,4 +68,4 @@ class Individual(Generic[Genotype, Evaluation], Serializable):
         else:
             parents = [parent.int for parent in parents_db.list]
 
-        return Individual(id, genotype, evaluation, parents)
+        return Individual(id, genotype, fitness, parents)

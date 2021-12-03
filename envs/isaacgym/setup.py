@@ -8,8 +8,6 @@ setup(
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
     package_data={"revolve2.envs.isaacgym": ["py.typed"]},
-    install_requires=[
-        "revolve2-core",
-    ],
+    install_requires=["revolve2-core", "isaacgym==1.0rc2"],
     zip_safe=False,
 )

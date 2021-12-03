@@ -161,8 +161,8 @@ class LocalRunner(Runner):
             while (
                 time := self._gym.get_sim_time(self._sim)
             ) < self._batch.simulation_time:
+                # do control if it is time
                 if time >= last_control_time + control_step:
-                    print(time)
                     last_control_time = int(time / control_step) * control_step
                     control = ActorControl()
                     self._batch.control(0.2, control)
@@ -183,6 +183,12 @@ class LocalRunner(Runner):
                             targets,
                         )
 
+                # sample state if it is time
+                if time >= last_sample_time + sample_step:
+                    last_sample_time = int(time / sample_step) * sample_step
+                    states.append((time, self._get_state()))
+
+                # step simulation
                 self._gym.simulate(self._sim)
                 self._gym.fetch_results(self._sim, True)
                 self._gym.step_graphics(self._sim)
@@ -190,7 +196,8 @@ class LocalRunner(Runner):
                 if self._viewer is not None:
                     self._gym.draw_viewer(self._viewer, self._sim, False)
 
-                states.append((time, self._get_state()))
+            # sample one final time
+            states.append((time, self._get_state()))
 
             return states
 

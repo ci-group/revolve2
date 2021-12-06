@@ -17,6 +17,10 @@ class AnyView:
         self._path = path
 
     @property
+    def path(self) -> Path:
+        return self._path
+
+    @property
     def int(self) -> int:
         return self._database.get_int(self._path)
 

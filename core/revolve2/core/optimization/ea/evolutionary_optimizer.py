@@ -249,11 +249,15 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     async def _save_zeroth_generation(
         self, new_individuals: List[Individual[Genotype, Fitness]]
     ) -> None:
+        """
+        Save parameters to the database and do `_save_generation` for the initial population.
+        """
+
         self.__database.begin_transaction()
 
         root = DictView(self.__database, self.__dbbranch)
 
-        root.insert(".rng").make_none()
+        root.insert(".rng_after_generation").list.clear()
 
         root.insert(".genotype_type").bytes = pickle.dumps(self.__genotype_type)
         root.insert(".fitness_type").bytes = pickle.dumps(self.__fitness_type)
@@ -274,7 +278,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         self, new_individuals: List[Individual[Genotype, Fitness]]
     ) -> None:
         """
-        Saves current random object and append the last generation to the checkpoint database.
+        Append the last generation and accompanying random object to the checkpoint database.
 
         :param new_individuals: Individuals borns during last generation
         """
@@ -289,7 +293,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     async def _save_generation_notransaction(
         self, root: DictView, new_individuals: List[Individual[Genotype, Fitness]]
     ):
-        root[".rng"].bytes = pickle.dumps(self._rng.getstate())
+        root[".rng_after_generation"].list.append().bytes = pickle.dumps(
+            self._rng.getstate()
+        )
 
         generation = root["generations"].list.append().list
         generation.clear()
@@ -311,8 +317,6 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         try:
             root = DictView(self.__database, self.__dbbranch)
 
-            self._rng.setstate(pickle.loads(root[".rng"].bytes))
-
             self.__genotype_type = pickle.loads(root[".genotype_type"].bytes)
             self.__fitness_type = pickle.loads(root[".fitness_type"].bytes)
             self.__population_size = root["population_size"].int
@@ -328,6 +332,12 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             self.__last_generation = individuals
             self.__next_id = len(individuals_list)
             self.__generation_index = len(generations) - 1  # first generation is 0
+
+            self._rng.setstate(
+                pickle.loads(
+                    root[".rng_after_generation"].list[len(generations) - 1].bytes
+                )
+            )
         except (IndexError, pickle.PickleError):
             return False
 

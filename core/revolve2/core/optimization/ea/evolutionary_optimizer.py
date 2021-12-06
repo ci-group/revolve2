@@ -10,7 +10,6 @@ from asyncinit import asyncinit
 from revolve2.core.database import Database, Path
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.view import DictView
-from revolve2.core.database.view.any_view import AnyView
 
 from .individual import Individual
 
@@ -94,7 +93,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                 # save fitness type so we can type check things later
                 self.__fitness_type = type(initial_fitness[0])
 
-                await self._save_zeroth_generation()
+                await self._save_zeroth_generation(self.__last_generation)
             else:
                 self.__initial_population = initial_population
                 self.__last_generation = None
@@ -196,6 +195,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             await self._save_zeroth_generation(self.__last_generation)
 
         while self._safe_must_do_next_gen():
+            assert self.__generation_index is not None
+            assert self.__last_generation is not None
+
             # let user select parents
             parent_selections = self._safe_select_parents(
                 self.__last_generation, self.__offspring_size
@@ -293,6 +295,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     async def _save_generation_notransaction(
         self, root: DictView, new_individuals: List[Individual[Genotype, Fitness]]
     ):
+        assert self.__last_generation is not None
+
         root[".rng_after_generation"].list.append().bytes = pickle.dumps(
             self._rng.getstate()
         )
@@ -346,6 +350,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return True
 
     async def _prepare_db_evaluation(self) -> Path:
+        assert self.__generation_index is not None
+
         root = DictView(self.__database, self.__dbbranch)
 
         if self.__last_generation is None:
@@ -417,7 +423,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return self.__offspring_size
 
     @property
-    def generation_index(self) -> int:
+    def generation_index(self) -> Optional[int]:
         """
         Get the current generation.
         The initial generation is numbered 0.
@@ -426,7 +432,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return self.__generation_index
 
     @property
-    def last_generation(self) -> List[Individual[Genotype, Fitness]]:
+    def last_generation(self) -> Optional[List[Individual[Genotype, Fitness]]]:
         """
         Get the last generation.
         """

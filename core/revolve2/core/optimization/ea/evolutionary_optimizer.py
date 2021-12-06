@@ -350,8 +350,6 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return True
 
     async def _prepare_db_evaluation(self) -> Path:
-        assert self.__generation_index is not None
-
         root = DictView(self.__database, self.__dbbranch)
 
         if self.__last_generation is None:
@@ -359,6 +357,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             if not "evaluations" in root:
                 root.insert("evaluations").list.clear()
         else:
+            assert self.__generation_index is not None
             generation = self.__generation_index + 1
 
         evaluations = root["evaluations"].list

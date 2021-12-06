@@ -17,7 +17,7 @@ class DictView:
         return AnyView(self._database, self._database.dict_index(self._path, index))
 
     def __contains__(self, key: str) -> bool:
-        return self._database.dict_has_key(key)
+        return self._database.dict_has_key(self._path, key)
 
     def clear(self) -> None:
         self._database.set_dict(self._path)

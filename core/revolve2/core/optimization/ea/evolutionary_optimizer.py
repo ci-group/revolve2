@@ -10,6 +10,7 @@ from asyncinit import asyncinit
 from revolve2.core.database import Database, Path
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.view import DictView
+from revolve2.core.database.view.any_view import AnyView
 
 from .individual import Individual
 
@@ -57,7 +58,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         self.__next_id = 0
 
         logging.info("Attempting to load checkpoint..")
-        if await self.load_checkpoint():
+        if await self._load_checkpoint():
             logging.info(
                 f"Checkpoint found. Last complete generation was {self.__generation_index}."
             )
@@ -92,6 +93,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
                 # save fitness type so we can type check things later
                 self.__fitness_type = type(initial_fitness[0])
+
+                await self._save_zeroth_generation()
             else:
                 self.__initial_population = initial_population
                 self.__last_generation = None
@@ -101,8 +104,12 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                 # we will set it when evaluating the first generation later
                 self.__fitness_type = None
 
+            await self._init_root()
+
     @abstractmethod
-    async def _evaluate_generation(self, genotypes: List[Genotype]) -> List[Fitness]:
+    async def _evaluate_generation(
+        self, genotypes: List[Genotype], database: Database, dbbranch: Path
+    ) -> List[Fitness]:
         """
         Evaluate a genotype.
 
@@ -163,7 +170,10 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     async def run(self) -> None:
         if self.__initial_population is not None:
             # let user evaluate. use unsafe version because we don't know fitness type yet.
-            fitness = await self._evaluate_generation(self.__initial_population)
+            db_evaluation_branch = await self._prepare_db_evaluation()
+            fitness = await self._evaluate_generation(
+                self.__initial_population, self.__database, db_evaluation_branch
+            )
 
             # assert user return value
             assert type(fitness) == list
@@ -183,8 +193,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             self.__generation_index = 0
             self.__initial_population = None
 
-            await self._init_checkpoints()
-            await self._save_checkpoint(self.__last_generation)
+            await self._save_zeroth_generation(self.__last_generation)
 
         while self._safe_must_do_next_gen():
             # let user select parents
@@ -199,7 +208,10 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             ]
 
             # let user evaluate offspring
-            fitness = await self._safe_evaluate_generation(offspring)
+            db_evaluation_branch = await self._prepare_db_evaluation()
+            fitness = await self._safe_evaluate_generation(
+                offspring, self.__database, db_evaluation_branch
+            )
 
             # combine to create list of individuals
             new_individuals = [
@@ -223,22 +235,23 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             self.__last_generation = survivors
             self.__generation_index += 1
 
-            await self._save_checkpoint(new_individuals)
+            await self._save_generation(new_individuals)
 
     def _get_next_id(self) -> int:
         next_id = self.__next_id
         self.__next_id += 1
         return next_id
 
-    async def _init_checkpoints(self) -> None:
-        """
-        Initialize the checkpoint database.
-        Saves all settings and sets up the generations list.
-        """
+    async def _init_root(self) -> None:
+        root = DictView(self.__database, self.__dbbranch)
+        root.clear()
+
+    async def _save_zeroth_generation(
+        self, new_individuals: List[Individual[Genotype, Fitness]]
+    ) -> None:
         self.__database.begin_transaction()
 
         root = DictView(self.__database, self.__dbbranch)
-        root.clear()
 
         root.insert(".rng").make_none()
 
@@ -253,9 +266,11 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         individuals = root.insert("individuals").list
         individuals.clear()
 
+        await self._save_generation_notransaction(root, new_individuals)
+
         self.__database.commit_transaction()
 
-    async def _save_checkpoint(
+    async def _save_generation(
         self, new_individuals: List[Individual[Genotype, Fitness]]
     ) -> None:
         """
@@ -267,7 +282,13 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         self.__database.begin_transaction()
 
         root = DictView(self.__database, self.__dbbranch)
+        await self._save_generation_notransaction(root, new_individuals)
 
+        self.__database.commit_transaction()
+
+    async def _save_generation_notransaction(
+        self, root: DictView, new_individuals: List[Individual[Genotype, Fitness]]
+    ):
         root[".rng"].bytes = pickle.dumps(self._rng.getstate())
 
         generation = root["generations"].list.append().list
@@ -279,9 +300,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         for individual in new_individuals:
             individual.to_database(individuals.append())
 
-        self.__database.commit_transaction()
-
-    async def load_checkpoint(self) -> bool:
+    async def _load_checkpoint(self) -> bool:
         """
         Deserialize from the database.
         Can leave this class partially initialized if load unsuccessful.
@@ -316,6 +335,22 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
         return True
 
+    async def _prepare_db_evaluation(self) -> Path:
+        root = DictView(self.__database, self.__dbbranch)
+
+        if self.__last_generation is None:
+            generation = 0
+            if not "evaluations" in root:
+                root.insert("evaluations").list.clear()
+        else:
+            generation = self.__generation_index + 1
+
+        evaluations = root["evaluations"].list
+        if len(evaluations) <= generation:
+            return evaluations.append().path
+        else:
+            return evaluations[generation].path
+
     def _safe_select_parents(
         self, generation: List[Individual[Genotype, Fitness]], num_parents: int
     ) -> List[List[Individual[Genotype, Fitness]]]:
@@ -336,9 +371,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return genotype
 
     async def _safe_evaluate_generation(
-        self, genotypes: List[Genotype]
+        self, genotypes: List[Genotype], database: Database, dbbranch: Path
     ) -> List[Fitness]:
-        fitnesss = await self._evaluate_generation(genotypes)
+        fitnesss = await self._evaluate_generation(genotypes, database, dbbranch)
         assert type(fitnesss) == list
         assert len(fitnesss) == len(genotypes)
         assert all(type(e) == self.__fitness_type for e in fitnesss)

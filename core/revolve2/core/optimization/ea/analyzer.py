@@ -38,7 +38,7 @@ class Generations:
         self._view = view.list
 
     def __getitem__(self, index: int) -> Generation:
-        return Generation(self._view[index])
+        return Generation(self._view[index], index)
 
     def __len__(self) -> int:
         return len(self._view)

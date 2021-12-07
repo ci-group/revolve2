@@ -1,4 +1,6 @@
 import multineat
+from revolve2.core.database.serialize import Serializable
+from revolve2.core.database.view import AnyView
 from revolve2.core.modular_robot import Body as ModularRobotBody
 from revolve2.core.modular_robot import Brain as ModularRobotBrain
 from revolve2.core.optimization.ea.modular_robot import BrainGenotype
@@ -29,3 +31,12 @@ class BrainGenotypeCpgV1(BrainGenotype, BodybrainBase["BrainGenotypeCpgV1"]):
 
     def develop(self, body: ModularRobotBody) -> ModularRobotBrain:
         return BrainCpgV1(self._genotype)
+
+    def to_database(self, db_view: AnyView) -> None:
+        db_view.string = self._genotype.Serialize()
+
+    @classmethod
+    def from_database(cls, db_view: AnyView) -> Serializable:
+        genotype = multineat.Genome()
+        genotype.Deserialize(db_view.string)
+        return cls(genotype)

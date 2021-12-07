@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pickle
 from dataclasses import dataclass
-from typing import Generic, List, Optional, TypeVar
+from typing import Generic, List, Optional, TypeVar, cast
 
 from revolve2.core.database.serialize import Serializable, SerializeError
 from revolve2.core.database.view import AnyView
@@ -30,7 +30,7 @@ class Individual(Generic[Genotype, Fitness], Serializable):
         fitness = root.insert("fitness")
         # TODO support more types in a more generic way throughout this codebase
         if type(self.fitness) == float:
-            fitness.float = self.fitness
+            fitness.float = cast(float, self.fitness)
         else:
             self.fitness.to_database(fitness)
 
@@ -54,11 +54,11 @@ class Individual(Generic[Genotype, Fitness], Serializable):
         genotype = genotype_type.from_database(root["genotype"])
 
         fitness_type = pickle.loads(root[".fitness_type"].bytes)
-        fitness = root["fitness"]
+        fitness_db = root["fitness"]
         if fitness_type == float:
-            fitness = fitness.float
+            fitness = fitness_db.float
         elif issubclass(fitness_type, Serializable):
-            fitness = fitness_type.from_database(fitness)
+            fitness = fitness_type.from_database(fitness_db)
         else:
             raise SerializeError("Loaded fitness type is not Serializable.")
 
@@ -68,4 +68,4 @@ class Individual(Generic[Genotype, Fitness], Serializable):
         else:
             parents = [parent.int for parent in parents_db.list]
 
-        return Individual(id, genotype, fitness, parents)
+        return Individual(id, genotype, cast(Fitness, fitness), parents)

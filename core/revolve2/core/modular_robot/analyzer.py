@@ -52,7 +52,7 @@ class Analyzer:
         ]  # (module, came_from)
 
         for _ in range(within_range):
-            new_open_nodes = []
+            new_open_nodes: List[Tuple[AnalyzerModule, Optional[AnalyzerModule]]] = []
             for (open_node, came_from) in open_nodes:
                 neighbours = [
                     mod

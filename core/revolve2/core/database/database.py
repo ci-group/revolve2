@@ -85,15 +85,15 @@ class Database(ABC):
         pass
 
     @abstractmethod
-    def get_float(self, path: Path) -> int:
+    def get_float(self, path: Path) -> float:
         pass
 
     @abstractmethod
-    def get_string(self, path: Path) -> int:
+    def get_string(self, path: Path) -> str:
         pass
 
     @abstractmethod
-    def get_bytes(self, path: Path) -> int:
+    def get_bytes(self, path: Path) -> bytes:
         pass
 
     @abstractmethod

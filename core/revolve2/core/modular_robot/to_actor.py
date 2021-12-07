@@ -103,7 +103,7 @@ class _ActorBuilder:
                 position,
                 orientation,
                 "model://rg_robot/meshes/CoreComponent.dae",
-                (1.0, 1.0, 0.0, 1.0),
+                (1.0, 1.0, 0.0),
             )
         )
 
@@ -121,8 +121,11 @@ class _ActorBuilder:
                     * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
 
+                analyzer_child = analyzer_module.children[child_index]
+                assert analyzer_child is not None
+
                 self._make_module(
-                    analyzer_module.children[child_index],
+                    analyzer_child,
                     body,
                     f"{name_prefix}_{name_suffix}",
                     position + rotation * Vector3([CHILD_OFFSET, 0.0, 0.0]),
@@ -162,7 +165,7 @@ class _ActorBuilder:
                 position,
                 orientation,
                 "model://rg_robot/meshes/FixedBrick.dae",
-                (1.0, 0.0, 0.0, 1.0),
+                (1.0, 0.0, 0.0),
             )
         )
 
@@ -179,8 +182,11 @@ class _ActorBuilder:
                     * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
 
+                analyzer_child = analyzer_module.children[child_index]
+                assert analyzer_child is not None
+
                 self._make_module(
-                    analyzer_module.children[child_index],
+                    analyzer_child,
                     body,
                     f"{name_prefix}_{name_suffix}",
                     position + rotation * Vector3([CHILD_OFFSET, 0.0, 0.0]),
@@ -241,7 +247,7 @@ class _ActorBuilder:
                 frame_position,
                 orientation,
                 "model://rg_robot/meshes/ActiveHinge_Frame.dae",
-                (0.0, 1.0, 0.0, 1.0),
+                (0.0, 1.0, 0.0),
             )
         )
 
@@ -287,7 +293,7 @@ class _ActorBuilder:
                 Vector3(),
                 Quaternion(),
                 "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
-                (0.0, 1.0, 0.0, 1.0),
+                (0.0, 1.0, 0.0),
             )
         )
 
@@ -295,8 +301,11 @@ class _ActorBuilder:
         if child is not None:
             rotation = Quaternion.from_eulers([child.rotation, 0.0, 0.0])
 
+            analyzer_child = analyzer_module.children[ActiveHinge.ATTACHMENT_INDEX]
+            assert analyzer_child is not None
+
             self._make_module(
-                analyzer_module.children[ActiveHinge.ATTACHMENT_INDEX],
+                analyzer_child,
                 next_body,
                 f"{name_prefix}_attachment",
                 rotation * Vector3([ATTACHMENT_OFFSET, 0.0, 0.0]),

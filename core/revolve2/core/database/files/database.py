@@ -1,10 +1,9 @@
 import logging
 import os
 import shutil
-from typing import List, Union
+from typing import List
 
-from revolve2.core.database import Database as DatabaseBase
-
+from ..database import Database as DatabaseBase
 from ..path import Path as PathBase
 from .path import Path
 
@@ -240,11 +239,11 @@ class Database(DatabaseBase):
             f.write(value)
 
     @classmethod
-    def _get_value_string(cls, path: Path) -> None:
+    def _get_value_string(cls, path: Path) -> str:
         with open(cls._value_path(path), "r") as f:
             return f.read()
 
     @classmethod
-    def _get_value_bytes(cls, path: Path) -> None:
+    def _get_value_bytes(cls, path: Path) -> bytes:
         with open(cls._value_path(path), "rb") as f:
             return f.read()

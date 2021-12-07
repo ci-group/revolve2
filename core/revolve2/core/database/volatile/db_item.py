@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, List, Tuple
+from typing import Dict, List, Union
 
 
 @dataclass
@@ -8,4 +8,4 @@ class DbItem:
     deleted: bool
 
 
-DbType = Tuple[int, float, str, bytes, None, List["DbItem"], Dict[str, "DbItem"]]
+DbType = Union[int, float, str, bytes, None, List["DbItem"], Dict[str, "DbItem"]]

@@ -1,6 +1,6 @@
 import math
 from abc import ABC, abstractmethod
-from typing import List, Mapping, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
 from revolve2.core.modular_robot import (
@@ -27,7 +27,7 @@ class Cpg(Brain, ABC):
         assert len(internal_weights) == len(active_hinges)
         assert len(external_weights) == len(connections)
 
-        id_to_index: Mapping[int, int] = {}
+        id_to_index: Dict[int, int] = {}
         for i, active_hinge in enumerate(active_hinges):
             id_to_index[active_hinge.id] = i
 

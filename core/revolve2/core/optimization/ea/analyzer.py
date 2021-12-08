@@ -56,7 +56,7 @@ class Individual:
 
     @property
     def id(self) -> IndividualId:
-        return self._view["id"].int
+        return IndividualId(self._view["id"].int)
 
     @property
     def parents(self) -> Optional[List[IndividualId]]:

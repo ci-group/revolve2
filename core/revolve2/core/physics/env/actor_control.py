@@ -5,7 +5,7 @@ from typing import List, Tuple
 class ActorControl:
     _dof_targets: List[Tuple[int, int, List[float]]]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._dof_targets = []
 
     def set_dof_targets(

@@ -1,6 +1,5 @@
 import logging
-from dataclasses import dataclass
-from typing import cast
+from typing import Dict, List, cast
 
 from ..database import Database as DatabaseBase
 from ..path import Path as PathBase
@@ -106,100 +105,100 @@ class Database(DatabaseBase):
         castpath.item.item[key] = newitem
         return Path(newitem)
 
-    def is_none(self, path: Path) -> bool:
+    def is_none(self, path: PathBase) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        return path.item.item is None
+        return castpath.item.item is None
 
-    def is_int(self, path: Path) -> bool:
+    def is_int(self, path: PathBase) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        return type(path.item.item) == int
+        return type(castpath.item.item) == int
 
-    def is_float(self, path: Path) -> bool:
+    def is_float(self, path: PathBase) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        return type(path.item.item) == float
+        return type(castpath.item.item) == float
 
-    def is_string(self, path: Path) -> bool:
+    def is_string(self, path: PathBase) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        return type(path.item.item) == str
+        return type(castpath.item.item) == str
 
-    def is_bytes(self, path: Path) -> bool:
+    def is_bytes(self, path: PathBase) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        return type(path.item.item) == bytes
+        return type(castpath.item.item) == bytes
 
-    def is_list(self, path: Path) -> bool:
+    def is_list(self, path: PathBase) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        return type(path.item.item) == list
+        return type(castpath.item.item) == list
 
-    def is_dict(self, path: Path) -> bool:
+    def is_dict(self, path: PathBase) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        return type(path.item.item) == dict
+        return type(castpath.item.item) == dict
 
-    def get_int(self, path: Path) -> int:
+    def get_int(self, path: PathBase) -> int:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        if not self.is_int(path):
+        if not self.is_int(castpath):
             raise IndexError("Trying to get int, but type does not match.")
-        return castpath.item.item
+        return cast(int, castpath.item.item)
 
-    def get_float(self, path: Path) -> float:
+    def get_float(self, path: PathBase) -> float:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        if not self.is_float(path):
+        if not self.is_float(castpath):
             raise IndexError("Trying to get float, but type does not match.")
-        return castpath.item.item
+        return cast(float, castpath.item.item)
 
-    def get_string(self, path: Path) -> str:
+    def get_string(self, path: PathBase) -> str:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        if not self.is_string(path):
+        if not self.is_string(castpath):
             raise IndexError("Trying to get string, but type does not match.")
-        return castpath.item.item
+        return cast(str, castpath.item.item)
 
-    def get_bytes(self, path: Path) -> bytes:
+    def get_bytes(self, path: PathBase) -> bytes:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        if not self.is_bytes(path):
+        if not self.is_bytes(castpath):
             raise IndexError("Trying to get bytes, but type does not match.")
-        return castpath.item.item
+        return cast(bytes, castpath.item.item)
 
-    def list_length(self, path: Path) -> int:
+    def list_length(self, path: PathBase) -> int:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        if not self.is_list(path):
+        if not self.is_list(castpath):
             raise IndexError("Trying to length of list, but type does not match.")
-        return len(castpath.item.item)
+        return len(cast(List[DbItem], castpath.item.item))
 
-    def list_index(self, path: Path, index: int) -> Path:
+    def list_index(self, path: PathBase, index: int) -> Path:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        if not self.is_list(path):
+        if not self.is_list(castpath):
             raise IndexError("Trying to index list, but type does not match.")
-        if not index < len(castpath.item.item):
+        if not index < len(cast(List[DbItem], castpath.item.item)):
             raise IndexError("Trying to index list out of bounds.")
-        return Path(castpath.item.item[index])
+        return Path(cast(List[DbItem], castpath.item.item)[index])
 
-    def dict_has_key(self, path: Path, index: str) -> bool:
+    def dict_has_key(self, path: PathBase, index: str) -> bool:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        if not self.is_dict(path):
+        if not self.is_dict(castpath):
             raise IndexError("Trying check if dict has key, but type does not match.")
-        return index in castpath.item.item
+        return index in cast(Dict[str, DbItem], castpath.item.item)
 
-    def dict_index(self, path: Path, index: str) -> Path:
+    def dict_index(self, path: PathBase, index: str) -> Path:
         castpath = self._cast_path(path)
         self._assert_not_deleted(castpath.item)
-        if not self.is_dict(path):
+        if not self.is_dict(castpath):
             raise IndexError("Trying to index dict, but type does not match.")
         if not self.dict_has_key(path, index):
             raise IndexError("Trying to index dict, but key not in dict.")
-        return Path(castpath.item.item[index])
+        return Path(cast(Dict[str, DbItem], castpath.item.item)[index])
 
     @staticmethod
     def _cast_path(path: PathBase) -> Path:

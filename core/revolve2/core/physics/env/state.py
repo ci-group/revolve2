@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import List
 
 from pyrr import Quaternion, Vector3
-from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.view import AnyView
 
 

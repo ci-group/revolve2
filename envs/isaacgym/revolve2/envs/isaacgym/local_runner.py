@@ -54,6 +54,8 @@ class LocalRunner(Runner):
             else:
                 self._viewer = self._create_viewer()
 
+            self._gym.prepare_sim(self._sim)
+
         def _create_sim(self, sim_params: gymapi.SimParams) -> gymapi.Sim:
             sim = self._gym.create_sim(type=gymapi.SIM_PHYSX, params=sim_params)
 

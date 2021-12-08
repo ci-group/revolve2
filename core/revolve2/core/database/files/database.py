@@ -163,7 +163,7 @@ class Database(DatabaseBase):
         castpath = self._cast_path(path)
         meta = self._read_meta(castpath)
         if meta[0] != "list":
-            raise IndexError("Getting length of list, buyt type does not match.")
+            raise IndexError("Getting length of list, but type does not match.")
         return int(meta[1])
 
     def list_index(self, path: PathBase, index: int) -> PathBase:

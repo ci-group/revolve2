@@ -4,6 +4,7 @@ Assumes fitness is a float and database is files.
 """
 
 import argparse
+from statistics import mean
 
 import matplotlib.pyplot as plt
 from revolve2.core.database.files import Database
@@ -19,20 +20,50 @@ def main() -> None:
     database = Database(args.database)
     analyzer = EaAnalyzer(AnyView(database, database.root()))
 
-    best_individuals = [
+    max_fitness = [
         max(
-            [analyzer.individuals[individual] for individual in generation],
-            key=lambda individual: individual.fitness.float,
+            [
+                analyzer.individuals[individual].fitness.float
+                for individual in generation
+            ],
         )
         for generation in analyzer.generations
     ]
 
-    print([i.fitness.float for i in best_individuals])
+    min_fitness = [
+        min(
+            [
+                analyzer.individuals[individual].fitness.float
+                for individual in generation
+            ],
+        )
+        for generation in analyzer.generations
+    ]
+
+    mean_fitness = [
+        mean(
+            [
+                analyzer.individuals[individual].fitness.float
+                for individual in generation
+            ],
+        )
+        for generation in analyzer.generations
+    ]
+
+    x = [i for i in range(len(analyzer.generations))]
 
     fig, ax = plt.subplots()
     ax.plot(
-        [i for i in range(len(best_individuals))],
-        [i.fitness.float for i in best_individuals],
+        x,
+        max_fitness,
+    )
+    ax.plot(
+        x,
+        min_fitness,
+    )
+    ax.plot(
+        x,
+        mean_fitness,
     )
     plt.show()
 

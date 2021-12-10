@@ -29,18 +29,21 @@ class View(ABC):
         else:
             return self._set_dict(key)
 
+    @abstractmethod
     def __len__(self) -> int:
         """
         Get the length of a list.
         """
         pass
 
+    @abstractmethod
     def append(self, data: Data) -> None:
         """
         Append to list.
         """
         pass
 
+    @abstractmethod
     def extend(self, list: List[Data]) -> None:
         """
         Extend a list with another list. All elements appended at the end of the original list.

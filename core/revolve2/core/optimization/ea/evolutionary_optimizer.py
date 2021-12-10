@@ -7,7 +7,7 @@ from random import Random
 from typing import Any, Generic, List, Optional, Type, TypeVar, cast
 
 from asyncinit import asyncinit
-from revolve2.core.database import Database, View
+from revolve2.core.database import Database, DatabaseError, View
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 
@@ -332,7 +332,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     self.__dbview[".rng_after_generation"][self.__generation_index].data
                 )
             )
-        except (IndexError, pickle.PickleError, SerializeError):
+        except (DatabaseError, pickle.PickleError, SerializeError):
             return False
 
         self.__initial_population = None

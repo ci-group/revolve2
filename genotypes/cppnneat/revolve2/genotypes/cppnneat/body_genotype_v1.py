@@ -4,8 +4,8 @@ from queue import Queue
 from typing import Any, List, Optional, Set, Tuple
 
 import multineat
-from revolve2.core.database.serialize import Serializable
-from revolve2.core.database.view import AnyView
+from revolve2.core.database import Data
+from revolve2.core.database.serialize import Serializable, SerializeError
 from revolve2.core.modular_robot import ActiveHinge
 from revolve2.core.modular_robot import Body
 from revolve2.core.modular_robot import Body as ModularRobotBody
@@ -202,11 +202,13 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
             cls._timesscalar(b, cls._dot(b, a) * (1 - cosangle)),
         )
 
-    def to_database(self, db_view: AnyView) -> None:
-        db_view.string = self._genotype.Serialize()
+    def serialize(self) -> Data:
+        return self._genotype.Serialize()
 
     @classmethod
-    def from_database(cls, db_view: AnyView) -> Serializable:
+    def deserialize(cls, data: Data) -> Serializable:
+        if type(data) != str:
+            raise SerializeError()
         genotype = multineat.Genome()
-        genotype.Deserialize(db_view.string)
+        genotype.Deserialize(data)
         return cls(genotype)

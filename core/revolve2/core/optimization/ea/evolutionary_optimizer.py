@@ -4,12 +4,12 @@ import logging
 import pickle
 from abc import ABC, abstractmethod
 from random import Random
-from typing import Any, Generic, List, Optional, Type, TypeVar
+from typing import Any, Generic, List, Optional, Type, TypeVar, cast
 
 from asyncinit import asyncinit
-from revolve2.core.database import Database, Path
+from revolve2.core.database import Database, View
 from revolve2.core.database.serialize import Serializable
-from revolve2.core.database.view import DictView
+from revolve2.core.database.serialize.serialize_error import SerializeError
 
 from .individual import Individual
 
@@ -20,7 +20,7 @@ Fitness = TypeVar("Fitness", bound=Serializable)
 @asyncinit
 class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __database: Database
-    __dbbranch: Path
+    __dbview: View
 
     _rng: Random
 
@@ -42,7 +42,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     async def __init__(
         self,
         database: Database,
-        dbbranch: Path,
+        dbview: View,
         random: Random,
         population_size: int,
         offspring_size: int,
@@ -50,7 +50,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         initial_fitness: Optional[List[Fitness]],
     ):
         self.__database = database
-        self.__dbbranch = dbbranch
+        self.__dbview = dbview
 
         self._rng = random
 
@@ -107,7 +107,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     @abstractmethod
     async def _evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, dbbranch: Path
+        self, genotypes: List[Genotype], database: Database, dbview: View
     ) -> List[Fitness]:
         """
         Evaluate a genotype.
@@ -245,8 +245,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return next_id
 
     async def _init_root(self) -> None:
-        root = DictView(self.__database, self.__dbbranch)
-        root.clear()
+        self.__database.begin_transaction()
+        self.__dbview.data = {"evaluations": []}
+        self.__database.commit_transaction()
 
     async def _save_zeroth_generation(
         self, new_individuals: List[Individual[Genotype, Fitness]]
@@ -257,22 +258,15 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
         self.__database.begin_transaction()
 
-        root = DictView(self.__database, self.__dbbranch)
+        self.__dbview[".rng_after_generation"] = []
+        self.__dbview[".genotype_type"] = pickle.dumps(self.__genotype_type)
+        self.__dbview[".fitness_type"] = pickle.dumps(self.__fitness_type)
+        self.__dbview["population_size"] = self.__population_size
+        self.__dbview["offspring_size"] = self.__offspring_size
+        self.__dbview["generations"] = []
+        self.__dbview["individuals"] = []
 
-        root.insert(".rng_after_generation").list.clear()
-
-        root.insert(".genotype_type").bytes = pickle.dumps(self.__genotype_type)
-        root.insert(".fitness_type").bytes = pickle.dumps(self.__fitness_type)
-        root.insert("population_size").int = self.__population_size
-        root.insert("offspring_size").int = self.__offspring_size
-
-        generations = root.insert("generations").list
-        generations.clear()
-
-        individuals = root.insert("individuals").list
-        individuals.clear()
-
-        await self._save_generation_notransaction(root, new_individuals)
+        await self._save_generation_notransaction(new_individuals)
 
         self.__database.commit_transaction()
 
@@ -286,29 +280,23 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         """
 
         self.__database.begin_transaction()
-
-        root = DictView(self.__database, self.__dbbranch)
-        await self._save_generation_notransaction(root, new_individuals)
-
+        await self._save_generation_notransaction(new_individuals)
         self.__database.commit_transaction()
 
     async def _save_generation_notransaction(
-        self, root: DictView, new_individuals: List[Individual[Genotype, Fitness]]
+        self, new_individuals: List[Individual[Genotype, Fitness]]
     ):
         assert self.__last_generation is not None
 
-        root[".rng_after_generation"].list.append().bytes = pickle.dumps(
-            self._rng.getstate()
+        self.__dbview[".rng_after_generation"].append(
+            pickle.dumps(self._rng.getstate())
         )
-
-        generation = root["generations"].list.append().list
-        generation.clear()
-        for individual in self.__last_generation:
-            generation.append().int = individual.id
-
-        individuals = root["individuals"].list
-        for individual in new_individuals:
-            individual.to_database(individuals.append())
+        self.__dbview["generations"].append(
+            [individual.id for individual in self.__last_generation]
+        )
+        self.__dbview["individuals"].extend(
+            [individual.serialize() for individual in new_individuals]
+        )
 
     async def _load_checkpoint(self) -> bool:
         """
@@ -319,52 +307,48 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         """
 
         try:
-            root = DictView(self.__database, self.__dbbranch)
+            self.__genotype_type = pickle.loads(self.__dbview[".genotype_type"].data)
+            self.__fitness_type = pickle.loads(self.__dbview[".fitness_type"].data)
+            self.__population_size = self.__dbview["population_size"].data
+            if type(self.__population_size) != int:
+                raise SerializeError()
+            self.__offspring_size = self.__dbview["offspring_size"].data
+            if type(self.__offspring_size) != int:
+                raise SerializeError()
 
-            self.__genotype_type = pickle.loads(root[".genotype_type"].bytes)
-            self.__fitness_type = pickle.loads(root[".fitness_type"].bytes)
-            self.__population_size = root["population_size"].int
-            self.__offspring_size = root["offspring_size"].int
-
-            generations = root["generations"].list
-            individual_ids = [individual.int for individual in generations[-1].list]
-            individuals_list = root["individuals"].list
+            generations_view = self.__dbview["generations"]
+            individual_ids = cast(List[int], generations_view[-1].data)
+            individuals_view = self.__dbview["individuals"]
             individuals = [
-                Individual[Genotype, Fitness].from_database(individuals_list[id])
+                Individual.deserialize(individuals_view[id].data)
                 for id in individual_ids
             ]
             self.__last_generation = individuals
-            self.__next_id = len(individuals_list)
-            self.__generation_index = len(generations) - 1  # first generation is 0
+            self.__next_id = len(individuals_view)
+            self.__generation_index = len(generations_view) - 1  # first generation is 0
 
             self._rng.setstate(
                 pickle.loads(
-                    root[".rng_after_generation"].list[len(generations) - 1].bytes
+                    self.__dbview[".rng_after_generation"][self.__generation_index].data
                 )
             )
-        except (IndexError, pickle.PickleError):
+        except (IndexError, pickle.PickleError, SerializeError):
             return False
 
         self.__initial_population = None
 
         return True
 
-    async def _prepare_db_evaluation(self) -> Path:
-        root = DictView(self.__database, self.__dbbranch)
-
-        if self.__last_generation is None:
+    async def _prepare_db_evaluation(self) -> View:
+        if self.__generation_index is None:
             generation = 0
-            if not "evaluations" in root:
-                root.insert("evaluations").list.clear()
         else:
-            assert self.__generation_index is not None
             generation = self.__generation_index + 1
 
-        evaluations = root["evaluations"].list
-        if len(evaluations) <= generation:
-            return evaluations.append().path
-        else:
-            return evaluations[generation].path
+        evaluations_view = self.__dbview["evaluations"]
+        if len(evaluations_view) <= generation:
+            evaluations_view.append(None)
+        return evaluations_view[-1]
 
     def _safe_select_parents(
         self, generation: List[Individual[Genotype, Fitness]], num_parents: int
@@ -386,9 +370,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return genotype
 
     async def _safe_evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, dbbranch: Path
+        self, genotypes: List[Genotype], database: Database, dbview: View
     ) -> List[Fitness]:
-        fitnesss = await self._evaluate_generation(genotypes, database, dbbranch)
+        fitnesss = await self._evaluate_generation(genotypes, database, dbview)
         assert type(fitnesss) == list
         assert len(fitnesss) == len(genotypes)
         assert all(type(e) == self.__fitness_type for e in fitnesss)

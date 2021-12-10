@@ -4,54 +4,45 @@ from dataclasses import dataclass
 from typing import List
 
 from pyrr import Quaternion, Vector3
-from revolve2.core.database.view import AnyView
+from revolve2.core.database import Data
+from revolve2.core.database.serialize import Serializable
 
 
 @dataclass
-class ActorState:
+class ActorState(Serializable):
     position: Vector3
     orientation: Quaternion
 
-    def to_database(self, db_view: AnyView) -> None:
-        root = db_view.dict
-        root.clear()
-        root.insert(
-            "position"
-        ).string = f"{self.position.x} {self.position.y} {self.position.z}"
-        root.insert(
-            "orientation"
-        ).string = f"{self.orientation.x} {self.orientation.y} {self.orientation.z} {self.orientation.w}"
+    def serialize(self) -> Data:
+        return {
+            "position": f"{self.position.x} {self.position.y} {self.position.z}",
+            "orientation": f"{self.orientation.x} {self.orientation.y} {self.orientation.z} {self.orientation.w}",
+        }
 
     @classmethod
-    def from_database(cls, db_view: AnyView) -> State:
+    def deserialize(cls, data: Data) -> None:
         raise NotImplementedError()
 
 
 @dataclass
-class EnvironmentState:
+class EnvironmentState(Serializable):
     actor_states: List[ActorState]
 
-    def to_database(self, db_view: AnyView) -> None:
-        root = db_view.list
-        root.clear()
-        for state in self.actor_states:
-            state.to_database(root.append())
+    def serialize(self) -> Data:
+        return [state.serialize for state in self.actor_states]
 
     @classmethod
-    def from_database(cls, db_view: AnyView) -> State:
+    def deserialize(cls, data: Data) -> None:
         raise NotImplementedError()
 
 
 @dataclass
-class State:
+class State(Serializable):
     envs: List[EnvironmentState]
 
-    def to_database(self, db_view: AnyView) -> None:
-        root = db_view.list
-        root.clear()
-        for env in self.envs:
-            env.to_database(root.append())
+    def serialize(self) -> Data:
+        return [env.serialize() for env in self.envs]
 
     @classmethod
-    def from_database(cls, db_view: AnyView) -> State:
+    def deserialize(cls, data: Data) -> None:
         raise NotImplementedError()

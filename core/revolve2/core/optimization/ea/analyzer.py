@@ -1,7 +1,8 @@
 from typing import Any, Iterator, List, Optional
 
-from revolve2.core.database.view import AnyView, ListView
-from revolve2.core.database.view.dict_view import DictView
+from multineat import RetrieveGenomeList
+from revolve2.core.database import Data, View
+from revolve2.core.database.serialize import SerializeError
 
 
 class IndividualId(int):
@@ -9,22 +10,28 @@ class IndividualId(int):
 
 
 class Generation:
-    _view: ListView
+    _view: View
     _gen_num: int
 
-    def __init__(self, view: AnyView, gen_num: int):
+    def __init__(self, view: View, gen_num: int):
         self._view = view.list
         self._gen_num = gen_num
 
-    def __getitem__(self, index: int) -> IndividualId:
-        return IndividualId(self._view[index].int)
-
-    def __len__(self) -> int:
-        return len(self._view)
-
     def __iter__(self) -> Iterator[IndividualId]:
-        for i in range(len(self)):
-            yield IndividualId(self._view[i].int)
+        for id in self.individual_ids:
+            yield id
+
+    @property
+    def individual_ids(self) -> List[IndividualId]:
+        data = self._view.data
+        if type(data) != list:
+            raise SerializeError()
+        ids = []
+        for id in data:
+            if type(id) != int:
+                raise SerializeError()
+            ids.append(IndividualId(id))
+        return ids
 
     @property
     def gen_num(self) -> int:
@@ -32,9 +39,9 @@ class Generation:
 
 
 class Generations:
-    _view: ListView
+    _view: View
 
-    def __init__(self, view: AnyView):
+    def __init__(self, view: View):
         self._view = view.list
 
     def __getitem__(self, index: int) -> Generation:
@@ -49,51 +56,76 @@ class Generations:
 
 
 class Individual:
-    _view: DictView
+    _id: int
+    _parents: Optional[List[int]]
+    _genotype: Data
+    _fitness: Data
 
-    def __init__(self, view: AnyView):
-        self._view = view.dict
+    def __init__(self, view: View):
+        data = view.data
+        if type(data) != dict:
+            raise SerializeError()
+
+        id_data = data.get("id")
+        if id_data is None or type(id_data) != int:
+            raise SerializeError()
+        self._id = id_data
+
+        parents_data = data.get("parents")
+        if parents_data is None:
+            self._parents = None
+        else:
+            if type(parents_data) != list:
+                raise SerializeError()
+            self._parents = []
+            for parent_data in parents_data:
+                if type(parent_data) != int:
+                    raise SerializeError()
+                self._parents.append(parent_data)
+
+        genotype_data = data.get("genotype")
+        if genotype_data is None:
+            raise SerializeError()
+        self._genotype = genotype_data
+
+        fitness_data = data.get("fitness")
+        if fitness_data is None:
+            raise SerializeError()
+        self._fitness = fitness_data
 
     @property
     def id(self) -> IndividualId:
-        return IndividualId(self._view["id"].int)
+        return self._id
 
     @property
     def parents(self) -> Optional[List[IndividualId]]:
-        parents_db = self._view["parents"]
-        if parents_db.is_none():
-            return None
-        else:
-            return [IndividualId(p.int) for p in parents_db.list]
+        return self._parents
 
     @property
-    def genotype(self) -> AnyView:
-        return self._view["genotype"]
+    def genotype(self) -> Data:
+        return self._genotype
 
     @property
-    def fitness(self) -> AnyView:
-        return self._view["fitness"]
+    def fitness(self) -> Data:
+        return self._fitness
 
 
 class Individuals:
-    _view: ListView
+    _view: View
 
-    def __init__(self, view: AnyView):
+    def __init__(self, view: View):
         self._view = view.list
 
     def __getitem__(self, index: int) -> Individual:
         return Individual(self._view[index])
 
-    def __len__(self) -> int:
-        return len(self._view)
-
-    def __iter__(self) -> Iterator[Individual]:
-        for i in range(len(self)):
-            yield Individual(self._view[i])
-
 
 class Evaluations:
-    _view: ListView
+    pass
+
+
+"""
+    _view: View
 
     def __init__(self, view: AnyView):
         self._view = view.list
@@ -107,13 +139,14 @@ class Evaluations:
     def __iter__(self) -> Iterator[AnyView]:
         for i in range(len(self)):
             yield self._view[i]
+"""
 
 
 class Analyzer:
-    _database: DictView
+    _database: View
 
-    def __init__(self, database: AnyView):
-        self._database = database.dict
+    def __init__(self, database: View):
+        self._database = database
 
     @property
     def generations(self) -> Generations:
@@ -133,4 +166,5 @@ class Analyzer:
 
     @property
     def evaluations(self) -> Evaluations:
-        return Evaluations(self._database["evaluations"])
+        # return Evaluations(self._database["evaluations"])
+        raise NotImplementedError()

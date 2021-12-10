@@ -1,2 +1,0 @@
-class Path:
-    pass

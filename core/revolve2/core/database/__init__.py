@@ -1,2 +1,3 @@
+from .data import Data
 from .database import Database
-from .path import Path
+from .view import View

@@ -29,7 +29,7 @@ class EnvironmentState(Serializable):
     actor_states: List[ActorState]
 
     def serialize(self) -> Data:
-        return [state.serialize for state in self.actor_states]
+        return [state.serialize() for state in self.actor_states]
 
     @classmethod
     def deserialize(cls, data: Data) -> None:

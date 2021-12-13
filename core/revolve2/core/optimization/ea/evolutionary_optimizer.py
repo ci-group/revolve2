@@ -4,17 +4,17 @@ import logging
 import pickle
 from abc import ABC, abstractmethod
 from random import Random
-from typing import Any, Generic, List, Optional, Type, TypeVar, cast
+from typing import Generic, List, Optional, Type, TypeVar, Union, cast
 
 from asyncinit import asyncinit
-from revolve2.core.database import Database, DatabaseError, View
+from revolve2.core.database import Data, Database, DatabaseError, View
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 
 from .individual import Individual
 
-Genotype = TypeVar("Genotype", bound=Serializable)
-Fitness = TypeVar("Fitness", bound=Serializable)
+Genotype = TypeVar("Genotype", bound=Union[Serializable, Data])
+Fitness = TypeVar("Fitness", bound=Union[Serializable, Data])
 
 
 @asyncinit
@@ -294,6 +294,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         self.__dbview["generations"].append(
             [individual.id for individual in self.__last_generation]
         )
+        test = [individual.serialize() for individual in new_individuals]
         self.__dbview["individuals"].extend(
             [individual.serialize() for individual in new_individuals]
         )
@@ -317,7 +318,10 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                 raise SerializeError()
 
             generations_view = self.__dbview["generations"]
-            individual_ids = cast(List[int], generations_view[-1].data)
+            self.__generation_index = len(generations_view) - 1  # first generation is 0
+            individual_ids = cast(
+                List[int], generations_view[self.__generation_index].data
+            )
             individuals_view = self.__dbview["individuals"]
             individuals = [
                 Individual.deserialize(individuals_view[id].data)
@@ -325,7 +329,6 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             ]
             self.__last_generation = individuals
             self.__next_id = len(individuals_view)
-            self.__generation_index = len(generations_view) - 1  # first generation is 0
 
             self._rng.setstate(
                 pickle.loads(
@@ -348,7 +351,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         evaluations_view = self.__dbview["evaluations"]
         if len(evaluations_view) <= generation:
             evaluations_view.append(None)
-        return evaluations_view[-1]
+        return evaluations_view[generation]
 
     def _safe_select_parents(
         self, generation: List[Individual[Genotype, Fitness]], num_parents: int

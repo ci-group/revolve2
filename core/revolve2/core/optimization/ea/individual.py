@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import pickle
 from dataclasses import dataclass
-from typing import Generic, List, Optional, TypeVar, cast
+from typing import Generic, List, Optional, TypeVar, Union, cast
 
 from revolve2.core.database import Data
-from revolve2.core.database.serialize import Serializable, SerializeError
+from revolve2.core.database.serialize import (
+    Serializable,
+    SerializeError,
+    deserialize,
+    serialize,
+)
 
-Genotype = TypeVar("Genotype", bound=Serializable)
-Fitness = TypeVar("Fitness", bound=Serializable)
+Genotype = TypeVar("Genotype", bound=Union[Serializable, Data])
+Fitness = TypeVar("Fitness", bound=Union[Serializable, Data])
 
 
 @dataclass
@@ -19,17 +24,12 @@ class Individual(Generic[Genotype, Fitness], Serializable):
     parent_ids: Optional[List[int]]  # None means this is from the initial population
 
     def serialize(self) -> Data:
-        if type(self.fitness) == float:
-            fitness_serialized = cast(float, self.fitness)
-        else:
-            fitness_serialized = self.fitness.serialize()
-
         return {
             "id": self.id,
             ".genotype_type": pickle.dumps(type(self.genotype)),
-            "genotype": self.genotype,
+            "genotype": serialize(self.genotype),
             ".fitness_type": pickle.dumps(type(self.fitness)),
-            "fitness": fitness_serialized,
+            "fitness": serialize(self.fitness),
             "parents": self.parent_ids,
         }
 
@@ -47,25 +47,19 @@ class Individual(Generic[Genotype, Fitness], Serializable):
         if genotype_type_data is None or type(genotype_type_data) != bytes:
             raise SerializeError()
         genotype_type = pickle.loads(genotype_type_data)  # TODO catch error
-        if not issubclass(genotype_type, Serializable):
+        if "genotype" not in data:
             raise SerializeError()
-
         genotype_data = data.get("genotype")
-        if genotype_data is None:
-            raise SerializeError()
-        genotype = cast(Genotype, genotype_type.deserialize(genotype_data))
+        genotype = deserialize(genotype_data, genotype_type)
 
         fitness_type_data = data.get(".fitness_type")
         if fitness_type_data is None or type(fitness_type_data) != bytes:
             raise SerializeError()
         fitness_type = pickle.loads(fitness_type_data)  # TODO catch error
-        if not issubclass(fitness_type, Serializable):
+        if "fitness" not in data:
             raise SerializeError()
-
         fitness_data = data.get("fitness")
-        if fitness_data is None:
-            raise SerializeError()
-        fitness = cast(Fitness, fitness_type.deserialize(fitness_data))
+        fitness = deserialize(fitness_data, fitness_type)
 
         parents_data = data.get("parents")
         if parents_data is None:

@@ -1,4 +1,5 @@
 import logging
+import os
 
 from ..data import Data
 from ..database import Database as DatabaseBase
@@ -11,6 +12,10 @@ class Database(DatabaseBase):
 
     def __init__(self, root_directory: str) -> None:
         self._root_directory = root_directory
+
+        if not os.path.isdir(self._root_directory):
+            os.makedirs(self._root_directory, exist_ok=True)
+            self.root().data = None
 
     def root(self) -> ViewBase:
         return View(self._root_directory)

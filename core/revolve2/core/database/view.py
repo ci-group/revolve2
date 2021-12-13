@@ -25,9 +25,9 @@ class View(ABC):
 
     def __setitem__(self, key: Union[int, str], data: Data) -> None:
         if type(key) == int:
-            return self._set_list(key)
+            return self._set_list(key, data)
         else:
-            return self._set_dict(key)
+            return self._set_dict(key, data)
 
     @abstractmethod
     def __len__(self) -> int:

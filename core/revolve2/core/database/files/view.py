@@ -5,7 +5,7 @@ from typing import Dict, List, cast
 
 from ..data import Data
 from ..database_error import DatabaseError
-from ..view import View as ViewBase
+from ..node import Node as ViewBase
 
 
 class View(ViewBase):

@@ -8,7 +8,7 @@ from statistics import mean
 
 import matplotlib.pyplot as plt
 from revolve2.core.database.files import Database
-from revolve2.core.database.view import AnyView
+from revolve2.core.database.node import AnyView
 from revolve2.core.optimization.ea import Analyzer as EaAnalyzer
 
 

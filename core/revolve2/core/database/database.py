@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 
 from .data import Data
-from .view import View
+from .node import Node
 
 
 class Database(ABC):
     @abstractmethod
-    def root(self) -> View:
+    def root(self) -> Node:
         pass
 
     @abstractmethod

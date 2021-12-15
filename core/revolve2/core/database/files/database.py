@@ -3,7 +3,7 @@ import os
 
 from ..data import Data
 from ..database import Database as DatabaseBase
-from ..view import View as ViewBase
+from ..node import Node as ViewBase
 from .view import View
 
 

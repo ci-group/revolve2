@@ -7,7 +7,7 @@ from random import Random
 from typing import Generic, List, Optional, Type, TypeVar, Union, cast
 
 from asyncinit import asyncinit
-from revolve2.core.database import Data, Database, DatabaseError, View
+from revolve2.core.database import Data, Database, DatabaseError, Node
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 
@@ -20,7 +20,7 @@ Fitness = TypeVar("Fitness", bound=Union[Serializable, Data])
 @asyncinit
 class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __database: Database
-    __dbview: View
+    __dbview: Node
 
     _rng: Random
 
@@ -42,7 +42,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     async def __init__(
         self,
         database: Database,
-        dbview: View,
+        dbview: Node,
         random: Random,
         population_size: int,
         offspring_size: int,
@@ -107,7 +107,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     @abstractmethod
     async def _evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, dbview: View
+        self, genotypes: List[Genotype], database: Database, dbview: Node
     ) -> List[Fitness]:
         """
         Evaluate a genotype.
@@ -342,7 +342,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
         return True
 
-    async def _prepare_db_evaluation(self) -> View:
+    async def _prepare_db_evaluation(self) -> Node:
         if self.__generation_index is None:
             generation = 0
         else:
@@ -373,7 +373,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return genotype
 
     async def _safe_evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, dbview: View
+        self, genotypes: List[Genotype], database: Database, dbview: Node
     ) -> List[Fitness]:
         fitnesss = await self._evaluate_generation(genotypes, database, dbview)
         assert type(fitnesss) == list

@@ -6,7 +6,7 @@ from typing import List, Union
 from .data import Data
 
 
-class View(ABC):
+class Node(ABC):
     @property
     @abstractmethod
     def data(self) -> Data:
@@ -17,7 +17,7 @@ class View(ABC):
     def data(self, data: Data) -> None:
         pass
 
-    def __getitem__(self, key: Union[int, str]) -> View:
+    def __getitem__(self, key: Union[int, str]) -> Node:
         if type(key) == int:
             return self._get_list(key)
         else:
@@ -51,11 +51,11 @@ class View(ABC):
         pass
 
     @abstractmethod
-    def _get_list(self, index: int) -> View:
+    def _get_list(self, index: int) -> Node:
         pass
 
     @abstractmethod
-    def _get_dict(self, index: str) -> View:
+    def _get_dict(self, index: str) -> Node:
         pass
 
     @abstractmethod

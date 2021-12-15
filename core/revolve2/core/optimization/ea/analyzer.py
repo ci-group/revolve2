@@ -1,7 +1,7 @@
 from typing import Any, Iterator, List, Optional
 
 from multineat import RetrieveGenomeList
-from revolve2.core.database import Data, View
+from revolve2.core.database import Data, Node
 from revolve2.core.database.serialize import SerializeError
 
 
@@ -10,10 +10,10 @@ class IndividualId(int):
 
 
 class Generation:
-    _view: View
+    _view: Node
     _gen_num: int
 
-    def __init__(self, view: View, gen_num: int):
+    def __init__(self, view: Node, gen_num: int):
         self._view = view.list
         self._gen_num = gen_num
 
@@ -39,9 +39,9 @@ class Generation:
 
 
 class Generations:
-    _view: View
+    _view: Node
 
-    def __init__(self, view: View):
+    def __init__(self, view: Node):
         self._view = view.list
 
     def __getitem__(self, index: int) -> Generation:
@@ -61,7 +61,7 @@ class Individual:
     _genotype: Data
     _fitness: Data
 
-    def __init__(self, view: View):
+    def __init__(self, view: Node):
         data = view.data
         if type(data) != dict:
             raise SerializeError()
@@ -111,9 +111,9 @@ class Individual:
 
 
 class Individuals:
-    _view: View
+    _view: Node
 
-    def __init__(self, view: View):
+    def __init__(self, view: Node):
         self._view = view.list
 
     def __getitem__(self, index: int) -> Individual:
@@ -143,9 +143,9 @@ class Evaluations:
 
 
 class Analyzer:
-    _database: View
+    _database: Node
 
-    def __init__(self, database: View):
+    def __init__(self, database: Node):
         self._database = database
 
     @property

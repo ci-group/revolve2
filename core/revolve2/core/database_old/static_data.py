@@ -1,6 +1,8 @@
 from typing import Any, Dict, List, Union, cast
 
-Data = Union[List["Data"], Dict[str, "Data"], str, float, int, bytes, None]
+StaticData = Union[
+    List["StaticData"], Dict[str, "StaticData"], str, float, int, bytes, None
+]
 
 
 def is_data(to_check: Any) -> bool:

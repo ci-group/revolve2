@@ -7,14 +7,14 @@ from random import Random
 from typing import Generic, List, Optional, Type, TypeVar, Union, cast
 
 from asyncinit import asyncinit
-from revolve2.core.database import Data, Database, DatabaseError, Node
+from revolve2.core.database import StaticData, Database, DatabaseError, Node
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 
 from .individual import Individual
 
-Genotype = TypeVar("Genotype", bound=Union[Serializable, Data])
-Fitness = TypeVar("Fitness", bound=Union[Serializable, Data])
+Genotype = TypeVar("Genotype", bound=Union[Serializable, StaticData])
+Fitness = TypeVar("Fitness", bound=Union[Serializable, StaticData])
 
 
 @asyncinit

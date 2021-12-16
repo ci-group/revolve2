@@ -1,5 +1,5 @@
 import multineat
-from revolve2.core.database import Data
+from revolve2.core.database import StaticData
 from revolve2.core.database.serialize import Serializable, SerializeError
 from revolve2.core.modular_robot import Body as ModularRobotBody
 from revolve2.core.modular_robot import Brain as ModularRobotBrain
@@ -34,11 +34,11 @@ class BrainGenotypeCpgV1(
     def develop(self, body: ModularRobotBody) -> ModularRobotBrain:
         return BrainCpgV1(self._genotype)
 
-    def serialize(self) -> Data:
+    def serialize(self) -> StaticData:
         return self._genotype.Serialize()
 
     @classmethod
-    def deserialize(cls, data: Data) -> None:
+    def deserialize(cls, data: StaticData) -> None:
         genotype = multineat.Genome()
         if type(data) != str:
             raise SerializeError()

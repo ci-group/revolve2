@@ -1,67 +1,54 @@
-from __future__ import annotations
-
 from abc import ABC, abstractmethod
-from typing import List, Union
 
-from .data import Data
+from .list import List as DbList
+from .object import Object
+from .transaction import Transaction
 
 
 class Node(ABC):
+    """
+    Represents a node in a database.
+    Can be either an object, a list, or unitialized.
+    """
+
+    @abstractmethod
     @property
-    @abstractmethod
-    def data(self) -> Data:
-        pass
-
-    @data.setter
-    @abstractmethod
-    def data(self, data: Data) -> None:
-        pass
-
-    def __getitem__(self, key: Union[int, str]) -> Node:
-        if type(key) == int:
-            return self._get_list(key)
-        else:
-            return self._get_dict(key)
-
-    def __setitem__(self, key: Union[int, str], data: Data) -> None:
-        if type(key) == int:
-            return self._set_list(key, data)
-        else:
-            return self._set_dict(key, data)
-
-    @abstractmethod
-    def __len__(self) -> int:
+    def is_stub(self) -> bool:
         """
-        Get the length of a list.
+        If node is not yet linked to the database but a stub created by the user.
         """
         pass
 
     @abstractmethod
-    def append(self, data: Data) -> None:
+    def make_object(self, tnx: Transaction, object: Object) -> None:
         """
-        Append to list.
-        """
-        pass
-
-    @abstractmethod
-    def extend(self, list: List[Data]) -> None:
-        """
-        Extend a list with another list. All elements appended at the end of the original list.
+        Make this node an object. Raises DatabaseError if node is not uninitialized.
         """
         pass
 
     @abstractmethod
-    def _get_list(self, index: int) -> Node:
+    def make_list(self, tnx: Transaction) -> DbList:
+        """
+        Make this node a list. Raises DatabaseError if node is not uninitialized.
+        """
         pass
 
     @abstractmethod
-    def _get_dict(self, index: str) -> Node:
+    def is_uninitialized(self, tnx: Transaction) -> bool:
+        """
+        Checks if this node is uninitialized.
+        """
+
+    @abstractmethod
+    def as_object(self, tnx: Transaction) -> Object:
+        """
+        Read this node as an object, or raise an error if this node is not an object.
+        """
         pass
 
     @abstractmethod
-    def _set_list(self, index: int, data: Data) -> None:
-        pass
-
-    @abstractmethod
-    def _set_dict(self, index: str, data: Data) -> None:
+    def as_list(self, tnx: Transaction) -> DbList:
+        """
+        Read this node as a list, or raise an error if this node is not a list.
+        """
         pass

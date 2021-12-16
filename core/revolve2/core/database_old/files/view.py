@@ -3,7 +3,7 @@ import shutil
 from os import path
 from typing import Dict, List, cast
 
-from ..data import Data
+from ..static_data import StaticData
 from ..database_error import DatabaseError
 from ..node import Node as ViewBase
 
@@ -15,7 +15,7 @@ class View(ViewBase):
         self._path = path
 
     @property
-    def data(self) -> Data:
+    def data(self) -> StaticData:
         meta = self._read_meta()
         try:
             if meta[0] == "none":
@@ -43,7 +43,7 @@ class View(ViewBase):
             raise DatabaseError()
 
     @data.setter
-    def data(self, data: Data) -> None:
+    def data(self, data: StaticData) -> None:
         self._clear_directory()
         if data is None:
             self._set_meta("none")
@@ -60,12 +60,12 @@ class View(ViewBase):
             self._set_meta("bytes")
             self._set_value_bytes(data)
         elif type(data) == list:
-            data_list = cast(List[Data], data)
+            data_list = cast(List[StaticData], data)
             self._set_meta(f"list\n0")
             for child_data in data_list:
                 self.append(child_data)
         elif type(data) == dict:
-            data_dict = cast(Dict[str, Data], data)
+            data_dict = cast(Dict[str, StaticData], data)
             self._set_meta("dict")
             for key, child_data in data_dict.items():
                 self[key] = child_data
@@ -80,7 +80,7 @@ class View(ViewBase):
         else:
             raise DatabaseError()
 
-    def append(self, data: Data) -> None:
+    def append(self, data: StaticData) -> None:
         meta = self._read_meta()
         if meta[0] == "list":
             length = int(meta[1])
@@ -91,7 +91,7 @@ class View(ViewBase):
         else:
             raise DatabaseError()
 
-    def extend(self, list: List[Data]) -> None:
+    def extend(self, list: List[StaticData]) -> None:
         for item in list:
             self.append(item)
 
@@ -104,10 +104,10 @@ class View(ViewBase):
     def _get_dict(self, key: str) -> ViewBase:
         return View(path.join(self._path, key))
 
-    def _set_list(self, key: int, data: Data) -> None:
+    def _set_list(self, key: int, data: StaticData) -> None:
         raise NotImplementedError()
 
-    def _set_dict(self, key: str, data: Data) -> None:
+    def _set_dict(self, key: str, data: StaticData) -> None:
         meta = self._read_meta()
         if meta[0] != "dict":
             raise IndexError("Inserting into dict, but type does not match.")

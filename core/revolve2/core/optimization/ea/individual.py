@@ -4,7 +4,7 @@ import pickle
 from dataclasses import dataclass
 from typing import Generic, List, Optional, TypeVar, Union, cast
 
-from revolve2.core.database import Data
+from revolve2.core.database import StaticData
 from revolve2.core.database.serialize import (
     Serializable,
     SerializeError,
@@ -12,8 +12,8 @@ from revolve2.core.database.serialize import (
     serialize,
 )
 
-Genotype = TypeVar("Genotype", bound=Union[Serializable, Data])
-Fitness = TypeVar("Fitness", bound=Union[Serializable, Data])
+Genotype = TypeVar("Genotype", bound=Union[Serializable, StaticData])
+Fitness = TypeVar("Fitness", bound=Union[Serializable, StaticData])
 
 
 @dataclass
@@ -23,7 +23,7 @@ class Individual(Generic[Genotype, Fitness], Serializable):
     fitness: Fitness
     parent_ids: Optional[List[int]]  # None means this is from the initial population
 
-    def serialize(self) -> Data:
+    def serialize(self) -> StaticData:
         return {
             "id": self.id,
             ".genotype_type": pickle.dumps(type(self.genotype)),
@@ -34,7 +34,7 @@ class Individual(Generic[Genotype, Fitness], Serializable):
         }
 
     @classmethod
-    def deserialize(cls, data: Data) -> Individual[Genotype, Fitness]:
+    def deserialize(cls, data: StaticData) -> Individual[Genotype, Fitness]:
         if type(data) != dict:
             raise SerializeError()
 

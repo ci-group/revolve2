@@ -1,7 +1,7 @@
 from typing import Any, Iterator, List, Optional
 
 from multineat import RetrieveGenomeList
-from revolve2.core.database import Data, Node
+from revolve2.core.database import StaticData, Node
 from revolve2.core.database.serialize import SerializeError
 
 
@@ -58,8 +58,8 @@ class Generations:
 class Individual:
     _id: int
     _parents: Optional[List[int]]
-    _genotype: Data
-    _fitness: Data
+    _genotype: StaticData
+    _fitness: StaticData
 
     def __init__(self, view: Node):
         data = view.data
@@ -102,11 +102,11 @@ class Individual:
         return self._parents
 
     @property
-    def genotype(self) -> Data:
+    def genotype(self) -> StaticData:
         return self._genotype
 
     @property
-    def fitness(self) -> Data:
+    def fitness(self) -> StaticData:
         return self._fitness
 
 

@@ -1,18 +1,10 @@
-from abc import ABC, abstractmethod
-
-from .data import Data
 from .node import Node
+from .transaction import Transaction
 
 
-class Database(ABC):
-    @abstractmethod
-    def root(self) -> Node:
-        pass
-
-    @abstractmethod
-    def begin_transaction(self):
-        pass
-
-    @abstractmethod
-    def commit_transaction(self):
+class Database:
+    def begin_transaction() -> Transaction:
+        """
+        Begin a transaction context.
+        """
         pass

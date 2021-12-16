@@ -1,7 +1,7 @@
 import logging
 import os
 
-from ..data import Data
+from ..static_data import StaticData
 from ..database import Database as DatabaseBase
 from ..node import Node as ViewBase
 from .view import View

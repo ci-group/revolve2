@@ -1,11 +1,11 @@
 from typing import Type, TypeVar, Union
 
-from ..data import Data, is_data
+from ..static_data import StaticData, is_data
 from .serializable import Serializable
 from .serialize_error import SerializeError
 
 
-def serialize(to_serialize: Union[Serializable, Data]) -> Data:
+def serialize(to_serialize: Union[Serializable, StaticData]) -> StaticData:
     if isinstance(to_serialize, Serializable):
         return to_serialize.serialize()
     elif is_data(to_serialize):
@@ -14,7 +14,7 @@ def serialize(to_serialize: Union[Serializable, Data]) -> Data:
         raise SerializeError()
 
 
-def deserialize(data: Data, type: Type) -> Union[Serializable, Data]:
+def deserialize(data: StaticData, type: Type) -> Union[Serializable, StaticData]:
     if issubclass(type, Serializable):
         return type.deserialize(data)
     elif is_data(data):

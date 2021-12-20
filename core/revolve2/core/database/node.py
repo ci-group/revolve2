@@ -1,54 +1,50 @@
-from abc import ABC, abstractmethod
+from typing import Optional, Union
 
-from .list import List as DbList
+from .database_error import DatabaseError
+from .node_impl import NodeImpl
 from .object import Object
 from .transaction import Transaction
+from .uninitialized import Uninitialized
 
 
-class Node(ABC):
+class Node:
     """
     Represents a node in a database.
-    Can be either an object, a list, or unitialized.
+    Can be either an object or unitialized.
     """
 
-    @abstractmethod
+    _impl: Optional[NodeImpl]
+
+    def __init__(self, impl: NodeImpl = None):
+        self._impl = impl
+
     @property
     def is_stub(self) -> bool:
         """
         If node is not yet linked to the database but a stub created by the user.
         """
-        pass
+        return self._impl is None
 
-    @abstractmethod
-    def make_object(self, tnx: Transaction, object: Object) -> None:
+    def get_object(self, txn: Transaction) -> Union[Object, Uninitialized]:
         """
-        Make this node an object. Raises DatabaseError if node is not uninitialized.
+        Read the underlying object from the database.
         """
-        pass
+        if self.is_stub:
+            raise DatabaseError()
 
-    @abstractmethod
-    def make_list(self, tnx: Transaction) -> DbList:
-        """
-        Make this node a list. Raises DatabaseError if node is not uninitialized.
-        """
-        pass
+        return self._impl.get_object(txn)
 
-    @abstractmethod
-    def is_uninitialized(self, tnx: Transaction) -> bool:
+    def set_object(self, txn: Transaction, object: Object) -> None:
         """
-        Checks if this node is uninitialized.
+        Set the underlying object in the database.
+        If object is not uninitialized, raises DatabaseError.
         """
+        if self.is_stub:
+            raise DatabaseError(
+                "Node not usable yet. It is a stub created by the user that has not yet been linked with the database."
+            )
 
-    @abstractmethod
-    def as_object(self, tnx: Transaction) -> Object:
-        """
-        Read this node as an object, or raise an error if this node is not an object.
-        """
-        pass
+        return self._impl.set_object(txn, object)
 
-    @abstractmethod
-    def as_list(self, tnx: Transaction) -> DbList:
-        """
-        Read this node as a list, or raise an error if this node is not a list.
-        """
-        pass
+    def _set_impl(self, impl: NodeImpl) -> None:
+        self._impl = impl

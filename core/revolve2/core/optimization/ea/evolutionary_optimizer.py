@@ -7,7 +7,9 @@ from random import Random
 from typing import Generic, List, Optional, Type, TypeVar, Union, cast
 
 from asyncinit import asyncinit
-from revolve2.core.database import StaticData, Database, DatabaseError, Node
+from revolve2.core.database import Database, DatabaseError
+from revolve2.core.database import List as DbList
+from revolve2.core.database import Node, StaticData
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 
@@ -20,7 +22,7 @@ Fitness = TypeVar("Fitness", bound=Union[Serializable, StaticData])
 @asyncinit
 class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __database: Database
-    __dbview: Node
+    __db_node: Node
 
     _rng: Random
 
@@ -42,7 +44,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     async def __init__(
         self,
         database: Database,
-        dbview: Node,
+        db_node: Node,
         random: Random,
         population_size: int,
         offspring_size: int,
@@ -50,7 +52,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         initial_fitness: Optional[List[Fitness]],
     ):
         self.__database = database
-        self.__dbview = dbview
+        self.__db_node = db_node
 
         self._rng = random
 
@@ -107,7 +109,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     @abstractmethod
     async def _evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, dbview: Node
+        self, genotypes: List[Genotype], database: Database, db_node: Node
     ) -> List[Fitness]:
         """
         Evaluate a genotype.
@@ -245,9 +247,12 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return next_id
 
     async def _init_root(self) -> None:
-        self.__database.begin_transaction()
-        self.__dbview.data = {"evaluations": []}
-        self.__database.commit_transaction()
+        with self.__database.begin_transaction() as txn:
+            self.__db_ea = Node()
+            self.__db_evaluations = DbList()
+            self.__db_node.set_object(
+                txn, {"evaluations": self.__db_evaluations, "ea": self.__db_ea}
+            )
 
     async def _save_zeroth_generation(
         self, new_individuals: List[Individual[Genotype, Fitness]]
@@ -258,13 +263,13 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
         self.__database.begin_transaction()
 
-        self.__dbview[".rng_after_generation"] = []
-        self.__dbview[".genotype_type"] = pickle.dumps(self.__genotype_type)
-        self.__dbview[".fitness_type"] = pickle.dumps(self.__fitness_type)
-        self.__dbview["population_size"] = self.__population_size
-        self.__dbview["offspring_size"] = self.__offspring_size
-        self.__dbview["generations"] = []
-        self.__dbview["individuals"] = []
+        self.__db_node[".rng_after_generation"] = []
+        self.__db_node[".genotype_type"] = pickle.dumps(self.__genotype_type)
+        self.__db_node[".fitness_type"] = pickle.dumps(self.__fitness_type)
+        self.__db_node["population_size"] = self.__population_size
+        self.__db_node["offspring_size"] = self.__offspring_size
+        self.__db_node["generations"] = []
+        self.__db_node["individuals"] = []
 
         await self._save_generation_notransaction(new_individuals)
 
@@ -288,14 +293,14 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     ):
         assert self.__last_generation is not None
 
-        self.__dbview[".rng_after_generation"].append(
+        self.__db_node[".rng_after_generation"].append(
             pickle.dumps(self._rng.getstate())
         )
-        self.__dbview["generations"].append(
+        self.__db_node["generations"].append(
             [individual.id for individual in self.__last_generation]
         )
         test = [individual.serialize() for individual in new_individuals]
-        self.__dbview["individuals"].extend(
+        self.__db_node["individuals"].extend(
             [individual.serialize() for individual in new_individuals]
         )
 
@@ -305,24 +310,32 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         Can leave this class partially initialized if load unsuccessful.
 
         :returns: True if checkpoint could be loaded and everything is initialized from the database.
+                  False if there was no checkpoint.
+        :raises SerializeError: If the database is in an incompatible state and the optimizer cannot continue.
         """
 
+        return False
+
+        raise SerializeError(
+            "Database in incompatible state. Remove database before trying again."
+        )
+
         try:
-            self.__genotype_type = pickle.loads(self.__dbview[".genotype_type"].data)
-            self.__fitness_type = pickle.loads(self.__dbview[".fitness_type"].data)
-            self.__population_size = self.__dbview["population_size"].data
+            self.__genotype_type = pickle.loads(self.__db_node[".genotype_type"].data)
+            self.__fitness_type = pickle.loads(self.__db_node[".fitness_type"].data)
+            self.__population_size = self.__db_node["population_size"].data
             if type(self.__population_size) != int:
                 raise SerializeError()
-            self.__offspring_size = self.__dbview["offspring_size"].data
+            self.__offspring_size = self.__db_node["offspring_size"].data
             if type(self.__offspring_size) != int:
                 raise SerializeError()
 
-            generations_view = self.__dbview["generations"]
+            generations_view = self.__db_node["generations"]
             self.__generation_index = len(generations_view) - 1  # first generation is 0
             individual_ids = cast(
                 List[int], generations_view[self.__generation_index].data
             )
-            individuals_view = self.__dbview["individuals"]
+            individuals_view = self.__db_node["individuals"]
             individuals = [
                 Individual.deserialize(individuals_view[id].data)
                 for id in individual_ids
@@ -332,7 +345,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
             self._rng.setstate(
                 pickle.loads(
-                    self.__dbview[".rng_after_generation"][self.__generation_index].data
+                    self.__db_node[".rng_after_generation"][
+                        self.__generation_index
+                    ].data
                 )
             )
         except (DatabaseError, pickle.PickleError, SerializeError):
@@ -348,10 +363,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         else:
             generation = self.__generation_index + 1
 
-        evaluations_view = self.__dbview["evaluations"]
-        if len(evaluations_view) <= generation:
-            evaluations_view.append(None)
-        return evaluations_view[generation]
+        with self.__database.begin_transaction() as txn:
+            return self.__db_evaluations.get_or_append(txn, self.__generation_index)
 
     def _safe_select_parents(
         self, generation: List[Individual[Genotype, Fitness]], num_parents: int
@@ -373,9 +386,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return genotype
 
     async def _safe_evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, dbview: Node
+        self, genotypes: List[Genotype], database: Database, db_node: Node
     ) -> List[Fitness]:
-        fitnesss = await self._evaluate_generation(genotypes, database, dbview)
+        fitnesss = await self._evaluate_generation(genotypes, database, db_node)
         assert type(fitnesss) == list
         assert len(fitnesss) == len(genotypes)
         assert all(type(e) == self.__fitness_type for e in fitnesss)

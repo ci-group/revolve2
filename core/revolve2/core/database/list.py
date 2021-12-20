@@ -9,8 +9,8 @@ from .transaction import Transaction
 class List:
     _impl: Optional[ListImpl]
 
-    def __init__(self):
-        self._impl = None
+    def __init__(self, impl: ListImpl = None):
+        self._impl = impl
 
     @property
     def is_stub(self) -> bool:

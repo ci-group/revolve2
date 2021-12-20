@@ -76,6 +76,7 @@ class NodeImpl(NodeImplBase):
 
         jsoned = json.dumps(object, cls=_JSONEncoder)
         dbrow.object = jsoned
+        dbrow.type = 1
 
     def _get_row(self, txn: Transaction) -> Any:  # TODO sqlalchemy typing
         query = txn._session.query(DbNode).filter(DbNode.id == self._id)

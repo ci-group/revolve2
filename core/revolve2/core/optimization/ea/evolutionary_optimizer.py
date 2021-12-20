@@ -12,6 +12,7 @@ from revolve2.core.database import List as DbList
 from revolve2.core.database import Node, StaticData
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
+from revolve2.core.database.uninitialized import Uninitialized
 
 from .individual import Individual
 
@@ -314,11 +315,15 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         :raises SerializeError: If the database is in an incompatible state and the optimizer cannot continue.
         """
 
-        return False
+        with self.__database.begin_transaction() as txn:
+            object = self.__db_node.get_object(txn)
 
-        raise SerializeError(
-            "Database in incompatible state. Remove database before trying again."
-        )
+        if not isinstance(object, Uninitialized):
+            raise SerializeError(
+                "Database in incompatible state. Remove database before trying again."
+            )
+
+        return False
 
         try:
             self.__genotype_type = pickle.loads(self.__db_node[".genotype_type"].data)

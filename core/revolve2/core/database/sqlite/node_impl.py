@@ -1,6 +1,7 @@
 import json
+import re
 from json.decoder import JSONDecodeError
-from typing import Any, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 
 from ..database_error import DatabaseError
 from ..list import List as ListIface
@@ -10,20 +11,8 @@ from ..object import Object, is_object
 from ..transaction import Transaction as TransactionBase
 from ..uninitialized import Uninitialized
 from .list_impl import List as ListImpl
-from .schema import DbListItem, DbNode
+from .schema import DbNode
 from .transaction import Transaction
-
-
-class _JSONEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, NodeIface):
-            assert isinstance(obj._impl, NodeImpl)
-            return f"__node_{obj._impl._id}__"
-        elif isinstance(obj, ListIface):
-            assert isinstance(obj._impl, ListImpl)
-            return f"__node_{obj._impl._id}__"
-        else:
-            return json.JSONEncoder.default(self, obj)
 
 
 class NodeImpl(NodeImplBase):
@@ -35,19 +24,23 @@ class NodeImpl(NodeImplBase):
     def get_object(self, txn: TransactionBase) -> Union[Object, Uninitialized]:
         assert isinstance(txn, Transaction)
 
-        object = self._get_row(txn).object
+        row = self._get_row(txn)
 
-        if object is None:
+        if row.type == 0:
             return Uninitialized()
-        if not isinstance(object, str):
-            raise DatabaseError("Object of Node should be string, but it is not.")
+        elif row.type == 1:
+            object = row.object
+            if not isinstance(object, str):
+                raise DatabaseError("Object of Node should be string, but it is not.")
 
-        try:
-            parsed = json.loads(object)
-        except JSONDecodeError as err:
-            raise DatabaseError("Object of Node is not valid JSON.")
-
-        raise NotImplementedError()  # TODO parse the object
+            try:
+                return json.loads(object, cls=_JSONDecoder)
+            except JSONDecodeError as err:
+                raise DatabaseError("Object of Node is not valid JSON.")
+        elif row.type == 2:
+            return ListIface(ListImpl(row.id))
+        else:
+            raise DatabaseError("Database corrupted. Unexpected type.")
 
     def set_object(self, txn: TransactionBase, object: Object) -> None:
         assert isinstance(txn, Transaction)
@@ -90,7 +83,7 @@ class NodeImpl(NodeImplBase):
             raise DatabaseError(
                 "Database out of sync with program. Node does not exist in database but it should."
             )
-        return query[0]
+        return query.first()
 
     @classmethod
     def _find_node_stubs(
@@ -118,3 +111,34 @@ class NodeImpl(NodeImplBase):
             return (nodes, lists)
         else:
             return ([], [])
+
+
+class _JSONEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, NodeIface):
+            assert isinstance(obj._impl, NodeImpl)
+            return f"__node_{obj._impl._id}__"
+        elif isinstance(obj, ListIface):
+            assert isinstance(obj._impl, ListImpl)
+            return f"__node_{obj._impl._id}__"
+        else:
+            return json.JSONEncoder.default(self, obj)
+
+
+class _JSONDecoder(json.JSONDecoder):
+    def __init__(self, *args, **kwargs):
+        json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
+
+    def object_hook(self, dct: Dict):
+        res = {}
+        for key, val in dct.items():
+            if (
+                isinstance(val, str)
+                and (reres := re.search(r"^__node_(\d+)__$", val)) is not None
+            ):
+                id = int(reres.group(1))
+                res[key] = NodeIface(NodeImpl(id))
+            else:
+                res[key] = val
+
+        return res

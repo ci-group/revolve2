@@ -1,3 +1,4 @@
+import base64
 import json
 import re
 from json.decoder import JSONDecodeError
@@ -122,6 +123,8 @@ class _JSONEncoder(json.JSONEncoder):
         elif isinstance(obj, ListIface):
             assert isinstance(obj._impl, ListImpl)
             return f"__node_{obj._impl._id}__"
+        elif isinstance(obj, bytes):
+            return f"__bytes_{base64.b64encode(obj).decode('ascii')}"
         else:
             return json.JSONEncoder.default(self, obj)
 
@@ -139,6 +142,20 @@ class _JSONDecoder(json.JSONDecoder):
             ):
                 id = int(reres.group(1))
                 res[key] = NodeIface(NodeImpl(id))
+            elif (
+                isinstance(val, str)
+                # this crazy regex searches for __bytes_<base64>__ and sets the base64 to group(1)
+                # https://stackoverflow.com/questions/475074/regex-to-parse-or-validate-base64-data
+                and (
+                    reres := re.search(
+                        r"^__bytes_((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)__$",
+                        val,
+                    )
+                )
+                is not None
+            ):
+                bytes = base64.decode(reres.group(1))
+                res[key] = bytes
             else:
                 res[key] = val
 

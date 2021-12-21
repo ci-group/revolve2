@@ -26,9 +26,11 @@ class DbListItem(Base):
     id = Column(
         Integer, nullable=False, unique=True, autoincrement=True, primary_key=True
     )
+    index = Column(Integer, nullable=False)
     list_node_id = Column(Integer, nullable=False)
     child_node_id = Column(Integer, nullable=False)
 
-    def __init__(self, list_node_id: int, child_node_id: int) -> None:
+    def __init__(self, index: int, list_node_id: int, child_node_id: int) -> None:
+        self.index = index
         self.list_node_id = list_node_id
         self.child_node_id = child_node_id

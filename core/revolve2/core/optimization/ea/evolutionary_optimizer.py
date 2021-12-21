@@ -9,7 +9,7 @@ from typing import Generic, List, Optional, Type, TypeVar, Union, cast
 from asyncinit import asyncinit
 from revolve2.core.database import Database, DatabaseError
 from revolve2.core.database import List as DbList
-from revolve2.core.database import Node, StaticData
+from revolve2.core.database import Node, StaticData, Transaction
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 from revolve2.core.database.uninitialized import Uninitialized
@@ -44,6 +44,10 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     __db_ea: Node
     __db_evaluations: DbList
+
+    __db_rng_after_generation: Optional[DbList]
+    __db_generations: Optional[DbList]
+    __db_individuals: Optional[DbList]
 
     async def __init__(
         self,
@@ -108,6 +112,11 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                 # set fitness type to None
                 # we will set it when evaluating the first generation later
                 self.__fitness_type = None
+
+                # same with these database nodes
+                self.__db_rng_after_generation = None
+                self.__db_generations = None
+                self.__db_individuals = None
 
     @abstractmethod
     async def _evaluate_generation(
@@ -255,19 +264,25 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         Save parameters to the database and do `_save_generation` for the initial population.
         """
 
-        self.__database.begin_transaction()
+        with self.__database.begin_transaction() as txn:
+            self.__db_rng_after_generation = DbList()
+            self.__db_generations = DbList()
+            self.__db_individuals = DbList()
 
-        self.__db_node[".rng_after_generation"] = []
-        self.__db_node[".genotype_type"] = pickle.dumps(self.__genotype_type)
-        self.__db_node[".fitness_type"] = pickle.dumps(self.__fitness_type)
-        self.__db_node["population_size"] = self.__population_size
-        self.__db_node["offspring_size"] = self.__offspring_size
-        self.__db_node["generations"] = []
-        self.__db_node["individuals"] = []
+            self.__db_ea.set_object(
+                txn,
+                {
+                    "rng_after_generation": self.__db_rng_after_generation,
+                    "genotype_type": pickle.dumps(self.__genotype_type),
+                    "fitness_type": pickle.dumps(self.__fitness_type),
+                    "population_size": self.__population_size,
+                    "offspring_size": self.__offspring_size,
+                    "generations": self.__db_generations,
+                    "individuals": self.__db_individuals,
+                },
+            )
 
-        await self._save_generation_notransaction(new_individuals)
-
-        self.__database.commit_transaction()
+            await self._save_generation_notransaction(txn, new_individuals)
 
     async def _save_generation(
         self, new_individuals: List[Individual[Genotype, Fitness]]
@@ -278,25 +293,25 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         :param new_individuals: Individuals borns during last generation
         """
 
-        self.__database.begin_transaction()
-        await self._save_generation_notransaction(new_individuals)
-        self.__database.commit_transaction()
+        with self.__database.begin_transaction() as txn:
+            await self._save_generation_notransaction(txn, new_individuals)
 
     async def _save_generation_notransaction(
-        self, new_individuals: List[Individual[Genotype, Fitness]]
+        self, txn: Transaction, new_individuals: List[Individual[Genotype, Fitness]]
     ):
         assert self.__last_generation is not None
+        assert self.__db_rng_after_generation is not None
+        assert self.__db_generations is not None
+        assert self.__db_individuals is not None
 
-        self.__db_node[".rng_after_generation"].append(
-            pickle.dumps(self._rng.getstate())
+        self.__db_rng_after_generation.append(txn).set_object(
+            txn, pickle.dumps(self._rng.getstate())
         )
-        self.__db_node["generations"].append(
-            [individual.id for individual in self.__last_generation]
+        self.__db_generations.append(txn).set_object(
+            txn, [individual.id for individual in self.__last_generation]
         )
-        test = [individual.serialize() for individual in new_individuals]
-        self.__db_node["individuals"].extend(
-            [individual.serialize() for individual in new_individuals]
-        )
+        for individual in new_individuals:
+            self.__db_individuals.append(txn).set_object(txn, individual.serialize())
 
     async def _load_checkpoint_or_init(self) -> bool:
         """
@@ -387,7 +402,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             generation = self.__generation_index + 1
 
         with self.__database.begin_transaction() as txn:
-            return self.__db_evaluations.get_or_append(txn, self.__generation_index)
+            return self.__db_evaluations.get_or_append(txn, generation)
 
     def _safe_select_parents(
         self, generation: List[Individual[Genotype, Fitness]], num_parents: int

@@ -52,6 +52,5 @@ class Database(DatabaseBase):
     def _create_root_node(self) -> None:
 
         with self.begin_transaction() as ses:
-            print(ses._session.query(DbNode).count())
             if ses._session.query(DbNode).count() == 0:
                 ses._session.add(DbNode(0, None, 0))

@@ -33,5 +33,16 @@ class List:
 
         return self._impl.get_or_append(txn, index)
 
+    def append(self, txn: Transaction) -> Node:
+        """
+        Append a new node to the list and return it.
+        """
+        if self.is_stub:
+            raise DatabaseError(
+                "List not usable yet. It is a stub created by the user that has not yet been linked with the database."
+            )
+
+        return self._impl.append(txn)
+
     def _set_impl(self, impl: ListImpl) -> None:
         self._impl = impl

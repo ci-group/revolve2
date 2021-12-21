@@ -1,2 +1,0 @@
-class SerializeError(Exception):
-    pass

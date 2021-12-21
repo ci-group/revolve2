@@ -345,55 +345,64 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     if isinstance(ea, Uninitialized):
                         return False
 
-                    raise NotImplementedError()
+                    self.__db_rng_after_generation = ea[
+                        "rng_after_generation"
+                    ].get_object(txn)
+                    if not isinstance(self.__db_rng_after_generation, DbList):
+                        raise SerializeError()
+                    self.__population_size = ea["population_size"]
+                    if not isinstance(self.__population_size, int):
+                        raise SerializeError()
+                    self.__offspring_size = ea["offspring_size"]
+                    if not isinstance(self.__offspring_size, int):
+                        raise SerializeError()
+                    self.__db_generations = ea["generations"].get_object(txn)
+                    if not isinstance(self.__db_generations, DbList):
+                        raise SerializeError()
+                    self.__db_individuals = ea["individuals"].get_object(txn)
+                    if not isinstance(self.__db_individuals, DbList):
+                        raise SerializeError()
+
+                    self.__genotype_type = pickle.loads(ea["genotype_type"])
+                    self.__fitness_type = pickle.loads(ea["fitness_type"])
+
+                    self.__generation_index = (
+                        self.__db_generations.len(txn) - 1
+                    )  # first generation is 0
+
+                    individual_ids = self.__db_generations.get(
+                        txn, self.__generation_index
+                    ).get_object(txn)
+                    if not isinstance(individual_ids, list):
+                        raise SerializeError()
+                    self.__last_generation = [
+                        Individual.deserialize(
+                            self.__db_individuals.get(txn, id).get_object(txn)
+                        )
+                        for id in individual_ids
+                    ]
+                    self.__next_id = self.__db_individuals.len(txn)
+
+                    x = self.__db_rng_after_generation.get(
+                        txn, self.__generation_index
+                    ).get_object(txn)
+
+                    self._rng.setstate(
+                        pickle.loads(
+                            self.__db_rng_after_generation.get(
+                                txn, self.__generation_index
+                            ).get_object(txn)
+                        )
+                    )
+
+                    self.__initial_population = None
+
+                    return True
 
             except (SerializeError, pickle.PickleError, KeyError, TypeError) as err:
                 raise SerializeError(
-                    "Database in incompatible state. Remove database before trying again."
+                    "Database in state incompatible with this code. Remove database before trying again."
                 ) from err
-
-            """
-            try:
-                self.__genotype_type = pickle.loads(
-                    self.__db_node[".genotype_type"].data
-                )
-                self.__fitness_type = pickle.loads(self.__db_node[".fitness_type"].data)
-                self.__population_size = self.__db_node["population_size"].data
-                if type(self.__population_size) != int:
-                    raise SerializeError()
-                self.__offspring_size = self.__db_node["offspring_size"].data
-                if type(self.__offspring_size) != int:
-                    raise SerializeError()
-
-                generations_view = self.__db_node["generations"]
-                self.__generation_index = (
-                    len(generations_view) - 1
-                )  # first generation is 0
-                individual_ids = cast(
-                    List[int], generations_view[self.__generation_index].data
-                )
-                individuals_view = self.__db_node["individuals"]
-                individuals = [
-                    Individual.deserialize(individuals_view[id].data)
-                    for id in individual_ids
-                ]
-                self.__last_generation = individuals
-                self.__next_id = len(individuals_view)
-
-                self._rng.setstate(
-                    pickle.loads(
-                        self.__db_node[".rng_after_generation"][
-                            self.__generation_index
-                        ].data
-                    )
-                )
-            except (DatabaseError, pickle.PickleError, SerializeError):
-                return False
-
-            self.__initial_population = None
-
-            return True
-            """
 
     async def _prepare_db_evaluation(self) -> Node:
         if self.__generation_index is None:

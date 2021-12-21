@@ -119,12 +119,12 @@ class _JSONEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, NodeIface):
             assert isinstance(obj._impl, NodeImpl)
-            return f"__node_{obj._impl._id}__"
+            return {"__type__": "node", "id": obj._impl._id}
         elif isinstance(obj, ListIface):
             assert isinstance(obj._impl, ListImpl)
-            return f"__node_{obj._impl._id}__"
+            return {"__type__": "node", "id": obj._impl._id}
         elif isinstance(obj, bytes):
-            return f"__bytes_{base64.b64encode(obj).decode('ascii')}"
+            return {"__type__": "bytes", "bytes": base64.b64encode(obj).decode("ascii")}
         else:
             return json.JSONEncoder.default(self, obj)
 
@@ -134,29 +134,10 @@ class _JSONDecoder(json.JSONDecoder):
         json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
 
     def object_hook(self, dct: Dict):
-        res = {}
-        for key, val in dct.items():
-            if (
-                isinstance(val, str)
-                and (reres := re.search(r"^__node_(\d+)__$", val)) is not None
-            ):
-                id = int(reres.group(1))
-                res[key] = NodeIface(NodeImpl(id))
-            elif (
-                isinstance(val, str)
-                # this crazy regex searches for __bytes_<base64>__ and sets the base64 to group(1)
-                # https://stackoverflow.com/questions/475074/regex-to-parse-or-validate-base64-data
-                and (
-                    reres := re.search(
-                        r"^__bytes_((?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)__$",
-                        val,
-                    )
-                )
-                is not None
-            ):
-                bytes = base64.decode(reres.group(1))
-                res[key] = bytes
-            else:
-                res[key] = val
-
-        return res
+        type = dct.get("__type__")
+        if type is None:
+            return dct
+        elif type == "node":
+            return NodeIface(NodeImpl(dct["id"]))
+        elif type == "bytes":
+            return base64.b64decode(dct["bytes"])

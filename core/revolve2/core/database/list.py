@@ -44,5 +44,28 @@ class List:
 
         return self._impl.append(txn)
 
+    def get(self, txn: Transaction, index: int) -> Node:
+        """
+        Get the item at the given index.
+        :raises: DatabaseError if out of bounds
+        """
+        if self.is_stub:
+            raise DatabaseError(
+                "List not usable yet. It is a stub created by the user that has not yet been linked with the database."
+            )
+
+        return self._impl.get(txn, index)
+
+    def len(self, txn: Transaction) -> int:
+        """
+        Get the length of the list.
+        """
+        if self.is_stub:
+            raise DatabaseError(
+                "List not usable yet. It is a stub created by the user that has not yet been linked with the database."
+            )
+
+        return self._impl.len(txn)
+
     def _set_impl(self, impl: ListImpl) -> None:
         self._impl = impl

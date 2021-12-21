@@ -52,3 +52,20 @@ class List(ListImplBase):
         txn._session.flush()
         txn._session.add(DbListItem(index, self._id, child.id))
         return Node(NodeImpl(child.id))
+
+    def get(self, txn: Transaction, index: int) -> Node:
+        from .node_impl import NodeImpl
+
+        item = txn._session.query(DbListItem).filter(
+            DbListItem.list_node_id == self._id, DbListItem.index == index
+        )
+        if item.count() != 1:
+            raise DatabaseError("Index out of bounds or database corrupted.")
+        return Node(NodeImpl(item.first().child_node_id))
+
+    def len(self, txn: Transaction) -> int:
+        return (
+            txn._session.query(DbListItem)
+            .filter(DbListItem.list_node_id == self._id)
+            .count()
+        )

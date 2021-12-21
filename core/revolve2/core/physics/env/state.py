@@ -15,8 +15,17 @@ class ActorState(Serializable):
 
     def serialize(self) -> StaticData:
         return {
-            "position": f"{self.position.x} {self.position.y} {self.position.z}",
-            "orientation": f"{self.orientation.x} {self.orientation.y} {self.orientation.z} {self.orientation.w}",
+            "position": [
+                float(self.position.x),
+                float(self.position.y),
+                float(self.position.z),
+            ],
+            "orientation": [
+                float(self.orientation.x),
+                float(self.orientation.y),
+                float(self.orientation.z),
+                float(self.orientation.w),
+            ],
         }
 
     @classmethod

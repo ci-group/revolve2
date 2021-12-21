@@ -7,7 +7,7 @@ from random import Random
 from typing import Generic, List, Optional, Type, TypeVar, Union, cast
 
 from asyncinit import asyncinit
-from revolve2.core.database import Database, DatabaseError
+from revolve2.core.database import Database
 from revolve2.core.database import List as DbList
 from revolve2.core.database import Node, StaticData, Transaction
 from revolve2.core.database.serialize import Serializable
@@ -207,6 +207,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
             await self._save_zeroth_generation(self.__last_generation)
 
+            logging.info("Finished generation 0.")
+
         while self._safe_must_do_next_gen():
             assert self.__generation_index is not None
             assert self.__last_generation is not None
@@ -251,6 +253,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             self.__generation_index += 1
 
             await self._save_generation(new_individuals)
+
+            logging.info(f"Finished generation {self.__generation_index}.")
 
     def _get_next_id(self) -> int:
         next_id = self.__next_id
@@ -304,6 +308,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         assert self.__db_generations is not None
         assert self.__db_individuals is not None
 
+        logging.debug("Beginning saving generation..")
+
         self.__db_rng_after_generation.append(txn).set_object(
             txn, pickle.dumps(self._rng.getstate())
         )
@@ -312,6 +318,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         )
         for individual in new_individuals:
             self.__db_individuals.append(txn).set_object(txn, individual.serialize())
+
+        logging.debug("Finished saving generation.")
 
     async def _load_checkpoint_or_init(self) -> bool:
         """

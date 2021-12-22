@@ -6,7 +6,6 @@ from abc import ABC, abstractmethod
 from random import Random
 from typing import Generic, List, Optional, Type, TypeVar, Union, cast
 
-from asyncinit import asyncinit
 from revolve2.core.database import Database
 from revolve2.core.database import List as DbList
 from revolve2.core.database import Node, StaticData, Transaction
@@ -20,7 +19,6 @@ Genotype = TypeVar("Genotype", bound=Union[Serializable, StaticData])
 Fitness = TypeVar("Fitness", bound=Union[Serializable, StaticData])
 
 
-@asyncinit
 class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __database: Database
     __db_node: Node
@@ -49,7 +47,12 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __db_generations: Optional[DbList]
     __db_individuals: Optional[DbList]
 
-    async def __init__(
+    def __init__(self) -> None:
+        raise ValueError(
+            "Do not call this function. Call asyncinit instead. Inherit this class and implement __init__ to avoid this error."
+        )
+
+    async def asyncinit(
         self,
         database: Database,
         db_node: Node,
@@ -58,7 +61,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         offspring_size: int,
         initial_population: List[Genotype],
         initial_fitness: Optional[List[Fitness]],
-    ):
+    ) -> None:
         self.__database = database
         self.__db_node = db_node
 

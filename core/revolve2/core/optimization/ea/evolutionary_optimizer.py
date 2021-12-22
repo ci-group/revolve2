@@ -73,7 +73,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             )
         else:
             logging.info(
-                f"No checkpoint has been made yet or if it has, database incompatible or corrupted. Starting with generation 0."
+                f"No checkpoint has been made yet. Starting with generation 0."
             )
             assert type(population_size) == int
             self.__population_size = population_size

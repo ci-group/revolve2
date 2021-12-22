@@ -1,3 +1,4 @@
+import multiprocessing as mp
 import os
 import tempfile
 from dataclasses import dataclass
@@ -38,12 +39,11 @@ class LocalRunner(Runner):
 
         def __init__(
             self,
-            gym: gymapi.Gym,
             batch: Batch,
             sim_params: gymapi.SimParams,
             headless: bool,
         ):
-            self._gym = gym
+            self._gym = gymapi.acquire_gym()
             self._batch = batch
 
             self._sim = self._create_sim(sim_params)
@@ -235,11 +235,10 @@ class LocalRunner(Runner):
 
             return state
 
-    _gym = gymapi.Gym
     _sim_params: gymapi.SimParams
+    _headless: bool
 
     def __init__(self, sim_params: gymapi.SimParams, headless: bool = False):
-        self._gym = gymapi.acquire_gym()
         self._sim_params = sim_params
         self._headless = headless
 
@@ -260,8 +259,25 @@ class LocalRunner(Runner):
         return sim_params
 
     async def run_batch(self, batch: Batch) -> List[Tuple[float, State]]:
-        simulator = self.Simulator(self._gym, batch, self._sim_params, self._headless)
-        states = simulator.run()  # TODO this is not async
-        simulator.cleanup()
+        # sadly we must run Isaac Gym in a subprocess, because it has some big memory leaks.
+        result_queue = mp.Queue()
+        process = mp.Process(
+            target=self._run_batch_impl,
+            args=(result_queue, batch, self._sim_params, self._headless),
+        )
+        process.start()
+        process.join()
+        return result_queue.get()
 
-        return states
+    @classmethod
+    def _run_batch_impl(
+        cls,
+        result_queue: mp.Queue,
+        batch: Batch,
+        sim_params: gymapi.SimParams,
+        headless: bool,
+    ) -> int:
+        simulator = cls.Simulator(batch, sim_params, headless)
+        states = simulator.run()
+        simulator.cleanup()
+        result_queue.put(states)

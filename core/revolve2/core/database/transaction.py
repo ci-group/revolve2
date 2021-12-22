@@ -1,5 +1,2 @@
-from abc import ABC, abstractmethod
-
-
-class Transaction(ABC):
+class Transaction:
     pass

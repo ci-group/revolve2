@@ -4,23 +4,26 @@ import logging
 import pickle
 from abc import ABC, abstractmethod
 from random import Random
-from typing import Any, Generic, List, Optional, Type, TypeVar
+from typing import Generic, List, Optional, Type, TypeVar, Union, cast
 
 from asyncinit import asyncinit
-from revolve2.core.database import Database, Path
+from revolve2.core.database import Database
+from revolve2.core.database import List as DbList
+from revolve2.core.database import Node, StaticData, Transaction
 from revolve2.core.database.serialize import Serializable
-from revolve2.core.database.view import DictView
+from revolve2.core.database.serialize.serialize_error import SerializeError
+from revolve2.core.database.uninitialized import Uninitialized
 
 from .individual import Individual
 
-Genotype = TypeVar("Genotype", bound=Serializable)
-Fitness = TypeVar("Fitness", bound=Serializable)
+Genotype = TypeVar("Genotype", bound=Union[Serializable, StaticData])
+Fitness = TypeVar("Fitness", bound=Union[Serializable, StaticData])
 
 
 @asyncinit
 class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __database: Database
-    __dbbranch: Path
+    __db_node: Node
 
     _rng: Random
 
@@ -39,10 +42,17 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __last_generation: Optional[List[Individual[Genotype, Fitness]]]
     __initial_population: Optional[List[Genotype]]
 
+    __db_ea: Node
+    __db_evaluations: DbList
+
+    __db_rng_after_generation: Optional[DbList]
+    __db_generations: Optional[DbList]
+    __db_individuals: Optional[DbList]
+
     async def __init__(
         self,
         database: Database,
-        dbbranch: Path,
+        db_node: Node,
         random: Random,
         population_size: int,
         offspring_size: int,
@@ -50,14 +60,14 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         initial_fitness: Optional[List[Fitness]],
     ):
         self.__database = database
-        self.__dbbranch = dbbranch
+        self.__db_node = db_node
 
         self._rng = random
 
         self.__next_id = 0
 
         logging.info("Attempting to load checkpoint..")
-        if await self._load_checkpoint():
+        if await self._load_checkpoint_or_init():
             logging.info(
                 f"Checkpoint found. Last complete generation was {self.__generation_index}."
             )
@@ -103,11 +113,14 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                 # we will set it when evaluating the first generation later
                 self.__fitness_type = None
 
-            await self._init_root()
+                # same with these database nodes
+                self.__db_rng_after_generation = None
+                self.__db_generations = None
+                self.__db_individuals = None
 
     @abstractmethod
     async def _evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, dbbranch: Path
+        self, genotypes: List[Genotype], database: Database, db_node: Node
     ) -> List[Fitness]:
         """
         Evaluate a genotype.
@@ -194,6 +207,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
             await self._save_zeroth_generation(self.__last_generation)
 
+            logging.info("Finished generation 0.")
+
         while self._safe_must_do_next_gen():
             assert self.__generation_index is not None
             assert self.__last_generation is not None
@@ -239,14 +254,12 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
             await self._save_generation(new_individuals)
 
+            logging.info(f"Finished generation {self.__generation_index}.")
+
     def _get_next_id(self) -> int:
         next_id = self.__next_id
         self.__next_id += 1
         return next_id
-
-    async def _init_root(self) -> None:
-        root = DictView(self.__database, self.__dbbranch)
-        root.clear()
 
     async def _save_zeroth_generation(
         self, new_individuals: List[Individual[Genotype, Fitness]]
@@ -255,26 +268,25 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         Save parameters to the database and do `_save_generation` for the initial population.
         """
 
-        self.__database.begin_transaction()
+        with self.__database.begin_transaction() as txn:
+            self.__db_rng_after_generation = DbList()
+            self.__db_generations = DbList()
+            self.__db_individuals = DbList()
 
-        root = DictView(self.__database, self.__dbbranch)
+            self.__db_ea.set_object(
+                txn,
+                {
+                    "rng_after_generation": self.__db_rng_after_generation,
+                    "genotype_type": pickle.dumps(self.__genotype_type),
+                    "fitness_type": pickle.dumps(self.__fitness_type),
+                    "population_size": self.__population_size,
+                    "offspring_size": self.__offspring_size,
+                    "generations": self.__db_generations,
+                    "individuals": self.__db_individuals,
+                },
+            )
 
-        root.insert(".rng_after_generation").list.clear()
-
-        root.insert(".genotype_type").bytes = pickle.dumps(self.__genotype_type)
-        root.insert(".fitness_type").bytes = pickle.dumps(self.__fitness_type)
-        root.insert("population_size").int = self.__population_size
-        root.insert("offspring_size").int = self.__offspring_size
-
-        generations = root.insert("generations").list
-        generations.clear()
-
-        individuals = root.insert("individuals").list
-        individuals.clear()
-
-        await self._save_generation_notransaction(root, new_individuals)
-
-        self.__database.commit_transaction()
+            await self._save_generation_notransaction(txn, new_individuals)
 
     async def _save_generation(
         self, new_individuals: List[Individual[Genotype, Fitness]]
@@ -285,86 +297,129 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         :param new_individuals: Individuals borns during last generation
         """
 
-        self.__database.begin_transaction()
-
-        root = DictView(self.__database, self.__dbbranch)
-        await self._save_generation_notransaction(root, new_individuals)
-
-        self.__database.commit_transaction()
+        with self.__database.begin_transaction() as txn:
+            await self._save_generation_notransaction(txn, new_individuals)
 
     async def _save_generation_notransaction(
-        self, root: DictView, new_individuals: List[Individual[Genotype, Fitness]]
+        self, txn: Transaction, new_individuals: List[Individual[Genotype, Fitness]]
     ):
         assert self.__last_generation is not None
+        assert self.__db_rng_after_generation is not None
+        assert self.__db_generations is not None
+        assert self.__db_individuals is not None
 
-        root[".rng_after_generation"].list.append().bytes = pickle.dumps(
-            self._rng.getstate()
+        logging.debug("Beginning saving generation..")
+
+        self.__db_rng_after_generation.append(txn).set_object(
+            txn, pickle.dumps(self._rng.getstate())
         )
-
-        generation = root["generations"].list.append().list
-        generation.clear()
-        for individual in self.__last_generation:
-            generation.append().int = individual.id
-
-        individuals = root["individuals"].list
+        self.__db_generations.append(txn).set_object(
+            txn, [individual.id for individual in self.__last_generation]
+        )
         for individual in new_individuals:
-            individual.to_database(individuals.append())
+            self.__db_individuals.append(txn).set_object(txn, individual.serialize())
 
-    async def _load_checkpoint(self) -> bool:
+        logging.debug("Finished saving generation.")
+
+    async def _load_checkpoint_or_init(self) -> bool:
         """
-        Deserialize from the database.
-        Can leave this class partially initialized if load unsuccessful.
+        Deserialize from the database. If no checkpoint was found, the basic database structure is created.
 
         :returns: True if checkpoint could be loaded and everything is initialized from the database.
+                  False if there was no checkpoint.
+        :raises SerializeError: If the database is in an incompatible state and the optimizer cannot continue.
+                                Can leave this class in a partially deserialized state.
         """
 
-        try:
-            root = DictView(self.__database, self.__dbbranch)
+        with self.__database.begin_transaction() as txn:
+            root = self.__db_node.get_object(txn)
 
-            self.__genotype_type = pickle.loads(root[".genotype_type"].bytes)
-            self.__fitness_type = pickle.loads(root[".fitness_type"].bytes)
-            self.__population_size = root["population_size"].int
-            self.__offspring_size = root["offspring_size"].int
+            try:
+                if isinstance(root, Uninitialized):
+                    self.__db_ea = Node()
+                    self.__db_evaluations = DbList()
+                    self.__db_node.set_object(
+                        txn, {"evaluations": self.__db_evaluations, "ea": self.__db_ea}
+                    )
+                else:
+                    self.__db_ea = root["ea"]
+                    if not isinstance(self.__db_ea, Node):
+                        raise SerializeError()
+                    self.__db_evaluations = root["evaluations"].get_object(txn)
+                    if not isinstance(self.__db_evaluations, DbList):
+                        raise SerializeError()
 
-            generations = root["generations"].list
-            individual_ids = [individual.int for individual in generations[-1].list]
-            individuals_list = root["individuals"].list
-            individuals = [
-                Individual[Genotype, Fitness].from_database(individuals_list[id])
-                for id in individual_ids
-            ]
-            self.__last_generation = individuals
-            self.__next_id = len(individuals_list)
-            self.__generation_index = len(generations) - 1  # first generation is 0
+                    ea = self.__db_ea.get_object(txn)
+                    if isinstance(ea, Uninitialized):
+                        return False
 
-            self._rng.setstate(
-                pickle.loads(
-                    root[".rng_after_generation"].list[len(generations) - 1].bytes
-                )
-            )
-        except (IndexError, pickle.PickleError):
-            return False
+                    self.__db_rng_after_generation = ea[
+                        "rng_after_generation"
+                    ].get_object(txn)
+                    if not isinstance(self.__db_rng_after_generation, DbList):
+                        raise SerializeError()
+                    self.__population_size = ea["population_size"]
+                    if not isinstance(self.__population_size, int):
+                        raise SerializeError()
+                    self.__offspring_size = ea["offspring_size"]
+                    if not isinstance(self.__offspring_size, int):
+                        raise SerializeError()
+                    self.__db_generations = ea["generations"].get_object(txn)
+                    if not isinstance(self.__db_generations, DbList):
+                        raise SerializeError()
+                    self.__db_individuals = ea["individuals"].get_object(txn)
+                    if not isinstance(self.__db_individuals, DbList):
+                        raise SerializeError()
 
-        self.__initial_population = None
+                    self.__genotype_type = pickle.loads(ea["genotype_type"])
+                    self.__fitness_type = pickle.loads(ea["fitness_type"])
 
-        return True
+                    self.__generation_index = (
+                        self.__db_generations.len(txn) - 1
+                    )  # first generation is 0
 
-    async def _prepare_db_evaluation(self) -> Path:
-        root = DictView(self.__database, self.__dbbranch)
+                    individual_ids = self.__db_generations.get(
+                        txn, self.__generation_index
+                    ).get_object(txn)
+                    if not isinstance(individual_ids, list):
+                        raise SerializeError()
+                    self.__last_generation = [
+                        Individual.deserialize(
+                            self.__db_individuals.get(txn, id).get_object(txn)
+                        )
+                        for id in individual_ids
+                    ]
+                    self.__next_id = self.__db_individuals.len(txn)
 
-        if self.__last_generation is None:
+                    x = self.__db_rng_after_generation.get(
+                        txn, self.__generation_index
+                    ).get_object(txn)
+
+                    self._rng.setstate(
+                        pickle.loads(
+                            self.__db_rng_after_generation.get(
+                                txn, self.__generation_index
+                            ).get_object(txn)
+                        )
+                    )
+
+                    self.__initial_population = None
+
+                    return True
+
+            except (SerializeError, pickle.PickleError, KeyError, TypeError) as err:
+                raise SerializeError(
+                    "Database in state incompatible with this code. Remove database before trying again."
+                ) from err
+
+    async def _prepare_db_evaluation(self) -> Node:
+        if self.__generation_index is None:
             generation = 0
-            if not "evaluations" in root:
-                root.insert("evaluations").list.clear()
         else:
-            assert self.__generation_index is not None
             generation = self.__generation_index + 1
 
-        evaluations = root["evaluations"].list
-        if len(evaluations) <= generation:
-            return evaluations.append().path
-        else:
-            return evaluations[generation].path
+        with self.__database.begin_transaction() as txn:
+            return self.__db_evaluations.get_or_append(txn, generation)
 
     def _safe_select_parents(
         self, generation: List[Individual[Genotype, Fitness]], num_parents: int
@@ -386,9 +441,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         return genotype
 
     async def _safe_evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, dbbranch: Path
+        self, genotypes: List[Genotype], database: Database, db_node: Node
     ) -> List[Fitness]:
-        fitnesss = await self._evaluate_generation(genotypes, database, dbbranch)
+        fitnesss = await self._evaluate_generation(genotypes, database, db_node)
         assert type(fitnesss) == list
         assert len(fitnesss) == len(genotypes)
         assert all(type(e) == self.__fitness_type for e in fitnesss)

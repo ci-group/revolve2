@@ -2,13 +2,18 @@ from __future__ import annotations
 
 import pickle
 from dataclasses import dataclass
-from typing import Generic, List, Optional, TypeVar, cast
+from typing import Generic, List, Optional, TypeVar, Union, cast
 
-from revolve2.core.database.serialize import Serializable, SerializeError
-from revolve2.core.database.view import AnyView
+from revolve2.core.database import StaticData
+from revolve2.core.database.serialize import (
+    Serializable,
+    SerializeError,
+    deserialize,
+    serialize,
+)
 
-Genotype = TypeVar("Genotype", bound=Serializable)
-Fitness = TypeVar("Fitness", bound=Serializable)
+Genotype = TypeVar("Genotype", bound=Union[Serializable, StaticData])
+Fitness = TypeVar("Fitness", bound=Union[Serializable, StaticData])
 
 
 @dataclass
@@ -18,54 +23,54 @@ class Individual(Generic[Genotype, Fitness], Serializable):
     fitness: Fitness
     parent_ids: Optional[List[int]]  # None means this is from the initial population
 
-    def to_database(self, db_view: AnyView) -> None:
-        root = db_view.dict
-        root.clear()
-
-        root.insert("id").int = self.id
-        root.insert(".genotype_type").bytes = pickle.dumps(type(self.genotype))
-        self.genotype.to_database(root.insert("genotype"))
-
-        root.insert(".fitness_type").bytes = pickle.dumps(type(self.fitness))
-        fitness = root.insert("fitness")
-        # TODO support more types in a more generic way throughout this codebase
-        if type(self.fitness) == float:
-            fitness.float = cast(float, self.fitness)
-        else:
-            self.fitness.to_database(fitness)
-
-        parents = root.insert("parents")
-        if self.parent_ids is None:
-            parents.make_none()
-        else:
-            parents_list = parents.list
-            parents_list.clear()
-            for parent in self.parent_ids:
-                parents_list.append().int = parent
+    def serialize(self) -> StaticData:
+        return {
+            "id": self.id,
+            ".genotype_type": pickle.dumps(type(self.genotype)),
+            "genotype": serialize(self.genotype),
+            ".fitness_type": pickle.dumps(type(self.fitness)),
+            "fitness": serialize(self.fitness),
+            "parents": self.parent_ids,
+        }
 
     @classmethod
-    def from_database(cls, db_view: AnyView) -> Individual[Genotype, Fitness]:
-        root = db_view.dict
+    def deserialize(cls, data: StaticData) -> Individual[Genotype, Fitness]:
+        if type(data) != dict:
+            raise SerializeError()
 
-        id = root["id"].int
-        genotype_type = pickle.loads(root[".genotype_type"].bytes)
-        if not issubclass(genotype_type, Serializable):
-            raise SerializeError("Loaded genotype type is not Serializable.")
-        genotype = genotype_type.from_database(root["genotype"])
+        id_data = data.get("id")
+        if id_data is None or type(id_data) != int:
+            raise SerializeError()
+        id = cast(int, id_data)
 
-        fitness_type = pickle.loads(root[".fitness_type"].bytes)
-        fitness_db = root["fitness"]
-        if fitness_type == float:
-            fitness = fitness_db.float
-        elif issubclass(fitness_type, Serializable):
-            fitness = fitness_type.from_database(fitness_db)
+        genotype_type_data = data.get(".genotype_type")
+        if genotype_type_data is None or type(genotype_type_data) != bytes:
+            raise SerializeError()
+        genotype_type = pickle.loads(genotype_type_data)  # TODO catch error
+        if "genotype" not in data:
+            raise SerializeError()
+        genotype_data = data.get("genotype")
+        genotype = deserialize(genotype_data, genotype_type)
+
+        fitness_type_data = data.get(".fitness_type")
+        if fitness_type_data is None or type(fitness_type_data) != bytes:
+            raise SerializeError()
+        fitness_type = pickle.loads(fitness_type_data)  # TODO catch error
+        if "fitness" not in data:
+            raise SerializeError()
+        fitness_data = data.get("fitness")
+        fitness = deserialize(fitness_data, fitness_type)
+
+        parents_data = data.get("parents")
+        if parents_data is None:
+            parent_ids = None
         else:
-            raise SerializeError("Loaded fitness type is not Serializable.")
+            if type(parents_data) != list:
+                raise SerializeError()
+            parent_ids: List[int] = []
+            for parent_data in parents_data:
+                if type(parent_data) != int:
+                    raise SerializeError()
+                parent_ids.append(parent_data)
 
-        parents_db = root["parents"]
-        if parents_db.is_none():
-            parents = None
-        else:
-            parents = [parent.int for parent in parents_db.list]
-
-        return Individual(id, genotype, cast(Fitness, fitness), parents)
+        return Individual(id, genotype, fitness, parent_ids)

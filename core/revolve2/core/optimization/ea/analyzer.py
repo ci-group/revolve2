@@ -122,6 +122,14 @@ class Individuals:
         except DatabaseError as err:
             raise SerializeError from err
 
+    def __len__(self) -> int:
+        return self._individuals.len(self._txn)
+
+    def __iter__(self) -> Iterator[Generation]:
+        asdas = range(len(self))
+        for i in range(len(self)):
+            yield self[i]
+
 
 class Evaluations:
     _txn: Transaction

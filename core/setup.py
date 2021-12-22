@@ -15,7 +15,6 @@ setup(
         "matplotlib>=3.4.3",
         "scipy>=1.7.1",
         "pyrr>=0.10.3",
-        "asyncinit>=0.2.4",
         "sqlalchemy>=1.4.28",
     ],
     zip_safe=False,

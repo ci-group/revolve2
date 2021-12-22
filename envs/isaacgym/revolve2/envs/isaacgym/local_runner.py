@@ -266,8 +266,16 @@ class LocalRunner(Runner):
             args=(result_queue, batch, self._sim_params, self._headless),
         )
         process.start()
+        states = []
+        # states are sent state by state(every sample)
+        # because sending all at once is too big for the queue.
+        # should be good enough for now.
+        # if the program hangs here in the future,
+        # improve the way the results are passed back to the parent program.
+        while (state := result_queue.get()) is not None:
+            states.append(state)
         process.join()
-        return result_queue.get()
+        return states
 
     @classmethod
     def _run_batch_impl(
@@ -280,4 +288,6 @@ class LocalRunner(Runner):
         simulator = cls.Simulator(batch, sim_params, headless)
         states = simulator.run()
         simulator.cleanup()
-        result_queue.put(states)
+        for state in states:
+            result_queue.put(state)
+        result_queue.put(None)

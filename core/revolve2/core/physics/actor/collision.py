@@ -9,4 +9,4 @@ class Collision:
     position: Vector3
     orientation: Quaternion
     mass: float
-    bounding_box: Vector3
+    bounding_box: Vector3  # sizes of the lengths of the bounding box. not half.

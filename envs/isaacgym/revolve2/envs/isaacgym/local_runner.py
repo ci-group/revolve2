@@ -6,14 +6,8 @@ from typing import List, Optional, Tuple
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
-from revolve2.core.physics.env import (
-    ActorControl,
-    ActorState,
-    Batch,
-    EnvironmentState,
-    Runner,
-    State,
-)
+from revolve2.core.physics.env import (ActorControl, ActorState, Batch,
+                                       EnvironmentState, Runner, State)
 
 from isaacgym import gymapi
 
@@ -73,8 +67,8 @@ class LocalRunner(Runner):
             plane_params = gymapi.PlaneParams()
             plane_params.normal = gymapi.Vec3(0, 0, 1)
             plane_params.distance = 0
-            plane_params.static_friction = 1
-            plane_params.dynamic_friction = 1
+            plane_params.static_friction = 0.8
+            plane_params.dynamic_friction = 0.5
             plane_params.restitution = 0
             self._gym.add_ground(self._sim, plane_params)
 
@@ -133,6 +127,21 @@ class LocalRunner(Runner):
                     props["stiffness"].fill(1000.0)
                     props["damping"].fill(600.0)
                     self._gym.set_actor_dof_properties(env, actor_handle, props)
+
+                    all_rigid_props = self._gym.get_actor_rigid_shape_properties(
+                        env, actor_handle
+                    )
+
+                    for body, rigid_props in zip(
+                        posed_actor.actor.bodies,
+                        all_rigid_props,
+                    ):
+                        rigid_props.friction = body.static_friction
+                        rigid_props.rolling_friction = body.dynamic_friction
+
+                    self._gym.set_actor_rigid_shape_properties(
+                        env, actor_handle, all_rigid_props
+                    )
 
                     gymenv.actors.append(actor_handle)
 

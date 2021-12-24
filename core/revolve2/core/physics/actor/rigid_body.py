@@ -15,6 +15,8 @@ class RigidBody:
     orientation: Quaternion
     collisions: List[Collision] = field(default_factory=list, init=False)
     visuals: List[Visual] = field(default_factory=list, init=False)
+    static_friction: float
+    dynamic_friction: float
 
     def mass(self) -> float:
         return sum(collision.mass for collision in self.collisions)

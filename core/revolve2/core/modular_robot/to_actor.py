@@ -22,6 +22,9 @@ def to_actor(analyzer: Analyzer) -> Tuple[Actor, List[AnalyzerModule]]:
 
 
 class _ActorBuilder:
+    _STATIC_FRICTION = 2
+    _DYNAMIC_FRICTION = 2
+
     robot: Actor
     dof_ids: List[AnalyzerModule]
 
@@ -29,7 +32,13 @@ class _ActorBuilder:
         self.robot = Actor([], [])
         self.dof_ids = []
 
-        origin_body = RigidBody("origin", Vector3(), Quaternion())
+        origin_body = RigidBody(
+            "origin",
+            Vector3(),
+            Quaternion(),
+            self._STATIC_FRICTION,
+            self._DYNAMIC_FRICTION,
+        )
         self.robot.bodies.append(origin_body)
 
         self._make_module(analyzer.core, origin_body, "origin", Vector3(), Quaternion())
@@ -255,6 +264,8 @@ class _ActorBuilder:
             f"{name_prefix}_activehinge",
             servo_body_position,
             servo_body_orientation,
+            self._STATIC_FRICTION,
+            self._DYNAMIC_FRICTION,
         )
         self.robot.bodies.append(next_body)
         self.robot.joints.append(

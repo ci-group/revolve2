@@ -22,8 +22,8 @@ def to_actor(analyzer: Analyzer) -> Tuple[Actor, List[AnalyzerModule]]:
 
 
 class _ActorBuilder:
-    _STATIC_FRICTION = 2
-    _DYNAMIC_FRICTION = 2
+    _STATIC_FRICTION = 0.8
+    _DYNAMIC_FRICTION = 0.5
 
     robot: Actor
     dof_ids: List[AnalyzerModule]

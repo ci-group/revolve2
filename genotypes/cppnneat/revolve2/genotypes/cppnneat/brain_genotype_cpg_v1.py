@@ -21,6 +21,11 @@ class BrainGenotypeCpgV1(
         output_activation_func: multineat.ActivationFunction,
         num_initial_mutations: int,
     ) -> BodybrainBase:
+        assert multineat_params.MutateOutputActivationFunction == True
+        # other activation functions could work too, but this has been tested.
+        # if you want another one, make sure it's output is between -1 and 1.
+        assert output_activation_func == multineat.ActivationFunction.SIGNED_SINE
+
         return super(BrainGenotypeCpgV1, cls).random(
             innov_db,
             rng,

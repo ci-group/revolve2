@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Union, cast
 
-StaticData = Union[
-    List["StaticData"], Dict[str, "StaticData"], str, float, int, bytes, None
+StaticData = Union[  # type: ignore # TODO this is not yet supported by mypy
+    List["StaticData"], Dict[str, "StaticData"], str, float, int, bytes, None  # type: ignore
 ]
 
 
@@ -18,10 +18,7 @@ def is_static_data(to_check: Any) -> bool:
         return all([is_static_data(child) for child in to_check])
     elif type(to_check) == dict:
         return all(
-            [
-                type(key) == str and is_static_data(val)
-                for key, val in cast(Dict[Any, Any], to_check).items()
-            ]
+            [type(key) == str and is_static_data(val) for key, val in to_check.items()]
         )
     else:
         return False

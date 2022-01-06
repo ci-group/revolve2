@@ -1,7 +1,7 @@
 import random
 from typing import List, Tuple
 
-from revolve2.core.modular_robot import AnalyzerModule, Serialized
+from revolve2.core.modular_robot import AnalyzerModule
 
 from .cpg import Cpg
 
@@ -17,6 +17,3 @@ class CpgRandom(Cpg):
             [random.random() * 2.0 - 1 for _ in range(len(active_hinges))],
             [random.random() * 2.0 - 1 for _ in range(len(connections))],
         )
-
-    def serialize(self) -> Serialized:
-        return []  # TODO

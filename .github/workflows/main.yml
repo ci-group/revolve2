@@ -20,6 +20,7 @@ jobs:
         - name: install requirements not provided by pip
           run: |
             sudo apt install libboost-all-dev
+            pip install numpy
             pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
         - name: install core
           run: pip install ./core

@@ -15,7 +15,7 @@ jobs:
           run: |
             pip install virtualenv
             virtualenv .venv
-            .venv/bin/activate.sh
+            . .venv/bin/activate
 
         - name: install requirements not provided by pip
           run: |

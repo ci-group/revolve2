@@ -6,8 +6,14 @@ from typing import List, Optional, Tuple
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
-from revolve2.core.physics.env import (ActorControl, ActorState, Batch,
-                                       EnvironmentState, Runner, State)
+from revolve2.core.physics.env import (
+    ActorControl,
+    ActorState,
+    Batch,
+    EnvironmentState,
+    Runner,
+    State,
+)
 
 from isaacgym import gymapi
 

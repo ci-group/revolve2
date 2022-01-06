@@ -1,0 +1,31 @@
+name: ci
+
+on: push
+
+jobs:
+  test_install:
+    runs-on: ubuntu-20.04
+
+    steps:
+        - uses: actions/checkout@v2
+        - uses: actions/setup-python@v2
+          with:
+            python-version: '>=3.8'
+        - name: create virtualenv
+          run: |
+            pip install virtualenv
+            virtualenv .venv
+            . .venv/bin/activate
+
+        - name: install requirements not provided by pip
+          run: |
+            sudo apt install libboost-all-dev
+            pip install numpy
+            pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
+        - name: install core
+          run: pip install ./core
+        - name: install env isaacgym
+          #run: pip install ./envs/isaacgym
+          run: echo "IsaacGym is not open source so sadly we cannot test this."
+        - name: install genotype cppnneat
+          run: pip install ./genotypes/cppnneat

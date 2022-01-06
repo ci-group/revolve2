@@ -17,5 +17,6 @@ setup(
         "pyrr>=0.10.3",
         "sqlalchemy>=1.4.28",
     ],
+    extras_require={"dev": ["sqlalchemy-stubs>=0.4"]},
     zip_safe=False,
 )

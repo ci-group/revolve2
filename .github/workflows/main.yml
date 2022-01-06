@@ -12,8 +12,8 @@ jobs:
           with:
             python-version: '>=3.8'
         - uses: syphar/restore-virtualenv@v1
-            with:
-              requirement_files: []
+          with:
+            requirement_files: []
 
         - name: install requirements not provided by pip
           run: |

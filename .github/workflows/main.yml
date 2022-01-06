@@ -13,6 +13,7 @@ jobs:
             python-version: '>=3.8'
         - name: create virtualenv
           run: |
+            pip install virtualenv
             virtualenv .venv
             .venv/bin/activate.sh
 

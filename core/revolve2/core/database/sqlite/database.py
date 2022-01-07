@@ -4,7 +4,7 @@ import contextlib
 import os
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from ..database import Database as DatabaseBase
 from ..node import Node
@@ -40,7 +40,7 @@ class Database(DatabaseBase):
 
     @contextlib.contextmanager
     def begin_transaction(self) -> Transaction:
-        session = self._db_sessionmaker()
+        session: Session = self._db_sessionmaker()
         yield Transaction(session)
         session.commit()
         session.close()

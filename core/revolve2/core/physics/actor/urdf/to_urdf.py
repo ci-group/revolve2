@@ -45,9 +45,12 @@ def to_urdf(
     for el in _make_node(root, tree, position, orientation):
         urdf.append(el)
 
-    return minidom.parseString(
-        xml.tostring(urdf, encoding="unicode", method="xml")
-    ).toprettyxml(indent="    ")
+    return cast(
+        str,
+        minidom.parseString(
+            xml.tostring(urdf, encoding="unicode", method="xml")
+        ).toprettyxml(indent="    "),
+    )  # TODO for some reason the stubs for parseString have no proper return type. investigate
 
 
 def _make_node(

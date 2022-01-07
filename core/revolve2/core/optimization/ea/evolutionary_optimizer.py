@@ -30,8 +30,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     # Types of genotype and fitness are stored as soon as they are available.
     # Used to type check the return values of user functions.
-    __genotype_type: Type
-    __fitness_type: Optional[Type]
+    __genotype_type: type
+    __fitness_type: Optional[type]
 
     __population_size: int
     __offspring_size: int
@@ -305,7 +305,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     async def _save_generation_notransaction(
         self, txn: Transaction, new_individuals: List[Individual[Genotype, Fitness]]
-    ):
+    ) -> None:
         assert self.__last_generation is not None
         assert self.__db_rng_after_generation is not None
         assert self.__db_generations is not None
@@ -344,6 +344,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     self.__db_node.set_object(
                         txn, {"evaluations": self.__db_evaluations, "ea": self.__db_ea}
                     )
+                    return False
                 else:
                     self.__db_ea = root["ea"]
                     if not isinstance(self.__db_ea, Node):

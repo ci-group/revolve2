@@ -62,10 +62,11 @@ class Individual:
     _genotype: StaticData
     _fitness: StaticData
 
-    def __init__(self, data: dict):
-        self._id = data.get("id")
-        if self._id is None or not isinstance(self._id, int):
+    def __init__(self, data: Dict[str, Object]):
+        id_data = data.get("id")
+        if not isinstance(id_data, int):
             raise SerializeError()
+        self._id = id_data
 
         if "parents" not in data:
             raise SerializeError()
@@ -125,7 +126,7 @@ class Individuals:
     def __len__(self) -> int:
         return self._individuals.len(self._txn)
 
-    def __iter__(self) -> Iterator[Generation]:
+    def __iter__(self) -> Iterator[Individual]:
         asdas = range(len(self))
         for i in range(len(self)):
             yield self[i]

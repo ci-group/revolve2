@@ -2,7 +2,7 @@ import base64
 import json
 import re
 from json.decoder import JSONDecodeError
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, cast
 
 from ..database_error import DatabaseError
 from ..list import List as ListIface
@@ -35,7 +35,10 @@ class NodeImpl(NodeImplBase):
                 raise DatabaseError("Object of Node should be string, but it is not.")
 
             try:
-                return json.loads(object, cls=_JSONDecoder)
+                object = json.loads(object, cls=_JSONDecoder)
+                if not is_object(object):
+                    raise DatabaseError("Database corrupted.")
+                return cast(Object, object)
             except JSONDecodeError as err:
                 raise DatabaseError("Object of Node is not valid JSON.")
         elif row.type == 2:
@@ -116,7 +119,7 @@ class NodeImpl(NodeImplBase):
 
 
 class _JSONEncoder(json.JSONEncoder):
-    def default(self, obj):
+    def default(self, obj: Any) -> Any:
         if isinstance(obj, NodeIface):
             assert isinstance(obj._impl, NodeImpl)
             return {"__type__": "node", "id": obj._impl._id}
@@ -130,10 +133,10 @@ class _JSONEncoder(json.JSONEncoder):
 
 
 class _JSONDecoder(json.JSONDecoder):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         json.JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
 
-    def object_hook(self, dct: Dict):
+    def object_hook(self, dct: Dict[str, Any]) -> Any:
         type = dct.get("__type__")
         if type is None:
             return dct

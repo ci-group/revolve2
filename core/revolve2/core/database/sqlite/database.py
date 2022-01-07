@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import contextlib
 import os
+from typing import Generator, cast
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from ..database import Database as DatabaseBase
 from ..node import Node
+from ..transaction import Transaction as TransactionBase
 from .node_impl import NodeImpl
 from .schema import Base, DbNode
 from .transaction import Transaction
@@ -18,14 +20,15 @@ class Database(DatabaseBase):
 
     _db_sessionmaker: sessionmaker
 
-    def __init__(self, create_key) -> None:
+    def __init__(self, create_key: object) -> None:
         if create_key is not self.__create_key:
             raise ValueError(
                 "Sqlite database can only be created through its factory function."
             )
 
-    async def create(root_directory: str) -> Database:
-        self = Database(Database.__create_key)
+    @classmethod
+    async def create(cls, root_directory: str) -> Database:
+        self = cls(Database.__create_key)
 
         if not os.path.isdir(root_directory):
             os.makedirs(root_directory, exist_ok=True)
@@ -38,12 +41,9 @@ class Database(DatabaseBase):
 
         return self
 
-    @contextlib.contextmanager
-    def begin_transaction(self) -> Transaction:
+    def begin_transaction(self) -> TransactionBase:
         session: Session = self._db_sessionmaker()
-        yield Transaction(session)
-        session.commit()
-        session.close()
+        return Transaction(session)
 
     @property
     def root(self) -> Node:

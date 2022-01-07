@@ -4,11 +4,17 @@ import logging
 import pickle
 from abc import ABC, abstractmethod
 from random import Random
-from typing import Generic, List, Optional, Type, TypeVar, Union, cast
+from typing import Generic, List, Optional, Type, TypeVar, Union
 
 from revolve2.core.database import Database
 from revolve2.core.database import List as DbList
-from revolve2.core.database import Node, StaticData, Transaction
+from revolve2.core.database import (
+    Node,
+    StaticData,
+    Transaction,
+    dynamic_cast_bytes,
+    dynamic_cast_static_data,
+)
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 from revolve2.core.database.uninitialized import Uninitialized
@@ -30,7 +36,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     # Types of genotype and fitness are stored as soon as they are available.
     # Used to type check the return values of user functions.
-    __genotype_type: type
+    __genotype_type: Type[Genotype]
     __fitness_type: Optional[type]
 
     __population_size: int
@@ -346,6 +352,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     )
                     return False
                 else:
+                    if not isinstance(root, dict):
+                        raise SerializeError()
                     self.__db_ea = root["ea"]
                     if not isinstance(self.__db_ea, Node):
                         raise SerializeError()
@@ -356,6 +364,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     ea = self.__db_ea.get_object(txn)
                     if isinstance(ea, Uninitialized):
                         return False
+                    elif not isinstance(ea, dict):
+                        raise SerializeError()
 
                     self.__db_rng_after_generation = ea[
                         "rng_after_generation"
@@ -389,7 +399,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                         raise SerializeError()
                     self.__last_generation = [
                         Individual.deserialize(
-                            self.__db_individuals.get(txn, id).get_object(txn)
+                            dynamic_cast_static_data(
+                                self.__db_individuals.get(txn, id).get_object(txn)
+                            )
                         )
                         for id in individual_ids
                     ]
@@ -401,9 +413,11 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
                     self._rng.setstate(
                         pickle.loads(
-                            self.__db_rng_after_generation.get(
-                                txn, self.__generation_index
-                            ).get_object(txn)
+                            dynamic_cast_bytes(
+                                self.__db_rng_after_generation.get(
+                                    txn, self.__generation_index
+                                ).get_object(txn)
+                            )
                         )
                     )
 

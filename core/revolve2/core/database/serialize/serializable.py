@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC, abstractclassmethod, abstractmethod
+from abc import ABC, abstractmethod
 
 from ..static_data import StaticData
 
@@ -10,7 +10,8 @@ class Serializable(ABC):
     def serialize(self) -> StaticData:
         pass
 
-    @abstractclassmethod
+    @classmethod
+    @abstractmethod
     def deserialize(cls, data: StaticData) -> Serializable:
         # This should return an instance of the class implementing this interface
         pass

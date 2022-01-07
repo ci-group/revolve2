@@ -15,7 +15,7 @@ class Node:
 
     _impl: Optional[NodeImpl]
 
-    def __init__(self, impl: NodeImpl = None):
+    def __init__(self, impl: Optional[NodeImpl] = None):
         self._impl = impl
 
     @property
@@ -29,7 +29,7 @@ class Node:
         """
         Read the underlying object from the database.
         """
-        if self.is_stub:
+        if self._impl is None:
             raise DatabaseError()
 
         return self._impl.get_object(txn)
@@ -39,12 +39,12 @@ class Node:
         Set the underlying object in the database.
         If object is not uninitialized, raises DatabaseError.
         """
-        if self.is_stub:
+        if self._impl is None:
             raise DatabaseError(
                 "Node not usable yet. It is a stub created by the user that has not yet been linked with the database."
             )
 
-        return self._impl.set_object(txn, object)
+        self._impl.set_object(txn, object)
 
     def _set_impl(self, impl: NodeImpl) -> None:
         self._impl = impl

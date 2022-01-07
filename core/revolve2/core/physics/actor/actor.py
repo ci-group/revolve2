@@ -126,10 +126,10 @@ class _Box:
     ]
 
     def rotate(self, rotation: Quaternion) -> None:
-        self.coordinates = [rotation * coord for coord in self.coordinates]
+        self.coordinates = tuple(rotation * coord for coord in self.coordinates)
 
     def translate(self, offset: Vector3) -> None:
-        self.coordinates = [coord + offset for coord in self.coordinates]
+        self.coordinates = tuple(coord + offset for coord in self.coordinates)
 
     def aabb(self) -> BoundingBox:
         xmax = max([coord.x for coord in self.coordinates])

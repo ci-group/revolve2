@@ -1,4 +1,5 @@
-from typing import Any
+from types import TracebackType
+from typing import Any, Optional, Type
 
 from sqlalchemy.orm import Session
 
@@ -11,10 +12,12 @@ class Transaction(TransactionBase):
     def __init__(self, session: Session) -> None:
         self._session = session
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, exc_traceback):
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        exc_traceback: Optional[TracebackType],
+    ) -> None:
         if exc_type is None:
             self._session.commit()
         else:

@@ -1,4 +1,4 @@
-from typing import Dict, Iterator, List, Optional
+from typing import Dict, Iterator, List, Optional, cast
 
 from revolve2.core.database import List as DbList
 from revolve2.core.database import Node, Object, StaticData, Transaction, is_static_data
@@ -70,24 +70,27 @@ class Individual:
 
         if "parents" not in data:
             raise SerializeError()
-        self._parents = data["parents"]
-        if self._parents is not None:
-            if not isinstance(self._parents, list) or not all(
-                [isinstance(parent, int) for parent in self._parents]
+        parents_data = data["parents"]
+        if parents_data is not None:
+            if not isinstance(parents_data, list) or not all(
+                [isinstance(parent, int) for parent in parents_data]
             ):
                 raise SerializeError()
+        self._parents = parents_data
 
         if "genotype" not in data:
             raise SerializeError()
-        self._genotype = data["genotype"]
-        if not is_static_data(self._genotype):
+        genotype_data = data["genotype"]
+        if not is_static_data(genotype_data):
             raise SerializeError()
+        self._genotype = cast(StaticData, genotype_data)
 
         if "fitness" not in data:
             raise SerializeError()
-        self._fitness = data["fitness"]
+        fitness_data = data["fitness"]
         if not is_static_data(self._fitness):
             raise SerializeError()
+        self._fitness = cast(StaticData, fitness_data)
 
     @property
     def id(self) -> int:

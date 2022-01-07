@@ -29,7 +29,7 @@ class ActorState(Serializable):
         }
 
     @classmethod
-    def deserialize(cls, data: StaticData) -> None:
+    def deserialize(cls, data: StaticData) -> ActorState:
         raise NotImplementedError()
 
 
@@ -41,7 +41,7 @@ class EnvironmentState(Serializable):
         return [state.serialize() for state in self.actor_states]
 
     @classmethod
-    def deserialize(cls, data: StaticData) -> None:
+    def deserialize(cls, data: StaticData) -> ActorState:
         raise NotImplementedError()
 
 
@@ -53,5 +53,5 @@ class State(Serializable):
         return [env.serialize() for env in self.envs]
 
     @classmethod
-    def deserialize(cls, data: StaticData) -> None:
+    def deserialize(cls, data: StaticData) -> ActorState:
         raise NotImplementedError()

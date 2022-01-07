@@ -7,3 +7,15 @@ from .brick import Brick
 from .core import Core
 from .modular_robot import ModularRobot
 from .module import Module
+
+__all__ = [
+    "ActiveHinge",
+    "Analyzer",
+    "AnalyzerModule",
+    "Body",
+    "Brain",
+    "Brick",
+    "Core",
+    "ModularRobot",
+    "Module",
+]

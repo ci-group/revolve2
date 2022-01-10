@@ -1,4 +1,4 @@
-from typing import List, cast
+from typing import List
 
 import numpy as np
 import numpy.typing as npt
@@ -38,13 +38,13 @@ class Cpg(ActorController):
     ) -> npt.NDArray[np.float_]:
         # TODO The scipy implementation of this function is very slow for some reason.
         # investigate the performance and accuracy differences
-        A1 = np.matmul(A, state)
-        A2 = np.matmul(A, (state + dt / 2 * A1))
-        A3 = np.matmul(A, (state + dt / 2 * A2))
-        A4 = np.matmul(A, (state + dt * A3))
-        return cast(
-            npt.NDArray[np.float_], state + dt / 6 * (A1 + 2 * (A2 + A3) + A4)
-        )  # TODO
+        A1: npt.NDArray[np.float_] = np.matmul(
+            A, state
+        )  # TODO matmul doesn't seem to be properly typed.
+        A2: npt.NDArray[np.float_] = np.matmul(A, (state + dt / 2 * A1))
+        A3: npt.NDArray[np.float_] = np.matmul(A, (state + dt / 2 * A2))
+        A4: npt.NDArray[np.float_] = np.matmul(A, (state + dt * A3))
+        return state + dt / 6 * (A1 + 2 * (A2 + A3) + A4)
 
     def get_dof_targets(self) -> List[float]:
         return list(self._state[0 : self._num_output_neurons])

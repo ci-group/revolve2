@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple
 
 import numpy as np
+import numpy.typing as npt
 from revolve2.core.modular_robot import Analyzer, AnalyzerModule, Brain, Module
 from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.control import ActorController
@@ -25,7 +26,9 @@ class Cpg(Brain, ABC):
         for i, active_hinge in enumerate(active_hinges):
             id_to_index[active_hinge.id] = i
 
-        intial_state = np.array([0.5 * math.sqrt(2)] * (len(active_hinges) * 2))
+        intial_state: npt.NDArray[np.float_] = np.array(
+            [0.5 * math.sqrt(2)] * (len(active_hinges) * 2)
+        )
         weight_matrix = np.zeros((len(active_hinges) * 2, len(active_hinges) * 2))
 
         for i in range(len(active_hinges)):

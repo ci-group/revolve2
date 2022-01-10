@@ -25,7 +25,9 @@ class Cpg(Brain, ABC):
         for i, active_hinge in enumerate(active_hinges):
             id_to_index[active_hinge.id] = i
 
-        intial_state = np.array([0.5 * math.sqrt(2)] * (len(active_hinges) * 2))
+        intial_state = np.array(
+            [0.5 * math.sqrt(2)] * (len(active_hinges) * 2), dtype=np.float_
+        )
         weight_matrix = np.zeros((len(active_hinges) * 2, len(active_hinges) * 2))
 
         for i in range(len(active_hinges)):

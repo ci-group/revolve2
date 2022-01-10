@@ -52,4 +52,4 @@ jobs:
       - name: install core
         run: pip install ./core[dev]
       - name: run mypy
-        run: scripts/run_mypy_all.sh
+        run: scripts/run_mypy_all_opensource.sh

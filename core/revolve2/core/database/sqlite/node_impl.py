@@ -38,7 +38,7 @@ class NodeImpl(NodeImplBase):
                 object = json.loads(object, cls=_JSONDecoder)
                 if not is_object(object):
                     raise DatabaseError("Database corrupted.")
-                return cast(Object, object)
+                return object
             except JSONDecodeError as err:
                 raise DatabaseError("Object of Node is not valid JSON.")
         elif row.type == 2:

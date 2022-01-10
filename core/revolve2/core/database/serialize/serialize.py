@@ -19,10 +19,8 @@ T = TypeVar("T", Serializable, StaticData)
 
 def deserialize(data: StaticData, type: Type[T]) -> T:
     if issubclass(type, Serializable):
-        return cast(
-            T, type.deserialize(data)
-        )  # mypy is not advanced enough to understand this without cast.
+        return type.deserialize(data)
     elif type == StaticData and is_static_data(data):
-        return cast(T, data)
+        return data
     else:
         raise SerializeError()

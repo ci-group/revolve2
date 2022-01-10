@@ -51,6 +51,6 @@ jobs:
           virtualenv .venv
           . .venv/bin/activate
       - name: install core
-        run: pip install ./core
+        run: pip install ./core[dev]
       - name: run mypy
         run: scripts/run_mypy_all.sh

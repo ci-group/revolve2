@@ -6,6 +6,7 @@ Assumes fitness is a float and database is files.
 import argparse
 from operator import add
 from statistics import mean
+from typing import List
 
 import matplotlib.pyplot as plt  # type: ignore # TODO couldn't find any stubs
 from revolve2.core.database import dynamic_cast_float
@@ -14,20 +15,12 @@ from revolve2.core.optimization.ea import Analyzer as EaAnalyzer
 from revolve2.core.optimization.ea.analyzer import Generation
 
 
-async def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "databases",
-        nargs="+",
-        help="The databases to make plots for. If more then one database(multiple runs of the same experiment) is provided, their respective plots are averaged into one single plot.",
-    )
-    args = parser.parse_args()
-
+async def plot(databases: List[str]) -> None:
     max_fitness_sum = None
     min_fitness_sum = None
     mean_fitness_sum = None
 
-    for db_file in args.databases:
+    for db_file in databases:
         db = await Database.create(db_file)
         with db.begin_transaction() as txn:
             analyzer = EaAnalyzer(txn, db.root)
@@ -89,9 +82,9 @@ async def main() -> None:
     assert min_fitness_sum is not None
     assert mean_fitness_sum is not None
 
-    mean_max_fitness = [f / len(args.databases) for f in max_fitness_sum]
-    mean_min_fitness = [f / len(args.databases) for f in min_fitness_sum]
-    mean_avg_fitness = [f / len(args.databases) for f in mean_fitness_sum]
+    mean_max_fitness = [f / len(databases) for f in max_fitness_sum]
+    mean_min_fitness = [f / len(databases) for f in min_fitness_sum]
+    mean_avg_fitness = [f / len(databases) for f in mean_fitness_sum]
 
     x = [i for i in range(len(mean_max_fitness))]
 
@@ -109,6 +102,18 @@ async def main() -> None:
         mean_avg_fitness,
     )
     plt.show()
+
+
+async def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "databases",
+        nargs="+",
+        help="The databases to make plots for. If more then one database(multiple runs of the same experiment) is provided, their respective plots are averaged into one single plot.",
+    )
+    args = parser.parse_args()
+
+    plot(args.databases)
 
 
 if __name__ == "__main__":

@@ -15,7 +15,7 @@ def serialize(to_serialize: Union[Serializable, StaticData]) -> StaticData:
 
 
 def deserialize(
-    data: StaticData, type: Union[Type[Serializable], Type[StaticData]]
+    data: StaticData, type: Type[Union[Serializable, StaticData]]
 ) -> Union[Serializable, StaticData]:
     if issubclass(type, Serializable):
         return type.deserialize(data)

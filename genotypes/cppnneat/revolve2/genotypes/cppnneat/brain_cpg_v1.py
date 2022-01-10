@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List, Tuple, cast
 
 import multineat
 from revolve2.core.modular_robot import AnalyzerModule
@@ -62,4 +62,4 @@ class BrainCpgV1(ModularRobotBrainCpg):
     ) -> float:
         network.Input(inputs)
         network.Activate()
-        return network.Output()[0]
+        return cast(float, network.Output()[0])  # TODO missing multineat typing

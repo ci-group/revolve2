@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import math
 from dataclasses import dataclass
 from queue import Queue
-from typing import Any, List, Optional, Set, Tuple
+from typing import Any, List, Optional, Set, Tuple, cast
 
 import multineat
 from revolve2.core.database import StaticData
@@ -24,7 +26,7 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
         multineat_params: multineat.Parameters,
         output_activation_func: multineat.ActivationFunction,
         num_initial_mutations: int,
-    ) -> BodybrainBase:
+    ) -> BodybrainBase[BodyGenotypeV1]:
         return super(BodyGenotypeV1, cls).random(
             innov_db,
             rng,
@@ -49,8 +51,8 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
         body_net = multineat.NeuralNetwork()
         self._genotype.BuildPhenotype(body_net)
 
-        to_explore: Queue[self.Module] = Queue()
-        grid: Set[Tuple(int, int, int)] = set()
+        to_explore: Queue[BodyGenotypeV1._Module] = Queue()
+        grid: Set[Tuple[int, int, int]] = set()
 
         body = Body()
 
@@ -59,7 +61,7 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
         part_count = 1
 
         while not to_explore.empty():
-            module: self._Module = to_explore.get()
+            module = to_explore.get()
 
             children: List[Tuple[int, int]] = []  # child index, rotation
 
@@ -152,7 +154,7 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
     def _add(
         cls, a: Tuple[int, int, int], b: Tuple[int, int, int]
     ) -> Tuple[int, int, int]:
-        return tuple(map(sum, zip(a, b)))
+        return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
 
     @classmethod
     def _timesscalar(cls, a: Tuple[int, int, int], scalar: int) -> Tuple[int, int, int]:
@@ -203,7 +205,7 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
         )
 
     def serialize(self) -> StaticData:
-        return self._genotype.Serialize()
+        return cast(str, self._genotype.Serialize())  # TODO missing multineat typing
 
     @classmethod
     def deserialize(cls, data: StaticData) -> Serializable:

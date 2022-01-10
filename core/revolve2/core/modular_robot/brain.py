@@ -4,7 +4,8 @@ from typing import List
 from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.control import ActorController
 
-from .analyzer import Analyzer, AnalyzerModule
+from .analyzer import Analyzer
+from .analyzer_module import AnalyzerModule
 
 
 class Brain(ABC):

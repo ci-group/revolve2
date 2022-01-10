@@ -101,18 +101,20 @@ class Analyzer:
         """
         size = self._recursive_size(self._core, Vector3([0, 0, 0]), Quaternion())
         return (
-            round(size[0]),
-            round(size[1]),
-            round(size[2]),
-            round(size[3]),
-            round(size[4]),
-            round(size[5]),
+            size[0],
+            size[1],
+            size[2],
+            size[3],
+            size[4],
+            size[5],
         )
 
     def _recursive_size(
         self, module: AnalyzerModule, position: Vector3, orientation: Quaternion
     ) -> Tuple[int, int, int, int, int, int]:
-        children: List[Tuple[int, float]]
+        children: List[
+            Tuple[int, float]
+        ]  # TODO I don't really get why mypy doesn't pick this type up, but I have to set it manually.
         if module.type == Module.Type.CORE:
             children = [
                 (Core.FRONT, 0.0),
@@ -132,7 +134,14 @@ class Analyzer:
             raise NotImplementedError()
 
         sizes = [
-            (position.x, position.x, position.y, position.y, position.z, position.z)
+            (
+                round(position.x),
+                round(position.x),
+                round(position.y),
+                round(position.y),
+                round(position.z),
+                round(position.z),
+            )
         ] + [
             self._recursive_size(
                 child, position + quat * Vector3([1.0, 0.0, 0.0]), quat

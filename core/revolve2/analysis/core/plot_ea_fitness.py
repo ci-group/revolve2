@@ -4,9 +4,11 @@ Assumes fitness is a float and database is files.
 """
 
 import argparse
+from operator import add
 from statistics import mean
 
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt  # type: ignore # TODO couldn't find any stubs
+from revolve2.core.database import dynamic_cast_float
 from revolve2.core.database.sqlite import Database
 from revolve2.core.optimization.ea import Analyzer as EaAnalyzer
 from revolve2.core.optimization.ea.analyzer import Generation
@@ -21,9 +23,9 @@ async def main() -> None:
     )
     args = parser.parse_args()
 
-    max_fitnesses = []
-    min_fitnesses = []
-    mean_fitnesses = []
+    max_fitness_sum = None
+    min_fitness_sum = None
+    mean_fitness_sum = None
 
     for db_file in args.databases:
         db = await Database.create(db_file)
@@ -33,7 +35,7 @@ async def main() -> None:
             max_fitness = [
                 max(
                     [
-                        analyzer.individuals[individual].fitness
+                        dynamic_cast_float(analyzer.individuals[individual].fitness)
                         for individual in generation
                     ],
                 )
@@ -43,7 +45,7 @@ async def main() -> None:
             min_fitness = [
                 min(
                     [
-                        analyzer.individuals[individual].fitness
+                        dynamic_cast_float(analyzer.individuals[individual].fitness)
                         for individual in generation
                     ],
                 )
@@ -53,23 +55,43 @@ async def main() -> None:
             mean_fitness = [
                 mean(
                     [
-                        analyzer.individuals[individual].fitness
+                        dynamic_cast_float(analyzer.individuals[individual].fitness)
                         for individual in generation
                     ],
                 )
                 for generation in analyzer.generations
             ]
-            max_fitnesses.append(max_fitness)
-            min_fitnesses.append(min_fitness)
-            mean_fitnesses.append(mean_fitness)
+            if max_fitness_sum is None:
+                max_fitness_sum = max_fitness
+            else:
+                assert len(max_fitness_sum) == len(
+                    max_fitness
+                ), "Not all databases have an equal amount of generations."
+                max_fitness_sum = list(map(add, max_fitness_sum, max_fitness))
 
-    assert all(
-        len(max_fitnesses[0]) == len(x) for x in max_fitnesses
-    ), "Not all databases have an equal amount of generations."
+            if min_fitness_sum is None:
+                min_fitness_sum = min_fitness
+            else:
+                assert len(min_fitness_sum) == len(
+                    min_fitness
+                ), "Not all databases have an equal amount of generations."
+                min_fitness_sum = list(map(add, min_fitness_sum, min_fitness))
 
-    mean_max_fitness = [mean(x) for x in list(map(list, zip(*max_fitnesses)))]
-    mean_min_fitness = [mean(x) for x in list(map(list, zip(*min_fitnesses)))]
-    mean_avg_fitness = [mean(x) for x in list(map(list, zip(*mean_fitnesses)))]
+            if mean_fitness_sum is None:
+                mean_fitness_sum = mean_fitness
+            else:
+                assert len(mean_fitness_sum) == len(
+                    mean_fitness
+                ), "Not all databases have an equal amount of generations."
+                mean_fitness_sum = list(map(add, mean_fitness_sum, mean_fitness))
+
+    assert max_fitness_sum is not None  # impossible because we always open one database
+    assert min_fitness_sum is not None
+    assert mean_fitness_sum is not None
+
+    mean_max_fitness = [f / len(args.databases) for f in max_fitness_sum]
+    mean_min_fitness = [f / len(args.databases) for f in min_fitness_sum]
+    mean_avg_fitness = [f / len(args.databases) for f in mean_fitness_sum]
 
     x = [i for i in range(len(mean_max_fitness))]
 

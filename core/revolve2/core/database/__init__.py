@@ -6,6 +6,7 @@ from .object import Object
 from .static_data import (
     StaticData,
     dynamic_cast_bytes,
+    dynamic_cast_float,
     dynamic_cast_static_data,
     is_static_data,
 )
@@ -22,6 +23,7 @@ __all__ = [
     "is_static_data",
     "dynamic_cast_static_data",
     "dynamic_cast_bytes",
+    "dynamic_cast_float",
     "Transaction",
     "Uninitialized",
 ]

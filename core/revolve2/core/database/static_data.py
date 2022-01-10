@@ -44,3 +44,14 @@ def dynamic_cast_bytes(data: Any) -> bytes:
     if type(data) != bytes:
         raise TypeError("Data to be cast is not bytes")
     return data
+
+
+def dynamic_cast_float(data: Any) -> float:
+    """
+    Check if data is float, returning data cast.
+    :raises TypeError: If data is not float.
+    """
+
+    if type(data) != float:
+        raise TypeError("Data to be cast is not float")
+    return data

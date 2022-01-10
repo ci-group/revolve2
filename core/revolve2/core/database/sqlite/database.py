@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-import contextlib
 import os
-from typing import Generator, cast
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
@@ -52,5 +50,6 @@ class Database(DatabaseBase):
     def _create_root_node(self) -> None:
 
         with self.begin_transaction() as ses:
+            assert isinstance(ses, Transaction)
             if ses._session.query(DbNode).count() == 0:
                 ses._session.add(DbNode(0, None, 0))

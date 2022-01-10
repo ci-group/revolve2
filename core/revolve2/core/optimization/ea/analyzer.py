@@ -88,7 +88,7 @@ class Individual:
         if "fitness" not in data:
             raise SerializeError()
         fitness_data = data["fitness"]
-        if not is_static_data(self._fitness):
+        if not is_static_data(fitness_data):
             raise SerializeError()
         self._fitness = cast(StaticData, fitness_data)
 

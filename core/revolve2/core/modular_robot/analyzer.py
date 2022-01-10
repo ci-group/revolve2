@@ -112,8 +112,8 @@ class Analyzer:
     def _recursive_size(
         self, module: AnalyzerModule, position: Vector3, orientation: Quaternion
     ) -> Tuple[int, int, int, int, int, int]:
+        children: List[Tuple[int, float]]
         if module.type == Module.Type.CORE:
-            # for (child_index, angle) in [
             children = [
                 (Core.FRONT, 0.0),
                 (Core.BACK, math.pi),
@@ -128,6 +128,8 @@ class Analyzer:
             ]
         elif module.type == Module.Type.ACTIVE_HINGE:
             children = [(ActiveHinge.ATTACHMENT_INDEX, 0.0)]
+        else:
+            raise NotImplementedError()
 
         sizes = [
             (position.x, position.x, position.y, position.y, position.z, position.z)
@@ -137,15 +139,15 @@ class Analyzer:
             )
             for child, quat in [
                 (
-                    module.children[index],
+                    maybechild,
                     orientation
                     * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Quaternion.from_eulers(
-                        [module.children[index].module.rotation, 0.0, 0.0]
-                    ),
+                    * Quaternion.from_eulers([maybechild.module.rotation, 0.0, 0.0]),
                 )
-                for (index, angle) in children
-                if module.children[index] is not None
+                for (maybechild, angle) in [
+                    (module.children[index], angle) for (index, angle) in children
+                ]
+                if maybechild is not None
             ]
         ]
 

@@ -50,7 +50,6 @@ class Individual(Generic[Genotype, Fitness], Serializable):
             raise SerializeError()
         genotype_data = data.get("genotype")
         genotype = deserialize(genotype_data, genotype_type)
-        assert type(genotype) == genotype_type
 
         fitness_type_data = data.get(".fitness_type")
         if fitness_type_data is None or type(fitness_type_data) != bytes:
@@ -60,7 +59,6 @@ class Individual(Generic[Genotype, Fitness], Serializable):
             raise SerializeError()
         fitness_data = data.get("fitness")
         fitness = deserialize(fitness_data, fitness_type)
-        assert type(fitness) == fitness_type
 
         parent_ids: Optional[List[int]]
         parents_data = data.get("parents")

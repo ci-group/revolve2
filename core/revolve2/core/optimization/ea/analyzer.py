@@ -83,14 +83,14 @@ class Individual:
         genotype_data = data["genotype"]
         if not is_static_data(genotype_data):
             raise SerializeError()
-        self._genotype = cast(StaticData, genotype_data)
+        self._genotype = genotype_data
 
         if "fitness" not in data:
             raise SerializeError()
         fitness_data = data["fitness"]
         if not is_static_data(fitness_data):
             raise SerializeError()
-        self._fitness = cast(StaticData, fitness_data)
+        self._fitness = fitness_data
 
     @property
     def id(self) -> int:

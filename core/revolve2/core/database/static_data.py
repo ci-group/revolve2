@@ -1,11 +1,13 @@
 from typing import Any, Dict, List, Union, cast
 
+from typing_extensions import TypeGuard
+
 StaticData = Union[  # type: ignore # TODO this is not yet supported by mypy
     List["StaticData"], Dict[str, "StaticData"], str, float, int, bytes, None  # type: ignore
 ]
 
 
-def is_static_data(to_check: Any) -> bool:
+def is_static_data(to_check: Any) -> TypeGuard[StaticData]:
     if (
         to_check is None
         or type(to_check) == int
@@ -32,7 +34,7 @@ def dynamic_cast_static_data(data: Any) -> StaticData:
 
     if not is_static_data(data):
         raise TypeError("Data to be cast is not StaticData")
-    return cast(StaticData, data)
+    return data
 
 
 def dynamic_cast_bytes(data: Any) -> bytes:

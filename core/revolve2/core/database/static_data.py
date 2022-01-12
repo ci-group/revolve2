@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union, cast
+from typing import Any, Dict, List, Type, Union
 
 from typing_extensions import TypeGuard
 

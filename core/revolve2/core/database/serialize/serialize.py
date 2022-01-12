@@ -1,6 +1,9 @@
-from typing import Any, Type, TypeVar, Union, cast
+from typing import Any, Type, TypeVar, Union
 
-from ..static_data import StaticData, is_static_data
+from ..static_data import (
+    StaticData,
+    is_static_data,
+)
 from .serializable import Serializable
 from .serialize_error import SerializeError
 
@@ -17,10 +20,16 @@ def serialize(to_serialize: Union[Serializable, StaticData]) -> StaticData:
 T = TypeVar("T", Serializable, StaticData)
 
 
-def deserialize(data: StaticData, type: Type[T]) -> T:
-    if issubclass(type, Serializable):
-        return type.deserialize(data)
-    elif type == StaticData and is_static_data(data):
+def deserialize(data: StaticData, as_type: Type[T]) -> T:
+    if issubclass(as_type, Serializable):
+        return as_type.deserialize(data)
+    elif (
+        (as_type is None and data is None)
+        or (as_type == str and type(data) == str)
+        or (as_type == float and type(data) == float)
+        or (as_type == int and type(data) == int)
+        or (as_type == bytes and type(data) == bytes)
+    ):
         return data
     else:
         raise SerializeError()

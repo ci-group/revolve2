@@ -16,6 +16,7 @@ from revolve2.core.database import (
     dynamic_cast_static_data,
     dynamic_cast_node,
 )
+from revolve2.core.database.cast import dynamic_cast_dblist
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 from revolve2.core.database.uninitialized import Uninitialized
@@ -360,9 +361,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     self.__db_ea = root["ea"]
                     if not isinstance(self.__db_ea, Node):
                         raise SerializeError()
-                    self.__db_evaluations = dynamic_cast_node(
-                        root["evaluations"]
-                    ).get_object(txn)
+                    self.__db_evaluations = dynamic_cast_dblist(
+                        dynamic_cast_node(root["evaluations"]).get_object(txn)
+                    )
                     if not isinstance(self.__db_evaluations, DbList):
                         raise SerializeError()
 
@@ -372,9 +373,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     elif not isinstance(ea, dict):
                         raise SerializeError()
 
-                    self.__db_rng_after_generation = dynamic_cast_node(
-                        ea["rng_after_generation"]
-                    ).get_object(txn)
+                    self.__db_rng_after_generation = dynamic_cast_dblist(
+                        dynamic_cast_node(ea["rng_after_generation"]).get_object(txn)
+                    )
                     if not isinstance(self.__db_rng_after_generation, DbList):
                         raise SerializeError()
                     self.__population_size = ea["population_size"]
@@ -383,14 +384,14 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     self.__offspring_size = ea["offspring_size"]
                     if not isinstance(self.__offspring_size, int):
                         raise SerializeError()
-                    self.__db_generations = dynamic_cast_node(
-                        ea["generations"]
-                    ).get_object(txn)
+                    self.__db_generations = dynamic_cast_dblist(
+                        dynamic_cast_node(ea["generations"]).get_object(txn)
+                    )
                     if not isinstance(self.__db_generations, DbList):
                         raise SerializeError()
-                    self.__db_individuals = dynamic_cast_node(
-                        ea["individuals"]
-                    ).get_object(txn)
+                    self.__db_individuals = dynamic_cast_dblist(
+                        dynamic_cast_node(ea["individuals"]).get_object(txn)
+                    )
                     if not isinstance(self.__db_individuals, DbList):
                         raise SerializeError()
 

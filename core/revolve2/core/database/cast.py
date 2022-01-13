@@ -3,6 +3,7 @@ from typing import Any
 from .object import Object, is_object
 from .static_data import StaticData, is_static_data
 from .node import Node
+from .list import List as DbList
 
 
 def dynamic_cast_object(data: Any) -> Object:
@@ -57,4 +58,15 @@ def dynamic_cast_node(data: Any) -> Node:
 
     if not isinstance(data, Node):
         raise TypeError("Data to be cast is not Node")
+    return data
+
+
+def dynamic_cast_dblist(data: Any) -> DbList:
+    """
+    Check if data is DbList, returning data cast.
+    :raises TypeError: If data is not DbList.
+    """
+
+    if not isinstance(data, DbList):
+        raise TypeError("Data to be cast is not DbList")
     return data

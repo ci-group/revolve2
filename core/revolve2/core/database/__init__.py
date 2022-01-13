@@ -13,6 +13,7 @@ from .cast import (
     dynamic_cast_static_data,
     dynamic_cast_object,
     dynamic_cast_node,
+    dynamic_cast_dblist,
 )
 from .transaction import Transaction
 from .uninitialized import Uninitialized
@@ -31,6 +32,7 @@ __all__ = [
     "dynamic_cast_float",
     "dynamic_cast_object",
     "dynamic_cast_node",
+    "dynamic_cast_dblist",
     "Transaction",
     "Uninitialized",
 ]

@@ -62,4 +62,4 @@ jobs:
         with:
           docs-folder: "core/docs"
       - if: ${{ github.ref == 'refs/heads/docs' }}
-        echo "TESTING!!!"
+        run: echo "TESTING!!!"

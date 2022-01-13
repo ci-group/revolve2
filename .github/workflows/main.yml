@@ -61,3 +61,5 @@ jobs:
       - uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "core/docs"
+      - if: ${{ github.ref == 'refs/heads/docs' }}
+        echo "TESTING!!!"

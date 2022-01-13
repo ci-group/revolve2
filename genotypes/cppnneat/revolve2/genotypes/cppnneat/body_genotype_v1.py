@@ -27,7 +27,7 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
         output_activation_func: multineat.ActivationFunction,
         num_initial_mutations: int,
     ) -> BodybrainBase[BodyGenotypeV1]:
-        return super(BodyGenotypeV1, cls).random(
+        return super(BodyGenotypeV1, cls)._random(
             innov_db,
             rng,
             multineat_params,

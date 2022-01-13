@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import Generic, TypeVar, cast
 
 import multineat
 
@@ -13,7 +13,7 @@ class BodybrainBase(Generic[Child]):
     _genotype: multineat.Genome
 
     @classmethod
-    def random(
+    def _random(
         cls,
         innov_db: multineat.InnovationDatabase,
         rng: multineat.RNG,
@@ -61,7 +61,7 @@ class BodybrainBase(Generic[Child]):
             multineat_params,
             rng,
         )
-        return type(self)(new_genotype)
+        return type(self)(new_genotype)  # type: ignore # TODO
 
     @classmethod
     def crossover(
@@ -80,4 +80,4 @@ class BodybrainBase(Generic[Child]):
             rng,
             multineat_params,
         )
-        return cls(new_genotype)
+        return cls(new_genotype)  # type: ignore # TODO

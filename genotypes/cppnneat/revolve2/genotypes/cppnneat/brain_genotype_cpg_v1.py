@@ -30,7 +30,7 @@ class BrainGenotypeCpgV1(
         # if you want another one, make sure it's output is between -1 and 1.
         assert output_activation_func == multineat.ActivationFunction.SIGNED_SINE
 
-        return super(BrainGenotypeCpgV1, cls).random(
+        return super(BrainGenotypeCpgV1, cls)._random(
             innov_db,
             rng,
             multineat_params,

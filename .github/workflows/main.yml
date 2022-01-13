@@ -53,3 +53,11 @@ jobs:
         run: pip install ./core[dev]
       - name: run mypy
         run: scripts/run_mypy_all_opensource.sh
+
+  docs:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: "docs/"

@@ -1,9 +1,9 @@
-from .actor_control import ActorControl
-from .batch import Batch
-from .environment import Environment
-from .posed_actor import PosedActor
-from .runner import Runner
-from .state import ActorState, EnvironmentState, State
+from ._actor_control import ActorControl
+from ._batch import Batch
+from ._environment import Environment
+from ._posed_actor import PosedActor
+from ._runner import Runner
+from ._state import ActorState, EnvironmentState, State
 
 __all__ = [
     "ActorControl",

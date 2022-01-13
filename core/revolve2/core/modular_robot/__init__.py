@@ -1,12 +1,12 @@
-from .active_hinge import ActiveHinge
-from .analyzer import Analyzer
-from .analyzer_module import AnalyzerModule
-from .body import Body
-from .brain import Brain
-from .brick import Brick
-from .core import Core
-from .modular_robot import ModularRobot
-from .module import Module
+from ._active_hinge import ActiveHinge
+from ._analyzer import Analyzer
+from ._analyzer_module import AnalyzerModule
+from ._body import Body
+from ._brain import Brain
+from ._brick import Brick
+from ._core import Core
+from ._modular_robot import ModularRobot
+from ._module import Module
 
 __all__ = [
     "ActiveHinge",

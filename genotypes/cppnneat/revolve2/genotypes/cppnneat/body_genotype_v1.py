@@ -7,7 +7,7 @@ from typing import Any, List, Optional, Set, Tuple, cast
 
 import multineat
 from revolve2.core.database import StaticData
-from revolve2.core.database.serialize import Serializable, SerializeError
+from revolve2.core.database.serialization import Serializable, SerializeError
 from revolve2.core.modular_robot import ActiveHinge
 from revolve2.core.modular_robot import Body
 from revolve2.core.modular_robot import Body as ModularRobotBody

@@ -68,3 +68,4 @@ jobs:
         with:
           branch: gh-pages
           folder: core/docs/build/html
+          clean-exclude: .nojekyll

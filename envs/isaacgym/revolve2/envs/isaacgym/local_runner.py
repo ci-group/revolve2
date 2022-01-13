@@ -276,7 +276,7 @@ class LocalRunner(Runner):
 
     async def run_batch(self, batch: Batch) -> List[Tuple[float, State]]:
         # sadly we must run Isaac Gym in a subprocess, because it has some big memory leaks.
-        result_queue = mp.Queue()
+        result_queue: mp.queues.Queue[Optional[Tuple[float, State]]] = mp.Queue()
         process = mp.Process(
             target=self._run_batch_impl,
             args=(result_queue, batch, self._sim_params, self._headless),
@@ -296,7 +296,7 @@ class LocalRunner(Runner):
     @classmethod
     def _run_batch_impl(
         cls,
-        result_queue: mp.Queue,
+        result_queue: mp.queues.Queue[Optional[Tuple[float, State]]],
         batch: Batch,
         sim_params: gymapi.SimParams,
         headless: bool,

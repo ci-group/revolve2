@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import cast
+
 import multineat
 from revolve2.core.database import StaticData
 from revolve2.core.database.serialize import Serializable, SerializeError
@@ -20,13 +24,13 @@ class BrainGenotypeCpgV1(
         multineat_params: multineat.Parameters,
         output_activation_func: multineat.ActivationFunction,
         num_initial_mutations: int,
-    ) -> BodybrainBase:
+    ) -> BodybrainBase[BrainGenotypeCpgV1]:
         assert multineat_params.MutateOutputActivationFunction == False
         # other activation functions could work too, but this has been tested.
         # if you want another one, make sure it's output is between -1 and 1.
         assert output_activation_func == multineat.ActivationFunction.SIGNED_SINE
 
-        return super(BrainGenotypeCpgV1, cls).random(
+        return super(BrainGenotypeCpgV1, cls)._random(
             innov_db,
             rng,
             multineat_params,
@@ -40,10 +44,10 @@ class BrainGenotypeCpgV1(
         return BrainCpgV1(self._genotype)
 
     def serialize(self) -> StaticData:
-        return self._genotype.Serialize()
+        return cast(str, self._genotype.Serialize())  # TODO missing multineat typing
 
     @classmethod
-    def deserialize(cls, data: StaticData) -> None:
+    def deserialize(cls, data: StaticData) -> Serializable:
         genotype = multineat.Genome()
         if type(data) != str:
             raise SerializeError()

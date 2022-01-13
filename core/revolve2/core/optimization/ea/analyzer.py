@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Dict, Iterator, List, Optional
 
 from revolve2.core.database import List as DbList
 from revolve2.core.database import Node, Object, StaticData, Transaction, is_static_data
@@ -62,31 +62,35 @@ class Individual:
     _genotype: StaticData
     _fitness: StaticData
 
-    def __init__(self, data: dict):
-        self._id = data.get("id")
-        if self._id is None or not isinstance(self._id, int):
+    def __init__(self, data: Dict[str, Object]):
+        id_data = data.get("id")
+        if not isinstance(id_data, int):
             raise SerializeError()
+        self._id = id_data
 
         if "parents" not in data:
             raise SerializeError()
-        self._parents = data["parents"]
-        if self._parents is not None:
-            if not isinstance(self._parents, list) or not all(
-                [isinstance(parent, int) for parent in self._parents]
+        parents_data = data["parents"]
+        if parents_data is not None:
+            if not isinstance(parents_data, list) or not all(
+                [isinstance(parent, int) for parent in parents_data]
             ):
                 raise SerializeError()
+        self._parents = parents_data
 
         if "genotype" not in data:
             raise SerializeError()
-        self._genotype = data["genotype"]
-        if not is_static_data(self._genotype):
+        genotype_data = data["genotype"]
+        if not is_static_data(genotype_data):
             raise SerializeError()
+        self._genotype = genotype_data
 
         if "fitness" not in data:
             raise SerializeError()
-        self._fitness = data["fitness"]
-        if not is_static_data(self._fitness):
+        fitness_data = data["fitness"]
+        if not is_static_data(fitness_data):
             raise SerializeError()
+        self._fitness = fitness_data
 
     @property
     def id(self) -> int:
@@ -125,7 +129,7 @@ class Individuals:
     def __len__(self) -> int:
         return self._individuals.len(self._txn)
 
-    def __iter__(self) -> Iterator[Generation]:
+    def __iter__(self) -> Iterator[Individual]:
         asdas = range(len(self))
         for i in range(len(self)):
             yield self[i]

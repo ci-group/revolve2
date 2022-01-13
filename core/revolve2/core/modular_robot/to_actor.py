@@ -1,6 +1,7 @@
 import math
-from typing import List, Tuple, cast
+from typing import List, Tuple
 
+from numpy.lib.arraysetops import isin
 from pyrr import Quaternion, Vector3
 from revolve2.core.physics.actor import Actor, Collision, Joint, RigidBody, Visual
 
@@ -92,7 +93,8 @@ class _ActorBuilder:
         MASS = 0.250  # kg
         CHILD_OFFSET = 0.089 / 2.0  # meter
 
-        module = cast(Core, analyzer_module.module)
+        module = analyzer_module.module
+        assert isinstance(module, Core)
 
         # attachment position is always at center of core
         position = attachment_point
@@ -153,7 +155,8 @@ class _ActorBuilder:
         MASS = 0.030  # kg
         CHILD_OFFSET = 0.06288625 / 2.0  # meter
 
-        module = cast(Brick, analyzer_module.module)
+        module = analyzer_module.module
+        assert isinstance(module, Brick)
 
         position = attachment_point + orientation * Vector3(
             [BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
@@ -227,7 +230,8 @@ class _ActorBuilder:
 
         ATTACHMENT_OFFSET = SERVO1_BOUNDING_BOX[0] / 2.0 + SERVO2_BOUNDING_BOX[0]
 
-        module = cast(ActiveHinge, analyzer_module.module)
+        module = analyzer_module.module
+        assert isinstance(module, ActiveHinge)
 
         frame_position = attachment_point + orientation * Vector3(
             [FRAME_BOUNDING_BOX[0] / 2.0, 0.0, 0.0]

@@ -4,11 +4,19 @@ import logging
 import pickle
 from abc import ABC, abstractmethod
 from random import Random
-from typing import Generic, List, Optional, Type, TypeVar, Union, cast
+from typing import Generic, List, Optional, Type, TypeVar, Union
 
 from revolve2.core.database import Database
 from revolve2.core.database import List as DbList
-from revolve2.core.database import Node, StaticData, Transaction
+from revolve2.core.database import (
+    Node,
+    StaticData,
+    Transaction,
+    dynamic_cast_bytes,
+    dynamic_cast_static_data,
+    dynamic_cast_node,
+)
+from revolve2.core.database.cast import dynamic_cast_dblist
 from revolve2.core.database.serialize import Serializable
 from revolve2.core.database.serialize.serialize_error import SerializeError
 from revolve2.core.database.uninitialized import Uninitialized
@@ -30,8 +38,8 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     # Types of genotype and fitness are stored as soon as they are available.
     # Used to type check the return values of user functions.
-    __genotype_type: Type
-    __fitness_type: Optional[Type]
+    __genotype_type: Type[Genotype]
+    __fitness_type: Optional[type]
 
     __population_size: int
     __offspring_size: int
@@ -40,12 +48,14 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     __last_generation: Optional[List[Individual[Genotype, Fitness]]]
     __initial_population: Optional[List[Genotype]]
 
-    __db_ea: Node
-    __db_evaluations: DbList
+    __db_ea: Node  # All db data that is not evaluations.
+    __db_evaluations: DbList  # A node for every generation, provided to the user to store their evaluation.
 
-    __db_rng_after_generation: Optional[DbList]
-    __db_generations: Optional[DbList]
-    __db_individuals: Optional[DbList]
+    __db_rng_after_generation: Optional[
+        DbList
+    ]  # The Random object state directly after the generation matching its index.
+    __db_generations: Optional[DbList]  # Lists of invidiual ids
+    __db_individuals: Optional[DbList]  # All individuals, indexed by id
 
     def __init__(self) -> None:
         raise ValueError(
@@ -305,7 +315,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     async def _save_generation_notransaction(
         self, txn: Transaction, new_individuals: List[Individual[Genotype, Fitness]]
-    ):
+    ) -> None:
         assert self.__last_generation is not None
         assert self.__db_rng_after_generation is not None
         assert self.__db_generations is not None
@@ -344,21 +354,28 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     self.__db_node.set_object(
                         txn, {"evaluations": self.__db_evaluations, "ea": self.__db_ea}
                     )
+                    return False
                 else:
+                    if not isinstance(root, dict):
+                        raise SerializeError()
                     self.__db_ea = root["ea"]
                     if not isinstance(self.__db_ea, Node):
                         raise SerializeError()
-                    self.__db_evaluations = root["evaluations"].get_object(txn)
+                    self.__db_evaluations = dynamic_cast_dblist(
+                        dynamic_cast_node(root["evaluations"]).get_object(txn)
+                    )
                     if not isinstance(self.__db_evaluations, DbList):
                         raise SerializeError()
 
                     ea = self.__db_ea.get_object(txn)
                     if isinstance(ea, Uninitialized):
                         return False
+                    elif not isinstance(ea, dict):
+                        raise SerializeError()
 
-                    self.__db_rng_after_generation = ea[
-                        "rng_after_generation"
-                    ].get_object(txn)
+                    self.__db_rng_after_generation = dynamic_cast_dblist(
+                        dynamic_cast_node(ea["rng_after_generation"]).get_object(txn)
+                    )
                     if not isinstance(self.__db_rng_after_generation, DbList):
                         raise SerializeError()
                     self.__population_size = ea["population_size"]
@@ -367,10 +384,14 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     self.__offspring_size = ea["offspring_size"]
                     if not isinstance(self.__offspring_size, int):
                         raise SerializeError()
-                    self.__db_generations = ea["generations"].get_object(txn)
+                    self.__db_generations = dynamic_cast_dblist(
+                        dynamic_cast_node(ea["generations"]).get_object(txn)
+                    )
                     if not isinstance(self.__db_generations, DbList):
                         raise SerializeError()
-                    self.__db_individuals = ea["individuals"].get_object(txn)
+                    self.__db_individuals = dynamic_cast_dblist(
+                        dynamic_cast_node(ea["individuals"]).get_object(txn)
+                    )
                     if not isinstance(self.__db_individuals, DbList):
                         raise SerializeError()
 
@@ -388,7 +409,9 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                         raise SerializeError()
                     self.__last_generation = [
                         Individual.deserialize(
-                            self.__db_individuals.get(txn, id).get_object(txn)
+                            dynamic_cast_static_data(
+                                self.__db_individuals.get(txn, id).get_object(txn)
+                            )
                         )
                         for id in individual_ids
                     ]
@@ -400,9 +423,11 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
                     self._rng.setstate(
                         pickle.loads(
-                            self.__db_rng_after_generation.get(
-                                txn, self.__generation_index
-                            ).get_object(txn)
+                            dynamic_cast_bytes(
+                                self.__db_rng_after_generation.get(
+                                    txn, self.__generation_index
+                                ).get_object(txn)
+                            )
                         )
                     )
 

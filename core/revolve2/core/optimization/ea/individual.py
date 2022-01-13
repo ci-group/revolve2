@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pickle
 from dataclasses import dataclass
-from typing import Generic, List, Optional, TypeVar, Union, cast
+from typing import Generic, List, Optional, TypeVar, Union
 
 from revolve2.core.database import StaticData
 from revolve2.core.database.serialize import (
@@ -35,13 +35,12 @@ class Individual(Generic[Genotype, Fitness], Serializable):
 
     @classmethod
     def deserialize(cls, data: StaticData) -> Individual[Genotype, Fitness]:
-        if type(data) != dict:
+        if not isinstance(data, dict):
             raise SerializeError()
 
-        id_data = data.get("id")
-        if id_data is None or type(id_data) != int:
+        id = data.get("id")
+        if not isinstance(id, int):
             raise SerializeError()
-        id = cast(int, id_data)
 
         genotype_type_data = data.get(".genotype_type")
         if genotype_type_data is None or type(genotype_type_data) != bytes:
@@ -61,15 +60,16 @@ class Individual(Generic[Genotype, Fitness], Serializable):
         fitness_data = data.get("fitness")
         fitness = deserialize(fitness_data, fitness_type)
 
+        parent_ids: Optional[List[int]]
         parents_data = data.get("parents")
         if parents_data is None:
             parent_ids = None
         else:
             if type(parents_data) != list:
                 raise SerializeError()
-            parent_ids: List[int] = []
+            parent_ids = []
             for parent_data in parents_data:
-                if type(parent_data) != int:
+                if not isinstance(parent_data, int):
                     raise SerializeError()
                 parent_ids.append(parent_data)
 

@@ -1,3 +1,4 @@
+import math
 import multiprocessing as mp
 import os
 import tempfile
@@ -65,7 +66,7 @@ class LocalRunner(Runner):
             return sim
 
         def _create_envs(self) -> List[GymEnv]:
-            gymenvs: List[self.GymEnv] = []
+            gymenvs: List[LocalRunner.Simulator.GymEnv] = []
 
             # TODO this is only temporary. When we switch to the new isaac sim it should be easily possible to
             # let the user create static object, rendering the group plane redundant.
@@ -172,15 +173,15 @@ class LocalRunner(Runner):
             control_step = 1 / self._batch.control_frequency
             sample_step = 1 / self._batch.sampling_frequency
 
-            last_control_time = 0
-            last_sample_time = 0
+            last_control_time = 0.0
+            last_sample_time = 0.0
 
             while (
                 time := self._gym.get_sim_time(self._sim)
             ) < self._batch.simulation_time:
                 # do control if it is time
                 if time >= last_control_time + control_step:
-                    last_control_time = int(time / control_step) * control_step
+                    last_control_time = math.floor(time / control_step) * control_step
                     control = ActorControl()
                     self._batch.control(0.2, control)
 
@@ -275,7 +276,7 @@ class LocalRunner(Runner):
 
     async def run_batch(self, batch: Batch) -> List[Tuple[float, State]]:
         # sadly we must run Isaac Gym in a subprocess, because it has some big memory leaks.
-        result_queue = mp.Queue()
+        result_queue: mp.Queue = mp.Queue()  # type: ignore # TODO
         process = mp.Process(
             target=self._run_batch_impl,
             args=(result_queue, batch, self._sim_params, self._headless),
@@ -295,11 +296,11 @@ class LocalRunner(Runner):
     @classmethod
     def _run_batch_impl(
         cls,
-        result_queue: mp.Queue,
+        result_queue: mp.Queue,  # type: ignore # TODO
         batch: Batch,
         sim_params: gymapi.SimParams,
         headless: bool,
-    ) -> int:
+    ) -> None:
         simulator = cls.Simulator(batch, sim_params, headless)
         states = simulator.run()
         simulator.cleanup()

@@ -1,7 +1,7 @@
-from typing import List, Tuple
+from typing import List, Tuple, cast
 
 import multineat
-from revolve2.core.modular_robot import AnalyzerModule, Serialized
+from revolve2.core.modular_robot import AnalyzerModule
 from revolve2.core.modular_robot.brains import Cpg as ModularRobotBrainCpg
 
 
@@ -62,7 +62,4 @@ class BrainCpgV1(ModularRobotBrainCpg):
     ) -> float:
         network.Input(inputs)
         network.Activate()
-        return network.Output()[0]
-
-    def serialize(self) -> Serialized:
-        return []  # TODO
+        return cast(float, network.Output()[0])  # TODO missing multineat typing

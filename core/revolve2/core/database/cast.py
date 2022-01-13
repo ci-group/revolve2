@@ -28,14 +28,14 @@ def dynamic_cast_static_data(data: Any) -> StaticData:
     return data
 
 
-def dynamic_cast_bytes(data: Any) -> bytes:
+def dynamic_cast_int(data: Any) -> int:
     """
-    Check if data is bytes, returning data cast.
-    :raises TypeError: If data is not bytes.
+    Check if data is int, returning data cast.
+    :raises TypeError: If data is not int.
     """
 
-    if type(data) != bytes:
-        raise TypeError("Data to be cast is not bytes")
+    if type(data) != int:
+        raise TypeError("Data to be cast is not int")
     return data
 
 
@@ -47,6 +47,28 @@ def dynamic_cast_float(data: Any) -> float:
 
     if type(data) != float:
         raise TypeError("Data to be cast is not float")
+    return data
+
+
+def dynamic_cast_str(data: Any) -> str:
+    """
+    Check if data is str, returning data cast.
+    :raises TypeError: If data is not str.
+    """
+
+    if type(data) != str:
+        raise TypeError("Data to be cast is not str")
+    return data
+
+
+def dynamic_cast_bytes(data: Any) -> bytes:
+    """
+    Check if data is bytes, returning data cast.
+    :raises TypeError: If data is not bytes.
+    """
+
+    if type(data) != bytes:
+        raise TypeError("Data to be cast is not bytes")
     return data
 
 

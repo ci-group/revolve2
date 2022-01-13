@@ -2,7 +2,7 @@ import base64
 import json
 import re
 from json.decoder import JSONDecodeError
-from typing import Any, Dict, List, Tuple, Union, cast
+from typing import Any, Dict, List, Tuple, Union
 
 from ..database_error import DatabaseError
 from ..list import List as ListIface

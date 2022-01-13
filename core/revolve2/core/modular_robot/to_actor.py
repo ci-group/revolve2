@@ -1,5 +1,5 @@
 import math
-from typing import List, Tuple, cast
+from typing import List, Tuple
 
 from numpy.lib.arraysetops import isin
 from pyrr import Quaternion, Vector3

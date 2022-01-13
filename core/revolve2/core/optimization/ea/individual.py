@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pickle
 from dataclasses import dataclass
-from typing import Generic, List, Optional, TypeVar, Union, cast
+from typing import Generic, List, Optional, TypeVar, Union
 
 from revolve2.core.database import StaticData
 from revolve2.core.database.serialize import (

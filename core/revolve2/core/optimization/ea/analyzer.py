@@ -1,4 +1,4 @@
-from typing import Dict, Iterator, List, Optional, cast
+from typing import Dict, Iterator, List, Optional
 
 from revolve2.core.database import List as DbList
 from revolve2.core.database import Node, Object, StaticData, Transaction, is_static_data

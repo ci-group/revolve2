@@ -4,8 +4,8 @@ from typing import List
 from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.control import ActorController
 
-from .analyzer import Analyzer, AnalyzerModule
-from .serialized import Serialized
+from .analyzer import Analyzer
+from .analyzer_module import AnalyzerModule
 
 
 class Brain(ABC):
@@ -21,11 +21,3 @@ class Brain(ABC):
         :param dof_ids: Map from actor joint index to AnalyzerModule
         """
         pass
-
-    @abstractmethod
-    def serialize(self) -> Serialized:
-        """
-        Serialize to a dictionary containing only the data types
-        Dict, List, str, int, float bool,
-        which in turn will only contain these data types as well.
-        """

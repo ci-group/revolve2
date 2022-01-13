@@ -9,7 +9,7 @@ Fitness = TypeVar("Fitness", bound="SupportsLessThan")
 
 
 def tournament(
-    rng: Random, population: List[Tuple[Individual, Fitness]], k
+    rng: Random, population: List[Tuple[Individual, Fitness]], k: int
 ) -> Tuple[Individual, Fitness]:
     """
     Perform tournament selection and return best individual

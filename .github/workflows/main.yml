@@ -16,7 +16,6 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
-
       - name: install requirements not provided by pip
         run: |
           sudo apt install libboost-all-dev
@@ -37,3 +36,20 @@ jobs:
       - uses: rickstaa/action-black@v1
         with:
           black_args: ". --diff --check"
+
+  mypy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ">=3.8"
+      - name: create virtualenv
+        run: |
+          pip install virtualenv
+          virtualenv .venv
+          . .venv/bin/activate
+      - name: install core
+        run: pip install ./core[dev]
+      - name: run mypy
+        run: scripts/run_mypy_all_opensource.sh

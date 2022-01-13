@@ -1,5 +1,8 @@
 from setuptools import find_namespace_packages, setup
 
+print("ASDASIOKKUDUHIAOUSHDIUASHDIUHAISUHD")
+print(find_namespace_packages())
+
 setup(
     name="revolve2-envs-isaacgym",
     version="0.0.0",

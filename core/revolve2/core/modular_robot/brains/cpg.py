@@ -3,13 +3,8 @@ from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple
 
 import numpy as np
-from revolve2.core.modular_robot import (
-    Analyzer,
-    AnalyzerModule,
-    Brain,
-    Module,
-    Serialized,
-)
+import numpy.typing as npt
+from revolve2.core.modular_robot import Analyzer, AnalyzerModule, Brain, Module
 from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.control import ActorController
 from revolve2.core.physics.control.actor_controllers import Cpg as ControllerCpg
@@ -31,7 +26,9 @@ class Cpg(Brain, ABC):
         for i, active_hinge in enumerate(active_hinges):
             id_to_index[active_hinge.id] = i
 
-        intial_state = np.array([0.5 * math.sqrt(2)] * (len(active_hinges) * 2))
+        intial_state: npt.NDArray[np.float_] = np.array(
+            [0.5 * math.sqrt(2)] * (len(active_hinges) * 2)
+        )
         weight_matrix = np.zeros((len(active_hinges) * 2, len(active_hinges) * 2))
 
         for i in range(len(active_hinges)):
@@ -61,10 +58,6 @@ class Cpg(Brain, ABC):
                  The second list contains the weights between connected cpgs, corresponding to `connections`
                  The lists should match the order of the input parameters.
         """
-
-    @abstractmethod
-    def serialize(self) -> Serialized:
-        pass
 
     @staticmethod
     def _find_connections(

@@ -83,9 +83,12 @@ def to_sdf(
         xml.SubElement(limit, "effort").text = "1.765800e-01"
         xml.SubElement(limit, "velocity").text = "5.235988e+00"
 
-    return minidom.parseString(
-        xml.tostring(sdf, encoding="unicode", method="xml")
-    ).toprettyxml(indent="    ")
+    return cast(
+        str,
+        minidom.parseString(
+            xml.tostring(sdf, encoding="unicode", method="xml")
+        ).toprettyxml(indent="    "),
+    )
 
 
 def _quaternion_to_euler(quaternion: Quaternion) -> Tuple[float, float, float]:
@@ -119,7 +122,7 @@ def _make_visual(
     orientation: Quaternion,
     color: Tuple[float, float, float],
     model: str,
-):
+) -> xml.Element:
     visual = xml.Element("visual", {"name": name})
     visual.append(_make_pose(position, orientation))
 
@@ -140,7 +143,7 @@ def _make_box_collision(
     position: Vector3,
     orientation: Quaternion,
     box_size: Vector3,
-):
+) -> xml.Element:
     collision = xml.Element("collision", {"name": name})
     collision.append(_make_pose(position, orientation))
 

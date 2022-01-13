@@ -1,15 +1,17 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Union
 
-from .static_data import StaticData, cast, is_static_data
+from typing_extensions import TypeGuard
+
+from .static_data import StaticData, is_static_data
 
 if TYPE_CHECKING:
     from .list import List as DbList
     from .node import Node
 
-Object = Union[List["Object"], Dict[str, "Object"], StaticData, "Node", "DbList"]
+Object = Union[List["Object"], Dict[str, "Object"], StaticData, "Node", "DbList"]  # type: ignore # TODO this is not yet supported by mypy
 
 
-def is_object(to_check: Any) -> bool:
+def is_object(to_check: Any) -> TypeGuard[Object]:
     from .list import List as DbList
     from .node import Node
 
@@ -21,10 +23,7 @@ def is_object(to_check: Any) -> bool:
         return all([is_object(child) for child in to_check])
     elif isinstance(to_check, dict):
         return all(
-            [
-                isinstance(key, str) and is_object(val)
-                for key, val in cast(Dict[Any, Any], to_check).items()
-            ]
+            [isinstance(key, str) and is_object(val) for key, val in to_check.items()]
         )
     elif is_static_data(to_check):
         return True

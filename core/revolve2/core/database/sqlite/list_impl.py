@@ -34,6 +34,10 @@ class List(ListImplBase):
             return Node(NodeImpl(child.id))
         else:
             item = allitems.filter(DbListItem.index == index).first()
+            if item is None:
+                raise DatabaseError(
+                    "Database corrupt. Indeices of nodes not in line with number of nodes."
+                )
             return Node(NodeImpl(item.child_node_id))
 
     def append(self, txn: TransactionBase) -> Node:
@@ -53,17 +57,23 @@ class List(ListImplBase):
         txn._session.add(DbListItem(index, self._id, child.id))
         return Node(NodeImpl(child.id))
 
-    def get(self, txn: Transaction, index: int) -> Node:
+    def get(self, txn: TransactionBase, index: int) -> Node:
         from .node_impl import NodeImpl
+
+        assert isinstance(txn, Transaction)
 
         item = txn._session.query(DbListItem).filter(
             DbListItem.list_node_id == self._id, DbListItem.index == index
         )
         if item.count() != 1:
             raise DatabaseError("Index out of bounds or database corrupted.")
-        return Node(NodeImpl(item.first().child_node_id))
+        first = item.first()
+        assert first is not None  # cannot happen but mypy doesn't recognize
+        return Node(NodeImpl(first.child_node_id))
 
-    def len(self, txn: Transaction) -> int:
+    def len(self, txn: TransactionBase) -> int:
+        assert isinstance(txn, Transaction)
+
         return (
             txn._session.query(DbListItem)
             .filter(DbListItem.list_node_id == self._id)

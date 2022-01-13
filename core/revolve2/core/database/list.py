@@ -9,7 +9,7 @@ from .transaction import Transaction
 class List:
     _impl: Optional[ListImpl]
 
-    def __init__(self, impl: ListImpl = None):
+    def __init__(self, impl: Optional[ListImpl] = None):
         self._impl = impl
 
     @property
@@ -26,7 +26,7 @@ class List:
         If the list is more than one too short or the index is not the last index in the list,
         DatabaseError is thrown.
         """
-        if self.is_stub:
+        if self._impl is None:
             raise DatabaseError(
                 "List not usable yet. It is a stub created by the user that has not yet been linked with the database."
             )
@@ -37,7 +37,7 @@ class List:
         """
         Append a new node to the list and return it.
         """
-        if self.is_stub:
+        if self._impl is None:
             raise DatabaseError(
                 "List not usable yet. It is a stub created by the user that has not yet been linked with the database."
             )
@@ -49,7 +49,7 @@ class List:
         Get the item at the given index.
         :raises: DatabaseError if out of bounds
         """
-        if self.is_stub:
+        if self._impl is None:
             raise DatabaseError(
                 "List not usable yet. It is a stub created by the user that has not yet been linked with the database."
             )
@@ -60,7 +60,7 @@ class List:
         """
         Get the length of the list.
         """
-        if self.is_stub:
+        if self._impl is None:
             raise DatabaseError(
                 "List not usable yet. It is a stub created by the user that has not yet been linked with the database."
             )

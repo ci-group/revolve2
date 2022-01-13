@@ -13,7 +13,7 @@ class BodybrainBase(Generic[Child]):
     _genotype: multineat.Genome
 
     @classmethod
-    def random(
+    def _random(
         cls,
         innov_db: multineat.InnovationDatabase,
         rng: multineat.RNG,
@@ -22,7 +22,7 @@ class BodybrainBase(Generic[Child]):
         num_inputs: int,
         num_outputs: int,
         num_initial_mutations: int,
-    ) -> BodybrainBase:
+    ) -> BodybrainBase[Child]:
         genotype = multineat.Genome(
             0,  # ID
             num_inputs,
@@ -61,13 +61,13 @@ class BodybrainBase(Generic[Child]):
             multineat_params,
             rng,
         )
-        return type(self)(new_genotype)
+        return type(self)(new_genotype)  # type: ignore # TODO
 
     @classmethod
     def crossover(
         cls,
-        parent1: BodybrainBase,
-        parent2: BodybrainBase,
+        parent1: BodybrainBase[Child],
+        parent2: BodybrainBase[Child],
         multineat_params: multineat.Parameters,
         rng: multineat.RNG,
         mate_average: bool,
@@ -80,4 +80,4 @@ class BodybrainBase(Generic[Child]):
             rng,
             multineat_params,
         )
-        return cls(new_genotype)
+        return cls(new_genotype)  # type: ignore # TODO

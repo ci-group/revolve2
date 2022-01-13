@@ -67,4 +67,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.2.2
         with:
           branch: gh-pages
-          folder: core/docs/build
+          folder: core/docs/build/html

@@ -66,8 +66,8 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
-      #- name: install core
-      #  run: pip install ./core[dev]
+      - name: install core
+        run: pip install ./core[dev]
       - name: sphinx
         run: make -C core/docs html
       - name: deploy

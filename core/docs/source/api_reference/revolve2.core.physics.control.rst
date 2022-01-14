@@ -5,9 +5,9 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   revolve2.core.physics.control.actor_controllers
+   actor_controllers <revolve2.core.physics.control.actor_controllers>
 
 Module contents
 ---------------

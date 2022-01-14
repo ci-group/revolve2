@@ -5,12 +5,12 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   revolve2.core.database
-   revolve2.core.modular_robot
-   revolve2.core.optimization
-   revolve2.core.physics
+   database <revolve2.core.database>
+   modular_robot <revolve2.core.modular_robot>
+   optimization <revolve2.core.optimization>
+   physics <revolve2.core.physics>
 
 Module contents
 ---------------

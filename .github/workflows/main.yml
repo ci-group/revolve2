@@ -61,8 +61,7 @@ jobs:
       - name: build
         uses: ammaraskar/sphinx-action@master
         with:
-          pre-build-command: "cd core"
-          docs-folder: "docs"
+          docs-folder: "core/docs"
       - name: deploy
         if: ${{ github.ref == 'refs/heads/docs' }}
         uses: JamesIves/github-pages-deploy-action@v4.2.2

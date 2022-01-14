@@ -10,3 +10,4 @@ Subpackages
    :maxdepth: 4
 
    revolve2.core
+   revolve2.analysis

@@ -48,6 +48,8 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = "sphinx_rtd_theme"
+html_logo = "logo.png"
+html_favicon = "favicon.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -60,3 +62,5 @@ autodoc_type_aliases = {
     "Object": "Object",
 }
 add_module_names = False
+# python_use_unqualified_type_names = True
+autodoc_typehints_format = "short"

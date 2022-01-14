@@ -1,5 +1,5 @@
-revolve2
-========
+API Reference
+=============
 
 .. toctree::
    :maxdepth: 4

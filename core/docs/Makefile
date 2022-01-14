@@ -14,7 +14,7 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 apidoc:
-	@$(SPHINXAPIDOC) -o source ../revolve2 --implicit-namespaces 
+	@$(SPHINXAPIDOC) -o source/api_reference ../revolve2 --implicit-namespaces  --tocfile index --doc-project "API Reference"
 
 .PHONY: help Makefile
 

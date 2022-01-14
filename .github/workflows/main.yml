@@ -59,6 +59,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: cd core/docs
+      - run: pwd
       - name: build
         uses: ammaraskar/sphinx-action@master
         with:

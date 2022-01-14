@@ -7,6 +7,6 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   revolve2.analysis.core
+   core <revolve2.analysis.core>

@@ -5,11 +5,11 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   revolve2.core.optimization.ea.modular_robot
-   revolve2.core.optimization.ea.population_management
-   revolve2.core.optimization.ea.selection
+   modular_robot <revolve2.core.optimization.ea.modular_robot>
+   population_management <revolve2.core.optimization.ea.population_management>
+   selection <revolve2.core.optimization.ea.selection>
 
 Submodules
 ----------

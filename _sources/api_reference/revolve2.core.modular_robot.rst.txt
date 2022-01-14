@@ -5,9 +5,9 @@ Subpackages
 -----------
 
 .. toctree::
-   :maxdepth: 4
+   :maxdepth: 1
 
-   revolve2.core.modular_robot.brains
+   brains <revolve2.core.modular_robot.brains>
 
 Module contents
 ---------------

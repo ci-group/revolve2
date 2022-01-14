@@ -13,7 +13,8 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath("../../revolve2"))
+THIS_DIR = os.path.dirname(__file__)
+sys.path.insert(0, os.path.abspath(os.path.join(THIS_DIR, "../../revolve2")))
 
 
 # -- Project information -----------------------------------------------------

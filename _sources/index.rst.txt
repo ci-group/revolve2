@@ -1,15 +1,10 @@
-Welcome to revolve2-core's documentation!
-=========================================
+======================
+Revolve2 documentation
+======================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   Installation <installation/index>
+   Tutorials <tutorials/index>
+   API Reference <api_reference/index>

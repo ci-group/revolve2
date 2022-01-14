@@ -62,5 +62,5 @@ autodoc_type_aliases = {
     "Object": "Object",
 }
 add_module_names = False
-# python_use_unqualified_type_names = True
+python_use_unqualified_type_names = True
 autodoc_typehints_format = "short"

@@ -62,6 +62,7 @@ jobs:
       - name: build
         uses: ammaraskar/sphinx-action@master
         with:
+          pre-build-command: "pwd"
           docs-folder: "."
       - name: deploy
         if: ${{ github.ref == 'refs/heads/docs' }}

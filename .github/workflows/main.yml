@@ -58,12 +58,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - run: cd core
       - name: build
         uses: ammaraskar/sphinx-action@master
         with:
-          pre-build-command: "pwd"
-          docs-folder: "core/docs"
+          pre-build-command: "cd core"
+          docs-folder: "docs"
       - name: deploy
         if: ${{ github.ref == 'refs/heads/docs' }}
         uses: JamesIves/github-pages-deploy-action@v4.2.2

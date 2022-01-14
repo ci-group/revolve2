@@ -18,7 +18,12 @@ setup(
         "sqlalchemy>=1.4.28",
     ],
     extras_require={
-        "dev": ["sqlalchemy-stubs>=0.4", "mypy==0.921", "sphinx-rtd-theme=1.0.0"]
+        "dev": [
+            "sqlalchemy-stubs>=0.4",
+            "mypy==0.921",
+            "sphinx=4.3.2",
+            "sphinx-rtd-theme=1.0.0",
+        ]
     },
     zip_safe=False,
 )

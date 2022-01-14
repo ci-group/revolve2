@@ -68,6 +68,8 @@ jobs:
           . .venv/bin/activate
       #- name: install core
       #  run: pip install ./core[dev]
+      - name: sphinx
+        run: make -C core/docs html
       - name: deploy
         if: ${{ github.ref == 'refs/heads/docs' }}
         uses: JamesIves/github-pages-deploy-action@v4.2.2

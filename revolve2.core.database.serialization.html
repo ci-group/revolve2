@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.database.serialization package &mdash; revolve2-core v0.0.0-alpha1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>revolve2.core.database.serialization package &mdash; revolve2-core v0.0.0-alpha1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -36,7 +38,7 @@
               <!-- Local TOC -->
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">revolve2.core.database.serialization package</a><ul>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-revolve2.core.database.serialization">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -65,12 +67,44 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="revolve2-core-database-serialization-package">
-<h1>revolve2.core.database.serialization package<a class="headerlink" href="#revolve2-core-database-serialization-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+  <section id="revolve2-core-database-serialization-package">
+<h1>revolve2.core.database.serialization package<a class="headerlink" href="#revolve2-core-database-serialization-package" title="Permalink to this headline"></a></h1>
+<section id="module-revolve2.core.database.serialization">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.database.serialization" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.database.serialization.Serializable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Serializable</span></span><a class="headerlink" href="#revolve2.core.database.serialization.Serializable" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.serialization.Serializable.deserialize">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StaticData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.database.serialization.Serializable" title="revolve2.core.database.serialization._serializable.Serializable"><span class="pre">revolve2.core.database.serialization._serializable.Serializable</span></a></span></span><a class="headerlink" href="#revolve2.core.database.serialization.Serializable.deserialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.serialization.Serializable.serialize">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StaticData</span></span></span><a class="headerlink" href="#revolve2.core.database.serialization.Serializable.serialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="revolve2.core.database.serialization.SerializeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SerializeError</span></span><a class="headerlink" href="#revolve2.core.database.serialization.SerializeError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.serialization.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StaticData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">as_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.database.serialization._functions.T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.core.database.serialization._functions.T</span></span></span><a class="headerlink" href="#revolve2.core.database.serialization.deserialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.serialization.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_serialize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.database.serialization.Serializable" title="revolve2.core.database.serialization.Serializable"><span class="pre">Serializable</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">StaticData</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StaticData</span></span></span><a class="headerlink" href="#revolve2.core.database.serialization.serialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
 
 
            </div>

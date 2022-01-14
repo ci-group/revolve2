@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.physics.actor package &mdash; revolve2-core v0.0.0-alpha1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>revolve2.core.physics.actor package &mdash; revolve2-core v0.0.0-alpha1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -37,7 +39,7 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">revolve2.core.physics.actor package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-revolve2.core.physics.actor">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -66,27 +68,207 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="revolve2-core-physics-actor-package">
-<h1>revolve2.core.physics.actor package<a class="headerlink" href="#revolve2-core-physics-actor-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+  <section id="revolve2-core-physics-actor-package">
+<h1>revolve2.core.physics.actor package<a class="headerlink" href="#revolve2-core-physics-actor-package" title="Permalink to this headline"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="revolve2.core.physics.actor.sdf.html">revolve2.core.physics.actor.sdf package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.core.physics.actor.sdf.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.core.physics.actor.sdf.html#module-revolve2.core.physics.actor.sdf">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="revolve2.core.physics.actor.urdf.html">revolve2.core.physics.actor.urdf package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.core.physics.actor.urdf.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.core.physics.actor.urdf.html#module-revolve2.core.physics.actor.urdf">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+</section>
+<section id="module-revolve2.core.physics.actor">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.physics.actor" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Actor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Actor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bodies</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.actor.RigidBody" title="revolve2.core.physics.actor._rigid_body.RigidBody"><span class="pre">revolve2.core.physics.actor._rigid_body.RigidBody</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joints</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.actor.Joint" title="revolve2.core.physics.actor._joint.Joint"><span class="pre">revolve2.core.physics.actor._joint.Joint</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.actor.Actor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Actor.bodies">
+<span class="sig-name descname"><span class="pre">bodies</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.actor.RigidBody" title="revolve2.core.physics.actor._rigid_body.RigidBody"><span class="pre">revolve2.core.physics.actor._rigid_body.RigidBody</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.actor.Actor.bodies" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Actor.calc_aabb">
+<span class="sig-name descname"><span class="pre">calc_aabb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.core.physics.actor._bounding_box.BoundingBox</span></span></span><a class="headerlink" href="#revolve2.core.physics.actor.Actor.calc_aabb" title="Permalink to this definition"></a></dt>
+<dd><p>Calculate the axis aligned bounding box for this actor.
+This not the exact bounding box for the actor,
+but the smallest box the actor fits in that is aligned
+with the global axes.</p>
+<p>Not very efficient but it works and is fast enough for our use case</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Actor.joints">
+<span class="sig-name descname"><span class="pre">joints</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.actor.Joint" title="revolve2.core.physics.actor._joint.Joint"><span class="pre">revolve2.core.physics.actor._joint.Joint</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.actor.Actor.joints" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Collision">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Collision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.actor.Collision" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Collision.bounding_box">
+<span class="sig-name descname"><span class="pre">bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.vector3.Vector3</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Collision.bounding_box" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Collision.mass">
+<span class="sig-name descname"><span class="pre">mass</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Collision.mass" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Collision.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Collision.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Collision.orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.quaternion.Quaternion</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Collision.orientation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Collision.position">
+<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.vector3.Vector3</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Collision.position" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Joint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Joint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.actor.RigidBody" title="revolve2.core.physics.actor._rigid_body.RigidBody"><span class="pre">revolve2.core.physics.actor._rigid_body.RigidBody</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">body2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.actor.RigidBody" title="revolve2.core.physics.actor._rigid_body.RigidBody"><span class="pre">revolve2.core.physics.actor._rigid_body.RigidBody</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.actor.Joint" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Joint.axis">
+<span class="sig-name descname"><span class="pre">axis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.vector3.Vector3</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Joint.axis" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Joint.body1">
+<span class="sig-name descname"><span class="pre">body1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.physics.actor.RigidBody" title="revolve2.core.physics.actor._rigid_body.RigidBody"><span class="pre">revolve2.core.physics.actor._rigid_body.RigidBody</span></a></em><a class="headerlink" href="#revolve2.core.physics.actor.Joint.body1" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Joint.body2">
+<span class="sig-name descname"><span class="pre">body2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.physics.actor.RigidBody" title="revolve2.core.physics.actor._rigid_body.RigidBody"><span class="pre">revolve2.core.physics.actor._rigid_body.RigidBody</span></a></em><a class="headerlink" href="#revolve2.core.physics.actor.Joint.body2" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Joint.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Joint.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Joint.orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.quaternion.Quaternion</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Joint.orientation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Joint.position">
+<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.vector3.Vector3</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Joint.position" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RigidBody</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_friction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynamic_friction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.center_of_mass">
+<span class="sig-name descname"><span class="pre">center_of_mass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.objects.vector3.Vector3</span></span></span><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.center_of_mass" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.collisions">
+<span class="sig-name descname"><span class="pre">collisions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.actor.Collision" title="revolve2.core.physics.actor._collision.Collision"><span class="pre">revolve2.core.physics.actor._collision.Collision</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.collisions" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.dynamic_friction">
+<span class="sig-name descname"><span class="pre">dynamic_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.dynamic_friction" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.inertia_tensor">
+<span class="sig-name descname"><span class="pre">inertia_tensor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.objects.matrix33.Matrix33</span></span></span><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.inertia_tensor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.mass">
+<span class="sig-name descname"><span class="pre">mass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.mass" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.quaternion.Quaternion</span></em><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.orientation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.position">
+<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.vector3.Vector3</span></em><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.position" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.static_friction">
+<span class="sig-name descname"><span class="pre">static_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.static_friction" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.RigidBody.visuals">
+<span class="sig-name descname"><span class="pre">visuals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.actor.Visual" title="revolve2.core.physics.actor._visual.Visual"><span class="pre">revolve2.core.physics.actor._visual.Visual</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.actor.RigidBody.visuals" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Visual">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Visual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.actor.Visual" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Visual.color">
+<span class="sig-name descname"><span class="pre">color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.actor.Visual.color" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Visual.model">
+<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Visual.model" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Visual.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Visual.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Visual.orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.quaternion.Quaternion</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Visual.orientation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.actor.Visual.position">
+<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.vector3.Vector3</span></em><a class="headerlink" href="#revolve2.core.physics.actor.Visual.position" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
 
 
            </div>

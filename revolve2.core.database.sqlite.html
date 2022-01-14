@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.database.sqlite package &mdash; revolve2-core v0.0.0-alpha1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>revolve2.core.database.sqlite package &mdash; revolve2-core v0.0.0-alpha1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -36,7 +38,7 @@
               <!-- Local TOC -->
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">revolve2.core.database.sqlite package</a><ul>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-revolve2.core.database.sqlite">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -65,12 +67,41 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="revolve2-core-database-sqlite-package">
-<h1>revolve2.core.database.sqlite package<a class="headerlink" href="#revolve2-core-database-sqlite-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+  <section id="revolve2-core-database-sqlite-package">
+<h1>revolve2.core.database.sqlite package<a class="headerlink" href="#revolve2-core-database-sqlite-package" title="Permalink to this headline"></a></h1>
+<section id="module-revolve2.core.database.sqlite">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.database.sqlite" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.database.sqlite.Database">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">create_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.sqlite.Database" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.Database" title="revolve2.core.database._database.Database"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.database._database.Database</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.sqlite.Database.begin_transaction">
+<span class="sig-name descname"><span class="pre">begin_transaction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.Transaction" title="revolve2.core.database._transaction.Transaction"><span class="pre">revolve2.core.database._transaction.Transaction</span></a></span></span><a class="headerlink" href="#revolve2.core.database.sqlite.Database.begin_transaction" title="Permalink to this definition"></a></dt>
+<dd><p>Begin a transaction context.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.sqlite.Database.create">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.database.sqlite.Database" title="revolve2.core.database.sqlite._database.Database"><span class="pre">revolve2.core.database.sqlite._database.Database</span></a></span></span><a class="headerlink" href="#revolve2.core.database.sqlite.Database.create" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="revolve2.core.database.sqlite.Database.root">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.Node" title="revolve2.core.database._node.Node"><span class="pre">revolve2.core.database._node.Node</span></a></em><a class="headerlink" href="#revolve2.core.database.sqlite.Database.root" title="Permalink to this definition"></a></dt>
+<dd><p>Get the root node of the database.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.database.sqlite.Transaction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Transaction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.orm.session.Session</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.sqlite.Transaction" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.Transaction" title="revolve2.core.database._transaction.Transaction"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.database._transaction.Transaction</span></code></a></p>
+</dd></dl>
+
+</section>
+</section>
 
 
            </div>

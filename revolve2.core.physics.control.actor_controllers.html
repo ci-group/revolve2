@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.physics.control.actor_controllers package &mdash; revolve2-core v0.0.0-alpha1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>revolve2.core.physics.control.actor_controllers package &mdash; revolve2-core v0.0.0-alpha1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -36,7 +38,7 @@
               <!-- Local TOC -->
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">revolve2.core.physics.control.actor_controllers package</a><ul>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-revolve2.core.physics.control.actor_controllers">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -65,12 +67,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="revolve2-core-physics-control-actor-controllers-package">
-<h1>revolve2.core.physics.control.actor_controllers package<a class="headerlink" href="#revolve2-core-physics-control-actor-controllers-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+  <section id="revolve2-core-physics-control-actor-controllers-package">
+<h1>revolve2.core.physics.control.actor_controllers package<a class="headerlink" href="#revolve2-core-physics-control-actor-controllers-package" title="Permalink to this headline"></a></h1>
+<section id="module-revolve2.core.physics.control.actor_controllers">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.physics.control.actor_controllers" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.control.actor_controllers.Cpg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Cpg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_output_neurons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.control.actor_controllers.Cpg" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="revolve2.core.physics.control.html#revolve2.core.physics.control.ActorController" title="revolve2.core.physics.control._actor_controller.ActorController"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.physics.control._actor_controller.ActorController</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.physics.control.actor_controllers.Cpg.get_dof_targets">
+<span class="sig-name descname"><span class="pre">get_dof_targets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.physics.control.actor_controllers.Cpg.get_dof_targets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.physics.control.actor_controllers.Cpg.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.physics.control.actor_controllers.Cpg.step" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
 
 
            </div>

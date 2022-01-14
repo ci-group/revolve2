@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.database package &mdash; revolve2-core v0.0.0-alpha1 documentation</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <title>revolve2.core.database package &mdash; revolve2-core v0.0.0-alpha1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -37,7 +39,7 @@
               <div class="local-toc"><ul>
 <li><a class="reference internal" href="#">revolve2.core.database package</a><ul>
 <li><a class="reference internal" href="#subpackages">Subpackages</a></li>
-<li><a class="reference internal" href="#module-contents">Module contents</a></li>
+<li><a class="reference internal" href="#module-revolve2.core.database">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -66,27 +68,182 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <div class="section" id="revolve2-core-database-package">
-<h1>revolve2.core.database package<a class="headerlink" href="#revolve2-core-database-package" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+  <section id="revolve2-core-database-package">
+<h1>revolve2.core.database package<a class="headerlink" href="#revolve2-core-database-package" title="Permalink to this headline"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="revolve2.core.database.serialization.html">revolve2.core.database.serialization package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.core.database.serialization.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.core.database.serialization.html#module-revolve2.core.database.serialization">Module contents</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="revolve2.core.database.sqlite.html">revolve2.core.database.sqlite package</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.core.database.sqlite.html#module-contents">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.core.database.sqlite.html#module-revolve2.core.database.sqlite">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
-</div>
-</div>
+</section>
+<section id="module-revolve2.core.database">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.database" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.database.Database">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Database</span></span><a class="headerlink" href="#revolve2.core.database.Database" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.Database.begin_transaction">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">begin_transaction</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.database.Transaction" title="revolve2.core.database._transaction.Transaction"><span class="pre">revolve2.core.database._transaction.Transaction</span></a></span></span><a class="headerlink" href="#revolve2.core.database.Database.begin_transaction" title="Permalink to this definition"></a></dt>
+<dd><p>Begin a transaction context.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="revolve2.core.database.Database.root">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.database.Node" title="revolve2.core.database._node.Node"><span class="pre">revolve2.core.database._node.Node</span></a></em><a class="headerlink" href="#revolve2.core.database.Database.root" title="Permalink to this definition"></a></dt>
+<dd><p>Get the root node of the database.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="revolve2.core.database.DatabaseError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DatabaseError</span></span><a class="headerlink" href="#revolve2.core.database.DatabaseError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.database.List">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">List</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">impl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.database._list_impl.ListImpl</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.List" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.List.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.database.Transaction" title="revolve2.core.database._transaction.Transaction"><span class="pre">revolve2.core.database._transaction.Transaction</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.database.Node" title="revolve2.core.database._node.Node"><span class="pre">revolve2.core.database._node.Node</span></a></span></span><a class="headerlink" href="#revolve2.core.database.List.append" title="Permalink to this definition"></a></dt>
+<dd><p>Append a new node to the list and return it.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.List.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.database.Transaction" title="revolve2.core.database._transaction.Transaction"><span class="pre">revolve2.core.database._transaction.Transaction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.database.Node" title="revolve2.core.database._node.Node"><span class="pre">revolve2.core.database._node.Node</span></a></span></span><a class="headerlink" href="#revolve2.core.database.List.get" title="Permalink to this definition"></a></dt>
+<dd><p>Get the item at the given index.
+:raises: DatabaseError if out of bounds</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.List.get_or_append">
+<span class="sig-name descname"><span class="pre">get_or_append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.database.Transaction" title="revolve2.core.database._transaction.Transaction"><span class="pre">revolve2.core.database._transaction.Transaction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.database.Node" title="revolve2.core.database._node.Node"><span class="pre">revolve2.core.database._node.Node</span></a></span></span><a class="headerlink" href="#revolve2.core.database.List.get_or_append" title="Permalink to this definition"></a></dt>
+<dd><p>Get the item at the given index, or if the list is one short,
+append to the list and return the new node.
+If the list is more than one too short or the index is not the last index in the list,
+DatabaseError is thrown.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="revolve2.core.database.List.is_stub">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_stub</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#revolve2.core.database.List.is_stub" title="Permalink to this definition"></a></dt>
+<dd><p>If list is not yet linked to the database but a stub created by the user.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.List.len">
+<span class="sig-name descname"><span class="pre">len</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.database.Transaction" title="revolve2.core.database._transaction.Transaction"><span class="pre">revolve2.core.database._transaction.Transaction</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#revolve2.core.database.List.len" title="Permalink to this definition"></a></dt>
+<dd><p>Get the length of the list.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.database.Node">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">impl</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.database._node_impl.NodeImpl</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.Node" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a node in a database.
+Can be either an object or unitialized.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.Node.get_object">
+<span class="sig-name descname"><span class="pre">get_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.database.Transaction" title="revolve2.core.database.Transaction"><span class="pre">Transaction</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">Object</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.database.Uninitialized" title="revolve2.core.database.Uninitialized"><span class="pre">Uninitialized</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.database.Node.get_object" title="Permalink to this definition"></a></dt>
+<dd><p>Read the underlying object from the database.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="revolve2.core.database.Node.is_stub">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_stub</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#revolve2.core.database.Node.is_stub" title="Permalink to this definition"></a></dt>
+<dd><p>If node is not yet linked to the database but a stub created by the user.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.database.Node.set_object">
+<span class="sig-name descname"><span class="pre">set_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">txn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.database.Transaction" title="revolve2.core.database._transaction.Transaction"><span class="pre">revolve2.core.database._transaction.Transaction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.database.Node.set_object" title="Permalink to this definition"></a></dt>
+<dd><p>Set the underlying object in the database.
+If object is not uninitialized, raises DatabaseError.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.database.Transaction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Transaction</span></span><a class="headerlink" href="#revolve2.core.database.Transaction" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.database.Uninitialized">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Uninitialized</span></span><a class="headerlink" href="#revolve2.core.database.Uninitialized" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.dynamic_cast_bytes">
+<span class="sig-name descname"><span class="pre">dynamic_cast_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="headerlink" href="#revolve2.core.database.dynamic_cast_bytes" title="Permalink to this definition"></a></dt>
+<dd><p>Check if data is bytes, returning data cast.
+:raises TypeError: If data is not bytes.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.dynamic_cast_dblist">
+<span class="sig-name descname"><span class="pre">dynamic_cast_dblist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.database.List" title="revolve2.core.database._list.List"><span class="pre">revolve2.core.database._list.List</span></a></span></span><a class="headerlink" href="#revolve2.core.database.dynamic_cast_dblist" title="Permalink to this definition"></a></dt>
+<dd><p>Check if data is DbList, returning data cast.
+:raises TypeError: If data is not DbList.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.dynamic_cast_float">
+<span class="sig-name descname"><span class="pre">dynamic_cast_float</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#revolve2.core.database.dynamic_cast_float" title="Permalink to this definition"></a></dt>
+<dd><p>Check if data is float, returning data cast.
+:raises TypeError: If data is not float.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.dynamic_cast_node">
+<span class="sig-name descname"><span class="pre">dynamic_cast_node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.database.Node" title="revolve2.core.database._node.Node"><span class="pre">revolve2.core.database._node.Node</span></a></span></span><a class="headerlink" href="#revolve2.core.database.dynamic_cast_node" title="Permalink to this definition"></a></dt>
+<dd><p>Check if data is Node, returning data cast.
+:raises TypeError: If data is not Node.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.dynamic_cast_object">
+<span class="sig-name descname"><span class="pre">dynamic_cast_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Object</span></span></span><a class="headerlink" href="#revolve2.core.database.dynamic_cast_object" title="Permalink to this definition"></a></dt>
+<dd><p>Check if data is Object, returning data cast.
+:raises TypeError: If data is not Object.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.dynamic_cast_static_data">
+<span class="sig-name descname"><span class="pre">dynamic_cast_static_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StaticData</span></span></span><a class="headerlink" href="#revolve2.core.database.dynamic_cast_static_data" title="Permalink to this definition"></a></dt>
+<dd><p>Check if data is StaticData, returning data cast.
+:raises TypeError: If data is not StaticData.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.is_object">
+<span class="sig-name descname"><span class="pre">is_object</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.is_object" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.database.is_static_data">
+<span class="sig-name descname"><span class="pre">is_static_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.is_static_data" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
 
 
            </div>

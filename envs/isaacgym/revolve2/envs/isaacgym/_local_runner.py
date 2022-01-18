@@ -20,7 +20,7 @@ from isaacgym import gymapi
 
 
 class LocalRunner(Runner):
-    class Simulator:
+    class _Simulator:
         @dataclass
         class GymEnv:
             env: gymapi.Env  # environment handle
@@ -66,7 +66,7 @@ class LocalRunner(Runner):
             return sim
 
         def _create_envs(self) -> List[GymEnv]:
-            gymenvs: List[LocalRunner.Simulator.GymEnv] = []
+            gymenvs: List[LocalRunner._Simulator.GymEnv] = []
 
             # TODO this is only temporary. When we switch to the new isaac sim it should be easily possible to
             # let the user create static object, rendering the group plane redundant.
@@ -301,9 +301,9 @@ class LocalRunner(Runner):
         sim_params: gymapi.SimParams,
         headless: bool,
     ) -> None:
-        simulator = cls.Simulator(batch, sim_params, headless)
-        states = simulator.run()
-        simulator.cleanup()
+        _Simulator = cls._Simulator(batch, sim_params, headless)
+        states = _Simulator.run()
+        _Simulator.cleanup()
         for state in states:
             result_queue.put(state)
         result_queue.put(None)

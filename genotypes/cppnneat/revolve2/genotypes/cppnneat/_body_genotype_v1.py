@@ -14,7 +14,7 @@ from revolve2.core.modular_robot import Body as ModularRobotBody
 from revolve2.core.modular_robot import Brick, Core, Module
 from revolve2.core.optimization.ea.modular_robot import BodyGenotype
 
-from .bodybrain_base import BodybrainBase
+from ._bodybrain_base import BodybrainBase
 
 
 class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable):

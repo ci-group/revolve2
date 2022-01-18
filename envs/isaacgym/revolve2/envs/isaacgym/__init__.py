@@ -1,3 +1,3 @@
-from .local_runner import LocalRunner
+from ._local_runner import LocalRunner
 
 __all__ = ["LocalRunner"]

@@ -9,8 +9,8 @@ from revolve2.core.modular_robot import Body as ModularRobotBody
 from revolve2.core.modular_robot import Brain as ModularRobotBrain
 from revolve2.core.optimization.ea.modular_robot import BrainGenotype
 
-from .bodybrain_base import BodybrainBase
-from .brain_cpg_v1 import BrainCpgV1
+from ._bodybrain_base import BodybrainBase
+from ._brain_cpg_v1 import BrainCpgV1
 
 
 class BrainGenotypeCpgV1(

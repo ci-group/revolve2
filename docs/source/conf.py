@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath("../.."))
 
 # -- Project information -----------------------------------------------------
 
-project = "revolve2-core"
+project = "revolve2"
 copyright = "2022, ci-group"
 author = "ci-group"
 

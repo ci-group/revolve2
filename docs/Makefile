@@ -6,6 +6,7 @@
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SPHINXAPIDOC  ?= sphinx-apidoc
+APIDOCARGS=-o source/api_reference --implicit-namespaces  --tocfile index --doc-project "API Reference" --maxdepth 1 --templatedir $(THIS_DIR)/source/apidoc_template
 SOURCEDIR     = source
 BUILDDIR      = build
 
@@ -16,7 +17,8 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 apidoc:
-	@$(SPHINXAPIDOC) -o source/api_reference ../revolve2 --implicit-namespaces  --tocfile index --doc-project "API Reference" --maxdepth 1 --templatedir $(THIS_DIR)/source/apidoc_template
+	@$(SPHINXAPIDOC) ../core/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../genotypes/cppnneat/revolve2 $(APIDOCARGS)
 
 .PHONY: help Makefile apidoc
 

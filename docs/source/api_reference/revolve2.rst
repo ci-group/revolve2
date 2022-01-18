@@ -11,3 +11,4 @@ Subpackages
 
    core <revolve2.core>
    analysis <revolve2.analysis>
+   genotypes <revolve2.genotypes>

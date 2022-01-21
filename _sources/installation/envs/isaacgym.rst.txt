@@ -1,7 +1,7 @@
 ===========================================
 Isaac Gym environment supplementary library
 ===========================================
-This library provides an environment for simulating physics actors.
+This library provides an environment for simulating physics actors using Isaac Gym.
 It depends on Nvidia's closed source Isaac Gym library version rc3.
 
 -------------

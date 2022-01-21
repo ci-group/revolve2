@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Tutorials" href="../tutorials/index.html" />
+    <link rel="next" title="Isaac Gym environment supplemental library" href="envs/isaacgym.html" />
     <link rel="prev" title="Revolve2 documentation" href="../index.html" /> 
 </head>
 
@@ -40,7 +40,17 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-core">Install core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-supplementary-libraries">Install supplementary libraries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l3"><a class="reference internal" href="genotypes/cppnneat.html">Cppn+Neat genotype</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#editable-mode">Editable Mode</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../api_reference/index.html">API Reference</a></li>
 </ul>
@@ -71,6 +81,36 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
+<p>Revolve2 consists of a <code class="docutils literal notranslate"><span class="pre">core</span></code> library and supplementary libraries that depend on software not available on PyPI. All supplementary libraries require <code class="docutils literal notranslate"><span class="pre">core</span></code>.</p>
+<p>All libraries are installed as python libraries. If you need to edit revolve2 code, take a look at <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
+<section id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline"></a></h2>
+<p>Download your preferred version from <a class="reference external" href="https://github.com/ci-group/revolve2/releases">https://github.com/ci-group/revolve2/releases</a>.</p>
+</section>
+<section id="install-core">
+<h2>Install core<a class="headerlink" href="#install-core" title="Permalink to this headline"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">Core</span></code> has no dependencies and is a pure python library:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve_path</span><span class="o">&gt;/</span><span class="n">core</span>
+</pre></div>
+</div>
+</section>
+<section id="install-supplementary-libraries">
+<h2>Install supplementary libraries<a class="headerlink" href="#install-supplementary-libraries" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="genotypes/cppnneat.html">Cppn+Neat genotype</a></li>
+</ul>
+</div>
+</section>
+<section id="editable-mode">
+<h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Permalink to this headline"></a></h2>
+<p>If you want to edit revolve’s code while having it installed, consider using pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">library</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span>
+</pre></div>
+</div>
+<p>Refer to pip’s documentation for what this does exactly.</p>
+</section>
 </section>
 
 
@@ -78,7 +118,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../index.html" class="btn btn-neutral float-left" title="Revolve2 documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="envs/isaacgym.html" class="btn btn-neutral float-right" title="Isaac Gym environment supplemental library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

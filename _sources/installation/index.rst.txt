@@ -5,16 +5,35 @@ Revolve2 consists of a ``core`` library and supplementary libraries that depend 
 
 All libraries are installed as python libraries. If you need to edit revolve2 code, take a look at :ref:`installation/index:Editable Mode`.
 
---------
-Download
---------
+-------------
+Prerequisites
+-------------
+* python 3.8 or higher. If you are using the Isaac Gym environment supplementary library, it requires exactly python 3.8.
+* virtualenv::
+
+    pip3.8 install virtualenv
+
+---------------------
+Create an environment
+---------------------
+Create a directory for your project, then create a virtual environment::
+
+    python3.8 -m virtualenv .venv
+
+Activate the virtual environment::
+
+    source .venv/bin/activate
+
+-------------------
+Download the source
+-------------------
 Download your preferred version from `<https://github.com/ci-group/revolve2/releases>`_.
 
 ------------
 Install core
 ------------
 
-``Core`` has no dependencies and is a pure python library::
+``Core`` has only PyPI dependencies and is a pure python library::
 
     pip install <revolve_path>/core
 

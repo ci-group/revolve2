@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Isaac Gym environment supplemental library &mdash; revolve2 v0.0.0-alpha1 documentation</title>
+  <title>Isaac Gym environment supplementary library &mdash; revolve2 v0.0.0-alpha1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
@@ -41,10 +41,16 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Installation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../index.html#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#create-an-environment">Create an environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../index.html#download-the-source">Download the source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#install-core">Install core</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="../index.html#install-supplementary-libraries">Install supplementary libraries</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Isaac Gym environment</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Isaac Gym environment</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#install">Install</a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="../genotypes/cppnneat.html">Cppn+Neat genotype</a></li>
 </ul>
 </li>
@@ -70,7 +76,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Installation</a> &raquo;</li>
-      <li>Isaac Gym environment supplemental library</li>
+      <li>Isaac Gym environment supplementary library</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/installation/envs/isaacgym.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -80,8 +86,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="isaac-gym-environment-supplemental-library">
-<h1>Isaac Gym environment supplemental library<a class="headerlink" href="#isaac-gym-environment-supplemental-library" title="Permalink to this headline"></a></h1>
+  <section id="isaac-gym-environment-supplementary-library">
+<h1>Isaac Gym environment supplementary library<a class="headerlink" href="#isaac-gym-environment-supplementary-library" title="Permalink to this headline"></a></h1>
+<p>This library provides an environment for simulating physics actors.
+It depends on Nvidia’s closed source Isaac Gym library version rc3.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<p>Obtain a copy of Isaac Gym version rc3.
+At the time of writing it is available at <a class="reference external" href="https://developer.nvidia.com/isaac-gym">https://developer.nvidia.com/isaac-gym</a>.
+Next, make sure you are in your virtual environment and install Isaac Gym:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">isaacgym_path</span><span class="o">&gt;/</span><span class="n">python</span>
+</pre></div>
+</div>
+</section>
+<section id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline"></a></h2>
+<p>Install the library as a python package:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve_path</span><span class="o">&gt;/</span><span class="n">envs</span><span class="o">/</span><span class="n">isaacgym</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 

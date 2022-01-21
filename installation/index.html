@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Isaac Gym environment supplemental library" href="envs/isaacgym.html" />
+    <link rel="next" title="Isaac Gym environment supplementary library" href="envs/isaacgym.html" />
     <link rel="prev" title="Revolve2 documentation" href="../index.html" /> 
 </head>
 
@@ -41,7 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-an-environment">Create an environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-the-source">Download the source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#install-core">Install core</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#install-supplementary-libraries">Install supplementary libraries</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="envs/isaacgym.html">Isaac Gym environment</a></li>
@@ -83,13 +85,35 @@
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
 <p>Revolve2 consists of a <code class="docutils literal notranslate"><span class="pre">core</span></code> library and supplementary libraries that depend on software not available on PyPI. All supplementary libraries require <code class="docutils literal notranslate"><span class="pre">core</span></code>.</p>
 <p>All libraries are installed as python libraries. If you need to edit revolve2 code, take a look at <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
-<section id="download">
-<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline"></a></h2>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p>python 3.8 or higher. If you are using the Isaac Gym environment supplementary library, it requires exactly python 3.8.</p></li>
+<li><p>virtualenv:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span><span class="mf">.8</span> <span class="n">install</span> <span class="n">virtualenv</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+<section id="create-an-environment">
+<h2>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this headline"></a></h2>
+<p>Create a directory for your project, then create a virtual environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="mf">.8</span> <span class="o">-</span><span class="n">m</span> <span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span>
+</pre></div>
+</div>
+<p>Activate the virtual environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+</section>
+<section id="download-the-source">
+<h2>Download the source<a class="headerlink" href="#download-the-source" title="Permalink to this headline"></a></h2>
 <p>Download your preferred version from <a class="reference external" href="https://github.com/ci-group/revolve2/releases">https://github.com/ci-group/revolve2/releases</a>.</p>
 </section>
 <section id="install-core">
 <h2>Install core<a class="headerlink" href="#install-core" title="Permalink to this headline"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">Core</span></code> has no dependencies and is a pure python library:</p>
+<p><code class="docutils literal notranslate"><span class="pre">Core</span></code> has only PyPI dependencies and is a pure python library:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve_path</span><span class="o">&gt;/</span><span class="n">core</span>
 </pre></div>
 </div>
@@ -118,7 +142,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../index.html" class="btn btn-neutral float-left" title="Revolve2 documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="envs/isaacgym.html" class="btn btn-neutral float-right" title="Isaac Gym environment supplemental library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="envs/isaacgym.html" class="btn btn-neutral float-right" title="Isaac Gym environment supplementary library" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

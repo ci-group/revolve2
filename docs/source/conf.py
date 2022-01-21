@@ -68,4 +68,8 @@ autodoc_typehints_format = "short"
 autosectionlabel_prefix_document = True
 
 html_show_sourcelink = False
-html_theme_options = {"prev_next_buttons_location": None}
+html_theme_options = {
+    "prev_next_buttons_location": None,
+    "collapse_navigation": False,
+    "titles_only": True,
+}

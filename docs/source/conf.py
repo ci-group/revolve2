@@ -19,8 +19,8 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "revolve2"
-copyright = "ci-group"
-author = "ci-group"
+copyright = "Computational Intelligence research group, Vrije Universiteit Amsterdam"
+author = "Computational Intelligence research group, Vrije Universiteit Amsterdam"
 
 # The full version, including alpha/beta/rc tags
 release = "v0.0.0-alpha1"
@@ -66,3 +66,5 @@ python_use_unqualified_type_names = True
 autodoc_typehints_format = "short"
 
 autosectionlabel_prefix_document = True
+
+html_show_sourcelink = False

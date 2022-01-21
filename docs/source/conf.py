@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "revolve2"
-copyright = "2022, ci-group"
+copyright = "ci-group"
 author = "ci-group"
 
 # The full version, including alpha/beta/rc tags

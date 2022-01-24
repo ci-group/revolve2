@@ -117,6 +117,36 @@
              
   <section id="a-simple-optimization-process-with-a-database">
 <h1>A simple optimization process with a database<a class="headerlink" href="#a-simple-optimization-process-with-a-database" title="Permalink to this headline"></a></h1>
+<p>The final results of this tutorial are available at <code class="docutils literal notranslate"><span class="pre">&lt;revolve2_source&gt;/examples/simple_optimization&gt;</span></code>.</p>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>How to use the <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code></p></li>
+<li><p>How to use the <code class="docutils literal notranslate"><span class="pre">Database</span></code></p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Have Revolve2 <a class="reference internal" href="../installation/index.html#installation"><span class="std std-ref">installed</span></a>.</p></li>
+<li><p>No supplementary libraries are required.</p></li>
+<li><p>Basic knowledge of evolutionary computing.</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>You are going to create an evolutionary optimization process that can find a good solution to the <a class="reference external" href="https://en.wikipedia.org/wiki/Knapsack_problem">knapsack problem</a>.
+See also chapter 2.4.2 of <a class="reference external" href="https://www.cs.vu.nl/~gusz/ecbook/Eiben-Smith-Intro2EC-Ch2.pdf">https://www.cs.vu.nl/~gusz/ecbook/Eiben-Smith-Intro2EC-Ch2.pdf</a>.
+The problem is as follows: given a set of items, each with a weight and a value, determine the items to include in a collection so that the total weight is less than or equal to a given limit and the total value is as large as possible.</p>
+<p>The phenotype of a solution to the problem will be represented by a binary string.
+Every bit corresponds to an item that can be included in the knapsack.
+A one means the item is included, and a zero means it is not.
+Naturally the sum of the weights of all items must be no larger than the maximum weight.
+A genotype follows the same structure, but without the weight restriction.
+The functions from genotype to phenotype simply adds items from left to right in the bit string, skipping any items that would bring the weight over the maximum.</p>
+<p>The crossover operator will choose a random point along the bit string. All bits before that point will be taken taken from parent one and the rest from parent two.
+The mutation operator will randomly flip each bit with 1/<em>n</em> chance, with <em>n</em> being the length of the bit strings.</p>
+</section>
 </section>
 
 

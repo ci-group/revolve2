@@ -4,13 +4,14 @@ from typing import Any, Dict, List, Union
 from typing_extensions import TypeGuard
 
 StaticData = Union[  # type: ignore # TODO this is not yet supported by mypy
-    List["StaticData"], Dict[str, "StaticData"], str, float, int, bytes, None  # type: ignore
+    List["StaticData"], Dict[str, "StaticData"], bool, int, float, str, bytes, None  # type: ignore
 ]
 
 
 def is_static_data(to_check: Any) -> TypeGuard[StaticData]:
     if (
         to_check is None
+        or type(to_check) == bool
         or type(to_check) == int
         or type(to_check) == float
         or type(to_check) == str

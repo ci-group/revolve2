@@ -24,12 +24,20 @@ class Individual(Generic[Genotype, Fitness], Serializable):
     parent_ids: Optional[List[int]]  # None means this is from the initial population
 
     def serialize(self) -> StaticData:
+        try:
+            genotype_serialized = serialize(self.genotype)
+        except SerializeError as err:
+            raise SerializeError("Failed to serialize genotype.") from err
+        try:
+            fitness_serialized = serialize(self.fitness)
+        except SerializeError as err:
+            raise SerializeError("Failed to serialize fitness.") from err
         return {
             "id": self.id,
             ".genotype_type": pickle.dumps(type(self.genotype)),
-            "genotype": serialize(self.genotype),
+            "genotype": genotype_serialized,
             ".fitness_type": pickle.dumps(type(self.fitness)),
-            "fitness": serialize(self.fitness),
+            "fitness": fitness_serialized,
             "parents": self.parent_ids,
         }
 

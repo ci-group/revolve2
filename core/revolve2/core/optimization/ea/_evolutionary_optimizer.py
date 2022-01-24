@@ -329,8 +329,13 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         self.__db_generations.append(txn).set_object(
             txn, [individual.id for individual in self.__last_generation]
         )
-        for individual in new_individuals:
-            self.__db_individuals.append(txn).set_object(txn, individual.serialize())
+        try:
+            for individual in new_individuals:
+                self.__db_individuals.append(txn).set_object(
+                    txn, individual.serialize()
+                )
+        except SerializeError as err:
+            raise SerializeError("Failed to serialize individual.") from err
 
         logging.debug("Finished saving generation.")
 

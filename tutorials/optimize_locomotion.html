@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; revolve2 v0.0.0-alpha1 documentation</title>
+  <title>Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym &mdash; revolve2 v0.0.0-alpha1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Isaac Gym environment supplementary library" href="envs/isaacgym.html" />
-    <link rel="prev" title="Revolve2 documentation" href="../index.html" /> 
+    <link rel="next" title="revolve2 namespace" href="../api_reference/revolve2.html" />
+    <link rel="prev" title="Creating a modular robot and simulating it in the Isaac Gym environment" href="simulate_robot_isaac.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,15 +40,15 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="envs/isaacgym.html">Isaac Gym environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="genotypes/cppnneat.html">Cppn+Neat genotype</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnneat.html">Cppn+Neat genotype</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/optimize_locomotion.html">Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="simple_optimization.html">A simple optimization process with a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulate_robot_isaac.html">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api_reference/revolve2.html">API Reference</a><ul>
@@ -105,7 +105,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Installation</li>
+          <li><a href="index.html">Tutorials</a> &raquo;</li>
+      <li>Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -114,60 +115,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<p>Revolve2 consists of a <code class="docutils literal notranslate"><span class="pre">core</span></code> library and supplementary libraries that depend on software not available on PyPI. All supplementary libraries require <code class="docutils literal notranslate"><span class="pre">core</span></code>.</p>
-<p>All libraries are installed as python libraries. If you need to edit revolve2 code, take a look at <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
-<ul>
-<li><p>python 3.8 or higher. If you are using the Isaac Gym environment supplementary library, it requires exactly python 3.8.</p></li>
-<li><p>virtualenv:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span><span class="mf">.8</span> <span class="n">install</span> <span class="n">virtualenv</span>
-</pre></div>
-</div>
-</li>
-</ul>
-</section>
-<section id="create-an-environment">
-<h2>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this headline"></a></h2>
-<p>Create a directory for your project, then create a virtual environment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="mf">.8</span> <span class="o">-</span><span class="n">m</span> <span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span>
-</pre></div>
-</div>
-<p>Activate the virtual environment:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
-</pre></div>
-</div>
-</section>
-<section id="download-the-source">
-<h2>Download the source<a class="headerlink" href="#download-the-source" title="Permalink to this headline"></a></h2>
-<p>Download your preferred version from <a class="reference external" href="https://github.com/ci-group/revolve2/releases">https://github.com/ci-group/revolve2/releases</a>.</p>
-</section>
-<section id="install-core">
-<h2>Install core<a class="headerlink" href="#install-core" title="Permalink to this headline"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">Core</span></code> has only PyPI dependencies and is a pure python library:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve_path</span><span class="o">&gt;/</span><span class="n">core</span>
-</pre></div>
-</div>
-</section>
-<section id="install-supplementary-libraries">
-<h2>Install supplementary libraries<a class="headerlink" href="#install-supplementary-libraries" title="Permalink to this headline"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="envs/isaacgym.html">Isaac Gym environment</a></li>
-<li class="toctree-l1"><a class="reference internal" href="genotypes/cppnneat.html">Cppn+Neat genotype</a></li>
-</ul>
-</div>
-</section>
-<section id="editable-mode">
-<h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Permalink to this headline"></a></h2>
-<p>If you want to edit revolve’s code while having it installed, consider using pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">library</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span>
-</pre></div>
-</div>
-<p>Refer to pip’s documentation for what this does exactly.</p>
-</section>
+  <section id="optimizing-a-modular-robot-for-locomotion-using-cppn-neat-and-isaac-gym">
+<h1>Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym<a class="headerlink" href="#optimizing-a-modular-robot-for-locomotion-using-cppn-neat-and-isaac-gym" title="Permalink to this headline"></a></h1>
 </section>
 
 

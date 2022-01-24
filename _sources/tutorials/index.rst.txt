@@ -1,8 +1,10 @@
 =========
 Tutorials
 =========
-TODO
 
-* A simple optimizer with database
-* Running a modular robot in isaac gym
-* CPPN+NEAT modular robot isaac gym optmization
+.. toctree::
+   :maxdepth: 2
+
+   simple_optimization
+   simulate_robot_isaac
+   optimize_locomotion

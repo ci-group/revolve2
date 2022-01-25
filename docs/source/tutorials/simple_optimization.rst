@@ -425,5 +425,7 @@ If this tool is slow, this is something that is actively being worked on. Your o
 .. image:: simple_optimization_fitness_plot.png
     :width: 100%
 
-
+------------
+Contributing
+------------
 This marks the end of this tutorial. Feedback and contributions are welcome at Revolve's code repository.

@@ -1,11 +1,13 @@
-import math
-from revolve2.envs.isaacgym import LocalRunner
-from revolve2.core.modular_robot import ModularRobot, Body, Brick, ActiveHinge
 from random import Random
+from revolve2.core.modular_robot import Body, Brick, ActiveHinge
+import math
 from revolve2.core.modular_robot.brains import CpgRandom
+from revolve2.core.modular_robot import ModularRobot
+from revolve2.core.physics.env import Batch, Environment, ActorControl
 from revolve2.core.physics.control import ActorController
-from revolve2.core.physics.env import Environment, PosedActor, ActorControl, Batch
+from revolve2.core.physics.env import PosedActor
 from pyrr import Vector3, Quaternion
+from revolve2.envs.isaacgym import LocalRunner
 
 
 class Simulator:
@@ -18,10 +20,10 @@ class Simulator:
             control_frequency=control_frequency,
             control=self._control,
         )
+        env = Environment()
 
         actor, self._controller = robot.make_actor_and_controller()
 
-        env = Environment()
         env.actors.append(PosedActor(actor, Vector3([0.0, 0.0, 0.1]), Quaternion()))
         batch.environments.append(env)
 
@@ -34,6 +36,7 @@ class Simulator:
 
 
 async def main() -> None:
+    # random number generator
     rng = Random()
     rng.seed(5)
 

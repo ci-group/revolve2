@@ -1,23 +1,28 @@
 from __future__ import annotations
-
-from dataclasses import dataclass
+from revolve2.core.database.serialization import Serializable
 from random import Random
+from revolve2.core.database import StaticData
+from dataclasses import dataclass
 from typing import List, Optional
-
-import revolve2.core.optimization.ea.population_management as population_management
-import revolve2.core.optimization.ea.selection as selection
-from revolve2.core.database import Database, Node
-from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
 import logging
 from revolve2.core.database.sqlite import Database as DbSqlite
-from revolve2.core.database.serialization import Serializable
-from revolve2.core.database import StaticData
+from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
+from revolve2.core.database import Database, Node
+import revolve2.core.optimization.ea.selection as selection
+import revolve2.core.optimization.ea.population_management as population_management
 
 
 @dataclass
 class Item:
     weight: float
     value: float
+
+
+class Phenotype:
+    items: List[bool]
+
+    def __init__(self, items: List[bool]) -> None:
+        self.items = items
 
 
 class Genotype(Serializable):
@@ -31,15 +36,7 @@ class Genotype(Serializable):
         return cls([rng.random() < has_item_prob for _ in range(num_items)])
 
     def develop(self, items: List[Item], maximum_weight: float) -> Phenotype:
-        phenotype = []
-        total_weight = 0
-        for has_item, item in zip(self.items, items):
-            if has_item and total_weight + item.weight < maximum_weight:
-                phenotype.append(True)
-            else:
-                phenotype.append(False)
-
-        return Phenotype(phenotype)
+        raise NotImplementedError()
 
     def serialize(self) -> StaticData:
         return self.items
@@ -49,13 +46,6 @@ class Genotype(Serializable):
         assert isinstance(data, list)
         assert all([isinstance(item, bool) for item in data])
         return cls(data)
-
-
-class Phenotype(List[bool]):
-    items: List[bool]
-
-    def __init__(self, items: List[bool]) -> None:
-        self.items = items
 
 
 class Optimizer(EvolutionaryOptimizer[Genotype, float]):

@@ -179,4 +179,4 @@ For both with and without an Nvidia graphics card the simulation can fail if you
 ------------
 Contributing
 ------------
-This marks the end of this tutorial. Feedback and contributions are welcome at Revolve's code repository.
+This marks the end of this tutorial. Feedback and contributions are welcome at Revolve2's code repository.

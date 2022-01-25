@@ -428,4 +428,4 @@ If this tool is slow, this is something that is actively being worked on. Your o
 ------------
 Contributing
 ------------
-This marks the end of this tutorial. Feedback and contributions are welcome at Revolve's code repository.
+This marks the end of this tutorial. Feedback and contributions are welcome at Revolve2's code repository.

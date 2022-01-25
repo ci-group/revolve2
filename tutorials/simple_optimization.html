@@ -147,6 +147,391 @@ The functions from genotype to phenotype simply adds items from left to right in
 <p>The crossover operator will choose a random point along the bit string. All bits before that point will be taken taken from parent one and the rest from parent two.
 The mutation operator will randomly flip each bit with 1/<em>n</em> chance, with <em>n</em> being the length of the bit strings.</p>
 </section>
+<section id="programming-it">
+<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this headline"></a></h2>
+<p>Start by creating a file called <code class="docutils literal notranslate"><span class="pre">main.py</span></code>. For this tutorial, this is the only file you will need.</p>
+<p>Begin by creating the basic objects for the optimization process.
+To represent an item, create a class <code class="docutils literal notranslate"><span class="pre">Item</span></code> that contains a <code class="docutils literal notranslate"><span class="pre">weight</span></code> and a <code class="docutils literal notranslate"><span class="pre">value</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Item</span><span class="p">:</span>
+    <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">value</span><span class="p">:</span> <span class="nb">float</span>
+</pre></div>
+</div>
+<p>A phenotype is simply a list of booleans:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">class</span> <span class="nc">Phenotype</span><span class="p">():</span>
+    <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
+</pre></div>
+</div>
+<p>The class for the Genotype is more complex.
+It is also a list of booleans, but it should contain some methods.
+Firstly, a <code class="docutils literal notranslate"><span class="pre">random</span></code> function that create a random genotype.
+Secondly, a <code class="docutils literal notranslate"><span class="pre">develop</span></code> function that creates a phenotype from the genotype.
+And thirdly, Revolve2 requires it to have <code class="docutils literal notranslate"><span class="pre">serialize</span></code> and <code class="docutils literal notranslate"><span class="pre">deserialize</span></code> functions that converts the object between <code class="docutils literal notranslate"><span class="pre">StaticData</span></code>.
+StaticData is Revolve2’s type for JSON-like data containing only dictionaries, lists, bools, ints, floats, strings, bytes, and None:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.database.serialization</span> <span class="kn">import</span> <span class="n">Serializable</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">StaticData</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">class</span> <span class="nc">Genotype</span><span class="p">(</span><span class="n">Serializable</span><span class="p">):</span>
+    <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="n">items</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span> <span class="n">has_item_prob</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">num_items</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">develop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">maximum_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Phenotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StaticData</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">StaticData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Serializable</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>A straightforward way to create a random bit string is to randomly assign each bit with a given probability:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">random</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span> <span class="n">has_item_prob</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">num_items</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">([</span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">has_item_prob</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_items</span><span class="p">)])</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">Serialize</span></code> and <code class="docutils literal notranslate"><span class="pre">Deserialize</span></code> are very easy, because the contained <code class="docutils literal notranslate"><span class="pre">items</span></code> are already <code class="docutils literal notranslate"><span class="pre">StaticData</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StaticData</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">items</span>
+
+<span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">StaticData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Serializable</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">bool</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">data</span><span class="p">])</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, the <code class="docutils literal notranslate"><span class="pre">develop</span></code> function adds items from the genotype’s bit string from left to right, skipping any item that would make the knapsack too heavy:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">develop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span> <span class="n">maximum_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Phenotype</span><span class="p">:</span>
+    <span class="n">phenotype</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">total_weight</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">has_item</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">items</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">has_item</span> <span class="ow">and</span> <span class="n">total_weight</span> <span class="o">+</span> <span class="n">item</span><span class="o">.</span><span class="n">weight</span> <span class="o">&lt;</span> <span class="n">maximum_weight</span><span class="p">:</span>
+            <span class="n">phenotype</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">phenotype</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Phenotype</span><span class="p">(</span><span class="n">phenotype</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now that the baseline object are there it is time to start with the actual optimization process.
+Your program will use <code class="docutils literal notranslate"><span class="pre">async</span></code> Revolve2 functions, so the entry point for the program will be an async main:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">asyncio</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Define some parameters for the evolutionary algorithm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">POPULATION_SIZE</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">OFFSPRING_SIZE</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="n">NUM_GENERATIONS</span> <span class="o">=</span> <span class="mi">25</span>
+
+    <span class="n">INITIAL_HAS_ITEM_PROB</span> <span class="o">=</span> <span class="mf">0.5</span>
+</pre></div>
+</div>
+<p>Revolve2 uses python’s <code class="docutils literal notranslate"><span class="pre">logging</span></code> module. You can configure yourself what you want to do with the logs:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">] [</span><span class="si">%(levelname)s</span><span class="s2">] [</span><span class="si">%(module)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting optimization&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It is important to have reproducible random number generation.
+Revolve2 always uses a provided random object, never the global random object:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="c1"># random number generator</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">Random</span><span class="p">()</span>
+    <span class="n">rng</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Create the problem itself. One hundred random items:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="c1"># create 100 random items</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">Item</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">rng</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>The first important thing is to create a database.
+Revolve2 provides an interface for different database backends, but it is recommended to the the Sqlite backend:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.database.sqlite</span> <span class="kn">import</span> <span class="n">Database</span> <span class="k">as</span> <span class="n">DbSqlite</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="c1"># database</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="k">await</span> <span class="n">DbSqlite</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;database&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Moving away from the <code class="docutils literal notranslate"><span class="pre">main</span></code> function, Revolve2 provides an <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> class. To use it, inherit from it and fill in its abstract functions.
+Additionally, it requires you to override <code class="docutils literal notranslate"><span class="pre">init</span></code> and call its <code class="docutils literal notranslate"><span class="pre">asyncinit</span></code> instead:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea</span> <span class="kn">import</span> <span class="n">EvolutionaryOptimizer</span><span class="p">,</span> <span class="n">Individual</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">Database</span><span class="p">,</span> <span class="n">Node</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">class</span> <span class="nc">Optimizer</span><span class="p">(</span><span class="n">EvolutionaryOptimizer</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">create</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Optimizer</span><span class="p">:</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="n">Optimizer</span><span class="p">()</span>
+        <span class="c1"># await super(Optimizer, self).asyncinit(...)</span>
+        <span class="c1"># return self</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_evaluate_generation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">dbview</span><span class="p">:</span> <span class="n">Node</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_select_parents</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">generation</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="n">num_parents</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_select_survivors</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">old_individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="n">new_individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="n">num_survivors</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_crossover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_mutate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">:</span> <span class="n">Genotype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_must_do_next_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> base class has many arguments, but the names speak for themselves.
+Importantly <code class="docutils literal notranslate"><span class="pre">initial_fitness</span></code> is an optional argument.
+If set to None, the optimizer will automatically evaluate the initial population.
+The second argument of <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code>’s <code class="docutils literal notranslate"><span class="pre">asyncinit</span></code> is a database <code class="docutils literal notranslate"><span class="pre">Node</span></code>.
+Revolve’s database structure is similar to JSON, and a <code class="docutils literal notranslate"><span class="pre">Node</span></code> points to an position in this structure.
+This optimizer is the first and only part of the program touching the database, so it should write at the root node.
+In addition to the required arguments, also add <code class="docutils literal notranslate"><span class="pre">items</span></code>, representing all possible items, and <code class="docutils literal notranslate"><span class="pre">num_generation</span></code>, the number of generations to perform the algorithm for.
+These will be used later:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="k">class</span> <span class="nc">Optimizer</span><span class="p">(</span><span class="n">EvolutionaryOptimizer</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+    <span class="n">_items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span>
+    <span class="n">_num_generations</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="c1"># ...</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">create</span><span class="p">(</span>
+        <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span>
+        <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">offspring_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">initial_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span>
+        <span class="n">initial_fitness</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+        <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span>
+        <span class="n">num_generations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optimizer</span><span class="p">:</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="n">Optimizer</span><span class="p">()</span>
+
+        <span class="k">await</span> <span class="nb">super</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">asyncinit</span><span class="p">(</span>
+            <span class="n">database</span><span class="p">,</span>
+            <span class="n">database</span><span class="o">.</span><span class="n">root</span><span class="p">,</span>
+            <span class="n">rng</span><span class="p">,</span>
+            <span class="n">population_size</span><span class="p">,</span>
+            <span class="n">offspring_size</span><span class="p">,</span>
+            <span class="n">initial_population</span><span class="p">,</span>
+            <span class="n">initial_fitness</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="n">items</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_generations</span> <span class="o">=</span> <span class="n">num_generations</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+</pre></div>
+</div>
+<p>The optimizer can now be added to the <code class="docutils literal notranslate"><span class="pre">main</span></code> function.
+Create an initial population and start the optimizer.
+Running this program should results in a raised <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">initial_population</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Genotype</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">INITIAL_HAS_ITEM_PROB</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">POPULATION_SIZE</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">ep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">database</span><span class="p">,</span>
+        <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="o">=</span><span class="n">POPULATION_SIZE</span><span class="p">,</span>
+        <span class="n">offspring_size</span><span class="o">=</span><span class="n">OFFSPRING_SIZE</span><span class="p">,</span>
+        <span class="n">initial_population</span><span class="o">=</span><span class="n">initial_population</span><span class="p">,</span>
+        <span class="n">initial_fitness</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span>
+        <span class="n">num_generations</span><span class="o">=</span><span class="n">NUM_GENERATIONS</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting optimization process..&quot;</span><span class="p">)</span>
+
+    <span class="k">await</span> <span class="n">ep</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished optimizing.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, you can now move on to the bread and butter of the program.
+The <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> asks you to evaluate a complete generation at once.
+For some problems this can be beneficial in terms of concurrency, but for this example it does not matter.
+The evaluation of an individual is defined to be the total value of its contained items:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">_evaluate_generation</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">dbview</span><span class="p">:</span> <span class="n">Node</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="nb">float</span><span class="p">(</span>
+            <span class="nb">sum</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">has_items</span> <span class="o">*</span> <span class="n">item</span><span class="o">.</span><span class="n">value</span>
+                    <span class="k">for</span> <span class="n">has_items</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">individual</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">)</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">individual</span> <span class="ow">in</span> <span class="n">individuals</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>After each generation, and, in the current state of the program, after evaluating the initial population, the <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> ask you if it should continue with another generation.
+You already have the number of generations to evaluate, so this is straightforward:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_must_do_next_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation_index</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_generations</span>
+</pre></div>
+</div>
+<p>The optimizer is now stuck at selecting parent for the new generation.
+It expects you to return a list of groups of parent, each of which will make children.
+You can use any selection function that you want, but this tutorial selects pairs of parents using a tournament with two participants:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">revolve2.core.optimization.ea.selection</span> <span class="k">as</span> <span class="nn">selection</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">def</span> <span class="nf">_select_parents</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">generation</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+    <span class="n">num_parents</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="p">[</span>
+            <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">multiple_unique</span><span class="p">(</span>
+                <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">generation</span><span class="p">],</span>
+                <span class="mi">2</span><span class="p">,</span>
+                <span class="k">lambda</span> <span class="n">gen</span><span class="p">:</span> <span class="n">selection</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="p">,</span> <span class="n">gen</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_parents</span><span class="p">)</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>After parent selection comes crossover and mutation.
+Fill in these functions using the definitions from the introduction of this tutorial:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_crossover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="n">point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">Genotype</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">point</span><span class="p">]</span> <span class="o">+</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="n">point</span><span class="p">:])</span>
+
+<span class="k">def</span> <span class="nf">_mutate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">:</span> <span class="n">Genotype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">Genotype</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="n">has_item</span> <span class="o">^</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">individual</span><span class="o">.</span><span class="n">items</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">has_item</span> <span class="ow">in</span> <span class="n">individual</span><span class="o">.</span><span class="n">items</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Then the last thing is survivor selection.
+This tutorial uses a two participant tournament with a steady state population, meaning the previous generation is also allowed to participate in the tournament:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">revolve2.core.optimization.ea.population_management</span> <span class="k">as</span> <span class="nn">population_management</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">def</span> <span class="nf">_select_survivors</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">old_individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+    <span class="n">new_individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+    <span class="n">num_survivors</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">old_individuals</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_survivors</span>
+
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population_management</span><span class="o">.</span><span class="n">steady_state</span><span class="p">(</span>
+            <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">old_individuals</span><span class="p">],</span>
+            <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">new_individuals</span><span class="p">],</span>
+            <span class="k">lambda</span> <span class="n">pop</span><span class="p">:</span> <span class="n">selection</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+</pre></div>
+</div>
+<p>After all this, your optimization program is finally ready.</p>
+</section>
+<section id="running-and-analyzing">
+<h2>Running and analyzing<a class="headerlink" href="#running-and-analyzing" title="Permalink to this headline"></a></h2>
+<p>Looking at the log of this program, you will see that it creates 25 generations.
+It is not very fast, because the <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> assumes your evaluation is an expensive function, and writes to the databases every generation to allow for recovery.
+You will see that if you manually restart the program in the middle of the optimization process it will restart at the last successfully evaluated generation.</p>
+<p>Of course you want to see the results of the program.
+The <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> comes with an <code class="docutils literal notranslate"><span class="pre">Analyzer</span></code>.
+This class knows exactly what the database structure used by the optimizer is.
+However, for simplicity this tutorial is going to use the analysis program <code class="docutils literal notranslate"><span class="pre">plot_ea_fitness.py</span></code>, which can plot fitness over all generations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">core</span><span class="o">/</span><span class="n">revolve2</span><span class="o">/</span><span class="n">analysis</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">plot_ea_fitness</span><span class="o">.</span><span class="n">py</span> <span class="n">database</span>
+</pre></div>
+</div>
+<p>If this tool is slow, this is something that is actively being worked on. Your output should look similar to the image below.</p>
+<a class="reference internal image-reference" href="../_images/simple_optimization_fitness_plot.png"><img alt="../_images/simple_optimization_fitness_plot.png" src="../_images/simple_optimization_fitness_plot.png" style="width: 100%;" /></a>
+<p>This marks the end of this tutorial. Feedback and contributions are welcome at Revolve’s code repository.</p>
+</section>
 </section>
 
 

@@ -12,5 +12,6 @@ Revolve2's code resides at `<https://github.com/ci-group/revolve2>`_.
    :maxdepth: 2
 
    Installation <installation/index>
+   Concepts <concepts/index>
    Tutorials <tutorials/index>
    API Reference <api_reference/revolve2>

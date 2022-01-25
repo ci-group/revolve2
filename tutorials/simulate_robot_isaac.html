@@ -45,6 +45,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnneat.html">Cppn+Neat genotype</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
@@ -130,10 +135,162 @@
 <ul class="simple">
 <li><p>Have Revolve2 <a class="reference internal" href="../installation/index.html#installation"><span class="std std-ref">installed</span></a>.</p></li>
 <li><p>Have the supplementary library <code class="docutils literal notranslate"><span class="pre">Isaac</span> <span class="pre">Gym</span> <span class="pre">environment</span></code> <a class="reference internal" href="../installation/envs/isaacgym.html#isaac-gym-environment-supplementary-library"><span class="std std-ref">installed</span></a>.</p></li>
+<li><p>Knowledge of the <a class="reference internal" href="../concepts/modular_robots.html#modular-robots"><span class="std std-ref">modular robots</span></a> used in Revolve2.</p></li>
+<li><p>Superficial knowledge of the <a class="reference internal" href="../concepts/cpg.html#cpg"><span class="std std-ref">cpg controllers</span></a> used in Revolve2.</p></li>
 </ul>
 </section>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>You will hand design a modular robot body, generate a random controller for its brain, and simulate it in the Isaac Gym environment.</p>
+</section>
+<section id="programming-it">
+<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this headline"></a></h2>
+<p>Start by creating a file called <code class="docutils literal notranslate"><span class="pre">main.py</span></code>. For this tutorial, this is the only file you will need. The Isaac Gym environment uses <code class="docutils literal notranslate"><span class="pre">async</span></code> functions, so create an async main.
+Also add a random object. You will use that later:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># random number generator</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">Random</span><span class="p">()</span>
+    <span class="n">rng</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">asyncio</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The first new thing you will do is create a modular robot body.
+A body is described as a tree structure, with the <code class="docutils literal notranslate"><span class="pre">Core</span></code> of robot being the root node.
+You can add any number of <code class="docutils literal notranslate"><span class="pre">Brick</span></code> and <code class="docutils literal notranslate"><span class="pre">ActiveHinge</span></code> modules to the tree:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.modular_robot</span> <span class="kn">import</span> <span class="n">Body</span><span class="p">,</span> <span class="n">Brick</span><span class="p">,</span> <span class="n">ActiveHinge</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">body</span> <span class="o">=</span> <span class="n">Body</span><span class="p">()</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">ActiveHinge</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">attachment</span> <span class="o">=</span> <span class="n">ActiveHinge</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">attachment</span><span class="o">.</span><span class="n">attachment</span> <span class="o">=</span> <span class="n">Brick</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">ActiveHinge</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">attachment</span> <span class="o">=</span> <span class="n">ActiveHinge</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">attachment</span><span class="o">.</span><span class="n">attachment</span> <span class="o">=</span> <span class="n">Brick</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For simplicity this tutorial presents you with a CPG controller that uses random generated weights.
+If you wish to control the weights, take a look at the <code class="docutils literal notranslate"><span class="pre">CpgRandom</span></code> class and create a similar controller yourself.
+Using the brain and body, create a <code class="docutils literal notranslate"><span class="pre">ModularRobot</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.modular_robot.brains</span> <span class="kn">import</span> <span class="n">CpgRandom</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.modular_robot</span> <span class="kn">import</span> <span class="n">ModularRobot</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">brain</span> <span class="o">=</span> <span class="n">CpgRandom</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span>
+    <span class="n">robot</span> <span class="o">=</span> <span class="n">ModularRobot</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">brain</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To simulate the robot, create a <code class="docutils literal notranslate"><span class="pre">Simulator</span></code> class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># ...</span>
+
+<span class="k">class</span> <span class="nc">Simulator</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">robot</span><span class="p">:</span> <span class="n">ModularRobot</span><span class="p">,</span> <span class="n">control_frequency</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">()</span>
+    <span class="k">await</span> <span class="n">sim</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>A physics simulation environment such as the Isaac Gym environment works with batches of environments.
+A batch provides common arguments between all environments, and an environment describes the physical objects to be simulated in that environment.
+Environments do not interact with each other.
+Create batch and a single environment for our lone robot to be simulated.
+Also create a control function that controls all robots in each environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.physics.env</span> <span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">ActorControl</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">robot</span><span class="p">:</span> <span class="n">ModularRobot</span><span class="p">,</span> <span class="n">control_frequency</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span>
+        <span class="n">simulation_time</span><span class="o">=</span><span class="mi">1000000</span><span class="p">,</span>
+        <span class="n">sampling_frequency</span><span class="o">=</span><span class="mf">0.0001</span><span class="p">,</span>
+        <span class="n">control_frequency</span><span class="o">=</span><span class="n">control_frequency</span><span class="p">,</span>
+        <span class="n">control</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_control</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">control</span><span class="p">:</span> <span class="n">ActorControl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Next, get the actor and controller from the modular robot and save the controller as a class variable for later.
+An actor is the physical description of the robots.
+That is, it is a collection of rigid bodies and the joints connecting them.
+A controller is the brain that drives these joints:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.physics.control</span> <span class="kn">import</span> <span class="n">ActorController</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">class</span> <span class="nc">Simulator</span><span class="p">:</span>
+    <span class="n">_controller</span><span class="p">:</span> <span class="n">ActorController</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">robot</span><span class="p">:</span> <span class="n">ModularRobot</span><span class="p">,</span> <span class="n">control_frequency</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># ...</span>
+
+        <span class="n">actor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">make_actor_and_controller</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Add the robot to the environment just above the ground, add the environment to the batch, and run the batch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.physics.env</span> <span class="kn">import</span> <span class="n">PosedActor</span>
+<span class="kn">from</span> <span class="nn">pyrr</span> <span class="kn">import</span> <span class="n">Vector3</span><span class="p">,</span> <span class="n">Quaternion</span>
+<span class="kn">from</span> <span class="nn">revolve2.envs.isaacgym</span> <span class="kn">import</span> <span class="n">LocalRunner</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">simulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">robot</span><span class="p">:</span> <span class="n">ModularRobot</span><span class="p">,</span> <span class="n">control_frequency</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">env</span><span class="o">.</span><span class="n">actors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PosedActor</span><span class="p">(</span><span class="n">actor</span><span class="p">,</span> <span class="n">Vector3</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]),</span> <span class="n">Quaternion</span><span class="p">()))</span>
+    <span class="n">batch</span><span class="o">.</span><span class="n">environments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+    <span class="n">runner</span> <span class="o">=</span> <span class="n">LocalRunner</span><span class="p">(</span><span class="n">LocalRunner</span><span class="o">.</span><span class="n">SimParams</span><span class="p">())</span>
+    <span class="k">await</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, implement the control function, using the controller retrieved from the modular robot earlier.
+Modular robots provide a controller that you can use to drive that individual robot.
+If there is more than one robot, you need to store each individual controller:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">control</span><span class="p">:</span> <span class="n">ActorControl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+    <span class="n">control</span><span class="o">.</span><span class="n">set_dof_targets</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">get_dof_targets</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="running-and-expected-results">
+<h2>Running and expected results<a class="headerlink" href="#running-and-expected-results" title="Permalink to this headline"></a></h2>
+<p>You should now be able to successfully run the simulation and see a two armed robot attempt to move around.</p>
+<a class="reference internal image-reference" href="../_images/simulate_robot_isaac_results.gif"><img alt="../_images/simulate_robot_isaac_results.gif" src="../_images/simulate_robot_isaac_results.gif" style="width: 100%;" /></a>
+</section>
+<section id="errors">
+<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline"></a></h2>
+<p>If you do not have an Nvidia graphics card, you can expect the console out put to look like the image below.
+This is no issue.</p>
+<a class="reference internal image-reference" href="../_images/simulate_robot_isaac_errors.png"><img alt="../_images/simulate_robot_isaac_errors.png" src="../_images/simulate_robot_isaac_errors.png" style="width: 100%;" /></a>
+<p>For both with and without an Nvidia graphics card the simulation can fail if you do not have Cuda installed, even though it is not used at all when running on CPU.</p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h2>
+<p>This marks the end of this tutorial. Feedback and contributions are welcome at Revolve’s code repository.</p>
 </section>
 </section>
 

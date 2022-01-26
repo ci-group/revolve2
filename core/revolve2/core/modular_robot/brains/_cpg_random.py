@@ -20,6 +20,6 @@ class CpgRandom(Cpg):
     ) -> Tuple[List[float], List[float]]:
         # TODO use provided rng object, instead of global
         return (
-            [self._rng.random() * 1.0 - 1 for _ in range(len(active_hinges))],
-            [self._rng.random() * 1.0 - 1 for _ in range(len(connections))],
+            [self._rng.random() * 2.0 - 1 for _ in range(len(active_hinges))],
+            [self._rng.random() * 2.0 - 1 for _ in range(len(connections))],
         )

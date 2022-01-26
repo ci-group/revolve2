@@ -74,6 +74,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/docs' }}
         uses: JamesIves/github-pages-deploy-action@v4.2.2
         with:
-          branch: gh-pages
+          branch: master
           folder: docs/build/html
           clean-exclude: .nojekyll

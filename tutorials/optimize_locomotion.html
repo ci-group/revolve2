@@ -129,6 +129,7 @@
 <ul class="simple">
 <li><p>How to use the <code class="docutils literal notranslate"><span class="pre">CPPN+NEAT</span></code> genotype supplementary library.</p></li>
 <li><p>How to combine modular robots with evolutionary optimization.</p></li>
+<li><p>How to manually insert into a database.</p></li>
 </ul>
 </section>
 <section id="prerequisites">
@@ -196,13 +197,14 @@ The baseline code for this program is similar to the previous tutorials’:</p>
 <p>Start by creating genotype in a new file called <code class="docutils literal notranslate"><span class="pre">genotype.py</span></code>.
 The genotype will inherit from <code class="docutils literal notranslate"><span class="pre">BodybrainGenotype</span></code>, a base class provided by the modular_robot module.
 This class stores seperate body and brain genotypes and its <code class="docutils literal notranslate"><span class="pre">develop</span></code> function combines these to create a <code class="docutils literal notranslate"><span class="pre">ModularRobot</span></code>.
-<code class="docutils literal notranslate"><span class="pre">BodyGenotypeV1</span></code> and <code class="docutils literal notranslate"><span class="pre">BrainGenotypeCpgV1</span></code> are body and brain CPPNWIN genotypes respectively, provided by the <code class="docutils literal notranslate"><span class="pre">CPPN+NEAT</span></code> supplementary library:</p>
+<code class="docutils literal notranslate"><span class="pre">BodyGenotypeV1</span></code> and <code class="docutils literal notranslate"><span class="pre">BrainGenotypeCpgV1</span></code> are body and brain CPPNWIN genotypes respectively, provided by the <code class="docutils literal notranslate"><span class="pre">CPPN+NEAT</span></code> supplementary library.
+They use the CPPNWIN network to create a modular robot body and weights for a corresponding CPG brain:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">StaticData</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database.serialization</span> <span class="kn">import</span> <span class="n">Serializable</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea.modular_robot</span> <span class="kn">import</span> <span class="n">BodybrainGenotype</span>
-<span class="kn">from</span> <span class="nn">revolve2.genotypes.cppnneat</span> <span class="kn">import</span> <span class="n">BodyGenotypeV1</span><span class="p">,</span> <span class="n">BrainGenotypeCpgV1</span>
+<span class="kn">from</span> <span class="nn">revolve2s.cppnneat</span> <span class="kn">import</span> <span class="n">BodyGenotypeV1</span><span class="p">,</span> <span class="n">BrainGenotypeCpgV1</span>
 
 
 <span class="k">class</span> <span class="nc">Genotype</span><span class="p">(</span><span class="n">BodybrainGenotype</span><span class="p">[</span><span class="n">BodyGenotypeV1</span><span class="p">,</span> <span class="n">BrainGenotypeCpgV1</span><span class="p">],</span> <span class="n">Serializable</span><span class="p">):</span>
@@ -404,8 +406,315 @@ Simply use these to create a <code class="docutils literal notranslate"><span cl
 </section>
 <section id="the-optimizer">
 <h3>The optimizer<a class="headerlink" href="#the-optimizer" title="Permalink to this headline"></a></h3>
-<p>TODO</p>
+<p>The optimizer will look similar to the optimizer from the previous evolutionary optimization tutorial.
+Add the innovation databases as they will be shared between all genotypes.
+Additionally, instead of a single controller you will store a controller for each individual robot:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># optimizer.py</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">genotype</span> <span class="kn">import</span> <span class="n">Genotype</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea</span> <span class="kn">import</span> <span class="n">EvolutionaryOptimizer</span><span class="p">,</span> <span class="n">Individual</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.physics.env</span> <span class="kn">import</span> <span class="n">Runner</span><span class="p">,</span> <span class="n">ActorControl</span>
+<span class="kn">import</span> <span class="nn">multineat</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">Database</span><span class="p">,</span> <span class="n">Node</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
+<span class="kn">from</span> <span class="nn">revolve2.envs.isaacgym</span> <span class="kn">import</span> <span class="n">LocalRunner</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.physics.control</span> <span class="kn">import</span> <span class="n">ActorController</span>
+<span class="kn">import</span> <span class="nn">revolve2.core.optimization.ea.selection</span> <span class="k">as</span> <span class="nn">selection</span>
+<span class="kn">import</span> <span class="nn">revolve2.core.optimization.ea.population_management</span> <span class="k">as</span> <span class="nn">population_management</span>
+
+<span class="k">class</span> <span class="nc">Optimizer</span><span class="p">(</span><span class="n">EvolutionaryOptimizer</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
+    <span class="n">_runner</span><span class="p">:</span> <span class="n">Runner</span>
+
+    <span class="n">_controllers</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ActorController</span><span class="p">]</span>
+
+    <span class="n">_innov_db_body</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span>
+    <span class="n">_innov_db_brain</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span>
+
+    <span class="n">_simulation_time</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">_sampling_frequency</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">_control_frequency</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="n">_num_generations</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">create</span><span class="p">(</span>
+        <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span>
+        <span class="n">initial_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span>
+        <span class="n">initial_fitness</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span>
+        <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
+        <span class="n">innov_db_body</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
+        <span class="n">innov_db_brain</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
+        <span class="n">simulation_time</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">sampling_frequency</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">control_frequency</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">num_generations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">offspring_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optimizer</span><span class="p">:</span>
+        <span class="bp">self</span> <span class="o">=</span> <span class="n">Optimizer</span><span class="p">()</span>
+
+        <span class="k">await</span> <span class="nb">super</span><span class="p">(</span><span class="n">Optimizer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">asyncinit</span><span class="p">(</span>
+            <span class="n">database</span><span class="p">,</span>
+            <span class="n">database</span><span class="o">.</span><span class="n">root</span><span class="p">,</span>
+            <span class="n">rng</span><span class="p">,</span>
+            <span class="n">population_size</span><span class="p">,</span>
+            <span class="n">offspring_size</span><span class="p">,</span>
+            <span class="n">initial_population</span><span class="p">,</span>
+            <span class="n">initial_fitness</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span> <span class="o">=</span> <span class="n">LocalRunner</span><span class="p">(</span><span class="n">LocalRunner</span><span class="o">.</span><span class="n">SimParams</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_innov_db_body</span> <span class="o">=</span> <span class="n">innov_db_body</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_innov_db_brain</span> <span class="o">=</span> <span class="n">innov_db_brain</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_simulation_time</span> <span class="o">=</span> <span class="n">simulation_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sampling_frequency</span> <span class="o">=</span> <span class="n">sampling_frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_control_frequency</span> <span class="o">=</span> <span class="n">control_frequency</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_generations</span> <span class="o">=</span> <span class="n">num_generations</span>
+
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span> <span class="nf">_select_parents</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">generation</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="n">num_parents</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]]:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">[</span>
+                <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">selection</span><span class="o">.</span><span class="n">multiple_unique</span><span class="p">(</span>
+                    <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">generation</span><span class="p">],</span>
+                    <span class="mi">2</span><span class="p">,</span>
+                    <span class="k">lambda</span> <span class="n">gen</span><span class="p">:</span> <span class="n">selection</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="p">,</span> <span class="n">gen</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_parents</span><span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_select_survivors</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">old_individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="n">new_individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]],</span>
+        <span class="n">num_survivors</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Individual</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]]:</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">old_individuals</span><span class="p">)</span> <span class="o">==</span> <span class="n">num_survivors</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">population_management</span><span class="o">.</span><span class="n">steady_state</span><span class="p">(</span>
+                <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">old_individuals</span><span class="p">],</span>
+                <span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">fitness</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">new_individuals</span><span class="p">],</span>
+                <span class="k">lambda</span> <span class="n">pop</span><span class="p">:</span> <span class="n">selection</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="p">,</span> <span class="n">pop</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">_must_do_next_gen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generation_index</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_generations</span>
+
+    <span class="k">def</span> <span class="nf">_crossover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_mutate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">:</span> <span class="n">Genotype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_evaluate_generation</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">dbview</span><span class="p">:</span> <span class="n">Node</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">control</span><span class="p">:</span> <span class="n">ActorControl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">crossover</span></code> and <code class="docutils literal notranslate"><span class="pre">mutate</span></code> can use the functions defined in your <code class="docutils literal notranslate"><span class="pre">Genotype</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_crossover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+    <span class="k">return</span> <span class="n">Genotype</span><span class="o">.</span><span class="n">crossover</span><span class="p">(</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">parents</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_mutate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">individual</span><span class="p">:</span> <span class="n">Genotype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">individual</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_innov_db_body</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innov_db_brain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Evaluation works similar to the simulator created in the previous Isaac Gym environment tutorial, with two small differences.
+Firstly, there are multiple robots. Store the controllers in their array and call all of them in the control function.
+Secondly, the robots have unpredicatable bodies, so use the modular robot’s built-in axis aligned bounding box(aabb) function to find out how high off the ground you need to position it.
+Thirdly, save the simulation states in the database. This gives you a history so you can analyze each robot later.
+The amound of simulation states depends on the <code class="docutils literal notranslate"><span class="pre">sampling_frequency</span></code> defined earlier.
+And lastly, calculate and return the fitness of the robot, based on the simulation history.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.physics.env</span> <span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">PosedActor</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">ActorState</span>
+<span class="kn">from</span> <span class="nn">pyrr</span> <span class="kn">import</span> <span class="n">Vector3</span><span class="p">,</span> <span class="n">Quaternion</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">_evaluate_generation</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">individuals</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">dbview</span><span class="p">:</span> <span class="n">Node</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span>
+        <span class="n">simulation_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_simulation_time</span><span class="p">,</span>
+        <span class="n">sampling_frequency</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_sampling_frequency</span><span class="p">,</span>
+        <span class="n">control_frequency</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_control_frequency</span><span class="p">,</span>
+        <span class="n">control</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_control</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">_controllers</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">individual</span> <span class="ow">in</span> <span class="n">individuals</span><span class="p">:</span>
+        <span class="n">actor</span><span class="p">,</span> <span class="n">controller</span> <span class="o">=</span> <span class="n">individual</span><span class="o">.</span><span class="n">develop</span><span class="p">()</span><span class="o">.</span><span class="n">make_actor_and_controller</span><span class="p">()</span>
+        <span class="n">bounding_box</span> <span class="o">=</span> <span class="n">actor</span><span class="o">.</span><span class="n">calc_aabb</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controllers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">controller</span><span class="p">)</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">()</span>
+        <span class="n">env</span><span class="o">.</span><span class="n">actors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">PosedActor</span><span class="p">(</span>
+                <span class="n">actor</span><span class="p">,</span>
+                <span class="n">Vector3</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="mf">0.0</span><span class="p">,</span>
+                        <span class="n">bounding_box</span><span class="o">.</span><span class="n">size</span><span class="o">.</span><span class="n">z</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="n">bounding_box</span><span class="o">.</span><span class="n">offset</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                    <span class="p">]</span>
+                <span class="p">),</span>
+                <span class="n">Quaternion</span><span class="p">(),</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">environments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+
+    <span class="n">states</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_runner</span><span class="o">.</span><span class="n">run_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_save_states</span><span class="p">(</span><span class="n">states</span><span class="p">,</span> <span class="n">database</span><span class="p">,</span> <span class="n">dbview</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_fitness</span><span class="p">(</span>
+            <span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">actor_states</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">actor_states</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">individuals</span><span class="p">))</span>
+    <span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">control</span><span class="p">:</span> <span class="n">ActorControl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">control_i</span><span class="p">,</span> <span class="n">controller</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_controllers</span><span class="p">):</span>
+        <span class="n">controller</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
+        <span class="n">control</span><span class="o">.</span><span class="n">set_dof_targets</span><span class="p">(</span><span class="n">control_i</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">controller</span><span class="o">.</span><span class="n">get_dof_targets</span><span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">_save_states</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">State</span><span class="p">]],</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">db_node</span><span class="p">:</span> <span class="n">Node</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+<span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">_calculate_fitness</span><span class="p">(</span><span class="n">begin_state</span><span class="p">:</span> <span class="n">ActorState</span><span class="p">,</span> <span class="n">end_state</span><span class="p">:</span> <span class="n">ActorState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Implement saving the states to the database.
+Any interaction with a database requires a transactions.
+Whenever an error occurs everything done within the transaction is rolled back.
+The <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> provides you with an uninitialized <code class="docutils literal notranslate"><span class="pre">Node</span></code> for you to write your simulation history to.
+Be aware that you can only write to a node one time. Once the transaction completes you cannot write again.
+Simply convert your states to an <code class="docutils literal notranslate"><span class="pre">Object</span></code> and write it to the node.
+An <code class="docutils literal notranslate"><span class="pre">Object</span></code> is a superset of <code class="docutils literal notranslate"><span class="pre">StaticData</span></code>. For now you do not have to worry about this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_save_states</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">State</span><span class="p">]],</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">db_node</span><span class="p">:</span> <span class="n">Node</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">begin_transaction</span><span class="p">()</span> <span class="k">as</span> <span class="n">txn</span><span class="p">:</span>
+        <span class="n">db_node</span><span class="o">.</span><span class="n">set_object</span><span class="p">(</span>
+            <span class="n">txn</span><span class="p">,</span>
+            <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span> <span class="s2">&quot;actors&quot;</span><span class="p">:</span> <span class="n">actors</span><span class="o">.</span><span class="n">serialize</span><span class="p">()}</span>
+                <span class="k">for</span> <span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">actors</span><span class="p">)</span> <span class="ow">in</span> <span class="n">states</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+</pre></div>
+</div>
+<p>The last thing you have to do is write the fitness function.
+This tutorial simply uses the distance traveled on the xy plane:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">_calculate_fitness</span><span class="p">(</span><span class="n">begin_state</span><span class="p">:</span> <span class="n">ActorState</span><span class="p">,</span> <span class="n">end_state</span><span class="p">:</span> <span class="n">ActorState</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+    <span class="c1"># distance traveled on the xy plane</span>
+    <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">begin_state</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">end_state</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="o">+</span> <span class="p">((</span><span class="n">begin_state</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">end_state</span><span class="o">.</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
 </section>
+<section id="adding-the-optimizer-to-main">
+<h3>Adding the optimizer to main<a class="headerlink" href="#adding-the-optimizer-to-main" title="Permalink to this headline"></a></h3>
+<p>You can now add the finished optimizer to your <code class="docutils literal notranslate"><span class="pre">main</span></code> function.
+You will also need to add some extra constants.:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># optimize.py</span>
+
+<span class="kn">import</span> <span class="nn">multineat</span>
+<span class="kn">from</span> <span class="nn">genotype</span> <span class="kn">import</span> <span class="n">Genotype</span>
+<span class="kn">from</span> <span class="nn">optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># number of initial mutations for body and brain cppn neat networks</span>
+    <span class="n">NUM_INITIAL_MUTATIONS</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="n">SIMULATION_TIME</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">SAMPLING_FREQUENCY</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">CONTROL_FREQUENCY</span> <span class="o">=</span> <span class="mi">5</span>
+
+    <span class="c1"># ...</span>
+
+    <span class="c1"># database</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="k">await</span> <span class="n">DbSqlite</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;database&quot;</span><span class="p">)</span>
+
+    <span class="c1"># multineat innovation databases</span>
+    <span class="n">innov_db_body</span> <span class="o">=</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">()</span>
+    <span class="n">innov_db_brain</span> <span class="o">=</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">()</span>
+
+    <span class="n">initial_population</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Genotype</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">innov_db_body</span><span class="p">,</span> <span class="n">innov_db_brain</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">NUM_INITIAL_MUTATIONS</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">POPULATION_SIZE</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">ep</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+        <span class="n">database</span><span class="p">,</span>
+        <span class="n">initial_population</span><span class="o">=</span><span class="n">initial_population</span><span class="p">,</span>
+        <span class="n">initial_fitness</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
+        <span class="n">innov_db_body</span><span class="o">=</span><span class="n">innov_db_body</span><span class="p">,</span>
+        <span class="n">innov_db_brain</span><span class="o">=</span><span class="n">innov_db_brain</span><span class="p">,</span>
+        <span class="n">simulation_time</span><span class="o">=</span><span class="n">SIMULATION_TIME</span><span class="p">,</span>
+        <span class="n">sampling_frequency</span><span class="o">=</span><span class="n">SAMPLING_FREQUENCY</span><span class="p">,</span>
+        <span class="n">control_frequency</span><span class="o">=</span><span class="n">CONTROL_FREQUENCY</span><span class="p">,</span>
+        <span class="n">num_generations</span><span class="o">=</span><span class="n">NUM_GENERATIONS</span><span class="p">,</span>
+        <span class="n">population_size</span><span class="o">=</span><span class="n">POPULATION_SIZE</span><span class="p">,</span>
+        <span class="n">offspring_size</span><span class="o">=</span><span class="n">OFFSPRING_SIZE</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting optimization process..&quot;</span><span class="p">)</span>
+
+    <span class="k">await</span> <span class="n">ep</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished optimizing.&quot;</span><span class="p">)</span>
+
+<span class="c1"># ...</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="running-and-analyzing">
+<h2>Running and analyzing<a class="headerlink" href="#running-and-analyzing" title="Permalink to this headline"></a></h2>
+<p>Run <code class="docutils literal notranslate"><span class="pre">optimize.py</span></code> and see your robots evolve.
+Depending on your parameters this can take quite a long time.</p>
+<a class="reference internal image-reference" href="../_images/optimize_locomotion_simulator.gif"><img alt="../_images/optimize_locomotion_simulator.gif" src="../_images/optimize_locomotion_simulator.gif" style="width: 100%;" /></a>
+<p>You can analyze the results using the same scripts as from the previous optimization tutorial:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">core</span><span class="o">/</span><span class="n">revolve2</span><span class="o">/</span><span class="n">analysis</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">plot_ea_fitness</span><span class="o">.</span><span class="n">py</span> <span class="n">database</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/optimize_locomotion_analysis.png"><img alt="../_images/optimize_locomotion_analysis.png" src="../_images/optimize_locomotion_analysis.png" style="width: 100%;" /></a>
+<p>Of course this is a low number of generations, populations size, offspring size, and simulation time, but compare your results to see if the simulation runs correctly.</p>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h2>
+<p>This marks the end of this tutorial. Feedback and contributions are welcome at Revolve2’s code repository.</p>
 </section>
 </section>
 

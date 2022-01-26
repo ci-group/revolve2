@@ -216,7 +216,9 @@ Using the brain and body, create a <code class="docutils literal notranslate"><s
 A batch provides common arguments between all environments, and an environment describes the physical objects to be simulated in that environment.
 Environments do not interact with each other.
 Create batch and a single environment for our lone robot to be simulated.
-Also create a control function that controls all robots in each environment:</p>
+Also create a control function that controls all robots in each environment.
+Control frequency determines how often this control function is called.
+Sampling frequency is not relevant for this tutorial, but controls how much information about the simulation is saved:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.physics.env</span> <span class="kn">import</span> <span class="n">Batch</span><span class="p">,</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">ActorControl</span>
 
 <span class="c1"># ...</span>
@@ -251,7 +253,8 @@ A controller is the brain that drives these joints:</p>
         <span class="n">actor</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span> <span class="o">=</span> <span class="n">robot</span><span class="o">.</span><span class="n">make_actor_and_controller</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Add the robot to the environment just above the ground, add the environment to the batch, and run the batch:</p>
+<p>Add the robot to the environment just above the ground, add the environment to the batch, and run the batch.
+It is possible to run the simulation in headless mode(no graphics) by passing the <code class="docutils literal notranslate"><span class="pre">headless</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">LocalRunner</span></code>.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.physics.env</span> <span class="kn">import</span> <span class="n">PosedActor</span>
 <span class="kn">from</span> <span class="nn">pyrr</span> <span class="kn">import</span> <span class="n">Vector3</span><span class="p">,</span> <span class="n">Quaternion</span>
 <span class="kn">from</span> <span class="nn">revolve2.envs.isaacgym</span> <span class="kn">import</span> <span class="n">LocalRunner</span>
@@ -281,6 +284,7 @@ If there is more than one robot, you need to store each individual controller:</
 <h2>Running and expected results<a class="headerlink" href="#running-and-expected-results" title="Permalink to this headline"></a></h2>
 <p>You should now be able to successfully run the simulation and see a two armed robot attempt to move around.</p>
 <a class="reference internal image-reference" href="../_images/simulate_robot_isaac_results.gif"><img alt="../_images/simulate_robot_isaac_results.gif" src="../_images/simulate_robot_isaac_results.gif" style="width: 100%;" /></a>
+<p>The exact class you just created is also readily available at <code class="docutils literal notranslate"><span class="pre">revolve2.analysis.isaacgym.ModularRobotRerunner</span></code>.</p>
 </section>
 <section id="errors">
 <h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline"></a></h2>

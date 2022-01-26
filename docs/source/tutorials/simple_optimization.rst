@@ -7,8 +7,8 @@ The final results of this tutorial are available at ``<revolve2_source>/examples
 What you will learn
 -------------------
 
-* How to use the ``EvolutionaryOptimizer``
-* How to use the ``Database``
+* How to use the ``EvolutionaryOptimizer``.
+* How to use the ``Database``.
 
 -------------
 Prerequisites

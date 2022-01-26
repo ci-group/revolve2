@@ -7,8 +7,8 @@ The final results of this tutorial are available at ``<revolve2_source>/examples
 What you will learn
 -------------------
 
-* How to create a ``modular robot``
-* How to use the ``Isaac Gym environment``
+* How to create a ``modular robot``.
+* How to use the ``Isaac Gym environment``.
 
 -------------
 Prerequisites

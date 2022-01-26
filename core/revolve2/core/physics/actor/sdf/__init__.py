@@ -1,3 +1,3 @@
-from .to_sdf import to_sdf as to_sdf
+from ._to_sdf import to_sdf
 
 __all__ = ["to_sdf"]

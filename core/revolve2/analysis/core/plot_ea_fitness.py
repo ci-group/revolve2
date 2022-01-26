@@ -101,6 +101,9 @@ async def plot(databases: List[str]) -> None:
         x,
         mean_avg_fitness,
     )
+    plt.xlabel("Generation")
+    plt.ylabel("Fitness")
+    plt.legend(["Max fitness", "Min fitness", "Mean fitess"])
     plt.show()
 
 
@@ -113,7 +116,7 @@ async def main() -> None:
     )
     args = parser.parse_args()
 
-    plot(args.databases)
+    await plot(args.databases)
 
 
 if __name__ == "__main__":

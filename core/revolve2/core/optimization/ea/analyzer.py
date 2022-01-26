@@ -1,9 +1,10 @@
+from __future__ import annotations
 from typing import Dict, Iterator, List, Optional
 
 from revolve2.core.database import List as DbList
 from revolve2.core.database import Node, Object, StaticData, Transaction, is_static_data
-from revolve2.core.database.database_error import DatabaseError
-from revolve2.core.database.serialize import SerializeError
+from revolve2.core.database import DatabaseError
+from revolve2.core.database.serialization import SerializeError
 
 
 class Generation:

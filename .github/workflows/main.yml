@@ -53,3 +53,27 @@ jobs:
         run: pip install ./core[dev]
       - name: run mypy
         run: scripts/run_mypy_all_opensource.sh
+
+  docs:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ">=3.8"
+      - name: create virtualenv
+        run: |
+          pip install virtualenv
+          virtualenv .venv
+          . .venv/bin/activate
+      - name: install core
+        run: pip install ./core[dev]
+      - name: sphinx
+        run: make -C docs html
+      - name: deploy
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          folder: docs/build/html
+          clean-exclude: .nojekyll

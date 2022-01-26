@@ -13,13 +13,13 @@ async def main():
     # number of initial mutations for body and brain cppn neat networks
     NUM_INITIAL_MUTATIONS = 10
 
+    SIMULATION_TIME = 10
+    SAMPLING_FREQUENCY = 5
+    CONTROL_FREQUENCY = 5
+
     POPULATION_SIZE = 10
     OFFSPRING_SIZE = 10
     NUM_GENERATIONS = 3
-
-    SIMULATION_TIME = 1
-    SAMPLING_FREQUENCY = 5
-    CONTROL_FREQUENCY = 5
 
     logging.basicConfig(
         level=logging.DEBUG,
@@ -30,7 +30,7 @@ async def main():
 
     # random number generator
     rng = Random()
-    rng.seed(100)
+    rng.seed(5)
 
     # database
     database = await DbSqlite.create(f"database")

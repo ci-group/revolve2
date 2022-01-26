@@ -10,7 +10,7 @@ import revolve2.core.optimization.ea.selection as selection
 from pyrr import Quaternion, Vector3
 from revolve2.core.database import Database, Node
 from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
-from revolve2.core.physics.control import ActorController as Controller
+from revolve2.core.physics.control import ActorController
 from revolve2.core.physics.env import (
     ActorControl,
     ActorState,
@@ -28,7 +28,7 @@ from genotype import Genotype
 class Optimizer(EvolutionaryOptimizer[Genotype, float]):
     _runner: Runner
 
-    _controllers: List[Controller]
+    _controllers: List[ActorController]
 
     _innov_db_body: multineat.InnovationDatabase
     _innov_db_brain: multineat.InnovationDatabase
@@ -67,7 +67,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, float]):
             initial_population,
             initial_fitness,
         )
-        self._runner = LocalRunner(LocalRunner.SimParams())
+        self._runner = LocalRunner(LocalRunner.SimParams(), headless=True)
         self._innov_db_body = innov_db_body
         self._innov_db_brain = innov_db_brain
         self._simulation_time = simulation_time
@@ -76,6 +76,50 @@ class Optimizer(EvolutionaryOptimizer[Genotype, float]):
         self._num_generations = num_generations
 
         return self
+
+    def _select_parents(
+        self,
+        generation: List[Individual[Genotype, float]],
+        num_parents: int,
+    ) -> List[List[Individual[Genotype, float]]]:
+        return [
+            [
+                i[0]
+                for i in selection.multiple_unique(
+                    [(i, i.fitness) for i in generation],
+                    2,
+                    lambda gen: selection.tournament(self._rng, gen, k=2),
+                )
+            ]
+            for _ in range(num_parents)
+        ]
+
+    def _select_survivors(
+        self,
+        old_individuals: List[Individual[Genotype, float]],
+        new_individuals: List[Individual[Genotype, float]],
+        num_survivors: int,
+    ) -> List[Individual[Genotype, float]]:
+        assert len(old_individuals) == num_survivors
+
+        return [
+            i[0]
+            for i in population_management.steady_state(
+                [(i, i.fitness) for i in old_individuals],
+                [(i, i.fitness) for i in new_individuals],
+                lambda pop: selection.tournament(self._rng, pop, k=2),
+            )
+        ]
+
+    def _must_do_next_gen(self) -> bool:
+        return self.generation_index != self._num_generations
+
+    def _crossover(self, parents: List[Genotype]) -> Genotype:
+        assert len(parents) == 2
+        return Genotype.crossover(parents[0], parents[1], self._rng)
+
+    def _mutate(self, individual: Genotype) -> Genotype:
+        return individual.mutate(self._innov_db_body, self._innov_db_brain, self._rng)
 
     async def _evaluate_generation(
         self, individuals: List[Genotype], database: Database, dbview: Node
@@ -141,52 +185,8 @@ class Optimizer(EvolutionaryOptimizer[Genotype, float]):
     def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:
         # TODO simulation can continue slightly passed the defined sim time.
 
-        # for now simply the distance traveled on the xy plane
+        # distance traveled on the xy plane
         return math.sqrt(
             (begin_state.position[0] - end_state.position[0]) ** 2
             + ((begin_state.position[1] - end_state.position[1]) ** 2)
         )
-
-    def _select_parents(
-        self,
-        generation: List[Individual[Genotype, float]],
-        num_parents: int,
-    ) -> List[List[Individual[Genotype, float]]]:
-        return [
-            [
-                i[0]
-                for i in selection.multiple_unique(
-                    [(i, i.fitness) for i in generation],
-                    2,
-                    lambda gen: selection.tournament(self._rng, gen, k=2),
-                )
-            ]
-            for _ in range(num_parents)
-        ]
-
-    def _select_survivors(
-        self,
-        old_individuals: List[Individual[Genotype, float]],
-        new_individuals: List[Individual[Genotype, float]],
-        num_survivors: int,
-    ) -> List[Individual[Genotype, float]]:
-        assert len(old_individuals) == num_survivors
-
-        return [
-            i[0]
-            for i in population_management.steady_state(
-                [(i, i.fitness) for i in old_individuals],
-                [(i, i.fitness) for i in new_individuals],
-                lambda pop: selection.tournament(self._rng, pop, k=2),
-            )
-        ]
-
-    def _crossover(self, parents: List[Genotype]) -> Genotype:
-        assert len(parents) == 2
-        return Genotype.crossover(parents[0], parents[1], self._rng)
-
-    def _mutate(self, individual: Genotype) -> Genotype:
-        return individual.mutate(self._innov_db_body, self._innov_db_brain, self._rng)
-
-    def _must_do_next_gen(self) -> bool:
-        return self.generation_index != self._num_generations

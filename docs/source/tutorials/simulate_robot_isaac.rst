@@ -97,7 +97,9 @@ A physics simulation environment such as the Isaac Gym environment works with ba
 A batch provides common arguments between all environments, and an environment describes the physical objects to be simulated in that environment.
 Environments do not interact with each other.
 Create batch and a single environment for our lone robot to be simulated.
-Also create a control function that controls all robots in each environment::
+Also create a control function that controls all robots in each environment.
+Control frequency determines how often this control function is called.
+Sampling frequency is not relevant for this tutorial, but controls how much information about the simulation is saved::
 
     from revolve2.core.physics.env import Batch, Environment, ActorControl
 
@@ -132,7 +134,8 @@ A controller is the brain that drives these joints::
 
             actor, self._controller = robot.make_actor_and_controller()
 
-Add the robot to the environment just above the ground, add the environment to the batch, and run the batch::
+Add the robot to the environment just above the ground, add the environment to the batch, and run the batch.
+It is possible to run the simulation in headless mode(no graphics) by passing the ``headless`` parameter to ``LocalRunner``.::
 
     from revolve2.core.physics.env import PosedActor
     from pyrr import Vector3, Quaternion
@@ -164,6 +167,8 @@ You should now be able to successfully run the simulation and see a two armed ro
 
 .. image:: simulate_robot_isaac_results.gif
     :width: 100%
+
+The exact class you just created is also readily available at ``revolve2.analysis.isaacgym.ModularRobotRerunner``.
 
 ------
 Errors

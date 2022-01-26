@@ -48,6 +48,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
@@ -122,6 +123,290 @@
              
   <section id="optimizing-a-modular-robot-for-locomotion-using-cppn-neat-and-isaac-gym">
 <h1>Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym<a class="headerlink" href="#optimizing-a-modular-robot-for-locomotion-using-cppn-neat-and-isaac-gym" title="Permalink to this headline"></a></h1>
+<p>The final results of this tutorial are available at <code class="docutils literal notranslate"><span class="pre">&lt;revolve2_source&gt;/examples/optimize_modular&gt;</span></code>.</p>
+<section id="what-you-will-learn">
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>How to use the <code class="docutils literal notranslate"><span class="pre">CPPN+NEAT</span></code> genotype supplementary library.</p></li>
+<li><p>How to combine modular robots with evolutionary optimization.</p></li>
+</ul>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p>Tutorial <a class="reference internal" href="simple_optimization.html#a-simple-optimization-process-with-a-database"><span class="std std-ref">A simple optimization process with a database</span></a></p></li>
+<li><p>Tutorial <a class="reference internal" href="simulate_robot_isaac.html#creating-a-modular-robot-and-simulating-it-in-the-isaac-gym-environment"><span class="std std-ref">Creating a modular robot and simulating it in the Isaac Gym environment</span></a></p></li>
+<li><p>Have the supplementary library <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPN+NEAT</span></code> <a class="reference internal" href="../installation/genotypes/cppnneat.html#cppn-neat-genotype-supplemental-library"><span class="std std-ref">installed</span></a>.</p></li>
+<li><p>Superficial knowledge of the <a class="reference internal" href="../concepts/cppnwin.html#cppnwin"><span class="std std-ref">CPPNWIN</span></a> genotype, used by ci-group.</p></li>
+</ul>
+</section>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>You will create a program that optimizes a modular robot body and brain for undirected locomotion.
+That is, a robot that moves as far as possible, no matter the direction.</p>
+</section>
+<section id="programming-it">
+<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this headline"></a></h2>
+<p>For this tutorial it will be convenient to seperate your code in multiple files.
+Create an empty directory and a file <code class="docutils literal notranslate"><span class="pre">optimize.py</span></code>. This will be your program’s entry point.
+The baseline code for this program is similar to the previous tutorials’:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># optimize.py</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.database.sqlite</span> <span class="kn">import</span> <span class="n">Database</span> <span class="k">as</span> <span class="n">DbSqlite</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">POPULATION_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">OFFSPRING_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">NUM_GENERATIONS</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">] [</span><span class="si">%(levelname)s</span><span class="s2">] [</span><span class="si">%(module)s</span><span class="s2">] </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting optimization&quot;</span><span class="p">)</span>
+
+    <span class="c1"># random number generator</span>
+    <span class="n">rng</span> <span class="o">=</span> <span class="n">Random</span><span class="p">()</span>
+    <span class="n">rng</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1"># database</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="k">await</span> <span class="n">DbSqlite</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;database&quot;</span><span class="p">)</span>
+
+    <span class="c1"># here you will add your initial population and optimizer later</span>
+    <span class="c1"># ...</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting optimization process..&quot;</span><span class="p">)</span>
+
+    <span class="c1"># await ep.run()</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished optimizing.&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">asyncio</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<section id="the-genotype">
+<h3>The genotype<a class="headerlink" href="#the-genotype" title="Permalink to this headline"></a></h3>
+<p>Start by creating genotype in a new file called <code class="docutils literal notranslate"><span class="pre">genotype.py</span></code>.
+The genotype will inherit from <code class="docutils literal notranslate"><span class="pre">BodybrainGenotype</span></code>, a base class provided by the modular_robot module.
+This class stores seperate body and brain genotypes and its <code class="docutils literal notranslate"><span class="pre">develop</span></code> function combines these to create a <code class="docutils literal notranslate"><span class="pre">ModularRobot</span></code>.
+<code class="docutils literal notranslate"><span class="pre">BodyGenotypeV1</span></code> and <code class="docutils literal notranslate"><span class="pre">BrainGenotypeCpgV1</span></code> are body and brain CPPNWIN genotypes respectively, provided by the <code class="docutils literal notranslate"><span class="pre">CPPN+NEAT</span></code> supplementary library:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">StaticData</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.database.serialization</span> <span class="kn">import</span> <span class="n">Serializable</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea.modular_robot</span> <span class="kn">import</span> <span class="n">BodybrainGenotype</span>
+<span class="kn">from</span> <span class="nn">revolve2.genotypes.cppnneat</span> <span class="kn">import</span> <span class="n">BodyGenotypeV1</span><span class="p">,</span> <span class="n">BrainGenotypeCpgV1</span>
+
+
+<span class="k">class</span> <span class="nc">Genotype</span><span class="p">(</span><span class="n">BodybrainGenotype</span><span class="p">[</span><span class="n">BodyGenotypeV1</span><span class="p">,</span> <span class="n">BrainGenotypeCpgV1</span><span class="p">],</span> <span class="n">Serializable</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">random</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
+        <span class="n">num_initial_mutations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">mutate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">crossover</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">parent1</span><span class="p">:</span> <span class="n">Genotype</span><span class="p">,</span>
+        <span class="n">parent2</span><span class="p">:</span> <span class="n">Genotype</span><span class="p">,</span>
+        <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StaticData</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">StaticData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The CPPNWIN genotypes each require an innovation database when initialize, so add these as arguments to your random function.
+Additionally you have to provide many parameters. These must be set using the <code class="docutils literal notranslate"><span class="pre">multineat.Parameters</span></code> structure.
+It is convenient to store these parameters are a constant value in your genotype.
+Next, multineat has its own random object and does not take the standard python <code class="docutils literal notranslate"><span class="pre">Random</span></code>.
+This is unfortunate, but there is no way around it.
+To make sure that your randomness is reproducible and an be set with a single seed, simple seed a new <code class="docutils literal notranslate"><span class="pre">multineat.RNG</span></code> object with a value from your <code class="docutils literal notranslate"><span class="pre">Random</span></code> object.
+Finally, the <code class="docutils literal notranslate"><span class="pre">CPPWIN</span></code> supplementary library creates random genotypes by mutating an empty network a few times.
+Add a parameters so the number of mutation can be set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multineat</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="c1"># ...</span>
+
+<span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">random</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span>
+    <span class="n">innov_db_body</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
+    <span class="n">innov_db_brain</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
+    <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
+    <span class="n">num_initial_mutations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+    <span class="n">multineat_rng</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_multineat_rng_from_random</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span>
+
+    <span class="n">body</span> <span class="o">=</span> <span class="n">BodyGenotypeV1</span><span class="o">.</span><span class="n">random</span><span class="p">(</span>
+        <span class="n">innov_db_body</span><span class="p">,</span>
+        <span class="n">multineat_rng</span><span class="p">,</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_MULTINEAT_PARAMS</span><span class="p">,</span>
+        <span class="n">multineat</span><span class="o">.</span><span class="n">ActivationFunction</span><span class="o">.</span><span class="n">TANH</span><span class="p">,</span>
+        <span class="n">num_initial_mutations</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">brain</span> <span class="o">=</span> <span class="n">BrainGenotypeCpgV1</span><span class="o">.</span><span class="n">random</span><span class="p">(</span>
+        <span class="n">innov_db_brain</span><span class="p">,</span>
+        <span class="n">multineat_rng</span><span class="p">,</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_MULTINEAT_PARAMS</span><span class="p">,</span>
+        <span class="n">multineat</span><span class="o">.</span><span class="n">ActivationFunction</span><span class="o">.</span><span class="n">SIGNED_SINE</span><span class="p">,</span>
+        <span class="n">num_initial_mutations</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="n">brain</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_make_multineat_params</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">multineat</span><span class="o">.</span><span class="n">Parameters</span><span class="p">:</span>
+    <span class="n">multineat_params</span> <span class="o">=</span> <span class="n">multineat</span><span class="o">.</span><span class="n">Parameters</span><span class="p">()</span>
+
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateRemLinkProb</span> <span class="o">=</span> <span class="mf">0.02</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">RecurrentProb</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">OverallMutationRate</span> <span class="o">=</span> <span class="mf">0.15</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateAddLinkProb</span> <span class="o">=</span> <span class="mf">0.08</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateAddNeuronProb</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateWeightsProb</span> <span class="o">=</span> <span class="mf">0.90</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MaxWeight</span> <span class="o">=</span> <span class="mf">8.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">WeightMutationMaxPower</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">WeightReplacementMaxPower</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateActivationAProb</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationAMutationMaxPower</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MinActivationA</span> <span class="o">=</span> <span class="mf">0.05</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MaxActivationA</span> <span class="o">=</span> <span class="mf">6.0</span>
+
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateNeuronActivationTypeProb</span> <span class="o">=</span> <span class="mf">0.03</span>
+
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateOutputActivationFunction</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_SignedSigmoid_Prob</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_UnsignedSigmoid_Prob</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_Tanh_Prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_TanhCubic_Prob</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_SignedStep_Prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_UnsignedStep_Prob</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_SignedGauss_Prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_UnsignedGauss_Prob</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_Abs_Prob</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_SignedSine_Prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_UnsignedSine_Prob</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">ActivationFunction_Linear_Prob</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateNeuronTraitsProb</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">MutateLinkTraitsProb</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="n">multineat_params</span><span class="o">.</span><span class="n">AllowLoops</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">return</span> <span class="n">multineat_params</span>
+
+<span class="n">_MULTINEAT_PARAMS</span> <span class="o">=</span> <span class="n">_make_multineat_params</span><span class="p">()</span>
+
+<span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">_multineat_rng_from_random</span><span class="p">(</span><span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">multineat</span><span class="o">.</span><span class="n">RNG</span><span class="p">:</span>
+    <span class="n">multineat_rng</span> <span class="o">=</span> <span class="n">multineat</span><span class="o">.</span><span class="n">RNG</span><span class="p">()</span>
+    <span class="n">multineat_rng</span><span class="o">.</span><span class="n">Seed</span><span class="p">(</span><span class="n">rng</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">maxsize</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">multineat_rng</span>
+</pre></div>
+</div>
+<p>Mutation is straightforward. Create a new instance of your <code class="docutils literal notranslate"><span class="pre">Genotype</span></code> class and use the <code class="docutils literal notranslate"><span class="pre">mutate</span></code> functions on your body and brain genotypes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">mutate</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">innov_db_body</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
+    <span class="n">innov_db_brain</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
+    <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+    <span class="n">multineat_rng</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multineat_rng_from_random</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Genotype</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_body_genotype</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_MULTINEAT_PARAMS</span><span class="p">,</span> <span class="n">innov_db_body</span><span class="p">,</span> <span class="n">multineat_rng</span>
+        <span class="p">),</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_brain_genotype</span><span class="o">.</span><span class="n">mutate</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_MULTINEAT_PARAMS</span><span class="p">,</span> <span class="n">innov_db_brain</span><span class="p">,</span> <span class="n">multineat_rng</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Crossover is very similar. It takes some extra parameters that are irrelevant for now. Take a look at the documentation if you are interested:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">crossover</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="p">,</span>
+    <span class="n">parent1</span><span class="p">:</span> <span class="n">Genotype</span><span class="p">,</span>
+    <span class="n">parent2</span><span class="p">:</span> <span class="n">Genotype</span><span class="p">,</span>
+    <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">multineat_rng</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_multineat_rng_from_random</span><span class="p">(</span><span class="n">rng</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Genotype</span><span class="p">(</span>
+        <span class="n">BodyGenotypeV1</span><span class="o">.</span><span class="n">crossover</span><span class="p">(</span>
+            <span class="n">parent1</span><span class="o">.</span><span class="n">_body_genotype</span><span class="p">,</span>
+            <span class="n">parent2</span><span class="o">.</span><span class="n">_body_genotype</span><span class="p">,</span>
+            <span class="n">Genotype</span><span class="o">.</span><span class="n">_MULTINEAT_PARAMS</span><span class="p">,</span>
+            <span class="n">multineat_rng</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">BrainGenotypeCpgV1</span><span class="o">.</span><span class="n">crossover</span><span class="p">(</span>
+            <span class="n">parent1</span><span class="o">.</span><span class="n">_brain_genotype</span><span class="p">,</span>
+            <span class="n">parent2</span><span class="o">.</span><span class="n">_brain_genotype</span><span class="p">,</span>
+            <span class="n">Genotype</span><span class="o">.</span><span class="n">_MULTINEAT_PARAMS</span><span class="p">,</span>
+            <span class="n">multineat_rng</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+            <span class="kc">False</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>Serialization and deserializataion is not as easy as in the previous tutorials, as the types contained in this class are not <code class="docutils literal notranslate"><span class="pre">StaticData</span></code>.
+However, they provide <code class="docutils literal notranslate"><span class="pre">serialize</span></code> and <code class="docutils literal notranslate"><span class="pre">deserialize</span></code> functions of their own.
+Simply use these to create a <code class="docutils literal notranslate"><span class="pre">StaticData</span></code> representation of your genotype:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.database.serialization</span> <span class="kn">import</span> <span class="n">SerializeError</span>
+
+<span class="c1"># ...</span>
+
+<span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StaticData</span><span class="p">:</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;body&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body_genotype</span><span class="o">.</span><span class="n">serialize</span><span class="p">(),</span>
+        <span class="s2">&quot;brain&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_brain_genotype</span><span class="o">.</span><span class="n">serialize</span><span class="p">(),</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">test</span>
+
+<span class="nd">@classmethod</span>
+<span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">StaticData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Genotype</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SerializeError</span><span class="p">()</span>
+    <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+        <span class="n">BodyGenotypeV1</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;body&quot;</span><span class="p">]),</span>
+        <span class="n">BrainGenotypeCpgV1</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;brain&quot;</span><span class="p">]),</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="the-optimizer">
+<h3>The optimizer<a class="headerlink" href="#the-optimizer" title="Permalink to this headline"></a></h3>
+<p>TODO</p>
+</section>
+</section>
 </section>
 
 

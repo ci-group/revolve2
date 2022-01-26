@@ -19,8 +19,10 @@ sys.path.insert(0, os.path.abspath("../.."))
 # -- Project information -----------------------------------------------------
 
 project = "revolve2"
-copyright = "Computational Intelligence research group, Vrije Universiteit Amsterdam"
-author = "Computational Intelligence research group, Vrije Universiteit Amsterdam"
+copyright = (
+    "Computational Intelligence Group, Vrije Universiteit Amsterdam & Contributors"
+)
+author = "Computational Intelligence Group, Vrije Universiteit Amsterdam & Contributors"
 
 # The full version, including alpha/beta/rc tags
 release = "v0.0.0-alpha1"

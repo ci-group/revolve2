@@ -1,7 +1,7 @@
 =======================================
-Cppn+Neat genotype supplemental library
+CPPNWIN genotype supplemental library
 =======================================
-This library provides a modular robot genotype using CPPN+NEAT.
+This library provides a modular robot genotype using CPPNWIN.
 
 -------------
 Prerequisites
@@ -15,4 +15,4 @@ Install
 -------
 Install the library as a python package::
 
-    pip install <revolve_path>/genotypes/cppnneat
+    pip install <revolve_path>/genotypes/cppnwin

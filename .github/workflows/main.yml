@@ -26,8 +26,8 @@ jobs:
       - name: install env isaacgym
         #run: pip install ./envs/isaacgym
         run: echo "IsaacGym is not open source so sadly we cannot test this."
-      - name: install genotype cppnneat
-        run: pip install ./genotypes/cppnneat
+      - name: install genotype CPPNWIN
+        run: pip install ./genotypes/cppnwin
 
   check_format:
     runs-on: ubuntu-20.04

@@ -18,7 +18,7 @@ help:
 
 apidoc:
 	@$(SPHINXAPIDOC) ../core/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../genotypes/cppnneat/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../genotypes/cppnwin/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../envs/isaacgym/revolve2 $(APIDOCARGS)
 
 .PHONY: help Makefile apidoc

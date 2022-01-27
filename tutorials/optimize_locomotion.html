@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym &mdash; revolve2 v0.0.0-alpha1 documentation</title>
+  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.0.0-alpha1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -42,7 +42,7 @@
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../installation/envs/isaacgym.html">Isaac Gym environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnneat.html">Cppn+Neat genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
@@ -54,7 +54,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulate_robot_isaac.html">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../api_reference/revolve2.html">API Reference</a><ul>
@@ -86,7 +86,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.genotypes.html">genotypes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.genotypes.cppnneat.html">cppnneat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.genotypes.cppnwin.html">cppnwin</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.envs.html">envs</a><ul>
@@ -112,7 +112,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="index.html">Tutorials</a> &raquo;</li>
-      <li>Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym</li>
+      <li>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -121,13 +121,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="optimizing-a-modular-robot-for-locomotion-using-cppn-neat-and-isaac-gym">
-<h1>Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym<a class="headerlink" href="#optimizing-a-modular-robot-for-locomotion-using-cppn-neat-and-isaac-gym" title="Permalink to this headline"></a></h1>
+  <section id="optimizing-a-modular-robot-for-locomotion-using-cppnwin-and-isaac-gym">
+<h1>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym<a class="headerlink" href="#optimizing-a-modular-robot-for-locomotion-using-cppnwin-and-isaac-gym" title="Permalink to this headline"></a></h1>
 <p>The final results of this tutorial are available at <code class="docutils literal notranslate"><span class="pre">&lt;revolve2_source&gt;/examples/optimize_modular&gt;</span></code>.</p>
 <section id="what-you-will-learn">
 <h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p>How to use the <code class="docutils literal notranslate"><span class="pre">CPPN+NEAT</span></code> genotype supplementary library.</p></li>
+<li><p>How to use the <code class="docutils literal notranslate"><span class="pre">CPPNWIN</span></code> genotype supplementary library.</p></li>
 <li><p>How to combine modular robots with evolutionary optimization.</p></li>
 <li><p>How to manually insert into a database.</p></li>
 </ul>
@@ -137,7 +137,7 @@
 <ul class="simple">
 <li><p>Tutorial <a class="reference internal" href="simple_optimization.html#a-simple-optimization-process-with-a-database"><span class="std std-ref">A simple optimization process with a database</span></a></p></li>
 <li><p>Tutorial <a class="reference internal" href="simulate_robot_isaac.html#creating-a-modular-robot-and-simulating-it-in-the-isaac-gym-environment"><span class="std std-ref">Creating a modular robot and simulating it in the Isaac Gym environment</span></a></p></li>
-<li><p>Have the supplementary library <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPN+NEAT</span></code> <a class="reference internal" href="../installation/genotypes/cppnneat.html#cppn-neat-genotype-supplemental-library"><span class="std std-ref">installed</span></a>.</p></li>
+<li><p>Have the supplementary library <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPNWIN</span></code> <a class="reference internal" href="../installation/genotypes/cppnwin.html#cppnwin-genotype-supplemental-library"><span class="std std-ref">installed</span></a>.</p></li>
 <li><p>Superficial knowledge of the <a class="reference internal" href="../concepts/cppnwin.html#cppnwin"><span class="std std-ref">CPPNWIN</span></a> genotype, used by ci-group.</p></li>
 </ul>
 </section>
@@ -197,14 +197,14 @@ The baseline code for this program is similar to the previous tutorials’:</p>
 <p>Start by creating genotype in a new file called <code class="docutils literal notranslate"><span class="pre">genotype.py</span></code>.
 The genotype will inherit from <code class="docutils literal notranslate"><span class="pre">BodybrainGenotype</span></code>, a base class provided by the modular_robot module.
 This class stores seperate body and brain genotypes and its <code class="docutils literal notranslate"><span class="pre">develop</span></code> function combines these to create a <code class="docutils literal notranslate"><span class="pre">ModularRobot</span></code>.
-<code class="docutils literal notranslate"><span class="pre">BodyGenotypeV1</span></code> and <code class="docutils literal notranslate"><span class="pre">BrainGenotypeCpgV1</span></code> are body and brain CPPNWIN genotypes respectively, provided by the <code class="docutils literal notranslate"><span class="pre">CPPN+NEAT</span></code> supplementary library.
+<code class="docutils literal notranslate"><span class="pre">BodyGenotypeV1</span></code> and <code class="docutils literal notranslate"><span class="pre">BrainGenotypeCpgV1</span></code> are body and brain CPPNWIN genotypes respectively, provided by the <code class="docutils literal notranslate"><span class="pre">CPPNWIN</span></code> supplementary library.
 They use the CPPNWIN network to create a modular robot body and weights for a corresponding CPG brain:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">StaticData</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database.serialization</span> <span class="kn">import</span> <span class="n">Serializable</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea.modular_robot</span> <span class="kn">import</span> <span class="n">BodybrainGenotype</span>
-<span class="kn">from</span> <span class="nn">revolve2s.cppnneat</span> <span class="kn">import</span> <span class="n">BodyGenotypeV1</span><span class="p">,</span> <span class="n">BrainGenotypeCpgV1</span>
+<span class="kn">from</span> <span class="nn">revolve2s.cppnwin</span> <span class="kn">import</span> <span class="n">BodyGenotypeV1</span><span class="p">,</span> <span class="n">BrainGenotypeCpgV1</span>
 
 
 <span class="k">class</span> <span class="nc">Genotype</span><span class="p">(</span><span class="n">BodybrainGenotype</span><span class="p">[</span><span class="n">BodyGenotypeV1</span><span class="p">,</span> <span class="n">BrainGenotypeCpgV1</span><span class="p">],</span> <span class="n">Serializable</span><span class="p">):</span>
@@ -653,7 +653,7 @@ You will also need to add some extra constants.:</p>
 <span class="c1"># ...</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="c1"># number of initial mutations for body and brain cppn neat networks</span>
+    <span class="c1"># number of initial mutations for body and brain CPPNWIN networks</span>
     <span class="n">NUM_INITIAL_MUTATIONS</span> <span class="o">=</span> <span class="mi">10</span>
 
     <span class="n">SIMULATION_TIME</span> <span class="o">=</span> <span class="mi">10</span>

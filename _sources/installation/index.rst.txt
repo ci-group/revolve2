@@ -44,7 +44,7 @@ Install supplementary libraries
    :maxdepth: 1
 
    Isaac Gym environment <envs/isaacgym>
-   Cppn+Neat genotype <genotypes/cppnneat>
+   CPPNWIN genotype <genotypes/cppnwin>
 
 
 -------------

@@ -9,4 +9,4 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   cppnneat <revolve2.genotypes.cppnneat>
+   cppnwin <revolve2.genotypes.cppnwin>

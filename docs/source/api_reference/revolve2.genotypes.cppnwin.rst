@@ -1,10 +1,10 @@
-revolve2.genotypes.cppnneat package
+revolve2.genotypes.cppnwin package
 ===================================
 
 Module contents
 ---------------
 
-.. automodule:: revolve2.genotypes.cppnneat
+.. automodule:: revolve2.genotypes.cppnwin
    :members:
    :undoc-members:
    :show-inheritance:

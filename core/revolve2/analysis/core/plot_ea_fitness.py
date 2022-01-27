@@ -107,7 +107,7 @@ async def plot(databases: List[str]) -> None:
     plt.show()
 
 
-async def main() -> None:
+async def async_main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "databases",
@@ -119,7 +119,11 @@ async def main() -> None:
     await plot(args.databases)
 
 
-if __name__ == "__main__":
+def main() -> None:
     import asyncio
 
-    asyncio.run(main())
+    asyncio.run(async_main())
+
+
+if __name__ == "__main__":
+    main()

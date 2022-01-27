@@ -594,7 +594,7 @@ Depending on your parameters this can take quite a long time.
 
 You can analyze the results using the same scripts as from the previous optimization tutorial::
 
-    python core/revolve2/analysis/core/plot_ea_fitness.py database
+    revolve2.analysis.core.plot_ea_fitness database
 
 .. image:: optimize_locomotion_analysis.png
     :width: 100%

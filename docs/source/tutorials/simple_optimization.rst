@@ -418,7 +418,7 @@ The ``EvolutionaryOptimizer`` comes with an ``Analyzer``.
 This class knows exactly what the database structure used by the optimizer is.
 However, for simplicity this tutorial is going to use the analysis program ``plot_ea_fitness.py``, which can plot fitness over all generations::
 
-    python core/revolve2/analysis/core/plot_ea_fitness.py database
+    revolve2.analysis.core.plot_ea_fitness database
 
 If this tool is slow, this is something that is actively being worked on. Your output should look similar to the image below.
 

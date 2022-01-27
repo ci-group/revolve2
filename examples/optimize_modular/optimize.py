@@ -10,7 +10,7 @@ from optimizer import Optimizer
 
 
 async def main():
-    # number of initial mutations for body and brain cppn neat networks
+    # number of initial mutations for body and brain CPPNWIN networks
     NUM_INITIAL_MUTATIONS = 10
 
     SIMULATION_TIME = 10

@@ -1,5 +1,5 @@
 =======================================================================
-Optimizing a modular robot for locomotion using CPPN+NEAT and Isaac Gym
+Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym
 =======================================================================
 The final results of this tutorial are available at ``<revolve2_source>/examples/optimize_modular>``.
 
@@ -7,7 +7,7 @@ The final results of this tutorial are available at ``<revolve2_source>/examples
 What you will learn
 -------------------
 
-* How to use the ``CPPN+NEAT`` genotype supplementary library.
+* How to use the ``CPPNWIN`` genotype supplementary library.
 * How to combine modular robots with evolutionary optimization.
 * How to manually insert into a database.
 
@@ -17,7 +17,7 @@ Prerequisites
 
 * Tutorial :ref:`tutorials/simple_optimization:A simple optimization process with a database`
 * Tutorial :ref:`tutorials/simulate_robot_isaac:Creating a modular robot and simulating it in the Isaac Gym environment`
-* Have the supplementary library ``genotype CPPN+NEAT`` :ref:`installed <installation/genotypes/cppnneat:Cppn+Neat genotype supplemental library>`.
+* Have the supplementary library ``genotype CPPNWIN`` :ref:`installed <installation/genotypes/cppnwin:CPPNWIN genotype supplemental library>`.
 * Superficial knowledge of the :ref:`CPPNWIN <concepts/cppnwin:CPPNWIN>` genotype, used by ci-group.
 
 ------------
@@ -80,7 +80,7 @@ The genotype
 Start by creating genotype in a new file called ``genotype.py``.
 The genotype will inherit from ``BodybrainGenotype``, a base class provided by the modular_robot module.
 This class stores seperate body and brain genotypes and its ``develop`` function combines these to create a ``ModularRobot``.
-``BodyGenotypeV1`` and ``BrainGenotypeCpgV1`` are body and brain CPPNWIN genotypes respectively, provided by the ``CPPN+NEAT`` supplementary library.
+``BodyGenotypeV1`` and ``BrainGenotypeCpgV1`` are body and brain CPPNWIN genotypes respectively, provided by the ``CPPNWIN`` supplementary library.
 They use the CPPNWIN network to create a modular robot body and weights for a corresponding CPG brain::
 
     from __future__ import annotations
@@ -88,7 +88,7 @@ They use the CPPNWIN network to create a modular robot body and weights for a co
     from revolve2.core.database import StaticData
     from revolve2.core.database.serialization import Serializable
     from revolve2.core.optimization.ea.modular_robot import BodybrainGenotype
-    from revolve2s.cppnneat import BodyGenotypeV1, BrainGenotypeCpgV1
+    from revolve2s.cppnwin import BodyGenotypeV1, BrainGenotypeCpgV1
 
 
     class Genotype(BodybrainGenotype[BodyGenotypeV1, BrainGenotypeCpgV1], Serializable):
@@ -539,7 +539,7 @@ You will also need to add some extra constants.::
     # ...
 
     async def main():
-        # number of initial mutations for body and brain cppn neat networks
+        # number of initial mutations for body and brain CPPNWIN networks
         NUM_INITIAL_MUTATIONS = 10
 
         SIMULATION_TIME = 10

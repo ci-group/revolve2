@@ -5,6 +5,7 @@ from revolve2.core.optimization.ea.analyzer import Analyzer as EaAnalyzer
 from revolve2.core.modular_robot.physical import (
     export_physical_robot,
 )
+import shutil
 
 from genotype import Genotype
 
@@ -26,6 +27,8 @@ async def main() -> None:
     genotype = Genotype.deserialize(best.genotype)
 
     robot = genotype.develop()
+
+    shutil.rmtree("test_export")
     export_physical_robot(robot, "test_export")
 
     # rerunner = ModularRobotRerunner()

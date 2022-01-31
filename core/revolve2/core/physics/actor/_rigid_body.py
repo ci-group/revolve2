@@ -35,21 +35,21 @@ class RigidBody:
             inertia[0][0] += collision.mass * (
                 1.0
                 / 12.0
-                * (collision.bounding_box.y ** 2 + collision.bounding_box.z ** 2)
+                * (collision.bounding_box.y**2 + collision.bounding_box.z**2)
                 + (collision.position.y - com.y) ** 2
                 + (collision.position.z - com.z) ** 2
             )
             inertia[1][1] += collision.mass * (
                 1.0
                 / 12.0
-                * (collision.bounding_box.x ** 2 + collision.bounding_box.z ** 2)
+                * (collision.bounding_box.x**2 + collision.bounding_box.z**2)
                 + (collision.position.x - com.x) ** 2
                 + (collision.position.z - com.z) ** 2
             )
             inertia[2][2] += collision.mass * (
                 1.0
                 / 12.0
-                * (collision.bounding_box.x ** 2 + collision.bounding_box.y ** 2)
+                * (collision.bounding_box.x**2 + collision.bounding_box.y**2)
                 + (collision.position.x - com.x) ** 2
                 + (collision.position.y - com.y) ** 2
             )

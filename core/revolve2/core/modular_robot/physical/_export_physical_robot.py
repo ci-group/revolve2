@@ -14,12 +14,12 @@ def export_physical_robot(robot: ModularRobot, output_path: str) -> None:
     actor, controller = robot.make_actor_and_controller()
     controller.export_standalone(os.path.join(output_path, "brain"))
 
-    with open(os.path.join(output_path, "gpio.json"), "w") as gpio:
+    with open(os.path.join(output_path, "settings.json"), "w") as gpio:
         gpio.write(
             json.dumps(
-                [{"dof": i, "gpio": i} for i in range(len(actor.joints))],
+                {"gpio": [{"dof": i, "gpio": i} for i in range(len(actor.joints))]},
                 indent=4,
-            )
+            ),
         )
 
     shutil.copyfile(

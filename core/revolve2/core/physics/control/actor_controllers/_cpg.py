@@ -3,7 +3,11 @@ from typing import List
 import numpy as np
 import numpy.typing as npt
 
-from .._actor_controller import ActorController
+from revolve2.core.physics.control import ActorController
+import os
+import shutil
+from pathlib import Path
+import json
 
 
 class Cpg(ActorController):
@@ -48,3 +52,27 @@ class Cpg(ActorController):
 
     def get_dof_targets(self) -> List[float]:
         return list(self._state[0 : self._num_output_neurons])
+
+    def export_standalone(self, output_path: str) -> None:
+        if os.path.exists(output_path):
+            raise RuntimeError("Output path already exists.")
+
+        os.mkdir(output_path)
+        shutil.copyfile(__file__, os.path.join(output_path, "_cpg.py"))
+        shutil.copyfile(
+            os.path.join(Path(__file__).parent, "_cpg_export.py"),
+            os.path.join(output_path, "brain.py"),
+        )
+
+        with open(os.path.join(output_path, "settings.json"), "w") as settings:
+            settings.write(
+                json.dumps(
+                    {
+                        "weight_matrix": self._weight_matrix.tolist(),
+                        "num_output_neurons": self._num_output_neurons,
+                        "initial_state": self._state.tolist(),
+                    },
+                    indent=4,
+                    sort_keys=True,
+                )
+            )

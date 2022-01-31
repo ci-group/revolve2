@@ -10,3 +10,10 @@ class ActorController(ABC):
     @abstractmethod
     def get_dof_targets(self) -> List[float]:
         pass
+
+    @abstractmethod
+    def export_standalone(self, output_path: str) -> None:
+        """
+        Export this brain as a standalone package including a requirements.txt file.
+        """
+        pass

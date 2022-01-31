@@ -1,5 +1,4 @@
 import multineat  # very important, because this actually imports the multineat dynamic library
-from revolve2.analysis.isaacgym import ModularRobotRerunner
 from revolve2.core.database.sqlite import Database as DbSqlite
 from revolve2.core.optimization.ea.analyzer import Analyzer as EaAnalyzer
 from revolve2.core.modular_robot.physical import (
@@ -29,7 +28,7 @@ async def main() -> None:
     robot = genotype.develop()
 
     shutil.rmtree("test_export")
-    export_physical_robot(robot, "test_export")
+    export_physical_robot(robot, "test_export", 10.0)
 
     # rerunner = ModularRobotRerunner()
     # await rerunner.rerun(genotype.develop(), 5)

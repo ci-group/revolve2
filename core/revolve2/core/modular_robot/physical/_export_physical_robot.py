@@ -6,7 +6,9 @@ import shutil
 from pathlib import Path
 
 
-def export_physical_robot(robot: ModularRobot, output_path: str) -> None:
+def export_physical_robot(
+    robot: ModularRobot, output_path: str, control_frequency: float
+) -> None:
     if os.path.exists(output_path):
         raise RuntimeError("Output path already exists")
 
@@ -17,7 +19,10 @@ def export_physical_robot(robot: ModularRobot, output_path: str) -> None:
     with open(os.path.join(output_path, "settings.json"), "w") as gpio:
         gpio.write(
             json.dumps(
-                {"gpio": [{"dof": i, "gpio": i} for i in range(len(actor.joints))]},
+                {
+                    "gpio": [{"dof": i, "gpio": i} for i in range(len(actor.joints))],
+                    "control_frequency": control_frequency,
+                },
                 indent=4,
             ),
         )
@@ -26,3 +31,18 @@ def export_physical_robot(robot: ModularRobot, output_path: str) -> None:
         os.path.join(Path(__file__).parent, "_main.py"),
         os.path.join(output_path, "main.py"),
     )
+
+    os.makedirs(os.path.join(output_path, "revolve2/core/physics/control"))
+    shutil.copyfile(
+        os.path.join(
+            Path(__file__).parent.parent.parent,
+            "physics/control/_actor_controller.py",
+        ),
+        os.path.join(output_path, "revolve2/core/physics/control/_actor_controller.py"),
+    )
+    with open(
+        os.path.join(output_path, "revolve2/core/physics/control/__init__.py"), "w"
+    ) as init:
+        init.write(
+            """from ._actor_controller import ActorController\n\n__all__ = ["ActorController"]"""
+        )

@@ -23,6 +23,8 @@ setup(
             "mypy==0.921",
             "sphinx==4.3.2",
             "sphinx-rtd-theme==1.0.0",
+            "pigpio==1.78",
+            "jsonschema==4.4.0",
         ]
     },
     zip_safe=False,

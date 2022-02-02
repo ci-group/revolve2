@@ -20,7 +20,10 @@ def export_physical_robot(
         gpio.write(
             json.dumps(
                 {
-                    "gpio": [{"dof": i, "gpio": i} for i in range(len(actor.joints))],
+                    "gpio": [
+                        {"dof": i, "gpio_pin": i, "invert": False}
+                        for i in range(len(actor.joints))
+                    ],
                     "control_frequency": control_frequency,
                 },
                 indent=4,
@@ -30,6 +33,11 @@ def export_physical_robot(
     shutil.copyfile(
         os.path.join(Path(__file__).parent, "_main.py"),
         os.path.join(output_path, "main.py"),
+    )
+
+    shutil.copyfile(
+        os.path.join(Path(__file__).parent, "_settings_schema.json"),
+        os.path.join(output_path, "settings_schema.json"),
     )
 
     os.makedirs(os.path.join(output_path, "revolve2/core/physics/control"))

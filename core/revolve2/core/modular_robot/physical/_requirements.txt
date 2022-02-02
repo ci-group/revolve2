@@ -1,0 +1,3 @@
+numpy==1.21.2
+pigpio==1.78
+jsonschema==4.4.0

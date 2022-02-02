@@ -27,10 +27,15 @@
         "control_frequency": {
             "type": "number",
             "exclusiveMinimum": 0
+        },
+        "pwm_frequency": {
+            "type": "number",
+            "exclusiveMinimum": 0
         }
     },
     "required": [
         "gpio",
-        "control_frequency"
+        "control_frequency",
+        "pwm_frequency"
     ]
 }

@@ -9,6 +9,7 @@ import pigpio
 from typing import Any, List
 import jsonschema
 from dataclasses import dataclass
+import logging
 
 
 @dataclass
@@ -41,6 +42,8 @@ class Controller:
 
     def _init_gpio(self, settings: Any) -> None:
         self._gpio = pigpio.pi()
+        if not self._gpio.connected:
+            raise RuntimeError("Failed to talk to GPIO daemon.")
 
         gpio_settings = [gpio for gpio in settings["gpio"]]
         gpio_settings.sort(key=lambda gpio: gpio["dof"])
@@ -52,7 +55,6 @@ class Controller:
                 )
             i += 1
 
-        gpio_settings = [gpio["gpio_pin"] for gpio in gpio_settings]
         targets = self._brain.get_dof_targets()
         if len(gpio_settings) != len(targets):
             raise RuntimeError(
@@ -60,11 +62,16 @@ class Controller:
             )
 
         self._pins = [
-            Pin(gpio_setting["gpio_pin"], gpio_settings["invert"])
+            Pin(gpio_setting["gpio_pin"], gpio_setting["invert"])
             for gpio_setting in gpio_settings
         ]
 
-        # TODO init gpios
+        for pin in self._pins:
+            self._gpio.set_PWM_frequency(pin.pin, settings["pwm_frequency"])
+            self._gpio.set_PWM_range(
+                pin.pin, 255
+            )  # 255 is also the default, but just making sure
+            self._gpio.set_PWM_dutycycle(pin.pin, 0)
 
         self._set_targets(targets)
 
@@ -88,7 +95,14 @@ class Controller:
 
 
 async def async_main() -> None:
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
+    )
+
+    logging.info("Initializing..")
     controller = Controller()
+    logging.info("Initialized. Running..")
     await controller.run()
 
 

@@ -46,7 +46,7 @@ class Controller:
             raise RuntimeError("Failed to talk to GPIO daemon.")
 
         gpio_settings = [gpio for gpio in settings["gpio"]]
-        gpio_settings.sort(key=lambda gpio: gpio["dof"])
+        gpio_settings.sort(key=lambda gpio: cast(int, gpio["dof"]))
         i = -1
         for gpio in gpio_settings:
             if gpio["dof"] != i + 1:

@@ -4,7 +4,7 @@ from revolve2.core.modular_robot import ModularRobot, Body, Brick, ActiveHinge
 from random import Random
 from revolve2.core.modular_robot.brains import CpgRandom
 from revolve2.core.physics.control import ActorController
-from revolve2.core.physics.env import Environment, PosedActor, ActorControl, Batch
+from revolve2.core.physics.running import Environment, PosedActor, ActorControl, Batch
 from pyrr import Vector3, Quaternion
 
 

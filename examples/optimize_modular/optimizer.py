@@ -11,7 +11,7 @@ from pyrr import Quaternion, Vector3
 from revolve2.core.database import Database, Node
 from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
 from revolve2.core.physics.control import ActorController
-from revolve2.core.physics.env import (
+from revolve2.core.physics.running import (
     ActorControl,
     ActorState,
     Batch,

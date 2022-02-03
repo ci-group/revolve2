@@ -5,9 +5,9 @@ from pathlib import Path
 import os
 import json
 import time
-import pigpio
-from typing import Any, List
-import jsonschema
+import pigpio  # type: ignore # Does not have typing
+from typing import Any, List, cast
+import jsonschema  # type: ignore # Does not have typing
 from dataclasses import dataclass
 import logging
 
@@ -24,7 +24,7 @@ class Controller:
     _control_period: float
     _pins: List[Pin]
 
-    def __init__(self):
+    def __init__(self) -> None:
         with open(
             os.path.join(Path(__file__).parent, "settings.json"), "r"
         ) as settings_file, open(
@@ -46,7 +46,7 @@ class Controller:
             raise RuntimeError("Failed to talk to GPIO daemon.")
 
         gpio_settings = [gpio for gpio in settings["gpio"]]
-        gpio_settings.sort(key=lambda gpio: gpio["dof"])
+        gpio_settings.sort(key=lambda gpio: cast(int, gpio["dof"]))
         i = -1
         for gpio in gpio_settings:
             if gpio["dof"] != i + 1:

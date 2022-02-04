@@ -4,13 +4,13 @@ Rerun(watch) a modular robot in isaac gym.
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.modular_robot import ModularRobot
-from revolve2.core.physics.control import ActorController
+from revolve2.object_controller import ObjectController
 from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
 from revolve2.runners.isaacgym import LocalRunner
 
 
 class ModularRobotRerunner:
-    _controller: ActorController
+    _controller: ObjectController
 
     async def rerun(self, robot: ModularRobot, control_frequency: float) -> None:
         batch = Batch(

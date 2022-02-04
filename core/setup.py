@@ -9,6 +9,7 @@ setup(
     packages=find_namespace_packages(),
     package_data={"revolve2": ["py.typed"]},
     install_requires=[
+        "revolve2-object-controller",
         "networkx>=2.6.3",
         "numpy>=1.21.2",
         "rootpath>=0.1.1",

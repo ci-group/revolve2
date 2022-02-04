@@ -7,7 +7,10 @@ setup(
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
-    package_data={"revolve2/object_controller": ["py.typed"]},
+    package_data={
+        "revolve2.object_controller": ["py.typed"],
+        "revolve2.object_controllers": ["py.typed"],
+    },
     install_requires=["numpy==1.22.0"],
     extras_require={"dev": []},
     zip_safe=False,

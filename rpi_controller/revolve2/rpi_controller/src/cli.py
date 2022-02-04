@@ -1,13 +1,7 @@
-from types import ModuleType
-
 from .interface import Interface
 import asyncio
 import sys
-import importlib
 from revolve2.object_controller import ObjectController
-import traceback
-import json
-import argparse
 from .controller import Controller
 
 

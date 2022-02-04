@@ -8,7 +8,11 @@ setup(
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
     package_data={"revolve2/rpi_controller": ["py.typed"]},
-    install_requires=["revolve2-object-controller", "aioconsole==0.4.1"],
+    install_requires=[
+        "revolve2-object-controller",
+        "aioconsole==0.4.1",
+        "pigpio==1.78",
+    ],
     extras_require={"dev": []},
     zip_safe=False,
     entry_points={

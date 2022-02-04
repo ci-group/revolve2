@@ -6,7 +6,7 @@ from pyrr import Quaternion, Vector3
 from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.physics.control import ActorController
 from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
-from revolve2.envs.isaacgym import LocalRunner
+from revolve2.runners.isaacgym import LocalRunner
 
 
 class ModularRobotRerunner:

@@ -3,6 +3,7 @@ from typing import List
 
 import numpy as np
 import numpy.typing as npt
+from typing import Any
 
 from revolve2.object_controller import ObjectController
 
@@ -52,7 +53,7 @@ class Cpg(ObjectController):
         self._state = initial_state
 
     @classmethod
-    def from_config(cls, config: str) -> Cpg:
+    def from_config(cls, config: Any) -> Cpg:
         jsonschema.validate(config, cls._CONFIG_SCHEMA)
         return Cpg(
             np.array(config["initial_state"]),

@@ -48,7 +48,7 @@ class Server(Interface):
         self._socket.bind(("127.0.0.1", port))
         self._socket.setblocking(False)
 
-    async def handle_client(self, reader: StreamReader, writer: StreamWriter):
+    async def handle_client(self, reader: StreamReader, writer: StreamWriter) -> None:
         logging.info("Client connected.")
         if self._client_is_connected:
             logging.info(
@@ -89,7 +89,7 @@ class Server(Interface):
 
     async def _read_message(self, reader: StreamReader) -> Any:
         try:
-            message_str = (await reader.readuntil("\n".encode())).decode("utf-8")
+            message_str = (await reader.readuntil("\n".encode("utf-8"))).decode("utf-8")
         except IncompleteReadError:
             raise _DisconnectError()
 
@@ -107,4 +107,4 @@ class Server(Interface):
             raise _ProtocolError("Could not load controller.") from err
         except Controller.SystemError as err:
             raise RuntimeError("Error in controller system.") from err
-        await writer.write(json.dumps({"type": "load_controller_complete"}))
+        writer.write(json.dumps({"type": "load_controller_complete"}).encode("utf-8"))

@@ -11,8 +11,9 @@ setup(
     install_requires=[
         "revolve2-object-controller",
         "pigpio==1.78",
+        "jsonschema==4.4.0",
     ],
-    extras_require={"dev": []},
+    extras_require={"dev": ["types-jsonschema==4.4.1"]},
     zip_safe=False,
     entry_points={
         "console_scripts": [

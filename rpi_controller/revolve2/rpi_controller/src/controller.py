@@ -79,6 +79,8 @@ class Controller:
     async def run(self) -> None:
         await self._start_event.wait()
 
+        last_update_time = time.time()
+
         while True:
             await asyncio.sleep(self._control_period)
             current_time = time.time()
@@ -100,8 +102,7 @@ class Controller:
             controller_type = getattr(controller_module, config["controller_type"])
 
             if not issubclass(controller_type, ObjectController):
-                print("Controller is not an ObjectController")
-                return False
+                raise self.UserError("Controller is not an ObjectController")
 
             self._controller = controller_type.from_config(config["controller_config"])
 
@@ -132,6 +133,8 @@ class Controller:
         raise NotImplementedError("Stopping controller not yet implemented.")
 
     def _init_gpio(self, config: Any) -> None:
+        assert self._controller is not None
+
         gpio_settings = [gpio for gpio in config["gpio"]]
         gpio_settings.sort(key=lambda gpio: cast(int, gpio["dof"]))
         i = -1
@@ -166,6 +169,8 @@ class Controller:
         self._set_targets(targets)
 
     def _step(self, dt: float) -> None:
+        assert self._controller is not None
+
         self._controller.step(dt)
         targets = self._controller.get_dof_targets()
         self._set_targets(targets)

@@ -1,12 +1,13 @@
+from types import ModuleType
+from xmlrpc.client import ProtocolError
 from revolve2.object_controller import ObjectController
 from typing import Optional, List, cast, Any
 import asyncio
-import traceback
-import json
 import importlib
 import time
 import pigpio
 from dataclasses import dataclass
+import jsonschema
 
 
 @dataclass
@@ -16,19 +17,64 @@ class _Pin:
 
 
 class Controller:
+    class UserError(RuntimeError):
+        pass
+
+    class SystemError(RuntimeError):
+        pass
+
+    _pwm_frequency: int
+
     _controller: Optional[ObjectController]
     _start_event: asyncio.Event
     _gpio: pigpio.pi
+    _is_running: bool
+
     _control_period: float
     _pins: List[_Pin]
 
-    def __init__(self) -> None:
+    _CONFIG_SCHEMA = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+            "controller_module": {"type": "string"},
+            "controller_type": {"type": "string"},
+            "control_frequency": {"type": "integer", "exclusiveMinimum": 0},
+            "gpio": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "dof": {"type": "integer"},
+                        "gpio_pin": {"type": "integer"},
+                        "invert": {"type": "boolean"},
+                    },
+                    "required": ["dof", "gpio_pin", "invert"],
+                },
+            },
+            "controller_config": {},
+        },
+        "required": [
+            "controller_module",
+            "controller_type",
+            "control_frequency",
+            "gpio",
+            "controller_config",
+        ],
+    }
+
+    def __init__(self, pwm_frequency: int) -> None:
+        self._pwm_frequency = pwm_frequency
+
         self._controller = None
         self._start_event = asyncio.Event()
 
         self._gpio = pigpio.pi()
+        # TODO uncomment when running on real hardware
         # if not self._gpio.connected:
-        #    raise RuntimeError("Failed to talk to GPIO daemon.")
+        #    raise self.SystemError("Failed to talk to GPIO daemon.")
+
+        self._is_running = False
 
     async def run(self) -> None:
         await self._start_event.wait()
@@ -40,41 +86,49 @@ class Controller:
             last_update_time = current_time
             self._step(elapsed_time)
 
-    async def start_controller(self, config_file: str) -> bool:
+    async def load_controller(self, config: Any) -> None:
+        if self._is_running:
+            raise self.UserError("Cannot load controller. Controller is running.")
+
+        self._controller = None
+
+        try:
+            jsonschema.validate(config, self._CONFIG_SCHEMA)
+
+            controller_module = importlib.import_module(config["controller_module"])
+            # TODO python is shit and cannot properly reload modules so if this is the same module as one loaded before its code is not updated.
+            controller_type = getattr(controller_module, config["controller_type"])
+
+            if not issubclass(controller_type, ObjectController):
+                print("Controller is not an ObjectController")
+                return False
+
+            self._controller = controller_type.from_config(config["controller_config"])
+
+            self._control_period = 1.0 / config["control_frequency"]
+            self._init_gpio(config)
+        except jsonschema.ValidationError as err:
+            raise self.UserError("Invalid config.") from err
+        except self.SystemError as err:
+            raise err
+        except Exception as err:
+            raise self.UserError("Cannot load controller.") from err
+
+    async def start_controller(self) -> None:
         """
         False if controller cannot be loaded.
         """
 
-        if self._controller is not None:
-            await self.stop_controller()
+        if self._is_running:
+            raise self.UserError("Cannot start controller. Already running.")
 
-        try:
-            with open(config_file) as file:
-                config_str = file.read()
-                config = json.loads(config_str)
-
-                controller_module = importlib.import_module(config["controller_module"])
-                controller_type = getattr(controller_module, config["controller_type"])
-
-                if not issubclass(controller_type, ObjectController):
-                    print("Controller is not an ObjectController")
-                    return False
-
-                self._controller = controller_type.from_config(
-                    config["controller_config"]
-                )
-
-                self._control_period = 1.0 / config["control_frequency"]
-                self._init_gpio(config)
-        except Exception as err:
-            print("Cannot load controller:")
-            traceback.print_exc()
-            return False
+        if self._controller is None:
+            raise self.UserError("Cannot start contrfoller. No controller loaded.")
 
         self._start_event.set()
-        return True
+        self._is_running = True
 
-    async def stop_controller(self) -> bool:
+    async def stop_controller(self) -> None:
         raise NotImplementedError("Stopping controller not yet implemented.")
 
     def _init_gpio(self, config: Any) -> None:
@@ -83,14 +137,14 @@ class Controller:
         i = -1
         for gpio in gpio_settings:
             if gpio["dof"] != i + 1:
-                raise RuntimeError(
+                raise self.UserError(
                     "GPIO pin settings are not a incremental list of degrees of freedom indices."
                 )
             i += 1
 
         targets = self._controller.get_dof_targets()
         if len(gpio_settings) != len(targets):
-            raise RuntimeError(
+            raise self.UserError(
                 "Number of degrees of freedom in brain does not match settings."
             )
 
@@ -99,12 +153,15 @@ class Controller:
             for gpio_setting in gpio_settings
         ]
 
-        for pin in self._pins:
-            self._gpio.set_PWM_frequency(pin.pin, config["pwm_frequency"])
-            self._gpio.set_PWM_range(
-                pin.pin, 255
-            )  # 255 is also the default, but just making sure
-            self._gpio.set_PWM_dutycycle(pin.pin, 0)
+        try:
+            for pin in self._pins:
+                self._gpio.set_PWM_frequency(pin.pin, self._pwm_frequency)
+                self._gpio.set_PWM_range(
+                    pin.pin, 255
+                )  # 255 is also the default, but just making sure
+                self._gpio.set_PWM_dutycycle(pin.pin, 0)
+        except AttributeError as err:
+            raise self.SystemError("Could not initialize gpios.") from err
 
         self._set_targets(targets)
 

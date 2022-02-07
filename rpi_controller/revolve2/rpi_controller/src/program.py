@@ -7,6 +7,7 @@ import asyncio
 import argparse
 
 PORT: int = 14875
+PWM_FREQUENCY = 50
 
 
 class Program:
@@ -25,7 +26,7 @@ class Program:
 
             args = parser.parse_args()
 
-            self._controller = Controller()
+            self._controller = Controller(PWM_FREQUENCY)
 
             if args.interface == "cli":
                 self._interface = Cli(self._controller)

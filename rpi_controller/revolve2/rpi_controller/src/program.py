@@ -49,11 +49,12 @@ class Program:
                 )
             )
 
-            assert controller_task not in finished
+            # assume interface is done. else program is ill-formed.
 
-            unfinished.add(self._controller.shutdown())
-
-            asyncio.get_event_loop().run_until_complete(asyncio.wait(unfinished))
+            # shut down controller and exit cleanly
+            asyncio.get_event_loop().run_until_complete(
+                asyncio.gather(*unfinished, self._controller.shutdown())
+            )
 
         except KeyboardInterrupt:
             exit(1)

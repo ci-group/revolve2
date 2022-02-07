@@ -27,8 +27,10 @@ class Controller:
 
     _controller: Optional[ObjectController]
     _start_event: asyncio.Event
+    _stopped_event: asyncio.Event
     _gpio: pigpio.pi
-    _is_running: bool
+    _stop: bool
+    _shutdown: bool
 
     _control_period: float
     _pins: List[_Pin]
@@ -68,28 +70,39 @@ class Controller:
 
         self._controller = None
         self._start_event = asyncio.Event()
+        self._stopped_event = asyncio.Event()
 
         self._gpio = pigpio.pi()
         # TODO uncomment when running on real hardware
         # if not self._gpio.connected:
         #    raise self.SystemError("Failed to talk to GPIO daemon.")
 
-        self._is_running = False
+        self._stop = True
+        self._shutdown = False
 
     async def run(self) -> None:
-        await self._start_event.wait()
-
-        last_update_time = time.time()
-
         while True:
-            await asyncio.sleep(self._control_period)
-            current_time = time.time()
-            elapsed_time = current_time - last_update_time
-            last_update_time = current_time
-            self._step(elapsed_time)
+            await self._start_event.wait()
+
+            if self._shutdown:
+                return
+
+            last_update_time = time.time()
+
+            while True:
+                if self._stop:
+                    self._start_event.clear()
+                    self._controller = None
+                    self._stopped_event.set()
+                    break
+                await asyncio.sleep(self._control_period)
+                current_time = time.time()
+                elapsed_time = current_time - last_update_time
+                last_update_time = current_time
+                self._step(elapsed_time)
 
     async def load_controller(self, config: Any) -> None:
-        if self._is_running:
+        if not self._stop:
             raise self.UserError("Cannot load controller. Controller is running.")
 
         self._controller = None
@@ -120,17 +133,25 @@ class Controller:
         False if controller cannot be loaded.
         """
 
-        if self._is_running:
+        if not self._stop:
             raise self.UserError("Cannot start controller. Already running.")
 
         if self._controller is None:
-            raise self.UserError("Cannot start contrfoller. No controller loaded.")
+            raise self.UserError("Cannot start controller. No controller loaded.")
 
+        self._stop = False
+        self._stopped_event.clear()
         self._start_event.set()
-        self._is_running = True
 
     async def stop_controller(self) -> None:
-        raise NotImplementedError("Stopping controller not yet implemented.")
+        self._stop = True
+        self._start_event.set()
+        await self._stopped_event.wait()
+
+    async def shutdown(self) -> None:
+        await self.stop_controller()
+        self._shutdown = True
+        self._start_event.set()
 
     def _init_gpio(self, config: Any) -> None:
         assert self._controller is not None

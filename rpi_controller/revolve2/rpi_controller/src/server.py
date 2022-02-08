@@ -77,6 +77,8 @@ class Server(Interface):
         except _DisconnectError:
             logging.info("Client disconnected.")
             pass
+        except RuntimeError as err:
+            logging.info(f"Unexpected error: {traceback.format_exc()}")
 
         writer.close()
         self._client_is_connected = False

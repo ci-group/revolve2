@@ -76,7 +76,7 @@ jobs:
       - name: install requirements for mypy
         run: pip install -r ./mypy/requirements.txt
       - name: run mypy
-        run: scripts/run_mypy_all_opensource.sh
+        run: ./mypy/mypy_opensource.sh
 
   docs:
     runs-on: ubuntu-20.04

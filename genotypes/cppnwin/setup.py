@@ -16,5 +16,6 @@ setup(
         f"revolve2-core @ file://{os.path.join(revolve2_path, 'core')}",
         "multineat",
     ],
+    extras_require={"dev": []},
     zip_safe=False,
 )

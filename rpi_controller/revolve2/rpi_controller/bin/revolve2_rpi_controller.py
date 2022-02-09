@@ -106,8 +106,6 @@ class Program:
             asyncio.gather(self._run_interface(), self._run_controller())
         )
 
-        print(self._log_file)
-
         if self._log_file is not None:
             with open(self._log_file, "w") as log_file:
                 json.dump([entry.__dict__ for entry in self._log], log_file)

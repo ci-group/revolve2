@@ -10,4 +10,4 @@ Subpackages
    :maxdepth: 1
 
    core <revolve2.analysis.core>
-   core <revolve2.analysis.isaacgym>
+   isaacgym <revolve2.analysis.isaacgym>

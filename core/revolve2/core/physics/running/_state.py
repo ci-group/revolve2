@@ -4,8 +4,7 @@ from dataclasses import dataclass
 from typing import List
 
 from pyrr import Quaternion, Vector3
-from revolve2.core.database import StaticData
-from revolve2.core.database.serialization import Serializable
+from revolve2.serialization import Serializable, StaticData
 
 
 @dataclass

@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import Any
 
 from ._object import Object, is_object
-from ._static_data import StaticData, is_static_data
+from revolve2.serialization import StaticData, is_static_data
 from ._node import Node
 from ._list import List as DbList
 

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Union
 
 from typing_extensions import TypeGuard
 
-from ._static_data import StaticData, is_static_data
+from revolve2.serialization import StaticData, is_static_data
 
 if TYPE_CHECKING:
     from ._list import List as DbList

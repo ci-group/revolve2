@@ -10,7 +10,6 @@ import asyncio
 import time
 import sys
 from revolve2.serialization import StaticData
-from typing import TypedDict
 
 
 class Program:

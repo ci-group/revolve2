@@ -9,7 +9,6 @@ setup(
     packages=find_namespace_packages(),
     package_data={
         "revolve2.object_controller": ["py.typed"],
-        "revolve2.object_controllers": ["py.typed"],
     },
     install_requires=["revolve2-serialization", "numpy==1.22.0"],
     extras_require={"dev": []},

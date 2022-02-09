@@ -1,5 +1,5 @@
 revolve2.genotypes.cppnwin package
-===================================
+==================================
 
 Module contents
 ---------------

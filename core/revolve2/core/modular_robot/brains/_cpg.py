@@ -7,7 +7,7 @@ import numpy.typing as npt
 from revolve2.core.modular_robot import Analyzer, AnalyzerModule, Brain, Module
 from revolve2.core.physics.actor import Actor
 from revolve2.object_controller import ObjectController
-from revolve2.object_controllers.cpg import Cpg as ControllerCpg
+from revolve2.object_controller.controllers.cpg import Cpg as ControllerCpg
 
 
 class Cpg(Brain, ABC):

@@ -8,8 +8,7 @@ Subpackages
    :maxdepth: 1
 
    actor <revolve2.core.physics.actor>
-   control <revolve2.core.physics.control>
-   env <revolve2.core.physics.env>
+   running <revolve2.core.physics.running>
 
 Module contents
 ---------------

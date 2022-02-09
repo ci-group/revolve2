@@ -1,10 +1,10 @@
-revolve2.core.physics.env package
+revolve2.runners.isaacgym package
 =================================
 
 Module contents
 ---------------
 
-.. automodule:: revolve2.core.physics.env
+.. automodule:: revolve2.runners.isaacgym
    :members:
    :undoc-members:
    :show-inheritance:

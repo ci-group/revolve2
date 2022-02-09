@@ -1,10 +1,10 @@
-revolve2.envs.isaacgym package
+revolve2.serialization package
 ==============================
 
 Module contents
 ---------------
 
-.. automodule:: revolve2.envs.isaacgym
+.. automodule:: revolve2.serialization
    :members:
    :undoc-members:
    :show-inheritance:

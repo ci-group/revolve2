@@ -59,6 +59,8 @@ jobs:
         run: pip install ./serialization[dev]
       - name: install object_controller
         run: pip install ./object_controller[dev]
+      - name: install rpi_controller
+        run: pip install ./rpi_controller[dev]
       - name: install core
         run: pip install ./core[dev]
       - name: run mypy
@@ -80,6 +82,8 @@ jobs:
         run: pip install ./serialization[dev]
       - name: install object_controller
         run: pip install ./object_controller[dev]
+      - name: install rpi_controller
+        run: pip install ./rpi_controller[dev]
       - name: install core
         run: pip install ./core[dev]
       - name: sphinx

@@ -5,16 +5,14 @@ import os.path
 revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
-    name="revolve2-object-controller",
+    name="revolve2-namespace",
     version="0.0.0",
-    description="Inidividual object controller for revolve2",
+    description="Namespace for revolve2. Does nothing but install 'py.typed'.",
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
-    install_requires=[
-        f"revolve2-serialization @ file://{os.path.join(revolve2_path, 'serialization')}",
-        "numpy==1.22.0",
-    ],
+    package_data={"revolve2": ["py.typed"]},
+    install_requires=[],
     extras_require={"dev": []},
     zip_safe=False,
 )

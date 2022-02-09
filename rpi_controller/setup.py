@@ -11,7 +11,6 @@ setup(
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
-    package_data={"revolve2/rpi_controller": ["py.typed"]},
     install_requires=[
         f"revolve2-object-controller @ file://{os.path.join(revolve2_path, 'object_controller')}",
         "pigpio==1.78",

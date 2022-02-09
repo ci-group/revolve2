@@ -88,7 +88,6 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
-        run: pip install -r ./docs/requirements.txt
       - name: install requirements not provided by pip
         run: |
           sudo apt install libboost-all-dev
@@ -108,6 +107,7 @@ jobs:
       - name: install genotype CPPNWIN
         run: pip install ./genotypes/cppnwin[dev]
       - name: install requirements for sphinx
+        run: pip install -r ./docs/requirements.txt
       - name: sphinx
         run: make -C docs html
       - name: deploy

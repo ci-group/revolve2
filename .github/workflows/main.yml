@@ -29,8 +29,8 @@ jobs:
         run: pip install ./rpi_controller
       - name: install core
         run: pip install ./core
-      - name: install env isaacgym
-        #run: pip install ./envs/isaacgym
+      - name: install runner isaacgym
+        #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
         run: pip install ./genotypes/cppnwin
@@ -68,8 +68,8 @@ jobs:
         run: pip install ./rpi_controller[dev]
       - name: install core
         run: pip install ./core[dev]
-      - name: install env isaacgym
-        #run: pip install ./envs/isaacgym[dev]
+      - name: install runner isaacgym
+        #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
         run: pip install ./genotypes/cppnwin[dev]
@@ -101,8 +101,8 @@ jobs:
         run: pip install ./rpi_controller[dev]
       - name: install core
         run: pip install ./core[dev]
-      - name: install env isaacgym
-        #run: pip install ./envs/isaacgym[dev]
+      - name: install runner isaacgym
+        #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
         run: pip install ./genotypes/cppnwin[dev]

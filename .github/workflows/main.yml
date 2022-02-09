@@ -67,7 +67,7 @@ jobs:
         #run: pip install ./envs/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
-        run: pip install ./genotypes/cppnwin[dev]
+        run: pip install ./genotypes/cppnwin # [dev]
       - name: run mypy
         run: scripts/run_mypy_all_opensource.sh
 
@@ -83,6 +83,8 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
+      - name: install requirements
+        run: pip install -r ./docs/requirements.txt
       - name: sphinx
         run: make -C docs html
       - name: deploy

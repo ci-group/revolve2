@@ -1,7 +1,7 @@
 import argparse
 import jsonschema
 import json
-from typing import Any, cast, List
+from typing import Any, cast, List, Optional
 import importlib
 from revolve2.object_controller import ObjectController
 import pigpio
@@ -9,6 +9,8 @@ from dataclasses import dataclass
 import asyncio
 import time
 import sys
+from revolve2.serialization import StaticData
+from typing import TypedDict
 
 
 class Program:
@@ -31,14 +33,14 @@ class Program:
                     "required": ["dof", "gpio_pin", "invert"],
                 },
             },
-            "controller_config": {},
+            "serialized_controller": {},
         },
         "required": [
             "controller_module",
             "controller_type",
             "control_frequency",
             "gpio",
-            "controller_config",
+            "serialized_controller",
         ],
     }
 
@@ -51,6 +53,7 @@ class Program:
 
     _debug: bool
     _dry: bool  # if true, gpio output is skipped.
+    _log_file: Optional[str]
 
     _controller: ObjectController
     _control_period: float
@@ -59,6 +62,12 @@ class Program:
     _gpio: pigpio.pi
 
     _stop: bool
+
+    class _LogEntry(TypedDict):
+        timestamp: int
+        serialized_controller: StaticData
+
+    _log: List[_LogEntry]
 
     def __init__(self) -> None:
         self._stop = False
@@ -74,10 +83,14 @@ class Program:
             help="If set, gpio output is skipped.",
             action="store_true",
         )
+        parser.add_argument(
+            "--log", help="If set, outputs controller log to this file.", type=str
+        )
         args = parser.parse_args()
 
         self._debug = args.debug
         self._dry = args.dry
+        self._log_file = args.log
 
         with open(args.config_file) as file:
             config = json.load(file)
@@ -97,6 +110,14 @@ class Program:
 
     async def _run_controller(self) -> None:
         last_update_time = time.time()
+
+        if self._log_file:
+            self._log.append(
+                self._LogEntry(
+                    int(last_update_time * 1000), self._controller.serialize()
+                )
+            )
+
         while not self._stop:
             await asyncio.sleep(self._control_period)
             current_time = time.time()
@@ -114,7 +135,7 @@ class Program:
         if not issubclass(controller_type, ObjectController):
             raise ValueError("Controller is not an ObjectController")
 
-        self._controller = controller_type.from_config(config["controller_config"])
+        self._controller = controller_type.deserialize(config["serialized_controller"])
 
         self._control_period = 1.0 / config["control_frequency"]
         self._init_gpio(config)

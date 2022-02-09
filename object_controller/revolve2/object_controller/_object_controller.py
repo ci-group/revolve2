@@ -1,14 +1,10 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import List
+from revolve2.serialization import Serializable
 
 
-class ObjectController(ABC):
-    @classmethod
-    @abstractmethod
-    def from_config(cls, config: str) -> ObjectController:
-        pass
-
+class ObjectController(Serializable, ABC):
     @abstractmethod
     def step(self, dt: float) -> None:
         pass

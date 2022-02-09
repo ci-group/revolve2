@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Any, Type, TypeVar, Union
 
-from .._static_data import (
+from ._static_data import (
     StaticData,
     is_static_data,
 )
@@ -26,9 +26,10 @@ def deserialize(data: StaticData, as_type: Type[T]) -> T:
         return as_type.deserialize(data)
     elif (
         (as_type is None and data is None)
-        or (as_type == str and type(data) == str)
-        or (as_type == float and type(data) == float)
+        or (as_type == bool and type(data) == bool)
         or (as_type == int and type(data) == int)
+        or (as_type == float and type(data) == float)
+        or (as_type == str and type(data) == str)
         or (as_type == bytes and type(data) == bytes)
     ):
         return data

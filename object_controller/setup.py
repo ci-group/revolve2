@@ -11,7 +11,7 @@ setup(
         "revolve2.object_controller": ["py.typed"],
         "revolve2.object_controllers": ["py.typed"],
     },
-    install_requires=["numpy==1.22.0", "jsonschema==4.4.0"],
+    install_requires=["revolve2-serialization", "numpy==1.22.0", "jsonschema==4.4.0"],
     extras_require={"dev": ["types-jsonschema==4.4.1"]},
     zip_safe=False,
 )

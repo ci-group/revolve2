@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Union
 from typing_extensions import TypeGuard
 
 StaticData = Union[  # type: ignore # TODO this is not yet supported by mypy
-    List["StaticData"], Dict[str, "StaticData"], bool, int, float, str, bytes, None  # type: ignore
+    List["StaticData"], Dict[str, "StaticData"], None, bool, int, float, str, bytes  # type: ignore
 ]
 
 

@@ -1,4 +1,8 @@
 from setuptools import find_namespace_packages, setup
+import pathlib
+import os.path
+
+revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-core",
@@ -9,7 +13,7 @@ setup(
     packages=find_namespace_packages(),
     package_data={"revolve2": ["py.typed"]},
     install_requires=[
-        "revolve2-object-controller",
+        f"revolve2-object-controller @ file://{os.path.join(revolve2_path, 'object_controller')}",
         "networkx>=2.6.3",
         "numpy>=1.21.2",
         "rootpath>=0.1.1",

@@ -1,4 +1,8 @@
 from setuptools import find_namespace_packages, setup
+import pathlib
+import os.path
+
+revolve2_path = pathlib.Path(__file__).parent.parent.parent.resolve()
 
 setup(
     name="revolve2-runners-isaacgym",
@@ -8,6 +12,9 @@ setup(
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
     package_data={"revolve2.runners.isaacgym": ["py.typed"]},
-    install_requires=["revolve2-core", "isaacgym==1.0rc2"],
+    install_requires=[
+        f"revolve2-core @ file://{os.path.join(revolve2_path, 'core')}",
+        "isaacgym==1.0rc2",
+    ],
     zip_safe=False,
 )

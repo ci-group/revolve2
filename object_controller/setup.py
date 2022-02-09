@@ -1,4 +1,8 @@
 from setuptools import find_namespace_packages, setup
+import pathlib
+import os.path
+
+revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-object-controller",
@@ -10,7 +14,10 @@ setup(
     package_data={
         "revolve2.object_controller": ["py.typed"],
     },
-    install_requires=["revolve2-serialization", "numpy==1.22.0"],
+    install_requires=[
+        f"revolve2-serialization @ file://{os.path.join(revolve2_path, 'serialization')}",
+        "numpy==1.22.0",
+    ],
     extras_require={"dev": []},
     zip_safe=False,
 )

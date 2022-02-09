@@ -1,4 +1,8 @@
 from setuptools import find_namespace_packages, setup
+import pathlib
+import os.path
+
+revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-rpi-controller",
@@ -9,7 +13,7 @@ setup(
     packages=find_namespace_packages(),
     package_data={"revolve2/rpi_controller": ["py.typed"]},
     install_requires=[
-        "revolve2-object-controller",
+        f"revolve2-object-controller @ file://{os.path.join(revolve2_path, 'object_controller')}",
         "pigpio==1.78",
         "jsonschema==4.4.0",
     ],

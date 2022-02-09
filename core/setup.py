@@ -23,7 +23,6 @@ setup(
     extras_require={
         "dev": [
             "sqlalchemy-stubs>=0.4",
-            "jsonschema==4.4.0",
         ]
     },
     zip_safe=False,

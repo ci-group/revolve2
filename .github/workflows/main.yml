@@ -55,11 +55,6 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
-      - name: install requirements not provided by pip
-        run: |
-          sudo apt install libboost-all-dev
-          pip install numpy
-          pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
       - name: install serialization
         run: pip install ./serialization[dev]
       - name: install object_controller
@@ -68,11 +63,6 @@ jobs:
         run: pip install ./rpi_controller[dev]
       - name: install core
         run: pip install ./core[dev]
-      - name: install env isaacgym
-        #run: pip install ./envs/isaacgym[dev]
-        run: echo "IsaacGym is not open source so sadly we cannot test this."
-      - name: install genotype CPPNWIN
-        run: pip install ./genotypes/cppnwin[dev]
       - name: run mypy
         run: scripts/run_mypy_all_opensource.sh
 

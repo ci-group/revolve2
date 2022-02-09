@@ -49,6 +49,9 @@ class Program:
         pin: int
         invert: bool
 
+    _debug: bool
+    _dry: bool  # if true, gpio output is skipped.
+
     _controller: ObjectController
     _control_period: float
     _pins: List[_Pin]
@@ -63,7 +66,18 @@ class Program:
     def main(self) -> None:
         parser = argparse.ArgumentParser()
         parser.add_argument("config_file", type=str)
+        parser.add_argument(
+            "--debug", help="Print debug information.", action="store_true"
+        )
+        parser.add_argument(
+            "--dry",
+            help="If set, gpio output is skipped.",
+            action="store_true",
+        )
         args = parser.parse_args()
+
+        self._debug = args.debug
+        self._dry = args.dry
 
         with open(args.config_file) as file:
             config = json.load(file)
@@ -71,14 +85,13 @@ class Program:
 
         self._load_controller(config)
 
-        input("Press enter to start controller..")
+        input("Press enter to start controller. Press enter again to stop.")
 
         asyncio.get_event_loop().run_until_complete(
             asyncio.gather(self._run_interface(), self._run_controller())
         )
 
     async def _run_interface(self) -> None:
-        print("Press enter to stop controller..")
         await asyncio.get_event_loop().run_in_executor(None, sys.stdin.readline)
         self._stop = True
 
@@ -107,9 +120,10 @@ class Program:
         self._init_gpio(config)
 
     def _init_gpio(self, config: Any) -> None:
-        gpio = pigpio.pi()
-        if not self._gpio.connected:
-            raise RuntimeError("Failed to reach pigpio daemon.")
+        if not self._dry:
+            self._gpio = pigpio.pi()
+            if not self._gpio.connected:
+                raise RuntimeError("Failed to reach pigpio daemon.")
 
         gpio_settings = [gpio for gpio in config["gpio"]]
         gpio_settings.sort(key=lambda gpio: cast(int, gpio["dof"]))
@@ -132,21 +146,33 @@ class Program:
             for gpio_setting in gpio_settings
         ]
 
-        try:
-            for pin in self._pins:
-                gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
-                gpio.set_PWM_range(
-                    pin.pin, 255
-                )  # 255 is also the default, but just making sure
-                gpio.set_PWM_dutycycle(pin.pin, 0)
-        except AttributeError as err:
-            raise RuntimeError("Could not initialize gpios.") from err
+        if self._debug:
+            print(f"Using PWM frequency {self._PWM_FREQUENCY}Hz")
+
+        if not self._dry:
+            try:
+                for pin in self._pins:
+                    gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
+                    gpio.set_PWM_range(
+                        pin.pin, 255
+                    )  # 255 is also the default, but just making sure
+                    gpio.set_PWM_dutycycle(pin.pin, 0)
+            except AttributeError as err:
+                raise RuntimeError("Could not initialize gpios.") from err
 
         self._set_targets(targets)
 
     def _set_targets(self, targets: List[float]) -> None:
+        if self._debug:
+            print("Setting pins to:")
+            print("pin | target")
+            print("---------------")
+            for pin, target in zip(self._pins, targets):
+                print(f"{pin.pin:03d} | {target}")
+
         for pin, target in zip(self._pins, targets):
-            self._gpio.set_PWM_dutycycle(pin.pin, (target + 1.0) / 2.0 * 255)
+            if not self._dry:
+                self._gpio.set_PWM_dutycycle(pin.pin, (target + 1.0) / 2.0 * 255)
 
 
 def main() -> None:

@@ -73,6 +73,8 @@ jobs:
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
         run: pip install ./genotypes/cppnwin[dev]
+      - name: install requirements for mypy
+        run: pip install -r ./mypy/requirements.txt
       - name: run mypy
         run: scripts/run_mypy_all_opensource.sh
 

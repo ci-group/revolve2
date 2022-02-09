@@ -14,7 +14,6 @@ setup(
     package_data={"revolve2": ["py.typed"]},
     install_requires=[
         f"revolve2-object-controller @ file://{os.path.join(revolve2_path, 'object_controller')}",
-        "networkx>=2.6.3",
         "numpy>=1.21.2",
         "rootpath>=0.1.1",
         "matplotlib>=3.4.3",
@@ -25,8 +24,6 @@ setup(
     extras_require={
         "dev": [
             "sqlalchemy-stubs>=0.4",
-            "mypy==0.921",
-            "pigpio==1.78",
             "jsonschema==4.4.0",
         ]
     },

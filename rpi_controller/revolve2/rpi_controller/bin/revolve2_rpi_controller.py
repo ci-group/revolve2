@@ -63,7 +63,8 @@ class Program:
 
     _stop: bool
 
-    class _LogEntry(TypedDict):
+    @dataclass
+    class _LogEntry:
         timestamp: int
         serialized_controller: StaticData
 
@@ -91,6 +92,7 @@ class Program:
         self._debug = args.debug
         self._dry = args.dry
         self._log_file = args.log
+        self._log = []
 
         with open(args.config_file) as file:
             config = json.load(file)
@@ -104,6 +106,12 @@ class Program:
             asyncio.gather(self._run_interface(), self._run_controller())
         )
 
+        print(self._log_file)
+
+        if self._log_file is not None:
+            with open(self._log_file, "w") as log_file:
+                json.dump([entry.__dict__ for entry in self._log], log_file)
+
     async def _run_interface(self) -> None:
         await asyncio.get_event_loop().run_in_executor(None, sys.stdin.readline)
         self._stop = True
@@ -111,12 +119,7 @@ class Program:
     async def _run_controller(self) -> None:
         last_update_time = time.time()
 
-        if self._log_file:
-            self._log.append(
-                self._LogEntry(
-                    int(last_update_time * 1000), self._controller.serialize()
-                )
-            )
+        self._record_log(last_update_time)
 
         while not self._stop:
             await asyncio.sleep(self._control_period)
@@ -127,6 +130,14 @@ class Program:
             self._controller.step(elapsed_time)
             targets = self._controller.get_dof_targets()
             self._set_targets(targets)
+
+            self._record_log(last_update_time)
+
+    def _record_log(self, time: float) -> None:
+        if self._log_file is not None:
+            self._log.append(
+                self._LogEntry(int(time * 1000), self._controller.serialize())
+            )
 
     def _load_controller(self, config: Any) -> None:
         controller_module = importlib.import_module(config["controller_module"])

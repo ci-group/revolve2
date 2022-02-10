@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CPPNWIN genotype supplemental library &mdash; revolve2 v0.0.0-alpha1 documentation</title>
+  <title>CPPNWIN genotype supplemental package &mdash; revolve2 v0.0.0-alpha1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
@@ -19,8 +19,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Concepts" href="../../concepts/index.html" />
-    <link rel="prev" title="Isaac Gym environment supplementary library" href="../envs/isaacgym.html" /> 
+    <link rel="next" title="Raspberry Pi controller package" href="../rpi_controller.html" />
+    <link rel="prev" title="Isaac Gym environment supplementary package" href="../runners/isaacgym.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,8 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Installation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../runners/isaacgym.html">Isaac Gym environment</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../concepts/index.html">Concepts</a><ul>
@@ -60,7 +61,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api_reference/revolve2.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../api_reference/revolve2.core.html">core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../api_reference/revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../../api_reference/revolve2.core.database.serialization.html">serialization</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api_reference/revolve2.core.database.sqlite.html">sqlite</a></li>
 </ul>
 </li>
@@ -74,8 +74,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../api_reference/revolve2.core.physics.html">physics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../api_reference/revolve2.core.physics.actor.html">actor</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api_reference/revolve2.core.physics.control.html">control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../api_reference/revolve2.core.physics.env.html">env</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api_reference/revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
 </ul>
@@ -85,12 +84,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api_reference/revolve2.analysis.isaacgym.html">isaacgym</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api_reference/revolve2.genotypes.html">genotypes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../api_reference/revolve2.genotypes.cppnwin.html">cppnwin</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../api_reference/revolve2.envs.html">envs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../api_reference/revolve2.envs.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/revolve2.runners.html">runners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api_reference/revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api_reference/revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
 </ul>
@@ -112,7 +117,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../index.html">Installation</a> &raquo;</li>
-      <li>CPPNWIN genotype supplemental library</li>
+      <li>CPPNWIN genotype supplemental package</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -121,19 +126,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cppnwin-genotype-supplemental-library">
-<h1>CPPNWIN genotype supplemental library<a class="headerlink" href="#cppnwin-genotype-supplemental-library" title="Permalink to this headline"></a></h1>
-<p>This library provides a modular robot genotype using CPPNWIN.</p>
+  <section id="cppnwin-genotype-supplemental-package">
+<h1>CPPNWIN genotype supplemental package<a class="headerlink" href="#cppnwin-genotype-supplemental-package" title="Permalink to this headline"></a></h1>
+<p>This package provides a modular robot genotype using CPPNWIN.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
-<p>This library depends on a patched version of the open source MultiNEAT library.
+<p>This package depends on a patched version of the open source MultiNEAT library.
 It is not available on PyPI but can instead be downloaded at <a class="reference external" href="https://github.com/ci-group/MultiNEAT">https://github.com/ci-group/MultiNEAT</a>.
-Make sure you are in your virtual environment and follow the installation instructions in the repository.</p>
+Make sure you are in your virtual environment and follow the instructions in the repository for the installation of the python package.</p>
 </section>
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline"></a></h2>
-<p>Install the library as a python package:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve_path</span><span class="o">&gt;/</span><span class="n">genotypes</span><span class="o">/</span><span class="n">cppnwin</span>
+<p>Install the package:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">genotypes</span><span class="o">/</span><span class="n">cppnwin</span>
 </pre></div>
 </div>
 </section>

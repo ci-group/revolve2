@@ -41,8 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
@@ -60,7 +61,6 @@
 <li class="toctree-l1 current"><a class="reference internal" href="revolve2.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="revolve2.core.html">core</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.serialization.html">serialization</a></li>
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.sqlite.html">sqlite</a></li>
 </ul>
 </li>
@@ -74,8 +74,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.actor.html">actor</a></li>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.control.html">control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.env.html">env</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
 </ul>
@@ -85,12 +84,18 @@
 <li class="toctree-l3"><a class="reference internal" href="revolve2.analysis.isaacgym.html">isaacgym</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.genotypes.html">genotypes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.genotypes.cppnwin.html">cppnwin</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.envs.html">envs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.envs.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.runners.html">runners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
 </ul>
@@ -248,7 +253,7 @@ All module angles must be multiples of 90 degrees.</p>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brain.make_controller">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.modular_robot.Analyzer" title="revolve2.core.modular_robot._analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.AnalyzerModule" title="revolve2.core.modular_robot._analyzer_module.AnalyzerModule"><span class="pre">AnalyzerModule</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.core.physics.control.html#revolve2.core.physics.control.ActorController" title="revolve2.core.physics.control._actor_controller.ActorController"><span class="pre">ActorController</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Brain.make_controller" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.modular_robot.Analyzer" title="revolve2.core.modular_robot._analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.AnalyzerModule" title="revolve2.core.modular_robot._analyzer_module.AnalyzerModule"><span class="pre">AnalyzerModule</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Brain.make_controller" title="Permalink to this definition"></a></dt>
 <dd><p>Create a controller for the provided body</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -361,7 +366,7 @@ All module angles must be multiples of 90 degrees.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.ModularRobot.make_actor_and_controller">
-<span class="sig-name descname"><span class="pre">make_actor_and_controller</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="revolve2.core.physics.control.html#revolve2.core.physics.control.ActorController" title="revolve2.core.physics.control._actor_controller.ActorController"><span class="pre">ActorController</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.modular_robot.ModularRobot.make_actor_and_controller" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_actor_and_controller</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.modular_robot.ModularRobot.make_actor_and_controller" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

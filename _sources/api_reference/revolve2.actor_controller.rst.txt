@@ -1,10 +1,10 @@
-revolve2.genotypes.cppnwin package
+revolve2.actor\_controller package
 ==================================
 
 Module contents
 ---------------
 
-.. automodule:: revolve2.genotypes.cppnwin
+.. automodule:: revolve2.actor_controller
    :members:
    :undoc-members:
    :show-inheritance:

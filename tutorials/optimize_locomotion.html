@@ -41,8 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
@@ -60,7 +61,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../api_reference/revolve2.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.core.html">core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.database.serialization.html">serialization</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.database.sqlite.html">sqlite</a></li>
 </ul>
 </li>
@@ -74,8 +74,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.physics.html">physics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.actor.html">actor</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.control.html">control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.env.html">env</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
 </ul>
@@ -85,12 +84,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.analysis.isaacgym.html">isaacgym</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.genotypes.html">genotypes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.genotypes.cppnwin.html">cppnwin</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.envs.html">envs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.envs.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.runners.html">runners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
 </ul>
@@ -127,7 +132,7 @@
 <section id="what-you-will-learn">
 <h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this headline"></a></h2>
 <ul class="simple">
-<li><p>How to use the <code class="docutils literal notranslate"><span class="pre">CPPNWIN</span></code> genotype supplementary library.</p></li>
+<li><p>How to use the <code class="docutils literal notranslate"><span class="pre">CPPNWIN</span></code> genotype supplementary package.</p></li>
 <li><p>How to combine modular robots with evolutionary optimization.</p></li>
 <li><p>How to manually insert into a database.</p></li>
 </ul>
@@ -137,7 +142,7 @@
 <ul class="simple">
 <li><p>Tutorial <a class="reference internal" href="simple_optimization.html#a-simple-optimization-process-with-a-database"><span class="std std-ref">A simple optimization process with a database</span></a></p></li>
 <li><p>Tutorial <a class="reference internal" href="simulate_robot_isaac.html#creating-a-modular-robot-and-simulating-it-in-the-isaac-gym-environment"><span class="std std-ref">Creating a modular robot and simulating it in the Isaac Gym environment</span></a></p></li>
-<li><p>Have the supplementary library <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPNWIN</span></code> <a class="reference internal" href="../installation/genotypes/cppnwin.html#cppnwin-genotype-supplemental-library"><span class="std std-ref">installed</span></a>.</p></li>
+<li><p>Have the supplementary package <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPNWIN</span></code> <a class="reference internal" href="../installation/genotypes/cppnwin.html#cppnwin-genotype-supplemental-package"><span class="std std-ref">installed</span></a>.</p></li>
 <li><p>Superficial knowledge of the <a class="reference internal" href="../concepts/cppnwin.html#cppnwin"><span class="std std-ref">CPPNWIN</span></a> genotype, used by ci-group.</p></li>
 </ul>
 </section>
@@ -197,7 +202,7 @@ The baseline code for this program is similar to the previous tutorials’:</p>
 <p>Start by creating genotype in a new file called <code class="docutils literal notranslate"><span class="pre">genotype.py</span></code>.
 The genotype will inherit from <code class="docutils literal notranslate"><span class="pre">BodybrainGenotype</span></code>, a base class provided by the modular_robot module.
 This class stores seperate body and brain genotypes and its <code class="docutils literal notranslate"><span class="pre">develop</span></code> function combines these to create a <code class="docutils literal notranslate"><span class="pre">ModularRobot</span></code>.
-<code class="docutils literal notranslate"><span class="pre">BodyGenotypeV1</span></code> and <code class="docutils literal notranslate"><span class="pre">BrainGenotypeCpgV1</span></code> are body and brain CPPNWIN genotypes respectively, provided by the <code class="docutils literal notranslate"><span class="pre">CPPNWIN</span></code> supplementary library.
+<code class="docutils literal notranslate"><span class="pre">BodyGenotypeV1</span></code> and <code class="docutils literal notranslate"><span class="pre">BrainGenotypeCpgV1</span></code> are body and brain CPPNWIN genotypes respectively, provided by the <code class="docutils literal notranslate"><span class="pre">CPPNWIN</span></code> supplementary package.
 They use the CPPNWIN network to create a modular robot body and weights for a corresponding CPG brain:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
@@ -242,10 +247,10 @@ They use the CPPNWIN network to create a modular robot body and weights for a co
 <p>The CPPNWIN genotypes each require an innovation database when initialize, so add these as arguments to your random function.
 Additionally you have to provide many parameters. These must be set using the <code class="docutils literal notranslate"><span class="pre">multineat.Parameters</span></code> structure.
 It is convenient to store these parameters are a constant value in your genotype.
-Next, multineat has its own random object and does not take the standard python <code class="docutils literal notranslate"><span class="pre">Random</span></code>.
+Next, multineat has its own random object and does not take the standard Python <code class="docutils literal notranslate"><span class="pre">Random</span></code>.
 This is unfortunate, but there is no way around it.
 To make sure that your randomness is reproducible and an be set with a single seed, simple seed a new <code class="docutils literal notranslate"><span class="pre">multineat.RNG</span></code> object with a value from your <code class="docutils literal notranslate"><span class="pre">Random</span></code> object.
-Finally, the <code class="docutils literal notranslate"><span class="pre">CPPWIN</span></code> supplementary library creates random genotypes by mutating an empty network a few times.
+Finally, the <code class="docutils literal notranslate"><span class="pre">CPPWIN</span></code> supplementary package creates random genotypes by mutating an empty network a few times.
 Add a parameters so the number of mutation can be set:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multineat</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -613,13 +618,13 @@ Any interaction with a database requires a transactions.
 Whenever an error occurs everything done within the transaction is rolled back.
 The <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> provides you with an uninitialized <code class="docutils literal notranslate"><span class="pre">Node</span></code> for you to write your simulation history to.
 Be aware that you can only write to a node one time. Once the transaction completes you cannot write again.
-Simply convert your states to an <code class="docutils literal notranslate"><span class="pre">Object</span></code> and write it to the node.
-An <code class="docutils literal notranslate"><span class="pre">Object</span></code> is a superset of <code class="docutils literal notranslate"><span class="pre">StaticData</span></code>. For now you do not have to worry about this:</p>
+Simply convert your states to <code class="docutils literal notranslate"><span class="pre">DbData</span></code> and write it to the node.
+An <code class="docutils literal notranslate"><span class="pre">DbData</span></code> is a superset of <code class="docutils literal notranslate"><span class="pre">StaticData</span></code>. For now you do not have to worry about this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_save_states</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">states</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">State</span><span class="p">]],</span> <span class="n">database</span><span class="p">:</span> <span class="n">Database</span><span class="p">,</span> <span class="n">db_node</span><span class="p">:</span> <span class="n">Node</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">with</span> <span class="n">database</span><span class="o">.</span><span class="n">begin_transaction</span><span class="p">()</span> <span class="k">as</span> <span class="n">txn</span><span class="p">:</span>
-        <span class="n">db_node</span><span class="o">.</span><span class="n">set_object</span><span class="p">(</span>
+        <span class="n">db_node</span><span class="o">.</span><span class="n">set_db_data</span><span class="p">(</span>
             <span class="n">txn</span><span class="p">,</span>
             <span class="p">[</span>
                 <span class="p">{</span><span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span> <span class="s2">&quot;actors&quot;</span><span class="p">:</span> <span class="n">actors</span><span class="o">.</span><span class="n">serialize</span><span class="p">()}</span>
@@ -706,7 +711,7 @@ You will also need to add some extra constants.:</p>
 Depending on your parameters this can take quite a long time.</p>
 <a class="reference internal image-reference" href="../_images/optimize_locomotion_simulator.gif"><img alt="../_images/optimize_locomotion_simulator.gif" src="../_images/optimize_locomotion_simulator.gif" style="width: 100%;" /></a>
 <p>You can analyze the results using the same scripts as from the previous optimization tutorial:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">core</span><span class="o">/</span><span class="n">revolve2</span><span class="o">/</span><span class="n">analysis</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">plot_ea_fitness</span><span class="o">.</span><span class="n">py</span> <span class="n">database</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">revolve2</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">plot_ea_fitness</span> <span class="n">database</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/optimize_locomotion_analysis.png"><img alt="../_images/optimize_locomotion_analysis.png" src="../_images/optimize_locomotion_analysis.png" style="width: 100%;" /></a>

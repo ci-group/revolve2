@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Isaac Gym environment supplementary library" href="envs/isaacgym.html" />
+    <link rel="next" title="Isaac Gym environment supplementary package" href="runners/isaacgym.html" />
     <link rel="prev" title="Revolve2 documentation" href="../index.html" /> 
 </head>
 
@@ -41,8 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runners/isaacgym.html">Isaac Gym environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
@@ -60,7 +61,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../api_reference/revolve2.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.core.html">core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.database.serialization.html">serialization</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.database.sqlite.html">sqlite</a></li>
 </ul>
 </li>
@@ -74,8 +74,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.physics.html">physics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.actor.html">actor</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.control.html">control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.env.html">env</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
 </ul>
@@ -85,12 +84,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.analysis.isaacgym.html">isaacgym</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.genotypes.html">genotypes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.genotypes.cppnwin.html">cppnwin</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.envs.html">envs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.envs.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.runners.html">runners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
 </ul>
@@ -122,12 +127,14 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
-<p>Revolve2 consists of a <code class="docutils literal notranslate"><span class="pre">core</span></code> library and supplementary libraries that depend on software not available on PyPI. All supplementary libraries require <code class="docutils literal notranslate"><span class="pre">core</span></code>.</p>
-<p>All libraries are installed as python libraries. If you need to edit revolve2 code, take a look at <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
+<p>Revolve2 consists of multiple smaller Python packages.
+Installing the <code class="docutils literal notranslate"><span class="pre">core</span></code> package automatically installs all packages required for optimization.
+Additionally there are optional supplementary packages that contain varying functionality that is not always required.</p>
+<p>If you need to edit revolve2’s code, take a look at <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
 <ul>
-<li><p>python 3.8 or higher. If you are using the Isaac Gym environment supplementary library, it requires exactly python 3.8.</p></li>
+<li><p>Python 3.8 or higher. If you are using the Isaac Gym environment supplementary package, it requires exactly Python 3.8.</p></li>
 <li><p>virtualenv:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span><span class="mf">.8</span> <span class="n">install</span> <span class="n">virtualenv</span>
 </pre></div>
@@ -152,24 +159,27 @@
 </section>
 <section id="install-core">
 <h2>Install core<a class="headerlink" href="#install-core" title="Permalink to this headline"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">Core</span></code> has only PyPI dependencies and is a pure python library:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve_path</span><span class="o">&gt;/</span><span class="n">core</span>
+<p><code class="docutils literal notranslate"><span class="pre">Core</span></code> installs all code and revolve2 packages required for optimization.
+It has only PyPI dependencies and is a pure python package:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">core</span>
 </pre></div>
 </div>
 </section>
-<section id="install-supplementary-libraries">
-<h2>Install supplementary libraries<a class="headerlink" href="#install-supplementary-libraries" title="Permalink to this headline"></a></h2>
+<section id="install-supplementary-packages-optional">
+<h2>Install supplementary packages (Optional)<a class="headerlink" href="#install-supplementary-packages-optional" title="Permalink to this headline"></a></h2>
+<p>Revolve2 contains additional packages that provide extra functionality. These are fully optional.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runners/isaacgym.html">Isaac Gym environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </div>
 </section>
 <section id="editable-mode">
 <h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Permalink to this headline"></a></h2>
-<p>If you want to edit revolve’s code while having it installed, consider using pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">library</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span>
+<p>If you want to edit revolve2’s code while having it installed, consider using pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">package</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span>
 </pre></div>
 </div>
 <p>Refer to pip’s documentation for what this does exactly.</p>

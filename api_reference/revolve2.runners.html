@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.envs.isaacgym package &mdash; revolve2 v0.0.0-alpha1 documentation</title>
+  <title>revolve2.runners namespace &mdash; revolve2 v0.0.0-alpha1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -19,7 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="revolve2.envs namespace" href="revolve2.envs.html" /> 
+    <link rel="next" title="revolve2.runners.isaacgym package" href="revolve2.runners.isaacgym.html" />
+    <link rel="prev" title="revolve2.genotypes.cppnwin package" href="revolve2.genotypes.cppnwin.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,8 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
@@ -59,7 +61,6 @@
 <li class="toctree-l1 current"><a class="reference internal" href="revolve2.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="revolve2.core.html">core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.serialization.html">serialization</a></li>
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.sqlite.html">sqlite</a></li>
 </ul>
 </li>
@@ -73,8 +74,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.actor.html">actor</a></li>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.control.html">control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.env.html">env</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
 </ul>
@@ -84,12 +84,18 @@
 <li class="toctree-l3"><a class="reference internal" href="revolve2.analysis.isaacgym.html">isaacgym</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.genotypes.html">genotypes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.genotypes.cppnwin.html">cppnwin</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current"><a class="reference internal" href="revolve2.envs.html">envs</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">isaacgym</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">runners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
 </ul>
@@ -111,8 +117,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="revolve2.html">revolve2 namespace</a> &raquo;</li>
-          <li><a href="revolve2.envs.html">revolve2.envs namespace</a> &raquo;</li>
-      <li>revolve2.envs.isaacgym package</li>
+      <li>revolve2.runners namespace</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -121,10 +126,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="revolve2-envs-isaacgym-package">
-<h1>revolve2.envs.isaacgym package<a class="headerlink" href="#revolve2-envs-isaacgym-package" title="Permalink to this headline"></a></h1>
-<section id="module-contents">
-<h2>Module contents<a class="headerlink" href="#module-contents" title="Permalink to this headline"></a></h2>
+  <section id="module-revolve2.runners">
+<span id="revolve2-runners-namespace"></span><h1>revolve2.runners namespace<a class="headerlink" href="#module-revolve2.runners" title="Permalink to this headline"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</div>
 </section>
 </section>
 

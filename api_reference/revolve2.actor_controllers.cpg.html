@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.physics.actor.sdf package &mdash; revolve2 v0.0.0-alpha1 documentation</title>
+  <title>revolve2.actor_controllers.cpg package &mdash; revolve2 v0.0.0-alpha1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -19,8 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="revolve2.core.physics.actor.urdf package" href="revolve2.core.physics.actor.urdf.html" />
-    <link rel="prev" title="revolve2.core.physics.actor package" href="revolve2.core.physics.actor.html" /> 
+    <link rel="prev" title="revolve2.actor_controllers namespace" href="revolve2.actor_controllers.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -59,7 +58,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="revolve2.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="revolve2.core.html">core</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="revolve2.core.html">core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.database.html">database</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.sqlite.html">sqlite</a></li>
 </ul>
@@ -72,8 +71,8 @@
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ea.html">ea</a></li>
 </ul>
 </li>
-<li class="toctree-l3 current"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul class="current">
-<li class="toctree-l4 current"><a class="reference internal" href="revolve2.core.physics.actor.html">actor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.actor.html">actor</a></li>
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
@@ -94,8 +93,8 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controller.html">actor_controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controllers.html">actor_controllers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.actor_controllers.cpg.html">cpg</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="revolve2.actor_controllers.html">actor_controllers</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">cpg</a></li>
 </ul>
 </li>
 </ul>
@@ -117,10 +116,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="revolve2.html">revolve2 namespace</a> &raquo;</li>
-          <li><a href="revolve2.core.html">revolve2.core package</a> &raquo;</li>
-          <li><a href="revolve2.core.physics.html">revolve2.core.physics package</a> &raquo;</li>
-          <li><a href="revolve2.core.physics.actor.html">revolve2.core.physics.actor package</a> &raquo;</li>
-      <li>revolve2.core.physics.actor.sdf package</li>
+          <li><a href="revolve2.actor_controllers.html">revolve2.actor_controllers namespace</a> &raquo;</li>
+      <li>revolve2.actor_controllers.cpg package</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -129,14 +126,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="revolve2-core-physics-actor-sdf-package">
-<h1>revolve2.core.physics.actor.sdf package<a class="headerlink" href="#revolve2-core-physics-actor-sdf-package" title="Permalink to this headline"></a></h1>
-<section id="module-revolve2.core.physics.actor.sdf">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.physics.actor.sdf" title="Permalink to this headline"></a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="revolve2.core.physics.actor.sdf.to_sdf">
-<span class="sig-name descname"><span class="pre">to_sdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physics_robot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#revolve2.core.physics.actor.sdf.to_sdf" title="Permalink to this definition"></a></dt>
+  <section id="revolve2-actor-controllers-cpg-package">
+<h1>revolve2.actor_controllers.cpg package<a class="headerlink" href="#revolve2-actor-controllers-cpg-package" title="Permalink to this headline"></a></h1>
+<section id="module-revolve2.actor_controllers.cpg">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.actor_controllers.cpg" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.Cpg">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Cpg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_output_neurons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.actor_controllers.cpg.Cpg" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.actor_controller._actor_controller.ActorController</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.Cpg.deserialize">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StaticData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg.Cpg"><span class="pre">Cpg</span></a></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.Cpg.deserialize" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.Cpg.get_dof_targets">
+<span class="sig-name descname"><span class="pre">get_dof_targets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.Cpg.get_dof_targets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.Cpg.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StaticData</span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.Cpg.serialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.Cpg.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.Cpg.step" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 </section>
 </section>

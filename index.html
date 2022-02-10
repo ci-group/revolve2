@@ -40,8 +40,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation/envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/runners/isaacgym.html">Isaac Gym environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="concepts/index.html">Concepts</a><ul>
@@ -59,7 +60,6 @@
 <li class="toctree-l1"><a class="reference internal" href="api_reference/revolve2.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.core.html">core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.database.serialization.html">serialization</a></li>
 <li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.database.sqlite.html">sqlite</a></li>
 </ul>
 </li>
@@ -73,8 +73,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.physics.html">physics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.physics.actor.html">actor</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.physics.control.html">control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.physics.env.html">env</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
 </ul>
@@ -84,12 +83,18 @@
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.analysis.isaacgym.html">isaacgym</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.genotypes.html">genotypes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.genotypes.cppnwin.html">cppnwin</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.envs.html">envs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.envs.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.runners.html">runners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
 </ul>
@@ -121,9 +126,9 @@
              
   <section id="revolve2-documentation">
 <h1>Revolve2 documentation<a class="headerlink" href="#revolve2-documentation" title="Permalink to this headline"></a></h1>
-<p>Revolve2 is a python library for optimization, geared towards modular robots and evolutionary computing.
+<p>Revolve2 is a Python package for optimization, geared towards modular robots and evolutionary computing.
 Its primary features are a modular robot framework, wrappers around physics simulators, and evolutionary optimizers.
-It consists of a <code class="docutils literal notranslate"><span class="pre">core</span></code> library and suplementary libraries that depend on software not available on PyPI.</p>
+It consists of multiple smaller python packages and optional supplementary packages that contain varying functionality that is not always required.</p>
 <p>Revolve2’s code resides at <a class="reference external" href="https://github.com/ci-group/revolve2">https://github.com/ci-group/revolve2</a>.</p>
 <div class="toctree-wrapper compound">
 <ul>
@@ -132,7 +137,7 @@ It consists of a <code class="docutils literal notranslate"><span class="pre">co
 <li class="toctree-l2"><a class="reference internal" href="installation/index.html#create-an-environment">Create an environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation/index.html#download-the-source">Download the source</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation/index.html#install-core">Install core</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation/index.html#install-supplementary-libraries">Install supplementary libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation/index.html#install-supplementary-packages-optional">Install supplementary packages (Optional)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation/index.html#editable-mode">Editable Mode</a></li>
 </ul>
 </li>

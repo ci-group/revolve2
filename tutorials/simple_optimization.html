@@ -41,8 +41,9 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/envs/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
@@ -60,7 +61,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../api_reference/revolve2.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.core.html">core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.database.serialization.html">serialization</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.database.sqlite.html">sqlite</a></li>
 </ul>
 </li>
@@ -74,8 +74,7 @@
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.physics.html">physics</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.actor.html">actor</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.control.html">control</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.env.html">env</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
 </ul>
@@ -85,12 +84,18 @@
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.analysis.isaacgym.html">isaacgym</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.genotypes.html">genotypes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.genotypes.cppnwin.html">cppnwin</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.envs.html">envs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.envs.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.runners.html">runners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
 </ul>
@@ -149,7 +154,7 @@ Every bit corresponds to an item that can be included in the knapsack.
 A one means the item is included, and a zero means it is not.
 Naturally the sum of the weights of all items must be no larger than the maximum weight.
 A genotype follows the same structure, but without the weight restriction.
-The functions from genotype to phenotype simply adds items from left to right in the bit string, skipping any items that would bring the weight over the maximum.</p>
+The function from genotype to phenotype simply adds items from left to right in the bit string, skipping any items that would bring the weight over the maximum.</p>
 <p>The crossover operator will choose a random point along the bit string. All bits before that point will be taken taken from parent one and the rest from parent two.
 The mutation operator will randomly flip each bit with 1/<em>n</em> chance, with <em>n</em> being the length of the bit strings.</p>
 </section>
@@ -242,7 +247,7 @@ StaticData is Revolve2’s type for JSON-like data containing only dictionaries,
     <span class="k">return</span> <span class="n">Phenotype</span><span class="p">(</span><span class="n">phenotype</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Now that the baseline object are there it is time to start with the actual optimization process.
+<p>Now that the baseline objects are there it is time to start with the actual optimization process.
 Your program will use <code class="docutils literal notranslate"><span class="pre">async</span></code> Revolve2 functions, so the entry point for the program will be an async main:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">pass</span>
@@ -262,7 +267,7 @@ Your program will use <code class="docutils literal notranslate"><span class="pr
     <span class="n">INITIAL_HAS_ITEM_PROB</span> <span class="o">=</span> <span class="mf">0.5</span>
 </pre></div>
 </div>
-<p>Revolve2 uses python’s <code class="docutils literal notranslate"><span class="pre">logging</span></code> module. You can configure yourself what you want to do with the logs:</p>
+<p>Revolve2 uses Python’s <code class="docutils literal notranslate"><span class="pre">logging</span></code> module. You can configure yourself what you want to do with the logs:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
 
 <span class="c1"># ...</span>
@@ -360,7 +365,7 @@ Additionally, it requires you to override <code class="docutils literal notransl
 Importantly <code class="docutils literal notranslate"><span class="pre">initial_fitness</span></code> is an optional argument.
 If set to None, the optimizer will automatically evaluate the initial population.
 The second argument of <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code>’s <code class="docutils literal notranslate"><span class="pre">asyncinit</span></code> is a database <code class="docutils literal notranslate"><span class="pre">Node</span></code>.
-Revolve’s database structure is similar to JSON, and a <code class="docutils literal notranslate"><span class="pre">Node</span></code> points to an position in this structure.
+Revolve’s database structure is similar to JSON and a <code class="docutils literal notranslate"><span class="pre">Node</span></code> points to an position in this structure.
 This optimizer is the first and only part of the program touching the database, so it should write at the root node.
 In addition to the required arguments, also add <code class="docutils literal notranslate"><span class="pre">items</span></code>, representing all possible items, and <code class="docutils literal notranslate"><span class="pre">num_generation</span></code>, the number of generations to perform the algorithm for.
 These will be used later:</p>
@@ -531,7 +536,7 @@ You will see that if you manually restart the program in the middle of the optim
 The <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code> comes with an <code class="docutils literal notranslate"><span class="pre">Analyzer</span></code>.
 This class knows exactly what the database structure used by the optimizer is.
 However, for simplicity this tutorial is going to use the analysis program <code class="docutils literal notranslate"><span class="pre">plot_ea_fitness.py</span></code>, which can plot fitness over all generations:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">core</span><span class="o">/</span><span class="n">revolve2</span><span class="o">/</span><span class="n">analysis</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">plot_ea_fitness</span><span class="o">.</span><span class="n">py</span> <span class="n">database</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">revolve2</span><span class="o">.</span><span class="n">analysis</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">plot_ea_fitness</span> <span class="n">database</span>
 </pre></div>
 </div>
 <p>If this tool is slow, this is something that is actively being worked on. Your output should look similar to the image below.</p>

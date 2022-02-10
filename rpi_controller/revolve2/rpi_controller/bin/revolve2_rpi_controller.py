@@ -3,7 +3,7 @@ import jsonschema
 import json
 from typing import Any, cast, List, Optional
 import importlib
-from revolve2.object_controller import ObjectController
+from revolve2.actor_controller import ActorController
 import pigpio
 from dataclasses import dataclass
 import asyncio
@@ -54,7 +54,7 @@ class Program:
     _dry: bool  # if true, gpio output is skipped.
     _log_file: Optional[str]
 
-    _controller: ObjectController
+    _controller: ActorController
     _control_period: float
     _pins: List[_Pin]
 
@@ -140,8 +140,8 @@ class Program:
         controller_module = importlib.import_module(config["controller_module"])
         controller_type = getattr(controller_module, config["controller_type"])
 
-        if not issubclass(controller_type, ObjectController):
-            raise ValueError("Controller is not an ObjectController")
+        if not issubclass(controller_type, ActorController):
+            raise ValueError("Controller is not an ActorController")
 
         self._controller = controller_type.deserialize(config["serialized_controller"])
 

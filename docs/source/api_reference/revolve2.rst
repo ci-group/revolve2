@@ -14,4 +14,4 @@ Subpackages
    serialization <revolve2.serialization>
    genotypes <revolve2.genotypes>
    runners <revolve2.runners>
-   object_controller <revolve2.object_controller>
+   actor_controller <revolve2.actor_controller>

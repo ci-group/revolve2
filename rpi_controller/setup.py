@@ -12,7 +12,7 @@ setup(
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
     install_requires=[
-        f"revolve2-object-controller @ file://{os.path.join(revolve2_path, 'object_controller')}",
+        f"revolve2-actor-controller @ file://{os.path.join(revolve2_path, 'actor_controller')}",
         "pigpio==1.78",
         "jsonschema==4.4.0",
     ],

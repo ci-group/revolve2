@@ -21,7 +21,7 @@ apidoc:
 	@$(SPHINXAPIDOC) ../genotypes/cppnwin/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../runners/isaacgym/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../serialization/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../object_controller/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../actor_controller/revolve2 $(APIDOCARGS)
 
 .PHONY: help Makefile apidoc
 

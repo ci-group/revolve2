@@ -1,4 +1,4 @@
-revolve2.object\_controller package
+revolve2.actor\_controller package
 ===================================
 
 Subpackages
@@ -7,12 +7,12 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   controllers <revolve2.object_controller.controllers>
+   controllers <revolve2.actor_controller.controllers>
 
 Module contents
 ---------------
 
-.. automodule:: revolve2.object_controller
+.. automodule:: revolve2.actor_controller
    :members:
    :undoc-members:
    :show-inheritance:

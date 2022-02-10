@@ -10,7 +10,7 @@ import revolve2.core.optimization.ea.selection as selection
 from pyrr import Quaternion, Vector3
 from revolve2.core.database import Database, Node
 from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
-from revolve2.object_controller import ObjectController
+from revolve2.actor_controller import ActorController
 from revolve2.core.physics.running import (
     ActorControl,
     ActorState,
@@ -28,7 +28,7 @@ from genotype import Genotype
 class Optimizer(EvolutionaryOptimizer[Genotype, float]):
     _runner: Runner
 
-    _controllers: List[ObjectController]
+    _controllers: List[ActorController]
 
     _innov_db_body: multineat.InnovationDatabase
     _innov_db_brain: multineat.InnovationDatabase

@@ -23,8 +23,8 @@ jobs:
           pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
       - name: install serialization
         run: pip install ./serialization
-      - name: install object_controller
-        run: pip install ./object_controller
+      - name: install actor_controller
+        run: pip install ./actor_controller
       - name: install rpi_controller
         run: pip install ./rpi_controller
       - name: install core
@@ -62,8 +62,8 @@ jobs:
           pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
       - name: install serialization
         run: pip install ./serialization[dev]
-      - name: install object_controller
-        run: pip install ./object_controller[dev]
+      - name: install actor_controller
+        run: pip install ./actor_controller[dev]
       - name: install rpi_controller
         run: pip install ./rpi_controller[dev]
       - name: install core
@@ -97,8 +97,8 @@ jobs:
           pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
       - name: install serialization
         run: pip install ./serialization[dev]
-      - name: install object_controller
-        run: pip install ./object_controller[dev]
+      - name: install actor_controller
+        run: pip install ./actor_controller[dev]
       - name: install rpi_controller
         run: pip install ./rpi_controller[dev]
       - name: install core

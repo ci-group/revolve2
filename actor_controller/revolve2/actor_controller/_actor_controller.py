@@ -4,7 +4,7 @@ from typing import List
 from revolve2.serialization import Serializable
 
 
-class ObjectController(Serializable, ABC):
+class ActorController(Serializable, ABC):
     @abstractmethod
     def step(self, dt: float) -> None:
         pass

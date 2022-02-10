@@ -1,7 +1,7 @@
 from typing import Dict, Tuple
 
 from revolve2.core.physics.actor import Actor
-from revolve2.object_controller import ObjectController
+from revolve2.actor_controller import ActorController
 
 from ._body import Body
 from ._brain import Brain
@@ -15,7 +15,7 @@ class ModularRobot:
         self.body = body
         self.brain = brain
 
-    def make_actor_and_controller(self) -> Tuple[Actor, ObjectController]:
+    def make_actor_and_controller(self) -> Tuple[Actor, ActorController]:
         from ._analyzer import Analyzer
         from ._to_actor import to_actor
 

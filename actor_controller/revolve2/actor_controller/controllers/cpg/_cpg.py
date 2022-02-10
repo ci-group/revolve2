@@ -4,11 +4,11 @@ from typing import List
 import numpy as np
 import numpy.typing as npt
 
-from revolve2.object_controller import ObjectController
+from revolve2.actor_controller import ActorController
 from revolve2.serialization import StaticData, SerializeError
 
 
-class Cpg(ObjectController):
+class Cpg(ActorController):
     _state: npt.NDArray[np.float_]
     _num_output_neurons: int
     _weight_matrix: npt.NDArray[np.float_]  # nxn matrix matching number of neurons

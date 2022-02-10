@@ -1,7 +1,7 @@
 ===============================
 Raspberry Pi controller package
 ===============================
-This package provides a tool for controlling Raspberry Pi GPIO pins using a revolve2 ``ObjectController``.
+This package provides a tool for controlling Raspberry Pi GPIO pins using a revolve2 ``ActorController``.
 
 -------------
 Prerequisites

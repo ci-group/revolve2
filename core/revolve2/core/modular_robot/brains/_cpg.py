@@ -6,14 +6,14 @@ import numpy as np
 import numpy.typing as npt
 from revolve2.core.modular_robot import Analyzer, AnalyzerModule, Brain, Module
 from revolve2.core.physics.actor import Actor
-from revolve2.object_controller import ObjectController
-from revolve2.object_controller.controllers.cpg import Cpg as ControllerCpg
+from revolve2.actor_controller import ActorController
+from revolve2.actor_controller.controllers.cpg import Cpg as ControllerCpg
 
 
 class Cpg(Brain, ABC):
     def make_controller(
         self, analyzer: Analyzer, actor: Actor, dof_ids: List[AnalyzerModule]
-    ) -> ObjectController:
+    ) -> ActorController:
         active_hinges = analyzer.active_hinges
         connections = self._find_connections(analyzer)
         (internal_weights, external_weights) = self._make_weights(

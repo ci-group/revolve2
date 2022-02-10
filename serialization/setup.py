@@ -11,9 +11,7 @@ setup(
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
-    install_requires=[
-        f"revolve2-namespace @ file://{os.path.join(revolve2_path, 'namespace')}",
-    ],
+    package_data={"revolve2.serialization": ["py.typed"]},
     extras_require={"dev": []},
     zip_safe=False,
 )

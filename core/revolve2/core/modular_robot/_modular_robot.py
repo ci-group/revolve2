@@ -1,7 +1,7 @@
 from typing import Dict, Tuple
 
 from revolve2.core.physics.actor import Actor
-from revolve2.core.physics.control import ActorController
+from revolve2.actor_controller import ActorController
 
 from ._body import Body
 from ._brain import Brain

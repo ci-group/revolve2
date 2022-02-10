@@ -1,14 +1,16 @@
 ============
 Installation
 ============
-Revolve2 consists of a ``core`` library and supplementary libraries that depend on software not available on PyPI. All supplementary libraries require ``core``.
+Revolve2 consists of multiple smaller Python packages.
+Installing the ``core`` package automatically installs all packages required for optimization.
+Additionally there are optional supplementary packages that contain varying functionality that is not always required.
 
-All libraries are installed as python libraries. If you need to edit revolve2 code, take a look at :ref:`installation/index:Editable Mode`.
+If you need to edit revolve2's code, take a look at :ref:`installation/index:Editable Mode`.
 
 -------------
 Prerequisites
 -------------
-* python 3.8 or higher. If you are using the Isaac Gym environment supplementary library, it requires exactly python 3.8.
+* Python 3.8 or higher. If you are using the Isaac Gym environment supplementary package, it requires exactly Python 3.8.
 * virtualenv::
 
     pip3.8 install virtualenv
@@ -33,25 +35,29 @@ Download your preferred version from `<https://github.com/ci-group/revolve2/rele
 Install core
 ------------
 
-``Core`` has only PyPI dependencies and is a pure python library::
+``Core`` installs all code and revolve2 packages required for optimization.
+It has only PyPI dependencies and is a pure python package::
 
-    pip install <revolve_path>/core
+    pip install <revolve2_path>/core
 
--------------------------------
-Install supplementary libraries
--------------------------------
+--------------------------------------------
+Install supplementary packages (Optional)
+--------------------------------------------
+Revolve2 contains additional packages that provide extra functionality. These are fully optional.
+
 .. toctree::
    :maxdepth: 1
 
-   Isaac Gym environment <envs/isaacgym>
+   Isaac Gym environment <runners/isaacgym>
    CPPNWIN genotype <genotypes/cppnwin>
+   Raspberry Pi controller <rpi_controller>
 
 
 -------------
 Editable Mode
 -------------
-If you want to edit revolve's code while having it installed, consider using pip's ``editable mode``::
+If you want to edit revolve2's code while having it installed, consider using pip's ``editable mode``::
 
-    pip install <library> -e
+    pip install <package> -e
 
 Refer to pip's documentation for what this does exactly.

@@ -8,7 +8,7 @@ from .._database_error import DatabaseError
 from .._list import List as ListIface
 from .._node import Node as NodeIface
 from .._node_impl import NodeImpl as NodeImplBase
-from .._object import Object, is_object
+from .._db_data import DbData, is_db_data
 from .._transaction import Transaction as TransactionBase
 from .._uninitialized import Uninitialized
 from ._list_impl import List as ListImpl
@@ -22,7 +22,7 @@ class NodeImpl(NodeImplBase):
     def __init__(self, id: int) -> None:
         self._id = id
 
-    def get_object(self, txn: TransactionBase) -> Union[Object, Uninitialized]:
+    def get_db_data(self, txn: TransactionBase) -> Union[DbData, Uninitialized]:
         assert isinstance(txn, Transaction)
 
         row = self._get_row(txn)
@@ -30,37 +30,37 @@ class NodeImpl(NodeImplBase):
         if row.type == 0:
             return Uninitialized()
         elif row.type == 1:
-            object = row.object
-            if not isinstance(object, str):
-                raise DatabaseError("Object of Node should be string, but it is not.")
+            db_data = row.db_data
+            if not isinstance(db_data, str):
+                raise DatabaseError("DbData of Node should be string, but it is not.")
 
             try:
-                object = json.loads(object, cls=_JSONDecoder)
-                if not is_object(object):
+                db_data = json.loads(db_data, cls=_JSONDecoder)
+                if not is_db_data(db_data):
                     raise DatabaseError("Database corrupted.")
-                return object
+                return db_data
             except JSONDecodeError as err:
-                raise DatabaseError("Object of Node is not valid JSON.")
+                raise DatabaseError("DbData of Node is not valid JSON.")
         elif row.type == 2:
             return ListIface(ListImpl(row.id))
         else:
             raise DatabaseError("Database corrupted. Unexpected type.")
 
-    def set_object(self, txn: TransactionBase, object: Object) -> None:
+    def set_db_data(self, txn: TransactionBase, db_data: DbData) -> None:
         assert isinstance(txn, Transaction)
 
-        if not is_object(object):
-            raise DatabaseError("Not a valid object.")
+        if not is_db_data(db_data):
+            raise DatabaseError("Not valid DbData.")
 
         dbrow = self._get_row(txn)
-        if dbrow.object is not None or dbrow.type != 0:
-            raise DatabaseError("Node object already set. Cannot overwrite.")
+        if dbrow.db_data is not None or dbrow.type != 0:
+            raise DatabaseError("Node DbData already set. Cannot overwrite.")
 
-        node_stubs, list_stubs = self._find_node_stubs(object)
+        node_stubs, list_stubs = self._find_node_stubs(db_data)
 
         if not all([stub.is_stub for stub in node_stubs]):
             raise DatabaseError(
-                "Cannot add a node to an object that is not a stub. You are reusing nodes."
+                "Cannot add a node to a DbData that is not a stub. You are reusing nodes."
             )
 
         dbnodes = [DbNode(0, None) for _ in node_stubs]
@@ -78,8 +78,8 @@ class NodeImpl(NodeImplBase):
         for list_stub, dblistnode in zip(list_stubs, dblistnodes):
             list_stub._set_impl(ListImpl(dblistnode.id))
 
-        jsoned = json.dumps(object, cls=_JSONEncoder)
-        dbrow.object = jsoned
+        jsoned = json.dumps(db_data, cls=_JSONEncoder)
+        dbrow.db_data = jsoned
         dbrow.type = 1
 
     def _get_row(self, txn: Transaction) -> Any:  # TODO sqlalchemy typing
@@ -92,24 +92,24 @@ class NodeImpl(NodeImplBase):
 
     @classmethod
     def _find_node_stubs(
-        cls, object: Object
+        cls, db_data: DbData
     ) -> Tuple[List[NodeIface], List[ListIface]]:
-        if isinstance(object, NodeIface):
-            return [object], []
-        elif isinstance(object, ListIface):
-            return [], [object]
-        elif isinstance(object, list):
+        if isinstance(db_data, NodeIface):
+            return [db_data], []
+        elif isinstance(db_data, ListIface):
+            return [], [db_data]
+        elif isinstance(db_data, list):
             nodes = []
             lists = []
-            for child in object:
+            for child in db_data:
                 new_nodes, new_lists = cls._find_node_stubs(child)
                 nodes += new_nodes
                 lists += new_lists
             return (nodes, lists)
-        elif isinstance(object, dict):
+        elif isinstance(db_data, dict):
             nodes = []
             lists = []
-            for child in object.values():
+            for child in db_data.values():
                 new_nodes, new_lists = cls._find_node_stubs(child)
                 nodes += new_nodes
                 lists += new_lists

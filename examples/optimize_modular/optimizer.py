@@ -10,8 +10,8 @@ import revolve2.core.optimization.ea.selection as selection
 from pyrr import Quaternion, Vector3
 from revolve2.core.database import Database, Node
 from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
-from revolve2.core.physics.control import ActorController
-from revolve2.core.physics.env import (
+from revolve2.actor_controller import ActorController
+from revolve2.core.physics.running import (
     ActorControl,
     ActorState,
     Batch,
@@ -20,7 +20,7 @@ from revolve2.core.physics.env import (
     Runner,
     State,
 )
-from revolve2.envs.isaacgym import LocalRunner
+from revolve2.runners.isaacgym import LocalRunner
 
 from genotype import Genotype
 
@@ -173,7 +173,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, float]):
         self, states: List[Tuple[float, State]], database: Database, db_node: Node
     ) -> None:
         with database.begin_transaction() as txn:
-            db_node.set_object(
+            db_node.set_db_data(
                 txn,
                 [
                     {"time": time, "actors": actors.serialize()}

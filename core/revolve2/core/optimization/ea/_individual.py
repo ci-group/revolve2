@@ -4,12 +4,12 @@ import pickle
 from dataclasses import dataclass
 from typing import Generic, List, Optional, TypeVar, Union
 
-from revolve2.core.database import StaticData
-from revolve2.core.database.serialization import (
+from revolve2.serialization import (
     Serializable,
     SerializeError,
     deserialize,
     serialize,
+    StaticData,
 )
 
 Genotype = TypeVar("Genotype", bound=Union[Serializable, StaticData])

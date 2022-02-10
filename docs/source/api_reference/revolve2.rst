@@ -11,5 +11,8 @@ Subpackages
 
    core <revolve2.core>
    analysis <revolve2.analysis>
+   serialization <revolve2.serialization>
    genotypes <revolve2.genotypes>
-   envs <revolve2.envs>
+   runners <revolve2.runners>
+   actor_controller <revolve2.actor_controller>
+   actor_controllers <revolve2.actor_controllers>

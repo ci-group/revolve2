@@ -2,9 +2,9 @@
 Revolve2 documentation
 ======================
 
-Revolve2 is a python library for optimization, geared towards modular robots and evolutionary computing.
+Revolve2 is a Python package for optimization, geared towards modular robots and evolutionary computing.
 Its primary features are a modular robot framework, wrappers around physics simulators, and evolutionary optimizers.
-It consists of a ``core`` library and suplementary libraries that depend on software not available on PyPI.
+It consists of multiple smaller python packages and optional supplementary packages that contain varying functionality that is not always required.
 
 Revolve2's code resides at `<https://github.com/ci-group/revolve2>`_.
 

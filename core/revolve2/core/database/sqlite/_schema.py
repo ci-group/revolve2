@@ -13,16 +13,16 @@ class DbNode(Base):
     id = Column(
         Integer, nullable=False, unique=True, autoincrement=True, primary_key=True
     )
-    type = Column(Integer, nullable=False)  # 0: uninitialized, 1: object, 2: list
-    object = Column(String, nullable=True)
+    type = Column(Integer, nullable=False)  # 0: uninitialized, 1: db_data, 2: list
+    db_data = Column(String, nullable=True)
 
     def __init__(
-        self, type: int, object: Optional[str], id: Optional[int] = None
+        self, type: int, db_data: Optional[str], id: Optional[int] = None
     ) -> None:
         if id is not None:
             self.id = id
         self.type = type
-        self.object = object
+        self.db_data = db_data
 
 
 class DbListItem(Base):

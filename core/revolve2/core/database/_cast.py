@@ -1,20 +1,20 @@
 from __future__ import annotations
 from typing import Any
 
-from ._object import Object, is_object
-from ._static_data import StaticData, is_static_data
+from ._db_data import DbData, is_db_data
+from revolve2.serialization import StaticData, is_static_data
 from ._node import Node
 from ._list import List as DbList
 
 
-def dynamic_cast_object(data: Any) -> Object:
+def dynamic_cast_db_data(data: Any) -> DbData:
     """
-    Check if data is Object, returning data cast.
-    :raises TypeError: If data is not Object.
+    Check if data is DbData, returning data cast.
+    :raises TypeError: If data is not DbData.
     """
 
-    if not is_object(data):
-        raise TypeError("Data to be cast is not Object")
+    if not is_db_data(data):
+        raise TypeError("Data to be cast is not DbData")
     return data
 
 

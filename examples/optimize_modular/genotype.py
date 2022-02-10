@@ -4,8 +4,7 @@ import sys
 from random import Random
 
 import multineat
-from revolve2.core.database import StaticData
-from revolve2.core.database.serialization import Serializable, SerializeError
+from revolve2.serialization import Serializable, SerializeError, StaticData
 from revolve2.core.optimization.ea.modular_robot import BodybrainGenotype
 from revolve2.genotypes.cppnwin import BodyGenotypeV1, BrainGenotypeCpgV1
 

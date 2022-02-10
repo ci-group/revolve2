@@ -2,9 +2,9 @@ from __future__ import annotations
 from typing import Dict, Iterator, List, Optional
 
 from revolve2.core.database import List as DbList
-from revolve2.core.database import Node, Object, StaticData, Transaction, is_static_data
+from revolve2.core.database import Node, DbData, Transaction
+from revolve2.serialization import StaticData, is_static_data, SerializeError
 from revolve2.core.database import DatabaseError
-from revolve2.core.database.serialization import SerializeError
 
 
 class Generation:
@@ -40,7 +40,7 @@ class Generations:
 
     def __getitem__(self, index: int) -> Generation:
         try:
-            individual_ids = self._list.get(self._txn, index).get_object(self._txn)
+            individual_ids = self._list.get(self._txn, index).get_db_data(self._txn)
             if not isinstance(individual_ids, list) or not all(
                 [isinstance(id, int) for id in individual_ids]
             ):
@@ -63,7 +63,7 @@ class Individual:
     _genotype: StaticData
     _fitness: StaticData
 
-    def __init__(self, data: Dict[str, Object]):
+    def __init__(self, data: Dict[str, DbData]):
         id_data = data.get("id")
         if not isinstance(id_data, int):
             raise SerializeError()
@@ -120,7 +120,7 @@ class Individuals:
 
     def __getitem__(self, index: int) -> Individual:
         try:
-            individual = self._individuals.get(self._txn, index).get_object(self._txn)
+            individual = self._individuals.get(self._txn, index).get_db_data(self._txn)
             if not isinstance(individual, dict):
                 raise SerializeError()
             return Individual(individual)
@@ -160,18 +160,18 @@ class Evaluations:
 
 class Analyzer:
     _txn: Transaction
-    _ea: Dict[str, Object]
+    _ea: Dict[str, DbData]
     _evaluations: DbList
 
     def __init__(self, txn: Transaction, node: Node):
         self._txn = txn
-        root = node.get_object(txn)
+        root = node.get_db_data(txn)
         if not isinstance(root, Dict) or "ea" not in root or "evaluations" not in root:
             raise SerializeError()
-        self._ea = root["ea"].get_object(txn)
+        self._ea = root["ea"].get_db_data(txn)
         if not isinstance(self._ea, dict):
             raise SerializeError()
-        self._evaluations = root["evaluations"].get_object(txn)
+        self._evaluations = root["evaluations"].get_db_data(txn)
         if not isinstance(self._evaluations, DbList):
             raise SerializeError()
 
@@ -180,7 +180,7 @@ class Analyzer:
         generations_node = self._ea.get("generations")
         if generations_node is None or not isinstance(generations_node, Node):
             raise SerializeError()
-        generations = generations_node.get_object(self._txn)
+        generations = generations_node.get_db_data(self._txn)
         if not isinstance(generations, DbList):
             raise SerializeError()
 
@@ -191,7 +191,7 @@ class Analyzer:
         individuals_node = self._ea.get("individuals")
         if individuals_node is None or not isinstance(individuals_node, Node):
             raise SerializeError()
-        individuals = individuals_node.get_object(self._txn)
+        individuals = individuals_node.get_db_data(self._txn)
         if not isinstance(individuals, DbList):
             raise SerializeError()
 

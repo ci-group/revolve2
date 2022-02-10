@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   serialization <revolve2.core.database.serialization>
    sqlite <revolve2.core.database.sqlite>
 
 Module contents

@@ -3,8 +3,7 @@ from __future__ import annotations
 from typing import cast
 
 import multineat
-from revolve2.core.database import StaticData
-from revolve2.core.database.serialization import Serializable, SerializeError
+from revolve2.serialization import Serializable, SerializeError, StaticData
 from revolve2.core.modular_robot import Body as ModularRobotBody
 from revolve2.core.modular_robot import Brain as ModularRobotBrain
 from revolve2.core.optimization.ea.modular_robot import BrainGenotype

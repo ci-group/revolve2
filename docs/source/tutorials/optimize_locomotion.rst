@@ -1,13 +1,13 @@
-=======================================================================
+=====================================================================
 Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym
-=======================================================================
+=====================================================================
 The final results of this tutorial are available at ``<revolve2_source>/examples/optimize_modular>``.
 
 -------------------
 What you will learn
 -------------------
 
-* How to use the ``CPPNWIN`` genotype supplementary library.
+* How to use the ``CPPNWIN`` genotype supplementary package.
 * How to combine modular robots with evolutionary optimization.
 * How to manually insert into a database.
 
@@ -17,7 +17,7 @@ Prerequisites
 
 * Tutorial :ref:`tutorials/simple_optimization:A simple optimization process with a database`
 * Tutorial :ref:`tutorials/simulate_robot_isaac:Creating a modular robot and simulating it in the Isaac Gym environment`
-* Have the supplementary library ``genotype CPPNWIN`` :ref:`installed <installation/genotypes/cppnwin:CPPNWIN genotype supplemental library>`.
+* Have the supplementary package ``genotype CPPNWIN`` :ref:`installed <installation/genotypes/cppnwin:CPPNWIN genotype supplemental package>`.
 * Superficial knowledge of the :ref:`CPPNWIN <concepts/cppnwin:CPPNWIN>` genotype, used by ci-group.
 
 ------------
@@ -80,7 +80,7 @@ The genotype
 Start by creating genotype in a new file called ``genotype.py``.
 The genotype will inherit from ``BodybrainGenotype``, a base class provided by the modular_robot module.
 This class stores seperate body and brain genotypes and its ``develop`` function combines these to create a ``ModularRobot``.
-``BodyGenotypeV1`` and ``BrainGenotypeCpgV1`` are body and brain CPPNWIN genotypes respectively, provided by the ``CPPNWIN`` supplementary library.
+``BodyGenotypeV1`` and ``BrainGenotypeCpgV1`` are body and brain CPPNWIN genotypes respectively, provided by the ``CPPNWIN`` supplementary package.
 They use the CPPNWIN network to create a modular robot body and weights for a corresponding CPG brain::
 
     from __future__ import annotations
@@ -125,10 +125,10 @@ They use the CPPNWIN network to create a modular robot body and weights for a co
 The CPPNWIN genotypes each require an innovation database when initialize, so add these as arguments to your random function.
 Additionally you have to provide many parameters. These must be set using the ``multineat.Parameters`` structure.
 It is convenient to store these parameters are a constant value in your genotype.
-Next, multineat has its own random object and does not take the standard python ``Random``.
+Next, multineat has its own random object and does not take the standard Python ``Random``.
 This is unfortunate, but there is no way around it.
 To make sure that your randomness is reproducible and an be set with a single seed, simple seed a new ``multineat.RNG`` object with a value from your ``Random`` object.
-Finally, the ``CPPWIN`` supplementary library creates random genotypes by mutating an empty network a few times.
+Finally, the ``CPPWIN`` supplementary package creates random genotypes by mutating an empty network a few times.
 Add a parameters so the number of mutation can be set::
 
 
@@ -498,14 +498,14 @@ Any interaction with a database requires a transactions.
 Whenever an error occurs everything done within the transaction is rolled back.
 The ``EvolutionaryOptimizer`` provides you with an uninitialized ``Node`` for you to write your simulation history to.
 Be aware that you can only write to a node one time. Once the transaction completes you cannot write again.
-Simply convert your states to an ``Object`` and write it to the node.
-An ``Object`` is a superset of ``StaticData``. For now you do not have to worry about this::
+Simply convert your states to ``DbData`` and write it to the node.
+An ``DbData`` is a superset of ``StaticData``. For now you do not have to worry about this::
 
     def _save_states(
         self, states: List[Tuple[float, State]], database: Database, db_node: Node
     ) -> None:
         with database.begin_transaction() as txn:
-            db_node.set_object(
+            db_node.set_db_data(
                 txn,
                 [
                     {"time": time, "actors": actors.serialize()}
@@ -594,7 +594,7 @@ Depending on your parameters this can take quite a long time.
 
 You can analyze the results using the same scripts as from the previous optimization tutorial::
 
-    python core/revolve2/analysis/core/plot_ea_fitness.py database
+    revolve2.analysis.core.plot_ea_fitness database
 
 .. image:: optimize_locomotion_analysis.png
     :width: 100%

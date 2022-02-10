@@ -15,7 +15,7 @@ Prerequisites
 -------------
 
 * Have Revolve2 :ref:`installed <installation/index:Installation>`.
-* Have the supplementary library ``Isaac Gym environment`` :ref:`installed <installation/envs/isaacgym:Isaac Gym environment supplementary library>`.
+* Have the supplementary package ``Isaac Gym environment`` :ref:`installed <installation/runners/isaacgym:Isaac Gym environment supplementary package>`.
 * Knowledge of the :ref:`modular robots <concepts/modular_robots:Modular robots>` used in Revolve2.
 * Superficial knowledge of the :ref:`cpg controllers <concepts/cpg:CPG>` used in Revolve2.
 
@@ -94,7 +94,7 @@ To simulate the robot, create a ``Simulator`` class::
         await sim.simulate(robot, 10)
 
 A physics simulation environment such as the Isaac Gym environment works with batches of environments.
-A batch provides common arguments between all environments, and an environment describes the physical objects to be simulated in that environment.
+A batch provides common arguments between all environments, and an environment describes the physical Actors to be simulated in that environment.
 Environments do not interact with each other.
 Create batch and a single environment for our lone robot to be simulated.
 Also create a control function that controls all robots in each environment.

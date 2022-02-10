@@ -61,7 +61,7 @@ html_static_path = []
 # -- Other --
 autodoc_type_aliases = {
     "StaticData": "StaticData",
-    "Object": "Object",
+    "DbData": "DbData",
 }
 add_module_names = False
 python_use_unqualified_type_names = True

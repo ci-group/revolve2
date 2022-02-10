@@ -30,7 +30,7 @@ Every bit corresponds to an item that can be included in the knapsack.
 A one means the item is included, and a zero means it is not.
 Naturally the sum of the weights of all items must be no larger than the maximum weight.
 A genotype follows the same structure, but without the weight restriction.
-The functions from genotype to phenotype simply adds items from left to right in the bit string, skipping any items that would bring the weight over the maximum.
+The function from genotype to phenotype simply adds items from left to right in the bit string, skipping any items that would bring the weight over the maximum.
 
 The crossover operator will choose a random point along the bit string. All bits before that point will be taken taken from parent one and the rest from parent two.
 The mutation operator will randomly flip each bit with 1/*n* chance, with *n* being the length of the bit strings.
@@ -126,7 +126,7 @@ Finally, the ``develop`` function adds items from the genotype's bit string from
 
         return Phenotype(phenotype)
 
-Now that the baseline object are there it is time to start with the actual optimization process.
+Now that the baseline objects are there it is time to start with the actual optimization process.
 Your program will use ``async`` Revolve2 functions, so the entry point for the program will be an async main::
 
     async def main() -> None:
@@ -146,7 +146,7 @@ Define some parameters for the evolutionary algorithm::
 
         INITIAL_HAS_ITEM_PROB = 0.5
 
-Revolve2 uses python's ``logging`` module. You can configure yourself what you want to do with the logs::
+Revolve2 uses Python's ``logging`` module. You can configure yourself what you want to do with the logs::
 
     import logging
 
@@ -244,7 +244,7 @@ The ``EvolutionaryOptimizer`` base class has many arguments, but the names speak
 Importantly ``initial_fitness`` is an optional argument.
 If set to None, the optimizer will automatically evaluate the initial population.
 The second argument of ``EvolutionaryOptimizer``'s ``asyncinit`` is a database ``Node``.
-Revolve's database structure is similar to JSON, and a ``Node`` points to an position in this structure.
+Revolve's database structure is similar to JSON and a ``Node`` points to an position in this structure.
 This optimizer is the first and only part of the program touching the database, so it should write at the root node.
 In addition to the required arguments, also add ``items``, representing all possible items, and ``num_generation``, the number of generations to perform the algorithm for.
 These will be used later::
@@ -418,7 +418,7 @@ The ``EvolutionaryOptimizer`` comes with an ``Analyzer``.
 This class knows exactly what the database structure used by the optimizer is.
 However, for simplicity this tutorial is going to use the analysis program ``plot_ea_fitness.py``, which can plot fitness over all generations::
 
-    python core/revolve2/analysis/core/plot_ea_fitness.py database
+    revolve2.analysis.core.plot_ea_fitness database
 
 If this tool is slow, this is something that is actively being worked on. Your output should look similar to the image below.
 

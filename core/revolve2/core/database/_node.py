@@ -3,7 +3,7 @@ from typing import Optional, Union
 
 from ._database_error import DatabaseError
 from ._node_impl import NodeImpl
-from ._object import Object
+from ._db_data import DbData
 from ._transaction import Transaction
 from ._uninitialized import Uninitialized
 
@@ -11,7 +11,7 @@ from ._uninitialized import Uninitialized
 class Node:
     """
     Represents a node in a database.
-    Can be either an object or unitialized.
+    Can be either DbData or unitialized.
     """
 
     _impl: Optional[NodeImpl]
@@ -26,26 +26,26 @@ class Node:
         """
         return self._impl is None
 
-    def get_object(self, txn: Transaction) -> Union[Object, Uninitialized]:
+    def get_db_data(self, txn: Transaction) -> Union[DbData, Uninitialized]:
         """
-        Read the underlying object from the database.
+        Read the underlying DbData from the database.
         """
         if self._impl is None:
             raise DatabaseError()
 
-        return self._impl.get_object(txn)
+        return self._impl.get_db_data(txn)
 
-    def set_object(self, txn: Transaction, object: Object) -> None:
+    def set_db_data(self, txn: Transaction, db_data: DbData) -> None:
         """
-        Set the underlying object in the database.
-        If object is not uninitialized, raises DatabaseError.
+        Set the underlying db_data in the database.
+        If db_data is not uninitialized, raises DatabaseError.
         """
         if self._impl is None:
             raise DatabaseError(
                 "Node not usable yet. It is a stub created by the user that has not yet been linked with the database."
             )
 
-        self._impl.set_object(txn, object)
+        self._impl.set_db_data(txn, db_data)
 
     def _set_impl(self, impl: NodeImpl) -> None:
         self._impl = impl

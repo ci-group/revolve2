@@ -146,7 +146,7 @@ Define some parameters for the evolutionary algorithm::
 
         INITIAL_HAS_ITEM_PROB = 0.5
 
-Revolve2 uses python's ``logging`` module. You can configure yourself what you want to do with the logs::
+Revolve2 uses Python's ``logging`` module. You can configure yourself what you want to do with the logs::
 
     import logging
 

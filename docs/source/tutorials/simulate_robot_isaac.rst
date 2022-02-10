@@ -15,7 +15,7 @@ Prerequisites
 -------------
 
 * Have Revolve2 :ref:`installed <installation/index:Installation>`.
-* Have the supplementary library ``Isaac Gym environment`` :ref:`installed <installation/envs/isaacgym:Isaac Gym environment supplementary library>`.
+* Have the supplementary package ``Isaac Gym environment`` :ref:`installed <installation/runners/isaacgym:Isaac Gym environment supplementary package>`.
 * Knowledge of the :ref:`modular robots <concepts/modular_robots:Modular robots>` used in Revolve2.
 * Superficial knowledge of the :ref:`cpg controllers <concepts/cpg:CPG>` used in Revolve2.
 

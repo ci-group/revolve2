@@ -1,14 +1,6 @@
 revolve2.actor\_controller package
 ==================================
 
-Subpackages
------------
-
-.. toctree::
-   :maxdepth: 1
-
-   controllers <revolve2.actor_controller.controllers>
-
 Module contents
 ---------------
 

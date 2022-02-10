@@ -173,7 +173,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, float]):
         self, states: List[Tuple[float, State]], database: Database, db_node: Node
     ) -> None:
         with database.begin_transaction() as txn:
-            db_node.set_object(
+            db_node.set_db_data(
                 txn,
                 [
                     {"time": time, "actors": actors.serialize()}

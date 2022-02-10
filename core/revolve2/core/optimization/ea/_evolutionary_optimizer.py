@@ -284,7 +284,7 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
             self.__db_generations = DbList()
             self.__db_individuals = DbList()
 
-            self.__db_ea.set_object(
+            self.__db_ea.set_db_data(
                 txn,
                 {
                     "rng_after_generation": self.__db_rng_after_generation,
@@ -321,15 +321,15 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
         logging.debug("Beginning saving generation..")
 
-        self.__db_rng_after_generation.append(txn).set_object(
+        self.__db_rng_after_generation.append(txn).set_db_data(
             txn, pickle.dumps(self._rng.getstate())
         )
-        self.__db_generations.append(txn).set_object(
+        self.__db_generations.append(txn).set_db_data(
             txn, [individual.id for individual in self.__last_generation]
         )
         try:
             for individual in new_individuals:
-                self.__db_individuals.append(txn).set_object(
+                self.__db_individuals.append(txn).set_db_data(
                     txn, individual.serialize()
                 )
         except SerializeError as err:
@@ -348,13 +348,13 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
         """
 
         with self.__database.begin_transaction() as txn:
-            root = self.__db_node.get_object(txn)
+            root = self.__db_node.get_db_data(txn)
 
             try:
                 if isinstance(root, Uninitialized):
                     self.__db_ea = Node()
                     self.__db_evaluations = DbList()
-                    self.__db_node.set_object(
+                    self.__db_node.set_db_data(
                         txn, {"evaluations": self.__db_evaluations, "ea": self.__db_ea}
                     )
                     return False
@@ -365,19 +365,19 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     if not isinstance(self.__db_ea, Node):
                         raise SerializeError()
                     self.__db_evaluations = dynamic_cast_dblist(
-                        dynamic_cast_node(root["evaluations"]).get_object(txn)
+                        dynamic_cast_node(root["evaluations"]).get_db_data(txn)
                     )
                     if not isinstance(self.__db_evaluations, DbList):
                         raise SerializeError()
 
-                    ea = self.__db_ea.get_object(txn)
+                    ea = self.__db_ea.get_db_data(txn)
                     if isinstance(ea, Uninitialized):
                         return False
                     elif not isinstance(ea, dict):
                         raise SerializeError()
 
                     self.__db_rng_after_generation = dynamic_cast_dblist(
-                        dynamic_cast_node(ea["rng_after_generation"]).get_object(txn)
+                        dynamic_cast_node(ea["rng_after_generation"]).get_db_data(txn)
                     )
                     if not isinstance(self.__db_rng_after_generation, DbList):
                         raise SerializeError()
@@ -388,12 +388,12 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
                     if not isinstance(self.__offspring_size, int):
                         raise SerializeError()
                     self.__db_generations = dynamic_cast_dblist(
-                        dynamic_cast_node(ea["generations"]).get_object(txn)
+                        dynamic_cast_node(ea["generations"]).get_db_data(txn)
                     )
                     if not isinstance(self.__db_generations, DbList):
                         raise SerializeError()
                     self.__db_individuals = dynamic_cast_dblist(
-                        dynamic_cast_node(ea["individuals"]).get_object(txn)
+                        dynamic_cast_node(ea["individuals"]).get_db_data(txn)
                     )
                     if not isinstance(self.__db_individuals, DbList):
                         raise SerializeError()
@@ -407,13 +407,13 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
                     individual_ids = self.__db_generations.get(
                         txn, self.__generation_index
-                    ).get_object(txn)
+                    ).get_db_data(txn)
                     if not isinstance(individual_ids, list):
                         raise SerializeError()
                     self.__last_generation = [
                         Individual.deserialize(
                             dynamic_cast_static_data(
-                                self.__db_individuals.get(txn, id).get_object(txn)
+                                self.__db_individuals.get(txn, id).get_db_data(txn)
                             )
                         )
                         for id in individual_ids
@@ -422,14 +422,14 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
                     x = self.__db_rng_after_generation.get(
                         txn, self.__generation_index
-                    ).get_object(txn)
+                    ).get_db_data(txn)
 
                     self._rng.setstate(
                         pickle.loads(
                             dynamic_cast_bytes(
                                 self.__db_rng_after_generation.get(
                                     txn, self.__generation_index
-                                ).get_object(txn)
+                                ).get_db_data(txn)
                             )
                         )
                     )

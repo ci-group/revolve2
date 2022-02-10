@@ -9,10 +9,10 @@ if TYPE_CHECKING:
     from ._list import List as DbList
     from ._node import Node
 
-Object = Union[List["Object"], Dict[str, "Object"], StaticData, "Node", "DbList"]  # type: ignore # TODO this is not yet supported by mypy
+DbData = Union[List["DbData"], Dict[str, "DbData"], StaticData, "Node", "DbList"]  # type: ignore # TODO this is not yet supported by mypy
 
 
-def is_object(to_check: Any) -> TypeGuard[Object]:
+def is_db_data(to_check: Any) -> TypeGuard[DbData]:
     from ._list import List as DbList
     from ._node import Node
 
@@ -21,10 +21,10 @@ def is_object(to_check: Any) -> TypeGuard[Object]:
     elif isinstance(to_check, Node):
         return True
     elif isinstance(to_check, list):
-        return all([is_object(child) for child in to_check])
+        return all([is_db_data(child) for child in to_check])
     elif isinstance(to_check, dict):
         return all(
-            [isinstance(key, str) and is_object(val) for key, val in to_check.items()]
+            [isinstance(key, str) and is_db_data(val) for key, val in to_check.items()]
         )
     elif is_static_data(to_check):
         return True

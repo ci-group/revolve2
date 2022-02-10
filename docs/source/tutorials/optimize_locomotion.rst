@@ -498,14 +498,14 @@ Any interaction with a database requires a transactions.
 Whenever an error occurs everything done within the transaction is rolled back.
 The ``EvolutionaryOptimizer`` provides you with an uninitialized ``Node`` for you to write your simulation history to.
 Be aware that you can only write to a node one time. Once the transaction completes you cannot write again.
-Simply convert your states to an ``Object`` and write it to the node.
-An ``Object`` is a superset of ``StaticData``. For now you do not have to worry about this::
+Simply convert your states to ``DbData`` and write it to the node.
+An ``DbData`` is a superset of ``StaticData``. For now you do not have to worry about this::
 
     def _save_states(
         self, states: List[Tuple[float, State]], database: Database, db_node: Node
     ) -> None:
         with database.begin_transaction() as txn:
-            db_node.set_object(
+            db_node.set_db_data(
                 txn,
                 [
                     {"time": time, "actors": actors.serialize()}

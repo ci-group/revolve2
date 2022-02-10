@@ -2,12 +2,12 @@ from ._database import Database
 from ._database_error import DatabaseError
 from ._list import List
 from ._node import Node
-from ._object import Object, is_object
+from ._db_data import DbData, is_db_data
 from ._cast import (
     dynamic_cast_bytes,
     dynamic_cast_float,
     dynamic_cast_static_data,
-    dynamic_cast_object,
+    dynamic_cast_db_data,
     dynamic_cast_node,
     dynamic_cast_dblist,
 )
@@ -19,12 +19,12 @@ __all__ = [
     "DatabaseError",
     "List",
     "Node",
-    "Object",
-    "is_object",
+    "DbData",
+    "is_db_data",
     "dynamic_cast_static_data",
     "dynamic_cast_bytes",
     "dynamic_cast_float",
-    "dynamic_cast_object",
+    "dynamic_cast_db_data",
     "dynamic_cast_node",
     "dynamic_cast_dblist",
     "Transaction",

@@ -28,7 +28,6 @@ setup(
     zip_safe=False,
     entry_points={
         "console_scripts": [
-            "revolve2.core.modular_robot.physical.create_physical_robot=revolve2.core.modular_robot.physical.create_physical_robot:main",
             "revolve2.analysis.core.plot_ea_fitness=revolve2.analysis.core.plot_ea_fitness:main",
         ]
     },

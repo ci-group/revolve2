@@ -13,4 +13,4 @@ Install
 -------
 Install the package on your Raspberry Pi::
 
-    pip install <revolve_path>/rpi_controller
+    pip install <revolve2_path>/rpi_controller

@@ -18,4 +18,4 @@ Install
 -------
 Install the package::
 
-    pip install <revolve_path>/runners/isaacgym
+    pip install <revolve2_path>/runners/isaacgym

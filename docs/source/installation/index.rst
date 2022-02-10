@@ -38,11 +38,13 @@ Install core
 ``Core`` installs all code and revolve2 packages required for optimization.
 It has only PyPI dependencies and is a pure python package::
 
-    pip install <revolve_path>/core
+    pip install <revolve2_path>/core
 
 --------------------------------------------
 Install supplementary packages (Optional)
 --------------------------------------------
+Revolve2 contains additional packages that provide extra functionality. These are fully optional.
+
 .. toctree::
    :maxdepth: 1
 
@@ -54,7 +56,7 @@ Install supplementary packages (Optional)
 -------------
 Editable Mode
 -------------
-If you want to edit revolve's code while having it installed, consider using pip's ``editable mode``::
+If you want to edit revolve2's code while having it installed, consider using pip's ``editable mode``::
 
     pip install <package> -e
 

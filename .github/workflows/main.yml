@@ -29,7 +29,7 @@ jobs:
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
         run: |
-          apt install libcereal-dev
+          sudo apt install libcereal-dev
           pip install ./genotypes/cppnwin
 
   check_format:
@@ -63,7 +63,7 @@ jobs:
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
         run: |
-          apt install libcereal-dev
+          sudo apt install libcereal-dev
           pip install ./genotypes/cppnwin[dev]
       - name: install requirements for mypy
         run: pip install -r ./mypy/requirements.txt
@@ -95,7 +95,7 @@ jobs:
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
         run: |
-          apt install libcereal-dev
+          sudo apt install libcereal-dev
           pip install ./genotypes/cppnwin[dev]
       - name: install requirements for sphinx
         run: pip install -r ./docs/requirements.txt

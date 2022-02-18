@@ -16,11 +16,6 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
-      - name: install requirements not provided by pip
-        run: |
-          sudo apt install libboost-all-dev
-          pip install numpy
-          pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
       - name: install serialization
         run: pip install ./serialization
       - name: install actor_controller
@@ -33,7 +28,9 @@ jobs:
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
-        run: pip install ./genotypes/cppnwin
+        run: |
+          apt install libcereal-dev
+          pip install ./genotypes/cppnwin
 
   check_format:
     runs-on: ubuntu-20.04
@@ -55,11 +52,6 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
-      - name: install requirements not provided by pip
-        run: |
-          sudo apt install libboost-all-dev
-          pip install numpy
-          pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
       - name: install serialization
         run: pip install ./serialization[dev]
       - name: install actor_controller
@@ -72,7 +64,9 @@ jobs:
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
-        run: pip install ./genotypes/cppnwin[dev]
+        run: |
+          apt install libcereal-dev
+          pip install ./genotypes/cppnwin[dev]
       - name: install requirements for mypy
         run: pip install -r ./mypy/requirements.txt
       - name: run mypy
@@ -90,11 +84,6 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
-      - name: install requirements not provided by pip
-        run: |
-          sudo apt install libboost-all-dev
-          pip install numpy
-          pip install git+https://github.com/ci-group/MultiNEAT.git@33afbc1a5289a40e20eedcab3ad9af24e320318f
       - name: install serialization
         run: pip install ./serialization[dev]
       - name: install actor_controller
@@ -107,7 +96,9 @@ jobs:
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install genotype CPPNWIN
-        run: pip install ./genotypes/cppnwin[dev]
+        run: |
+          apt install libcereal-dev
+          pip install ./genotypes/cppnwin[dev]
       - name: install requirements for sphinx
         run: pip install -r ./docs/requirements.txt
       - name: sphinx

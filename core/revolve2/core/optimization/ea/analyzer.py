@@ -131,7 +131,6 @@ class Individuals:
         return self._individuals.len(self._txn)
 
     def __iter__(self) -> Iterator[Individual]:
-        asdas = range(len(self))
         for i in range(len(self)):
             yield self[i]
 

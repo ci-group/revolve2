@@ -24,7 +24,7 @@ class BrainGenotypeCpgV1(
         multineat_params: multineat.Parameters,
         output_activation_func: multineat.ActivationFunction,
         num_initial_mutations: int,
-    ) -> BodybrainBase[BrainGenotypeCpgV1]:
+    ) -> BrainGenotypeCpgV1:
         assert multineat_params.MutateOutputActivationFunction == False
         # other activation functions could work too, but this has been tested.
         # if you want another one, make sure it's output is between -1 and 1.
@@ -47,7 +47,7 @@ class BrainGenotypeCpgV1(
         return cast(str, self._genotype.Serialize())  # TODO missing multineat typing
 
     @classmethod
-    def deserialize(cls, data: StaticData) -> Serializable:
+    def deserialize(cls, data: StaticData) -> BodyGenotypeV1:
         genotype = multineat.Genome()
         if type(data) != str:
             raise SerializeError()

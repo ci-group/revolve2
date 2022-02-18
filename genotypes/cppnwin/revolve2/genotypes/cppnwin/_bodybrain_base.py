@@ -22,7 +22,7 @@ class BodybrainBase(Generic[Child]):
         num_inputs: int,
         num_outputs: int,
         num_initial_mutations: int,
-    ) -> BodybrainBase[Child]:
+    ) -> Child:
         genotype = multineat.Genome(
             0,  # ID
             num_inputs,

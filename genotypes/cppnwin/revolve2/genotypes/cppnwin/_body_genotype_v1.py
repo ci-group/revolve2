@@ -26,7 +26,7 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
         multineat_params: multineat.Parameters,
         output_activation_func: multineat.ActivationFunction,
         num_initial_mutations: int,
-    ) -> BodybrainBase[BodyGenotypeV1]:
+    ) -> BodyGenotypeV1:
         return super(BodyGenotypeV1, cls)._random(
             innov_db,
             rng,
@@ -208,7 +208,7 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
         return cast(str, self._genotype.Serialize())  # TODO missing multineat typing
 
     @classmethod
-    def deserialize(cls, data: StaticData) -> Serializable:
+    def deserialize(cls, data: StaticData) -> BodyGenotypeV1:
         if type(data) != str:
             raise SerializeError()
         genotype = multineat.Genome()

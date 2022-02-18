@@ -7,9 +7,9 @@ from typing import Generic, List, Optional, TypeVar, Union
 from revolve2.serialization import (
     Serializable,
     SerializeError,
+    StaticData,
     deserialize,
     serialize,
-    StaticData,
 )
 
 Genotype = TypeVar("Genotype", bound=Union[Serializable, StaticData])

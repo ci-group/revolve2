@@ -5,10 +5,10 @@ from json.decoder import JSONDecodeError
 from typing import Any, Dict, List, Tuple, Union
 
 from .._database_error import DatabaseError
+from .._db_data import DbData, is_db_data
 from .._list import List as ListIface
 from .._node import Node as NodeIface
 from .._node_impl import NodeImpl as NodeImplBase
-from .._db_data import DbData, is_db_data
 from .._transaction import Transaction as TransactionBase
 from .._uninitialized import Uninitialized
 from ._list_impl import List as ListImpl

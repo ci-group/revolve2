@@ -1,10 +1,10 @@
 import random
+from random import Random
 from typing import List, Tuple
 
 from revolve2.core.modular_robot import AnalyzerModule
 
 from ._cpg import Cpg
-from random import Random
 
 
 class CpgRandom(Cpg):

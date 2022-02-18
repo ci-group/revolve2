@@ -1,6 +1,7 @@
 from typing import List, Tuple, cast
 
 import multineat
+
 from revolve2.core.modular_robot import AnalyzerModule
 from revolve2.core.modular_robot.brains import Cpg as ModularRobotBrainCpg
 

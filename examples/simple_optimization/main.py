@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from random import Random
 from typing import List, Optional
@@ -7,10 +8,9 @@ from typing import List, Optional
 import revolve2.core.optimization.ea.population_management as population_management
 import revolve2.core.optimization.ea.selection as selection
 from revolve2.core.database import Database, Node
-from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
-import logging
 from revolve2.core.database.sqlite import Database as DbSqlite
-from revolve2.serialization import StaticData, Serializable
+from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
+from revolve2.serialization import Serializable, StaticData
 
 
 @dataclass

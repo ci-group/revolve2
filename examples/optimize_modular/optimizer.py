@@ -5,12 +5,14 @@ from random import Random
 from typing import List, Optional, Tuple
 
 import multineat
+from genotype import Genotype
+from pyrr import Quaternion, Vector3
+
 import revolve2.core.optimization.ea.population_management as population_management
 import revolve2.core.optimization.ea.selection as selection
-from pyrr import Quaternion, Vector3
+from revolve2.actor_controller import ActorController
 from revolve2.core.database import Database, Node
 from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
-from revolve2.actor_controller import ActorController
 from revolve2.core.physics.running import (
     ActorControl,
     ActorState,
@@ -21,8 +23,6 @@ from revolve2.core.physics.running import (
     State,
 )
 from revolve2.runners.isaacgym import LocalRunner
-
-from genotype import Genotype
 
 
 class Optimizer(EvolutionaryOptimizer[Genotype, float]):

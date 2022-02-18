@@ -1,10 +1,12 @@
 from __future__ import annotations
+
 from typing import Any
 
-from ._db_data import DbData, is_db_data
 from revolve2.serialization import StaticData, is_static_data
-from ._node import Node
+
+from ._db_data import DbData, is_db_data
 from ._list import List as DbList
+from ._node import Node
 
 
 def dynamic_cast_db_data(data: Any) -> DbData:

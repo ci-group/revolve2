@@ -37,6 +37,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
+      - uses: isort/isort-action@master
 
   mypy:
     runs-on: ubuntu-20.04

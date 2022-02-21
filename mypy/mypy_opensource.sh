@@ -6,4 +6,4 @@ cd "$(dirname "$0")"
 ../rpi_controller/run_mypy.sh && \
 ../core/run_mypy.sh && \
 ../genotypes/cppnwin/run_mypy.sh && \
-../examples/run_mypy.sh
+../examples/run_mypy_opensource.sh

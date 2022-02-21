@@ -6,9 +6,13 @@ This package provides a modular robot genotype using CPPNWIN.
 -------------
 Prerequisites
 -------------
-This package depends on a patched version of the open source MultiNEAT library.
-It is not available on PyPI but can instead be downloaded at `<https://github.com/ci-group/MultiNEAT>`_.
-Make sure you are in your virtual environment and follow the instructions in the repository for the installation of the python package.
+This package depends on a patched version of the open source MultiNEAT library, available at `<https://github.com/ci-group/MultiNEAT>`_.
+MultiNEAT is automatically installed by the CPPNWIN package, but you need to manually install one of its dependencies, the `cereal <https://uscilab.github.io/cereal/>`_ C++ library.
+On Ubuntu this can be done by running::
+
+    sudo apt install libcereal-dev
+
+On other systems you can check yourself if a package is available. If it not, you can install cereal from source. It is a header-only library, so there is no need to build cereal.
 
 -------
 Install

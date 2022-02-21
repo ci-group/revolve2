@@ -133,11 +133,10 @@ class Genotype(BodybrainGenotype[BodyGenotypeV1, BrainGenotypeCpgV1], Serializab
         return multineat_rng
 
     def serialize(self) -> StaticData:
-        test = {
+        return {
             "body": self._body_genotype.serialize(),
             "brain": self._brain_genotype.serialize(),
         }
-        return test
 
     @classmethod
     def deserialize(cls, data: StaticData) -> Genotype:

@@ -9,6 +9,7 @@ from statistics import mean
 from typing import List
 
 import matplotlib.pyplot as plt  # type: ignore # TODO couldn't find any stubs
+
 from revolve2.core.database import dynamic_cast_float
 from revolve2.core.database.sqlite import Database
 from revolve2.core.optimization.ea import Analyzer as EaAnalyzer

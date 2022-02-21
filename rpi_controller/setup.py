@@ -1,6 +1,7 @@
-from setuptools import find_namespace_packages, setup
-import pathlib
 import os.path
+import pathlib
+
+from setuptools import find_namespace_packages, setup
 
 revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 

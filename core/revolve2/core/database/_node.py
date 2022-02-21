@@ -1,9 +1,10 @@
 from __future__ import annotations
+
 from typing import Optional, Union
 
 from ._database_error import DatabaseError
-from ._node_impl import NodeImpl
 from ._db_data import DbData
+from ._node_impl import NodeImpl
 from ._transaction import Transaction
 from ._uninitialized import Uninitialized
 

@@ -9,13 +9,15 @@ from revolve2.core.modular_robot import Brain as ModularRobotBrain
 from revolve2.core.optimization.ea.modular_robot import BrainGenotype
 from revolve2.serialization import Serializable, SerializeError, StaticData
 
-from ._bodybrain_base import BodybrainBase
 from ._brain_cpg_v1 import BrainCpgV1
+from ._random_multineat_genotype import random_multineat_genotype
+from dataclasses import dataclass
 
 
-class BrainGenotypeCpgV1(
-    BrainGenotype, BodybrainBase["BrainGenotypeCpgV1"], Serializable
-):
+@dataclass
+class BrainGenotypeCpgV1(BrainGenotype, Serializable):
+    _genotype: multineat.Genome
+
     @classmethod
     def random(
         cls,
@@ -30,15 +32,52 @@ class BrainGenotypeCpgV1(
         # if you want another one, make sure it's output is between -1 and 1.
         assert output_activation_func == multineat.ActivationFunction.SIGNED_SINE
 
-        return super(BrainGenotypeCpgV1, cls)._random(
+        return cls(
+            random_multineat_genotype(
+                innov_db,
+                rng,
+                multineat_params,
+                output_activation_func,
+                7,  # bias(always 1), x1, y1, z1, x2, y2, z2
+                1,  # weight
+                num_initial_mutations,
+            )
+        )
+
+    def mutate(
+        self,
+        multineat_params: multineat.Parameters,
+        innov_db: multineat.InnovationDatabase,
+        rng: multineat.RNG,
+    ) -> BrainGenotypeCpgV1:
+        new_genotype = multineat.Genome(self._genotype)
+        new_genotype.Mutate(
+            False,
+            multineat.SearchMode.COMPLEXIFYING,
             innov_db,
+            multineat_params,
+            rng,
+        )
+        return type(self)(new_genotype)
+
+    @classmethod
+    def crossover(
+        cls,
+        parent1: BrainGenotypeCpgV1,
+        parent2: BrainGenotypeCpgV1,
+        multineat_params: multineat.Parameters,
+        rng: multineat.RNG,
+        mate_average: bool,
+        interspecies_crossover: bool,
+    ) -> BrainGenotypeCpgV1:
+        new_genotype = parent1._genotype.Mate(
+            parent2._genotype,
+            mate_average,
+            interspecies_crossover,
             rng,
             multineat_params,
-            output_activation_func,
-            7,  # bias(always 1), x1, y1, z1, x2, y2, z2
-            1,  # weight
-            num_initial_mutations,
         )
+        return cls(new_genotype)
 
     def develop(self, body: ModularRobotBody) -> ModularRobotBrain:
         return BrainCpgV1(self._genotype)
@@ -47,7 +86,7 @@ class BrainGenotypeCpgV1(
         return cast(str, self._genotype.Serialize())  # TODO missing multineat typing
 
     @classmethod
-    def deserialize(cls, data: StaticData) -> BodyGenotypeV1:
+    def deserialize(cls, data: StaticData) -> BrainGenotypeCpgV1:
         genotype = multineat.Genome()
         if type(data) != str:
             raise SerializeError()

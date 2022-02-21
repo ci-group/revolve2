@@ -14,10 +14,13 @@ from revolve2.core.modular_robot import Brick, Core, Module
 from revolve2.core.optimization.ea.modular_robot import BodyGenotype
 from revolve2.serialization import Serializable, SerializeError, StaticData
 
-from ._bodybrain_base import BodybrainBase
+from ._random_multineat_genotype import random_multineat_genotype
 
 
-class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable):
+@dataclass
+class BodyGenotypeV1(BodyGenotype, Serializable):
+    _genotype: multineat.Genome
+
     @classmethod
     def random(
         cls,
@@ -27,15 +30,52 @@ class BodyGenotypeV1(BodyGenotype, BodybrainBase["BodyGenotypeV1"], Serializable
         output_activation_func: multineat.ActivationFunction,
         num_initial_mutations: int,
     ) -> BodyGenotypeV1:
-        return super(BodyGenotypeV1, cls)._random(
+        return cls(
+            random_multineat_genotype(
+                innov_db,
+                rng,
+                multineat_params,
+                output_activation_func,
+                5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
+                5,  # empty, brick, activehinge, rot0, rot90
+                num_initial_mutations,
+            )
+        )
+
+    def mutate(
+        self,
+        multineat_params: multineat.Parameters,
+        innov_db: multineat.InnovationDatabase,
+        rng: multineat.RNG,
+    ) -> BodyGenotypeV1:
+        new_genotype = multineat.Genome(self._genotype)
+        new_genotype.Mutate(
+            False,
+            multineat.SearchMode.COMPLEXIFYING,
             innov_db,
+            multineat_params,
+            rng,
+        )
+        return type(self)(new_genotype)
+
+    @classmethod
+    def crossover(
+        cls,
+        parent1: BodyGenotypeV1,
+        parent2: BodyGenotypeV1,
+        multineat_params: multineat.Parameters,
+        rng: multineat.RNG,
+        mate_average: bool,
+        interspecies_crossover: bool,
+    ) -> BodyGenotypeV1:
+        new_genotype = parent1._genotype.Mate(
+            parent2._genotype,
+            mate_average,
+            interspecies_crossover,
             rng,
             multineat_params,
-            output_activation_func,
-            5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
-            5,  # empty, brick, activehinge, rot0, rot90
-            num_initial_mutations,
         )
+        return cls(new_genotype)
 
     @dataclass
     class _Module:

@@ -8,7 +8,7 @@ from optimizer import Optimizer
 from revolve2.core.database.sqlite import Database as DbSqlite
 
 
-async def main():
+async def main() -> None:
     # number of initial mutations for body and brain CPPNWIN networks
     NUM_INITIAL_MUTATIONS = 10
 

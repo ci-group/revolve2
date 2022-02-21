@@ -42,7 +42,9 @@ class Optimizer(EvolutionaryOptimizer[Genotype, float]):
     def __init__(self) -> None:
         pass
 
+    @classmethod
     async def create(
+        cls,
         database: Database,
         initial_population: List[Genotype],
         initial_fitness: Optional[List[float]],

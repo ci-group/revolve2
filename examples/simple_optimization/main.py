@@ -64,7 +64,9 @@ class Optimizer(EvolutionaryOptimizer[Genotype, float]):
     def __init__(self) -> None:
         pass
 
+    @classmethod
     async def create(
+        cls,
         database: Database,
         rng: Random,
         population_size: int,

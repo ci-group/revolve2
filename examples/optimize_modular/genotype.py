@@ -4,9 +4,10 @@ import sys
 from random import Random
 
 import multineat
-from revolve2.serialization import Serializable, SerializeError, StaticData
+
 from revolve2.core.optimization.ea.modular_robot import BodybrainGenotype
 from revolve2.genotypes.cppnwin import BodyGenotypeV1, BrainGenotypeCpgV1
+from revolve2.serialization import Serializable, SerializeError, StaticData
 
 
 class Genotype(BodybrainGenotype[BodyGenotypeV1, BrainGenotypeCpgV1], Serializable):

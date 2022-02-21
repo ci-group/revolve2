@@ -11,13 +11,13 @@ from revolve2.core.database import List as DbList
 from revolve2.core.database import (
     Node,
     Transaction,
+    Uninitialized,
     dynamic_cast_bytes,
-    dynamic_cast_static_data,
+    dynamic_cast_dblist,
     dynamic_cast_node,
+    dynamic_cast_static_data,
 )
-from revolve2.serialization import StaticData, Serializable, SerializeError
-from revolve2.core.database import dynamic_cast_dblist
-from revolve2.core.database import Uninitialized
+from revolve2.serialization import Serializable, SerializeError, StaticData
 
 from ._individual import Individual
 

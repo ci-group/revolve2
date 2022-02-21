@@ -4,10 +4,11 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 import numpy.typing as npt
+from revolve2.actor_controllers.cpg import Cpg as ControllerCpg
+
+from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import Analyzer, AnalyzerModule, Brain, Module
 from revolve2.core.physics.actor import Actor
-from revolve2.actor_controller import ActorController
-from revolve2.actor_controllers.cpg import Cpg as ControllerCpg
 
 
 class Cpg(Brain, ABC):

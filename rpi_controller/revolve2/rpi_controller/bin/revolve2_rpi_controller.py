@@ -1,14 +1,16 @@
 import argparse
-import jsonschema
-import json
-from typing import Any, cast, List, Optional
-import importlib
-from revolve2.actor_controller import ActorController
-import pigpio
-from dataclasses import dataclass
 import asyncio
-import time
+import importlib
+import json
 import sys
+import time
+from dataclasses import dataclass
+from typing import Any, List, Optional, cast
+
+import jsonschema
+import pigpio
+
+from revolve2.actor_controller import ActorController
 from revolve2.serialization import StaticData
 
 

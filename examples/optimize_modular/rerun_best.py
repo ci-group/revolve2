@@ -1,9 +1,9 @@
 import multineat  # very important, because this actually imports the multineat dynamic library
+from genotype import Genotype
 from revolve2.analysis.isaacgym import ModularRobotRerunner
+
 from revolve2.core.database.sqlite import Database as DbSqlite
 from revolve2.core.optimization.ea.analyzer import Analyzer as EaAnalyzer
-
-from genotype import Genotype
 
 
 async def main() -> None:

@@ -37,6 +37,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
+      - uses: isort/isort-action@master
+        with:
+          configuration: "--check-only --diff --profile black"
 
   mypy:
     runs-on: ubuntu-20.04

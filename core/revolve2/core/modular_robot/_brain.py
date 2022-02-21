@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from revolve2.core.physics.actor import Actor
 from revolve2.actor_controller import ActorController
+from revolve2.core.physics.actor import Actor
 
 from ._analyzer import Analyzer
 from ._analyzer_module import AnalyzerModule

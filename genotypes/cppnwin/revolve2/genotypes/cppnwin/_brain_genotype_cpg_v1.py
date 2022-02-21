@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import cast
 
 import multineat
@@ -11,7 +12,6 @@ from revolve2.serialization import Serializable, SerializeError, StaticData
 
 from ._brain_cpg_v1 import BrainCpgV1
 from ._random_multineat_genotype import random_multineat_genotype
-from dataclasses import dataclass
 
 
 @dataclass

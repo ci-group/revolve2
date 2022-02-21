@@ -2,9 +2,9 @@ import multineat  # very important, because this actually imports the multineat 
 from genotype import Genotype
 from revolve2.analysis.isaacgym import ModularRobotRerunner
 
+from revolve2.core.database import dynamic_cast_float
 from revolve2.core.database.sqlite import Database as DbSqlite
 from revolve2.core.optimization.ea.analyzer import Analyzer as EaAnalyzer
-from revolve2.core.database import dynamic_cast_float
 
 
 async def main() -> None:

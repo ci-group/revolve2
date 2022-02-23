@@ -183,11 +183,11 @@ class Program:
         if not self._dry:
             try:
                 for pin in self._pins:
-                    gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
-                    gpio.set_PWM_range(
+                    self._gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
+                    self._gpio.set_PWM_range(
                         pin.pin, 255
                     )  # 255 is also the default, but just making sure
-                    gpio.set_PWM_dutycycle(pin.pin, 0)
+                    self._gpio.set_PWM_dutycycle(pin.pin, 0)
             except AttributeError as err:
                 raise RuntimeError("Could not initialize gpios.") from err
 

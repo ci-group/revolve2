@@ -64,6 +64,7 @@ class Cpg(ActorController):
         if (
             not type(data) == dict
             or not "state" in data
+            or not type(data["state"]) == list
             or not all(type(s) == float for s in data["state"])
             or not "num_output_neurons" in data
             or not type(data["num_output_neurons"]) is int

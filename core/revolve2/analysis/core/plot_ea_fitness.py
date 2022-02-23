@@ -8,12 +8,11 @@ from operator import add
 from statistics import mean
 from typing import List
 
-import matplotlib.pyplot as plt  # type: ignore # TODO couldn't find any stubs
+import matplotlib.pyplot as plt
 
 from revolve2.core.database import dynamic_cast_float
 from revolve2.core.database.sqlite import Database
 from revolve2.core.optimization.ea import Analyzer as EaAnalyzer
-from revolve2.core.optimization.ea.analyzer import Generation
 
 
 async def plot(databases: List[str]) -> None:

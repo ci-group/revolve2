@@ -101,7 +101,7 @@ class Program:
 
         self._load_controller(config)
 
-        input("Press enter to start controller. Press enter again to stop.")
+        input("Press enter to start controller. Press enter again to stop.\n")
 
         asyncio.get_event_loop().run_until_complete(
             asyncio.gather(self._run_interface(), self._run_controller())
@@ -183,11 +183,11 @@ class Program:
         if not self._dry:
             try:
                 for pin in self._pins:
-                    gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
-                    gpio.set_PWM_range(
+                    self._gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
+                    self._gpio.set_PWM_range(
                         pin.pin, 255
                     )  # 255 is also the default, but just making sure
-                    gpio.set_PWM_dutycycle(pin.pin, 0)
+                    self._gpio.set_PWM_dutycycle(pin.pin, 0)
             except AttributeError as err:
                 raise RuntimeError("Could not initialize gpios.") from err
 
@@ -203,7 +203,13 @@ class Program:
 
         for pin, target in zip(self._pins, targets):
             if not self._dry:
-                self._gpio.set_PWM_dutycycle(pin.pin, (target + 1.0) / 2.0 * 255)
+                if pin.invert:
+                    invert_mul = -1
+                else:
+                    invert_mul = 1
+                self._gpio.set_PWM_dutycycle(
+                    pin.pin, (invert_mul * target + 1.0) / 2.0 * 255
+                )
 
 
 def main() -> None:

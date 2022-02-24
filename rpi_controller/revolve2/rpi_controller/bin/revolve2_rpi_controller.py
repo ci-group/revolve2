@@ -203,7 +203,13 @@ class Program:
 
         for pin, target in zip(self._pins, targets):
             if not self._dry:
-                self._gpio.set_PWM_dutycycle(pin.pin, (target + 1.0) / 2.0 * 255)
+                if pin.invert:
+                    invert_mul = -1
+                else:
+                    invert_mul = 1
+                self._gpio.set_PWM_dutycycle(
+                    pin.pin, (invert_mul * target + 1.0) / 2.0 * 255
+                )
 
 
 def main() -> None:

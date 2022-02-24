@@ -131,9 +131,13 @@
 <p>This package provides a modular robot genotype using CPPNWIN.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
-<p>This package depends on a patched version of the open source MultiNEAT library.
-It is not available on PyPI but can instead be downloaded at <a class="reference external" href="https://github.com/ci-group/MultiNEAT">https://github.com/ci-group/MultiNEAT</a>.
-Make sure you are in your virtual environment and follow the instructions in the repository for the installation of the python package.</p>
+<p>This package depends on a patched version of the open source MultiNEAT library, available at <a class="reference external" href="https://github.com/ci-group/MultiNEAT">https://github.com/ci-group/MultiNEAT</a>.
+MultiNEAT is automatically installed by the CPPNWIN package, but you need to manually install one of its dependencies, the <a class="reference external" href="https://uscilab.github.io/cereal/">cereal</a> C++ library.
+On Ubuntu this can be done by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span> <span class="n">install</span> <span class="n">libcereal</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>On other systems you can check yourself if a package is available. If it not, you can install cereal from source. It is a header-only library, so there is no need to build cereal.</p>
 </section>
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this headline"></a></h2>

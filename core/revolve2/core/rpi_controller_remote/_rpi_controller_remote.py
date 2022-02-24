@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-import asyncssh.connection
-from contextlib import asynccontextmanager
 import asyncio
-import logging
-import datetime
-from revolve2.serialization import StaticData
-from typing import Tuple, AsyncIterator
 import datetime
 import json
+import logging
+from contextlib import asynccontextmanager
+from typing import AsyncIterator, Tuple
+
+import asyncssh.connection
+
+from revolve2.serialization import StaticData
 
 
 class RpiControllerError(Exception):

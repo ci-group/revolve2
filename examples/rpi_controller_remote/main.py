@@ -1,5 +1,6 @@
-from revolve2.core.rpi_controller_remote import connect
 import logging
+
+from revolve2.core.rpi_controller_remote import connect
 
 config = {
     "controller_module": "revolve2.actor_controllers.cpg",

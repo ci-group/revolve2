@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import asyncssh
+import asyncssh.connection
 from contextlib import asynccontextmanager
 import asyncio
 import logging
 import datetime
 from revolve2.serialization import StaticData
-from typing import Tuple
+from typing import Tuple, AsyncIterator
 import datetime
 import json
 
@@ -16,15 +16,17 @@ class RpiControllerError(Exception):
 
 
 @asynccontextmanager
-async def connect(rpi_ip: str, username: str, password: str) -> RpiControllerRemote:
-    async with asyncssh.connect(
+async def connect(
+    rpi_ip: str, username: str, password: str
+) -> AsyncIterator[RpiControllerRemote]:
+    async with asyncssh.connection.connect(
         host=rpi_ip, username=username, password=password
     ) as conn:
         yield RpiControllerRemote(conn)
 
 
 class RpiControllerRemote:
-    def __init__(self, conn: asyncssh.SSHClientConnection) -> None:
+    def __init__(self, conn: asyncssh.connection.SSHClientConnection) -> None:
         self._conn = conn
 
     async def run_controller(
@@ -43,7 +45,7 @@ class RpiControllerRemote:
             async with sftp.open(
                 "revolve2_rpi_controller_config.json", "w"
             ) as config_file:
-                await config_file.write(json.dumps(config))
+                await config_file.write(json.dumps(config))  # type: ignore # Function annotated to return SFTPFileProtol that is not the correct class.
         logging.info("Copying done.")
 
         logging.info("Initializing controller..")
@@ -82,7 +84,7 @@ class RpiControllerRemote:
         logging.info("Retrieving log file..")
         async with self._conn.start_sftp_client() as sftp:
             async with sftp.open("revolve2_rpi_controller_log.json", "r") as log_file:
-                log = await log_file.read()
+                log = await log_file.read()  # type: ignore # Function annotated to return SFTPFileProtol that is not the correct class.
         logging.info("Retrieving done.")
         try:
             return start_time, json.loads(log)

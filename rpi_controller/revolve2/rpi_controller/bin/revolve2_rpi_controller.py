@@ -101,7 +101,7 @@ class Program:
 
         self._load_controller(config)
 
-        input("Press enter to start controller. Press enter again to stop.")
+        input("Press enter to start controller. Press enter again to stop.\n")
 
         asyncio.get_event_loop().run_until_complete(
             asyncio.gather(self._run_interface(), self._run_controller())

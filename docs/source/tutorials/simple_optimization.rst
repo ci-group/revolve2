@@ -70,7 +70,7 @@ And thirdly, Revolve2 requires it to have ``serialize`` and ``deserialize`` func
 StaticData is Revolve2's type for JSON-like data containing only dictionaries, lists, bools, ints, floats, strings, bytes, and None::
 
     from __future__ import annotations
-    from revolve2.core.database.serialization import Serializable
+    from revolve2.serialization import Serializable
     from random import Random
     from revolve2.core.database import StaticData
 

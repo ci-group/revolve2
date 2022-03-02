@@ -86,7 +86,7 @@ They use the CPPNWIN network to create a modular robot body and weights for a co
     from __future__ import annotations
     from random import Random
     from revolve2.core.database import StaticData
-    from revolve2.core.database.serialization import Serializable
+    from revolve2.serialization import Serializable
     from revolve2.core.optimization.ea.modular_robot import BodybrainGenotype
     from revolve2s.cppnwin import BodyGenotypeV1, BrainGenotypeCpgV1
 
@@ -267,7 +267,7 @@ Serialization and deserializataion is not as easy as in the previous tutorials, 
 However, they provide ``serialize`` and ``deserialize`` functions of their own.
 Simply use these to create a ``StaticData`` representation of your genotype::
 
-    from revolve2.core.database.serialization import SerializeError
+    from revolve2.serialization import SerializeError
 
     # ...
 

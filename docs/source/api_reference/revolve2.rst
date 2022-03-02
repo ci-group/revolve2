@@ -16,3 +16,4 @@ Subpackages
    runners <revolve2.runners>
    actor_controller <revolve2.actor_controller>
    actor_controllers <revolve2.actor_controllers>
+   rpi_controller <revolve2.rpi_controller>

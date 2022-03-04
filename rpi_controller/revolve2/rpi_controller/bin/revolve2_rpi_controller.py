@@ -194,7 +194,7 @@ class Program:
     def _set_targets(self, targets: List[float]) -> None:
         if self._debug:
             print("Setting pins to:")
-            print("pin | target")
+            print("pin | target (clamped -1 <= t <= 1)")
             print("---------------")
             for pin, target in zip(self._pins, targets):
                 print(f"{pin.pin:03d} | {target}")
@@ -209,7 +209,7 @@ class Program:
                 else:
                     invert_mul = 1
                 self._gpio.set_PWM_dutycycle(
-                    pin.pin, CENTER + (invert_mul * target * ANGLE60)
+                    pin.pin, CENTER + (invert_mul * min(1, max(-1, target)) * ANGLE60)
                 )
 
 

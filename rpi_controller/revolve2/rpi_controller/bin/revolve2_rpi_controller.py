@@ -184,9 +184,7 @@ class Program:
             try:
                 for pin in self._pins:
                     self._gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
-                    self._gpio.set_PWM_range(
-                        pin.pin, 255
-                    )  # 255 is also the default, but just making sure
+                    self._gpio.set_PWM_range(pin.pin, 2048)
                     self._gpio.set_PWM_dutycycle(pin.pin, 0)
             except AttributeError as err:
                 raise RuntimeError("Could not initialize gpios.") from err
@@ -196,10 +194,13 @@ class Program:
     def _set_targets(self, targets: List[float]) -> None:
         if self._debug:
             print("Setting pins to:")
-            print("pin | target")
+            print("pin | target (clamped -1 <= t <= 1)")
             print("---------------")
             for pin, target in zip(self._pins, targets):
                 print(f"{pin.pin:03d} | {target}")
+
+        CENTER = 157
+        ANGLE60 = 91
 
         for pin, target in zip(self._pins, targets):
             if not self._dry:
@@ -208,7 +209,7 @@ class Program:
                 else:
                     invert_mul = 1
                 self._gpio.set_PWM_dutycycle(
-                    pin.pin, (invert_mul * target + 1.0) / 2.0 * 255
+                    pin.pin, CENTER + (invert_mul * min(1, max(-1, target)) * ANGLE60)
                 )
 
 

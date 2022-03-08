@@ -75,6 +75,28 @@ def dynamic_cast_bytes(data: Any) -> bytes:
     return data
 
 
+def dynamic_cast_dict(data: Any) -> dict:
+    """
+    Check if data is dict, returning data cast.
+    :raises TypeError: If data is not dict.
+    """
+
+    if type(data) != dict:
+        raise TypeError("Data to be cast is not dict")
+    return data
+
+
+def dynamic_cast_list(data: Any) -> list:
+    """
+    Check if data is list, returning data cast.
+    :raises TypeError: If data is not list.
+    """
+
+    if type(data) != list:
+        raise TypeError("Data to be cast is not list")
+    return data
+
+
 def dynamic_cast_node(data: Any) -> Node:
     """
     Check if data is Node, returning data cast.

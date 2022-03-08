@@ -1,5 +1,67 @@
-class RevdeknnOptimizer:
-    pass
+from ._evolutionary_optimizer import EvolutionaryOptimizer
+from revolve2.core.database import Database, Node
+from random import Random
+from typing import List, Optional
+from ._individual import Individual
+import numpy as np
+from sklearn.neighbors import KNeighborsRegressor
+
+
+class RevdeknnOptimizer(EvolutionaryOptimizer):
+    transformation = np.asarray(
+        [
+            [1, self.gamma, -self.gamma],
+            [
+                -self.gamma,
+                1.0 - self.gamma**2,
+                self.gamma + self.gamma**2,
+            ],
+            [
+                self.gamma + self.gamma**2,
+                -self.gamma + self.gamma**2 + self.gamma**3,
+                1.0 - 2.0 * self.gamma**2 - self.gamma**3,
+            ],
+        ]
+    )
+
+    async def asyncinit(
+        self,
+        database: Database,
+        db_node: Node,
+        random: Random,
+        population_size: int,
+        offspring_size: int,
+        initial_population: List[List[float]],
+        initial_fitness: Optional[List[float]],
+    ) -> None:
+        pass
+
+    async def _evaluate_generation(
+        self, genotypes: List[List[float]], database: Database, db_node: Node
+    ) -> List[float]:
+        pass
+
+    def _select_parents(
+        self, generation: List[Individual[List[float], float]], num_parents: int
+    ) -> List[List[Individual[List[float], float]]]:
+        pass
+
+    def _select_survivors(
+        self,
+        old_individuals: List[Individual[List[float], float]],
+        new_individuals: List[Individual[List[float], float]],
+        num_survivors: int,
+    ) -> List[Individual[List[float], float]]:
+        pass
+
+    def _crossover(self, parents: List[List[float]]) -> List[float]:
+        pass
+
+    def _mutate(self, genotype: List[float]) -> List[float]:
+        pass
+
+    def _must_do_next_gen(self) -> bool:
+        pass
 
 
 class RevDEknn:

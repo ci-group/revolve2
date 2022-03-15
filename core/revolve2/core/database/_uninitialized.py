@@ -1,2 +1,0 @@
-class Uninitialized:
-    pass

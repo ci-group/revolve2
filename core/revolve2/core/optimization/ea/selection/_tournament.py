@@ -1,24 +1,21 @@
 from random import Random
-from typing import TYPE_CHECKING, List, Tuple, TypeVar
+from typing import TYPE_CHECKING, List, TypeVar
 
 if TYPE_CHECKING:
     from _typeshed import SupportsLessThan
 
-Individual = TypeVar("Individual")
 Fitness = TypeVar("Fitness", bound="SupportsLessThan")
 
 
-def tournament(
-    rng: Random, population: List[Tuple[Individual, Fitness]], k: int
-) -> Tuple[Individual, Fitness]:
+def tournament(rng: Random, fitnesses: List[Fitness], k: int) -> int:
     """
-    Perform tournament selection and return best individual
+    Perform tournament selection and return the index of the best individual
 
     :param rng: random number generator
     :param population: list of individuals where to select from
     :param k: amount of individuals to participate in tournament
     """
-    assert len(population) >= k
+    assert len(fitnesses) >= k
 
-    participants = rng.choices(population=population, k=k)
-    return max(participants, key=lambda p: p[1])
+    participant_indices = rng.choices(population=range(len(fitnesses)), k=k)
+    return max(participant_indices, key=lambda i: fitnesses[i])

@@ -4,8 +4,10 @@ from random import Random
 import multineat
 from genotype import Genotype
 from optimizer import Optimizer
+from revolve2.core.optimization import ProcessIdGen
 
-from revolve2.core.database.sqlite import Database as DbSqlite
+
+from revolve2.core.database import open_database_sqlite
 
 
 async def main() -> None:
@@ -32,7 +34,10 @@ async def main() -> None:
     rng.seed(5)
 
     # database
-    database = await DbSqlite.create(f"database")
+    database = open_database_sqlite("./database")
+
+    # process id generator
+    process_id_gen = ProcessIdGen()
 
     # multineat innovation databases
     innov_db_body = multineat.InnovationDatabase()
@@ -43,24 +48,31 @@ async def main() -> None:
         for _ in range(POPULATION_SIZE)
     ]
 
-    ep = await Optimizer.create(
-        database,
-        initial_population=initial_population,
-        initial_fitness=None,
-        rng=rng,
-        innov_db_body=innov_db_body,
-        innov_db_brain=innov_db_brain,
-        simulation_time=SIMULATION_TIME,
-        sampling_frequency=SAMPLING_FREQUENCY,
-        control_frequency=CONTROL_FREQUENCY,
-        num_generations=NUM_GENERATIONS,
-        population_size=POPULATION_SIZE,
-        offspring_size=OFFSPRING_SIZE,
+    maybe_optimizer = await Optimizer.from_database(
+        database=database, process_id=0, rng=rng, process_id_gen=process_id_gen
     )
+    if maybe_optimizer is not None:
+        optimizer = maybe_optimizer
+    else:
+        optimizer = await Optimizer.new(
+            database=database,
+            process_id=0,
+            initial_population=initial_population,
+            initial_fitness=None,
+            rng=rng,
+            process_id_gen=process_id_gen,
+            innov_db_body=innov_db_body,
+            innov_db_brain=innov_db_brain,
+            simulation_time=SIMULATION_TIME,
+            sampling_frequency=SAMPLING_FREQUENCY,
+            control_frequency=CONTROL_FREQUENCY,
+            num_generations=NUM_GENERATIONS,
+            offspring_size=OFFSPRING_SIZE,
+        )
 
     logging.info("Starting optimization process..")
 
-    await ep.run()
+    await optimizer.run()
 
     logging.info(f"Finished optimizing.")
 

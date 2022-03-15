@@ -1,21 +1,23 @@
-from abc import ABC, abstractmethod
+import sqlalchemy.ext.asyncio.engine
+import sqlalchemy.orm
+import sqlalchemy.ext.asyncio
 
-from ._node import Node
-from ._transaction import Transaction
 
+class Database:
+    _engine: sqlalchemy.ext.asyncio.engine.AsyncEngine
+    _session_maker: sqlalchemy.orm.sessionmaker
 
-class Database(ABC):
-    @abstractmethod
-    def begin_transaction(self) -> Transaction:
-        """
-        Begin a transaction context.
-        """
-        pass
+    def __init__(self, engine: sqlalchemy.ext.asyncio.engine.AsyncEngine) -> None:
+        self._engine = engine
+        self._session_maker = sqlalchemy.orm.sessionmaker(
+            self._engine,
+            expire_on_commit=False,
+            class_=sqlalchemy.ext.asyncio.AsyncSession,
+        )
 
     @property
-    @abstractmethod
-    def root(self) -> Node:
-        """
-        Get the root node of the database.
-        """
-        pass
+    def engine(self) -> sqlalchemy.ext.asyncio.engine.AsyncEngine:
+        return self._engine
+
+    def session(self) -> sqlalchemy.ext.asyncio.AsyncSession:
+        return self._session_maker()

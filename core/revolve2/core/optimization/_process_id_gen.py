@@ -5,8 +5,9 @@ class ProcessIdGen:
         self._next_id = 0
 
     def gen(self) -> int:
+        new_id = self._next_id
         self._next_id += 1
-        return self._next_id - 1
+        return new_id
 
     def get_state(self) -> int:
         return self._next_id

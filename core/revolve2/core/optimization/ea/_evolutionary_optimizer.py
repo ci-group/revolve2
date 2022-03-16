@@ -3,15 +3,19 @@ from typing import Generic, TypeVar, Type, List, Optional, Tuple
 
 from revolve2.core.optimization import Process, ProcessIdGen
 from abc import abstractmethod
-from sqlalchemy.ext.declarative import declarative_base
 from revolve2.core.database import Database, IncompatibleError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.exc import MultipleResultsFound
 from sqlalchemy.future import select
 from sqlalchemy.exc import OperationalError
-from random import Random
-import pickle
 from dataclasses import dataclass
+from ._evolutionary_optimizer_schema import (
+    DbEvolutionaryOptimizer,
+    DbEvolutionaryOptimizerGeneration,
+    DbEvolutionaryOptimizerIndividual,
+    DbEvolutionaryOptimizerState,
+    DbBase,
+)
 
 Child = TypeVar("Child")
 Genotype = TypeVar("Genotype")  # TODO bounds
@@ -25,7 +29,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         genotypes: List[Genotype],
         database: Database,
         process_id: int,
-        rng: Random,
         process_id_gen: ProcessIdGen,
     ) -> List[Fitness]:
         """
@@ -107,7 +110,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
     __fitness_type: Type[Fitness]
     __offspring_size: int
 
-    __rng: Random  # TODO remove. rng not used by this class.
     __process_id_gen: ProcessIdGen
 
     __next_individual_id: int
@@ -120,7 +122,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         self,
         database: Database,
         process_id: int,
-        rng: Random,
         process_id_gen: ProcessIdGen,
         genotype_type: Type[Genotype],
         fitness_type: Type[Fitness],
@@ -135,7 +136,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         self.__genotype_type = genotype_type
         self.__fitness_type = fitness_type
         self.__offspring_size = offspring_size
-        self.__rng = rng
         self.__process_id_gen = process_id_gen
         self.__next_individual_id = 0
         self.__latest_fitnesses = None
@@ -148,35 +148,58 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
         async with self.__database.engine.begin() as conn:
             await conn.run_sync(DbBase.metadata.create_all)
-        new_opt = DbEvolutionaryOptimizer(
-            process_id=process_id,
-            offspring_size=self.__offspring_size,
-            genotype_type="GENOTYPE_TEST",
-            fitness_type="FITNESS_TEST",
-        )
+
         async with self.__database.session() as session:
             async with session.begin():
+                new_opt = DbEvolutionaryOptimizer(
+                    process_id=process_id,
+                    offspring_size=self.__offspring_size,
+                    genotype_type="GENOTYPE_TEST",  # TODO proper genotype&fitness types
+                    fitness_type="FITNESS_TEST",
+                )
                 session.add(new_opt)
                 await session.flush()
                 self.__evolutionary_optimizer_id = new_opt.id
+
+                # TODO prepare genotype table
+                # TODO prepare fitness table
+
                 session.add(
-                    DbEvolutionaryOptimizerGeneration(
+                    DbEvolutionaryOptimizerState(
                         evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
                         generation_index=self.__generation_index,
-                        rng_state_before_evaluation=pickle.dumps(self.__rng.getstate()),
-                        processid_state_before_evaluation=self.__process_id_gen.get_state(),
+                        processid_state=self.__process_id_gen.get_state(),
                     )
                 )
 
-        # TODO proper genotype&fitness types
-        # TODO prepare genotype table
-        # TODO prepare fitness table
+                session.add_all(
+                    [
+                        DbEvolutionaryOptimizerIndividual(
+                            evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                            individual_id=i.id,
+                            genotype_id=0,  # TODO fitness and genotype
+                            fitness_id=None,  # will set after evaluating first generation
+                        )
+                        for i in self.__latest_population
+                    ]
+                )
+
+                session.add_all(
+                    [
+                        DbEvolutionaryOptimizerGeneration(
+                            evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                            generation_index=self.__generation_index,
+                            individual_index=index,
+                            individual_id=individual.id,
+                        )
+                        for index, individual in enumerate(self.__latest_population)
+                    ]
+                )
 
     async def ainit_from_database(
         self,
         database: Database,
         process_id: int,
-        rng: Random,
         process_id_gen: ProcessIdGen,
         genotype_type: Type[Genotype],
         fitness_type: Type[Fitness],
@@ -218,8 +241,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
             self.__generation_index = gen_row.generation_index
 
-            self.__rng = rng
-            self.__rng.setstate(pickle.loads(gen_row.rng_state_before_evaluation))
             self.__process_id_gen = process_id_gen
             self.__process_id_gen.set_state(gen_row.processid_state_before_evaluation)
 
@@ -237,12 +258,12 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 [i.genotype for i in self.__latest_population],
                 self.__database,
                 self.__process_id_gen.gen(),
-                self.__rng,
                 self.__process_id_gen,
             )
+            initial_fitnesses = self.__latest_fitnesses
+        else:
+            initial_fitnesses = None
 
-        # TODO save initial population evaluation
-        # TODO bug: nothing is saved to database and things might break if check below returns directly at gen 0, but who does that anyway
         while self.__safe_must_do_next_gen():
 
             # let user select parents
@@ -267,7 +288,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 offspring,
                 self.__database,
                 self.__process_id_gen.gen(),
-                self.__rng,
                 self.__process_id_gen,
             )
 
@@ -282,7 +302,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             ]
 
             # let user select survivors between old and new individuals
-            old_survivors, new_survivors = self._safe_select_survivors(
+            old_survivors, new_survivors = self.__safe_select_survivors(
                 self.__latest_population,
                 self.__latest_fitnesses,
                 new_individuals,
@@ -290,18 +310,28 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 len(self.__latest_population),
             )
 
+            survived_new_individuals = [new_individuals[i] for i in new_survivors]
+            survived_new_fitnesses = [new_fitnesses[i] for i in new_survivors]
+
             # combine old and new and store as the new generation
             self.__latest_population = [
                 self.__latest_population[i] for i in old_survivors
-            ] + [new_individuals[i] for i in new_survivors]
+            ] + survived_new_individuals
 
             self.__latest_fitnesses = [
                 self.__latest_fitnesses[i] for i in old_survivors
-            ] + [new_fitnesses[i] for i in new_survivors]
+            ] + survived_new_fitnesses
 
             self.__generation_index += 1
 
-            # TODO save generation
+            # save generation and possibly fitnesses of initial population
+            await self.__save_generation(
+                initial_fitnesses, survived_new_individuals, survived_new_fitnesses
+            )
+
+        assert (
+            self.__generation_index > 0
+        ), "Must create at least one generation beyond initial population. This behaviour is not supported."  # would break database structure
 
     @property
     def generation_index(self) -> Optional[int]:
@@ -311,14 +341,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         """
 
         return self.__generation_index
-
-    @property
-    def rng(self) -> Random:
-        """
-        Get the random object.
-        """
-
-        return self.__rng
 
     def __gen_next_individual_id(self) -> int:
         next_id = self.__next_individual_id
@@ -330,14 +352,12 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         genotypes: List[Genotype],
         database: Database,
         process_id: int,
-        rng: Random,
         process_id_gen: ProcessIdGen,
     ) -> List[Fitness]:
         fitnesses = await self._evaluate_generation(
             genotypes=genotypes,
             database=database,
             process_id=process_id,
-            rng=rng,
             process_id_gen=process_id_gen,
         )
         assert type(fitnesses) == list
@@ -375,7 +395,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         assert type(genotype) == self.__genotype_type
         return genotype
 
-    def _safe_select_survivors(
+    def __safe_select_survivors(
         self,
         old_individuals: List[Genotype],
         old_fitnesses: List[Fitness],
@@ -402,60 +422,43 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         assert type(must_do) == bool
         return must_do
 
+    async def __save_generation(
+        self,
+        initial_fitnesses: Optional[List[Fitness]],
+        new_individuals: List[__Individual],
+        new_fitnesses: List[Fitness],
+    ) -> None:
+        # TODO set initial fitnesses
+        async with self.__database.session() as session:
+            async with session.begin():
+                session.add(
+                    DbEvolutionaryOptimizerState(
+                        evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                        generation_index=self.__generation_index,
+                        processid_state=self.__process_id_gen.get_state(),
+                    )
+                )
 
-DbBase = declarative_base()
+                session.add_all(
+                    [
+                        DbEvolutionaryOptimizerIndividual(
+                            evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                            individual_id=i.id,
+                            genotype_id=0,  # TODO fitness and genotype
+                            fitness_id=0,
+                        )
+                        for i in new_individuals
+                    ]
+                )
 
-
-class DbEvolutionaryOptimizer(DbBase):
-    from sqlalchemy import Integer, Column, String
-
-    __tablename__ = "evolutionary_optimizer"
-
-    id = Column(
-        Integer,
-        nullable=False,
-        unique=True,
-        autoincrement=True,
-        primary_key=True,
-    )
-    process_id = Column(Integer, nullable=False, unique=True)
-    offspring_size = Column(Integer, nullable=False)
-    genotype_type = Column(String, nullable=False)
-    fitness_type = Column(String, nullable=False)
-
-
-class DbEvolutionaryOptimizerGeneration(DbBase):
-    from sqlalchemy import Integer, Column, LargeBinary
-
-    __tablename__ = "evolutionary_optimizer_generation"
-
-    id = Column(
-        Integer,
-        nullable=False,
-        unique=True,
-        autoincrement=True,
-        primary_key=True,
-    )
-    evolutionary_optimizer_id = Column(Integer, nullable=False)
-    generation_index = Column(Integer, nullable=False)
-    rng_state_before_evaluation = Column(
-        LargeBinary, nullable=False
-    )  # TODO string maybe binary
-    processid_state_before_evaluation = Column(Integer, nullable=False)
-
-
-class DbEvolutionaryOptimizerIndividual(DbBase):
-    from sqlalchemy import Integer, Column
-
-    __tablename__ = "evolutionary_optimizer_individual"
-
-    id = Column(
-        Integer,
-        nullable=False,
-        unique=True,
-        autoincrement=True,
-        primary_key=True,
-    )
-    generation_id = Column(Integer, nullable=False)
-    genotype_id = Column(Integer, nullable=False)
-    fitness_id = Column(Integer, nullable=False)
+                session.add_all(
+                    [
+                        DbEvolutionaryOptimizerGeneration(
+                            evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                            generation_index=self.__generation_index,
+                            individual_index=index,
+                            individual_id=individual.id,
+                        )
+                        for index, individual in enumerate(self.__latest_population)
+                    ]
+                )

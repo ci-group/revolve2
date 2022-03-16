@@ -148,6 +148,8 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
         async with self.__database.engine.begin() as conn:
             await conn.run_sync(DbBase.metadata.create_all)
+            # TODO prepare genotype table
+            # TODO prepare fitness table
 
         async with self.__database.session() as session:
             async with session.begin():
@@ -161,39 +163,8 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 await session.flush()
                 self.__evolutionary_optimizer_id = new_opt.id
 
-                # TODO prepare genotype table
-                # TODO prepare fitness table
-
-                session.add(
-                    DbEvolutionaryOptimizerState(
-                        evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
-                        generation_index=self.__generation_index,
-                        processid_state=self.__process_id_gen.get_state(),
-                    )
-                )
-
-                session.add_all(
-                    [
-                        DbEvolutionaryOptimizerIndividual(
-                            evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
-                            individual_id=i.id,
-                            genotype_id=0,  # TODO fitness and genotype
-                            fitness_id=None,  # will set after evaluating first generation
-                        )
-                        for i in self.__latest_population
-                    ]
-                )
-
-                session.add_all(
-                    [
-                        DbEvolutionaryOptimizerGeneration(
-                            evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
-                            generation_index=self.__generation_index,
-                            individual_index=index,
-                            individual_id=individual.id,
-                        )
-                        for index, individual in enumerate(self.__latest_population)
-                    ]
+                await self.__save_generation_using_session(
+                    session, None, self.__latest_population, None
                 )
 
     async def ainit_from_database(
@@ -294,7 +265,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             # combine to create list of individuals
             new_individuals = [
                 self.__Individual(
-                    self.__gen_next_individual_id(),
+                    -1,  # placeholder until later
                     genotype,
                     [self.__latest_population[i].id for i in parent_indices],
                 )
@@ -303,7 +274,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
             # let user select survivors between old and new individuals
             old_survivors, new_survivors = self.__safe_select_survivors(
-                self.__latest_population,
+                [i.genotype for i in self.__latest_population],
                 self.__latest_fitnesses,
                 new_individuals,
                 new_fitnesses,
@@ -312,6 +283,10 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
             survived_new_individuals = [new_individuals[i] for i in new_survivors]
             survived_new_fitnesses = [new_fitnesses[i] for i in new_survivors]
+
+            # set ids for new individuals
+            for individual in survived_new_individuals:
+                individual.id = self.__gen_next_individual_id()
 
             # combine old and new and store as the new generation
             self.__latest_population = [
@@ -426,39 +401,53 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         self,
         initial_fitnesses: Optional[List[Fitness]],
         new_individuals: List[__Individual],
-        new_fitnesses: List[Fitness],
+        new_fitnesses: Optional[List[Fitness]],
     ) -> None:
-        # TODO set initial fitnesses
         async with self.__database.session() as session:
             async with session.begin():
-                session.add(
-                    DbEvolutionaryOptimizerState(
-                        evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
-                        generation_index=self.__generation_index,
-                        processid_state=self.__process_id_gen.get_state(),
-                    )
+                await self.__save_generation_using_session(
+                    session, initial_fitnesses, new_individuals, new_fitnesses
                 )
 
-                session.add_all(
-                    [
-                        DbEvolutionaryOptimizerIndividual(
-                            evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
-                            individual_id=i.id,
-                            genotype_id=0,  # TODO fitness and genotype
-                            fitness_id=0,
-                        )
-                        for i in new_individuals
-                    ]
-                )
+    async def __save_generation_using_session(
+        self,
+        session,  # TODO type
+        initial_fitnesses: Optional[List[Fitness]],
+        new_individuals: List[__Individual],
+        new_fitnesses: Optional[List[Fitness]],  # TODO
+    ) -> None:
+        if initial_fitnesses is not None:
+            # TODO set initial fitnesses
+            pass
 
-                session.add_all(
-                    [
-                        DbEvolutionaryOptimizerGeneration(
-                            evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
-                            generation_index=self.__generation_index,
-                            individual_index=index,
-                            individual_id=individual.id,
-                        )
-                        for index, individual in enumerate(self.__latest_population)
-                    ]
+        session.add(
+            DbEvolutionaryOptimizerState(
+                evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                generation_index=self.__generation_index,
+                processid_state=self.__process_id_gen.get_state(),
+            )
+        )
+
+        session.add_all(
+            [
+                DbEvolutionaryOptimizerIndividual(
+                    evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                    individual_id=i.id,
+                    genotype_id=0,  # TODO fitness and genotype
+                    fitness_id=0,
                 )
+                for i in new_individuals
+            ]
+        )
+
+        session.add_all(
+            [
+                DbEvolutionaryOptimizerGeneration(
+                    evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                    generation_index=self.__generation_index,
+                    individual_index=index,
+                    individual_id=individual.id,
+                )
+                for index, individual in enumerate(self.__latest_population)
+            ]
+        )

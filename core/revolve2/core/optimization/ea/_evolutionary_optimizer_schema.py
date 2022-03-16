@@ -1,11 +1,10 @@
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Integer, Column, String
 
 DbBase = declarative_base()
 
 
 class DbEvolutionaryOptimizer(DbBase):
-    from sqlalchemy import Integer, Column, String
-
     __tablename__ = "evolutionary_optimizer"
 
     id = Column(
@@ -22,8 +21,6 @@ class DbEvolutionaryOptimizer(DbBase):
 
 
 class DbEvolutionaryOptimizerState(DbBase):
-    from sqlalchemy import Integer, Column
-
     __tablename__ = "evolutionary_optimizer_state"
 
     evolutionary_optimizer_id = Column(Integer, nullable=False, primary_key=True)
@@ -32,8 +29,6 @@ class DbEvolutionaryOptimizerState(DbBase):
 
 
 class DbEvolutionaryOptimizerGeneration(DbBase):
-    from sqlalchemy import Integer, Column
-
     __tablename__ = "evolutionary_optimizer_generation"
 
     evolutionary_optimizer_id = Column(Integer, nullable=False, primary_key=True)
@@ -43,12 +38,17 @@ class DbEvolutionaryOptimizerGeneration(DbBase):
 
 
 class DbEvolutionaryOptimizerIndividual(DbBase):
-    from sqlalchemy import Integer, Column
-
     __tablename__ = "evolutionary_optimizer_individual"
 
     evolutionary_optimizer_id = Column(Integer, nullable=False, primary_key=True)
     individual_id = Column(Integer, nullable=False, primary_key=True)
     genotype_id = Column(Integer, nullable=False)
     fitness_id = Column(Integer, nullable=True)
-    # TODO parents
+
+
+class DbEvolutionaryOptimizerParent(DbBase):
+    __tablename__ = "evolutionary_optimizer_parent"
+
+    evolutionary_optimizer_id = Column(Integer, nullable=False, primary_key=True)
+    child_individual_id = Column(Integer, nullable=False, primary_key=True)
+    parent_individual_id = Column(Integer, nullable=False, primary_key=True)

@@ -14,6 +14,7 @@ from ._evolutionary_optimizer_schema import (
     DbEvolutionaryOptimizerGeneration,
     DbEvolutionaryOptimizerIndividual,
     DbEvolutionaryOptimizerState,
+    DbEvolutionaryOptimizerParent,
     DbBase,
 )
 
@@ -98,9 +99,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
     class __Individual(Generic[Genotype]):
         id: int
         genotype: Genotype
-        parent_ids: Optional[
-            List[int]
-        ]  # None means this is from the initial population
+        parent_ids: List[int]  # No parents mean this is from the initial population
 
     __database: Database
 
@@ -142,7 +141,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         self.__generation_index = 0
 
         self.__latest_population = [
-            self.__Individual(self.__gen_next_individual_id(), g, None)
+            self.__Individual(self.__gen_next_individual_id(), g, [])
             for g in initial_population
         ]
 
@@ -420,6 +419,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             # TODO set initial fitnesses
             pass
 
+        # save current optimizer state
         session.add(
             DbEvolutionaryOptimizerState(
                 evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
@@ -428,6 +428,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             )
         )
 
+        # save new individuals
         session.add_all(
             [
                 DbEvolutionaryOptimizerIndividual(
@@ -440,6 +441,20 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             ]
         )
 
+        # save parents of new individuals
+        parents: List[DbEvolutionaryOptimizerParent] = []
+        for i in new_individuals:
+            for p_id in i.parent_ids:
+                parents.append(
+                    DbEvolutionaryOptimizerParent(
+                        evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                        child_individual_id=i.id,
+                        parent_individual_id=p_id,
+                    )
+                )
+        session.add_all(parents)
+
+        # save current generation
         session.add_all(
             [
                 DbEvolutionaryOptimizerGeneration(

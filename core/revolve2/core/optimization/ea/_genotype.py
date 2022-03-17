@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-Child = TypeVar("Child")
+Child = TypeVar("Child", bound="Genotype")
 
 
 class Genotype(ABC, Generic[Child]):

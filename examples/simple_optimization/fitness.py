@@ -6,6 +6,10 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from revolve2.core.database import Database
 from typing import List
 from sqlalchemy.ext.declarative import declarative_base
+from revolve2.core.database import IncompatibleError
+from sqlalchemy.future import select
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import MultipleResultsFound
 
 
 class Fitness(float, FitnessInterface["Fitness"]):
@@ -29,7 +33,22 @@ class Fitness(float, FitnessInterface["Fitness"]):
 
     @classmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> Fitness:
-        raise NotImplementedError()
+        try:
+            rows = (
+                (await session.execute(select(DbFitness).filter(DbFitness.id.in_(ids))))
+                .scalars()
+                .all()
+            )
+        except MultipleResultsFound as err:
+            raise IncompatibleError() from err
+        except NoResultFound:
+            return False
+
+        if len(rows) != len(ids):
+            raise IncompatibleError()
+
+        id_map = {t.id: t for t in rows}
+        return [Fitness(id_map[id].fitness) for id in ids]
 
 
 DbBase = declarative_base()

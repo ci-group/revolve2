@@ -9,6 +9,10 @@ from revolve2.core.database import Database
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from item import Item
+from revolve2.core.database import IncompatibleError
+from sqlalchemy.future import select
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.orm.exc import MultipleResultsFound
 
 
 class Genotype(GenotypeInterface["Genotype"]):
@@ -45,17 +49,38 @@ class Genotype(GenotypeInterface["Genotype"]):
     async def to_database(
         cls, session: AsyncSession, objects: List[Genotype]
     ) -> List[int]:
-        dbfitnesses = [
+        dbobjects = [
             DbGenotype(items="".join(["1" if x else "0" for x in g.items]))
             for g in objects
         ]
-        session.add_all(dbfitnesses)
+        session.add_all(dbobjects)
         await session.flush()
-        return [dbfitness.id for dbfitness in dbfitnesses]
+        return [dbfitness.id for dbfitness in dbobjects]
 
     @classmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> Genotype:
-        raise NotImplementedError()
+        try:
+            rows = (
+                (
+                    await session.execute(
+                        select(DbGenotype).filter(DbGenotype.id.in_(ids))
+                    )
+                )
+                .scalars()
+                .all()
+            )
+        except MultipleResultsFound as err:
+            raise IncompatibleError() from err
+        except NoResultFound:
+            return False
+
+        if len(rows) != len(ids):
+            raise IncompatibleError()
+
+        id_map = {t.id: t for t in rows}
+        items_str = [id_map[id].items for id in ids]
+        items_bool = [[item == "1" for item in items] for items in items_str]
+        return [Genotype(items) for items in items_bool]
 
 
 DbBase = declarative_base()

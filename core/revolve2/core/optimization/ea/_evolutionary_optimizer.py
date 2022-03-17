@@ -104,7 +104,9 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
     class __Individual(Generic[Genotype]):
         id: int
         genotype: Genotype
-        parent_ids: List[int]  # No parents mean this is from the initial population
+        # Empty list of parents means this is from the initial population
+        # None means we did not bother loading the parents during recovery because they are not needed.
+        parent_ids: Optional[List[int]]
 
     __database: Database
 
@@ -210,35 +212,97 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             self.__evolutionary_optimizer_id = eo_row.id
             self.__offspring_size = eo_row.offspring_size
 
-            gen_row = (
+            state_row = (
                 (
                     await session.execute(
-                        select(DbEvolutionaryOptimizerGeneration)
+                        select(DbEvolutionaryOptimizerState)
                         .filter(
-                            DbEvolutionaryOptimizerGeneration.id
+                            DbEvolutionaryOptimizerState.evolutionary_optimizer_id
                             == self.__evolutionary_optimizer_id
                         )
-                        .order_by(
-                            DbEvolutionaryOptimizerGeneration.generation_index.desc()
-                        )
+                        .order_by(DbEvolutionaryOptimizerState.generation_index.desc())
                     )
                 )
                 .scalars()
                 .first()
             )
 
-            if gen_row is None:
-                raise IncompatibleError()  # not possible that there is no generation but DbEvolutionaryOptimizer row exists
+            if state_row is None:
+                raise IncompatibleError()  # not possible that there is no saved state but DbEvolutionaryOptimizer row exists
 
-            self.__generation_index = gen_row.generation_index
-
+            self.__generation_index = state_row.generation_index
             self.__process_id_gen = process_id_gen
-            self.__process_id_gen.set_state(gen_row.processid_state_before_evaluation)
+            self.__process_id_gen.set_state(state_row.processid_state)
 
-            # TODO load individuals
-            # TODO load __latest_fitnesses
-            # self.__latest_population = []  # TODO
-            # self.__latest_fitnesses = []  # TODO
+            gen_rows = (
+                (
+                    await session.execute(
+                        select(DbEvolutionaryOptimizerGeneration)
+                        .filter(
+                            (
+                                DbEvolutionaryOptimizerGeneration.evolutionary_optimizer_id
+                                == self.__evolutionary_optimizer_id
+                            )
+                            & (
+                                DbEvolutionaryOptimizerGeneration.generation_index
+                                == self.__generation_index
+                            )
+                        )
+                        .order_by(
+                            DbEvolutionaryOptimizerGeneration.individual_index.desc()
+                        )
+                    )
+                )
+                .scalars()
+                .all()
+            )
+
+            individual_ids = [row.individual_id for row in gen_rows]
+
+            # the highest individual id in the latest generation is the highest id overall.
+            self.__next_individual_id = max(individual_ids) + 1
+
+            individual_rows = (
+                (
+                    await session.execute(
+                        select(DbEvolutionaryOptimizerIndividual).filter(
+                            (
+                                DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
+                                == self.__evolutionary_optimizer_id
+                            )
+                            & (
+                                DbEvolutionaryOptimizerIndividual.individual_id.in_(
+                                    individual_ids
+                                )
+                            )
+                        )
+                    )
+                )
+                .scalars()
+                .all()
+            )
+            individual_map = {i.individual_id: i for i in individual_rows}
+
+            if not len(individual_ids) == len(individual_rows):
+                raise IncompatibleError()
+
+            genotype_ids = [individual_map[id].genotype_id for id in individual_ids]
+            genotypes = await self.__genotype_type.from_database(session, genotype_ids)
+            assert len(genotypes) == len(genotype_ids)
+            self.__latest_population = [
+                self.__Individual(g_id, g, None)
+                for g_id, g in zip(individual_ids, genotypes)
+            ]
+
+            if self.__generation_index == 0:
+                self.__latest_fitnesses = None
+            else:
+                fitness_ids = [individual_map[id].fitness_id for id in individual_ids]
+                fitnesses = await self.__fitness_type.from_database(
+                    session, fitness_ids
+                )
+                assert len(fitnesses) == len(fitness_ids)
+                self.__latest_fitnesses = fitnesses
 
         return True
 
@@ -526,6 +590,9 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         # save parents of new individuals
         parents: List[DbEvolutionaryOptimizerParent] = []
         for i in new_individuals:
+            assert (
+                i.parent_ids is not None
+            )  # Cannot be None. They are only None after recovery and then they are already saved.
             for p_id in i.parent_ids:
                 parents.append(
                     DbEvolutionaryOptimizerParent(

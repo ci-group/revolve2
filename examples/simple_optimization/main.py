@@ -43,7 +43,12 @@ async def main() -> None:
     ]
 
     maybe_optimizer = await Optimizer.from_database(
-        database=database, process_id=0, rng=rng, process_id_gen=process_id_gen
+        database=database,
+        process_id=0,
+        process_id_gen=process_id_gen,
+        rng=rng,
+        items=items,
+        num_generations=NUM_GENERATIONS,
     )
     if maybe_optimizer is not None:
         optimizer = maybe_optimizer

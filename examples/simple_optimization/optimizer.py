@@ -51,6 +51,8 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
         process_id: int,
         process_id_gen: ProcessIdGen,
         rng: Random,
+        items: List[Item],
+        num_generations: int,
     ) -> bool:
         if not await super().ainit_from_database(
             database=database,
@@ -61,7 +63,11 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
         ):
             return False
 
-        raise NotImplementedError()
+        self._rng = rng
+        self._items = items
+        self._num_generations = num_generations
+
+        return True
 
     async def _evaluate_generation(
         self,

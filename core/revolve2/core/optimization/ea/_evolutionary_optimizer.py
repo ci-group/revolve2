@@ -17,10 +17,13 @@ from ._evolutionary_optimizer_schema import (
     DbEvolutionaryOptimizerParent,
     DbBase,
 )
+from ._genotype import Genotype as GenotypeInterface
+from ._fitness import Fitness as FitnessInterface
+
 
 Child = TypeVar("Child")
-Genotype = TypeVar("Genotype")  # TODO bounds
-Fitness = TypeVar("Fitness")
+Genotype = TypeVar("Genotype", bound=GenotypeInterface)
+Fitness = TypeVar("Fitness", bound=FitnessInterface)
 
 
 class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
@@ -131,6 +134,9 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         :id: Unique id between all EvolutionaryOptimizers in this database.
         :offspring_size: Number of offspring made by the population each generation.
         """
+        assert issubclass(genotype_type, GenotypeInterface)
+        assert issubclass(fitness_type, FitnessInterface)
+
         self.__database = database
         self.__genotype_type = genotype_type
         self.__fitness_type = fitness_type
@@ -147,8 +153,8 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
         async with self.__database.engine.begin() as conn:
             await conn.run_sync(DbBase.metadata.create_all)
-            # TODO prepare genotype table
-            # TODO prepare fitness table
+        await self.__genotype_type.create_tables(self.__database)
+        await self.__fitness_type.create_tables(self.__database)
 
         async with self.__database.session() as session:
             async with session.begin():
@@ -163,7 +169,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 self.__evolutionary_optimizer_id = new_opt.id
 
                 await self.__save_generation_using_session(
-                    session, None, self.__latest_population, None
+                    session, None, None, self.__latest_population, None
                 )
 
     async def ainit_from_database(
@@ -174,19 +180,26 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         genotype_type: Type[Genotype],
         fitness_type: Type[Fitness],
     ) -> bool:
+        assert issubclass(genotype_type, GenotypeInterface)
+        assert issubclass(fitness_type, FitnessInterface)
+
         self.__database = database
         self.__genotype_type = genotype_type
         self.__fitness_type = fitness_type
 
         async with database.session() as session:
             try:
-                (eo_row,) = (
-                    await session.execute(
-                        select(DbEvolutionaryOptimizer).filter(
-                            DbEvolutionaryOptimizer.process_id == process_id
+                eo_row = (
+                    (
+                        await session.execute(
+                            select(DbEvolutionaryOptimizer).filter(
+                                DbEvolutionaryOptimizer.process_id == process_id
+                            )
                         )
                     )
-                ).one()
+                    .scalars()
+                    .one()
+                )
             except MultipleResultsFound as err:
                 raise IncompatibleError() from err
             except (NoResultFound, OperationalError):
@@ -195,16 +208,22 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             self.__evolutionary_optimizer_id = eo_row.id
             self.__offspring_size = eo_row.offspring_size
 
-            (gen_row,) = (
-                await session.execute(
-                    select(DbEvolutionaryOptimizerGeneration)
-                    .filter(
-                        DbEvolutionaryOptimizerGeneration.id
-                        == self.__evolutionary_optimizer_id
+            gen_row = (
+                (
+                    await session.execute(
+                        select(DbEvolutionaryOptimizerGeneration)
+                        .filter(
+                            DbEvolutionaryOptimizerGeneration.id
+                            == self.__evolutionary_optimizer_id
+                        )
+                        .order_by(
+                            DbEvolutionaryOptimizerGeneration.generation_index.desc()
+                        )
                     )
-                    .order_by(DbEvolutionaryOptimizerGeneration.generation_index.desc())
                 )
-            ).first()
+                .scalars()
+                .first()
+            )
 
             if gen_row is None:
                 raise IncompatibleError()  # not possible that there is no generation but DbEvolutionaryOptimizer row exists
@@ -230,8 +249,10 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 self.__process_id_gen.gen(),
                 self.__process_id_gen,
             )
+            initial_population = self.__latest_population
             initial_fitnesses = self.__latest_fitnesses
         else:
+            initial_population = None
             initial_fitnesses = None
 
         while self.__safe_must_do_next_gen():
@@ -300,7 +321,10 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
             # save generation and possibly fitnesses of initial population
             await self.__save_generation(
-                initial_fitnesses, survived_new_individuals, survived_new_fitnesses
+                initial_population,
+                initial_fitnesses,
+                survived_new_individuals,
+                survived_new_fitnesses,
             )
 
         assert (
@@ -398,6 +422,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
     async def __save_generation(
         self,
+        initial_population: Optional[List[__Individual]],
         initial_fitnesses: Optional[List[Fitness]],
         new_individuals: List[__Individual],
         new_fitnesses: Optional[List[Fitness]],
@@ -405,19 +430,23 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         async with self.__database.session() as session:
             async with session.begin():
                 await self.__save_generation_using_session(
-                    session, initial_fitnesses, new_individuals, new_fitnesses
+                    session,
+                    initial_population,
+                    initial_fitnesses,
+                    new_individuals,
+                    new_fitnesses,
                 )
 
     async def __save_generation_using_session(
         self,
         session,  # TODO type
+        initial_population: Optional[List[__Individual]],
         initial_fitnesses: Optional[List[Fitness]],
         new_individuals: List[__Individual],
         new_fitnesses: Optional[List[Fitness]],  # TODO
     ) -> None:
-        if initial_fitnesses is not None:
-            # TODO set initial fitnesses
-            pass
+        # TODO this function can probably be simplified as well as optimized.
+        # but it works so I'll leave it for now.
 
         # save current optimizer state
         session.add(
@@ -429,15 +458,25 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         )
 
         # save new individuals
+        genotype_ids = await self.__genotype_type.to_database(
+            session, [i.genotype for i in new_individuals]
+        )
+        assert len(genotype_ids) == len(new_individuals)
+        if new_fitnesses is not None:
+            fitness_ids = await self.__fitness_type.to_database(session, new_fitnesses)
+            assert len(fitness_ids) == len(new_fitnesses)
+        else:
+            fitness_ids = [None for _ in range(len(new_individuals))]
+
         session.add_all(
             [
                 DbEvolutionaryOptimizerIndividual(
                     evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
                     individual_id=i.id,
-                    genotype_id=0,  # TODO fitness and genotype
-                    fitness_id=0,
+                    genotype_id=g_id,
+                    fitness_id=f_id,
                 )
-                for i in new_individuals
+                for i, g_id, f_id in zip(new_individuals, genotype_ids, fitness_ids)
             ]
         )
 
@@ -466,3 +505,39 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 for index, individual in enumerate(self.__latest_population)
             ]
         )
+
+        # update fitnesses of initial population if provided
+        if initial_fitnesses is not None:
+            assert initial_population is not None
+
+            fitness_ids = await self.__fitness_type.to_database(
+                session, initial_fitnesses
+            )
+            assert len(fitness_ids) == len(initial_fitnesses)
+
+            rows = (
+                (
+                    await session.execute(
+                        select(DbEvolutionaryOptimizerIndividual)
+                        .filter(
+                            (
+                                DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
+                                == self.__evolutionary_optimizer_id
+                            )
+                            & (
+                                DbEvolutionaryOptimizerIndividual.individual_id.in_(
+                                    [i.id for i in initial_population]
+                                )
+                            )
+                        )
+                        .order_by(DbEvolutionaryOptimizerIndividual.individual_id)
+                    )
+                )
+                .scalars()
+                .all()
+            )
+            if len(rows) != len(initial_population):
+                raise IncompatibleError()
+
+            for i, row in enumerate(rows):
+                row.fitness_id = fitness_ids[i]

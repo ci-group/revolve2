@@ -6,12 +6,13 @@ from typing import List, Optional, Tuple
 
 import multineat
 from genotype import Genotype
+from fitness import Fitness
 from pyrr import Quaternion, Vector3
 
 import revolve2.core.optimization.ea.population_management as population_management
 import revolve2.core.optimization.ea.selection as selection
 from revolve2.actor_controller import ActorController
-from revolve2.core.optimization.ea import EvolutionaryOptimizer, Individual
+from revolve2.core.optimization.ea import EvolutionaryOptimizer
 from revolve2.core.physics.running import (
     ActorControl,
     ActorState,
@@ -26,13 +27,15 @@ from revolve2.core.database import Database
 from revolve2.core.optimization import ProcessIdGen
 
 
-class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
+class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
     _runner: Runner
 
     _controllers: List[ActorController]
 
     _innov_db_body: multineat.InnovationDatabase
     _innov_db_brain: multineat.InnovationDatabase
+
+    _rng: Random
 
     _simulation_time: int
     _sampling_frequency: float
@@ -45,7 +48,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
         database: Database,
         process_id: int,
         initial_population: List[Genotype],
-        initial_fitness: Optional[List[float]],
+        initial_fitness: Optional[List[Fitness]],
         rng: Random,
         process_id_gen: ProcessIdGen,
         innov_db_body: multineat.InnovationDatabase,
@@ -59,10 +62,9 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
         await super().ainit_new(
             database=database,
             process_id=process_id,
-            rng=rng,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
-            fitness_type=float,
+            fitness_type=Fitness,
             offspring_size=offspring_size,
             initial_population=initial_population,
         )
@@ -70,6 +72,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
         self._runner = LocalRunner(LocalRunner.SimParams(), headless=True)
         self._innov_db_body = innov_db_body
         self._innov_db_brain = innov_db_brain
+        self._rng = rng
         self._simulation_time = simulation_time
         self._sampling_frequency = sampling_frequency
         self._control_frequency = control_frequency
@@ -87,26 +90,26 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
         if not await super().ainit_from_database(
             database=database,
             process_id=process_id,
-            rng=rng,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
-            fitness_type=float,
+            fitness_type=Fitness,
         ):
             return False
+        self._rng = rng
         return True  # TODO
 
     def _select_parents(
         self,
         population: List[Genotype],
-        fitnesses: List[float],
+        fitnesses: List[Fitness],
         num_parent_groups: int,
-    ) -> List[List[Individual[Genotype, float]]]:
+    ) -> List[List[int]]:
         return [
             selection.multiple_unique(
                 population,
                 fitnesses,
                 2,
-                lambda _, fitnesses: selection.tournament(self.rng, fitnesses, k=2),
+                lambda _, fitnesses: selection.tournament(self._rng, fitnesses, k=2),
             )
             for _ in range(num_parent_groups)
         ]
@@ -114,9 +117,9 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
     def _select_survivors(
         self,
         old_individuals: List[Genotype],
-        old_fitnesses: List[float],
+        old_fitnesses: List[Fitness],
         new_individuals: List[Genotype],
-        new_fitnesses: List[float],
+        new_fitnesses: List[Fitness],
         num_survivors: int,
     ) -> Tuple[List[int], List[int]]:
         assert len(old_individuals) == num_survivors
@@ -126,7 +129,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
             old_fitnesses,
             new_individuals,
             new_fitnesses,
-            lambda _, fitnesses: selection.tournament(self.rng, fitnesses, k=2),
+            lambda _, fitnesses: selection.tournament(self._rng, fitnesses, k=2),
         )
 
     def _must_do_next_gen(self) -> bool:
@@ -134,19 +137,18 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
 
     def _crossover(self, parents: List[Genotype]) -> Genotype:
         assert len(parents) == 2
-        return Genotype.crossover(parents[0], parents[1], self.rng)
+        return Genotype.crossover(parents[0], parents[1], self._rng)
 
     def _mutate(self, individual: Genotype) -> Genotype:
-        return individual.mutate(self._innov_db_body, self._innov_db_brain, self.rng)
+        return individual.mutate(self._innov_db_body, self._innov_db_brain, self._rng)
 
     async def _evaluate_generation(
         self,
         genotypes: List[Genotype],
         database: Database,
         process_id: int,
-        rng: Random,
         process_id_gen: ProcessIdGen,
-    ) -> List[float]:
+    ) -> List[Fitness]:
         batch = Batch(
             simulation_time=self._simulation_time,
             sampling_frequency=self._sampling_frequency,
@@ -207,11 +209,13 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, float]):
     """
 
     @staticmethod
-    def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:
+    def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> Fitness:
         # TODO simulation can continue slightly passed the defined sim time.
 
         # distance traveled on the xy plane
-        return math.sqrt(
-            (begin_state.position[0] - end_state.position[0]) ** 2
-            + ((begin_state.position[1] - end_state.position[1]) ** 2)
+        return Fitness(
+            math.sqrt(
+                (begin_state.position[0] - end_state.position[0]) ** 2
+                + ((begin_state.position[1] - end_state.position[1]) ** 2)
+            )
         )

@@ -13,6 +13,7 @@ from revolve2.core.database import Database
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, Column
 from typing import List
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
 
 def _make_multineat_params() -> multineat.Parameters:
@@ -168,11 +169,13 @@ class Genotype(
         return DbGenotype.__tablename__
 
     @classmethod
-    async def to_database(cls, session, objects: List[Genotype]) -> List[int]:
+    async def to_database(
+        cls, session: AsyncSession, objects: List[Genotype]
+    ) -> List[int]:
         return [99 for _ in range(len(objects))]  # TODO
 
     @classmethod
-    async def from_database(cls, session, ids: List[int]) -> Genotype:
+    async def from_database(cls, session: AsyncSession, ids: List[int]) -> Genotype:
         raise NotImplementedError()
 
 

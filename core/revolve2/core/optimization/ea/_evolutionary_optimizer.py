@@ -6,6 +6,7 @@ from abc import abstractmethod
 from revolve2.core.database import Database, IncompatibleError
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm.exc import MultipleResultsFound
+from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.exc import OperationalError
 from dataclasses import dataclass
@@ -442,7 +443,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
     async def __save_generation_using_session(
         self,
-        session,  # TODO type
+        session: AsyncSession,
         initial_population: Optional[List[__Individual]],
         initial_fitnesses: Optional[List[Fitness]],
         new_individuals: List[__Individual],

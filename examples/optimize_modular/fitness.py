@@ -4,6 +4,7 @@ from revolve2.core.database import Database
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, Column
 from typing import List
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
 
 class Fitness(float, FitnessInterface["Fitness"]):
@@ -17,14 +18,16 @@ class Fitness(float, FitnessInterface["Fitness"]):
         return DbFitness.__tablename__
 
     @classmethod
-    async def to_database(cls, session, objects: List[Fitness]) -> List[int]:
+    async def to_database(
+        cls, session: AsyncSession, objects: List[Fitness]
+    ) -> List[int]:
         dbfitnesses = [DbFitness(fitness=fitness) for fitness in objects]
         session.add_all(dbfitnesses)
         await session.flush()
         return [dbfitness.id for dbfitness in dbfitnesses]
 
     @classmethod
-    async def from_database(cls, session, ids: List[int]) -> Fitness:
+    async def from_database(cls, session: AsyncSession, ids: List[int]) -> Fitness:
         raise NotImplementedError()
 
 

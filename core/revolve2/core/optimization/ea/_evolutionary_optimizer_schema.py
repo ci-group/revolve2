@@ -16,8 +16,8 @@ class DbEvolutionaryOptimizer(DbBase):
     )
     process_id = Column(Integer, nullable=False, unique=True)
     offspring_size = Column(Integer, nullable=False)
-    genotype_type = Column(String, nullable=False)
-    fitness_type = Column(String, nullable=False)
+    genotype_table = Column(String, nullable=False)
+    fitness_table = Column(String, nullable=False)
 
 
 class DbEvolutionaryOptimizerState(DbBase):

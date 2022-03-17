@@ -164,6 +164,10 @@ class Genotype(
             await conn.run_sync(DbBase.metadata.create_all)
 
     @classmethod
+    def identifying_table(cls) -> str:
+        return DbGenotype.__tablename__
+
+    @classmethod
     async def to_database(cls, session, objects: List[Genotype]) -> List[int]:
         return [99 for _ in range(len(objects))]  # TODO
 

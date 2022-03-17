@@ -161,8 +161,8 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 new_opt = DbEvolutionaryOptimizer(
                     process_id=process_id,
                     offspring_size=self.__offspring_size,
-                    genotype_type="GENOTYPE_TEST",  # TODO proper genotype&fitness types
-                    fitness_type="FITNESS_TEST",
+                    genotype_table=self.__genotype_type.identifying_table(),
+                    fitness_table=self.__fitness_type.identifying_table(),
                 )
                 session.add(new_opt)
                 await session.flush()
@@ -326,6 +326,9 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 survived_new_individuals,
                 survived_new_fitnesses,
             )
+            # in any case they should be none after saving once
+            initial_population = None
+            initial_fitnesses = None
 
         assert (
             self.__generation_index > 0
@@ -448,6 +451,42 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         # TODO this function can probably be simplified as well as optimized.
         # but it works so I'll leave it for now.
 
+        # update fitnesses of initial population if provided
+        if initial_fitnesses is not None:
+            assert initial_population is not None
+
+            fitness_ids = await self.__fitness_type.to_database(
+                session, initial_fitnesses
+            )
+            assert len(fitness_ids) == len(initial_fitnesses)
+
+            rows = (
+                (
+                    await session.execute(
+                        select(DbEvolutionaryOptimizerIndividual)
+                        .filter(
+                            (
+                                DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
+                                == self.__evolutionary_optimizer_id
+                            )
+                            & (
+                                DbEvolutionaryOptimizerIndividual.individual_id.in_(
+                                    [i.id for i in initial_population]
+                                )
+                            )
+                        )
+                        .order_by(DbEvolutionaryOptimizerIndividual.individual_id)
+                    )
+                )
+                .scalars()
+                .all()
+            )
+            if len(rows) != len(initial_population):
+                raise IncompatibleError()
+
+            for i, row in enumerate(rows):
+                row.fitness_id = fitness_ids[i]
+
         # save current optimizer state
         session.add(
             DbEvolutionaryOptimizerState(
@@ -505,39 +544,3 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 for index, individual in enumerate(self.__latest_population)
             ]
         )
-
-        # update fitnesses of initial population if provided
-        if initial_fitnesses is not None:
-            assert initial_population is not None
-
-            fitness_ids = await self.__fitness_type.to_database(
-                session, initial_fitnesses
-            )
-            assert len(fitness_ids) == len(initial_fitnesses)
-
-            rows = (
-                (
-                    await session.execute(
-                        select(DbEvolutionaryOptimizerIndividual)
-                        .filter(
-                            (
-                                DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
-                                == self.__evolutionary_optimizer_id
-                            )
-                            & (
-                                DbEvolutionaryOptimizerIndividual.individual_id.in_(
-                                    [i.id for i in initial_population]
-                                )
-                            )
-                        )
-                        .order_by(DbEvolutionaryOptimizerIndividual.individual_id)
-                    )
-                )
-                .scalars()
-                .all()
-            )
-            if len(rows) != len(initial_population):
-                raise IncompatibleError()
-
-            for i, row in enumerate(rows):
-                row.fitness_id = fitness_ids[i]

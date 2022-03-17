@@ -13,8 +13,15 @@ class Fitness(float, FitnessInterface["Fitness"]):
             await conn.run_sync(DbBase.metadata.create_all)
 
     @classmethod
+    def identifying_table(cls) -> str:
+        return DbFitness.__tablename__
+
+    @classmethod
     async def to_database(cls, session, objects: List[Fitness]) -> List[int]:
-        return [99 for _ in range(len(objects))]  # TODO
+        dbfitnesses = [DbFitness(fitness=fitness) for fitness in objects]
+        session.add_all(dbfitnesses)
+        await session.flush()
+        return [dbfitness.id for dbfitness in dbfitnesses]
 
     @classmethod
     async def from_database(cls, session, ids: List[int]) -> Fitness:
@@ -24,8 +31,8 @@ class Fitness(float, FitnessInterface["Fitness"]):
 DbBase = declarative_base()
 
 
-class DbGenotype(DbBase):
-    __tablename__ = "genotype"
+class DbFitness(DbBase):
+    __tablename__ = "fitness"
 
     id = Column(
         Integer,
@@ -34,4 +41,4 @@ class DbGenotype(DbBase):
         autoincrement=True,
         primary_key=True,
     )
-    # TODO
+    fitness = Column(Integer, nullable=False)

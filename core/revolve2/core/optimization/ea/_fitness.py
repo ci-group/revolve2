@@ -15,6 +15,13 @@ class Fitness(ABC, Generic[Child]):
 
     @classmethod
     @abstractmethod
+    def identifying_table(cls) -> str:
+        """
+        Return the name of the table that can be used to find stored object manually using their id.
+        """
+
+    @classmethod
+    @abstractmethod
     async def to_database(
         cls, session, objects: List[Child]
     ) -> List[int]:  # TODO session type

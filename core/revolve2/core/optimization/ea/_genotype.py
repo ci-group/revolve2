@@ -15,6 +15,13 @@ class Genotype(ABC, Generic[Child]):
 
     @classmethod
     @abstractmethod
+    def identifying_table(cls) -> str:
+        """
+        Return the name of the table that can be used to find stored object manually using their id.
+        """
+
+    @classmethod
+    @abstractmethod
     async def to_database(cls, session, objects: List[Child]) -> List[int]:
         """
         Save a list of these objects to the database.

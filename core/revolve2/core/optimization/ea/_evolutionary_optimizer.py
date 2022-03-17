@@ -20,6 +20,7 @@ from ._evolutionary_optimizer_schema import (
 )
 from ._genotype import Genotype as GenotypeInterface
 from ._fitness import Fitness as FitnessInterface
+import logging
 
 
 Child = TypeVar("Child")
@@ -331,6 +332,8 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             initial_population = None
             initial_fitnesses = None
 
+            logging.info(f"Finished generation {self.__generation_index}.")
+
         assert (
             self.__generation_index > 0
         ), "Must create at least one generation beyond initial population. This behaviour is not supported."  # would break database structure
@@ -447,7 +450,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         initial_population: Optional[List[__Individual]],
         initial_fitnesses: Optional[List[Fitness]],
         new_individuals: List[__Individual],
-        new_fitnesses: Optional[List[Fitness]],  # TODO
+        new_fitnesses: Optional[List[Fitness]],
     ) -> None:
         # TODO this function can probably be simplified as well as optimized.
         # but it works so I'll leave it for now.

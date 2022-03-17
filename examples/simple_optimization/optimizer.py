@@ -63,6 +63,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
         ):
             return False
 
+        # TODO set rng from database!
         self._rng = rng
         self._items = items
         self._num_generations = num_generations

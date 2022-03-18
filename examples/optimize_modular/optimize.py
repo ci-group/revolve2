@@ -2,7 +2,7 @@ import logging
 from random import Random
 
 import multineat
-from genotype import Genotype
+from genotype import Genotype, random as random_genotype
 from optimizer import Optimizer
 from revolve2.core.optimization import ProcessIdGen
 
@@ -44,7 +44,7 @@ async def main() -> None:
     innov_db_brain = multineat.InnovationDatabase()
 
     initial_population = [
-        Genotype.random(innov_db_body, innov_db_brain, rng, NUM_INITIAL_MUTATIONS)
+        random_genotype(innov_db_body, innov_db_brain, rng, NUM_INITIAL_MUTATIONS)
         for _ in range(POPULATION_SIZE)
     ]
 
@@ -58,7 +58,6 @@ async def main() -> None:
             database=database,
             process_id=0,
             initial_population=initial_population,
-            initial_fitness=None,
             rng=rng,
             process_id_gen=process_id_gen,
             innov_db_body=innov_db_body,

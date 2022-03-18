@@ -18,14 +18,13 @@ from ._evolutionary_optimizer_schema import (
     DbEvolutionaryOptimizerParent,
     DbBase,
 )
-from ._genotype import Genotype as GenotypeInterface
-from ._fitness import Fitness as FitnessInterface
 import logging
+from revolve2.core.database import Tableable
 
 
 Child = TypeVar("Child")
-Genotype = TypeVar("Genotype", bound=GenotypeInterface)
-Fitness = TypeVar("Fitness", bound=FitnessInterface)
+Genotype = TypeVar("Genotype", bound=Tableable)
+Fitness = TypeVar("Fitness", bound=Tableable)
 
 
 class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
@@ -138,8 +137,8 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         :id: Unique id between all EvolutionaryOptimizers in this database.
         :offspring_size: Number of offspring made by the population each generation.
         """
-        assert issubclass(genotype_type, GenotypeInterface)
-        assert issubclass(fitness_type, FitnessInterface)
+        assert issubclass(genotype_type, Tableable)
+        assert issubclass(fitness_type, Tableable)
 
         self.__database = database
         self.__genotype_type = genotype_type
@@ -184,8 +183,8 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         genotype_type: Type[Genotype],
         fitness_type: Type[Fitness],
     ) -> bool:
-        assert issubclass(genotype_type, GenotypeInterface)
-        assert issubclass(fitness_type, FitnessInterface)
+        assert issubclass(genotype_type, Tableable)
+        assert issubclass(fitness_type, Tableable)
 
         self.__database = database
         self.__genotype_type = genotype_type

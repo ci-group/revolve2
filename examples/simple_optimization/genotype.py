@@ -1,21 +1,18 @@
 from __future__ import annotations
 
-from revolve2.core.optimization.ea import Genotype as GenotypeInterface
 import sqlalchemy
 from typing import List
 from random import Random
 from phenotype import Phenotype
-from revolve2.core.database import Database
+from revolve2.core.database import Database, Tableable
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from item import Item
 from revolve2.core.database import IncompatibleError
 from sqlalchemy.future import select
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm.exc import MultipleResultsFound
 
 
-class Genotype(GenotypeInterface["Genotype"]):
+class Genotype(Tableable["Genotype"]):
     items: List[bool]
 
     def __init__(self, items: List[bool]) -> None:
@@ -59,20 +56,11 @@ class Genotype(GenotypeInterface["Genotype"]):
 
     @classmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> Genotype:
-        try:
-            rows = (
-                (
-                    await session.execute(
-                        select(DbGenotype).filter(DbGenotype.id.in_(ids))
-                    )
-                )
-                .scalars()
-                .all()
-            )
-        except MultipleResultsFound as err:
-            raise IncompatibleError() from err
-        except NoResultFound:
-            return False
+        rows = (
+            (await session.execute(select(DbGenotype).filter(DbGenotype.id.in_(ids))))
+            .scalars()
+            .all()
+        )
 
         if len(rows) != len(ids):
             raise IncompatibleError()

@@ -1,19 +1,29 @@
 from __future__ import annotations
+from dataclasses import dataclass
 
 import sys
 from random import Random
 
 import multineat
 
-from revolve2.core.optimization.ea.modular_robot import BodybrainGenotype
-from revolve2.genotypes.cppnwin import BodyGenotypeV1, BrainGenotypeCpgV1
-from revolve2.serialization import Serializable, SerializeError, StaticData
-from revolve2.core.optimization.ea import Genotype as GenotypeInterface
-from revolve2.core.database import Database
+from revolve2.genotypes.cppnwin import Genotype as CppnwinGenotype
+from revolve2.core.database import Database, Tableable
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, Column
 from typing import List
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1 import (
+    random_v1 as body_random,
+    develop_v1 as body_develop,
+)
+from revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1 import (
+    random_v1 as brain_random,
+    develop_v1 as brain_develop,
+)
+from revolve2.genotypes.cppnwin import crossover_v1, mutate_v1
+from sqlalchemy.future import select
+from revolve2.core.database import IncompatibleError
+from revolve2.core.modular_robot import ModularRobot
 
 
 def _make_multineat_params() -> multineat.Parameters:
@@ -58,131 +68,154 @@ def _make_multineat_params() -> multineat.Parameters:
     return multineat_params
 
 
+_MULTINEAT_PARAMS = _make_multineat_params()
+
+
+@dataclass
 class Genotype(
-    GenotypeInterface,
-    BodybrainGenotype[BodyGenotypeV1, BrainGenotypeCpgV1],
-    Serializable,
+    Tableable["Genotype"],
 ):
-    _MULTINEAT_PARAMS = _make_multineat_params()
-
-    @classmethod
-    def random(
-        cls,
-        innov_db_body: multineat.InnovationDatabase,
-        innov_db_brain: multineat.InnovationDatabase,
-        rng: Random,
-        num_initial_mutations: int,
-    ) -> Genotype:
-        multineat_rng = cls._multineat_rng_from_random(rng)
-
-        body = BodyGenotypeV1.random(
-            innov_db_body,
-            multineat_rng,
-            cls._MULTINEAT_PARAMS,
-            multineat.ActivationFunction.TANH,
-            num_initial_mutations,
-        )
-
-        brain = BrainGenotypeCpgV1.random(
-            innov_db_brain,
-            multineat_rng,
-            cls._MULTINEAT_PARAMS,
-            multineat.ActivationFunction.SIGNED_SINE,
-            num_initial_mutations,
-        )
-
-        return cls(body, brain)
-
-    def mutate(
-        self,
-        innov_db_body: multineat.InnovationDatabase,
-        innov_db_brain: multineat.InnovationDatabase,
-        rng: Random,
-    ) -> Genotype:
-        multineat_rng = self._multineat_rng_from_random(rng)
-
-        return Genotype(
-            self._body_genotype.mutate(
-                self._MULTINEAT_PARAMS, innov_db_body, multineat_rng
-            ),
-            self._brain_genotype.mutate(
-                self._MULTINEAT_PARAMS, innov_db_brain, multineat_rng
-            ),
-        )
-
-    @classmethod
-    def crossover(
-        cls,
-        parent1: Genotype,
-        parent2: Genotype,
-        rng: Random,
-    ) -> Genotype:
-        multineat_rng = cls._multineat_rng_from_random(rng)
-
-        return Genotype(
-            BodyGenotypeV1.crossover(
-                parent1._body_genotype,
-                parent2._body_genotype,
-                Genotype._MULTINEAT_PARAMS,
-                multineat_rng,
-                False,
-                False,
-            ),
-            BrainGenotypeCpgV1.crossover(
-                parent1._brain_genotype,
-                parent2._brain_genotype,
-                Genotype._MULTINEAT_PARAMS,
-                multineat_rng,
-                False,
-                False,
-            ),
-        )
-
-    @staticmethod
-    def _multineat_rng_from_random(rng: Random) -> multineat.RNG:
-        multineat_rng = multineat.RNG()
-        multineat_rng.Seed(rng.randint(0, sys.maxsize))
-        return multineat_rng
-
-    def serialize(self) -> StaticData:
-        return {
-            "body": self._body_genotype.serialize(),
-            "brain": self._brain_genotype.serialize(),
-        }
-
-    @classmethod
-    def deserialize(cls, data: StaticData) -> Genotype:
-        if type(data) != dict:
-            raise SerializeError()
-        return cls(
-            BodyGenotypeV1.deserialize(data["body"]),
-            BrainGenotypeCpgV1.deserialize(data["brain"]),
-        )
+    body: CppnwinGenotype
+    brain: CppnwinGenotype
 
     @classmethod
     async def create_tables(cls, database: Database) -> None:
         async with database.engine.begin() as conn:
-            await conn.run_sync(DbBase.metadata.create_all)
+            await conn.run_sync(_DbBase.metadata.create_all)
+        await CppnwinGenotype.create_tables(database)
 
     @classmethod
     def identifying_table(cls) -> str:
-        return DbGenotype.__tablename__
+        return _DbGenotype.__tablename__
 
     @classmethod
     async def to_database(
         cls, session: AsyncSession, objects: List[Genotype]
     ) -> List[int]:
-        return [99 for _ in range(len(objects))]  # TODO
+        body_ids = await CppnwinGenotype.to_database(session, [o.body for o in objects])
+        brain_ids = await CppnwinGenotype.to_database(
+            session, [o.brain for o in objects]
+        )
+
+        dbgenotypes = [
+            _DbGenotype(body_id=body_id, brain_id=brain_id)
+            for body_id, brain_id in zip(body_ids, brain_ids)
+        ]
+
+        session.add_all(dbgenotypes)
+        await session.flush()
+        return [dbfitness.id for dbfitness in dbgenotypes]
 
     @classmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> Genotype:
-        raise NotImplementedError()
+        rows = (
+            (await session.execute(select(_DbGenotype).filter(_DbGenotype.id.in_(ids))))
+            .scalars()
+            .all()
+        )
+
+        if len(rows) != len(ids):
+            raise IncompatibleError()
+
+        id_map = {t.id: t for t in rows}
+        body_ids = [id_map[id].body_id for id in ids]
+        brain_ids = [id_map[id].brain_id for id in ids]
+
+        body_genotypes = await CppnwinGenotype.from_database(session, body_ids)
+        brain_genotypes = await CppnwinGenotype.from_database(session, brain_ids)
+
+        genotypes = [
+            Genotype(body, brain)
+            for body, brain in zip(body_genotypes, brain_genotypes)
+        ]
+
+        return genotypes
 
 
-DbBase = declarative_base()
+def random(
+    innov_db_body: multineat.InnovationDatabase,
+    innov_db_brain: multineat.InnovationDatabase,
+    rng: Random,
+    num_initial_mutations: int,
+) -> Genotype:
+    multineat_rng = _multineat_rng_from_random(rng)
+
+    body = body_random(
+        innov_db_body,
+        multineat_rng,
+        _MULTINEAT_PARAMS,
+        multineat.ActivationFunction.TANH,
+        num_initial_mutations,
+    )
+
+    brain = brain_random(
+        innov_db_brain,
+        multineat_rng,
+        _MULTINEAT_PARAMS,
+        multineat.ActivationFunction.SIGNED_SINE,
+        num_initial_mutations,
+    )
+
+    return Genotype(body, brain)
 
 
-class DbGenotype(DbBase):
+def mutate(
+    genotype: Genotype,
+    innov_db_body: multineat.InnovationDatabase,
+    innov_db_brain: multineat.InnovationDatabase,
+    rng: Random,
+) -> Genotype:
+    multineat_rng = _multineat_rng_from_random(rng)
+
+    return Genotype(
+        mutate_v1(genotype.body, _MULTINEAT_PARAMS, innov_db_body, multineat_rng),
+        mutate_v1(genotype.brain, _MULTINEAT_PARAMS, innov_db_brain, multineat_rng),
+    )
+
+
+def crossover(
+    parent1: Genotype,
+    parent2: Genotype,
+    rng: Random,
+) -> Genotype:
+    multineat_rng = _multineat_rng_from_random(rng)
+
+    return Genotype(
+        crossover_v1(
+            parent1.body,
+            parent2.body,
+            _MULTINEAT_PARAMS,
+            multineat_rng,
+            False,
+            False,
+        ),
+        crossover_v1(
+            parent1.brain,
+            parent2.brain,
+            _MULTINEAT_PARAMS,
+            multineat_rng,
+            False,
+            False,
+        ),
+    )
+
+
+def develop(genotype: Genotype) -> ModularRobot:
+    body = body_develop(genotype.body)
+    brain = brain_develop(genotype.brain, body)
+    return ModularRobot(body, brain)
+
+
+def _multineat_rng_from_random(rng: Random) -> multineat.RNG:
+    multineat_rng = multineat.RNG()
+    multineat_rng.Seed(rng.randint(0, sys.maxsize))
+    return multineat_rng
+
+
+_DbBase = declarative_base()
+
+
+class _DbGenotype(_DbBase):
     __tablename__ = "genotype"
 
     id = Column(
@@ -192,4 +225,6 @@ class DbGenotype(DbBase):
         autoincrement=True,
         primary_key=True,
     )
-    # TODO
+
+    body_id = Column(Integer, nullable=False)
+    brain_id = Column(Integer, nullable=False)

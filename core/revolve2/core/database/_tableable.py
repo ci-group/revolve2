@@ -3,10 +3,10 @@ from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-Child = TypeVar("Child", bound="Genotype")
+Child = TypeVar("Child", bound="Tableable")
 
 
-class Genotype(ABC, Generic[Child]):
+class Tableable(ABC, Generic[Child]):
     @classmethod
     @abstractmethod
     async def create_tables(cls, database: Database) -> None:

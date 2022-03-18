@@ -1,7 +1,8 @@
 import multineat
+from ._genotype import Genotype
 
 
-def random_multineat_genotype(
+def random_v1(
     innov_db: multineat.InnovationDatabase,
     rng: multineat.RNG,
     multineat_params: multineat.Parameters,
@@ -9,7 +10,7 @@ def random_multineat_genotype(
     num_inputs: int,
     num_outputs: int,
     num_initial_mutations: int,
-) -> multineat.Genome:
+) -> Genotype:
     genotype = multineat.Genome(
         0,  # ID
         num_inputs,
@@ -32,4 +33,4 @@ def random_multineat_genotype(
             rng,
         )
 
-    return genotype
+    return Genotype(genotype)

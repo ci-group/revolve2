@@ -1,17 +1,19 @@
 from __future__ import annotations
-from revolve2.core.optimization.ea import Fitness as FitnessInterface
-from revolve2.core.database import Database
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Integer, Column
-from typing import List
+
+import sqlalchemy
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from revolve2.core.database import Database, Tableable
+from typing import List
+from sqlalchemy.ext.declarative import declarative_base
+from revolve2.core.database import IncompatibleError
+from sqlalchemy.future import select
 
 
-class Fitness(float, FitnessInterface["Fitness"]):
+class Fitness(float, Tableable["Fitness"]):
     @classmethod
     async def create_tables(cls, database: Database) -> None:
         async with database.engine.begin() as conn:
-            await conn.run_sync(DbBase.metadata.create_all)
+            await conn.run_sync(DbFitness.metadata.create_all)
 
     @classmethod
     def identifying_table(cls) -> str:
@@ -28,7 +30,17 @@ class Fitness(float, FitnessInterface["Fitness"]):
 
     @classmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> Fitness:
-        raise NotImplementedError()
+        rows = (
+            (await session.execute(select(DbFitness).filter(DbFitness.id.in_(ids))))
+            .scalars()
+            .all()
+        )
+
+        if len(rows) != len(ids):
+            raise IncompatibleError()
+
+        id_map = {t.id: t for t in rows}
+        return [Fitness(id_map[id].fitness) for id in ids]
 
 
 DbBase = declarative_base()
@@ -37,11 +49,11 @@ DbBase = declarative_base()
 class DbFitness(DbBase):
     __tablename__ = "fitness"
 
-    id = Column(
-        Integer,
+    id = sqlalchemy.Column(
+        sqlalchemy.Integer,
         nullable=False,
         unique=True,
         autoincrement=True,
         primary_key=True,
     )
-    fitness = Column(Integer, nullable=False)
+    fitness = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)

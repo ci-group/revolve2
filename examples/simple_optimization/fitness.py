@@ -1,18 +1,15 @@
 from __future__ import annotations
 
-from revolve2.core.optimization.ea import Fitness as FitnessInterface
 import sqlalchemy
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from revolve2.core.database import Database
 from typing import List
 from sqlalchemy.ext.declarative import declarative_base
-from revolve2.core.database import IncompatibleError
+from revolve2.core.database import IncompatibleError, Tableable
 from sqlalchemy.future import select
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm.exc import MultipleResultsFound
 
 
-class Fitness(float, FitnessInterface["Fitness"]):
+class Fitness(float, Tableable["Fitness"]):
     @classmethod
     async def create_tables(cls, database: Database) -> None:
         async with database.engine.begin() as conn:
@@ -33,16 +30,11 @@ class Fitness(float, FitnessInterface["Fitness"]):
 
     @classmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> Fitness:
-        try:
-            rows = (
-                (await session.execute(select(DbFitness).filter(DbFitness.id.in_(ids))))
-                .scalars()
-                .all()
-            )
-        except MultipleResultsFound as err:
-            raise IncompatibleError() from err
-        except NoResultFound:
-            return False
+        rows = (
+            (await session.execute(select(DbFitness).filter(DbFitness.id.in_(ids))))
+            .scalars()
+            .all()
+        )
 
         if len(rows) != len(ids):
             raise IncompatibleError()

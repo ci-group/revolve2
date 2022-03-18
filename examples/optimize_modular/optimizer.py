@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import math
 from random import Random
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 
 import multineat
-from genotype import Genotype
+from genotype import Genotype, mutate, crossover, develop
 from fitness import Fitness
 from pyrr import Quaternion, Vector3
 
@@ -48,7 +48,6 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
         database: Database,
         process_id: int,
         initial_population: List[Genotype],
-        initial_fitness: Optional[List[Fitness]],
         rng: Random,
         process_id_gen: ProcessIdGen,
         innov_db_body: multineat.InnovationDatabase,
@@ -86,7 +85,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
         process_id: int,
         rng: Random,
         process_id_gen: ProcessIdGen,
-    ) -> None:
+    ) -> bool:
         if not await super().ainit_from_database(
             database=database,
             process_id=process_id,
@@ -137,10 +136,10 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
 
     def _crossover(self, parents: List[Genotype]) -> Genotype:
         assert len(parents) == 2
-        return Genotype.crossover(parents[0], parents[1], self._rng)
+        return crossover(parents[0], parents[1], self._rng)
 
-    def _mutate(self, individual: Genotype) -> Genotype:
-        return individual.mutate(self._innov_db_body, self._innov_db_brain, self._rng)
+    def _mutate(self, genotype: Genotype) -> Genotype:
+        return mutate(genotype, self._innov_db_body, self._innov_db_brain, self._rng)
 
     async def _evaluate_generation(
         self,
@@ -159,7 +158,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
         self._controllers = []
 
         for genotype in genotypes:
-            actor, controller = genotype.develop().make_actor_and_controller()
+            actor, controller = develop(genotype).make_actor_and_controller()
             bounding_box = actor.calc_aabb()
             self._controllers.append(controller)
             env = Environment()

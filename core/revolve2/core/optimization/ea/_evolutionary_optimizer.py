@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.exc import OperationalError
 from dataclasses import dataclass
-from ._evolutionary_optimizer_schema import (
+from .evolutionary_optimizer_schema import (
     DbEvolutionaryOptimizer,
     DbEvolutionaryOptimizerGeneration,
     DbEvolutionaryOptimizerIndividual,

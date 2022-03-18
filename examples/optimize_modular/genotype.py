@@ -81,12 +81,12 @@ class Genotype(
     @classmethod
     async def create_tables(cls, database: Database) -> None:
         async with database.engine.begin() as conn:
-            await conn.run_sync(_DbBase.metadata.create_all)
+            await conn.run_sync(DbBase.metadata.create_all)
         await CppnwinGenotype.create_tables(database)
 
     @classmethod
     def identifying_table(cls) -> str:
-        return _DbGenotype.__tablename__
+        return DbGenotype.__tablename__
 
     @classmethod
     async def to_database(
@@ -98,7 +98,7 @@ class Genotype(
         )
 
         dbgenotypes = [
-            _DbGenotype(body_id=body_id, brain_id=brain_id)
+            DbGenotype(body_id=body_id, brain_id=brain_id)
             for body_id, brain_id in zip(body_ids, brain_ids)
         ]
 
@@ -109,7 +109,7 @@ class Genotype(
     @classmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> Genotype:
         rows = (
-            (await session.execute(select(_DbGenotype).filter(_DbGenotype.id.in_(ids))))
+            (await session.execute(select(DbGenotype).filter(DbGenotype.id.in_(ids))))
             .scalars()
             .all()
         )
@@ -212,10 +212,10 @@ def _multineat_rng_from_random(rng: Random) -> multineat.RNG:
     return multineat_rng
 
 
-_DbBase = declarative_base()
+DbBase = declarative_base()
 
 
-class _DbGenotype(_DbBase):
+class DbGenotype(DbBase):
     __tablename__ = "genotype"
 
     id = Column(

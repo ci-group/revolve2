@@ -5,7 +5,7 @@ from sqlalchemy.future import select
 from revolve2.core.optimization.ea.evolutionary_optimizer_schema import (
     DbEvolutionaryOptimizerIndividual,
 )
-from fitness import DbFitness
+from revolve2.core.optimization.ea.fitness_float_schema import DbFitnessFloat
 from optimizer import develop
 
 
@@ -15,9 +15,11 @@ async def main() -> None:
     async with db.session() as session:
         best_individual = (
             await session.execute(
-                select(DbEvolutionaryOptimizerIndividual, DbFitness)
-                .filter(DbEvolutionaryOptimizerIndividual.fitness_id == DbFitness.id)
-                .order_by(DbFitness.fitness.desc())
+                select(DbEvolutionaryOptimizerIndividual, DbFitnessFloat)
+                .filter(
+                    DbEvolutionaryOptimizerIndividual.fitness_id == DbFitnessFloat.id
+                )
+                .order_by(DbFitnessFloat.fitness.desc())
             )
         ).first()
 

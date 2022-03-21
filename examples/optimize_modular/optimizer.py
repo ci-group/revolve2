@@ -6,7 +6,7 @@ from typing import List, Tuple
 
 import multineat
 from genotype import Genotype, mutate, crossover, develop
-from fitness import Fitness
+from revolve2.core.optimization.ea._fitness_float import FitnessFloat
 from pyrr import Quaternion, Vector3
 
 import revolve2.core.optimization.ea.population_management as population_management
@@ -27,7 +27,7 @@ from revolve2.core.database import Database
 from revolve2.core.optimization import ProcessIdGen
 
 
-class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
+class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
     _runner: Runner
 
     _controllers: List[ActorController]
@@ -63,7 +63,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
             process_id=process_id,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
-            fitness_type=Fitness,
+            fitness_type=FitnessFloat,
             offspring_size=offspring_size,
             initial_population=initial_population,
         )
@@ -91,7 +91,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
             process_id=process_id,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
-            fitness_type=Fitness,
+            fitness_type=FitnessFloat,
         ):
             return False
         self._rng = rng
@@ -100,7 +100,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
     def _select_parents(
         self,
         population: List[Genotype],
-        fitnesses: List[Fitness],
+        fitnesses: List[FitnessFloat],
         num_parent_groups: int,
     ) -> List[List[int]]:
         return [
@@ -116,9 +116,9 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
     def _select_survivors(
         self,
         old_individuals: List[Genotype],
-        old_fitnesses: List[Fitness],
+        old_fitnesses: List[FitnessFloat],
         new_individuals: List[Genotype],
-        new_fitnesses: List[Fitness],
+        new_fitnesses: List[FitnessFloat],
         num_survivors: int,
     ) -> Tuple[List[int], List[int]]:
         assert len(old_individuals) == num_survivors
@@ -147,7 +147,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
         database: Database,
         process_id: int,
         process_id_gen: ProcessIdGen,
-    ) -> List[Fitness]:
+    ) -> List[FitnessFloat]:
         batch = Batch(
             simulation_time=self._simulation_time,
             sampling_frequency=self._sampling_frequency,
@@ -208,11 +208,13 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, Fitness]):
     """
 
     @staticmethod
-    def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> Fitness:
+    def _calculate_fitness(
+        begin_state: ActorState, end_state: ActorState
+    ) -> FitnessFloat:
         # TODO simulation can continue slightly passed the defined sim time.
 
         # distance traveled on the xy plane
-        return Fitness(
+        return FitnessFloat(
             math.sqrt(
                 (begin_state.position[0] - end_state.position[0]) ** 2
                 + ((begin_state.position[1] - end_state.position[1]) ** 2)

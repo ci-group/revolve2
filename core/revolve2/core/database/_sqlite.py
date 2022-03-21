@@ -1,6 +1,8 @@
 from sqlalchemy.ext.asyncio import create_async_engine
 from ._database import Database
 import os
+from sqlalchemy.engine import Engine
+import sqlalchemy
 
 
 def open_database_sqlite(db_root_directory) -> Database:
@@ -8,3 +10,7 @@ def open_database_sqlite(db_root_directory) -> Database:
     return Database(
         create_async_engine(f"sqlite+aiosqlite:///{db_root_directory}/db.sqlite")
     )
+
+
+def create_sync_engine_sqlite(db_root_directory) -> Engine:
+    return sqlalchemy.create_engine(f"sqlite:///{db_root_directory}/db.sqlite")

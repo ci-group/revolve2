@@ -23,7 +23,7 @@ async def main() -> None:
     NUM_GENERATIONS = 3
 
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.INFO,
         format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
     )
 

@@ -10,9 +10,14 @@ from revolve2.core.optimization.ea import EvolutionaryOptimizer, FitnessFloat
 from genotype import Genotype
 from item import Item
 from revolve2.core.optimization import ProcessIdGen
+from optimizer_schema import DbOptimizerState, DbBase
+import pickle
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.future import select
 
 
 class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
+    _process_id: int
     _rng: Random
     _items: List[Item]
     _num_generations: int
@@ -20,6 +25,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
     async def ainit_new(
         self,
         database: Database,
+        session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
         offspring_size: int,
@@ -30,6 +36,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
     ) -> None:
         await super().ainit_new(
             database=database,
+            session=session,
             process_id=process_id,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
@@ -38,15 +45,22 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
             initial_population=initial_population,
         )
 
+        self._process_id = process_id
         self._rng = rng
         self._items = items
         self._num_generations = num_generations
 
-        # TODO database things
+        # create database structure if not exists
+        # TODO this works but there is probably a better way
+        await (await session.connection()).run_sync(DbBase.metadata.create_all)
+
+        # save to database
+        self._on_generation_checkpoint(session)
 
     async def ainit_from_database(
         self,
         database: Database,
+        session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
         rng: Random,
@@ -55,6 +69,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
     ) -> bool:
         if not await super().ainit_from_database(
             database=database,
+            session=session,
             process_id=process_id,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
@@ -62,10 +77,24 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
         ):
             return False
 
-        # TODO set rng from database!
-        self._rng = rng
+        self._process_id = process_id
         self._items = items
         self._num_generations = num_generations
+
+        opt_row = (
+            (
+                await session.execute(
+                    select(DbOptimizerState)
+                    .filter(DbOptimizerState.process_id == process_id)
+                    .order_by(DbOptimizerState.generation_index.desc())
+                )
+            )
+            .scalars()
+            .first()
+        )
+
+        self._rng = rng
+        self._rng.setstate(pickle.loads(opt_row.rng))
 
         return True
 
@@ -137,3 +166,12 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
 
     def _must_do_next_gen(self) -> bool:
         return self.generation_index != self._num_generations
+
+    def _on_generation_checkpoint(self, session: AsyncSession) -> None:
+        session.add(
+            DbOptimizerState(
+                process_id=self._process_id,
+                generation_index=self.generation_index,
+                rng=pickle.dumps(self._rng.getstate()),
+            )
+        )

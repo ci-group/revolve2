@@ -23,17 +23,17 @@ from revolve2.core.physics.running import (
     State,
 )
 from revolve2.runners.isaacgym import LocalRunner
-from revolve2.core.database import Database, IncompatibleError
+from revolve2.core.database import Database
 from revolve2.core.optimization import ProcessIdGen
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from optimizer_schema import DbOptimizer, DbBase
+from optimizer_schema import DbOptimizerState, DbBase
 import pickle
 from sqlalchemy.future import select
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm.exc import MultipleResultsFound
 
 
 class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
+    _process_id: int
+
     _runner: Runner
 
     _controllers: List[ActorController]
@@ -76,6 +76,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
             initial_population=initial_population,
         )
 
+        self._process_id = process_id
         self._init_runner()
         self._innov_db_body = innov_db_body
         self._innov_db_brain = innov_db_brain
@@ -90,22 +91,12 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
         await (await session.connection()).run_sync(DbBase.metadata.create_all)
 
         # save to database
-        session.add(
-            DbOptimizer(
-                process_id=process_id,
-                rng=pickle.dumps(self._rng.getstate()),
-                innov_db_body=innov_db_body.Serialize(),
-                innov_db_brain=innov_db_brain.Serialize(),
-                simulation_time=simulation_time,
-                sampling_frequency=sampling_frequency,
-                control_frequency=control_frequency,
-                num_generations=num_generations,
-            )
-        )
+        self._on_generation_checkpoint(session)
 
     async def ainit_from_database(
         self,
         database: Database,
+        session: AsyncSession,
         process_id: int,
         rng: Random,
         process_id_gen: ProcessIdGen,
@@ -114,6 +105,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
     ) -> bool:
         if not await super().ainit_from_database(
             database=database,
+            session=session,
             process_id=process_id,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
@@ -121,38 +113,33 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
         ):
             return False
 
+        self._process_id = process_id
         self._init_runner()
 
-        async with database.session() as session:
-            try:
-                opt_row = (
-                    (
-                        await session.execute(
-                            select(DbOptimizer).filter(
-                                DbOptimizer.process_id == process_id
-                            )
-                        )
-                    )
-                    .scalars()
-                    .one()
+        opt_row = (
+            (
+                await session.execute(
+                    select(DbOptimizerState)
+                    .filter(DbOptimizerState.process_id == process_id)
+                    .order_by(DbOptimizerState.generation_index.desc())
                 )
-            except MultipleResultsFound as err:
-                raise IncompatibleError() from err
-            except NoResultFound:
-                return False
+            )
+            .scalars()
+            .first()
+        )
 
-            self._simulation_time = opt_row.simulation_time
-            self._sampling_frequency = opt_row.sampling_frequency
-            self._control_frequency = opt_row.control_frequency
-            self._num_generations = opt_row.num_generations
+        self._simulation_time = opt_row.simulation_time
+        self._sampling_frequency = opt_row.sampling_frequency
+        self._control_frequency = opt_row.control_frequency
+        self._num_generations = opt_row.num_generations
 
-            self._rng = rng
-            rng.setstate(pickle.loads(opt_row.rng))
+        self._rng = rng
+        self._rng.setstate(pickle.loads(opt_row.rng))
 
-            self._innov_db_body = innov_db_body
-            self._innov_db_body.Deserialize(opt_row.innov_db_body)
-            self._innov_db_brain = innov_db_brain
-            self._innov_db_brain.Deserialize(opt_row.innov_db_brain)
+        self._innov_db_body = innov_db_body
+        self._innov_db_body.Deserialize(opt_row.innov_db_body)
+        self._innov_db_brain = innov_db_brain
+        self._innov_db_brain.Deserialize(opt_row.innov_db_brain)
 
         return True
 
@@ -284,4 +271,16 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
         )
 
     def _on_generation_checkpoint(self, session: AsyncSession) -> None:
-        pass
+        session.add(
+            DbOptimizerState(
+                process_id=self._process_id,
+                generation_index=self.generation_index,
+                rng=pickle.dumps(self._rng.getstate()),
+                innov_db_body=self._innov_db_body.Serialize(),
+                innov_db_brain=self._innov_db_brain.Serialize(),
+                simulation_time=self._simulation_time,
+                sampling_frequency=self._sampling_frequency,
+                control_frequency=self._control_frequency,
+                num_generations=self._num_generations,
+            )
+        )

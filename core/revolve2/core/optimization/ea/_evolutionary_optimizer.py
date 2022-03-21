@@ -184,6 +184,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
     async def ainit_from_database(
         self,
         database: Database,
+        session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
         genotype_type: Type[Genotype],
@@ -196,118 +197,114 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         self.__genotype_type = genotype_type
         self.__fitness_type = fitness_type
 
-        async with database.session() as session:
-            try:
-                eo_row = (
-                    (
-                        await session.execute(
-                            select(DbEvolutionaryOptimizer).filter(
-                                DbEvolutionaryOptimizer.process_id == process_id
-                            )
-                        )
-                    )
-                    .scalars()
-                    .one()
-                )
-            except MultipleResultsFound as err:
-                raise IncompatibleError() from err
-            except (NoResultFound, OperationalError):
-                return False
-
-            self.__evolutionary_optimizer_id = eo_row.id
-            self.__offspring_size = eo_row.offspring_size
-
-            state_row = (
+        try:
+            eo_row = (
                 (
                     await session.execute(
-                        select(DbEvolutionaryOptimizerState)
-                        .filter(
-                            DbEvolutionaryOptimizerState.evolutionary_optimizer_id
+                        select(DbEvolutionaryOptimizer).filter(
+                            DbEvolutionaryOptimizer.process_id == process_id
+                        )
+                    )
+                )
+                .scalars()
+                .one()
+            )
+        except MultipleResultsFound as err:
+            raise IncompatibleError() from err
+        except (NoResultFound, OperationalError):
+            return False
+
+        self.__evolutionary_optimizer_id = eo_row.id
+        self.__offspring_size = eo_row.offspring_size
+
+        state_row = (
+            (
+                await session.execute(
+                    select(DbEvolutionaryOptimizerState)
+                    .filter(
+                        DbEvolutionaryOptimizerState.evolutionary_optimizer_id
+                        == self.__evolutionary_optimizer_id
+                    )
+                    .order_by(DbEvolutionaryOptimizerState.generation_index.desc())
+                )
+            )
+            .scalars()
+            .first()
+        )
+
+        if state_row is None:
+            raise IncompatibleError()  # not possible that there is no saved state but DbEvolutionaryOptimizer row exists
+
+        self.__generation_index = state_row.generation_index
+        self.__process_id_gen = process_id_gen
+        self.__process_id_gen.set_state(state_row.processid_state)
+
+        gen_rows = (
+            (
+                await session.execute(
+                    select(DbEvolutionaryOptimizerGeneration)
+                    .filter(
+                        (
+                            DbEvolutionaryOptimizerGeneration.evolutionary_optimizer_id
                             == self.__evolutionary_optimizer_id
                         )
-                        .order_by(DbEvolutionaryOptimizerState.generation_index.desc())
-                    )
-                )
-                .scalars()
-                .first()
-            )
-
-            if state_row is None:
-                raise IncompatibleError()  # not possible that there is no saved state but DbEvolutionaryOptimizer row exists
-
-            self.__generation_index = state_row.generation_index
-            self.__process_id_gen = process_id_gen
-            self.__process_id_gen.set_state(state_row.processid_state)
-
-            gen_rows = (
-                (
-                    await session.execute(
-                        select(DbEvolutionaryOptimizerGeneration)
-                        .filter(
-                            (
-                                DbEvolutionaryOptimizerGeneration.evolutionary_optimizer_id
-                                == self.__evolutionary_optimizer_id
-                            )
-                            & (
-                                DbEvolutionaryOptimizerGeneration.generation_index
-                                == self.__generation_index
-                            )
-                        )
-                        .order_by(
-                            DbEvolutionaryOptimizerGeneration.individual_index.desc()
+                        & (
+                            DbEvolutionaryOptimizerGeneration.generation_index
+                            == self.__generation_index
                         )
                     )
+                    .order_by(DbEvolutionaryOptimizerGeneration.individual_index.desc())
                 )
-                .scalars()
-                .all()
             )
+            .scalars()
+            .all()
+        )
 
-            individual_ids = [row.individual_id for row in gen_rows]
+        individual_ids = [row.individual_id for row in gen_rows]
 
-            # the highest individual id in the latest generation is the highest id overall.
-            self.__next_individual_id = max(individual_ids) + 1
+        # the highest individual id in the latest generation is the highest id overall.
+        self.__next_individual_id = max(individual_ids) + 1
 
-            individual_rows = (
-                (
-                    await session.execute(
-                        select(DbEvolutionaryOptimizerIndividual).filter(
-                            (
-                                DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
-                                == self.__evolutionary_optimizer_id
-                            )
-                            & (
-                                DbEvolutionaryOptimizerIndividual.individual_id.in_(
-                                    individual_ids
-                                )
+        individual_rows = (
+            (
+                await session.execute(
+                    select(DbEvolutionaryOptimizerIndividual).filter(
+                        (
+                            DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
+                            == self.__evolutionary_optimizer_id
+                        )
+                        & (
+                            DbEvolutionaryOptimizerIndividual.individual_id.in_(
+                                individual_ids
                             )
                         )
                     )
                 )
-                .scalars()
-                .all()
             )
-            individual_map = {i.individual_id: i for i in individual_rows}
+            .scalars()
+            .all()
+        )
+        individual_map = {i.individual_id: i for i in individual_rows}
 
-            if not len(individual_ids) == len(individual_rows):
-                raise IncompatibleError()
+        if not len(individual_ids) == len(individual_rows):
+            raise IncompatibleError()
 
-            genotype_ids = [individual_map[id].genotype_id for id in individual_ids]
-            genotypes = await self.__genotype_type.from_database(session, genotype_ids)
-            assert len(genotypes) == len(genotype_ids)
-            self.__latest_population = [
-                self.__Individual(g_id, g, None)
-                for g_id, g in zip(individual_ids, genotypes)
-            ]
+        genotype_ids = [individual_map[id].genotype_id for id in individual_ids]
+        genotypes = await self.__genotype_type.from_database(session, genotype_ids)
+        print(genotypes)
+        assert len(genotypes) == len(genotype_ids)
+        self.__latest_population = [
+            self.__Individual(g_id, g, None)
+            for g_id, g in zip(individual_ids, genotypes)
+        ]
 
-            if self.__generation_index == 0:
-                self.__latest_fitnesses = None
-            else:
-                fitness_ids = [individual_map[id].fitness_id for id in individual_ids]
-                fitnesses = await self.__fitness_type.from_database(
-                    session, fitness_ids
-                )
-                assert len(fitnesses) == len(fitness_ids)
-                self.__latest_fitnesses = fitnesses
+        if self.__generation_index == 0:
+            self.__latest_fitnesses = None
+        else:
+            fitness_ids = [individual_map[id].fitness_id for id in individual_ids]
+            fitnesses = await self.__fitness_type.from_database(session, fitness_ids)
+            assert len(fitnesses) == len(fitness_ids)
+            self.__latest_fitnesses = fitnesses
 
         return True
 
@@ -391,12 +388,17 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             self.__generation_index += 1
 
             # save generation and possibly fitnesses of initial population
-            await self.__save_generation(
-                initial_population,
-                initial_fitnesses,
-                survived_new_individuals,
-                survived_new_fitnesses,
-            )
+            # and let user save their state
+            async with self.__database.session() as session:
+                async with session.begin():
+                    await self.__save_generation_using_session(
+                        session,
+                        initial_population,
+                        initial_fitnesses,
+                        survived_new_individuals,
+                        survived_new_fitnesses,
+                    )
+                    self._on_generation_checkpoint(session)
             # in any case they should be none after saving once
             initial_population = None
             initial_fitnesses = None
@@ -495,23 +497,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         must_do = self._must_do_next_gen()
         assert type(must_do) == bool
         return must_do
-
-    async def __save_generation(
-        self,
-        initial_population: Optional[List[__Individual]],
-        initial_fitnesses: Optional[List[Fitness]],
-        new_individuals: List[__Individual],
-        new_fitnesses: Optional[List[Fitness]],
-    ) -> None:
-        async with self.__database.session() as session:
-            async with session.begin():
-                await self.__save_generation_using_session(
-                    session,
-                    initial_population,
-                    initial_fitnesses,
-                    new_individuals,
-                    new_fitnesses,
-                )
 
     async def __save_generation_using_session(
         self,

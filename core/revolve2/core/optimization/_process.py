@@ -28,7 +28,12 @@ class Process(ABC, Generic[ChildClass]):
 
     @abstractmethod
     async def ainit_from_database(
-        self, database: Database, process_id: int, *args, **kwargs
+        self,
+        database: Database,
+        session: AsyncSession,
+        process_id: int,
+        *args,
+        **kwargs
     ) -> bool:
         """
         Init called when creating an instance through 'from_database'.
@@ -56,7 +61,10 @@ class Process(ABC, Generic[ChildClass]):
         :raises SerializeError: If database incompatible.
         """
         self = super().__new__(cls)
-        if await self.ainit_from_database(database, process_id, *args, **kwargs):
-            return self
-        else:
-            return None
+        async with database.session() as session:
+            if await self.ainit_from_database(
+                database, session, process_id, *args, **kwargs
+            ):
+                return self
+            else:
+                return None

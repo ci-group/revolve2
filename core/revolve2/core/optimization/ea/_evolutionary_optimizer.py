@@ -99,6 +99,14 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         :return: True if it must.
         """
 
+    @abstractmethod
+    def _on_generation_checkpoint(self, session: AsyncSession) -> None:
+        """
+        This function is called after a generation is finished and results and state are saved to the database.
+        Use it to store state and results of the optimizer.
+        The session must not be committed, but it may be flushed.
+        """
+
     @dataclass
     class __Individual(Generic[Genotype]):
         id: int
@@ -126,6 +134,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
     async def ainit_new(
         self,
         database: Database,
+        session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
         genotype_type: Type[Genotype],
@@ -154,26 +163,23 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             for g in initial_population
         ]
 
-        async with self.__database.engine.begin() as conn:
-            await conn.run_sync(DbBase.metadata.create_all)
-        await self.__genotype_type.create_tables(self.__database)
-        await self.__fitness_type.create_tables(self.__database)
+        await (await session.connection()).run_sync(DbBase.metadata.create_all)
+        await self.__genotype_type.create_tables(session)
+        await self.__fitness_type.create_tables(session)
 
-        async with self.__database.session() as session:
-            async with session.begin():
-                new_opt = DbEvolutionaryOptimizer(
-                    process_id=process_id,
-                    offspring_size=self.__offspring_size,
-                    genotype_table=self.__genotype_type.identifying_table(),
-                    fitness_table=self.__fitness_type.identifying_table(),
-                )
-                session.add(new_opt)
-                await session.flush()
-                self.__evolutionary_optimizer_id = new_opt.id
+        new_opt = DbEvolutionaryOptimizer(
+            process_id=process_id,
+            offspring_size=self.__offspring_size,
+            genotype_table=self.__genotype_type.identifying_table(),
+            fitness_table=self.__fitness_type.identifying_table(),
+        )
+        session.add(new_opt)
+        await session.flush()
+        self.__evolutionary_optimizer_id = new_opt.id
 
-                await self.__save_generation_using_session(
-                    session, None, None, self.__latest_population, None
-                )
+        await self.__save_generation_using_session(
+            session, None, None, self.__latest_population, None
+        )
 
     async def ainit_from_database(
         self,

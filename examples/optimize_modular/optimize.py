@@ -31,7 +31,7 @@ async def main() -> None:
 
     # random number generator
     rng = Random()
-    rng.seed(5)
+    rng.seed(6)
 
     # database
     database = open_database_sqlite("./database")
@@ -48,15 +48,21 @@ async def main() -> None:
         for _ in range(POPULATION_SIZE)
     ]
 
+    process_id = process_id_gen.gen()
     maybe_optimizer = await Optimizer.from_database(
-        database=database, process_id=0, rng=rng, process_id_gen=process_id_gen
+        database=database,
+        process_id=process_id,
+        innov_db_body=innov_db_body,
+        innov_db_brain=innov_db_brain,
+        rng=rng,
+        process_id_gen=process_id_gen,
     )
     if maybe_optimizer is not None:
         optimizer = maybe_optimizer
     else:
         optimizer = await Optimizer.new(
             database=database,
-            process_id=0,
+            process_id=process_id,
             initial_population=initial_population,
             rng=rng,
             process_id_gen=process_id_gen,

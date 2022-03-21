@@ -14,9 +14,8 @@ class Genotype(Tableable):
     genotype: multineat.Genome
 
     @classmethod
-    async def create_tables(cls, database: Database) -> None:
-        async with database.engine.begin() as conn:
-            await conn.run_sync(DbBase.metadata.create_all)
+    async def create_tables(cls, session: AsyncSession) -> None:
+        await (await session.connection()).run_sync(DbBase.metadata.create_all)
 
     @classmethod
     def identifying_table(cls) -> str:

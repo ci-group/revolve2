@@ -4,7 +4,7 @@ import sqlalchemy
 from typing import List
 from random import Random
 from phenotype import Phenotype
-from revolve2.core.database import Database, Tableable
+from revolve2.core.database import Tableable
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from item import Item
@@ -34,9 +34,8 @@ class Genotype(Tableable["Genotype"]):
         return Phenotype(phenotype)
 
     @classmethod
-    async def create_tables(cls, database: Database) -> None:
-        async with database.engine.begin() as conn:
-            await conn.run_sync(DbGenotype.metadata.create_all)
+    async def create_tables(cls, session: AsyncSession) -> None:
+        await (await session.connection()).run_sync(DbGenotype.metadata.create_all)
 
     @classmethod
     def identifying_table(cls) -> str:

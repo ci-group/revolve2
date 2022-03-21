@@ -7,7 +7,7 @@ from random import Random
 import multineat
 
 from revolve2.genotypes.cppnwin import Genotype as CppnwinGenotype
-from revolve2.core.database import Database, Tableable
+from revolve2.core.database import Tableable
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Integer, Column
 from typing import List
@@ -79,10 +79,9 @@ class Genotype(
     brain: CppnwinGenotype
 
     @classmethod
-    async def create_tables(cls, database: Database) -> None:
-        async with database.engine.begin() as conn:
-            await conn.run_sync(DbBase.metadata.create_all)
-        await CppnwinGenotype.create_tables(database)
+    async def create_tables(cls, session: AsyncSession) -> None:
+        await (await session.connection()).run_sync(DbBase.metadata.create_all)
+        await CppnwinGenotype.create_tables(session)
 
     @classmethod
     def identifying_table(cls) -> str:

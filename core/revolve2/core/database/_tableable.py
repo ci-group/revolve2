@@ -1,4 +1,3 @@
-from revolve2.core.database import Database
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic, List
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -9,7 +8,7 @@ Child = TypeVar("Child", bound="Tableable")
 class Tableable(ABC, Generic[Child]):
     @classmethod
     @abstractmethod
-    async def create_tables(cls, database: Database) -> None:
+    async def create_tables(cls, session: AsyncSession) -> None:
         """
         Create all tables required for storing this class.
         """

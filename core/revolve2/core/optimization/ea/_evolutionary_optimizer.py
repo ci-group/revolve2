@@ -253,7 +253,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                             == self.__generation_index
                         )
                     )
-                    .order_by(DbEvolutionaryOptimizerGeneration.individual_index.desc())
+                    .order_by(DbEvolutionaryOptimizerGeneration.individual_index)
                 )
             )
             .scalars()

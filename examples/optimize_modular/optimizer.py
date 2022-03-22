@@ -227,7 +227,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
             batch.environments.append(env)
 
         states = await self._runner.run_batch(batch)
-        # self._save_states(states, database, dbview) TODO
+        # self._save_states(states, database, dbview) TODO save states in database
 
         return [
             self._calculate_fitness(
@@ -241,20 +241,6 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
         for control_i, controller in enumerate(self._controllers):
             controller.step(dt)
             control.set_dof_targets(control_i, 0, controller.get_dof_targets())
-
-    """
-    def _save_states(
-        self, states: List[Tuple[float, State]], database: Database, db_node: Node
-    ) -> None:
-        with database.begin_transaction() as txn:
-            db_node.set_db_data(
-                txn,
-                [
-                    {"time": time, "actors": actors.serialize()}
-                    for (time, actors) in states
-                ],
-            )
-    """
 
     @staticmethod
     def _calculate_fitness(

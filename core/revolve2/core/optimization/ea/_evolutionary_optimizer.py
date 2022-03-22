@@ -291,7 +291,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
         genotype_ids = [individual_map[id].genotype_id for id in individual_ids]
         genotypes = await self.__genotype_type.from_database(session, genotype_ids)
-        print(genotypes)
+
         assert len(genotypes) == len(genotype_ids)
         self.__latest_population = [
             self.__Individual(g_id, g, None)

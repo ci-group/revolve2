@@ -1,11 +1,13 @@
 from __future__ import annotations
 
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from revolve2.core.database import Tableable
 from typing import List
-from .fitness_float_schema import DbBase, DbFitnessFloat
-from revolve2.core.database import IncompatibleError
+
+from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
+
+from revolve2.core.database import IncompatibleError, Tableable
+
+from .fitness_float_schema import DbBase, DbFitnessFloat
 
 
 class FitnessFloat(float, Tableable["FitnessFloat"]):

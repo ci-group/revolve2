@@ -4,16 +4,18 @@ Assumes fitness is a float and database is files.
 """
 
 import argparse
-from revolve2.core.database import create_sync_engine_sqlite
+
+import matplotlib.pyplot as plt
 import pandas
 from sqlalchemy.future import select
+
+from revolve2.core.database import create_sync_engine_sqlite
 from revolve2.core.optimization.ea.evolutionary_optimizer_schema import (
-    DbEvolutionaryOptimizerIndividual,
     DbEvolutionaryOptimizer,
     DbEvolutionaryOptimizerGeneration,
+    DbEvolutionaryOptimizerIndividual,
 )
 from revolve2.core.optimization.ea.fitness_float_schema import DbFitnessFloat
-import matplotlib.pyplot as plt
 
 
 def plot(database: str, optimizer_id: int) -> None:

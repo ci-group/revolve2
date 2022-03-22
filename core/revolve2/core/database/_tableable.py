@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic, List
+from typing import Generic, List, TypeVar
+
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 Child = TypeVar("Child", bound="Tableable")

@@ -1,4 +1,4 @@
-from typing import Callable, List, TypeVar, Tuple
+from typing import Callable, List, Tuple, TypeVar
 
 from ..selection import multiple_unique
 

@@ -1,15 +1,16 @@
 from __future__ import annotations
 
-import sqlalchemy
-from typing import List
 from random import Random
+from typing import List
+
+import sqlalchemy
+from item import Item
 from phenotype import Phenotype
-from revolve2.core.database import Tableable
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
-from item import Item
-from revolve2.core.database import IncompatibleError
 from sqlalchemy.future import select
+
+from revolve2.core.database import IncompatibleError, Tableable
 
 
 class Genotype(Tableable["Genotype"]):

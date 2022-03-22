@@ -1,7 +1,9 @@
 import multineat
+
+from revolve2.core.modular_robot import Body
+
 from .._genotype import Genotype
 from .._random_v1 import random_v1 as base_random_v1
-from revolve2.core.modular_robot import Body
 from ._brain_cpg_v1 import BrainCpgV1
 
 

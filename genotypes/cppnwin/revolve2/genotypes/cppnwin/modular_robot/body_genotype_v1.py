@@ -1,10 +1,13 @@
-from dataclasses import dataclass
-from typing import Tuple, Set, Optional, List, Any
-from revolve2.core.modular_robot import Module, Body, Core, Brick, ActiveHinge
-import multineat
-from queue import Queue
-from .._genotype import Genotype
 import math
+from dataclasses import dataclass
+from queue import Queue
+from typing import Any, List, Optional, Set, Tuple
+
+import multineat
+
+from revolve2.core.modular_robot import ActiveHinge, Body, Brick, Core, Module
+
+from .._genotype import Genotype
 from .._random_v1 import random_v1 as base_random_v1
 
 

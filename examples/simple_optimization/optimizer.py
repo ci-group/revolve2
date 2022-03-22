@@ -1,19 +1,20 @@
 from __future__ import annotations
 
+import pickle
 from random import Random
 from typing import List, Tuple
+
+from genotype import Genotype
+from item import Item
+from optimizer_schema import DbBase, DbOptimizerState
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.future import select
 
 import revolve2.core.optimization.ea.population_management as population_management
 import revolve2.core.optimization.ea.selection as selection
 from revolve2.core.database import Database
-from revolve2.core.optimization.ea import EvolutionaryOptimizer, FitnessFloat
-from genotype import Genotype
-from item import Item
 from revolve2.core.optimization import ProcessIdGen
-from optimizer_schema import DbOptimizerState, DbBase
-import pickle
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.future import select
+from revolve2.core.optimization.ea import EvolutionaryOptimizer, FitnessFloat
 
 
 class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):

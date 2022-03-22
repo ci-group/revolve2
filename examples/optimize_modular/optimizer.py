@@ -1,18 +1,24 @@
 from __future__ import annotations
 
 import math
+import pickle
 from random import Random
 from typing import List, Tuple
 
 import multineat
-from genotype import Genotype, mutate, crossover, develop
-from revolve2.core.optimization.ea._fitness_float import FitnessFloat
+from genotype import Genotype, crossover, develop, mutate
+from optimizer_schema import DbBase, DbOptimizerState
 from pyrr import Quaternion, Vector3
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.future import select
 
 import revolve2.core.optimization.ea.population_management as population_management
 import revolve2.core.optimization.ea.selection as selection
 from revolve2.actor_controller import ActorController
+from revolve2.core.database import Database
+from revolve2.core.optimization import ProcessIdGen
 from revolve2.core.optimization.ea import EvolutionaryOptimizer
+from revolve2.core.optimization.ea._fitness_float import FitnessFloat
 from revolve2.core.physics.running import (
     ActorControl,
     ActorState,
@@ -23,12 +29,6 @@ from revolve2.core.physics.running import (
     State,
 )
 from revolve2.runners.isaacgym import LocalRunner
-from revolve2.core.database import Database
-from revolve2.core.optimization import ProcessIdGen
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from optimizer_schema import DbOptimizerState, DbBase
-import pickle
-from sqlalchemy.future import select
 
 
 class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):

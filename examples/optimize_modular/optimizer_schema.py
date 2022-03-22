@@ -1,5 +1,5 @@
+from sqlalchemy import Column, Float, Integer, PickleType, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Integer, Column, String, Float, PickleType
 
 DbBase = declarative_base()
 

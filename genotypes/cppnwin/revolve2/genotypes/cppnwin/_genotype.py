@@ -1,11 +1,14 @@
 from __future__ import annotations
 
-import multineat
 from dataclasses import dataclass
-from revolve2.core.database import Tableable, Database, IncompatibleError
-from sqlalchemy.ext.asyncio.session import AsyncSession
 from typing import List
+
+import multineat
+from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
+
+from revolve2.core.database import Database, IncompatibleError, Tableable
+
 from .genotype_schema import DbBase, DbGenotype
 
 

@@ -1,6 +1,6 @@
+import sqlalchemy.ext.asyncio
 import sqlalchemy.ext.asyncio.engine
 import sqlalchemy.orm
-import sqlalchemy.ext.asyncio
 
 
 class Database:

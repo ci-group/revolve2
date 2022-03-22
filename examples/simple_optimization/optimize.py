@@ -3,10 +3,11 @@ from __future__ import annotations
 import logging
 from random import Random
 
-from revolve2.core.database import open_database_sqlite
 from genotype import Genotype
 from item import Item
 from optimizer import Optimizer
+
+from revolve2.core.database import open_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
 
 

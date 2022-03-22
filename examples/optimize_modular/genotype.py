@@ -1,29 +1,32 @@
 from __future__ import annotations
-from dataclasses import dataclass
 
 import sys
+from dataclasses import dataclass
 from random import Random
+from typing import List
 
 import multineat
-
-from revolve2.genotypes.cppnwin import Genotype as CppnwinGenotype
-from revolve2.core.database import Tableable
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Integer, Column
-from typing import List
+from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.future import select
+
+from revolve2.core.database import IncompatibleError, Tableable
+from revolve2.core.modular_robot import ModularRobot
+from revolve2.genotypes.cppnwin import Genotype as CppnwinGenotype
+from revolve2.genotypes.cppnwin import crossover_v1, mutate_v1
+from revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1 import (
+    develop_v1 as body_develop,
+)
 from revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1 import (
     random_v1 as body_random,
-    develop_v1 as body_develop,
+)
+from revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1 import (
+    develop_v1 as brain_develop,
 )
 from revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1 import (
     random_v1 as brain_random,
-    develop_v1 as brain_develop,
 )
-from revolve2.genotypes.cppnwin import crossover_v1, mutate_v1
-from sqlalchemy.future import select
-from revolve2.core.database import IncompatibleError
-from revolve2.core.modular_robot import ModularRobot
 
 
 def _make_multineat_params() -> multineat.Parameters:

@@ -1,5 +1,6 @@
-from ._genotype import Genotype
 import multineat
+
+from ._genotype import Genotype
 
 
 def mutate_v1(

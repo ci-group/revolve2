@@ -1,26 +1,26 @@
 from __future__ import annotations
-from typing import Generic, TypeVar, Type, List, Optional, Tuple
 
-from revolve2.core.optimization import Process, ProcessIdGen
+import logging
 from abc import abstractmethod
-from revolve2.core.database import Database, IncompatibleError
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm.exc import MultipleResultsFound
+from dataclasses import dataclass
+from typing import Generic, List, Optional, Tuple, Type, TypeVar
+
+from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.exc import OperationalError
-from dataclasses import dataclass
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
+from revolve2.core.database import Database, IncompatibleError, Tableable
+from revolve2.core.optimization import Process, ProcessIdGen
+
 from .evolutionary_optimizer_schema import (
+    DbBase,
     DbEvolutionaryOptimizer,
     DbEvolutionaryOptimizerGeneration,
     DbEvolutionaryOptimizerIndividual,
-    DbEvolutionaryOptimizerState,
     DbEvolutionaryOptimizerParent,
-    DbBase,
+    DbEvolutionaryOptimizerState,
 )
-import logging
-from revolve2.core.database import Tableable
-
 
 Child = TypeVar("Child")
 Genotype = TypeVar("Genotype", bound=Tableable)

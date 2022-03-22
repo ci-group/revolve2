@@ -1,7 +1,9 @@
-from typing import TypeVar, Generic, Type, Optional
-from abc import abstractmethod, ABC
-from revolve2.core.database import Database
+from abc import ABC, abstractmethod
+from typing import Generic, Optional, Type, TypeVar
+
 from sqlalchemy.ext.asyncio.session import AsyncSession
+
+from revolve2.core.database import Database
 
 ChildClass = TypeVar("ChildClass", bound="Process")
 

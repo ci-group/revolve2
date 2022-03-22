@@ -2,12 +2,12 @@ import logging
 from random import Random
 
 import multineat
-from genotype import Genotype, random as random_genotype
+from genotype import Genotype
+from genotype import random as random_genotype
 from optimizer import Optimizer
-from revolve2.core.optimization import ProcessIdGen
-
 
 from revolve2.core.database import open_database_sqlite
+from revolve2.core.optimization import ProcessIdGen
 
 
 async def main() -> None:

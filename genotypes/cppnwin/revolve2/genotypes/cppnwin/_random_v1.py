@@ -1,4 +1,5 @@
 import multineat
+
 from ._genotype import Genotype
 
 

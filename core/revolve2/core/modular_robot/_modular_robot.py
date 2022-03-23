@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Tuple
 
 from revolve2.actor_controller import ActorController
 from revolve2.core.physics.actor import Actor

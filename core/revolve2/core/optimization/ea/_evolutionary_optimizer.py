@@ -1,137 +1,40 @@
 from __future__ import annotations
 
 import logging
-import pickle
-from abc import ABC, abstractmethod
-from random import Random
-from typing import Generic, List, Optional, Type, TypeVar, Union
+from abc import abstractmethod
+from dataclasses import dataclass
+from typing import Generic, List, Optional, Tuple, Type, TypeVar
 
-from revolve2.core.database import Database
-from revolve2.core.database import List as DbList
-from revolve2.core.database import (
-    Node,
-    Transaction,
-    Uninitialized,
-    dynamic_cast_bytes,
-    dynamic_cast_dblist,
-    dynamic_cast_node,
-    dynamic_cast_static_data,
+from sqlalchemy.exc import OperationalError
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.future import select
+from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
+
+from revolve2.core.database import IncompatibleError, Tableable
+from revolve2.core.optimization import Process, ProcessIdGen
+
+from .evolutionary_optimizer_schema import (
+    DbBase,
+    DbEvolutionaryOptimizer,
+    DbEvolutionaryOptimizerGeneration,
+    DbEvolutionaryOptimizerIndividual,
+    DbEvolutionaryOptimizerParent,
+    DbEvolutionaryOptimizerState,
 )
-from revolve2.serialization import Serializable, SerializeError, StaticData
 
-from ._individual import Individual
-
-Genotype = TypeVar("Genotype", bound=Union[Serializable, StaticData])
-Fitness = TypeVar("Fitness", bound=Union[Serializable, StaticData])
+Genotype = TypeVar("Genotype", bound=Tableable)
+Fitness = TypeVar("Fitness", bound=Tableable)
 
 
-class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
-    __database: Database
-    __db_node: Node
-
-    _rng: Random
-
-    # next id to give to a new individual
-    __next_id: int
-
-    # Types of genotype and fitness are stored as soon as they are available.
-    # Used to type check the return values of user functions.
-    __genotype_type: Type[Genotype]
-    __fitness_type: Optional[type]
-
-    __population_size: int
-    __offspring_size: int
-
-    __generation_index: Optional[int]
-    __last_generation: Optional[List[Individual[Genotype, Fitness]]]
-    __initial_population: Optional[List[Genotype]]
-
-    __db_ea: Node  # All db data that is not evaluations.
-    __db_evaluations: DbList  # A node for every generation, provided to the user to store their evaluation.
-
-    __db_rng_after_generation: Optional[
-        DbList
-    ]  # The Random object state directly after the generation matching its index.
-    __db_generations: Optional[DbList]  # Lists of invidiual ids
-    __db_individuals: Optional[DbList]  # All individuals, indexed by id
-
-    def __init__(self) -> None:
-        raise ValueError(
-            "Do not call this function. Call asyncinit instead. Inherit this class and implement __init__ to avoid this error."
-        )
-
-    async def asyncinit(
-        self,
-        database: Database,
-        db_node: Node,
-        random: Random,
-        population_size: int,
-        offspring_size: int,
-        initial_population: List[Genotype],
-        initial_fitness: Optional[List[Fitness]],
-    ) -> None:
-        self.__database = database
-        self.__db_node = db_node
-
-        self._rng = random
-
-        self.__next_id = 0
-
-        logging.info("Attempting to load checkpoint..")
-        if await self._load_checkpoint_or_init():
-            logging.info(
-                f"Checkpoint found. Last complete generation was {self.__generation_index}."
-            )
-        else:
-            logging.info(
-                f"No checkpoint has been made yet. Starting with generation 0."
-            )
-            assert type(population_size) == int
-            self.__population_size = population_size
-
-            assert type(offspring_size) == int
-            self.__offspring_size = offspring_size
-
-            assert type(initial_population) == list
-            assert len(initial_population) == self.__population_size
-            assert len(initial_population) >= 1
-
-            # save genotype type so we can type check things later
-            self.__genotype_type = type(initial_population[0])
-
-            if initial_fitness is not None:
-                assert type(initial_fitness) == list
-                assert len(initial_fitness) == self.__population_size
-                self.__last_generation = [
-                    Individual[Genotype, Fitness](
-                        self._get_next_id(), genotype, fitness, None
-                    )
-                    for genotype, fitness in zip(initial_population, initial_fitness)
-                ]
-                self.__generation_index = 0
-                self.__initial_population = None
-
-                # save fitness type so we can type check things later
-                self.__fitness_type = type(initial_fitness[0])
-
-                await self._save_zeroth_generation(self.__last_generation)
-            else:
-                self.__initial_population = initial_population
-                self.__last_generation = None
-                self.__generation_index = None
-
-                # set fitness type to None
-                # we will set it when evaluating the first generation later
-                self.__fitness_type = None
-
-                # same with these database nodes
-                self.__db_rng_after_generation = None
-                self.__db_generations = None
-                self.__db_individuals = None
-
+class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
     @abstractmethod
     async def _evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, db_node: Node
+        self,
+        genotypes: List[Genotype],
+        database: AsyncEngine,
+        process_id: int,
+        process_id_gen: ProcessIdGen,
     ) -> List[Fitness]:
         """
         Evaluate a genotype.
@@ -142,27 +45,33 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
     @abstractmethod
     def _select_parents(
-        self, generation: List[Individual[Genotype, Fitness]], num_parents: int
-    ) -> List[List[Individual[Genotype, Fitness]]]:
+        self,
+        population: List[Genotype],
+        fitnesses: List[Fitness],
+        num_parent_groups: int,
+    ) -> List[List[int]]:
         """
         Select groups of parents that will create offspring.
 
         :param population: The generation to select sets of parents from. Must not be altered.
-        :return: The selected sets of parents.
+        :return: The selected sets of parents, each integer representing a population index.
         """
 
+    @abstractmethod
     def _select_survivors(
         self,
-        old_individuals: List[Individual[Genotype, Fitness]],
-        new_individuals: List[Individual[Genotype, Fitness]],
+        old_individuals: List[Genotype],
+        old_fitnesses: List[Fitness],
+        new_individuals: List[Genotype],
+        new_fitnesses: List[Fitness],
         num_survivors: int,
-    ) -> List[Individual[Genotype, Fitness]]:
+    ) -> Tuple[List[int], List[int]]:
         """
         Select survivors from a group of individuals. These will form the next generation.
 
         :param individuals: The individuals to choose from.
         :param num_survivors: How many individuals should be selected.
-        :returns: The selected individuals.
+        :return: Indices of the old survivors and indices of the new survivors.
         """
 
     @abstractmethod
@@ -187,325 +96,310 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
     def _must_do_next_gen(self) -> bool:
         """
         Decide if the optimizer must do another generation.
-        :returns: True if it must.
+        :return: True if it must.
         """
 
-    async def run(self) -> None:
-        if self.__initial_population is not None:
-            # let user evaluate. use unsafe version because we don't know fitness type yet.
-            db_evaluation_branch = await self._prepare_db_evaluation()
-            fitness = await self._evaluate_generation(
-                self.__initial_population, self.__database, db_evaluation_branch
-            )
+    @abstractmethod
+    def _on_generation_checkpoint(self, session: AsyncSession) -> None:
+        """
+        This function is called after a generation is finished and results and state are saved to the database.
+        Use it to store state and results of the optimizer.
+        The session must not be committed, but it may be flushed.
+        """
 
-            # assert user return value
-            assert type(fitness) == list
-            assert len(fitness) == len(self.__initial_population)
-            assert all(type(e) == type(fitness[0]) for e in fitness)
+    __database: AsyncEngine
 
-            # save fitness type so we can type check things later
-            self.__fitness_type = type(fitness[0])
+    __evolutionary_optimizer_id: int
 
-            # combine provided genotypes and new fitness to create the first generation
-            self.__last_generation = [
-                Individual[Genotype, Fitness](
-                    self._get_next_id(), genotype, fitness, None
+    __genotype_type: Type[Genotype]
+    __fitness_type: Type[Fitness]
+    __offspring_size: int
+
+    __process_id_gen: ProcessIdGen
+
+    __next_individual_id: int
+
+    __latest_population: List[_Individual[Genotype]]
+    __latest_fitnesses: Optional[List[Fitness]]  # None only for the initial population
+    __generation_index: int
+
+    async def ainit_new(
+        self,
+        database: AsyncEngine,
+        session: AsyncSession,
+        process_id: int,
+        process_id_gen: ProcessIdGen,
+        genotype_type: Type[Genotype],
+        fitness_type: Type[Fitness],
+        offspring_size: int,
+        initial_population: List[Genotype],
+    ) -> None:
+        """
+        :id: Unique id between all EvolutionaryOptimizers in this database.
+        :offspring_size: Number of offspring made by the population each generation.
+        """
+        assert issubclass(genotype_type, Tableable)
+        assert issubclass(fitness_type, Tableable)
+
+        self.__database = database
+        self.__genotype_type = genotype_type
+        self.__fitness_type = fitness_type
+        self.__offspring_size = offspring_size
+        self.__process_id_gen = process_id_gen
+        self.__next_individual_id = 0
+        self.__latest_fitnesses = None
+        self.__generation_index = 0
+
+        self.__latest_population = [
+            _Individual(self.__gen_next_individual_id(), g, [])
+            for g in initial_population
+        ]
+
+        await (await session.connection()).run_sync(DbBase.metadata.create_all)
+        await self.__genotype_type.create_tables(session)
+        await self.__fitness_type.create_tables(session)
+
+        new_opt = DbEvolutionaryOptimizer(
+            process_id=process_id,
+            offspring_size=self.__offspring_size,
+            genotype_table=self.__genotype_type.identifying_table(),
+            fitness_table=self.__fitness_type.identifying_table(),
+        )
+        session.add(new_opt)
+        await session.flush()
+        assert new_opt.id is not None  # this is impossible because it's not nullable
+        self.__evolutionary_optimizer_id = new_opt.id
+
+        await self.__save_generation_using_session(
+            session, None, None, self.__latest_population, None
+        )
+
+    async def ainit_from_database(
+        self,
+        database: AsyncEngine,
+        session: AsyncSession,
+        process_id: int,
+        process_id_gen: ProcessIdGen,
+        genotype_type: Type[Genotype],
+        fitness_type: Type[Fitness],
+    ) -> bool:
+        assert issubclass(genotype_type, Tableable)
+        assert issubclass(fitness_type, Tableable)
+
+        self.__database = database
+        self.__genotype_type = genotype_type
+        self.__fitness_type = fitness_type
+
+        try:
+            eo_row = (
+                (
+                    await session.execute(
+                        select(DbEvolutionaryOptimizer).filter(
+                            DbEvolutionaryOptimizer.process_id == process_id
+                        )
+                    )
                 )
-                for genotype, fitness in zip(self.__initial_population, fitness)
-            ]
-            self.__generation_index = 0
-            self.__initial_population = None
+                .scalars()
+                .one()
+            )
+        except MultipleResultsFound as err:
+            raise IncompatibleError() from err
+        except (NoResultFound, OperationalError):
+            return False
 
-            await self._save_zeroth_generation(self.__last_generation)
+        self.__evolutionary_optimizer_id = eo_row.id
+        self.__offspring_size = eo_row.offspring_size
 
-            logging.info("Finished generation 0.")
+        state_row = (
+            (
+                await session.execute(
+                    select(DbEvolutionaryOptimizerState)
+                    .filter(
+                        DbEvolutionaryOptimizerState.evolutionary_optimizer_id
+                        == self.__evolutionary_optimizer_id
+                    )
+                    .order_by(DbEvolutionaryOptimizerState.generation_index.desc())
+                )
+            )
+            .scalars()
+            .first()
+        )
 
-        while self._safe_must_do_next_gen():
-            assert self.__generation_index is not None
-            assert self.__last_generation is not None
+        if state_row is None:
+            raise IncompatibleError()  # not possible that there is no saved state but DbEvolutionaryOptimizer row exists
+
+        self.__generation_index = state_row.generation_index
+        self.__process_id_gen = process_id_gen
+        self.__process_id_gen.set_state(state_row.processid_state)
+
+        gen_rows = (
+            (
+                await session.execute(
+                    select(DbEvolutionaryOptimizerGeneration)
+                    .filter(
+                        (
+                            DbEvolutionaryOptimizerGeneration.evolutionary_optimizer_id
+                            == self.__evolutionary_optimizer_id
+                        )
+                        & (
+                            DbEvolutionaryOptimizerGeneration.generation_index
+                            == self.__generation_index
+                        )
+                    )
+                    .order_by(DbEvolutionaryOptimizerGeneration.individual_index)
+                )
+            )
+            .scalars()
+            .all()
+        )
+
+        individual_ids = [row.individual_id for row in gen_rows]
+
+        # the highest individual id in the latest generation is the highest id overall.
+        self.__next_individual_id = max(individual_ids) + 1
+
+        individual_rows = (
+            (
+                await session.execute(
+                    select(DbEvolutionaryOptimizerIndividual).filter(
+                        (
+                            DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
+                            == self.__evolutionary_optimizer_id
+                        )
+                        & (
+                            DbEvolutionaryOptimizerIndividual.individual_id.in_(
+                                individual_ids
+                            )
+                        )
+                    )
+                )
+            )
+            .scalars()
+            .all()
+        )
+        individual_map = {i.individual_id: i for i in individual_rows}
+
+        if not len(individual_ids) == len(individual_rows):
+            raise IncompatibleError()
+
+        genotype_ids = [individual_map[id].genotype_id for id in individual_ids]
+        genotypes = await self.__genotype_type.from_database(session, genotype_ids)
+
+        assert len(genotypes) == len(genotype_ids)
+        self.__latest_population = [
+            _Individual(g_id, g, None) for g_id, g in zip(individual_ids, genotypes)
+        ]
+
+        if self.__generation_index == 0:
+            self.__latest_fitnesses = None
+        else:
+            fitness_ids = [individual_map[id].fitness_id for id in individual_ids]
+            fitnesses = await self.__fitness_type.from_database(session, fitness_ids)
+            assert len(fitnesses) == len(fitness_ids)
+            self.__latest_fitnesses = fitnesses
+
+        return True
+
+    async def run(self) -> None:
+        # evaluate initial population if required
+        if self.__latest_fitnesses is None:
+            self.__latest_fitnesses = await self.__safe_evaluate_generation(
+                [i.genotype for i in self.__latest_population],
+                self.__database,
+                self.__process_id_gen.gen(),
+                self.__process_id_gen,
+            )
+            initial_population = self.__latest_population
+            initial_fitnesses = self.__latest_fitnesses
+        else:
+            initial_population = None
+            initial_fitnesses = None
+
+        while self.__safe_must_do_next_gen():
 
             # let user select parents
-            parent_selections = self._safe_select_parents(
-                self.__last_generation, self.__offspring_size
+            parent_selections = self.__safe_select_parents(
+                [i.genotype for i in self.__latest_population],
+                self.__latest_fitnesses,
+                self.__offspring_size,
             )
 
             # let user create offspring
             offspring = [
-                self._safe_mutate(self._safe_crossover(genotype))
-                for genotype in [[p.genotype for p in s] for s in parent_selections]
+                self.__safe_mutate(
+                    self.__safe_crossover(
+                        [self.__latest_population[i].genotype for i in s]
+                    )
+                )
+                for s in parent_selections
             ]
 
             # let user evaluate offspring
-            db_evaluation_branch = await self._prepare_db_evaluation()
-            fitness = await self._safe_evaluate_generation(
-                offspring, self.__database, db_evaluation_branch
+            new_fitnesses = await self.__safe_evaluate_generation(
+                offspring,
+                self.__database,
+                self.__process_id_gen.gen(),
+                self.__process_id_gen,
             )
 
             # combine to create list of individuals
             new_individuals = [
-                Individual[Genotype, Fitness](
-                    self._get_next_id(),
+                _Individual(
+                    -1,  # placeholder until later
                     genotype,
-                    fitness,
-                    [parent.id for parent in parents],
+                    [self.__latest_population[i].id for i in parent_indices],
                 )
-                for parents, genotype, fitness in zip(
-                    parent_selections, offspring, fitness
-                )
+                for parent_indices, genotype in zip(parent_selections, offspring)
             ]
 
             # let user select survivors between old and new individuals
-            survivors = self._safe_select_survivors(
-                self.__last_generation, new_individuals, self.__population_size
+            old_survivors, new_survivors = self.__safe_select_survivors(
+                [i.genotype for i in self.__latest_population],
+                self.__latest_fitnesses,
+                [i.genotype for i in new_individuals],
+                new_fitnesses,
+                len(self.__latest_population),
             )
 
-            # set survivors as the next generation
-            self.__last_generation = survivors
+            survived_new_individuals = [new_individuals[i] for i in new_survivors]
+            survived_new_fitnesses = [new_fitnesses[i] for i in new_survivors]
+
+            # set ids for new individuals
+            for individual in survived_new_individuals:
+                individual.id = self.__gen_next_individual_id()
+
+            # combine old and new and store as the new generation
+            self.__latest_population = [
+                self.__latest_population[i] for i in old_survivors
+            ] + survived_new_individuals
+
+            self.__latest_fitnesses = [
+                self.__latest_fitnesses[i] for i in old_survivors
+            ] + survived_new_fitnesses
+
             self.__generation_index += 1
 
-            await self._save_generation(new_individuals)
+            # save generation and possibly fitnesses of initial population
+            # and let user save their state
+            async with AsyncSession(self.__database) as session:
+                async with session.begin():
+                    await self.__save_generation_using_session(
+                        session,
+                        initial_population,
+                        initial_fitnesses,
+                        survived_new_individuals,
+                        survived_new_fitnesses,
+                    )
+                    self._on_generation_checkpoint(session)
+            # in any case they should be none after saving once
+            initial_population = None
+            initial_fitnesses = None
 
             logging.info(f"Finished generation {self.__generation_index}.")
 
-    def _get_next_id(self) -> int:
-        next_id = self.__next_id
-        self.__next_id += 1
-        return next_id
-
-    async def _save_zeroth_generation(
-        self, new_individuals: List[Individual[Genotype, Fitness]]
-    ) -> None:
-        """
-        Save parameters to the database and do `_save_generation` for the initial population.
-        """
-
-        with self.__database.begin_transaction() as txn:
-            self.__db_rng_after_generation = DbList()
-            self.__db_generations = DbList()
-            self.__db_individuals = DbList()
-
-            self.__db_ea.set_db_data(
-                txn,
-                {
-                    "rng_after_generation": self.__db_rng_after_generation,
-                    "genotype_type": pickle.dumps(self.__genotype_type),
-                    "fitness_type": pickle.dumps(self.__fitness_type),
-                    "population_size": self.__population_size,
-                    "offspring_size": self.__offspring_size,
-                    "generations": self.__db_generations,
-                    "individuals": self.__db_individuals,
-                },
-            )
-
-            await self._save_generation_notransaction(txn, new_individuals)
-
-    async def _save_generation(
-        self, new_individuals: List[Individual[Genotype, Fitness]]
-    ) -> None:
-        """
-        Append the last generation and accompanying random object to the checkpoint database.
-
-        :param new_individuals: Individuals borns during last generation
-        """
-
-        with self.__database.begin_transaction() as txn:
-            await self._save_generation_notransaction(txn, new_individuals)
-
-    async def _save_generation_notransaction(
-        self, txn: Transaction, new_individuals: List[Individual[Genotype, Fitness]]
-    ) -> None:
-        assert self.__last_generation is not None
-        assert self.__db_rng_after_generation is not None
-        assert self.__db_generations is not None
-        assert self.__db_individuals is not None
-
-        logging.debug("Beginning saving generation..")
-
-        self.__db_rng_after_generation.append(txn).set_db_data(
-            txn, pickle.dumps(self._rng.getstate())
-        )
-        self.__db_generations.append(txn).set_db_data(
-            txn, [individual.id for individual in self.__last_generation]
-        )
-        try:
-            for individual in new_individuals:
-                self.__db_individuals.append(txn).set_db_data(
-                    txn, individual.serialize()
-                )
-        except SerializeError as err:
-            raise SerializeError("Failed to serialize individual.") from err
-
-        logging.debug("Finished saving generation.")
-
-    async def _load_checkpoint_or_init(self) -> bool:
-        """
-        Deserialize from the database. If no checkpoint was found, the basic database structure is created.
-
-        :returns: True if checkpoint could be loaded and everything is initialized from the database.
-                  False if there was no checkpoint.
-        :raises SerializeError: If the database is in an incompatible state and the optimizer cannot continue.
-                                Can leave this class in a partially deserialized state.
-        """
-
-        with self.__database.begin_transaction() as txn:
-            root = self.__db_node.get_db_data(txn)
-
-            try:
-                if isinstance(root, Uninitialized):
-                    self.__db_ea = Node()
-                    self.__db_evaluations = DbList()
-                    self.__db_node.set_db_data(
-                        txn, {"evaluations": self.__db_evaluations, "ea": self.__db_ea}
-                    )
-                    return False
-                else:
-                    if not isinstance(root, dict):
-                        raise SerializeError()
-                    self.__db_ea = root["ea"]
-                    if not isinstance(self.__db_ea, Node):
-                        raise SerializeError()
-                    self.__db_evaluations = dynamic_cast_dblist(
-                        dynamic_cast_node(root["evaluations"]).get_db_data(txn)
-                    )
-                    if not isinstance(self.__db_evaluations, DbList):
-                        raise SerializeError()
-
-                    ea = self.__db_ea.get_db_data(txn)
-                    if isinstance(ea, Uninitialized):
-                        return False
-                    elif not isinstance(ea, dict):
-                        raise SerializeError()
-
-                    self.__db_rng_after_generation = dynamic_cast_dblist(
-                        dynamic_cast_node(ea["rng_after_generation"]).get_db_data(txn)
-                    )
-                    if not isinstance(self.__db_rng_after_generation, DbList):
-                        raise SerializeError()
-                    self.__population_size = ea["population_size"]
-                    if not isinstance(self.__population_size, int):
-                        raise SerializeError()
-                    self.__offspring_size = ea["offspring_size"]
-                    if not isinstance(self.__offspring_size, int):
-                        raise SerializeError()
-                    self.__db_generations = dynamic_cast_dblist(
-                        dynamic_cast_node(ea["generations"]).get_db_data(txn)
-                    )
-                    if not isinstance(self.__db_generations, DbList):
-                        raise SerializeError()
-                    self.__db_individuals = dynamic_cast_dblist(
-                        dynamic_cast_node(ea["individuals"]).get_db_data(txn)
-                    )
-                    if not isinstance(self.__db_individuals, DbList):
-                        raise SerializeError()
-
-                    self.__genotype_type = pickle.loads(ea["genotype_type"])
-                    self.__fitness_type = pickle.loads(ea["fitness_type"])
-
-                    self.__generation_index = (
-                        self.__db_generations.len(txn) - 1
-                    )  # first generation is 0
-
-                    individual_ids = self.__db_generations.get(
-                        txn, self.__generation_index
-                    ).get_db_data(txn)
-                    if not isinstance(individual_ids, list):
-                        raise SerializeError()
-                    self.__last_generation = [
-                        Individual.deserialize(
-                            dynamic_cast_static_data(
-                                self.__db_individuals.get(txn, id).get_db_data(txn)
-                            )
-                        )
-                        for id in individual_ids
-                    ]
-                    self.__next_id = self.__db_individuals.len(txn)
-
-                    x = self.__db_rng_after_generation.get(
-                        txn, self.__generation_index
-                    ).get_db_data(txn)
-
-                    self._rng.setstate(
-                        pickle.loads(
-                            dynamic_cast_bytes(
-                                self.__db_rng_after_generation.get(
-                                    txn, self.__generation_index
-                                ).get_db_data(txn)
-                            )
-                        )
-                    )
-
-                    self.__initial_population = None
-
-                    return True
-
-            except (SerializeError, pickle.PickleError, KeyError, TypeError) as err:
-                raise SerializeError(
-                    "Database in state incompatible with this code. Remove database before trying again."
-                ) from err
-
-    async def _prepare_db_evaluation(self) -> Node:
-        if self.__generation_index is None:
-            generation = 0
-        else:
-            generation = self.__generation_index + 1
-
-        with self.__database.begin_transaction() as txn:
-            return self.__db_evaluations.get_or_append(txn, generation)
-
-    def _safe_select_parents(
-        self, generation: List[Individual[Genotype, Fitness]], num_parents: int
-    ) -> List[List[Individual[Genotype, Fitness]]]:
-        parent_selections = self._select_parents(generation, num_parents)
-        assert type(parent_selections) == list
-        assert all(type(s) == list for s in parent_selections)
-        assert all([all(type(p) == Individual for p in s) for s in parent_selections])
-        return parent_selections
-
-    def _safe_crossover(self, parents: List[Genotype]) -> Genotype:
-        genotype = self._crossover(parents)
-        assert type(genotype) == self.__genotype_type
-        return genotype
-
-    def _safe_mutate(self, genotype: Genotype) -> Genotype:
-        genotype = self._mutate(genotype)
-        assert type(genotype) == self.__genotype_type
-        return genotype
-
-    async def _safe_evaluate_generation(
-        self, genotypes: List[Genotype], database: Database, db_node: Node
-    ) -> List[Fitness]:
-        fitnesss = await self._evaluate_generation(genotypes, database, db_node)
-        assert type(fitnesss) == list
-        assert len(fitnesss) == len(genotypes)
-        assert all(type(e) == self.__fitness_type for e in fitnesss)
-        return fitnesss
-
-    def _safe_select_survivors(
-        self,
-        old_individuals: List[Individual[Genotype, Fitness]],
-        new_individuals: List[Individual[Genotype, Fitness]],
-        num_survivors: int,
-    ) -> List[Individual[Genotype, Fitness]]:
-        survivors = self._select_survivors(
-            old_individuals, new_individuals, num_survivors
-        )
-        assert type(survivors) == list
-        assert len(survivors) == self.__population_size
-        assert all(type(s) == Individual for s in survivors)
-        return survivors
-
-    def _safe_must_do_next_gen(self) -> bool:
-        must_do = self._must_do_next_gen()
-        assert type(must_do) == bool
-        return must_do
-
-    @property
-    def population_size(self) -> int:
-        return self.__population_size
-
-    @property
-    def offspring_size(self) -> int:
-        return self.__offspring_size
+        assert (
+            self.__generation_index > 0
+        ), "Must create at least one generation beyond initial population. This behaviour is not supported."  # would break database structure
 
     @property
     def generation_index(self) -> Optional[int]:
@@ -516,10 +410,202 @@ class EvolutionaryOptimizer(ABC, Generic[Genotype, Fitness]):
 
         return self.__generation_index
 
-    @property
-    def last_generation(self) -> Optional[List[Individual[Genotype, Fitness]]]:
-        """
-        Get the last generation.
-        """
+    def __gen_next_individual_id(self) -> int:
+        next_id = self.__next_individual_id
+        self.__next_individual_id += 1
+        return next_id
 
-        return self.__last_generation
+    async def __safe_evaluate_generation(
+        self,
+        genotypes: List[Genotype],
+        database: AsyncEngine,
+        process_id: int,
+        process_id_gen: ProcessIdGen,
+    ) -> List[Fitness]:
+        fitnesses = await self._evaluate_generation(
+            genotypes=genotypes,
+            database=database,
+            process_id=process_id,
+            process_id_gen=process_id_gen,
+        )
+        assert type(fitnesses) == list
+        assert len(fitnesses) == len(genotypes)
+        assert all(type(e) == self.__fitness_type for e in fitnesses)
+        return fitnesses
+
+    def __safe_select_parents(
+        self,
+        population: List[Genotype],
+        fitnesses: List[Fitness],
+        num_parent_groups: int,
+    ) -> List[List[int]]:
+        parent_selections = self._select_parents(
+            population, fitnesses, num_parent_groups
+        )
+        assert type(parent_selections) == list
+        assert len(parent_selections) == num_parent_groups
+        assert all(type(s) == list for s in parent_selections)
+        assert all(
+            [
+                all(type(p) == int and p >= 0 and p < len(population) for p in s)
+                for s in parent_selections
+            ]
+        )
+        return parent_selections
+
+    def __safe_crossover(self, parents: List[Genotype]) -> Genotype:
+        genotype = self._crossover(parents)
+        assert type(genotype) == self.__genotype_type
+        return genotype
+
+    def __safe_mutate(self, genotype: Genotype) -> Genotype:
+        genotype = self._mutate(genotype)
+        assert type(genotype) == self.__genotype_type
+        return genotype
+
+    def __safe_select_survivors(
+        self,
+        old_individuals: List[Genotype],
+        old_fitnesses: List[Fitness],
+        new_individuals: List[Genotype],
+        new_fitnesses: List[Fitness],
+        num_survivors: int,
+    ) -> Tuple[List[int], List[int]]:
+        old_survivors, new_survivors = self._select_survivors(
+            old_individuals,
+            old_fitnesses,
+            new_individuals,
+            new_fitnesses,
+            num_survivors,
+        )
+        assert type(old_survivors) == list
+        assert type(new_survivors) == list
+        assert len(old_survivors) + len(new_survivors) == len(self.__latest_population)
+        assert all(type(s) == int for s in old_survivors)
+        assert all(type(s) == int for s in new_survivors)
+        return (old_survivors, new_survivors)
+
+    def __safe_must_do_next_gen(self) -> bool:
+        must_do = self._must_do_next_gen()
+        assert type(must_do) == bool
+        return must_do
+
+    async def __save_generation_using_session(
+        self,
+        session: AsyncSession,
+        initial_population: Optional[List[_Individual[Genotype]]],
+        initial_fitnesses: Optional[List[Fitness]],
+        new_individuals: List[_Individual[Genotype]],
+        new_fitnesses: Optional[List[Fitness]],
+    ) -> None:
+        # TODO this function can probably be simplified as well as optimized.
+        # but it works so I'll leave it for now.
+
+        # update fitnesses of initial population if provided
+        if initial_fitnesses is not None:
+            assert initial_population is not None
+
+            fitness_ids = await self.__fitness_type.to_database(
+                session, initial_fitnesses
+            )
+            assert len(fitness_ids) == len(initial_fitnesses)
+
+            rows = (
+                (
+                    await session.execute(
+                        select(DbEvolutionaryOptimizerIndividual)
+                        .filter(
+                            (
+                                DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
+                                == self.__evolutionary_optimizer_id
+                            )
+                            & (
+                                DbEvolutionaryOptimizerIndividual.individual_id.in_(
+                                    [i.id for i in initial_population]
+                                )
+                            )
+                        )
+                        .order_by(DbEvolutionaryOptimizerIndividual.individual_id)
+                    )
+                )
+                .scalars()
+                .all()
+            )
+            if len(rows) != len(initial_population):
+                raise IncompatibleError()
+
+            for i, row in enumerate(rows):
+                row.fitness_id = fitness_ids[i]
+
+        # save current optimizer state
+        session.add(
+            DbEvolutionaryOptimizerState(
+                evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                generation_index=self.__generation_index,
+                processid_state=self.__process_id_gen.get_state(),
+            )
+        )
+
+        # save new individuals
+        genotype_ids = await self.__genotype_type.to_database(
+            session, [i.genotype for i in new_individuals]
+        )
+        assert len(genotype_ids) == len(new_individuals)
+        fitness_ids2: List[Optional[int]]
+        if new_fitnesses is not None:
+            fitness_ids2 = [
+                f for f in await self.__fitness_type.to_database(session, new_fitnesses)
+            ]  # this extra comprehension is useless but it stops mypy from complaining
+            assert len(fitness_ids2) == len(new_fitnesses)
+        else:
+            fitness_ids2 = [None for _ in range(len(new_individuals))]
+
+        session.add_all(
+            [
+                DbEvolutionaryOptimizerIndividual(
+                    evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                    individual_id=i.id,
+                    genotype_id=g_id,
+                    fitness_id=f_id,
+                )
+                for i, g_id, f_id in zip(new_individuals, genotype_ids, fitness_ids2)
+            ]
+        )
+
+        # save parents of new individuals
+        parents: List[DbEvolutionaryOptimizerParent] = []
+        for individual in new_individuals:
+            assert (
+                individual.parent_ids is not None
+            )  # Cannot be None. They are only None after recovery and then they are already saved.
+            for p_id in individual.parent_ids:
+                parents.append(
+                    DbEvolutionaryOptimizerParent(
+                        evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                        child_individual_id=individual.id,
+                        parent_individual_id=p_id,
+                    )
+                )
+        session.add_all(parents)
+
+        # save current generation
+        session.add_all(
+            [
+                DbEvolutionaryOptimizerGeneration(
+                    evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                    generation_index=self.__generation_index,
+                    individual_index=index,
+                    individual_id=individual.id,
+                )
+                for index, individual in enumerate(self.__latest_population)
+            ]
+        )
+
+
+@dataclass
+class _Individual(Generic[Genotype]):
+    id: int
+    genotype: Genotype
+    # Empty list of parents means this is from the initial population
+    # None means we did not bother loading the parents during recovery because they are not needed.
+    parent_ids: Optional[List[int]]

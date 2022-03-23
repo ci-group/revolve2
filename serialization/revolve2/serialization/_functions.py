@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Type, TypeVar, Union
+from typing import Type, TypeVar, Union
 
 from ._serializable import Serializable
 from ._serialize_error import SerializeError

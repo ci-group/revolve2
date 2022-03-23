@@ -26,15 +26,11 @@ setup(
         "sqlalchemy>=1.4.28",
         "asyncssh>=2.9.0",
     ],
-    extras_require={
-        "dev": [
-            "sqlalchemy-stubs>=0.4",
-        ]
-    },
+    extras_require={"dev": ["sqlalchemy[mypy]>=1.4.28"]},
     zip_safe=False,
     entry_points={
         "console_scripts": [
-            "revolve2.analysis.core.plot_ea_fitness=revolve2.analysis.core.plot_ea_fitness:main",
+            "revolve2_plot_ea_fitness_float=revolve2.analysis.core.plot_ea_fitness_float:main",
         ]
     },
 )

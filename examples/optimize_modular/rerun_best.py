@@ -1,5 +1,6 @@
 from genotype import Genotype, develop
 from revolve2.analysis.isaacgym import ModularRobotRerunner
+from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
 from revolve2.core.database import open_async_database_sqlite
@@ -7,7 +8,6 @@ from revolve2.core.optimization.ea.evolutionary_optimizer_schema import (
     DbEvolutionaryOptimizerIndividual,
 )
 from revolve2.core.optimization.ea.fitness_float_schema import DbFitnessFloat
-from sqlalchemy.ext.asyncio.session import AsyncSession
 
 
 async def main() -> None:

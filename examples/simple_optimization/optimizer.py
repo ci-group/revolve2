@@ -7,12 +7,13 @@ from typing import List, Tuple
 from genotype import Genotype
 from item import Item
 from optimizer_schema import DbBase, DbOptimizerState
+from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
 import revolve2.core.optimization.ea.population_management as population_management
 import revolve2.core.optimization.ea.selection as selection
-from revolve2.core.database import Database, IncompatibleError
+from revolve2.core.database import IncompatibleError
 from revolve2.core.optimization import ProcessIdGen
 from revolve2.core.optimization.ea import EvolutionaryOptimizer, FitnessFloat
 
@@ -25,7 +26,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
 
     async def ainit_new(  # type: ignore # TODO for now ignoring mypy complaint about LSP problem, override parent's ainit
         self,
-        database: Database,
+        database: AsyncEngine,
         session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
@@ -60,7 +61,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
 
     async def ainit_from_database(  # type: ignore # see comment at ainit_new
         self,
-        database: Database,
+        database: AsyncEngine,
         session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
@@ -106,7 +107,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
     async def _evaluate_generation(
         self,
         genotypes: List[Genotype],
-        database: Database,
+        database: AsyncEngine,
         process_id: int,
         process_id_gen: ProcessIdGen,
     ) -> List[FitnessFloat]:

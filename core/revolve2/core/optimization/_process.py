@@ -1,6 +1,7 @@
 from typing import Any, Optional, Type, TypeVar
 
-from revolve2.core.database import Database
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
 TChild = TypeVar("TChild", bound="Process")
 
@@ -54,13 +55,13 @@ class Process:
     @classmethod
     async def new(
         cls: Type[TChild],
-        database: Database,
+        database: AsyncEngine,
         process_id: int,
         *args: Any,
         **kwargs: Any
     ) -> TChild:
         self = super().__new__(cls)
-        async with database.session() as session:
+        async with AsyncSession(database) as session:
             async with session.begin():
                 await self.ainit_new(database, session, process_id, *args, **kwargs)  # type: ignore # must have this function, see above
         return self
@@ -68,7 +69,7 @@ class Process:
     @classmethod
     async def from_database(
         cls: Type[TChild],
-        database: Database,
+        database: AsyncEngine,
         process_id: int,
         *args: Any,
         **kwargs: Any
@@ -80,7 +81,7 @@ class Process:
         :raises SerializeError: If database incompatible.
         """
         self = super().__new__(cls)
-        async with database.session() as session:
+        async with AsyncSession(database) as session:
             if await self.ainit_from_database(  # type: ignore # must have this function, see above
                 database, session, process_id, *args, **kwargs
             ):

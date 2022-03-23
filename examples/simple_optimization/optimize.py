@@ -7,7 +7,7 @@ from genotype import Genotype
 from item import Item
 from optimizer import Optimizer
 
-from revolve2.core.database import open_database_sqlite
+from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
 
 
@@ -33,7 +33,7 @@ async def main() -> None:
     items = [Item(rng.randrange(0, 100), rng.randrange(0, 100)) for _ in range(100)]
 
     # database
-    database = open_database_sqlite("./database")
+    database = open_async_database_sqlite("./database")
 
     # process id generator
     process_id_gen = ProcessIdGen()

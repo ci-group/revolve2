@@ -7,7 +7,7 @@ import multineat
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
-from revolve2.core.database import Database, IncompatibleError, Tableable
+from revolve2.core.database import IncompatibleError, Tableable
 
 from .genotype_schema import DbBase, DbGenotype
 

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pandas
 from sqlalchemy.future import select
 
-from revolve2.core.database import create_sync_engine_sqlite
+from revolve2.core.database import open_database_sqlite
 from revolve2.core.optimization.ea.evolutionary_optimizer_schema import (
     DbEvolutionaryOptimizer,
     DbEvolutionaryOptimizerGeneration,
@@ -20,7 +20,7 @@ from revolve2.core.optimization.ea.fitness_float_schema import DbFitnessFloat
 
 def plot(database: str, optimizer_id: int) -> None:
     # open the database
-    db = create_sync_engine_sqlite(database)
+    db = open_database_sqlite(database)
     # read the optimizer data into a pandas dataframe
     df = pandas.read_sql(
         select(

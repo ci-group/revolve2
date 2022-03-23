@@ -6,11 +6,12 @@ from dataclasses import dataclass
 from typing import Generic, List, Optional, Tuple, Type, TypeVar
 
 from sqlalchemy.exc import OperationalError
+from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
-from revolve2.core.database import Database, IncompatibleError, Tableable
+from revolve2.core.database import IncompatibleError, Tableable
 from revolve2.core.optimization import Process, ProcessIdGen
 
 from .evolutionary_optimizer_schema import (
@@ -31,7 +32,7 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
     async def _evaluate_generation(
         self,
         genotypes: List[Genotype],
-        database: Database,
+        database: AsyncEngine,
         process_id: int,
         process_id_gen: ProcessIdGen,
     ) -> List[Fitness]:
@@ -106,7 +107,7 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         The session must not be committed, but it may be flushed.
         """
 
-    __database: Database
+    __database: AsyncEngine
 
     __evolutionary_optimizer_id: int
 
@@ -124,7 +125,7 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
 
     async def ainit_new(
         self,
-        database: Database,
+        database: AsyncEngine,
         session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
@@ -175,7 +176,7 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
 
     async def ainit_from_database(
         self,
-        database: Database,
+        database: AsyncEngine,
         session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
@@ -380,7 +381,7 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
 
             # save generation and possibly fitnesses of initial population
             # and let user save their state
-            async with self.__database.session() as session:
+            async with AsyncSession(self.__database) as session:
                 async with session.begin():
                     await self.__save_generation_using_session(
                         session,
@@ -417,7 +418,7 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
     async def __safe_evaluate_generation(
         self,
         genotypes: List[Genotype],
-        database: Database,
+        database: AsyncEngine,
         process_id: int,
         process_id_gen: ProcessIdGen,
     ) -> List[Fitness]:

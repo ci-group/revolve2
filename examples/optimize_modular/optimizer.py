@@ -9,13 +9,14 @@ import multineat
 from genotype import Genotype, crossover, develop, mutate
 from optimizer_schema import DbBase, DbOptimizerState
 from pyrr import Quaternion, Vector3
+from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
 import revolve2.core.optimization.ea.population_management as population_management
 import revolve2.core.optimization.ea.selection as selection
 from revolve2.actor_controller import ActorController
-from revolve2.core.database import Database, IncompatibleError
+from revolve2.core.database import IncompatibleError
 from revolve2.core.optimization import ProcessIdGen
 from revolve2.core.optimization.ea import EvolutionaryOptimizer
 from revolve2.core.optimization.ea._fitness_float import FitnessFloat
@@ -51,7 +52,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
 
     async def ainit_new(  # type: ignore # TODO for now ignoring mypy complaint about LSP problem, override parent's ainit
         self,
-        database: Database,
+        database: AsyncEngine,
         session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
@@ -95,7 +96,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
 
     async def ainit_from_database(  # type: ignore # see comment at ainit_new
         self,
-        database: Database,
+        database: AsyncEngine,
         session: AsyncSession,
         process_id: int,
         process_id_gen: ProcessIdGen,
@@ -197,7 +198,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
     async def _evaluate_generation(
         self,
         genotypes: List[Genotype],
-        database: Database,
+        database: AsyncEngine,
         process_id: int,
         process_id_gen: ProcessIdGen,
     ) -> List[FitnessFloat]:

@@ -13,7 +13,7 @@ from sqlalchemy.future import select
 from revolve2.core.database import IncompatibleError, Tableable
 
 
-class Genotype(Tableable["Genotype"]):
+class Genotype(Tableable):
     items: List[bool]
 
     def __init__(self, items: List[bool]) -> None:
@@ -52,10 +52,16 @@ class Genotype(Tableable["Genotype"]):
         ]
         session.add_all(dbobjects)
         await session.flush()
-        return [dbfitness.id for dbfitness in dbobjects]
+        ids = [
+            dbfitness.id for dbfitness in dbobjects if dbfitness.id is not None
+        ]  # cannot be none because not nullable. check if only there to silence mypy.
+        assert len(ids) == len(objects)  # but check just to be sure
+        return ids
 
     @classmethod
-    async def from_database(cls, session: AsyncSession, ids: List[int]) -> Genotype:
+    async def from_database(
+        cls, session: AsyncSession, ids: List[int]
+    ) -> List[Genotype]:
         rows = (
             (await session.execute(select(DbGenotype).filter(DbGenotype.id.in_(ids))))
             .scalars()

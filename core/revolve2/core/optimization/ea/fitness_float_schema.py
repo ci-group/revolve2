@@ -14,4 +14,4 @@ class DbFitnessFloat(DbBase):
         autoincrement=True,
         primary_key=True,
     )
-    fitness = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    fitness = sqlalchemy.Column(sqlalchemy.Float, nullable=False)

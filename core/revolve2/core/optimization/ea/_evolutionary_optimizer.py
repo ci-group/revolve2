@@ -22,12 +22,11 @@ from .evolutionary_optimizer_schema import (
     DbEvolutionaryOptimizerState,
 )
 
-Child = TypeVar("Child")
 Genotype = TypeVar("Genotype", bound=Tableable)
 Fitness = TypeVar("Fitness", bound=Tableable)
 
 
-class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
+class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
     @abstractmethod
     async def _evaluate_generation(
         self,
@@ -65,7 +64,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         new_individuals: List[Genotype],
         new_fitnesses: List[Fitness],
         num_survivors: int,
-    ) -> Tuple(List[int], List[int]):
+    ) -> Tuple[List[int], List[int]]:
         """
         Select survivors from a group of individuals. These will form the next generation.
 
@@ -107,14 +106,6 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         The session must not be committed, but it may be flushed.
         """
 
-    @dataclass
-    class __Individual(Generic[Genotype]):
-        id: int
-        genotype: Genotype
-        # Empty list of parents means this is from the initial population
-        # None means we did not bother loading the parents during recovery because they are not needed.
-        parent_ids: Optional[List[int]]
-
     __database: Database
 
     __evolutionary_optimizer_id: int
@@ -127,7 +118,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
     __next_individual_id: int
 
-    __latest_population: List[__Individual[Genotype]]
+    __latest_population: List[_Individual[Genotype]]
     __latest_fitnesses: Optional[List[Fitness]]  # None only for the initial population
     __generation_index: int
 
@@ -159,7 +150,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         self.__generation_index = 0
 
         self.__latest_population = [
-            self.__Individual(self.__gen_next_individual_id(), g, [])
+            _Individual(self.__gen_next_individual_id(), g, [])
             for g in initial_population
         ]
 
@@ -175,6 +166,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         )
         session.add(new_opt)
         await session.flush()
+        assert new_opt.id is not None  # this is impossible because it's not nullable
         self.__evolutionary_optimizer_id = new_opt.id
 
         await self.__save_generation_using_session(
@@ -294,8 +286,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
         assert len(genotypes) == len(genotype_ids)
         self.__latest_population = [
-            self.__Individual(g_id, g, None)
-            for g_id, g in zip(individual_ids, genotypes)
+            _Individual(g_id, g, None) for g_id, g in zip(individual_ids, genotypes)
         ]
 
         if self.__generation_index == 0:
@@ -352,7 +343,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
 
             # combine to create list of individuals
             new_individuals = [
-                self.__Individual(
+                _Individual(
                     -1,  # placeholder until later
                     genotype,
                     [self.__latest_population[i].id for i in parent_indices],
@@ -364,7 +355,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             old_survivors, new_survivors = self.__safe_select_survivors(
                 [i.genotype for i in self.__latest_population],
                 self.__latest_fitnesses,
-                new_individuals,
+                [i.genotype for i in new_individuals],
                 new_fitnesses,
                 len(self.__latest_population),
             )
@@ -478,7 +469,7 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
         new_individuals: List[Genotype],
         new_fitnesses: List[Fitness],
         num_survivors: int,
-    ) -> Tuple(List[int], List[int]):
+    ) -> Tuple[List[int], List[int]]:
         old_survivors, new_survivors = self._select_survivors(
             old_individuals,
             old_fitnesses,
@@ -501,9 +492,9 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
     async def __save_generation_using_session(
         self,
         session: AsyncSession,
-        initial_population: Optional[List[__Individual]],
+        initial_population: Optional[List[_Individual[Genotype]]],
         initial_fitnesses: Optional[List[Fitness]],
-        new_individuals: List[__Individual],
+        new_individuals: List[_Individual[Genotype]],
         new_fitnesses: Optional[List[Fitness]],
     ) -> None:
         # TODO this function can probably be simplified as well as optimized.
@@ -559,11 +550,14 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
             session, [i.genotype for i in new_individuals]
         )
         assert len(genotype_ids) == len(new_individuals)
+        fitness_ids2: List[Optional[int]]
         if new_fitnesses is not None:
-            fitness_ids = await self.__fitness_type.to_database(session, new_fitnesses)
-            assert len(fitness_ids) == len(new_fitnesses)
+            fitness_ids2 = [
+                f for f in await self.__fitness_type.to_database(session, new_fitnesses)
+            ]  # this extra comprehension is useless but it stops mypy from complaining
+            assert len(fitness_ids2) == len(new_fitnesses)
         else:
-            fitness_ids = [None for _ in range(len(new_individuals))]
+            fitness_ids2 = [None for _ in range(len(new_individuals))]
 
         session.add_all(
             [
@@ -573,21 +567,21 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                     genotype_id=g_id,
                     fitness_id=f_id,
                 )
-                for i, g_id, f_id in zip(new_individuals, genotype_ids, fitness_ids)
+                for i, g_id, f_id in zip(new_individuals, genotype_ids, fitness_ids2)
             ]
         )
 
         # save parents of new individuals
         parents: List[DbEvolutionaryOptimizerParent] = []
-        for i in new_individuals:
+        for individual in new_individuals:
             assert (
-                i.parent_ids is not None
+                individual.parent_ids is not None
             )  # Cannot be None. They are only None after recovery and then they are already saved.
-            for p_id in i.parent_ids:
+            for p_id in individual.parent_ids:
                 parents.append(
                     DbEvolutionaryOptimizerParent(
                         evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
-                        child_individual_id=i.id,
+                        child_individual_id=individual.id,
                         parent_individual_id=p_id,
                     )
                 )
@@ -605,3 +599,12 @@ class EvolutionaryOptimizer(Process[Child], Generic[Child, Genotype, Fitness]):
                 for index, individual in enumerate(self.__latest_population)
             ]
         )
+
+
+@dataclass
+class _Individual(Generic[Genotype]):
+    id: int
+    genotype: Genotype
+    # Empty list of parents means this is from the initial population
+    # None means we did not bother loading the parents during recovery because they are not needed.
+    parent_ids: Optional[List[int]]

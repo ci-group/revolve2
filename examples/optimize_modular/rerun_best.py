@@ -1,5 +1,4 @@
-from genotype import Genotype
-from optimizer import develop
+from genotype import Genotype, develop
 from revolve2.analysis.isaacgym import ModularRobotRerunner
 from sqlalchemy.future import select
 
@@ -23,6 +22,8 @@ async def main() -> None:
                 .order_by(DbFitnessFloat.fitness.desc())
             )
         ).first()
+
+        assert best_individual is not None
 
         print(f"fitness: {best_individual[1].fitness}")
 

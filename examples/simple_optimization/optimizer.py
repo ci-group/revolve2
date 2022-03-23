@@ -12,18 +12,18 @@ from sqlalchemy.future import select
 
 import revolve2.core.optimization.ea.population_management as population_management
 import revolve2.core.optimization.ea.selection as selection
-from revolve2.core.database import Database
+from revolve2.core.database import Database, IncompatibleError
 from revolve2.core.optimization import ProcessIdGen
 from revolve2.core.optimization.ea import EvolutionaryOptimizer, FitnessFloat
 
 
-class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
+class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
     _process_id: int
     _rng: Random
     _items: List[Item]
     _num_generations: int
 
-    async def ainit_new(
+    async def ainit_new(  # type: ignore # TODO for now ignoring mypy complaint about LSP problem, override parent's ainit
         self,
         database: Database,
         session: AsyncSession,
@@ -58,7 +58,7 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
         # save to database
         self._on_generation_checkpoint(session)
 
-    async def ainit_from_database(
+    async def ainit_from_database(  # type: ignore # see comment at ainit_new
         self,
         database: Database,
         session: AsyncSession,
@@ -93,6 +93,10 @@ class Optimizer(EvolutionaryOptimizer["Optimizer", Genotype, FitnessFloat]):
             .scalars()
             .first()
         )
+
+        # if this happens something is wrong with the database
+        if opt_row is None:
+            raise IncompatibleError
 
         self._rng = rng
         self._rng.setstate(pickle.loads(opt_row.rng))

@@ -1,8 +1,14 @@
+from __future__ import annotations
 from random import Random
-from typing import TYPE_CHECKING, List, TypeVar
+from typing import List, TypeVar, Protocol
 
-if TYPE_CHECKING:
-    from _typeshed import SupportsLessThan
+TSupportsLessThan = TypeVar("TSupportsLessThan", bound="SupportsLessThan")
+
+
+class SupportsLessThan(Protocol):
+    def __lt__(self: TSupportsLessThan, other: TSupportsLessThan) -> bool:
+        pass
+
 
 Fitness = TypeVar("Fitness", bound="SupportsLessThan")
 

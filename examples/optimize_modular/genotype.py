@@ -75,9 +75,7 @@ _MULTINEAT_PARAMS = _make_multineat_params()
 
 
 @dataclass
-class Genotype(
-    Tableable["Genotype"],
-):
+class Genotype(Tableable):
     body: CppnwinGenotype
     brain: CppnwinGenotype
 
@@ -106,10 +104,16 @@ class Genotype(
 
         session.add_all(dbgenotypes)
         await session.flush()
-        return [dbfitness.id for dbfitness in dbgenotypes]
+        ids = [
+            dbfitness.id for dbfitness in dbgenotypes if dbfitness.id is not None
+        ]  # cannot be none because not nullable. check if only there to silence mypy.
+        assert len(ids) == len(objects)  # but check just to be sure
+        return ids
 
     @classmethod
-    async def from_database(cls, session: AsyncSession, ids: List[int]) -> Genotype:
+    async def from_database(
+        cls, session: AsyncSession, ids: List[int]
+    ) -> List[Genotype]:
         rows = (
             (await session.execute(select(DbGenotype).filter(DbGenotype.id.in_(ids))))
             .scalars()

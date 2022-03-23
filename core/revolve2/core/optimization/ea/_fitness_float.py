@@ -10,7 +10,7 @@ from revolve2.core.database import IncompatibleError, Tableable
 from .fitness_float_schema import DbBase, DbFitnessFloat
 
 
-class FitnessFloat(float, Tableable["FitnessFloat"]):
+class FitnessFloat(float, Tableable):
     @classmethod
     async def create_tables(cls, session: AsyncSession) -> None:
         await (await session.connection()).run_sync(DbFitnessFloat.metadata.create_all)
@@ -26,10 +26,16 @@ class FitnessFloat(float, Tableable["FitnessFloat"]):
         dbfitnesses = [DbFitnessFloat(fitness=fitness) for fitness in objects]
         session.add_all(dbfitnesses)
         await session.flush()
-        return [dbfitness.id for dbfitness in dbfitnesses]
+        ids = [
+            dbfitness.id for dbfitness in dbfitnesses if dbfitness.id is not None
+        ]  # cannot be none because not nullable but adding check for mypy
+        assert len(ids) == len(objects)  # just to be sure because of check above
+        return ids
 
     @classmethod
-    async def from_database(cls, session: AsyncSession, ids: List[int]) -> FitnessFloat:
+    async def from_database(
+        cls, session: AsyncSession, ids: List[int]
+    ) -> List[FitnessFloat]:
         rows = (
             (
                 await session.execute(

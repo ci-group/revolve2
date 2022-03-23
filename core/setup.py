@@ -27,11 +27,7 @@ setup(
         "asyncssh>=2.9.0",
         "sklearn>=0.0",
     ],
-    extras_require={
-        "dev": [
-            "sqlalchemy-stubs>=0.4",
-        ]
-    },
+    extras_require={"dev": ["sqlalchemy[mypy]>=1.4.28"]},
     zip_safe=False,
     entry_points={
         "console_scripts": [

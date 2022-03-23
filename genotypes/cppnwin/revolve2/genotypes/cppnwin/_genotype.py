@@ -34,10 +34,16 @@ class Genotype(Tableable):
         ]
         session.add_all(dbfitnesses)
         await session.flush()
-        return [dbfitness.id for dbfitness in dbfitnesses]
+        ids = [
+            dbfitness.id for dbfitness in dbfitnesses if dbfitness.id is not None
+        ]  # cannot be none because not nullable. used to silence mypy
+        assert len(ids) == len(objects)  # but check just to be sure
+        return ids
 
     @classmethod
-    async def from_database(cls, session: AsyncSession, ids: List[int]) -> Genotype:
+    async def from_database(
+        cls, session: AsyncSession, ids: List[int]
+    ) -> List[Genotype]:
         rows = (
             (await session.execute(select(DbGenotype).filter(DbGenotype.id.in_(ids))))
             .scalars()

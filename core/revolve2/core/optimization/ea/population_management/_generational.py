@@ -1,15 +1,18 @@
-from typing import Callable, List, TypeVar
+from typing import Callable, List, TypeVar, Tuple
 
 from .. import selection
 
-Individual = TypeVar("Individual")
+Genotype = TypeVar("Genotype")
+Fitness = TypeVar("Fitness")
 
 
 def generational(
-    old_individuals: List[Individual],
-    new_individuals: List[Individual],
-    selection_function: Callable[[List[Individual]], Individual],
-) -> List[Individual]:
+    old_individuals: List[Genotype],
+    old_fitnesses: List[Fitness],
+    new_individuals: List[Genotype],
+    new_fitnesses: List[Fitness],
+    selection_function: Callable[[List[Genotype], List[Fitness]], int],
+) -> List[int]:
     """
     Select n unique individuals from only the new individuals
     using the provided selection function,
@@ -23,5 +26,5 @@ def generational(
     assert len(selection_pool) >= population_size
 
     return selection.multiple_unique(
-        new_individuals, population_size, selection_function
+        new_individuals, new_fitnesses, population_size, selection_function
     )

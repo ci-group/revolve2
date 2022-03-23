@@ -27,7 +27,6 @@ from revolve2.core.physics.running import (
     Environment,
     PosedActor,
     Runner,
-    State,
 )
 from revolve2.runners.isaacgym import LocalRunner
 

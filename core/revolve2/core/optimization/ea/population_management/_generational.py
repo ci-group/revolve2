@@ -1,4 +1,4 @@
-from typing import Callable, List, Tuple, TypeVar
+from typing import Callable, List, TypeVar
 
 from .. import selection
 

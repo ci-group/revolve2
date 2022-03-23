@@ -7,7 +7,7 @@ from sqlalchemy.future import select
 
 from revolve2.core.database import IncompatibleError, Tableable
 
-from .fitness_float_schema import DbBase, DbFitnessFloat
+from .fitness_float_schema import DbFitnessFloat
 
 
 class FitnessFloat(float, Tableable):

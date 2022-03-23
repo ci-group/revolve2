@@ -1,8 +1,9 @@
+from typing import TYPE_CHECKING
+
 import sqlalchemy.ext.asyncio
 import sqlalchemy.ext.asyncio.engine
 import sqlalchemy.orm
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from typing import TYPE_CHECKING
 from sqlalchemy.orm import sessionmaker
 
 # there is a bug in sqlalchemy

@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 from random import Random
-from typing import List, TypeVar, Protocol
+from typing import List, Protocol, TypeVar
 
 TSupportsLessThan = TypeVar("TSupportsLessThan", bound="SupportsLessThan")
 

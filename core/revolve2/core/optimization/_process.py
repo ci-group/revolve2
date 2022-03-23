@@ -1,7 +1,6 @@
-from typing import Optional, Type, TypeVar, Any
+from typing import Any, Optional, Type, TypeVar
 
 from revolve2.core.database import Database
-
 
 TChild = TypeVar("TChild", bound="Process")
 

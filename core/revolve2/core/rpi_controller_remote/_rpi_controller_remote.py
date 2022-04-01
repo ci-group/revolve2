@@ -46,7 +46,7 @@ class RpiControllerRemote:
             async with sftp.open(
                 "revolve2_rpi_controller_config.json", "w"
             ) as config_file:
-                await config_file.write(json.dumps(config))  # type: ignore # Function annotated to return SFTPFileProtol that is not the correct class.
+                await config_file.write(json.dumps(config))
         logging.info("Copying done.")
 
         logging.info("Initializing controller..")
@@ -85,7 +85,7 @@ class RpiControllerRemote:
         logging.info("Retrieving log file..")
         async with self._conn.start_sftp_client() as sftp:
             async with sftp.open("revolve2_rpi_controller_log.json", "r") as log_file:
-                log = await log_file.read()  # type: ignore # Function annotated to return SFTPFileProtol that is not the correct class.
+                log = await log_file.read()
         logging.info("Retrieving done.")
         try:
             return start_time, json.loads(log)

@@ -4,6 +4,7 @@ import logging
 from random import Random
 
 from genotype import Genotype
+from genotype import random as random_genotype
 from item import Item
 from optimizer import Optimizer
 
@@ -17,6 +18,7 @@ async def main() -> None:
     NUM_GENERATIONS = 25
 
     INITIAL_HAS_ITEM_PROB = 0.5
+    MAX_WEIGHT = 300
 
     logging.basicConfig(
         level=logging.INFO,
@@ -39,7 +41,7 @@ async def main() -> None:
     process_id_gen = ProcessIdGen()
 
     initial_population = [
-        Genotype.random(rng, INITIAL_HAS_ITEM_PROB, len(items))
+        random_genotype(rng, INITIAL_HAS_ITEM_PROB, len(items))
         for _ in range(POPULATION_SIZE)
     ]
 
@@ -49,6 +51,7 @@ async def main() -> None:
         process_id_gen=process_id_gen,
         rng=rng,
         items=items,
+        max_weight=MAX_WEIGHT,
         num_generations=NUM_GENERATIONS,
     )
     if maybe_optimizer is not None:
@@ -62,6 +65,7 @@ async def main() -> None:
             initial_population=initial_population,
             rng=rng,
             items=items,
+            max_weight=MAX_WEIGHT,
             num_generations=NUM_GENERATIONS,
         )
 

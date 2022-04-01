@@ -11,23 +11,23 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
-from revolve2.core.database import IncompatibleError, Tableable
+from revolve2.core.database import IncompatibleError, Serializer
 from revolve2.core.optimization import Process, ProcessIdGen
 
-from .evolutionary_optimizer_schema import (
+from ._database import (
     DbBase,
-    DbEvolutionaryOptimizer,
-    DbEvolutionaryOptimizerGeneration,
-    DbEvolutionaryOptimizerIndividual,
-    DbEvolutionaryOptimizerParent,
-    DbEvolutionaryOptimizerState,
+    DbEAOptimizer,
+    DbEAOptimizerGeneration,
+    DbEAOptimizerIndividual,
+    DbEAOptimizerParent,
+    DbEAOptimizerState,
 )
 
-Genotype = TypeVar("Genotype", bound=Tableable)
-Fitness = TypeVar("Fitness", bound=Tableable)
+Genotype = TypeVar("Genotype")
+Fitness = TypeVar("Fitness")
 
 
-class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
+class EAOptimizer(Process, Generic[Genotype, Fitness]):
     @abstractmethod
     async def _evaluate_generation(
         self,
@@ -109,10 +109,13 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
 
     __database: AsyncEngine
 
-    __evolutionary_optimizer_id: int
+    __ea_optimizer_id: int
 
     __genotype_type: Type[Genotype]
+    __genotype_serializer: Type[Serializer[Genotype]]
     __fitness_type: Type[Fitness]
+    __fitness_serializer: Type[Serializer[Fitness]]
+
     __offspring_size: int
 
     __process_id_gen: ProcessIdGen
@@ -130,20 +133,21 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         process_id: int,
         process_id_gen: ProcessIdGen,
         genotype_type: Type[Genotype],
+        genotype_serializer: Type[Serializer[Genotype]],
         fitness_type: Type[Fitness],
+        fitness_serializer: Type[Serializer[Fitness]],
         offspring_size: int,
         initial_population: List[Genotype],
     ) -> None:
         """
-        :id: Unique id between all EvolutionaryOptimizers in this database.
+        :id: Unique id between all EAOptimizers in this database.
         :offspring_size: Number of offspring made by the population each generation.
         """
-        assert issubclass(genotype_type, Tableable)
-        assert issubclass(fitness_type, Tableable)
-
         self.__database = database
         self.__genotype_type = genotype_type
+        self.__genotype_serializer = genotype_serializer
         self.__fitness_type = fitness_type
+        self.__fitness_serializer = fitness_serializer
         self.__offspring_size = offspring_size
         self.__process_id_gen = process_id_gen
         self.__next_individual_id = 0
@@ -156,19 +160,19 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         ]
 
         await (await session.connection()).run_sync(DbBase.metadata.create_all)
-        await self.__genotype_type.create_tables(session)
-        await self.__fitness_type.create_tables(session)
+        await self.__genotype_serializer.create_tables(session)
+        await self.__fitness_serializer.create_tables(session)
 
-        new_opt = DbEvolutionaryOptimizer(
+        new_opt = DbEAOptimizer(
             process_id=process_id,
             offspring_size=self.__offspring_size,
-            genotype_table=self.__genotype_type.identifying_table(),
-            fitness_table=self.__fitness_type.identifying_table(),
+            genotype_table=self.__genotype_serializer.identifying_table(),
+            fitness_table=self.__fitness_serializer.identifying_table(),
         )
         session.add(new_opt)
         await session.flush()
         assert new_opt.id is not None  # this is impossible because it's not nullable
-        self.__evolutionary_optimizer_id = new_opt.id
+        self.__ea_optimizer_id = new_opt.id
 
         await self.__save_generation_using_session(
             session, None, None, self.__latest_population, None
@@ -181,21 +185,22 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         process_id: int,
         process_id_gen: ProcessIdGen,
         genotype_type: Type[Genotype],
+        genotype_serializer: Type[Serializer[Genotype]],
         fitness_type: Type[Fitness],
+        fitness_serializer: Type[Serializer[Fitness]],
     ) -> bool:
-        assert issubclass(genotype_type, Tableable)
-        assert issubclass(fitness_type, Tableable)
-
         self.__database = database
         self.__genotype_type = genotype_type
+        self.__genotype_serializer = genotype_serializer
         self.__fitness_type = fitness_type
+        self.__fitness_serializer = fitness_serializer
 
         try:
             eo_row = (
                 (
                     await session.execute(
-                        select(DbEvolutionaryOptimizer).filter(
-                            DbEvolutionaryOptimizer.process_id == process_id
+                        select(DbEAOptimizer).filter(
+                            DbEAOptimizer.process_id == process_id
                         )
                     )
                 )
@@ -207,18 +212,17 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         except (NoResultFound, OperationalError):
             return False
 
-        self.__evolutionary_optimizer_id = eo_row.id
+        self.__ea_optimizer_id = eo_row.id
         self.__offspring_size = eo_row.offspring_size
 
         state_row = (
             (
                 await session.execute(
-                    select(DbEvolutionaryOptimizerState)
+                    select(DbEAOptimizerState)
                     .filter(
-                        DbEvolutionaryOptimizerState.evolutionary_optimizer_id
-                        == self.__evolutionary_optimizer_id
+                        DbEAOptimizerState.ea_optimizer_id == self.__ea_optimizer_id
                     )
-                    .order_by(DbEvolutionaryOptimizerState.generation_index.desc())
+                    .order_by(DbEAOptimizerState.generation_index.desc())
                 )
             )
             .scalars()
@@ -226,7 +230,7 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         )
 
         if state_row is None:
-            raise IncompatibleError()  # not possible that there is no saved state but DbEvolutionaryOptimizer row exists
+            raise IncompatibleError()  # not possible that there is no saved state but DbEAOptimizer row exists
 
         self.__generation_index = state_row.generation_index
         self.__process_id_gen = process_id_gen
@@ -235,18 +239,18 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         gen_rows = (
             (
                 await session.execute(
-                    select(DbEvolutionaryOptimizerGeneration)
+                    select(DbEAOptimizerGeneration)
                     .filter(
                         (
-                            DbEvolutionaryOptimizerGeneration.evolutionary_optimizer_id
-                            == self.__evolutionary_optimizer_id
+                            DbEAOptimizerGeneration.ea_optimizer_id
+                            == self.__ea_optimizer_id
                         )
                         & (
-                            DbEvolutionaryOptimizerGeneration.generation_index
+                            DbEAOptimizerGeneration.generation_index
                             == self.__generation_index
                         )
                     )
-                    .order_by(DbEvolutionaryOptimizerGeneration.individual_index)
+                    .order_by(DbEAOptimizerGeneration.individual_index)
                 )
             )
             .scalars()
@@ -261,16 +265,12 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         individual_rows = (
             (
                 await session.execute(
-                    select(DbEvolutionaryOptimizerIndividual).filter(
+                    select(DbEAOptimizerIndividual).filter(
                         (
-                            DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
-                            == self.__evolutionary_optimizer_id
+                            DbEAOptimizerIndividual.ea_optimizer_id
+                            == self.__ea_optimizer_id
                         )
-                        & (
-                            DbEvolutionaryOptimizerIndividual.individual_id.in_(
-                                individual_ids
-                            )
-                        )
+                        & (DbEAOptimizerIndividual.individual_id.in_(individual_ids))
                     )
                 )
             )
@@ -283,7 +283,9 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
             raise IncompatibleError()
 
         genotype_ids = [individual_map[id].genotype_id for id in individual_ids]
-        genotypes = await self.__genotype_type.from_database(session, genotype_ids)
+        genotypes = await self.__genotype_serializer.from_database(
+            session, genotype_ids
+        )
 
         assert len(genotypes) == len(genotype_ids)
         self.__latest_population = [
@@ -294,7 +296,9 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
             self.__latest_fitnesses = None
         else:
             fitness_ids = [individual_map[id].fitness_id for id in individual_ids]
-            fitnesses = await self.__fitness_type.from_database(session, fitness_ids)
+            fitnesses = await self.__fitness_serializer.from_database(
+                session, fitness_ids
+            )
             assert len(fitnesses) == len(fitness_ids)
             self.__latest_fitnesses = fitnesses
 
@@ -505,7 +509,7 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         if initial_fitnesses is not None:
             assert initial_population is not None
 
-            fitness_ids = await self.__fitness_type.to_database(
+            fitness_ids = await self.__fitness_serializer.to_database(
                 session, initial_fitnesses
             )
             assert len(fitness_ids) == len(initial_fitnesses)
@@ -513,19 +517,19 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
             rows = (
                 (
                     await session.execute(
-                        select(DbEvolutionaryOptimizerIndividual)
+                        select(DbEAOptimizerIndividual)
                         .filter(
                             (
-                                DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
-                                == self.__evolutionary_optimizer_id
+                                DbEAOptimizerIndividual.ea_optimizer_id
+                                == self.__ea_optimizer_id
                             )
                             & (
-                                DbEvolutionaryOptimizerIndividual.individual_id.in_(
+                                DbEAOptimizerIndividual.individual_id.in_(
                                     [i.id for i in initial_population]
                                 )
                             )
                         )
-                        .order_by(DbEvolutionaryOptimizerIndividual.individual_id)
+                        .order_by(DbEAOptimizerIndividual.individual_id)
                     )
                 )
                 .scalars()
@@ -539,22 +543,25 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
 
         # save current optimizer state
         session.add(
-            DbEvolutionaryOptimizerState(
-                evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+            DbEAOptimizerState(
+                ea_optimizer_id=self.__ea_optimizer_id,
                 generation_index=self.__generation_index,
                 processid_state=self.__process_id_gen.get_state(),
             )
         )
 
         # save new individuals
-        genotype_ids = await self.__genotype_type.to_database(
+        genotype_ids = await self.__genotype_serializer.to_database(
             session, [i.genotype for i in new_individuals]
         )
         assert len(genotype_ids) == len(new_individuals)
         fitness_ids2: List[Optional[int]]
         if new_fitnesses is not None:
             fitness_ids2 = [
-                f for f in await self.__fitness_type.to_database(session, new_fitnesses)
+                f
+                for f in await self.__fitness_serializer.to_database(
+                    session, new_fitnesses
+                )
             ]  # this extra comprehension is useless but it stops mypy from complaining
             assert len(fitness_ids2) == len(new_fitnesses)
         else:
@@ -562,8 +569,8 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
 
         session.add_all(
             [
-                DbEvolutionaryOptimizerIndividual(
-                    evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                DbEAOptimizerIndividual(
+                    ea_optimizer_id=self.__ea_optimizer_id,
                     individual_id=i.id,
                     genotype_id=g_id,
                     fitness_id=f_id,
@@ -573,15 +580,15 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         )
 
         # save parents of new individuals
-        parents: List[DbEvolutionaryOptimizerParent] = []
+        parents: List[DbEAOptimizerParent] = []
         for individual in new_individuals:
             assert (
                 individual.parent_ids is not None
             )  # Cannot be None. They are only None after recovery and then they are already saved.
             for p_id in individual.parent_ids:
                 parents.append(
-                    DbEvolutionaryOptimizerParent(
-                        evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                    DbEAOptimizerParent(
+                        ea_optimizer_id=self.__ea_optimizer_id,
                         child_individual_id=individual.id,
                         parent_individual_id=p_id,
                     )
@@ -591,8 +598,8 @@ class EvolutionaryOptimizer(Process, Generic[Genotype, Fitness]):
         # save current generation
         session.add_all(
             [
-                DbEvolutionaryOptimizerGeneration(
-                    evolutionary_optimizer_id=self.__evolutionary_optimizer_id,
+                DbEAOptimizerGeneration(
+                    ea_optimizer_id=self.__ea_optimizer_id,
                     generation_index=self.__generation_index,
                     individual_index=index,
                     individual_id=individual.id,

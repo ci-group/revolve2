@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from random import Random
 from typing import List
 
@@ -10,30 +11,15 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
 
-from revolve2.core.database import IncompatibleError, Tableable
+from revolve2.core.database import IncompatibleError, Serializer
 
 
-class Genotype(Tableable):
+@dataclass
+class Genotype:
     items: List[bool]
 
-    def __init__(self, items: List[bool]) -> None:
-        self.items = items
 
-    @classmethod
-    def random(cls, rng: Random, has_item_prob: float, num_items: int) -> Genotype:
-        return cls([rng.random() < has_item_prob for _ in range(num_items)])
-
-    def develop(self, items: List[Item], maximum_weight: float) -> Phenotype:
-        phenotype = []
-        total_weight = 0
-        for has_item, item in zip(self.items, items):
-            if has_item and total_weight + item.weight < maximum_weight:
-                phenotype.append(True)
-            else:
-                phenotype.append(False)
-
-        return Phenotype(phenotype)
-
+class GenotypeSerializer(Serializer[Genotype]):
     @classmethod
     async def create_tables(cls, session: AsyncSession) -> None:
         await (await session.connection()).run_sync(DbGenotype.metadata.create_all)
@@ -75,6 +61,22 @@ class Genotype(Tableable):
         items_str = [id_map[id].items for id in ids]
         items_bool = [[item == "1" for item in items] for items in items_str]
         return [Genotype(items) for items in items_bool]
+
+
+def random(rng: Random, has_item_prob: float, num_items: int) -> Genotype:
+    return Genotype([rng.random() < has_item_prob for _ in range(num_items)])
+
+
+def develop(genotype: Genotype, items: List[Item], maximum_weight: float) -> Phenotype:
+    phenotype = []
+    total_weight = 0
+    for has_item, item in zip(genotype.items, items):
+        if has_item and total_weight + item.weight < maximum_weight:
+            phenotype.append(True)
+        else:
+            phenotype.append(False)
+
+    return Phenotype(phenotype)
 
 
 DbBase = declarative_base()

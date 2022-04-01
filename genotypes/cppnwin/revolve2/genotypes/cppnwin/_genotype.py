@@ -7,15 +7,17 @@ import multineat
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
-from revolve2.core.database import IncompatibleError, Tableable
+from revolve2.core.database import IncompatibleError, Serializer
 
 from .genotype_schema import DbBase, DbGenotype
 
 
 @dataclass
-class Genotype(Tableable):
+class Genotype:
     genotype: multineat.Genome
 
+
+class GenotypeSerializer(Serializer[Genotype]):
     @classmethod
     async def create_tables(cls, session: AsyncSession) -> None:
         await (await session.connection()).run_sync(DbBase.metadata.create_all)

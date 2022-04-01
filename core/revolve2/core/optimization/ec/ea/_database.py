@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 DbBase = declarative_base()
 
 
-class DbEvolutionaryOptimizer(DbBase):
-    __tablename__ = "evolutionary_optimizer"
+class DbEAOptimizer(DbBase):
+    __tablename__ = "ea_optimizer"
 
     id = Column(
         Integer,
@@ -20,35 +20,35 @@ class DbEvolutionaryOptimizer(DbBase):
     fitness_table = Column(String, nullable=False)
 
 
-class DbEvolutionaryOptimizerState(DbBase):
-    __tablename__ = "evolutionary_optimizer_state"
+class DbEAOptimizerState(DbBase):
+    __tablename__ = "ea_optimizer_state"
 
-    evolutionary_optimizer_id = Column(Integer, nullable=False, primary_key=True)
+    ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)
     generation_index = Column(Integer, nullable=False, primary_key=True)
     processid_state = Column(Integer, nullable=False)
 
 
-class DbEvolutionaryOptimizerGeneration(DbBase):
-    __tablename__ = "evolutionary_optimizer_generation"
+class DbEAOptimizerGeneration(DbBase):
+    __tablename__ = "ea_optimizer_generation"
 
-    evolutionary_optimizer_id = Column(Integer, nullable=False, primary_key=True)
+    ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)
     generation_index = Column(Integer, nullable=False, primary_key=True)
     individual_index = Column(Integer, nullable=False, primary_key=True)
     individual_id = Column(Integer, nullable=False)
 
 
-class DbEvolutionaryOptimizerIndividual(DbBase):
-    __tablename__ = "evolutionary_optimizer_individual"
+class DbEAOptimizerIndividual(DbBase):
+    __tablename__ = "ea_optimizer_individual"
 
-    evolutionary_optimizer_id = Column(Integer, nullable=False, primary_key=True)
+    ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)
     individual_id = Column(Integer, nullable=False, primary_key=True)
     genotype_id = Column(Integer, nullable=False)
     fitness_id = Column(Integer, nullable=True)
 
 
-class DbEvolutionaryOptimizerParent(DbBase):
-    __tablename__ = "evolutionary_optimizer_parent"
+class DbEAOptimizerParent(DbBase):
+    __tablename__ = "ea_optimizer_parent"
 
-    evolutionary_optimizer_id = Column(Integer, nullable=False, primary_key=True)
+    ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)
     child_individual_id = Column(Integer, nullable=False, primary_key=True)
     parent_individual_id = Column(Integer, nullable=False, primary_key=True)

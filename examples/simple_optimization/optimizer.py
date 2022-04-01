@@ -4,24 +4,26 @@ import pickle
 from random import Random
 from typing import List, Tuple
 
-from genotype import Genotype
+from genotype import Genotype, GenotypeSerializer, develop
 from item import Item
 from optimizer_schema import DbBase, DbOptimizerState
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
-import revolve2.core.optimization.ea.population_management as population_management
-import revolve2.core.optimization.ea.selection as selection
+import revolve2.core.optimization.ec.ea.population_management as population_management
+import revolve2.core.optimization.ec.ea.selection as selection
 from revolve2.core.database import IncompatibleError
+from revolve2.core.database.serializers import FloatSerializer
 from revolve2.core.optimization import ProcessIdGen
-from revolve2.core.optimization.ea import EvolutionaryOptimizer, FitnessFloat
+from revolve2.core.optimization.ec.ea import EAOptimizer
 
 
-class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
+class Optimizer(EAOptimizer[Genotype, float]):
     _process_id: int
     _rng: Random
     _items: List[Item]
+    _max_weight: float
     _num_generations: int
 
     async def ainit_new(  # type: ignore # TODO for now ignoring mypy complaint about LSP problem, override parent's ainit
@@ -34,6 +36,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
         initial_population: List[Genotype],
         rng: Random,
         items: List[Item],
+        max_weight: float,
         num_generations: int,
     ) -> None:
         await super().ainit_new(
@@ -42,7 +45,9 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
             process_id=process_id,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
-            fitness_type=FitnessFloat,
+            genotype_serializer=GenotypeSerializer,
+            fitness_type=float,
+            fitness_serializer=FloatSerializer,
             offspring_size=offspring_size,
             initial_population=initial_population,
         )
@@ -50,6 +55,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
         self._process_id = process_id
         self._rng = rng
         self._items = items
+        self._max_weight = max_weight
         self._num_generations = num_generations
 
         # create database structure if not exists
@@ -67,6 +73,7 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
         process_id_gen: ProcessIdGen,
         rng: Random,
         items: List[Item],
+        max_weight: float,
         num_generations: int,
     ) -> bool:
         if not await super().ainit_from_database(
@@ -75,12 +82,15 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
             process_id=process_id,
             process_id_gen=process_id_gen,
             genotype_type=Genotype,
-            fitness_type=FitnessFloat,
+            genotype_serializer=GenotypeSerializer,
+            fitness_type=float,
+            fitness_serializer=FloatSerializer,
         ):
             return False
 
         self._process_id = process_id
         self._items = items
+        self._max_weight = max_weight
         self._num_generations = num_generations
 
         opt_row = (
@@ -110,23 +120,26 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
         database: AsyncEngine,
         process_id: int,
         process_id_gen: ProcessIdGen,
-    ) -> List[FitnessFloat]:
+    ) -> List[float]:
+        phenotypes = [
+            develop(genotype, self._items, self._max_weight) for genotype in genotypes
+        ]
         return [
-            FitnessFloat(
+            float(
                 sum(
                     [
                         has_items * item.value
-                        for has_items, item in zip(genotype.items, self._items)
+                        for has_items, item in zip(phenotype.items, self._items)
                     ]
                 )
             )
-            for genotype in genotypes
+            for phenotype in phenotypes
         ]
 
     def _select_parents(
         self,
         population: List[Genotype],
-        fitnesses: List[FitnessFloat],
+        fitnesses: List[float],
         num_parent_groups: int,
     ) -> List[List[int]]:
         return [
@@ -142,9 +155,9 @@ class Optimizer(EvolutionaryOptimizer[Genotype, FitnessFloat]):
     def _select_survivors(
         self,
         old_individuals: List[Genotype],
-        old_fitnesses: List[FitnessFloat],
+        old_fitnesses: List[float],
         new_individuals: List[Genotype],
-        new_fitnesses: List[FitnessFloat],
+        new_fitnesses: List[float],
         num_survivors: int,
     ) -> Tuple[List[int], List[int]]:
         assert len(old_individuals) == num_survivors

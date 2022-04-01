@@ -10,12 +10,12 @@ import pandas
 from sqlalchemy.future import select
 
 from revolve2.core.database import open_database_sqlite
-from revolve2.core.optimization.ea.evolutionary_optimizer_schema import (
-    DbEvolutionaryOptimizer,
-    DbEvolutionaryOptimizerGeneration,
-    DbEvolutionaryOptimizerIndividual,
+from revolve2.core.database.serializers import DbFloat
+from revolve2.core.optimization.ec.ea import (
+    DbEAOptimizer,
+    DbEAOptimizerGeneration,
+    DbEAOptimizerIndividual,
 )
-from revolve2.core.optimization.ea.fitness_float_schema import DbFitnessFloat
 
 
 def plot(database: str, optimizer_id: int) -> None:
@@ -24,33 +24,27 @@ def plot(database: str, optimizer_id: int) -> None:
     # read the optimizer data into a pandas dataframe
     df = pandas.read_sql(
         select(
-            DbEvolutionaryOptimizer,
-            DbEvolutionaryOptimizerGeneration,
-            DbEvolutionaryOptimizerIndividual,
-            DbFitnessFloat,
+            DbEAOptimizer,
+            DbEAOptimizerGeneration,
+            DbEAOptimizerIndividual,
+            DbFloat,
         ).filter(
-            (DbEvolutionaryOptimizer.process_id == optimizer_id)
+            (DbEAOptimizer.process_id == optimizer_id)
+            & (DbEAOptimizerGeneration.ea_optimizer_id == DbEAOptimizer.id)
+            & (DbEAOptimizerIndividual.ea_optimizer_id == DbEAOptimizer.id)
+            & (DbEAOptimizerIndividual.fitness_id == DbFloat.id)
             & (
-                DbEvolutionaryOptimizerGeneration.evolutionary_optimizer_id
-                == DbEvolutionaryOptimizer.id
-            )
-            & (
-                DbEvolutionaryOptimizerIndividual.evolutionary_optimizer_id
-                == DbEvolutionaryOptimizer.id
-            )
-            & (DbEvolutionaryOptimizerIndividual.fitness_id == DbFitnessFloat.id)
-            & (
-                DbEvolutionaryOptimizerGeneration.individual_id
-                == DbEvolutionaryOptimizerIndividual.individual_id
+                DbEAOptimizerGeneration.individual_id
+                == DbEAOptimizerIndividual.individual_id
             )
         ),
         db,
     )
     # calculate max min avg
     describe = (
-        df[["generation_index", "fitness"]]
+        df[["generation_index", "value"]]
         .groupby(by="generation_index")
-        .describe()["fitness"]
+        .describe()["value"]
     )
     mean = describe[["mean"]].values.squeeze()
     std = describe[["std"]].values.squeeze()

@@ -11,9 +11,10 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
 
-from revolve2.core.database import IncompatibleError, Tableable
+from revolve2.core.database import IncompatibleError, Serializer
 from revolve2.core.modular_robot import ModularRobot
 from revolve2.genotypes.cppnwin import Genotype as CppnwinGenotype
+from revolve2.genotypes.cppnwin import GenotypeSerializer as CppnwinGenotypeSerializer
 from revolve2.genotypes.cppnwin import crossover_v1, mutate_v1
 from revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1 import (
     develop_v1 as body_develop,
@@ -75,14 +76,16 @@ _MULTINEAT_PARAMS = _make_multineat_params()
 
 
 @dataclass
-class Genotype(Tableable):
+class Genotype:
     body: CppnwinGenotype
     brain: CppnwinGenotype
 
+
+class GenotypeSerializer(Serializer[Genotype]):
     @classmethod
     async def create_tables(cls, session: AsyncSession) -> None:
         await (await session.connection()).run_sync(DbBase.metadata.create_all)
-        await CppnwinGenotype.create_tables(session)
+        await CppnwinGenotypeSerializer.create_tables(session)
 
     @classmethod
     def identifying_table(cls) -> str:
@@ -92,8 +95,10 @@ class Genotype(Tableable):
     async def to_database(
         cls, session: AsyncSession, objects: List[Genotype]
     ) -> List[int]:
-        body_ids = await CppnwinGenotype.to_database(session, [o.body for o in objects])
-        brain_ids = await CppnwinGenotype.to_database(
+        body_ids = await CppnwinGenotypeSerializer.to_database(
+            session, [o.body for o in objects]
+        )
+        brain_ids = await CppnwinGenotypeSerializer.to_database(
             session, [o.brain for o in objects]
         )
 
@@ -127,8 +132,12 @@ class Genotype(Tableable):
         body_ids = [id_map[id].body_id for id in ids]
         brain_ids = [id_map[id].brain_id for id in ids]
 
-        body_genotypes = await CppnwinGenotype.from_database(session, body_ids)
-        brain_genotypes = await CppnwinGenotype.from_database(session, brain_ids)
+        body_genotypes = await CppnwinGenotypeSerializer.from_database(
+            session, body_ids
+        )
+        brain_genotypes = await CppnwinGenotypeSerializer.from_database(
+            session, brain_ids
+        )
 
         genotypes = [
             Genotype(body, brain)

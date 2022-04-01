@@ -21,6 +21,8 @@ from revolve2.core.physics.running import (
 
 class LocalRunner(Runner):
     class _Simulator:
+        ENV_SIZE = 0.5
+
         @dataclass
         class GymEnv:
             env: gymapi.Env  # environment handle
@@ -74,17 +76,19 @@ class LocalRunner(Runner):
             plane_params = gymapi.PlaneParams()
             plane_params.normal = gymapi.Vec3(0, 0, 1)
             plane_params.distance = 0
-            plane_params.static_friction = 0.8
-            plane_params.dynamic_friction = 0.5
+            plane_params.static_friction = 1.0
+            plane_params.dynamic_friction = 1.0
             plane_params.restitution = 0
             self._gym.add_ground(self._sim, plane_params)
 
-            for env_descr in self._batch.environments:
+            num_per_row = int(math.sqrt(len(self._batch.environments)))
+
+            for env_index, env_descr in enumerate(self._batch.environments):
                 env = self._gym.create_env(
                     self._sim,
-                    gymapi.Vec3(-25.0, -25.0, 0.0),  # TODO make these configurable
-                    gymapi.Vec3(25.0, 25.0, 25.0),
-                    1,
+                    gymapi.Vec3(-self.ENV_SIZE, -self.ENV_SIZE, 0.0),
+                    gymapi.Vec3(self.ENV_SIZE, self.ENV_SIZE, self.ENV_SIZE),
+                    num_per_row,
                 )
 
                 gymenv = self.GymEnv(env, [])
@@ -124,15 +128,15 @@ class LocalRunner(Runner):
                         posed_actor.orientation.z,
                         posed_actor.orientation.w,
                     )
-                    actor_handle = self._gym.create_actor(
-                        env, actor_asset, pose, f"robot_{actor_index}", 0, 0
+                    actor_handle: int = self._gym.create_actor(
+                        env, actor_asset, pose, f"robot_{actor_index}", env_index, 0
                     )
 
                     # TODO make all this configurable.
                     props = self._gym.get_actor_dof_properties(env, actor_handle)
                     props["driveMode"].fill(gymapi.DOF_MODE_POS)
-                    props["stiffness"].fill(1000.0)
-                    props["damping"].fill(600.0)
+                    props["stiffness"].fill(0.5)
+                    props["damping"].fill(0.01)
                     self._gym.set_actor_dof_properties(env, actor_handle, props)
 
                     all_rigid_props = self._gym.get_actor_rigid_shape_properties(
@@ -161,8 +165,13 @@ class LocalRunner(Runner):
             viewer = self._gym.create_viewer(self._sim, gymapi.CameraProperties())
             if viewer is None:
                 raise RuntimeError()
-            cam_pos = gymapi.Vec3(-4.0, -1.0, 4.0)
-            cam_target = gymapi.Vec3(0.0, 0.0, 0.0)
+            num_per_row = math.sqrt(len(self._batch.environments))
+            cam_pos = gymapi.Vec3(
+                num_per_row / 2.0 - 0.5, num_per_row / 2.0 + 0.5, num_per_row
+            )
+            cam_target = gymapi.Vec3(
+                num_per_row / 2.0 - 0.5, num_per_row / 2.0 + 0.5 - 1, 0.0
+            )
             self._gym.viewer_camera_look_at(viewer, None, cam_pos, cam_target)
 
             return viewer
@@ -175,6 +184,9 @@ class LocalRunner(Runner):
 
             last_control_time = 0.0
             last_sample_time = 0.0
+
+            # sample initial state
+            states.append((0.0, self._get_state()))
 
             while (
                 time := self._gym.get_sim_time(self._sim)
@@ -228,14 +240,14 @@ class LocalRunner(Runner):
             state = State([])
 
             for gymenv in self._gymenvs:
-                state.envs.append(EnvironmentState([]))
-                for actor_index, _ in enumerate(gymenv.actors):
+                env_state = EnvironmentState([])
+                for actor_handle in gymenv.actors:
                     pose = self._gym.get_actor_rigid_body_states(
-                        gymenv.env, actor_index, gymapi.STATE_POS
+                        gymenv.env, actor_handle, gymapi.STATE_POS
                     )["pose"]
                     position = pose["p"][0]  # [0] is center of root element
-                    orientation = pose["r"][0]  # -> [0] is rotation of root element
-                    state.envs[-1].actor_states.append(
+                    orientation = pose["r"][0]
+                    env_state.actor_states.append(
                         ActorState(
                             Vector3([position[0], position[1], position[2]]),
                             Quaternion(
@@ -248,6 +260,7 @@ class LocalRunner(Runner):
                             ),
                         )
                     )
+                state.envs.append(env_state)
 
             return state
 

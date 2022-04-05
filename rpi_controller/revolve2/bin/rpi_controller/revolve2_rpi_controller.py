@@ -81,41 +81,66 @@ class Program:
         self._stop = False
 
     def main(self) -> None:
-        parser = argparse.ArgumentParser()
-        parser.add_argument("config_file", type=str)
-        parser.add_argument(
-            "--debug", help="Print debug information.", action="store_true"
-        )
-        parser.add_argument(
-            "--dry",
-            help="If set, gpio output is skipped.",
-            action="store_true",
-        )
-        parser.add_argument(
-            "--log", help="If set, outputs controller log to this file.", type=str
-        )
-        args = parser.parse_args()
+        try:
+            parser = argparse.ArgumentParser()
+            parser.add_argument("config_file", type=str)
+            parser.add_argument(
+                "--debug", help="Print debug information.", action="store_true"
+            )
+            parser.add_argument(
+                "--dry",
+                help="If set, gpio output is skipped.",
+                action="store_true",
+            )
+            parser.add_argument(
+                "--log", help="If set, outputs controller log to this file.", type=str
+            )
+            parser.add_argument(
+                "--all",
+                help="Set all outputs provided in the config file to the given value.",
+                type=str,
+                choices=["min", "center", "max"],
+            )
+            args = parser.parse_args()
 
-        self._debug = args.debug
-        self._dry = args.dry
-        self._log_file = args.log
-        self._log = []
+            self._debug = args.debug
+            self._dry = args.dry
+            self._log_file = args.log
+            self._log = []
 
-        with open(args.config_file) as file:
-            config = json.load(file)
-        jsonschema.validate(config, self._CONFIG_SCHEMA)
+            with open(args.config_file) as file:
+                config = json.load(file)
+            jsonschema.validate(config, self._CONFIG_SCHEMA)
 
-        self._load_controller(config)
+            self._load_controller(config)
 
-        input("Press enter to start controller. Press enter again to stop.\n")
+            if args.all is not None:
+                if args.all == "min":
+                    target = -1.0
+                elif args.all == "center":
+                    target = 0.0
+                else:
+                    target = 1.0
+                self._set_targets([target for _ in self._controller.get_dof_targets()])
+                input("Press enter to stop.\n")
+            else:
+                self._set_targets(self._controller.get_dof_targets())
+                user = input(
+                    "Press enter to start controller. Press enter again to stop.\nOR\nType Q to stop now.\n"
+                )
+                if user == "q" or user == "Q":
+                    self._stop_pwm()
+                else:
+                    asyncio.get_event_loop().run_until_complete(
+                        asyncio.gather(self._run_interface(), self._run_controller())
+                    )
 
-        asyncio.get_event_loop().run_until_complete(
-            asyncio.gather(self._run_interface(), self._run_controller())
-        )
-
-        if self._log_file is not None:
-            with open(self._log_file, "w") as log_file:
-                json.dump([entry.__dict__ for entry in self._log], log_file)
+            if self._log_file is not None:
+                with open(self._log_file, "w") as log_file:
+                    json.dump([entry.__dict__ for entry in self._log], log_file)
+        except KeyboardInterrupt:
+            # this is really ugly but whatever
+            self._stop_pwm()
 
     async def _run_interface(self) -> None:
         await asyncio.get_event_loop().run_in_executor(None, sys.stdin.readline)
@@ -137,6 +162,8 @@ class Program:
             self._set_targets(targets)
 
             self._record_log(last_update_time)
+
+        self._stop_pwm()
 
     def _record_log(self, time: float) -> None:
         if self._log_file is not None:
@@ -195,8 +222,6 @@ class Program:
             except AttributeError as err:
                 raise RuntimeError("Could not initialize gpios.") from err
 
-        self._set_targets(targets)
-
     def _set_targets(self, targets: List[float]) -> None:
         if self._debug:
             print("Setting pins to:")
@@ -217,6 +242,15 @@ class Program:
                 self._gpio.set_PWM_dutycycle(
                     pin.pin, CENTER + (invert_mul * min(1, max(-1, target)) * ANGLE60)
                 )
+
+    def _stop_pwm(self) -> None:
+        if self._debug:
+            print(
+                "Turning off all pwm signals for pins that were used by this controller."
+            )
+        for pin in self._pins:
+            if not self._dry:
+                self._gpio.set_PWM_dutycycle(pin.pin, 0)
 
 
 def main() -> None:

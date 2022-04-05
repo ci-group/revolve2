@@ -8,4 +8,6 @@ mypy simple_optimization && \
 echo "examples/simulate_isaac:" && \
 mypy simulate_isaac && \
 echo "examples/openai_es:" && \
-mypy openai_es
+mypy openai_es && \
+echo "examples/rpi_controller_remote:" && \
+mypy rpi_controller_remote

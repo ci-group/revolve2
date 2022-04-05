@@ -8,4 +8,6 @@ mypy simple_optimization && \
 echo "examples/simulate_isaac:" && \
 echo "isaacgym not open source. skipping.." && \
 echo "examples/openai_es:" && \
-echo "isaacgym not open source. skipping.."
+echo "isaacgym not open source. skipping.." && \
+echo "examples/rpi_controller_remote:" && \
+mypy rpi_controller_remote

@@ -6,4 +6,6 @@ echo "isaacgym not open source. skipping.." && \
 echo "examples/simple_optimization:" && \
 mypy simple_optimization && \
 echo "examples/simulate_isaac:" && \
+echo "isaacgym not open source. skipping.." && \
+echo "examples/openai_es:" && \
 echo "isaacgym not open source. skipping.."

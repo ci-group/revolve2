@@ -1,6 +1,8 @@
 """
 Plot average, min, and max fitness over generations, using the results of the evolutionary optimizer.
-Assumes fitness is a float and database is files.
+Assumes fitnesses is a floats.
+Installed as ``revolve2_plot_ea_fitness_float``.
+See ``revolve2_plot_ea_fitness_float --help`` for usage.
 """
 
 import argparse

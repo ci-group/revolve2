@@ -1,3 +1,9 @@
+"""
+Script to run an ActorController on a Raspberry Pi.
+Installed as ``revolve2_rpi_controller``.
+See ``revolve2_rpi_controller --help`` for usage.
+"""
+
 import argparse
 import asyncio
 import importlib

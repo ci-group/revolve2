@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python Module Index &mdash; revolve2 v0.1.0-alpha2-alpha2 documentation</title>
+  <title>Python Module Index &mdash; revolve2 v0.2.0-alpha3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -46,12 +46,7 @@
 <li class="toctree-l2"><a class="reference internal" href="installation/rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
@@ -61,7 +56,7 @@
 <li class="toctree-l1"><a class="reference internal" href="api_reference/revolve2.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.core.html">core</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.database.sqlite.html">sqlite</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.database.serializers.html">serializers</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.modular_robot.html">modular_robot</a><ul>
@@ -69,7 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.optimization.ea.html">ea</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.optimization.ec.html">ec</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.physics.html">physics</a><ul>
@@ -77,16 +72,15 @@
 <li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.analysis.html">analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.analysis.core.html">core</a></li>
-<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.analysis.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.rpi_controller_remote.html">rpi_controller_remote</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.genotypes.html">genotypes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.genotypes.cppnwin.html">cppnwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.genotypes.cppnwin.html">cppnwin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.genotypes.cppnwin.modular_robot.html">modular_robot</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.runners.html">runners</a><ul>
@@ -98,6 +92,20 @@
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/revolve2.bin.html">bin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.bin.core.html">core</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.bin.core.optimization.html">optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.bin.rpi_controller.html">rpi_controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concepts/index.html">Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concepts/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts/cpg.html">CPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concepts/cppnwin.html">CPPNWIN</a></li>
 </ul>
 </li>
 </ul>
@@ -160,17 +168,37 @@
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.analysis.html#module-revolve2.analysis"><code class="xref">revolve2.analysis</code></a></td><td>
+       <a href="api_reference/revolve2.bin.html#module-revolve2.bin"><code class="xref">revolve2.bin</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.analysis.core.html#module-revolve2.analysis.core"><code class="xref">revolve2.analysis.core</code></a></td><td>
+       <a href="api_reference/revolve2.bin.core.html#module-revolve2.bin.core"><code class="xref">revolve2.bin.core</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.analysis.core.html#module-revolve2.analysis.core.plot_ea_fitness"><code class="xref">revolve2.analysis.core.plot_ea_fitness</code></a></td><td>
+       <a href="api_reference/revolve2.bin.core.optimization.html#module-revolve2.bin.core.optimization"><code class="xref">revolve2.bin.core.optimization</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.bin.core.optimization.ec.html#module-revolve2.bin.core.optimization.ec"><code class="xref">revolve2.bin.core.optimization.ec</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.bin.core.optimization.ec.ea.html#module-revolve2.bin.core.optimization.ec.ea"><code class="xref">revolve2.bin.core.optimization.ec.ea</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.bin.rpi_controller.html#module-revolve2.bin.rpi_controller"><code class="xref">revolve2.bin.rpi_controller</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.bin.rpi_controller.html#module-revolve2.bin.rpi_controller.revolve2_rpi_controller"><code class="xref">revolve2.bin.rpi_controller.revolve2_rpi_controller</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -185,7 +213,7 @@
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.core.database.sqlite.html#module-revolve2.core.database.sqlite"><code class="xref">revolve2.core.database.sqlite</code></a></td><td>
+       <a href="api_reference/revolve2.core.database.serializers.html#module-revolve2.core.database.serializers"><code class="xref">revolve2.core.database.serializers</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -205,27 +233,27 @@
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.core.optimization.ea.html#module-revolve2.core.optimization.ea"><code class="xref">revolve2.core.optimization.ea</code></a></td><td>
+       <a href="api_reference/revolve2.core.optimization.ec.html#module-revolve2.core.optimization.ec"><code class="xref">revolve2.core.optimization.ec</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.core.optimization.ea.html#module-revolve2.core.optimization.ea.analyzer"><code class="xref">revolve2.core.optimization.ea.analyzer</code></a></td><td>
+       <a href="api_reference/revolve2.core.optimization.ec.ea.html#module-revolve2.core.optimization.ec.ea"><code class="xref">revolve2.core.optimization.ec.ea</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.core.optimization.ea.modular_robot.html#module-revolve2.core.optimization.ea.modular_robot"><code class="xref">revolve2.core.optimization.ea.modular_robot</code></a></td><td>
+       <a href="api_reference/revolve2.core.optimization.ec.ea.population_management.html#module-revolve2.core.optimization.ec.ea.population_management"><code class="xref">revolve2.core.optimization.ec.ea.population_management</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.core.optimization.ea.population_management.html#module-revolve2.core.optimization.ea.population_management"><code class="xref">revolve2.core.optimization.ea.population_management</code></a></td><td>
+       <a href="api_reference/revolve2.core.optimization.ec.ea.selection.html#module-revolve2.core.optimization.ec.ea.selection"><code class="xref">revolve2.core.optimization.ec.ea.selection</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
-       <a href="api_reference/revolve2.core.optimization.ea.selection.html#module-revolve2.core.optimization.ea.selection"><code class="xref">revolve2.core.optimization.ea.selection</code></a></td><td>
+       <a href="api_reference/revolve2.core.optimization.ec.html#module-revolve2.core.optimization.ec.openai_es"><code class="xref">revolve2.core.optimization.ec.openai_es</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
@@ -255,12 +283,37 @@
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.core.rpi_controller_remote.html#module-revolve2.core.rpi_controller_remote"><code class="xref">revolve2.core.rpi_controller_remote</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
        <a href="api_reference/revolve2.genotypes.html#module-revolve2.genotypes"><code class="xref">revolve2.genotypes</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>
        <td>&#160;&#160;&#160;
        <a href="api_reference/revolve2.genotypes.cppnwin.html#module-revolve2.genotypes.cppnwin"><code class="xref">revolve2.genotypes.cppnwin</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.genotypes.cppnwin.html#module-revolve2.genotypes.cppnwin.genotype_schema"><code class="xref">revolve2.genotypes.cppnwin.genotype_schema</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.genotypes.cppnwin.modular_robot.html#module-revolve2.genotypes.cppnwin.modular_robot"><code class="xref">revolve2.genotypes.cppnwin.modular_robot</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.genotypes.cppnwin.modular_robot.html#module-revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1"><code class="xref">revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1</code></a></td><td>
+       <em></em></td></tr>
+     <tr class="cg-1">
+       <td></td>
+       <td>&#160;&#160;&#160;
+       <a href="api_reference/revolve2.genotypes.cppnwin.modular_robot.html#module-revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1"><code class="xref">revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1</code></a></td><td>
        <em></em></td></tr>
      <tr class="cg-1">
        <td></td>

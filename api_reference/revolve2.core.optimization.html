@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.optimization package &mdash; revolve2 v0.1.0-alpha2-alpha2 documentation</title>
+  <title>revolve2.core.optimization package &mdash; revolve2 v0.2.0-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="revolve2.core.optimization.ea package" href="revolve2.core.optimization.ea.html" />
+    <link rel="next" title="revolve2.core.optimization.ec package" href="revolve2.core.optimization.ec.html" />
     <link rel="prev" title="revolve2.core.modular_robot.brains package" href="revolve2.core.modular_robot.brains.html" /> 
 </head>
 
@@ -46,12 +46,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
@@ -61,7 +56,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="revolve2.html">API Reference</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="revolve2.core.html">core</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.sqlite.html">sqlite</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.serializers.html">serializers</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.modular_robot.html">modular_robot</a><ul>
@@ -69,7 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l3 current"><a class="current reference internal" href="#">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ea.html">ea</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ec.html">ec</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul>
@@ -77,16 +72,15 @@
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.analysis.html">analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.analysis.core.html">core</a></li>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.analysis.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.core.rpi_controller_remote.html">rpi_controller_remote</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.genotypes.html">genotypes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.genotypes.cppnwin.html">cppnwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.genotypes.cppnwin.html">cppnwin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.genotypes.cppnwin.modular_robot.html">modular_robot</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.runners.html">runners</a><ul>
@@ -98,6 +92,20 @@
 <li class="toctree-l3"><a class="reference internal" href="revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.bin.html">bin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.core.html">core</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.bin.core.optimization.html">optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.rpi_controller.html">rpi_controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
 </ul>
 </li>
 </ul>
@@ -133,12 +141,60 @@
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="revolve2.core.optimization.ea.html">ea</a></li>
+<li class="toctree-l1"><a class="reference internal" href="revolve2.core.optimization.ec.html">ec</a></li>
 </ul>
 </div>
 </section>
 <section id="module-revolve2.core.optimization">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.optimization" title="Permalink to this headline"></a></h2>
+<p>Evolutionary computation optimizers</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.optimization.Process">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Process</span></span><a class="headerlink" href="#revolve2.core.optimization.Process" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.optimization.Process.from_database">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.engine.AsyncEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization._process.TChild</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.optimization.Process.from_database" title="Permalink to this definition"></a></dt>
+<dd><p>Create instance and initialize from database.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Instance if init from database was possible or None.
+None means there was no data in the database to initialize this object.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="revolve2.serialization.html#revolve2.serialization.SerializeError" title="revolve2.serialization.SerializeError"><strong>SerializeError</strong></a> – If database incompatible.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.optimization.Process.new">
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.engine.AsyncEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.core.optimization._process.TChild</span></span></span><a class="headerlink" href="#revolve2.core.optimization.Process.new" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.optimization.ProcessIdGen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProcessIdGen</span></span><a class="headerlink" href="#revolve2.core.optimization.ProcessIdGen" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.optimization.ProcessIdGen.gen">
+<span class="sig-name descname"><span class="pre">gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ProcessIdGen.gen" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.optimization.ProcessIdGen.get_state">
+<span class="sig-name descname"><span class="pre">get_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ProcessIdGen.get_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.optimization.ProcessIdGen.set_state">
+<span class="sig-name descname"><span class="pre">set_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ProcessIdGen.set_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 

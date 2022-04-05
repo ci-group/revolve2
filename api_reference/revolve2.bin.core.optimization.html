@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>revolve2.bin.core.optimization namespace &mdash; revolve2 v0.2.0-alpha3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="revolve2.bin.core.optimization.ec namespace" href="revolve2.bin.core.optimization.ec.html" />
+    <link rel="prev" title="revolve2.bin.core namespace" href="revolve2.bin.core.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> revolve2
+            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials/optimize_locomotion.html">Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="revolve2.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="revolve2.core.html">core</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.core.database.html">database</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.serializers.html">serializers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.core.modular_robot.html">modular_robot</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.modular_robot.brains.html">brains</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.core.optimization.html">optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ec.html">ec</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.actor.html">actor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.running.html">running</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.core.rpi_controller_remote.html">rpi_controller_remote</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.genotypes.html">genotypes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.genotypes.cppnwin.html">cppnwin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.genotypes.cppnwin.modular_robot.html">modular_robot</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.runners.html">runners</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.runners.isaacgym.html">isaacgym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.actor_controllers.cpg.html">cpg</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="revolve2.bin.html">bin</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="revolve2.bin.core.html">core</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.rpi_controller.html">rpi_controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">revolve2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="revolve2.html">revolve2 namespace</a> &raquo;</li>
+          <li><a href="revolve2.bin.html">revolve2.bin namespace</a> &raquo;</li>
+          <li><a href="revolve2.bin.core.html">revolve2.bin.core namespace</a> &raquo;</li>
+      <li>revolve2.bin.core.optimization namespace</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-revolve2.bin.core.optimization">
+<span id="revolve2-bin-core-optimization-namespace"></span><h1>revolve2.bin.core.optimization namespace<a class="headerlink" href="#module-revolve2.bin.core.optimization" title="Permalink to this headline"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="revolve2.bin.core.optimization.ec.html">ec</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Computational Intelligence Group, Vrije Universiteit Amsterdam &amp; Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

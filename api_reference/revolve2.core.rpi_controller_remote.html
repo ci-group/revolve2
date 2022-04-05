@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.analysis namespace &mdash; revolve2 v0.1.0-alpha2-alpha2 documentation</title>
+  <title>revolve2.core.rpi_controller_remote package &mdash; revolve2 v0.2.0-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -19,7 +19,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="revolve2.analysis.core namespace" href="revolve2.analysis.core.html" />
+    <link rel="next" title="revolve2.serialization package" href="revolve2.serialization.html" />
     <link rel="prev" title="revolve2.core.physics.running package" href="revolve2.core.physics.running.html" /> 
 </head>
 
@@ -46,12 +46,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
@@ -59,9 +54,9 @@
 </ul>
 </li>
 <li class="toctree-l1 current"><a class="reference internal" href="revolve2.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="revolve2.core.html">core</a><ul>
+<li class="toctree-l2 current"><a class="reference internal" href="revolve2.core.html">core</a><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.sqlite.html">sqlite</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.serializers.html">serializers</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.modular_robot.html">modular_robot</a><ul>
@@ -69,7 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ea.html">ea</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ec.html">ec</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul>
@@ -77,16 +72,15 @@
 <li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.running.html">running</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">analysis</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.analysis.core.html">core</a></li>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.analysis.isaacgym.html">isaacgym</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">rpi_controller_remote</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.genotypes.html">genotypes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.genotypes.cppnwin.html">cppnwin</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.genotypes.cppnwin.html">cppnwin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.genotypes.cppnwin.modular_robot.html">modular_robot</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.runners.html">runners</a><ul>
@@ -98,6 +92,20 @@
 <li class="toctree-l3"><a class="reference internal" href="revolve2.actor_controllers.cpg.html">cpg</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.bin.html">bin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.core.html">core</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.bin.core.optimization.html">optimization</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.rpi_controller.html">rpi_controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
 </ul>
 </li>
 </ul>
@@ -117,7 +125,8 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="revolve2.html">revolve2 namespace</a> &raquo;</li>
-      <li>revolve2.analysis namespace</li>
+          <li><a href="revolve2.core.html">revolve2.core package</a> &raquo;</li>
+      <li>revolve2.core.rpi_controller_remote package</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -126,16 +135,40 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-revolve2.analysis">
-<span id="revolve2-analysis-namespace"></span><h1>revolve2.analysis namespace<a class="headerlink" href="#module-revolve2.analysis" title="Permalink to this headline"></a></h1>
-<section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="revolve2.analysis.core.html">core</a></li>
-<li class="toctree-l1"><a class="reference internal" href="revolve2.analysis.isaacgym.html">isaacgym</a></li>
-</ul>
-</div>
+  <section id="revolve2-core-rpi-controller-remote-package">
+<h1>revolve2.core.rpi_controller_remote package<a class="headerlink" href="#revolve2-core-rpi-controller-remote-package" title="Permalink to this headline"></a></h1>
+<section id="module-revolve2.core.rpi_controller_remote">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.rpi_controller_remote" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.rpi_controller_remote.RpiControllerRemote">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RpiControllerRemote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">asyncssh.connection.SSHClientConnection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.rpi_controller_remote.RpiControllerRemote" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.rpi_controller_remote.RpiControllerRemote.run_controller">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_controller</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.rpi_controller_remote.RpiControllerRemote.run_controller" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Config</dt>
+<dd class="field-odd"><p>config to use for rpi controller.</p>
+</dd>
+<dt class="field-even">Run_time</dt>
+<dd class="field-even"><p>run controller for this many seconds.</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Tuple of controller start time and controller log.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>RpiControllerError</strong> – if something fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.rpi_controller_remote.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rpi_ip</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncIterator</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.rpi_controller_remote.RpiControllerRemote" title="revolve2.core.rpi_controller_remote._rpi_controller_remote.RpiControllerRemote"><span class="pre">RpiControllerRemote</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.rpi_controller_remote.connect" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 

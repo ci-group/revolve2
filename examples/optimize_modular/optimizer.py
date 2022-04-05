@@ -1,16 +1,15 @@
-from __future__ import annotations
-
 import math
 import pickle
 from random import Random
 from typing import List, Tuple
 
 import multineat
+import sqlalchemy
 from genotype import Genotype, GenotypeSerializer, crossover, develop, mutate
-from optimizer_schema import DbBase, DbOptimizerState
 from pyrr import Quaternion, Vector3
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
 
 import revolve2.core.optimization.ec.ea.population_management as population_management
@@ -276,3 +275,26 @@ class Optimizer(EAOptimizer[Genotype, float]):
                 num_generations=self._num_generations,
             )
         )
+
+
+DbBase = declarative_base()
+
+
+class DbOptimizerState(DbBase):
+    __tablename__ = "optimizer"
+
+    process_id = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable=False,
+        primary_key=True,
+    )
+    generation_index = sqlalchemy.Column(
+        sqlalchemy.Integer, nullable=False, primary_key=True
+    )
+    rng = sqlalchemy.Column(sqlalchemy.PickleType, nullable=False)
+    innov_db_body = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    innov_db_brain = sqlalchemy.Column(sqlalchemy.String, nullable=False)
+    simulation_time = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    sampling_frequency = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
+    control_frequency = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
+    num_generations = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)

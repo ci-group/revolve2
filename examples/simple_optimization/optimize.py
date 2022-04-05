@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 from random import Random
 
-from genotype import Genotype
 from genotype import random as random_genotype
 from item import Item
 from optimizer import Optimizer

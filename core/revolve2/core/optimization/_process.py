@@ -76,6 +76,7 @@ class Process:
     ) -> Optional[TChild]:
         """
         Create instance and initialize from database.
+
         :returns: Instance if init from database was possible or None.
                   None means there was no data in the database to initialize this object.
         :raises SerializeError: If database incompatible.

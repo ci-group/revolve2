@@ -1,11 +1,11 @@
 from genotype import GenotypeSerializer, develop
-from revolve2.analysis.isaacgym import ModularRobotRerunner
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.database.serializers import DbFloat
 from revolve2.core.optimization.ec.ea import DbEAOptimizerIndividual
+from revolve2.runners.isaacgym import ModularRobotRerunner
 
 
 async def main() -> None:

@@ -1,6 +1,5 @@
 from optimize import make_body
 from optimizer import Brain
-from revolve2.runners.isaacgym import ModularRobotRerunner
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
@@ -9,6 +8,7 @@ from revolve2.core.database.serializers import DbNdarray1xnItem
 from revolve2.core.modular_robot import Analyzer, ModularRobot
 from revolve2.core.modular_robot.brains import Cpg
 from revolve2.core.optimization.ec.openai_es import DbOpenaiESOptimizerIndividual
+from revolve2.runners.isaacgym import ModularRobotRerunner
 
 
 async def main() -> None:

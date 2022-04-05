@@ -1,12 +1,9 @@
-from __future__ import annotations
-
-import sys
 from dataclasses import dataclass
 from random import Random
 from typing import List
 
 import multineat
-from sqlalchemy import Column, Integer
+import sqlalchemy
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
@@ -223,7 +220,7 @@ def develop(genotype: Genotype) -> ModularRobot:
 
 def _multineat_rng_from_random(rng: Random) -> multineat.RNG:
     multineat_rng = multineat.RNG()
-    multineat_rng.Seed(rng.randint(0, sys.maxsize))
+    multineat_rng.Seed(rng.randint(0, 2**31))
     return multineat_rng
 
 
@@ -233,13 +230,13 @@ DbBase = declarative_base()
 class DbGenotype(DbBase):
     __tablename__ = "genotype"
 
-    id = Column(
-        Integer,
+    id = sqlalchemy.Column(
+        sqlalchemy.Integer,
         nullable=False,
         unique=True,
         autoincrement=True,
         primary_key=True,
     )
 
-    body_id = Column(Integer, nullable=False)
-    brain_id = Column(Integer, nullable=False)
+    body_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    brain_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)

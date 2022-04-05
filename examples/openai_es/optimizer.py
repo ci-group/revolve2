@@ -37,7 +37,7 @@ class Optimizer(OpenaiESOptimizer):
 
     _num_generations: int
 
-    async def ainit_new(
+    async def ainit_new(  # type: ignore # TODO for now ignoring mypy complaint about LSP problem, override parent's ainit
         self,
         database: AsyncEngine,
         session: AsyncSession,
@@ -83,7 +83,7 @@ class Optimizer(OpenaiESOptimizer):
         self._control_frequency = control_frequency
         self._num_generations = num_generations
 
-    async def ainit_from_database(
+    async def ainit_from_database(  # type: ignore # see comment at ainit_new
         self,
         database: AsyncEngine,
         session: AsyncSession,
@@ -95,7 +95,7 @@ class Optimizer(OpenaiESOptimizer):
         sampling_frequency: float,
         control_frequency: float,
         num_generations: int,
-    ) -> None:
+    ) -> bool:
         if not await super().ainit_from_database(
             database=database,
             session=session,

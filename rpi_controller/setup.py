@@ -21,7 +21,7 @@ setup(
     zip_safe=False,
     entry_points={
         "console_scripts": [
-            "revolve2_rpi_controller=revolve2.rpi_controller.bin.revolve2_rpi_controller:main",
+            "revolve2_rpi_controller=revolve2.bin.rpi_controller.revolve2_rpi_controller:main",
         ]
     },
 )

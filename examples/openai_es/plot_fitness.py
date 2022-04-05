@@ -7,7 +7,6 @@ import argparse
 
 import matplotlib.pyplot as plt
 import pandas
-import sqlalchemy
 from sqlalchemy.future import select
 
 from revolve2.core.database import open_database_sqlite

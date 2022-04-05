@@ -1,6 +1,6 @@
 from optimize import make_body
 from optimizer import Brain
-from revolve2.analysis.isaacgym import ModularRobotRerunner
+from revolve2.runners.isaacgym import ModularRobotRerunner
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 

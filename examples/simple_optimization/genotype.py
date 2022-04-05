@@ -19,6 +19,22 @@ class Genotype:
     items: List[bool]
 
 
+def random(rng: Random, has_item_prob: float, num_items: int) -> Genotype:
+    return Genotype([rng.random() < has_item_prob for _ in range(num_items)])
+
+
+def develop(genotype: Genotype, items: List[Item], maximum_weight: float) -> Phenotype:
+    phenotype = []
+    total_weight = 0
+    for has_item, item in zip(genotype.items, items):
+        if has_item and total_weight + item.weight < maximum_weight:
+            phenotype.append(True)
+        else:
+            phenotype.append(False)
+
+    return Phenotype(phenotype)
+
+
 class GenotypeSerializer(Serializer[Genotype]):
     @classmethod
     async def create_tables(cls, session: AsyncSession) -> None:
@@ -61,22 +77,6 @@ class GenotypeSerializer(Serializer[Genotype]):
         items_str = [id_map[id].items for id in ids]
         items_bool = [[item == "1" for item in items] for items in items_str]
         return [Genotype(items) for items in items_bool]
-
-
-def random(rng: Random, has_item_prob: float, num_items: int) -> Genotype:
-    return Genotype([rng.random() < has_item_prob for _ in range(num_items)])
-
-
-def develop(genotype: Genotype, items: List[Item], maximum_weight: float) -> Phenotype:
-    phenotype = []
-    total_weight = 0
-    for has_item, item in zip(genotype.items, items):
-        if has_item and total_weight + item.weight < maximum_weight:
-            phenotype.append(True)
-        else:
-            phenotype.append(False)
-
-    return Phenotype(phenotype)
 
 
 DbBase = declarative_base()

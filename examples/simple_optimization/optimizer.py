@@ -4,11 +4,12 @@ import pickle
 from random import Random
 from typing import List, Tuple
 
+import sqlalchemy
 from genotype import Genotype, GenotypeSerializer, develop
 from item import Item
-from optimizer_schema import DbBase, DbOptimizerState
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
 
 import revolve2.core.optimization.ec.ea.population_management as population_management
@@ -194,3 +195,20 @@ class Optimizer(EAOptimizer[Genotype, float]):
                 rng=pickle.dumps(self._rng.getstate()),
             )
         )
+
+
+DbBase = declarative_base()
+
+
+class DbOptimizerState(DbBase):
+    __tablename__ = "optimizer_state"
+
+    process_id = sqlalchemy.Column(
+        sqlalchemy.Integer,
+        nullable=False,
+        primary_key=True,
+    )
+    generation_index = sqlalchemy.Column(
+        sqlalchemy.Integer, nullable=False, primary_key=True
+    )
+    rng = sqlalchemy.Column(sqlalchemy.PickleType, nullable=False)

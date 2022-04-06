@@ -25,6 +25,7 @@ setup(
         "pyrr>=0.10.3",
         "sqlalchemy>=1.4.28",
         "asyncssh>=2.9.0",
+        "aiosqlite>=0.17.0",
     ],
     extras_require={"dev": ["sqlalchemy[mypy]>=1.4.28"]},
     zip_safe=False,

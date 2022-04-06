@@ -190,7 +190,7 @@ MultiNEAT is the C++ implementation behind CPPNWIN.
 You need to interact with this library because you need to determine the parameters used for creating the CPPN network,
 and because you need to create a random object that MultiNEAT understand.
 The latter is easy, as you can simply instantiate a MultiNEAT random object and seed it with a random integer obtained from the Python random object.
-The MultiNEAT ``parameters`` are more complex, but this tutorial will give you a starting point. For more options refer to the MultiNEAT documentation::
+The MultiNEAT ``parameters`` are more complex, but this tutorial will give you a starting point. For more options refer to the MultiNEAT documentation.
 You also need parameters for the MultiNEAT innovation databases, one for body and one for brain::
 
     import multineat

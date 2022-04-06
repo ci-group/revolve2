@@ -42,9 +42,9 @@ class FloatSerializer(Serializer[float]):
             .all()
         )
 
-        return [
-            i.value for i in sorted(items, key=lambda i: cast(int, i.id))
-        ]  # cast is there just to silence mypy.
+        idmap = {item.id: item for item in items}
+
+        return [idmap[id].value for id in ids]
 
 
 DbBase = declarative_base()

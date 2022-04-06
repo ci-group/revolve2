@@ -1,3 +1,7 @@
+"""
+Visualize and run a modular robot using Isaac Gym.
+"""
+
 import math
 from random import Random
 

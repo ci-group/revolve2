@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.2.0-alpha3 documentation</title>
+  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.2.1-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="revolve2 namespace" href="../api_reference/revolve2.html" />
-    <link rel="prev" title="Creating a modular robot and simulating it in the Isaac Gym environment" href="simulate_robot_isaac.html" /> 
+    <link rel="prev" title="Creating a modular robot and simulating and visualizing it in the Isaac Gym environment" href="simulate_robot_isaac.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -49,7 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="simple_optimization.html">A simple optimization process with a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="simulate_robot_isaac.html">Creating a modular robot and simulating it in the Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym</a></li>
 </ul>
 </li>
@@ -149,7 +149,7 @@
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>Tutorial <a class="reference internal" href="simple_optimization.html#a-simple-optimization-process-with-a-database"><span class="std std-ref">A simple optimization process with a database</span></a></p></li>
-<li><p>Tutorial <a class="reference internal" href="simulate_robot_isaac.html#creating-a-modular-robot-and-simulating-it-in-the-isaac-gym-environment"><span class="std std-ref">Creating a modular robot and simulating it in the Isaac Gym environment</span></a></p></li>
+<li><p>Tutorial <span class="xref std std-ref">tutorials/simulate_robot_isaac:Creating a modular robot and simulating it in the Isaac Gym environment</span></p></li>
 <li><p>Have the supplementary package <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPNWIN</span></code> <a class="reference internal" href="../installation/genotypes/cppnwin.html#cppnwin-genotype-supplemental-package"><span class="std std-ref">installed</span></a>.</p></li>
 <li><p>Superficial knowledge of the <a class="reference internal" href="../concepts/cppnwin.html#cppnwin"><span class="std std-ref">CPPNWIN</span></a> genotype, used by ci-group.</p></li>
 </ul>
@@ -320,7 +320,7 @@ MultiNEAT is the C++ implementation behind CPPNWIN.
 You need to interact with this library because you need to determine the parameters used for creating the CPPN network,
 and because you need to create a random object that MultiNEAT understand.
 The latter is easy, as you can simply instantiate a MultiNEAT random object and seed it with a random integer obtained from the Python random object.
-The MultiNEAT <code class="docutils literal notranslate"><span class="pre">parameters</span></code> are more complex, but this tutorial will give you a starting point. For more options refer to the MultiNEAT documentation::
+The MultiNEAT <code class="docutils literal notranslate"><span class="pre">parameters</span></code> are more complex, but this tutorial will give you a starting point. For more options refer to the MultiNEAT documentation.
 You also need parameters for the MultiNEAT innovation databases, one for body and one for brain:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">multineat</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>

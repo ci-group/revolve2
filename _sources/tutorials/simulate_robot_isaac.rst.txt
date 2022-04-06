@@ -1,5 +1,5 @@
 =======================================================================
-Creating a modular robot and simulating it in the Isaac Gym environment
+Creating a modular robot and simulating and visualizing it in the Isaac Gym environment
 =======================================================================
 The final results of this tutorial are available at ``<revolve2_source>/examples/simulate_isaac>``.
 
@@ -18,6 +18,7 @@ Prerequisites
 * Have the supplementary package ``Isaac Gym environment`` :ref:`installed <installation/runners/isaacgym:Isaac Gym environment supplementary package>`.
 * Knowledge of the :ref:`modular robots <concepts/modular_robots:Modular robots>` used in Revolve2.
 * Superficial knowledge of the :ref:`cpg controllers <concepts/cpg:CPG>` used in Revolve2.
+* A screen. You will visualize the robot.
 
 ------------
 Introduction

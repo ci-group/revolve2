@@ -20,7 +20,7 @@ from revolve2.core.optimization.ec.ea import (
 )
 
 
-def plot(database: str, optimizer_id: int) -> None:
+def plot(database: str, process_id: int) -> None:
     # open the database
     db = open_database_sqlite(database)
     # read the optimizer data into a pandas dataframe
@@ -31,7 +31,7 @@ def plot(database: str, optimizer_id: int) -> None:
             DbEAOptimizerIndividual,
             DbFloat,
         ).filter(
-            (DbEAOptimizer.process_id == optimizer_id)
+            (DbEAOptimizer.process_id == process_id)
             & (DbEAOptimizerGeneration.ea_optimizer_id == DbEAOptimizer.id)
             & (DbEAOptimizerIndividual.ea_optimizer_id == DbEAOptimizer.id)
             & (DbEAOptimizerIndividual.fitness_id == DbFloat.id)
@@ -65,11 +65,11 @@ def main() -> None:
         help="The database to plot.",
     )
     parser.add_argument(
-        "optimizer_id", type=int, help="The id of the ea optimizer to plot."
+        "process_id", type=int, help="The id of the ea optimizer to plot."
     )
     args = parser.parse_args()
 
-    plot(args.database, args.optimizer_id)
+    plot(args.database, args.process_id)
 
 
 if __name__ == "__main__":

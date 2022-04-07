@@ -46,7 +46,7 @@ async def main() -> None:
 
     maybe_optimizer = await Optimizer.from_database(
         database=database,
-        process_id=0,
+        process_id=process_id_gen.gen(),
         process_id_gen=process_id_gen,
         rng=rng,
         items=items,
@@ -58,7 +58,7 @@ async def main() -> None:
     else:
         optimizer = await Optimizer.new(
             database=database,
-            process_id=0,
+            process_id=process_id_gen.gen(),
             process_id_gen=process_id_gen,
             offspring_size=OFFSPRING_SIZE,
             initial_population=initial_population,

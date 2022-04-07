@@ -13,13 +13,13 @@ from revolve2.core.database import open_database_sqlite
 from revolve2.core.optimization.ec.openai_es import DbOpenaiESOptimizerIndividual
 
 
-def plot(database: str, optimizer_id: int) -> None:
+def plot(database: str, process_id: int) -> None:
     # open the database
     db = open_database_sqlite(database)
     # read the optimizer data into a pandas dataframe
     df = pandas.read_sql(
         select(DbOpenaiESOptimizerIndividual).filter(
-            DbOpenaiESOptimizerIndividual.process_id == optimizer_id
+            DbOpenaiESOptimizerIndividual.process_id == process_id
         ),
         db,
     )
@@ -42,11 +42,11 @@ def main() -> None:
         help="The database to plot.",
     )
     parser.add_argument(
-        "optimizer_id", type=int, help="The id of the ea optimizer to plot."
+        "process_id", type=int, help="The id of the ea optimizer to plot."
     )
     args = parser.parse_args()
 
-    plot(args.database, args.optimizer_id)
+    plot(args.database, args.process_id)
 
 
 if __name__ == "__main__":

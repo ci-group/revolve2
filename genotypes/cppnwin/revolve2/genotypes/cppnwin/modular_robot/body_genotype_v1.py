@@ -60,17 +60,17 @@ def develop_v1(
 
         children: List[Tuple[int, int]] = []  # child index, rotation
 
-        if module.module_reference.type == Module.Type.CORE:
+        if isinstance(module.module_reference, Core):
             children.append((Core.FRONT, 0))
             children.append((Core.LEFT, 1))
             children.append((Core.BACK, 2))
             children.append((Core.RIGHT, 3))
-        elif module.module_reference.type == Module.Type.BRICK:
+        elif isinstance(module.module_reference, Brick):
             children.append((Brick.FRONT, 0))
             children.append((Brick.LEFT, 1))
             children.append((Brick.RIGHT, 3))
-        elif module.module_reference.type == Module.Type.ACTIVE_HINGE:
-            children.append((ActiveHinge.ATTACHMENT_INDEX, 0))
+        elif isinstance(module.module_reference, ActiveHinge):
+            children.append((ActiveHinge.ATTACHMENT, 0))
         else:  # Should actually never arrive here but just checking module type to be sure
             raise RuntimeError()
 
@@ -81,6 +81,7 @@ def develop_v1(
                     to_explore.put(child)
                     part_count += 1
 
+    body.finalize()
     return body
 
 

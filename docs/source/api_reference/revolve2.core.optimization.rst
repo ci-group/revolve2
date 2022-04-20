@@ -7,7 +7,7 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   ec <revolve2.core.optimization.ec>
+   ea <revolve2.core.optimization.ea>
 
 Module contents
 ---------------

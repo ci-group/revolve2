@@ -50,6 +50,7 @@ async def main() -> None:
     body.core.right = ActiveHinge(math.pi / 2.0)
     body.core.right.attachment = ActiveHinge(math.pi / 2.0)
     body.core.right.attachment.attachment = Brick(0.0)
+    body.finalize()
 
     brain = CpgRandom(rng)
     robot = ModularRobot(body, brain)

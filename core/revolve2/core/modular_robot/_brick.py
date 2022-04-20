@@ -9,7 +9,7 @@ class Brick(Module):
     LEFT = 2
 
     def __init__(self, rotation: float):
-        super().__init__(Module.Type.BRICK, 4, rotation)
+        super().__init__(4, rotation)
 
     @property
     def front(self) -> Optional[Module]:

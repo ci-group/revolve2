@@ -5,9 +5,9 @@ from sqlalchemy.future import select
 
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.database.serializers import DbNdarray1xnItem
-from revolve2.core.modular_robot import Analyzer, ModularRobot
+from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.modular_robot.brains import Cpg
-from revolve2.core.optimization.ec.openai_es import DbOpenaiESOptimizerIndividual
+from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
 from revolve2.runners.isaacgym import ModularRobotRerunner
 
 
@@ -44,9 +44,8 @@ async def main() -> None:
         print(f"params: {params}")
 
         body = make_body()
-        body_analyzer = Analyzer(body)
-        active_hinges = body_analyzer.active_hinges
-        connections = Cpg._find_connections(body_analyzer)
+        active_hinges = body.find_active_hinges()
+        connections = Cpg._find_connections(body, active_hinges)
         num_internal_weights = len(active_hinges)
 
         brain = Brain(

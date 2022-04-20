@@ -17,18 +17,19 @@ def make_body() -> Body:
     body.core.right = ActiveHinge(0.0)
     body.core.right.attachment = ActiveHinge(math.pi / 2.0)
     body.core.right.attachment.attachment = Brick(0.0)
+    body.finalize()
     return body
 
 
 async def main() -> None:
-    POPULATION_SIZE = 100
+    POPULATION_SIZE = 10
     SIGMA = 0.1
     LEARNING_RATE = 0.05
-    NUM_GENERATIONS = 100
+    NUM_GENERATIONS = 3
 
-    SIMULATION_TIME = 30
+    SIMULATION_TIME = 10
     SAMPLING_FREQUENCY = 5
-    CONTROL_FREQUENCY = 60
+    CONTROL_FREQUENCY = 5
 
     logging.basicConfig(
         level=logging.INFO,

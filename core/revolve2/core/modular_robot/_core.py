@@ -10,7 +10,7 @@ class Core(Module):
     LEFT = 3
 
     def __init__(self, rotation: float):
-        super().__init__(Module.Type.CORE, 4, rotation)
+        super().__init__(4, rotation)
 
     @property
     def front(self) -> Optional[Module]:

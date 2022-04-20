@@ -2,7 +2,7 @@ from typing import List, Tuple, cast
 
 import multineat
 
-from revolve2.core.modular_robot import AnalyzerModule
+from revolve2.core.modular_robot import ActiveHinge, Body
 from revolve2.core.modular_robot.brains import Cpg as ModularRobotBrainCpg
 
 
@@ -14,8 +14,9 @@ class BrainCpgV1(ModularRobotBrainCpg):
 
     def _make_weights(
         self,
-        active_hinges: List[AnalyzerModule],
-        connections: List[Tuple[AnalyzerModule, AnalyzerModule]],
+        active_hinges: List[ActiveHinge],
+        connections: List[Tuple[ActiveHinge, ActiveHinge]],
+        body: Body,
     ) -> Tuple[List[float], List[float]]:
         brain_net = multineat.NeuralNetwork()
         self._genotype.BuildPhenotype(brain_net)
@@ -33,7 +34,9 @@ class BrainCpgV1(ModularRobotBrainCpg):
                     float(pos.z),
                 ],
             )
-            for pos in [active_hinge.grid_position() for active_hinge in active_hinges]
+            for pos in [
+                body.grid_position(active_hinge) for active_hinge in active_hinges
+            ]
         ]
 
         external_weights = [
@@ -50,7 +53,7 @@ class BrainCpgV1(ModularRobotBrainCpg):
                 ],
             )
             for (pos1, pos2) in [
-                (active_hinge1.grid_position(), active_hinge2.grid_position())
+                (body.grid_position(active_hinge1), body.grid_position(active_hinge2))
                 for (active_hinge1, active_hinge2) in connections
             ]
         ]

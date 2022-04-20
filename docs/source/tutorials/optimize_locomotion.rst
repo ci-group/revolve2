@@ -16,7 +16,7 @@ Prerequisites
 -------------
 
 * Tutorial :ref:`tutorials/simple_optimization:A simple optimization process with a database`
-* Tutorial :ref:`tutorials/simulate_robot_isaac:Creating a modular robot and simulating it in the Isaac Gym environment`
+* Tutorial :ref:`tutorials/simulate_robot_isaac:Creating a modular robot and simulating and visualizing it in the Isaac Gym environment`
 * Have the supplementary package ``genotype CPPNWIN`` :ref:`installed <installation/genotypes/cppnwin:CPPNWIN genotype supplemental package>`.
 * Superficial knowledge of the :ref:`CPPNWIN <concepts/cppnwin:CPPNWIN>` genotype, used by ci-group.
 
@@ -366,13 +366,13 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
     from sqlalchemy.ext.asyncio.session import AsyncSession
     from sqlalchemy.future import select
 
-    import revolve2.core.optimization.ec.ea.population_management as population_management
-    import revolve2.core.optimization.ec.ea.selection as selection
+    import revolve2.core.optimization.ea.generic_ea.population_management as population_management
+    import revolve2.core.optimization.ea.generic_ea.selection as selection
     from revolve2.actor_controller import ActorController
     from revolve2.core.database import IncompatibleError
     from revolve2.core.database.serializers import FloatSerializer
     from revolve2.core.optimization import ProcessIdGen
-    from revolve2.core.optimization.ec.ea import EAOptimizer
+    from revolve2.core.optimization.ea.generic_ea import EAOptimizer
     from revolve2.core.physics.running import (
         ActorControl,
         Runner,
@@ -798,7 +798,7 @@ The script below selects the best robot from the database and lets it walk::
 
     from revolve2.core.database import open_async_database_sqlite
     from revolve2.core.database.serializers import DbFloat
-    from revolve2.core.optimization.ec.ea import DbEAOptimizerIndividual
+    from revolve2.core.optimization.ea.generic_ea import DbEAOptimizerIndividual
 
 
     async def main() -> None:

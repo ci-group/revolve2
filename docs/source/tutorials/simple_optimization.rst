@@ -188,7 +188,7 @@ To use it, inherit from it and fill in its abstract functions::
 
     # optimizer.py
 
-    from revolve2.core.optimization.ec.ea import EAOptimizer
+    from revolve2.core.optimization.ea.generic_ea import EAOptimizer
     from genotype import Genotype
     from typing import List, Tuple
     from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -609,7 +609,7 @@ The optimizer is now stuck at selecting parents for the new generation.
 It expects you to return a list of groups of parents, each of which will make children.
 You can use any selection function that you want, but this tutorial selects pairs of parents using a tournament with two participants::
 
-    import revolve2.core.optimization.ec.ea.selection as selection
+    import revolve2.core.optimization.ea.generic_ea.selection as selection
 
     # ...
 
@@ -648,7 +648,7 @@ Fill in these functions using the definitions from the introduction of this tuto
 The last thing is survivor selection.
 This tutorial uses a two participant tournament with a steady state population, meaning the previous generation is also allowed to participate in the tournament::
 
-    import revolve2.core.optimization.ec.ea.population_management as population_management
+    import revolve2.core.optimization.ea.generic_ea.population_management as population_management
 
     # ...
 

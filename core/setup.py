@@ -32,7 +32,7 @@ setup(
     zip_safe=False,
     entry_points={
         "console_scripts": [
-            "revolve2_plot_ea_fitness_float=revolve2.bin.core.optimization.ec.ea.plot_ea_fitness_float:main",
+            "revolve2_plot_ea_fitness_float=revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float:main",
         ]
     },
 )

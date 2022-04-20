@@ -1,3 +1,9 @@
+"""
+CPG brain.
+Active hinges are connected if they are within 2 jumps in the modular robot tree structure.
+That means, NOT grid coordinates, but tree distance.
+"""
+
 import math
 from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple
@@ -7,18 +13,21 @@ import numpy.typing as npt
 from revolve2.actor_controllers.cpg import Cpg as ControllerCpg
 
 from revolve2.actor_controller import ActorController
-from revolve2.core.modular_robot import Analyzer, AnalyzerModule, Brain, Module
-from revolve2.core.physics.actor import Actor
+from revolve2.core.modular_robot import ActiveHinge, Body, Brain
 
 
 class Cpg(Brain, ABC):
-    def make_controller(
-        self, analyzer: Analyzer, actor: Actor, dof_ids: List[AnalyzerModule]
-    ) -> ActorController:
-        active_hinges = analyzer.active_hinges
-        connections = self._find_connections(analyzer)
+    def make_controller(self, body: Body, dof_ids: List[int]) -> ActorController:
+        # get active hinges and sort them according to dof_ids
+        active_hinges_unsorted = body.find_active_hinges()
+        active_hinge_map = {
+            active_hinge.id: active_hinge for active_hinge in active_hinges_unsorted
+        }
+        active_hinges = [active_hinge_map[id] for id in dof_ids]
+
+        connections = self._find_connections(body, active_hinges)
         (internal_weights, external_weights) = self._make_weights(
-            active_hinges, connections
+            active_hinges, connections, body
         )
         assert len(internal_weights) == len(active_hinges)
         assert len(external_weights) == len(connections)
@@ -47,8 +56,9 @@ class Cpg(Brain, ABC):
     @abstractmethod
     def _make_weights(
         self,
-        active_hinges: List[AnalyzerModule],
-        connections: List[Tuple[AnalyzerModule, AnalyzerModule]],
+        active_hinges: List[ActiveHinge],
+        connections: List[Tuple[ActiveHinge, ActiveHinge]],
+        body: Body,
     ) -> Tuple[List[float], List[float]]:
         """
         Override to the weights between neurons.
@@ -62,21 +72,19 @@ class Cpg(Brain, ABC):
 
     @staticmethod
     def _find_connections(
-        analyzer: Analyzer,
-    ) -> List[Tuple[AnalyzerModule, AnalyzerModule]]:
-        active_hinges = analyzer.active_hinges
+        body: Body, active_hinges: List[ActiveHinge]
+    ) -> List[Tuple[ActiveHinge, ActiveHinge]]:
         # sort by id, will be used later when ignoring existing connections
         active_hinges.sort(key=lambda mod: mod.id)
 
-        connections: List[Tuple[AnalyzerModule, AnalyzerModule]] = []
-        for active_hinge in analyzer.active_hinges:
-            neighbours = analyzer.neighbours(active_hinge, 2)
+        connections: List[Tuple[ActiveHinge, ActiveHinge]] = []
+        for active_hinge in active_hinges:
+            neighbours_all = active_hinge.neighbours(within_range=2)
             # ignore existing connections and neighbours that are not an active hinge
             neighbours = [
                 neighbour
-                for neighbour in neighbours
-                if neighbour.id > active_hinge.id
-                and neighbour.type == Module.Type.ACTIVE_HINGE
+                for neighbour in neighbours_all
+                if neighbour.id > active_hinge.id and isinstance(neighbour, ActiveHinge)
             ]
             connections += zip([active_hinge] * len(neighbours), neighbours)
 

@@ -9,10 +9,10 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from revolve2.actor_controller import ActorController
-from revolve2.core.modular_robot import Analyzer, AnalyzerModule, Body, ModularRobot
+from revolve2.core.modular_robot import ActiveHinge, Body, ModularRobot
 from revolve2.core.modular_robot.brains import Cpg
 from revolve2.core.optimization import ProcessIdGen
-from revolve2.core.optimization.ec.openai_es import OpenaiESOptimizer
+from revolve2.core.optimization.ea.openai_es import OpenaiESOptimizer
 from revolve2.core.physics.running import (
     ActorControl,
     ActorState,
@@ -54,9 +54,8 @@ class Optimizer(OpenaiESOptimizer):
         num_generations: int,
     ) -> None:
         self._body = robot_body
-        body_analyzer = Analyzer(robot_body)
-        active_hinges = body_analyzer.active_hinges
-        connections = Cpg._find_connections(body_analyzer)
+        active_hinges = self._body.find_active_hinges()
+        connections = Cpg._find_connections(self._body, active_hinges)
         self._num_internal_weights = len(active_hinges)
 
         nprng = np.random.Generator(
@@ -106,8 +105,7 @@ class Optimizer(OpenaiESOptimizer):
             return False
 
         self._body = robot_body
-        body_analyzer = Analyzer(robot_body)
-        active_hinges = body_analyzer.active_hinges
+        active_hinges = self._body.find_active_hinges()
         self._num_internal_weights = len(active_hinges)
 
         self._init_runner()
@@ -207,7 +205,8 @@ class Brain(Cpg):
 
     def _make_weights(
         self,
-        active_hinges: List[AnalyzerModule],
-        connections: List[Tuple[AnalyzerModule, AnalyzerModule]],
+        active_hinges: List[ActiveHinge],
+        connections: List[Tuple[ActiveHinge, ActiveHinge]],
+        body: Body,
     ) -> Tuple[List[float], List[float]]:
         return (self._internal_weights, self._external_weights)

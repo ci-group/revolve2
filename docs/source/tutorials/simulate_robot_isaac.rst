@@ -1,6 +1,6 @@
-=======================================================================
+=======================================================================================
 Creating a modular robot and simulating and visualizing it in the Isaac Gym environment
-=======================================================================
+=======================================================================================
 The final results of this tutorial are available at ``<revolve2_source>/examples/simulate_isaac>``.
 
 -------------------
@@ -64,6 +64,7 @@ You can add any number of ``Brick`` and ``ActiveHinge`` modules to the tree::
         body.core.right = ActiveHinge(math.pi / 2.0)
         body.core.right.attachment = ActiveHinge(math.pi / 2.0)
         body.core.right.attachment.attachment = Brick(0.0)
+        body.finalize()
 
 For simplicity this tutorial presents you with a CPG controller that uses random generated weights.
 If you wish to control the weights, take a look at the ``CpgRandom`` class and create a similar controller yourself.

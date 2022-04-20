@@ -12,12 +12,12 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
 
-import revolve2.core.optimization.ec.ea.population_management as population_management
-import revolve2.core.optimization.ec.ea.selection as selection
+import revolve2.core.optimization.ea.generic_ea.population_management as population_management
+import revolve2.core.optimization.ea.generic_ea.selection as selection
 from revolve2.core.database import IncompatibleError
 from revolve2.core.database.serializers import FloatSerializer
 from revolve2.core.optimization import ProcessIdGen
-from revolve2.core.optimization.ec.ea import EAOptimizer
+from revolve2.core.optimization.ea.generic_ea import EAOptimizer
 
 
 class Optimizer(EAOptimizer[Genotype, float]):

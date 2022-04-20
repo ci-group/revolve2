@@ -10,7 +10,7 @@ import pandas
 from sqlalchemy.future import select
 
 from revolve2.core.database import open_database_sqlite
-from revolve2.core.optimization.ec.openai_es import DbOpenaiESOptimizerIndividual
+from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
 
 
 def plot(database: str, process_id: int) -> None:

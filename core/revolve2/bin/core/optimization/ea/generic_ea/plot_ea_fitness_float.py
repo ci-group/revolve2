@@ -13,7 +13,7 @@ from sqlalchemy.future import select
 
 from revolve2.core.database import open_database_sqlite
 from revolve2.core.database.serializers import DbFloat
-from revolve2.core.optimization.ec.ea import (
+from revolve2.core.optimization.ea.generic_ea import (
     DbEAOptimizer,
     DbEAOptimizerGeneration,
     DbEAOptimizerIndividual,

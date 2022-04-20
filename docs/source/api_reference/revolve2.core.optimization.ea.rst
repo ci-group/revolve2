@@ -1,4 +1,4 @@
-revolve2.core.optimization.ec package
+revolve2.core.optimization.ea package
 =====================================
 
 Subpackages
@@ -7,15 +7,15 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   ea <revolve2.core.optimization.ec.ea>
+   generic_ea <revolve2.core.optimization.ea.generic_ea>
 
 Submodules
 ----------
 
-revolve2.core.optimization.ec.openai\_es module
+revolve2.core.optimization.ea.openai\_es module
 -----------------------------------------------
 
-.. automodule:: revolve2.core.optimization.ec.openai_es
+.. automodule:: revolve2.core.optimization.ea.openai_es
    :members:
    :undoc-members:
    :show-inheritance:
@@ -23,7 +23,7 @@ revolve2.core.optimization.ec.openai\_es module
 Module contents
 ---------------
 
-.. automodule:: revolve2.core.optimization.ec
+.. automodule:: revolve2.core.optimization.ea
    :members:
    :undoc-members:
    :show-inheritance:

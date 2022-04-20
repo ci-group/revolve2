@@ -26,6 +26,7 @@ setup(
         "sqlalchemy>=1.4.28",
         "asyncssh>=2.9.0",
         "aiosqlite>=0.17.0",
+        "pandas>=1.4.2",
     ],
     extras_require={"dev": ["sqlalchemy[mypy]>=1.4.28"]},
     zip_safe=False,

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.2.1-alpha3 documentation</title>
+  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.2.2-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -64,7 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.optimization.ec.html">ec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.optimization.ea.html">ea</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.physics.html">physics</a><ul>
@@ -149,7 +149,7 @@
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
 <ul class="simple">
 <li><p>Tutorial <a class="reference internal" href="simple_optimization.html#a-simple-optimization-process-with-a-database"><span class="std std-ref">A simple optimization process with a database</span></a></p></li>
-<li><p>Tutorial <span class="xref std std-ref">tutorials/simulate_robot_isaac:Creating a modular robot and simulating it in the Isaac Gym environment</span></p></li>
+<li><p>Tutorial <a class="reference internal" href="simulate_robot_isaac.html#creating-a-modular-robot-and-simulating-and-visualizing-it-in-the-isaac-gym-environment"><span class="std std-ref">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</span></a></p></li>
 <li><p>Have the supplementary package <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPNWIN</span></code> <a class="reference internal" href="../installation/genotypes/cppnwin.html#cppnwin-genotype-supplemental-package"><span class="std std-ref">installed</span></a>.</p></li>
 <li><p>Superficial knowledge of the <a class="reference internal" href="../concepts/cppnwin.html#cppnwin"><span class="std std-ref">CPPNWIN</span></a> genotype, used by ci-group.</p></li>
 </ul>
@@ -495,13 +495,13 @@ Finally, you can save some of the parameters provided to <code class="docutils l
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.asyncio.session</span> <span class="kn">import</span> <span class="n">AsyncSession</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.future</span> <span class="kn">import</span> <span class="n">select</span>
 
-<span class="kn">import</span> <span class="nn">revolve2.core.optimization.ec.ea.population_management</span> <span class="k">as</span> <span class="nn">population_management</span>
-<span class="kn">import</span> <span class="nn">revolve2.core.optimization.ec.ea.selection</span> <span class="k">as</span> <span class="nn">selection</span>
+<span class="kn">import</span> <span class="nn">revolve2.core.optimization.ea.generic_ea.population_management</span> <span class="k">as</span> <span class="nn">population_management</span>
+<span class="kn">import</span> <span class="nn">revolve2.core.optimization.ea.generic_ea.selection</span> <span class="k">as</span> <span class="nn">selection</span>
 <span class="kn">from</span> <span class="nn">revolve2.actor_controller</span> <span class="kn">import</span> <span class="n">ActorController</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">IncompatibleError</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database.serializers</span> <span class="kn">import</span> <span class="n">FloatSerializer</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">ProcessIdGen</span>
-<span class="kn">from</span> <span class="nn">revolve2.core.optimization.ec.ea</span> <span class="kn">import</span> <span class="n">EAOptimizer</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea.generic_ea</span> <span class="kn">import</span> <span class="n">EAOptimizer</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.physics.running</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ActorControl</span><span class="p">,</span>
     <span class="n">Runner</span><span class="p">,</span>
@@ -922,7 +922,7 @@ The script below selects the best robot from the database and lets it walk:</p>
 
 <span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">open_async_database_sqlite</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database.serializers</span> <span class="kn">import</span> <span class="n">DbFloat</span>
-<span class="kn">from</span> <span class="nn">revolve2.core.optimization.ec.ea</span> <span class="kn">import</span> <span class="n">DbEAOptimizerIndividual</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea.generic_ea</span> <span class="kn">import</span> <span class="n">DbEAOptimizerIndividual</span>
 
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>

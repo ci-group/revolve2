@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; revolve2 v0.2.1-alpha3 documentation</title>
+  <title>Index &mdash; revolve2 v0.2.2-alpha3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -61,7 +61,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.optimization.ec.html">ec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="api_reference/revolve2.core.optimization.ea.html">ea</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="api_reference/revolve2.core.physics.html">physics</a><ul>
@@ -157,10 +157,6 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.Type.ACTIVE_HINGE">ACTIVE_HINGE (Module.Type attribute)</a>
-</li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Analyzer.active_hinges">active_hinges (Analyzer property)</a>
-</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge">ActiveHinge (class in revolve2.core.modular_robot)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor">Actor (class in revolve2.core.physics.actor)</a>
@@ -179,27 +175,23 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.EAOptimizer.ainit_from_database">ainit_from_database() (EAOptimizer method)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.EAOptimizer.ainit_from_database">ainit_from_database() (EAOptimizer method)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.OpenaiESOptimizer.ainit_from_database">(OpenaiESOptimizer method)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.ainit_from_database">(OpenaiESOptimizer method)</a>
 </li>
       </ul></li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.EAOptimizer.ainit_new">ainit_new() (EAOptimizer method)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.EAOptimizer.ainit_new">ainit_new() (EAOptimizer method)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.OpenaiESOptimizer.ainit_new">(OpenaiESOptimizer method)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.ainit_new">(OpenaiESOptimizer method)</a>
 </li>
       </ul></li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Analyzer">Analyzer (class in revolve2.core.modular_robot)</a>
-</li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.AnalyzerModule">AnalyzerModule (class in revolve2.core.modular_robot)</a>
-</li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem.array_index">array_index (DbNdarray1xnItem attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge.attachment">attachment (ActiveHinge property)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge.ATTACHMENT">ATTACHMENT (ActiveHinge attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge.ATTACHMENT_INDEX">ATTACHMENT_INDEX (ActiveHinge attribute)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge.attachment">attachment (ActiveHinge property)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.axis">axis (Joint attribute)</a>
 </li>
@@ -223,10 +215,10 @@
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.body1">body1 (Joint attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.body2">body2 (Joint attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.body2">body2 (Joint attribute)</a>
+</li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Collision.bounding_box">bounding_box (Collision attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.BoundingBox">BoundingBox (class in revolve2.core.physics.actor)</a>
@@ -239,10 +231,6 @@
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brick">Brick (class in revolve2.core.modular_robot)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.Type.BRICK">BRICK (Module.Type attribute)</a>
-</li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Analyzer.bricks">bricks (Analyzer property)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -253,14 +241,10 @@
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.center_of_mass">center_of_mass() (RigidBody method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerParent.child_individual_id">child_individual_id (DbEAOptimizerParent attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerParent.child_individual_id">child_individual_id (DbEAOptimizerParent attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.AnalyzerModule.children">children (AnalyzerModule property)</a>
-
-      <ul>
-        <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.children">(Module property)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.children">children (Module property)</a>
 </li>
-      </ul></li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Collision">Collision (class in revolve2.core.physics.actor)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.collisions">collisions (RigidBody attribute)</a>
@@ -275,15 +259,9 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Analyzer.core">core (Analyzer property)</a>
-
-      <ul>
-        <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.core">(Body attribute)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.core">core (Body attribute)</a>
 </li>
-      </ul></li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Core">Core (class in revolve2.core.modular_robot)</a>
-</li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.Type.CORE">CORE (Module.Type attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg">Cpg (class in revolve2.actor_controllers.cpg)</a>
 
@@ -311,15 +289,15 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizer">DbEAOptimizer (class in revolve2.core.optimization.ec.ea)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer">DbEAOptimizer (class in revolve2.core.optimization.ea.generic_ea)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerGeneration">DbEAOptimizerGeneration (class in revolve2.core.optimization.ec.ea)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerGeneration">DbEAOptimizerGeneration (class in revolve2.core.optimization.ea.generic_ea)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerIndividual">DbEAOptimizerIndividual (class in revolve2.core.optimization.ec.ea)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerIndividual">DbEAOptimizerIndividual (class in revolve2.core.optimization.ea.generic_ea)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerParent">DbEAOptimizerParent (class in revolve2.core.optimization.ec.ea)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerParent">DbEAOptimizerParent (class in revolve2.core.optimization.ea.generic_ea)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerState">DbEAOptimizerState (class in revolve2.core.optimization.ec.ea)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerState">DbEAOptimizerState (class in revolve2.core.optimization.ea.generic_ea)</a>
 </li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbFloat">DbFloat (class in revolve2.core.database.serializers)</a>
 </li>
@@ -329,13 +307,13 @@
 </li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem">DbNdarray1xnItem (class in revolve2.core.database.serializers)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizer">DbOpenaiESOptimizer (class in revolve2.core.optimization.ec.openai_es)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer">DbOpenaiESOptimizer (class in revolve2.core.optimization.ea.openai_es)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerIndividual">DbOpenaiESOptimizerIndividual (class in revolve2.core.optimization.ec.openai_es)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual">DbOpenaiESOptimizerIndividual (class in revolve2.core.optimization.ea.openai_es)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerState">DbOpenaiESOptimizerState (class in revolve2.core.optimization.ec.openai_es)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState">DbOpenaiESOptimizerState (class in revolve2.core.optimization.ea.openai_es)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.ActorState.deserialize">deserialize() (ActorState class method)</a>
 
@@ -365,19 +343,23 @@
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerGeneration.ea_optimizer_id">ea_optimizer_id (DbEAOptimizerGeneration attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerGeneration.ea_optimizer_id">ea_optimizer_id (DbEAOptimizerGeneration attribute)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerIndividual.ea_optimizer_id">(DbEAOptimizerIndividual attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerIndividual.ea_optimizer_id">(DbEAOptimizerIndividual attribute)</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerParent.ea_optimizer_id">(DbEAOptimizerParent attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerParent.ea_optimizer_id">(DbEAOptimizerParent attribute)</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerState.ea_optimizer_id">(DbEAOptimizerState attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerState.ea_optimizer_id">(DbEAOptimizerState attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.EAOptimizer">EAOptimizer (class in revolve2.core.optimization.ea.generic_ea)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.EAOptimizer">EAOptimizer (class in revolve2.core.optimization.ec.ea)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge.EFFORT">EFFORT (ActiveHinge attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.effort">effort (Joint attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.Environment">Environment (class in revolve2.core.physics.running)</a>
 </li>
@@ -393,11 +375,15 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerIndividual.fitness">fitness (DbOpenaiESOptimizerIndividual attribute)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.finalize">finalize() (Body method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerIndividual.fitness_id">fitness_id (DbEAOptimizerIndividual attribute)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.find_active_hinges">find_active_hinges() (Body method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizer.fitness_table">fitness_table (DbEAOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.fitness">fitness (DbOpenaiESOptimizerIndividual attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerIndividual.fitness_id">fitness_id (DbEAOptimizerIndividual attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer.fitness_table">fitness_table (DbEAOptimizer attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.FloatSerializer">FloatSerializer (class in revolve2.core.database.serializers)</a>
 </li>
@@ -431,25 +417,25 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen.gen">gen() (ProcessIdGen method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerIndividual.gen_index">gen_index (DbOpenaiESOptimizerIndividual attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.gen_index">gen_index (DbOpenaiESOptimizerIndividual attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerIndividual.gen_num">gen_num (DbOpenaiESOptimizerIndividual attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.gen_num">gen_num (DbOpenaiESOptimizerIndividual attribute)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerState.gen_num">(DbOpenaiESOptimizerState attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.gen_num">(DbOpenaiESOptimizerState attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerGeneration.generation_index">generation_index (DbEAOptimizerGeneration attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerGeneration.generation_index">generation_index (DbEAOptimizerGeneration attribute)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerState.generation_index">(DbEAOptimizerState attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerState.generation_index">(DbEAOptimizerState attribute)</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.EAOptimizer.generation_index">(EAOptimizer property)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.EAOptimizer.generation_index">(EAOptimizer property)</a>
 </li>
       </ul></li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.OpenaiESOptimizer.generation_number">generation_number (OpenaiESOptimizer property)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.generation_number">generation_number (OpenaiESOptimizer property)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.population_management.html#revolve2.core.optimization.ec.ea.population_management.generational">generational() (in module revolve2.core.optimization.ec.ea.population_management)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.population_management.html#revolve2.core.optimization.ea.generic_ea.population_management.generational">generational() (in module revolve2.core.optimization.ea.generic_ea.population_management)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -457,9 +443,9 @@
 </li>
       <li><a href="api_reference/revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.Genotype.genotype">genotype (Genotype attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerIndividual.genotype_id">genotype_id (DbEAOptimizerIndividual attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerIndividual.genotype_id">genotype_id (DbEAOptimizerIndividual attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizer.genotype_table">genotype_table (DbEAOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer.genotype_table">genotype_table (DbEAOptimizer attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.GenotypeSerializer">GenotypeSerializer (class in revolve2.genotypes.cppnwin)</a>
 </li>
@@ -471,7 +457,7 @@
       </ul></li>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen.get_state">get_state() (ProcessIdGen method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.AnalyzerModule.grid_position">grid_position() (AnalyzerModule method)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.grid_position">grid_position() (Body method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -479,16 +465,16 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.AnalyzerModule.id">id (AnalyzerModule property)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer.id">id (DbEAOptimizer attribute)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizer.id">(DbEAOptimizer attribute)</a>
-</li>
         <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbFloat.id">(DbFloat attribute)</a>
 </li>
         <li><a href="api_reference/revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.genotype_schema.DbGenotype.id">(DbGenotype attribute)</a>
 </li>
         <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xn.id">(DbNdarray1xn attribute)</a>
+</li>
+        <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.id">(Module property)</a>
 </li>
       </ul></li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.FloatSerializer.identifying_table">identifying_table() (FloatSerializer class method)</a>
@@ -505,21 +491,23 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.IncompatibleError">IncompatibleError</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerIndividual.individual">individual (DbOpenaiESOptimizerIndividual attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.individual">individual (DbOpenaiESOptimizerIndividual attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerGeneration.individual_id">individual_id (DbEAOptimizerGeneration attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerGeneration.individual_id">individual_id (DbEAOptimizerGeneration attribute)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerIndividual.individual_id">(DbEAOptimizerIndividual attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerIndividual.individual_id">(DbEAOptimizerIndividual attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerGeneration.individual_index">individual_index (DbEAOptimizerGeneration attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerGeneration.individual_index">individual_index (DbEAOptimizerGeneration attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.inertia_tensor">inertia_tensor() (RigidBody method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizer.initial_mean">initial_mean (DbOpenaiESOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.initial_mean">initial_mean (DbOpenaiESOptimizer attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizer.initial_rng">initial_rng (DbOpenaiESOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.initial_rng">initial_rng (DbOpenaiESOptimizer attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.is_finalized">is_finalized (Body property)</a>
 </li>
       <li><a href="api_reference/revolve2.serialization.html#revolve2.serialization.is_static_data">is_static_data() (in module revolve2.serialization)</a>
 </li>
@@ -541,7 +529,7 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizer.learning_rate">learning_rate (DbOpenaiESOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.learning_rate">learning_rate (DbOpenaiESOptimizer attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brick.LEFT">LEFT (Brick attribute)</a>
 </li>
@@ -559,9 +547,11 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.bin.rpi_controller.html#revolve2.bin.rpi_controller.revolve2_rpi_controller.main">main() (in module revolve2.bin.rpi_controller.revolve2_rpi_controller)</a>
+      <li><a href="api_reference/revolve2.bin.core.optimization.ea.generic_ea.html#revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float.main">main() (in module revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float)</a>
 
       <ul>
+        <li><a href="api_reference/revolve2.bin.rpi_controller.html#revolve2.bin.rpi_controller.revolve2_rpi_controller.main">(in module revolve2.bin.rpi_controller.revolve2_rpi_controller)</a>
+</li>
         <li><a href="api_reference/revolve2.bin.rpi_controller.html#revolve2.bin.rpi_controller.revolve2_rpi_controller.Program.main">(Program method)</a>
 </li>
       </ul></li>
@@ -577,7 +567,7 @@
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.mass">mass() (RigidBody method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerState.mean">mean (DbOpenaiESOptimizerState attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.mean">mean (DbOpenaiESOptimizerState attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Visual.model">model (Visual attribute)</a>
 </li>
@@ -601,9 +591,11 @@
 </li>
         <li><a href="api_reference/revolve2.bin.core.optimization.html#module-revolve2.bin.core.optimization">revolve2.bin.core.optimization</a>
 </li>
-        <li><a href="api_reference/revolve2.bin.core.optimization.ec.html#module-revolve2.bin.core.optimization.ec">revolve2.bin.core.optimization.ec</a>
+        <li><a href="api_reference/revolve2.bin.core.optimization.ea.html#module-revolve2.bin.core.optimization.ea">revolve2.bin.core.optimization.ea</a>
 </li>
-        <li><a href="api_reference/revolve2.bin.core.optimization.ec.ea.html#module-revolve2.bin.core.optimization.ec.ea">revolve2.bin.core.optimization.ec.ea</a>
+        <li><a href="api_reference/revolve2.bin.core.optimization.ea.generic_ea.html#module-revolve2.bin.core.optimization.ea.generic_ea">revolve2.bin.core.optimization.ea.generic_ea</a>
+</li>
+        <li><a href="api_reference/revolve2.bin.core.optimization.ea.generic_ea.html#module-revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float">revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float</a>
 </li>
         <li><a href="api_reference/revolve2.bin.rpi_controller.html#module-revolve2.bin.rpi_controller">revolve2.bin.rpi_controller</a>
 </li>
@@ -621,15 +613,15 @@
 </li>
         <li><a href="api_reference/revolve2.core.optimization.html#module-revolve2.core.optimization">revolve2.core.optimization</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#module-revolve2.core.optimization.ec">revolve2.core.optimization.ec</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#module-revolve2.core.optimization.ea">revolve2.core.optimization.ea</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#module-revolve2.core.optimization.ec.ea">revolve2.core.optimization.ec.ea</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#module-revolve2.core.optimization.ea.generic_ea">revolve2.core.optimization.ea.generic_ea</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.population_management.html#module-revolve2.core.optimization.ec.ea.population_management">revolve2.core.optimization.ec.ea.population_management</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.population_management.html#module-revolve2.core.optimization.ea.generic_ea.population_management">revolve2.core.optimization.ea.generic_ea.population_management</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.selection.html#module-revolve2.core.optimization.ec.ea.selection">revolve2.core.optimization.ec.ea.selection</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.selection.html#module-revolve2.core.optimization.ea.generic_ea.selection">revolve2.core.optimization.ea.generic_ea.selection</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#module-revolve2.core.optimization.ec.openai_es">revolve2.core.optimization.ec.openai_es</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#module-revolve2.core.optimization.ea.openai_es">revolve2.core.optimization.ea.openai_es</a>
 </li>
         <li><a href="api_reference/revolve2.core.physics.html#module-revolve2.core.physics">revolve2.core.physics</a>
 </li>
@@ -662,13 +654,9 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.AnalyzerModule.module">module (AnalyzerModule property)</a>
-</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module">Module (class in revolve2.core.modular_robot)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.Type">Module.Type (class in revolve2.core.modular_robot)</a>
-</li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.selection.html#revolve2.core.optimization.ec.ea.selection.multiple_unique">multiple_unique() (in module revolve2.core.optimization.ec.ea.selection)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.selection.html#revolve2.core.optimization.ea.generic_ea.selection.multiple_unique">multiple_unique() (in module revolve2.core.optimization.ea.generic_ea.selection)</a>
 </li>
       <li><a href="api_reference/revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.mutate_v1">mutate_v1() (in module revolve2.genotypes.cppnwin)</a>
 </li>
@@ -692,13 +680,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.Ndarray1xnSerializer">Ndarray1xnSerializer (class in revolve2.core.database.serializers)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Analyzer.neighbours">neighbours() (Analyzer method)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.neighbours">neighbours() (Module method)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.Process.new">new() (Process class method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem.nparray1xn_id">nparray1xn_id (DbNdarray1xnItem attribute)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.NotFinalizedError">NotFinalizedError</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Analyzer.num_modules">num_modules (Analyzer property)</a>
+      <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem.nparray1xn_id">nparray1xn_id (DbNdarray1xnItem attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -708,13 +696,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.BoundingBox.offset">offset (BoundingBox attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizer.offspring_size">offspring_size (DbEAOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer.offspring_size">offspring_size (DbEAOptimizer attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.open_async_database_sqlite">open_async_database_sqlite() (in module revolve2.core.database)</a>
 </li>
       <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.open_database_sqlite">open_database_sqlite() (in module revolve2.core.database)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.OpenaiESOptimizer">OpenaiESOptimizer (class in revolve2.core.optimization.ec.openai_es)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer">OpenaiESOptimizer (class in revolve2.core.optimization.ea.openai_es)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -738,11 +726,11 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.AnalyzerModule.parent">parent (AnalyzerModule property)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerParent.parent_individual_id">parent_individual_id (DbEAOptimizerParent attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerParent.parent_individual_id">parent_individual_id (DbEAOptimizerParent attribute)</a>
+      <li><a href="api_reference/revolve2.bin.core.optimization.ea.generic_ea.html#revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float.plot">plot() (in module revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizer.population_size">population_size (DbOpenaiESOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.population_size">population_size (DbOpenaiESOptimizer attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.PosedActor">PosedActor (class in revolve2.core.physics.running)</a>
 </li>
@@ -764,17 +752,17 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.Process">Process (class in revolve2.core.optimization)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizer.process_id">process_id (DbEAOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer.process_id">process_id (DbEAOptimizer attribute)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizer.process_id">(DbOpenaiESOptimizer attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.process_id">(DbOpenaiESOptimizer attribute)</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerIndividual.process_id">(DbOpenaiESOptimizerIndividual attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.process_id">(DbOpenaiESOptimizerIndividual attribute)</a>
 </li>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerState.process_id">(DbOpenaiESOptimizerState attribute)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.process_id">(DbOpenaiESOptimizerState attribute)</a>
 </li>
       </ul></li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.DbEAOptimizerState.processid_state">processid_state (DbEAOptimizerState attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerState.processid_state">processid_state (DbEAOptimizerState attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen">ProcessIdGen (class in revolve2.core.optimization)</a>
 </li>
@@ -794,6 +782,10 @@
         <li><a href="api_reference/revolve2.genotypes.cppnwin.modular_robot.html#revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1.random_v1">(in module revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1)</a>
 </li>
       </ul></li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge.RANGE">RANGE (ActiveHinge attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.range">range (Joint attribute)</a>
+</li>
       <li>
     revolve2
 
@@ -844,17 +836,24 @@
 </li>
       </ul></li>
       <li>
-    revolve2.bin.core.optimization.ec
+    revolve2.bin.core.optimization.ea
 
       <ul>
-        <li><a href="api_reference/revolve2.bin.core.optimization.ec.html#module-revolve2.bin.core.optimization.ec">module</a>
+        <li><a href="api_reference/revolve2.bin.core.optimization.ea.html#module-revolve2.bin.core.optimization.ea">module</a>
 </li>
       </ul></li>
       <li>
-    revolve2.bin.core.optimization.ec.ea
+    revolve2.bin.core.optimization.ea.generic_ea
 
       <ul>
-        <li><a href="api_reference/revolve2.bin.core.optimization.ec.ea.html#module-revolve2.bin.core.optimization.ec.ea">module</a>
+        <li><a href="api_reference/revolve2.bin.core.optimization.ea.generic_ea.html#module-revolve2.bin.core.optimization.ea.generic_ea">module</a>
+</li>
+      </ul></li>
+      <li>
+    revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float
+
+      <ul>
+        <li><a href="api_reference/revolve2.bin.core.optimization.ea.generic_ea.html#module-revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float">module</a>
 </li>
       </ul></li>
       <li>
@@ -914,40 +913,40 @@
 </li>
       </ul></li>
       <li>
-    revolve2.core.optimization.ec
+    revolve2.core.optimization.ea
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#module-revolve2.core.optimization.ec">module</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#module-revolve2.core.optimization.ea">module</a>
 </li>
       </ul></li>
       <li>
-    revolve2.core.optimization.ec.ea
+    revolve2.core.optimization.ea.generic_ea
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#module-revolve2.core.optimization.ec.ea">module</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#module-revolve2.core.optimization.ea.generic_ea">module</a>
 </li>
       </ul></li>
       <li>
-    revolve2.core.optimization.ec.ea.population_management
+    revolve2.core.optimization.ea.generic_ea.population_management
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.population_management.html#module-revolve2.core.optimization.ec.ea.population_management">module</a>
-</li>
-      </ul></li>
-      <li>
-    revolve2.core.optimization.ec.ea.selection
-
-      <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.ea.selection.html#module-revolve2.core.optimization.ec.ea.selection">module</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.population_management.html#module-revolve2.core.optimization.ea.generic_ea.population_management">module</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    revolve2.core.optimization.ec.openai_es
+    revolve2.core.optimization.ea.generic_ea.selection
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#module-revolve2.core.optimization.ec.openai_es">module</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.selection.html#module-revolve2.core.optimization.ea.generic_ea.selection">module</a>
+</li>
+      </ul></li>
+      <li>
+    revolve2.core.optimization.ea.openai_es
+
+      <ul>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#module-revolve2.core.optimization.ea.openai_es">module</a>
 </li>
       </ul></li>
       <li>
@@ -1058,16 +1057,16 @@
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody">RigidBody (class in revolve2.core.physics.actor)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizerState.rng">rng (DbOpenaiESOptimizerState attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.rng">rng (DbOpenaiESOptimizerState attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.rotation">rotation (Module property)</a>
 </li>
       <li><a href="api_reference/revolve2.core.rpi_controller_remote.html#revolve2.core.rpi_controller_remote.RpiControllerRemote">RpiControllerRemote (class in revolve2.core.rpi_controller_remote)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.html#revolve2.core.optimization.ec.ea.EAOptimizer.run">run() (EAOptimizer method)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.EAOptimizer.run">run() (EAOptimizer method)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.OpenaiESOptimizer.run">(OpenaiESOptimizer method)</a>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.run">(OpenaiESOptimizer method)</a>
 </li>
       </ul></li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.Runner.run_batch">run_batch() (Runner method)</a>
@@ -1104,27 +1103,25 @@
 </li>
       <li><a href="api_reference/revolve2.serialization.html#revolve2.serialization.SerializeError">SerializeError</a>
 </li>
-      <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.Serializer">Serializer (class in revolve2.core.database)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.Serializer">Serializer (class in revolve2.core.database)</a>
+</li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.ActorControl.set_dof_targets">set_dof_targets() (ActorControl method)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen.set_state">set_state() (ProcessIdGen method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.html#revolve2.core.optimization.ec.openai_es.DbOpenaiESOptimizer.sigma">sigma (DbOpenaiESOptimizer attribute)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.sigma">sigma (DbOpenaiESOptimizer attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.Batch.simulation_time">simulation_time (Batch attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.BoundingBox.size">size (BoundingBox attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Analyzer.size">size() (Analyzer method)</a>
-</li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.State">State (class in revolve2.core.physics.running)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.static_friction">static_friction (RigidBody attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.population_management.html#revolve2.core.optimization.ec.ea.population_management.steady_state">steady_state() (in module revolve2.core.optimization.ec.ea.population_management)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.population_management.html#revolve2.core.optimization.ea.generic_ea.population_management.steady_state">steady_state() (in module revolve2.core.optimization.ea.generic_ea.population_management)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controller.html#revolve2.actor_controller.ActorController.step">step() (ActorController method)</a>
 
@@ -1138,6 +1135,8 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.to_actor">to_actor() (Body method)</a>
+</li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.FloatSerializer.to_database">to_database() (FloatSerializer class method)</a>
 
       <ul>
@@ -1154,14 +1153,8 @@
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.urdf.html#revolve2.core.physics.actor.urdf.to_urdf">to_urdf() (in module revolve2.core.physics.actor.urdf)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ec.ea.selection.html#revolve2.core.optimization.ec.ea.selection.tournament">tournament() (in module revolve2.core.optimization.ec.ea.selection)</a>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.selection.html#revolve2.core.optimization.ea.generic_ea.selection.tournament">tournament() (in module revolve2.core.optimization.ea.generic_ea.selection)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.AnalyzerModule.type">type (AnalyzerModule property)</a>
-
-      <ul>
-        <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.type">(Module property)</a>
-</li>
-      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -1174,8 +1167,12 @@
         <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem.value">(DbNdarray1xnItem attribute)</a>
 </li>
       </ul></li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge.VELOCITY">VELOCITY (ActiveHinge attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.velocity">velocity (Joint attribute)</a>
+</li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Visual">Visual (class in revolve2.core.physics.actor)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.visuals">visuals (RigidBody attribute)</a>

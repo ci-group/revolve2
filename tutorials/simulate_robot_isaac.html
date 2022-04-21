@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating a modular robot and simulating and visualizing it in the Isaac Gym environment &mdash; revolve2 v0.2.1-alpha3 documentation</title>
+  <title>Creating a modular robot and simulating and visualizing it in the Isaac Gym environment &mdash; revolve2 v0.2.2-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -64,7 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.optimization.ec.html">ec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.optimization.ea.html">ea</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.physics.html">physics</a><ul>
@@ -195,6 +195,7 @@ You can add any number of <code class="docutils literal notranslate"><span class
     <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">ActiveHinge</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
     <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">attachment</span> <span class="o">=</span> <span class="n">ActiveHinge</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
     <span class="n">body</span><span class="o">.</span><span class="n">core</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">attachment</span><span class="o">.</span><span class="n">attachment</span> <span class="o">=</span> <span class="n">Brick</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">body</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>For simplicity this tutorial presents you with a CPG controller that uses random generated weights.

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.modular_robot.brains package &mdash; revolve2 v0.2.1-alpha3 documentation</title>
+  <title>revolve2.core.modular_robot.brains package &mdash; revolve2 v0.2.2-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -64,7 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ec.html">ec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ea.html">ea</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul>
@@ -146,15 +146,14 @@
 <dd><p>Bases: <a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain" title="revolve2.core.modular_robot._brain.Brain"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._brain.Brain</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.Cpg.make_controller">
-<span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">analyzer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Analyzer" title="revolve2.core.modular_robot._analyzer.Analyzer"><span class="pre">Analyzer</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.AnalyzerModule" title="revolve2.core.modular_robot._analyzer_module.AnalyzerModule"><span class="pre">AnalyzerModule</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.Cpg.make_controller" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.Cpg.make_controller" title="Permalink to this definition"></a></dt>
 <dd><p>Create a controller for the provided body</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>analyzer</strong> – Tool for analyzing the modular robot</p></li>
-<li><p><strong>actor</strong> – Actor created from the modular robot</p></li>
-<li><p><strong>dof_ids</strong> – Map from actor joint index to AnalyzerModule</p></li>
-</ul>
+<dt class="field-odd">Body</dt>
+<dd class="field-odd"><p>The body to make the brain for.</p>
+</dd>
+<dt class="field-even">Dof_ids</dt>
+<dd class="field-even"><p>Map from actor joint index to module id.</p>
 </dd>
 </dl>
 </dd></dl>

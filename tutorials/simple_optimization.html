@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A simple optimization process with a database &mdash; revolve2 v0.2.1-alpha3 documentation</title>
+  <title>A simple optimization process with a database &mdash; revolve2 v0.2.2-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -64,7 +64,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.optimization.ec.html">ec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.core.optimization.ea.html">ea</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.core.physics.html">physics</a><ul>
@@ -317,7 +317,7 @@ Whenever you need to interact with the database, refer to SQLAlchemy’s documen
 To use it, inherit from it and fill in its abstract functions:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># optimizer.py</span>
 
-<span class="kn">from</span> <span class="nn">revolve2.core.optimization.ec.ea</span> <span class="kn">import</span> <span class="n">EAOptimizer</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea.generic_ea</span> <span class="kn">import</span> <span class="n">EAOptimizer</span>
 <span class="kn">from</span> <span class="nn">genotype</span> <span class="kn">import</span> <span class="n">Genotype</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.asyncio.session</span> <span class="kn">import</span> <span class="n">AsyncSession</span>
@@ -735,7 +735,7 @@ You already have the number of generations to evaluate, so this is straightforwa
 <p>The optimizer is now stuck at selecting parents for the new generation.
 It expects you to return a list of groups of parents, each of which will make children.
 You can use any selection function that you want, but this tutorial selects pairs of parents using a tournament with two participants:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">revolve2.core.optimization.ec.ea.selection</span> <span class="k">as</span> <span class="nn">selection</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">revolve2.core.optimization.ea.generic_ea.selection</span> <span class="k">as</span> <span class="nn">selection</span>
 
 <span class="c1"># ...</span>
 
@@ -774,7 +774,7 @@ Fill in these functions using the definitions from the introduction of this tuto
 </div>
 <p>The last thing is survivor selection.
 This tutorial uses a two participant tournament with a steady state population, meaning the previous generation is also allowed to participate in the tournament:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">revolve2.core.optimization.ec.ea.population_management</span> <span class="k">as</span> <span class="nn">population_management</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">revolve2.core.optimization.ea.generic_ea.population_management</span> <span class="k">as</span> <span class="nn">population_management</span>
 
 <span class="c1"># ...</span>
 

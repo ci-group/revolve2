@@ -128,9 +128,21 @@ class LocalRunner(Runner):
                         posed_actor.orientation.z,
                         posed_actor.orientation.w,
                     )
+
+                    # create an aggregate for this robot
+                    # disabling self collision to both improve performance and improve stability
+                    num_bodies = self._gym.get_asset_rigid_body_count(actor_asset)
+                    num_shapes = self._gym.get_asset_rigid_shape_count(actor_asset)
+                    enable_self_collision = False
+                    self._gym.begin_aggregate(
+                        env, num_bodies, num_shapes, enable_self_collision
+                    )
+
                     actor_handle: int = self._gym.create_actor(
                         env, actor_asset, pose, f"robot_{actor_index}", env_index, 0
                     )
+
+                    self._gym.end_aggregate(env)
 
                     # TODO make all this configurable.
                     props = self._gym.get_actor_dof_properties(env, actor_handle)

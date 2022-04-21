@@ -207,6 +207,22 @@ class LocalRunner(Runner):
                             .actor.joints
                         ):
                             raise RuntimeError("Need to set a target for every dof")
+
+                        if not all(
+                            [
+                                target >= -joint.range and target <= joint.range
+                                for target, joint in zip(
+                                    targets,
+                                    self._batch.environments[env_index]
+                                    .actors[actor_index]
+                                    .actor.joints,
+                                )
+                            ]
+                        ):
+                            raise RuntimeError(
+                                "Dof targets must lie within the joints range."
+                            )
+
                         self._gym.set_actor_dof_position_targets(
                             env_handle,
                             actor_handle,

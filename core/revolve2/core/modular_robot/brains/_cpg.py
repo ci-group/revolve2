@@ -51,7 +51,12 @@ class Cpg(Brain, ABC):
             weight_matrix[index_a][index_b] = external_weights[i]
             weight_matrix[index_b][index_a] = -external_weights[i]
 
-        return ControllerCpg(intial_state, len(active_hinges), weight_matrix)
+        return ControllerCpg(
+            intial_state,
+            len(active_hinges),
+            weight_matrix,
+            np.array([active_hinge.RANGE for active_hinge in active_hinges]),
+        )
 
     @abstractmethod
     def _make_weights(

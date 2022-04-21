@@ -376,6 +376,9 @@ class _ActorBuilder:
                 joint_position,
                 joint_orientation,
                 Vector3([0.0, 1.0, 0.0]),
+                range=module.RANGE,
+                effort=module.EFFORT,
+                velocity=module.VELOCITY,
             )
         )
         self.dof_ids.append(module.id)

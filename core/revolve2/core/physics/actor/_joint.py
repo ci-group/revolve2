@@ -13,3 +13,6 @@ class Joint:
     position: Vector3
     orientation: Quaternion
     axis: Vector3
+    range: float
+    effort: float
+    velocity: float

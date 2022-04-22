@@ -229,7 +229,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
                         ]
                     ),
                     Quaternion(),
-                )
+                    controller.get_dof_targets(),
+                ),
             )
             batch.environments.append(env)
 

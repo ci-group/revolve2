@@ -5,9 +5,11 @@ import tempfile
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
+import numpy as np
 from isaacgym import gymapi
 from pyrr import Quaternion, Vector3
 
+from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
 from revolve2.core.physics.running import (
     ActorControl,
@@ -92,6 +94,7 @@ class LocalRunner(Runner):
                 )
 
                 gymenv = self.GymEnv(env, [])
+                gymenvs.append(gymenv)
 
                 for actor_index, posed_actor in enumerate(env_descr.actors):
                     # sadly isaac gym can only read robot descriptions from a file,
@@ -139,16 +142,27 @@ class LocalRunner(Runner):
                     )
 
                     actor_handle: int = self._gym.create_actor(
-                        env, actor_asset, pose, f"robot_{actor_index}", env_index, 0
+                        env,
+                        actor_asset,
+                        pose,
+                        f"robot_{actor_index}",
+                        env_index,
+                        0,
                     )
+                    gymenv.actors.append(actor_handle)
 
                     self._gym.end_aggregate(env)
 
                     # TODO make all this configurable.
                     props = self._gym.get_actor_dof_properties(env, actor_handle)
                     props["driveMode"].fill(gymapi.DOF_MODE_POS)
-                    props["stiffness"].fill(0.5)
-                    props["damping"].fill(0.01)
+                    props["stiffness"].fill(
+                        572
+                    )  # rough guess: maximum active hinge effort divided by 1 degree, which is when we want to deliver max torque
+                    # also rough guess: damping chosen so desired max speed is never higher than what the motor can do.
+                    # v = v+dt*(F_proportional_max - v * damping) / mass
+                    # F_proportional_max = v * damping
+                    props["damping"].fill(0.15)
                     self._gym.set_actor_dof_properties(env, actor_handle, props)
 
                     all_rigid_props = self._gym.get_actor_rigid_shape_properties(
@@ -166,9 +180,12 @@ class LocalRunner(Runner):
                         env, actor_handle, all_rigid_props
                     )
 
-                    gymenv.actors.append(actor_handle)
-
-                gymenvs.append(gymenv)
+                    self.set_actor_dof_position_targets(
+                        env, actor_handle, posed_actor.actor, posed_actor.dof_states
+                    )
+                    self.set_actor_dof_positions(
+                        env, actor_handle, posed_actor.actor, posed_actor.dof_states
+                    )
 
             return gymenvs
 
@@ -212,33 +229,14 @@ class LocalRunner(Runner):
                     for (env_index, actor_index, targets) in control._dof_targets:
                         env_handle = self._gymenvs[env_index].env
                         actor_handle = self._gymenvs[env_index].actors[actor_index]
-
-                        if len(targets) != len(
+                        actor = (
                             self._batch.environments[env_index]
                             .actors[actor_index]
-                            .actor.joints
-                        ):
-                            raise RuntimeError("Need to set a target for every dof")
+                            .actor
+                        )
 
-                        if not all(
-                            [
-                                target >= -joint.range and target <= joint.range
-                                for target, joint in zip(
-                                    targets,
-                                    self._batch.environments[env_index]
-                                    .actors[actor_index]
-                                    .actor.joints,
-                                )
-                            ]
-                        ):
-                            raise RuntimeError(
-                                "Dof targets must lie within the joints range."
-                            )
-
-                        self._gym.set_actor_dof_position_targets(
-                            env_handle,
-                            actor_handle,
-                            targets,
+                        self.set_actor_dof_position_targets(
+                            env_handle, actor_handle, actor, targets
                         )
 
                 # sample state if it is time
@@ -258,6 +256,55 @@ class LocalRunner(Runner):
             states.append((time, self._get_state()))
 
             return states
+
+        def set_actor_dof_position_targets(
+            self,
+            env_handle: gymapi.Env,
+            actor_handle: int,
+            actor: Actor,
+            targets: List[float],
+        ) -> None:
+            if len(targets) != len(actor.joints):
+                raise RuntimeError("Need to set a target for every dof")
+
+            if not all(
+                [
+                    target >= -joint.range and target <= joint.range
+                    for target, joint in zip(
+                        targets,
+                        actor.joints,
+                    )
+                ]
+            ):
+                raise RuntimeError("Dof targets must lie within the joints range.")
+
+            self._gym.set_actor_dof_position_targets(
+                env_handle,
+                actor_handle,
+                targets,
+            )
+
+        def set_actor_dof_positions(
+            self,
+            env_handle: gymapi.Env,
+            actor_handle: int,
+            actor: Actor,
+            positions: List[float],
+        ) -> None:
+            num_dofs = len(actor.joints)
+
+            if len(positions) != num_dofs:
+                raise RuntimeError("Need to set a position for every dof")
+
+            if num_dofs != 0:  # isaac gym does not understand zero length arrays...
+                dof_states = np.zeros(num_dofs, dtype=gymapi.DofState.dtype)
+                dof_positions = dof_states["pos"]
+
+                for i in range(len(dof_positions)):
+                    dof_positions[i] = positions[i]
+                self._gym.set_actor_dof_states(
+                    env_handle, actor_handle, dof_states, gymapi.STATE_POS
+                )
 
         def cleanup(self) -> None:
             if self._viewer is not None:

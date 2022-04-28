@@ -28,7 +28,14 @@ class Simulator:
         actor, self._controller = robot.make_actor_and_controller()
 
         env = Environment()
-        env.actors.append(PosedActor(actor, Vector3([0.0, 0.0, 0.1]), Quaternion()))
+        env.actors.append(
+            PosedActor(
+                actor,
+                Vector3([0.0, 0.0, 0.1]),
+                Quaternion(),
+                [0.0 for _ in self._controller.get_dof_targets()],
+            )
+        )
         batch.environments.append(env)
 
         runner = LocalRunner(LocalRunner.SimParams())

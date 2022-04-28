@@ -1,7 +1,9 @@
+import warnings
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
 from typing import Dict, List, Optional, Tuple, cast
 
+import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
 
 from .._actor import Actor
@@ -42,7 +44,9 @@ def to_urdf(
             "Physics robot cannot be converted to urdf. Require at least one body."
         )
 
-    for el in _make_node(root, tree, position, orientation):
+    # pass negative position and inverse of orientation of robot to first element
+    # so the robot will be positioned and rotated accordingly because the first link tries to compensate
+    for el in _make_links(root, tree, -position, orientation.inverse):
         urdf.append(el)
 
     return cast(
@@ -53,20 +57,22 @@ def to_urdf(
     )  # TODO for some reason the stubs for parseString have no proper return type. investigate
 
 
-def _make_node(
-    node: RigidBody,
+def _make_links(
+    body: RigidBody,
     tree: Dict[str, List[Joint]],
-    joint_pos: Vector3,
-    joint_ori: Quaternion,
+    link_pos: Vector3,
+    link_ori: Quaternion,
 ) -> List[xml.Element]:
     elements = []
 
-    link = xml.Element("link", {"name": node.name})
+    link = xml.Element("link", {"name": body.name})
     elements.append(link)
 
-    com_xyz = joint_ori.inverse * (node.position + node.center_of_mass() - joint_pos)
-    com_rpy = _quaternion_to_euler(joint_ori.inverse * node.orientation)
-    inertia = node.inertia_tensor()
+    com_xyz = link_ori.inverse * (body.position + body.center_of_mass() - link_pos)
+    com_rpy = _quaternion_to_euler(link_ori.inverse * body.orientation)
+    inertia = (
+        body.inertia_tensor()
+    )  # TODO orientation of individual collisions on this function
 
     inertial = xml.SubElement(link, "inertial")
     xml.SubElement(
@@ -77,7 +83,7 @@ def _make_node(
             "xyz": f"{com_xyz[0]} {com_xyz[1]} {com_xyz[2]}",
         },
     )
-    xml.SubElement(inertial, "mass", {"value": "{:e}".format(node.mass())})
+    xml.SubElement(inertial, "mass", {"value": "{:e}".format(body.mass())})
     xml.SubElement(
         inertial,
         "inertia",
@@ -91,8 +97,8 @@ def _make_node(
         },
     )
 
-    for collision in node.collisions:
-        el = xml.SubElement(link, "collision")
+    for collision in body.collisions:
+        el = xml.SubElement(link, "collision", {"name": collision.name})
         geometry = xml.SubElement(el, "geometry")
         xml.SubElement(
             geometry,
@@ -101,11 +107,11 @@ def _make_node(
                 "size": f"{collision.bounding_box[0]} {collision.bounding_box[1]} {collision.bounding_box[2]}"
             },
         )
-        xyz = joint_ori.inverse * (
-            node.position - joint_pos + node.orientation * collision.position
+        xyz = link_ori.inverse * (
+            body.position - link_pos + body.orientation * collision.position
         )
         rpy = _quaternion_to_euler(
-            joint_ori.inverse * node.orientation * collision.orientation
+            link_ori.inverse * body.orientation * collision.orientation
         )
         xml.SubElement(
             el,
@@ -116,13 +122,13 @@ def _make_node(
             },
         )
 
-    if node.name in tree:
-        for joint in tree[node.name]:
+    if body.name in tree:
+        for joint in tree[body.name]:
             el = xml.Element("joint", name=joint.name, type="revolute")
-            xml.SubElement(el, "parent", {"link": node.name})
+            xml.SubElement(el, "parent", {"link": body.name})
             xml.SubElement(el, "child", {"link": joint.body2.name})
-            xyz = joint_ori.inverse * (joint.position - joint_pos)
-            rpy = _quaternion_to_euler(joint_ori.inverse * joint.orientation)
+            xyz = link_ori.inverse * (joint.position - link_pos)
+            rpy = _quaternion_to_euler(link_ori.inverse * joint.orientation)
             xml.SubElement(
                 el,
                 "origin",
@@ -143,7 +149,7 @@ def _make_node(
                 },
             )
             elements.append(el)
-            elements += _make_node(
+            elements += _make_links(
                 joint.body2,
                 tree,
                 joint.position,
@@ -158,15 +164,11 @@ def _make_node(
 
 
 def _quaternion_to_euler(quaternion: Quaternion) -> Tuple[float, float, float]:
-    import warnings
-
-    from scipy.spatial.transform import Rotation
-
     with warnings.catch_warnings():
         warnings.simplefilter(
             "ignore", UserWarning
         )  # ignore gimbal lock warning. it is irrelevant for us.
-        euler = Rotation.from_quat(
+        euler = scipy.spatial.transform.Rotation.from_quat(
             [quaternion.x, quaternion.y, quaternion.z, quaternion.w]
         ).as_euler("xyz")
 

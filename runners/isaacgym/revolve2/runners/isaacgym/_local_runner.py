@@ -5,9 +5,11 @@ import tempfile
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
 
+import numpy as np
 from isaacgym import gymapi
 from pyrr import Quaternion, Vector3
 
+from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
 from revolve2.core.physics.running import (
     ActorControl,
@@ -17,8 +19,6 @@ from revolve2.core.physics.running import (
     Runner,
     State,
 )
-from revolve2.core.physics.actor import Actor
-import numpy as np
 
 
 class LocalRunner(Runner):

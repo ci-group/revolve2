@@ -33,7 +33,7 @@ class Simulator:
                 actor,
                 Vector3([0.0, 0.0, 0.1]),
                 Quaternion(),
-                self._controller.get_dof_targets(),
+                [0.0 for _ in self._controller.get_dof_targets()],
             )
         )
         batch.environments.append(env)

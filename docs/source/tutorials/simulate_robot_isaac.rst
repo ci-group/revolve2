@@ -148,7 +148,7 @@ It is possible to run the simulation in headless mode(no graphics) by passing th
     async def simulate(self, robot: ModularRobot, control_frequency: float) -> None:
         # ...
 
-        env.actors.append(PosedActor(actor, Vector3([0.0, 0.0, 0.1]), Quaternion(), self._controller.get_dof_targets(),))
+        env.actors.append(PosedActor(actor, Vector3([0.0, 0.0, 0.1]), Quaternion(), [0.0 for _ in self._controller.get_dof_targets()],))
         batch.environments.append(env)
 
         runner = LocalRunner(LocalRunner.SimParams())

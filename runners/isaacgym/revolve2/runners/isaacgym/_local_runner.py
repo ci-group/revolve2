@@ -162,9 +162,7 @@ class LocalRunner(Runner):
                     # also rough guess: damping chosen so desired max speed is never higher than what the motor can do.
                     # v = v+dt*(F_proportional_max - v * damping) / mass
                     # F_proportional_max = v * damping
-                    props["damping"].fill(
-                        0.15
-                    ))
+                    props["damping"].fill(0.15)
                     self._gym.set_actor_dof_properties(env, actor_handle, props)
 
                     all_rigid_props = self._gym.get_actor_rigid_shape_properties(

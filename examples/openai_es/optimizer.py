@@ -158,6 +158,7 @@ class Optimizer(OpenaiESOptimizer):
                         ]
                     ),
                     Quaternion(),
+                    [0.0 for _ in controller.get_dof_targets()],
                 )
             )
             batch.environments.append(env)

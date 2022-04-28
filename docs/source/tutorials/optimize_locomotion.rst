@@ -652,6 +652,7 @@ And lastly, calculate and return the fitness of the robot, based on the simulati
                         ]
                     ),
                     Quaternion(),
+                    [0.0 for _ in controller.get_dof_targets()],
                 )
             )
             batch.environments.append(env)

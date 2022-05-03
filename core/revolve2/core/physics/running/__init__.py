@@ -3,7 +3,7 @@ from ._batch import Batch
 from ._environment import Environment
 from ._posed_actor import PosedActor
 from ._runner import Runner
-from ._state import ActorState, EnvironmentState, State
+from ._state import ActorState, EnvironmentState, RunnerState
 
 __all__ = [
     "ActorControl",
@@ -13,5 +13,5 @@ __all__ = [
     "Runner",
     "ActorState",
     "EnvironmentState",
-    "State",
+    "RunnerState",
 ]

@@ -3,7 +3,7 @@ import multiprocessing as mp
 import os
 import tempfile
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 import numpy as np
 from isaacgym import gymapi
@@ -17,7 +17,7 @@ from revolve2.core.physics.running import (
     Batch,
     EnvironmentState,
     Runner,
-    State,
+    RunnerState,
 )
 
 
@@ -205,8 +205,8 @@ class LocalRunner(Runner):
 
             return viewer
 
-        def run(self) -> List[Tuple[float, State]]:
-            states: List[Tuple[float, State]] = []  # (time, state)
+        def run(self) -> List[RunnerState]:
+            states: List[RunnerState] = []
 
             control_step = 1 / self._batch.control_frequency
             sample_step = 1 / self._batch.sampling_frequency
@@ -215,7 +215,7 @@ class LocalRunner(Runner):
             last_sample_time = 0.0
 
             # sample initial state
-            states.append((0.0, self._get_state()))
+            states.append(self._get_state(0.0))
 
             while (
                 time := self._gym.get_sim_time(self._sim)
@@ -242,7 +242,7 @@ class LocalRunner(Runner):
                 # sample state if it is time
                 if time >= last_sample_time + sample_step:
                     last_sample_time = int(time / sample_step) * sample_step
-                    states.append((time, self._get_state()))
+                    states.append(self._get_state(time))
 
                 # step simulation
                 self._gym.simulate(self._sim)
@@ -253,7 +253,7 @@ class LocalRunner(Runner):
                     self._gym.draw_viewer(self._viewer, self._sim, False)
 
             # sample one final time
-            states.append((time, self._get_state()))
+            states.append(self._get_state(time))
 
             return states
 
@@ -311,8 +311,8 @@ class LocalRunner(Runner):
                 self._gym.destroy_viewer(self._viewer)
             self._gym.destroy_sim(self._sim)
 
-        def _get_state(self) -> State:
-            state = State([])
+        def _get_state(self, time: float) -> RunnerState:
+            state = RunnerState(time, [])
 
             for gymenv in self._gymenvs:
                 env_state = EnvironmentState([])
@@ -362,7 +362,7 @@ class LocalRunner(Runner):
 
         return sim_params
 
-    async def run_batch(self, batch: Batch) -> List[Tuple[float, State]]:
+    async def run_batch(self, batch: Batch) -> List[RunnerState]:
         # sadly we must run Isaac Gym in a subprocess, because it has some big memory leaks.
         result_queue: mp.Queue = mp.Queue()  # type: ignore # TODO
         process = mp.Process(

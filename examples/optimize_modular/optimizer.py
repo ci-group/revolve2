@@ -238,8 +238,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
         return [
             self._calculate_fitness(
-                states[0][1].envs[i].actor_states[0],
-                states[-1][1].envs[i].actor_states[0],
+                states[0].envs[i].actor_states[0],
+                states[-1].envs[i].actor_states[0],
             )
             for i in range(len(genotypes))
         ]

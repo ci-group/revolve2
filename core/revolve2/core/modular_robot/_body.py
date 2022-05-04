@@ -134,8 +134,8 @@ class _Finalizer:
 
 
 class _ActorBuilder:
-    _STATIC_FRICTION = 0.9
-    _DYNAMIC_FRICTION = 0.6
+    _STATIC_FRICTION = 1.0
+    _DYNAMIC_FRICTION = 1.0
 
     robot: Actor
     dof_ids: List[int]

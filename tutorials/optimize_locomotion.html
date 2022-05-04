@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.2.2-alpha3 documentation</title>
+  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.2.3-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -780,6 +780,7 @@ And lastly, calculate and return the fitness of the robot, based on the simulati
                     <span class="p">]</span>
                 <span class="p">),</span>
                 <span class="n">Quaternion</span><span class="p">(),</span>
+                <span class="p">[</span><span class="mf">0.0</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">controller</span><span class="o">.</span><span class="n">get_dof_targets</span><span class="p">()],</span>
             <span class="p">)</span>
         <span class="p">)</span>
         <span class="n">batch</span><span class="o">.</span><span class="n">environments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
@@ -788,8 +789,8 @@ And lastly, calculate and return the fitness of the robot, based on the simulati
 
     <span class="k">return</span> <span class="p">[</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_fitness</span><span class="p">(</span>
-            <span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">actor_states</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">actor_states</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">states</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">actor_states</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">states</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">envs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">actor_states</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">genotypes</span><span class="p">))</span>
     <span class="p">]</span>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.physics.running package &mdash; revolve2 v0.2.2-alpha3 documentation</title>
+  <title>revolve2.core.physics.running package &mdash; revolve2 v0.2.3-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -153,13 +153,9 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.ActorState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActorState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'Vector3'</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'Quaternion'</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.ActorState" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="revolve2.serialization.html#revolve2.serialization.Serializable" title="revolve2.serialization._serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.serialization._serializable.Serializable</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.ActorState.deserialize">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StaticData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._state.ActorState"><span class="pre">ActorState</span></a></span></span><a class="headerlink" href="#revolve2.core.physics.running.ActorState.deserialize" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActorState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.ActorState" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>State of an actor.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.ActorState.orientation">
 <span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.quaternion.Quaternion</span></em><a class="headerlink" href="#revolve2.core.physics.running.ActorState.orientation" title="Permalink to this definition"></a></dt>
@@ -168,11 +164,6 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.ActorState.position">
 <span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.objects.vector3.Vector3</span></em><a class="headerlink" href="#revolve2.core.physics.running.ActorState.position" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.ActorState.serialize">
-<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StaticData</span></span></span><a class="headerlink" href="#revolve2.core.physics.running.ActorState.serialize" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -224,32 +215,28 @@ but is dependent on the actual step frequency of the simulator.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'List[ActorState]'</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="revolve2.serialization.html#revolve2.serialization.Serializable" title="revolve2.serialization._serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.serialization._serializable.Serializable</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._state.ActorState"><span class="pre">ActorState</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>State of an environment.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentState.actor_states">
 <span class="sig-name descname"><span class="pre">actor_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._state.ActorState"><span class="pre">ActorState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState.actor_states" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentState.deserialize">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StaticData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._state.ActorState"><span class="pre">ActorState</span></a></span></span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState.deserialize" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentState.serialize">
-<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StaticData</span></span></span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState.serialize" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.PosedActor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PosedActor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.PosedActor" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PosedActor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.PosedActor" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.PosedActor.actor">
 <span class="sig-name descname"><span class="pre">actor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a></em><a class="headerlink" href="#revolve2.core.physics.running.PosedActor.actor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.PosedActor.dof_states">
+<span class="sig-name descname"><span class="pre">dof_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.PosedActor.dof_states" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -268,30 +255,34 @@ but is dependent on the actual step frequency of the simulator.</p>
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Runner">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Runner</span></span><a class="headerlink" href="#revolve2.core.physics.running.Runner" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Interface class for physics runners.
+Running happens either in simulation or reality, depending on the implementation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Runner.run_batch">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.running.Batch" title="revolve2.core.physics.running._batch.Batch"><span class="pre">Batch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.physics.running.State" title="revolve2.core.physics.running._state.State"><span class="pre">State</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.physics.running.Runner.run_batch" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.running.Batch" title="revolve2.core.physics.running._batch.Batch"><span class="pre">Batch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.RunnerState" title="revolve2.core.physics.running._state.RunnerState"><span class="pre">RunnerState</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.physics.running.Runner.run_batch" title="Permalink to this definition"></a></dt>
+<dd><p>Simulate the provided batch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of simulation states in ascending order of time.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.State">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">State</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">envs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'List[EnvironmentState]'</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.State" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="revolve2.serialization.html#revolve2.serialization.Serializable" title="revolve2.serialization._serializable.Serializable"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.serialization._serializable.Serializable</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.State.deserialize">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StaticData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._state.ActorState"><span class="pre">ActorState</span></a></span></span><a class="headerlink" href="#revolve2.core.physics.running.State.deserialize" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="revolve2.core.physics.running.RunnerState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RunnerState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentState" title="revolve2.core.physics.running._state.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.RunnerState" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>State of a runner.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.RunnerState.envs">
+<span class="sig-name descname"><span class="pre">envs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentState" title="revolve2.core.physics.running._state.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.RunnerState.envs" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.State.envs">
-<span class="sig-name descname"><span class="pre">envs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentState" title="revolve2.core.physics.running._state.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.State.envs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.State.serialize">
-<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StaticData</span></span></span><a class="headerlink" href="#revolve2.core.physics.running.State.serialize" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="revolve2.core.physics.running.RunnerState.time_seconds">
+<span class="sig-name descname"><span class="pre">time_seconds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.running.RunnerState.time_seconds" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

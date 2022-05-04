@@ -231,7 +231,7 @@ class Program:
                 print(f"{pin.pin:03d} | {target}")
 
         CENTER = 157
-        ANGLE60 = 91
+        ANGLE60 = 64
 
         for pin, target in zip(self._pins, targets):
             if not self._dry:

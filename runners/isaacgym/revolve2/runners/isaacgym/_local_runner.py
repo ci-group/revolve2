@@ -157,12 +157,12 @@ class LocalRunner(Runner):
                     props = self._gym.get_actor_dof_properties(env, actor_handle)
                     props["driveMode"].fill(gymapi.DOF_MODE_POS)
                     props["stiffness"].fill(
-                        572
+                        1.0
                     )  # rough guess: maximum active hinge effort divided by 1 degree, which is when we want to deliver max torque
                     # also rough guess: damping chosen so desired max speed is never higher than what the motor can do.
                     # v = v+dt*(F_proportional_max - v * damping) / mass
                     # F_proportional_max = v * damping
-                    props["damping"].fill(0.15)
+                    props["damping"].fill(0.05)
                     self._gym.set_actor_dof_properties(env, actor_handle, props)
 
                     all_rigid_props = self._gym.get_actor_rigid_shape_properties(

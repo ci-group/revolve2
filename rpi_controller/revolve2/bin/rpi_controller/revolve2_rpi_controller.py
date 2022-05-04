@@ -239,8 +239,20 @@ class Program:
                     invert_mul = -1
                 else:
                     invert_mul = 1
+
+                adjust_reversed_motor = (
+                    -1
+                )  # the motor is attached reversed by design so we need to inverse what it does.
+
                 self._gpio.set_PWM_dutycycle(
-                    pin.pin, CENTER + (invert_mul * min(1, max(-1, target)) * ANGLE60)
+                    pin.pin,
+                    CENTER
+                    + (
+                        adjust_reversed_motor
+                        * invert_mul
+                        * min(1, max(-1, target))
+                        * ANGLE60
+                    ),
                 )
 
     def _stop_pwm(self) -> None:

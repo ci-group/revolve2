@@ -63,7 +63,7 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
         )
 
         arrays: List[npt.NDArray[np.float_]] = [
-            np.array(group)
+            np.array([item.value for item in group])
             for _, group in itertools.groupby(
                 items, key=lambda item: cast(int, item.nparray1xn_id)
             )

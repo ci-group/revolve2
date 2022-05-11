@@ -9,7 +9,7 @@ from pyrr import Quaternion, Vector3
 
 from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick, ModularRobot
-from revolve2.core.modular_robot.brains import CpgRandom
+from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighbourRandom
 from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
 from revolve2.runners.isaacgym import LocalRunner
 
@@ -59,7 +59,7 @@ async def main() -> None:
     body.core.right.attachment.attachment = Brick(0.0)
     body.finalize()
 
-    brain = CpgRandom(rng)
+    brain = BrainCpgNetworkNeighbourRandom(rng)
     robot = ModularRobot(body, brain)
 
     sim = Simulator()

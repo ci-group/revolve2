@@ -1,3 +1,3 @@
-from ._brain_cpg_v1 import BrainCpgV1
+from ._brain_cpg_network_neighbour_v1 import BrainCpgNetworkNeighbourV1
 
-__all__ = ["BrainCpgV1"]
+__all__ = ["BrainCpgNetworkNeighbourV1"]

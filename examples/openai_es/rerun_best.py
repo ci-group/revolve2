@@ -1,14 +1,17 @@
 from optimize import make_body
-from optimizer import Brain
+from revolve2.core.modular_robot.brains import (
+    BrainCpgNetworkStatic,
+    make_cpg_network_structure_neighbour,
+)
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.database.serializers import DbNdarray1xnItem
 from revolve2.core.modular_robot import ModularRobot
-from revolve2.core.modular_robot.brains import Cpg
 from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
 from revolve2.runners.isaacgym import ModularRobotRerunner
+import math
 
 
 async def main() -> None:
@@ -44,13 +47,24 @@ async def main() -> None:
         print(f"params: {params}")
 
         body = make_body()
-        active_hinges = body.find_active_hinges()
-        connections = Cpg._find_connections(body, active_hinges)
-        num_internal_weights = len(active_hinges)
 
-        brain = Brain(
-            params[:num_internal_weights],
-            params[num_internal_weights:],
+        actor, dof_ids = body.to_actor()
+        active_hinges_unsorted = body.find_active_hinges()
+        active_hinge_map = {
+            active_hinge.id: active_hinge for active_hinge in active_hinges_unsorted
+        }
+        active_hinges = [active_hinge_map[id] for id in dof_ids]
+
+        cpg_network_structure = make_cpg_network_structure_neighbour(active_hinges)
+
+        initial_state = cpg_network_structure.make_uniform_state(0.5 * math.pi / 2.0)
+        weight_matrix = cpg_network_structure.make_weight_matrix_from_params(params)
+        dof_ranges = cpg_network_structure.make_uniform_dof_ranges(1.0)
+        brain = BrainCpgNetworkStatic(
+            initial_state,
+            cpg_network_structure.num_cpgs,
+            weight_matrix,
+            dof_ranges,
         )
 
         bot = ModularRobot(body, brain)

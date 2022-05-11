@@ -1,12 +1,14 @@
-from typing import List, Tuple, cast
+from typing import List, Tuple, cast, Set
 
 import multineat
 
 from revolve2.core.modular_robot import ActiveHinge, Body
-from revolve2.core.modular_robot.brains import Cpg as ModularRobotBrainCpg
+from revolve2.core.modular_robot.brains import (
+    BrainCpgNetworkNeighbour as ModularRobotBrainCpgNetworkNeighbour,
+)
 
 
-class BrainCpgV1(ModularRobotBrainCpg):
+class BrainCpgNetworkNeighbourV1(ModularRobotBrainCpgNetworkNeighbour):
     _genotype: multineat.Genome
 
     def __init__(self, genotype: multineat.Genome):
@@ -15,7 +17,7 @@ class BrainCpgV1(ModularRobotBrainCpg):
     def _make_weights(
         self,
         active_hinges: List[ActiveHinge],
-        connections: List[Tuple[ActiveHinge, ActiveHinge]],
+        connections: Set[Tuple[ActiveHinge, ActiveHinge]],
         body: Body,
     ) -> Tuple[List[float], List[float]]:
         brain_net = multineat.NeuralNetwork()

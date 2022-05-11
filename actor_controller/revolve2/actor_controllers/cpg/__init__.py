@@ -1,3 +1,4 @@
-from ._cpg import Cpg, CpgIndex, CpgPair, CpgParamUtil
+from ._cpg import CpgActorController
+from ._cpg_network_structure import CpgIndex, CpgPair, CpgNetworkStructure
 
-__all__ = ["Cpg", "CpgIndex", "CpgPair", "CpgParamUtil"]
+__all__ = ["CpgActorController", "CpgIndex", "CpgPair", "CpgNetworkStructure"]

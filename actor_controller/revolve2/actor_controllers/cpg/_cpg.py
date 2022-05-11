@@ -7,6 +7,99 @@ import numpy.typing as npt
 
 from revolve2.actor_controller import ActorController
 from revolve2.serialization import SerializeError, StaticData
+from dataclasses import dataclass
+from typing import Dict
+
+
+@dataclass(eq=True, frozen=True)
+class CpgIndex:
+    index: int
+
+
+class CpgPair:
+    # lowest is automatically set to be the lowest state index of the two
+    cpg_lowest_index: CpgIndex
+    cpg_highest_index: CpgIndex
+
+    def __init__(self, cpg_1: CpgIndex, cpg_2: CpgIndex) -> None:
+        if cpg_1.index < cpg_2.index:
+            self.cpg_lowest_index = cpg_1
+            self.cpg_highest_index = cpg_2
+        else:
+            self.cpg_lowest_index = cpg_2
+            self.cpg_highest_index = cpg_1
+
+
+class CpgParamUtil:
+    cpgs: List[CpgIndex]
+    connections: List[CpgPair]
+
+    def __init__(self, cpgs: List[CpgIndex], connections: List[CpgPair]) -> None:
+        assert len(set(connections)) == len(connections)
+
+        self.cpgs = cpgs
+        self.connections = connections
+
+    @staticmethod
+    def make_cpgs(num_cpgs: int) -> List[CpgIndex]:
+        return [CpgIndex(index) for index in range(num_cpgs)]
+
+    def make_weight_matrix(
+        self,
+        internal_weights: Dict[CpgIndex, float],
+        external_weights: Dict[CpgPair, float],
+    ) -> npt.NDArray[np.float_]:
+        state_size = self.num_cpgs * 2
+
+        assert set(internal_weights.keys()) == set(self.cpgs)
+        assert set(external_weights.keys()) == set(self.connections)
+
+        weight_matrix = np.zeros((state_size, state_size))
+
+        for cpg, weight in internal_weights.items():
+            weight_matrix[cpg.index][self.num_cpgs + cpg.index] = weight
+            weight_matrix[self.num_cpgs + cpg.index][cpg.index] = -weight
+
+        for cpg_pair, weight in external_weights.items():
+            weight_matrix[cpg_pair.cpg_lowest_index.index][
+                cpg_pair.cpg_highest_index.index
+            ] = weight
+            weight_matrix[cpg_pair.cpg_highest_index.index][
+                cpg_pair.cpg_lowest_index.index
+            ] = -weight
+
+        return weight_matrix
+
+    @property
+    def num_weights(self) -> int:
+        return len(self.cpgs) + len(self.connections)
+
+    def make_weight_matrix_from_params(
+        self, params: List[float]
+    ) -> npt.NDArray[np.float_]:
+        assert len(params) == self.num_weights
+
+        internal_weights = {cpg: weight for cpg, weight in zip(self.cpgs, params)}
+
+        external_weights = {
+            pair: weight for pair, weight in zip(self.connections, params)
+        }
+
+        return self.make_weight_matrix(internal_weights, external_weights)
+
+    @property
+    def num_states(self) -> int:
+        return len(self.cpgs) * 2
+
+    def make_uniform_state(self, value: float) -> npt.NDArray[np.float_]:
+        return np.full(self.num_states, value)
+
+    @property
+    def num_cpgs(self) -> int:
+        return len(self.cpgs)
+
+    def make_uniform_dof_ranges(self, value: float) -> npt.NDArray[np.float_]:
+        return np.full(self.num_cpgs, value)
 
 
 class Cpg(ActorController):

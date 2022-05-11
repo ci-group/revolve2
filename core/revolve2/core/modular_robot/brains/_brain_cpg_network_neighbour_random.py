@@ -1,12 +1,12 @@
 from random import Random
-from typing import List, Tuple
+from typing import List, Tuple, Set
 
 from revolve2.core.modular_robot import ActiveHinge, Body
 
-from ._cpg import Cpg
+from ._brain_cpg_network_neighbour import BrainCpgNetworkNeighbour
 
 
-class CpgRandom(Cpg):
+class BrainCpgNetworkNeighbourRandom(BrainCpgNetworkNeighbour):
     _rng: Random
 
     def __init__(self, rng: Random) -> None:
@@ -15,7 +15,7 @@ class CpgRandom(Cpg):
     def _make_weights(
         self,
         active_hinges: List[ActiveHinge],
-        connections: List[Tuple[ActiveHinge, ActiveHinge]],
+        connections: Set[Tuple[ActiveHinge, ActiveHinge]],
         body: Body,
     ) -> Tuple[List[float], List[float]]:
         return (

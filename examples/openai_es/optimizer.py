@@ -9,8 +9,11 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from revolve2.actor_controller import ActorController
-from revolve2.core.modular_robot import ActiveHinge, Body, ModularRobot
-from revolve2.core.modular_robot.brains import Cpg
+from revolve2.core.modular_robot import Body, ModularRobot
+from revolve2.core.modular_robot.brains import (
+    make_cpg_network_structure_neighbour,
+    BrainCpgNetworkStatic,
+)
 from revolve2.core.optimization import ProcessIdGen
 from revolve2.core.optimization.ea.openai_es import OpenaiESOptimizer
 from revolve2.core.physics.running import (
@@ -21,12 +24,16 @@ from revolve2.core.physics.running import (
     PosedActor,
     Runner,
 )
+from revolve2.core.physics.actor import Actor
 from revolve2.runners.isaacgym import LocalRunner
+from revolve2.actor_controllers.cpg import CpgNetworkStructure
 
 
 class Optimizer(OpenaiESOptimizer):
     _body: Body
-    _num_internal_weights: int
+    _actor: Actor
+    _dof_ids: List[int]
+    _cpg_network_structure: CpgNetworkStructure
 
     _runner: Runner
     _controllers: List[ActorController]
@@ -54,14 +61,12 @@ class Optimizer(OpenaiESOptimizer):
         num_generations: int,
     ) -> None:
         self._body = robot_body
-        active_hinges = self._body.find_active_hinges()
-        connections = Cpg._find_connections(self._body, active_hinges)
-        self._num_internal_weights = len(active_hinges)
+        self._init_actor_and_cpg_network_structure()
 
         nprng = np.random.Generator(
             np.random.PCG64(rng.randint(0, 2**63))
         )  # rng is currently not numpy, but this would be very convenient. do this until that is resolved.
-        initial_mean = nprng.standard_normal(len(active_hinges) + len(connections))
+        initial_mean = nprng.standard_normal(self._cpg_network_structure.num_params)
 
         await super().ainit_new(
             database=database,
@@ -105,8 +110,7 @@ class Optimizer(OpenaiESOptimizer):
             return False
 
         self._body = robot_body
-        active_hinges = self._body.find_active_hinges()
-        self._num_internal_weights = len(active_hinges)
+        self._init_actor_and_cpg_network_structure()
 
         self._init_runner()
 
@@ -116,6 +120,18 @@ class Optimizer(OpenaiESOptimizer):
         self._num_generations = num_generations
 
         return True
+
+    def _init_actor_and_cpg_network_structure(self) -> None:
+        self._actor, self._dof_ids = self._body.to_actor()
+        active_hinges_unsorted = self._body.find_active_hinges()
+        active_hinge_map = {
+            active_hinge.id: active_hinge for active_hinge in active_hinges_unsorted
+        }
+        active_hinges = [active_hinge_map[id] for id in self._dof_ids]
+
+        self._cpg_network_structure = make_cpg_network_structure_neighbour(
+            active_hinges
+        )
 
     def _init_runner(self) -> None:
         self._runner = LocalRunner(LocalRunner.SimParams(), headless=True)
@@ -136,20 +152,28 @@ class Optimizer(OpenaiESOptimizer):
 
         self._controllers = []
 
-        for weights in population:
-            brain = Brain(
-                weights.tolist()[: self._num_internal_weights],
-                weights.tolist()[self._num_internal_weights :],
+        for params in population:
+            initial_state = self._cpg_network_structure.make_uniform_state(
+                0.5 * math.pi / 2.0
             )
-            actor, controller = ModularRobot(
-                self._body, brain
-            ).make_actor_and_controller()
-            bounding_box = actor.calc_aabb()
+            weight_matrix = self._cpg_network_structure.make_weight_matrix_from_params(
+                params
+            )
+            dof_ranges = self._cpg_network_structure.make_uniform_dof_ranges(1.0)
+            brain = BrainCpgNetworkStatic(
+                initial_state,
+                self._cpg_network_structure.num_cpgs,
+                weight_matrix,
+                dof_ranges,
+            )
+            controller = brain.make_controller(self._body, self._dof_ids)
+
+            bounding_box = self._actor.calc_aabb()
             self._controllers.append(controller)
             env = Environment()
             env.actors.append(
                 PosedActor(
-                    actor,
+                    self._actor,
                     Vector3(
                         [
                             0.0,
@@ -192,22 +216,3 @@ class Optimizer(OpenaiESOptimizer):
 
     def _must_do_next_gen(self) -> bool:
         return self.generation_number != self._num_generations
-
-
-class Brain(Cpg):
-    _internal_weights: List[float]
-    _external_weights: List[float]
-
-    def __init__(
-        self, internal_weights: List[float], external_weights: List[float]
-    ) -> None:
-        self._internal_weights = internal_weights
-        self._external_weights = external_weights
-
-    def _make_weights(
-        self,
-        active_hinges: List[ActiveHinge],
-        connections: List[Tuple[ActiveHinge, ActiveHinge]],
-        body: Body,
-    ) -> Tuple[List[float], List[float]]:
-        return (self._internal_weights, self._external_weights)

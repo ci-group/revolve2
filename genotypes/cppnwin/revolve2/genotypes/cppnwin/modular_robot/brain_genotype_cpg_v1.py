@@ -4,7 +4,7 @@ from revolve2.core.modular_robot import Body
 
 from .._genotype import Genotype
 from .._random_v1 import random_v1 as base_random_v1
-from ._brain_cpg_v1 import BrainCpgV1
+from ._brain_cpg_network_neighbour_v1 import BrainCpgNetworkNeighbourV1
 
 
 def random_v1(
@@ -30,5 +30,5 @@ def random_v1(
     )
 
 
-def develop_v1(genotype: Genotype, body: Body) -> BrainCpgV1:
-    return BrainCpgV1(genotype.genotype)
+def develop_v1(genotype: Genotype, body: Body) -> BrainCpgNetworkNeighbourV1:
+    return BrainCpgNetworkNeighbourV1(genotype.genotype)

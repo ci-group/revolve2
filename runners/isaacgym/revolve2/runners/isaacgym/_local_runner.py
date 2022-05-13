@@ -113,7 +113,11 @@ class LocalRunner(Runner):
                     botfile.close()
                     asset_root = os.path.dirname(botfile.name)
                     urdf_file = os.path.basename(botfile.name)
-                    actor_asset = self._gym.load_urdf(self._sim, asset_root, urdf_file)
+                    asset_options = gymapi.AssetOptions()
+                    asset_options.angular_damping = 0.0
+                    actor_asset = self._gym.load_urdf(
+                        self._sim, asset_root, urdf_file, asset_options
+                    )
                     os.remove(botfile.name)
 
                     if actor_asset is None:

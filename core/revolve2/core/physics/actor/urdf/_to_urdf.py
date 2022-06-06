@@ -68,7 +68,9 @@ def _make_links(
     link = xml.Element("link", {"name": body.name})
     elements.append(link)
 
-    com_xyz = link_ori.inverse * (body.position + body.center_of_mass() - link_pos)
+    com_xyz = link_ori.inverse * (
+        body.position - link_pos + body.orientation * body.center_of_mass()
+    )
     com_rpy = _quaternion_to_euler(link_ori.inverse * body.orientation)
     inertia = (
         body.inertia_tensor()

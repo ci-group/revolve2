@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Dict, List, Set
+
 import numpy as np
 import numpy.typing as npt
 

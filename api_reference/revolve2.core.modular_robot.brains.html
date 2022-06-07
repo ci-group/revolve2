@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.modular_robot.brains package &mdash; revolve2 v0.2.3-alpha3 documentation</title>
+  <title>revolve2.core.modular_robot.brains package &mdash; revolve2 v0.2.4-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -141,12 +141,12 @@
 <section id="module-revolve2.core.modular_robot.brains">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.modular_robot.brains" title="Permalink to this headline"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.Cpg">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Cpg</span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.Cpg" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkNeighbour</span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain" title="revolve2.core.modular_robot._brain.Brain"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._brain.Brain</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.Cpg.make_controller">
-<span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.Cpg.make_controller" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour.make_controller">
+<span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour.make_controller" title="Permalink to this definition"></a></dt>
 <dd><p>Create a controller for the provided body</p>
 <dl class="field-list simple">
 <dt class="field-odd">Body</dt>
@@ -161,9 +161,38 @@
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.CpgRandom">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CpgRandom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.brains.CpgRandom" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.brains.Cpg" title="revolve2.core.modular_robot.brains._cpg.Cpg"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot.brains._cpg.Cpg</span></code></a></p>
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbourRandom">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkNeighbourRandom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbourRandom" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour" title="revolve2.core.modular_robot.brains._brain_cpg_network_neighbour.BrainCpgNetworkNeighbour"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot.brains._brain_cpg_network_neighbour.BrainCpgNetworkNeighbour</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.BrainCpgNetworkStatic">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkStatic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_cpgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ranges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkStatic" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain" title="revolve2.core.modular_robot._brain.Brain"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._brain.Brain</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.BrainCpgNetworkStatic.make_controller">
+<span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkStatic.make_controller" title="Permalink to this definition"></a></dt>
+<dd><p>Create a controller for the provided body</p>
+<dl class="field-list simple">
+<dt class="field-odd">Body</dt>
+<dd class="field-odd"><p>The body to make the brain for.</p>
+</dd>
+<dt class="field-even">Dof_ids</dt>
+<dd class="field-even"><p>Map from actor joint index to module id.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.make_cpg_network_structure_neighbour">
+<span class="sig-name descname"><span class="pre">make_cpg_network_structure_neighbour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active_hinges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge" title="revolve2.core.modular_robot._active_hinge.ActiveHinge"><span class="pre">ActiveHinge</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure" title="revolve2.actor_controllers.cpg._cpg_network_structure.CpgNetworkStructure"><span class="pre">CpgNetworkStructure</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.make_cpg_network_structure_neighbour" title="Permalink to this definition"></a></dt>
+<dd><p>Create the structure of a cpg network based on a list of active hinges.
+The order of the active hinges matches the order of the cpgs.
+I.e. every active hinges has a corresponding cpg,
+and these are stored in the order the hinges are provided in.</p>
 </dd></dl>
 
 </section>

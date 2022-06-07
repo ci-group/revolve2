@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; revolve2 v0.2.3-alpha3 documentation</title>
+  <title>Index &mdash; revolve2 v0.2.4-alpha3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -215,10 +215,10 @@
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.body1">body1 (Joint attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.body2">body2 (Joint attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Collision.bounding_box">bounding_box (Collision attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.BoundingBox">BoundingBox (class in revolve2.core.physics.actor)</a>
@@ -227,7 +227,13 @@
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ModularRobot.brain">brain (ModularRobot attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.genotypes.cppnwin.modular_robot.html#revolve2.genotypes.cppnwin.modular_robot.BrainCpgV1">BrainCpgV1 (class in revolve2.genotypes.cppnwin.modular_robot)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour">BrainCpgNetworkNeighbour (class in revolve2.core.modular_robot.brains)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbourRandom">BrainCpgNetworkNeighbourRandom (class in revolve2.core.modular_robot.brains)</a>
+</li>
+      <li><a href="api_reference/revolve2.genotypes.cppnwin.modular_robot.html#revolve2.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighbourV1">BrainCpgNetworkNeighbourV1 (class in revolve2.genotypes.cppnwin.modular_robot)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.BrainCpgNetworkStatic">BrainCpgNetworkStatic (class in revolve2.core.modular_robot.brains)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brick">Brick (class in revolve2.core.modular_robot)</a>
 </li>
@@ -253,23 +259,31 @@
 </li>
       <li><a href="api_reference/revolve2.core.rpi_controller_remote.html#revolve2.core.rpi_controller_remote.connect">connect() (in module revolve2.core.rpi_controller_remote)</a>
 </li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.connections">connections (CpgNetworkStructure attribute)</a>
+</li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.Batch.control">control (Batch attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.Batch.control_frequency">control_frequency (Batch attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.core">core (Body attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Core">Core (class in revolve2.core.modular_robot)</a>
 </li>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg">Cpg (class in revolve2.actor_controllers.cpg)</a>
-
-      <ul>
-        <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.Cpg">(class in revolve2.core.modular_robot.brains)</a>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgPair.cpg_index_highest">cpg_index_highest (CpgPair attribute)</a>
 </li>
-      </ul></li>
-      <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.CpgRandom">CpgRandom (class in revolve2.core.modular_robot.brains)</a>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgPair.cpg_index_lowest">cpg_index_lowest (CpgPair attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgActorController">CpgActorController (class in revolve2.actor_controllers.cpg)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgIndex">CpgIndex (class in revolve2.actor_controllers.cpg)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure">CpgNetworkStructure (class in revolve2.actor_controllers.cpg)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgPair">CpgPair (class in revolve2.actor_controllers.cpg)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.cpgs">cpgs (CpgNetworkStructure attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.FloatSerializer.create_tables">create_tables() (FloatSerializer class method)</a>
 
@@ -315,7 +329,7 @@
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState">DbOpenaiESOptimizerState (class in revolve2.core.optimization.ea.openai_es)</a>
 </li>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg.deserialize">deserialize() (Cpg class method)</a>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgActorController.deserialize">deserialize() (CpgActorController class method)</a>
 
       <ul>
         <li><a href="api_reference/revolve2.serialization.html#revolve2.serialization.deserialize">(in module revolve2.serialization)</a>
@@ -448,7 +462,7 @@
       <li><a href="api_reference/revolve2.actor_controller.html#revolve2.actor_controller.ActorController.get_dof_targets">get_dof_targets() (ActorController method)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg.get_dof_targets">(Cpg method)</a>
+        <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgActorController.get_dof_targets">(CpgActorController method)</a>
 </li>
       </ul></li>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen.get_state">get_state() (ProcessIdGen method)</a>
@@ -483,9 +497,11 @@
         <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.Serializer.identifying_table">(Serializer class method)</a>
 </li>
       </ul></li>
+      <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.IncompatibleError">IncompatibleError</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.IncompatibleError">IncompatibleError</a>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgIndex.index">index (CpgIndex attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.individual">individual (DbOpenaiESOptimizerIndividual attribute)</a>
 </li>
@@ -556,9 +572,23 @@
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain.make_controller">make_controller() (Brain method)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.Cpg.make_controller">(Cpg method)</a>
+        <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour.make_controller">(BrainCpgNetworkNeighbour method)</a>
+</li>
+        <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.BrainCpgNetworkStatic.make_controller">(BrainCpgNetworkStatic method)</a>
 </li>
       </ul></li>
+      <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.make_cpg_network_structure_neighbour">make_cpg_network_structure_neighbour() (in module revolve2.core.modular_robot.brains)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_cpgs">make_cpgs() (CpgNetworkStructure static method)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_uniform_dof_ranges">make_uniform_dof_ranges() (CpgNetworkStructure method)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_uniform_state">make_uniform_state() (CpgNetworkStructure method)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_weight_matrix">make_weight_matrix() (CpgNetworkStructure method)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_weight_matrix_from_params">make_weight_matrix_from_params() (CpgNetworkStructure method)</a>
+</li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Collision.mass">mass (Collision attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.mass">mass() (RigidBody method)</a>
@@ -672,17 +702,23 @@
         <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Visual.name">(Visual attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.Ndarray1xnSerializer">Ndarray1xnSerializer (class in revolve2.core.database.serializers)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.neighbours">neighbours() (Module method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.Process.new">new() (Process class method)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.NotFinalizedError">NotFinalizedError</a>
 </li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem.nparray1xn_id">nparray1xn_id (DbNdarray1xnItem attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_cpgs">num_cpgs (CpgNetworkStructure property)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_params">num_params (CpgNetworkStructure property)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_states">num_states (CpgNetworkStructure property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1083,7 +1119,7 @@
 </li>
       <li><a href="api_reference/revolve2.serialization.html#revolve2.serialization.Serializable">Serializable (class in revolve2.serialization)</a>
 </li>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg.serialize">serialize() (Cpg method)</a>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgActorController.serialize">serialize() (CpgActorController method)</a>
 
       <ul>
         <li><a href="api_reference/revolve2.serialization.html#revolve2.serialization.serialize">(in module revolve2.serialization)</a>
@@ -1116,7 +1152,7 @@
       <li><a href="api_reference/revolve2.actor_controller.html#revolve2.actor_controller.ActorController.step">step() (ActorController method)</a>
 
       <ul>
-        <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg.step">(Cpg method)</a>
+        <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgActorController.step">(CpgActorController method)</a>
 </li>
       </ul></li>
   </ul></td>

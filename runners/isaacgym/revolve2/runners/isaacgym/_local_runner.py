@@ -223,7 +223,7 @@ class LocalRunner(Runner):
                 if time >= last_control_time + control_step:
                     last_control_time = math.floor(time / control_step) * control_step
                     control = ActorControl()
-                    self._batch.control(0.2, control)
+                    self._batch.control(control_step, control)
 
                     for (env_index, actor_index, targets) in control._dof_targets:
                         env_handle = self._gymenvs[env_index].env

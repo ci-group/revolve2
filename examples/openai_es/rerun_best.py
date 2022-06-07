@@ -12,6 +12,7 @@ from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
 from revolve2.runners.isaacgym import ModularRobotRerunner
 import math
+from revolve2.core.database.serializers import DbNdarray1xn, Ndarray1xnSerializer
 
 
 async def main() -> None:
@@ -30,18 +31,11 @@ async def main() -> None:
             .all()[0]
         )
 
-        best_id = best_individual.individual
-        assert best_id is not None
-
-        dbparams = (
-            await session.execute(
-                select(DbNdarray1xnItem)
-                .filter(DbNdarray1xnItem.nparray1xn_id == best_id)
-                .order_by(DbNdarray1xnItem.array_index)
+        params = (
+            await Ndarray1xnSerializer.from_database(
+                session, [best_individual.individual]
             )
-        ).scalars()
-
-        params = [p.value for p in dbparams]
+        )[0]
 
         print(f"fitness: {best_individual.fitness}")
         print(f"params: {params}")
@@ -70,7 +64,7 @@ async def main() -> None:
         bot = ModularRobot(body, brain)
 
     rerunner = ModularRobotRerunner()
-    await rerunner.rerun(bot, 60)
+    await rerunner.rerun(bot, 5)
 
 
 if __name__ == "__main__":

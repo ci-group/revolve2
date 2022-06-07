@@ -72,9 +72,7 @@ def _make_links(
         body.position - link_pos + body.orientation * body.center_of_mass()
     )
     com_rpy = _quaternion_to_euler(link_ori.inverse * body.orientation)
-    inertia = (
-        body.inertia_tensor()
-    )  # TODO orientation of individual collisions on this function
+    inertia = body.inertia_tensor()
 
     inertial = xml.SubElement(link, "inertial")
     xml.SubElement(

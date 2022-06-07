@@ -1,18 +1,22 @@
+import math
+
 from optimize import make_body
-from revolve2.core.modular_robot.brains import (
-    BrainCpgNetworkStatic,
-    make_cpg_network_structure_neighbour,
-)
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
 from revolve2.core.database import open_async_database_sqlite
-from revolve2.core.database.serializers import DbNdarray1xnItem
+from revolve2.core.database.serializers import (
+    DbNdarray1xn,
+    DbNdarray1xnItem,
+    Ndarray1xnSerializer,
+)
 from revolve2.core.modular_robot import ModularRobot
+from revolve2.core.modular_robot.brains import (
+    BrainCpgNetworkStatic,
+    make_cpg_network_structure_neighbour,
+)
 from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
 from revolve2.runners.isaacgym import ModularRobotRerunner
-import math
-from revolve2.core.database.serializers import DbNdarray1xn, Ndarray1xnSerializer
 
 
 async def main() -> None:

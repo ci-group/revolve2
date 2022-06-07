@@ -1,5 +1,5 @@
 from random import Random
-from typing import List, Tuple, Set
+from typing import List, Set, Tuple
 
 from revolve2.core.modular_robot import ActiveHinge, Body
 

@@ -35,11 +35,14 @@ async def main() -> None:
             .all()[0]
         )
 
-        params = (
-            await Ndarray1xnSerializer.from_database(
-                session, [best_individual.individual]
-            )
-        )[0]
+        params = [
+            p
+            for p in (
+                await Ndarray1xnSerializer.from_database(
+                    session, [best_individual.individual]
+                )
+            )[0]
+        ]
 
         print(f"fitness: {best_individual.fitness}")
         print(f"params: {params}")

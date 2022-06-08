@@ -1,5 +1,5 @@
 from random import Random
-from typing import List, Set, Tuple
+from typing import List, Tuple
 
 from revolve2.core.modular_robot import ActiveHinge, Body
 
@@ -15,7 +15,7 @@ class BrainCpgNetworkNeighbourRandom(BrainCpgNetworkNeighbour):
     def _make_weights(
         self,
         active_hinges: List[ActiveHinge],
-        connections: Set[Tuple[ActiveHinge, ActiveHinge]],
+        connections: List[Tuple[ActiveHinge, ActiveHinge]],
         body: Body,
     ) -> Tuple[List[float], List[float]]:
         return (

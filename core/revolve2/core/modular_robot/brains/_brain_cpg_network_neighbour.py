@@ -6,7 +6,7 @@ That means, NOT grid coordinates, but tree distance.
 
 import math
 from abc import ABC, abstractmethod
-from typing import List, Set, Tuple
+from typing import List, Tuple
 
 from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
 
@@ -26,15 +26,13 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
         active_hinges = [active_hinge_map[id] for id in dof_ids]
 
         cpg_network_structure = make_cpg_network_structure_neighbour(active_hinges)
-        connections = set(
-            [
-                (
-                    active_hinges[pair.cpg_index_lowest.index],
-                    active_hinges[pair.cpg_index_highest.index],
-                )
-                for pair in cpg_network_structure.connections
-            ]
-        )
+        connections = [
+            (
+                active_hinges[pair.cpg_index_lowest.index],
+                active_hinges[pair.cpg_index_highest.index],
+            )
+            for pair in cpg_network_structure.connections
+        ]
 
         (internal_weights, external_weights) = self._make_weights(
             active_hinges, connections, body
@@ -62,7 +60,7 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
     def _make_weights(
         self,
         active_hinges: List[ActiveHinge],
-        connections: Set[Tuple[ActiveHinge, ActiveHinge]],
+        connections: List[Tuple[ActiveHinge, ActiveHinge]],
         body: Body,
     ) -> Tuple[List[float], List[float]]:
         """

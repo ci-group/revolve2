@@ -17,7 +17,7 @@ class BrainCpgNetworkNeighbourV1(ModularRobotBrainCpgNetworkNeighbour):
     def _make_weights(
         self,
         active_hinges: List[ActiveHinge],
-        connections: Set[Tuple[ActiveHinge, ActiveHinge]],
+        connections: List[Tuple[ActiveHinge, ActiveHinge]],
         body: Body,
     ) -> Tuple[List[float], List[float]]:
         brain_net = multineat.NeuralNetwork()

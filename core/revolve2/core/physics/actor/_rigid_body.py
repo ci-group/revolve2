@@ -22,12 +22,20 @@ class RigidBody:
         return sum(collision.mass for collision in self.collisions)
 
     def center_of_mass(self) -> Vector3:
+        """
+        center of mass in local reference frame of this rigid body.
+        """
+
         return (
             sum(collision.mass * collision.position for collision in self.collisions)
             / self.mass()
         )
 
     def inertia_tensor(self) -> Matrix33:
+        """
+        intertia tensor in local reference frame of this rigid body.
+        """
+
         com = self.center_of_mass()
         inertia = Matrix33()
 

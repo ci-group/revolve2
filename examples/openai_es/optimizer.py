@@ -187,15 +187,15 @@ class Optimizer(OpenaiESOptimizer):
             )
             batch.environments.append(env)
 
-        states = await self._runner.run_batch(batch)
+        batch_results = await self._runner.run_batch(batch)
 
         return np.array(
             [
                 self._calculate_fitness(
-                    states[0].envs[i].actor_states[0],
-                    states[-1].envs[i].actor_states[0],
+                    environment_result.environment_states[0].actor_states[0],
+                    environment_result.environment_states[-1].actor_states[0],
                 )
-                for i in range(len(population))
+                for environment_result in batch_results.environment_results
             ]
         )
 

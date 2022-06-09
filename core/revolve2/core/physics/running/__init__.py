@@ -2,8 +2,8 @@ from ._actor_control import ActorControl
 from ._batch import Batch
 from ._environment import Environment
 from ._posed_actor import PosedActor
+from ._results import ActorState, BatchResults, EnvironmentResults, EnvironmentState
 from ._runner import Runner
-from ._state import ActorState, EnvironmentState, RunnerState
 
 __all__ = [
     "ActorControl",
@@ -11,7 +11,8 @@ __all__ = [
     "Environment",
     "PosedActor",
     "Runner",
-    "ActorState",
+    "BatchResults",
+    "EnvironmentResults",
     "EnvironmentState",
-    "RunnerState",
+    "ActorState",
 ]

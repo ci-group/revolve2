@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from typing import List
 
 from ._batch import Batch
-from ._state import RunnerState
+from ._results import BatchResults
 
 
 class Runner(ABC):
@@ -16,7 +16,7 @@ class Runner(ABC):
     """
 
     @abstractmethod
-    async def run_batch(self, batch: Batch) -> List[RunnerState]:
+    async def run_batch(self, batch: Batch) -> BatchResults:
         """
         Simulate the provided batch.
 

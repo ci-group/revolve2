@@ -26,14 +26,23 @@ class EnvironmentState:
     State of an environment.
     """
 
+    time_seconds: float
     actor_states: List[ActorState]
 
 
 @dataclass
-class RunnerState:
+class EnvironmentResults:
     """
-    State of a runner.
+    Result of running an environment
     """
 
-    time_seconds: float
-    envs: List[EnvironmentState]
+    environment_states: List[EnvironmentState]
+
+
+@dataclass
+class BatchResults:
+    """
+    Result of running a batch
+    """
+
+    environment_results: List[EnvironmentResults]

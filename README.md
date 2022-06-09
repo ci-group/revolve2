@@ -1,3 +1,5 @@
+<img  align="right" width="150" height="150"  src="/docs/source/logo.png">
+
 # Revolve2
 Revolve2 is a Python package for optimization, geared towards modular robots and evolutionary computing.
 Its primary features are a modular robot framework, wrappers around physics simulators, and evolutionary optimizers.

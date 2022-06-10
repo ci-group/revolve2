@@ -52,7 +52,7 @@ class RigidBody:
                 * (collision.bounding_box.x**2 + collision.bounding_box.z**2)
                 / 12.0
             )
-            inertia[2][2] += (
+            local_inertia[2][2] += (
                 collision.mass
                 * (collision.bounding_box.x**2 + collision.bounding_box.y**2)
                 / 12.0

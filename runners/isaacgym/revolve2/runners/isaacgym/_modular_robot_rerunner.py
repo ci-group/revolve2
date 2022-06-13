@@ -1,5 +1,7 @@
 """Rerun(watch) a modular robot in Isaac Gym."""
 
+from typing import List, Union
+
 from pyrr import Quaternion, Vector3
 from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ModularRobot
@@ -8,17 +10,24 @@ from revolve2.runners.isaacgym import LocalRunner
 
 
 class ModularRobotRerunner:
-    """Rerunner for a single robot that uses Isaac Gym."""
+    """Rerunner for one or more robots that uses Isaac Gym."""
 
-    _controller: ActorController
+    _controllers: List[ActorController]
 
-    async def rerun(self, robot: ModularRobot, control_frequency: float) -> None:
+    async def rerun(
+        self, robots: Union[ModularRobot, List[ModularRobot]], control_frequency: float
+    ) -> None:
         """
         Rerun a single robot.
 
-        :param robot: The robot the simulate.
+        :param robots: One or more robots to simulate.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
         """
+        if isinstance(robots, ModularRobot):
+            robots = [robots]
+
+        self._controllers = []
+
         batch = Batch(
             simulation_time=1000000,
             sampling_frequency=0.0001,
@@ -26,18 +35,20 @@ class ModularRobotRerunner:
             control=self._control,
         )
 
-        actor, self._controller = robot.make_actor_and_controller()
+        for robot in robots:
+            actor, controller = robot.make_actor_and_controller()
+            self._controllers.append(controller)
 
-        env = Environment()
-        env.actors.append(
-            PosedActor(
-                actor,
-                Vector3([0.0, 0.0, 0.1]),
-                Quaternion(),
-                [0.0 for _ in self._controller.get_dof_targets()],
+            env = Environment()
+            env.actors.append(
+                PosedActor(
+                    actor,
+                    Vector3([0.0, 0.0, 0.1]),
+                    Quaternion(),
+                    [0.0 for _ in controller.get_dof_targets()],
+                )
             )
-        )
-        batch.environments.append(env)
+            batch.environments.append(env)
 
         runner = LocalRunner(real_time=True)
         await runner.run_batch(batch)
@@ -45,8 +56,10 @@ class ModularRobotRerunner:
     def _control(
         self, environment_index: int, dt: float, control: ActorControl
     ) -> None:
-        self._controller.step(dt)
-        control.set_dof_targets(0, self._controller.get_dof_targets())
+        self._controllers[environment_index].step(dt)
+        control.set_dof_targets(
+            0, self._controllers[environment_index].get_dof_targets()
+        )
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ import tempfile
 from dataclasses import dataclass
 from typing import List, Optional
 
+import colored
 import numpy as np
 from isaacgym import gymapi
 from pyrr import Quaternion, Vector3
@@ -361,6 +362,10 @@ class LocalRunner(Runner):
         return sim_params
 
     async def run_batch(self, batch: Batch) -> BatchResults:
+        print(
+            "\n--- Begin Isaac Gym log ----------------------------------------------------------------------------"
+        )
+
         # sadly we must run Isaac Gym in a subprocess, because it has some big memory leaks.
         result_queue: mp.Queue = mp.Queue()  # type: ignore # TODO
         process = mp.Process(
@@ -377,6 +382,10 @@ class LocalRunner(Runner):
         while (environment_result := result_queue.get()) is not None:
             environment_results.append(environment_result)
         process.join()
+        print(
+            colored.attr("reset")
+            + "--- End Isaac Gym log ------------------------------------------------------------------------------\n"
+        )
         return BatchResults(environment_results)
 
     @classmethod

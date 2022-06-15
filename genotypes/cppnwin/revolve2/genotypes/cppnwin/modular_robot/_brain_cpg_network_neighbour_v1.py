@@ -67,5 +67,5 @@ class BrainCpgNetworkNeighbourV1(ModularRobotBrainCpgNetworkNeighbour):
         network: multineat.NeuralNetwork, inputs: List[float]
     ) -> float:
         network.Input(inputs)
-        network.Activate()
+        network.ActivateAllLayers()
         return cast(float, network.Output()[0])  # TODO missing multineat typing

@@ -9,10 +9,9 @@ def mutate_v1(
     innov_db: multineat.InnovationDatabase,
     rng: multineat.RNG,
 ) -> Genotype:
-    new_genotype = multineat.Genome(genotype.genotype)
-    new_genotype.Mutate(
+    new_genotype = genotype.genotype.MutateWithConstraints(
         False,
-        multineat.SearchMode.COMPLEXIFYING,
+        multineat.SearchMode.BLENDED,
         innov_db,
         multineat_params,
         rng,

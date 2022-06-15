@@ -11,7 +11,7 @@ def crossover_v1(
     mate_average: bool,
     interspecies_crossover: bool,
 ) -> Genotype:
-    new_genotype = parent1.genotype.Mate(
+    new_genotype = parent1.genotype.MateWithConstraints(
         parent2.genotype,
         mate_average,
         interspecies_crossover,

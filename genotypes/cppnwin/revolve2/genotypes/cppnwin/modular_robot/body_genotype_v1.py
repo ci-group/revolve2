@@ -96,7 +96,7 @@ def __evaluate_cppn(
     body_net.Input(
         [1.0, position[0], position[1], position[2], chain_length]
     )  # 1.0 is the bias input
-    body_net.Activate()
+    body_net.ActivateAllLayers()
     outputs = body_net.Output()
 
     # get module type from output probabilities

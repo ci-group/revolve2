@@ -26,9 +26,9 @@ def random_v1(
     )
 
     for _ in range(num_initial_mutations):
-        genotype.Mutate(
+        genotype = genotype.MutateWithConstraints(
             False,
-            multineat.SearchMode.COMPLEXIFYING,
+            multineat.SearchMode.BLENDED,
             innov_db,
             multineat_params,
             rng,

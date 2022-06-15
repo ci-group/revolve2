@@ -34,6 +34,8 @@ class LocalRunner(Runner):
                 int
             ]  # actor handles, in same order as provided by environment description
 
+        _real_time: bool
+
         _gym: gymapi.Gym
         _batch: Batch
 
@@ -49,6 +51,7 @@ class LocalRunner(Runner):
             batch: Batch,
             sim_params: gymapi.SimParams,
             headless: bool,
+            real_time: bool,
         ):
             self._gym = gymapi.acquire_gym()
             self._batch = batch
@@ -60,6 +63,8 @@ class LocalRunner(Runner):
                 self._viewer = None
             else:
                 self._viewer = self._create_viewer()
+
+            self._real_time = real_time
 
             self._gym.prepare_sim(self._sim)
 
@@ -248,10 +253,13 @@ class LocalRunner(Runner):
                 # step simulation
                 self._gym.simulate(self._sim)
                 self._gym.fetch_results(self._sim, True)
-                self._gym.step_graphics(self._sim)
 
                 if self._viewer is not None:
+                    self._gym.step_graphics(self._sim)
                     self._gym.draw_viewer(self._viewer, self._sim, False)
+
+                if self._real_time:
+                    self._gym.sync_frame_time(self._sim)
 
             # sample one final time
             self._append_states(results, time)
@@ -340,10 +348,17 @@ class LocalRunner(Runner):
 
     _sim_params: gymapi.SimParams
     _headless: bool
+    _real_time: bool
 
-    def __init__(self, sim_params: gymapi.SimParams, headless: bool = False):
+    def __init__(
+        self,
+        sim_params: gymapi.SimParams,
+        headless: bool = False,
+        real_time: bool = False,
+    ):
         self._sim_params = sim_params
         self._headless = headless
+        self._real_time = real_time
 
     @staticmethod
     def SimParams() -> gymapi.SimParams:
@@ -370,7 +385,13 @@ class LocalRunner(Runner):
         result_queue: mp.Queue = mp.Queue()  # type: ignore # TODO
         process = mp.Process(
             target=self._run_batch_impl,
-            args=(result_queue, batch, self._sim_params, self._headless),
+            args=(
+                result_queue,
+                batch,
+                self._sim_params,
+                self._headless,
+                self._real_time,
+            ),
         )
         process.start()
         environment_results = []
@@ -395,8 +416,9 @@ class LocalRunner(Runner):
         batch: Batch,
         sim_params: gymapi.SimParams,
         headless: bool,
+        real_time: bool,
     ) -> None:
-        _Simulator = cls._Simulator(batch, sim_params, headless)
+        _Simulator = cls._Simulator(batch, sim_params, headless, real_time)
         batch_results = _Simulator.run()
         _Simulator.cleanup()
         for environment_results in batch_results.environment_results:

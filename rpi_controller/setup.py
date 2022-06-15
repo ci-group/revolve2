@@ -7,7 +7,7 @@ revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-rpi-controller",
-    version="0.2.4-alpha3",
+    version="0.2.5-alpha3",
     description="Raspberry Pi controller for revolve2",
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",

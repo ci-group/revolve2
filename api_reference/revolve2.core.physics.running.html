@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.physics.running package &mdash; revolve2 v0.2.4-alpha3 documentation</title>
+  <title>revolve2.core.physics.running package &mdash; revolve2 v0.2.5-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -203,6 +203,18 @@ but is dependent on the actual step frequency of the simulator.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.BatchResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BatchResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environment_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentResults" title="revolve2.core.physics.running._results.EnvironmentResults"><span class="pre">EnvironmentResults</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.BatchResults" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Result of running a batch</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.BatchResults.environment_results">
+<span class="sig-name descname"><span class="pre">environment_results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentResults" title="revolve2.core.physics.running._results.EnvironmentResults"><span class="pre">EnvironmentResults</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.BatchResults.environment_results" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Environment">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Environment</span></span><a class="headerlink" href="#revolve2.core.physics.running.Environment" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -214,13 +226,30 @@ but is dependent on the actual step frequency of the simulator.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environment_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentState" title="revolve2.core.physics.running._results.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentResults" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Result of running an environment</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentResults.environment_states">
+<span class="sig-name descname"><span class="pre">environment_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentState" title="revolve2.core.physics.running._results.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentResults.environment_states" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._state.ActorState"><span class="pre">ActorState</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actor_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._results.ActorState"><span class="pre">ActorState</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>State of an environment.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentState.actor_states">
-<span class="sig-name descname"><span class="pre">actor_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._state.ActorState"><span class="pre">ActorState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState.actor_states" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">actor_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._results.ActorState"><span class="pre">ActorState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState.actor_states" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentState.time_seconds">
+<span class="sig-name descname"><span class="pre">time_seconds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentState.time_seconds" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -259,7 +288,7 @@ but is dependent on the actual step frequency of the simulator.</p>
 Running happens either in simulation or reality, depending on the implementation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Runner.run_batch">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.running.Batch" title="revolve2.core.physics.running._batch.Batch"><span class="pre">Batch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.RunnerState" title="revolve2.core.physics.running._state.RunnerState"><span class="pre">RunnerState</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.physics.running.Runner.run_batch" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.running.Batch" title="revolve2.core.physics.running._batch.Batch"><span class="pre">Batch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.physics.running.BatchResults" title="revolve2.core.physics.running._results.BatchResults"><span class="pre">BatchResults</span></a></span></span><a class="headerlink" href="#revolve2.core.physics.running.Runner.run_batch" title="Permalink to this definition"></a></dt>
 <dd><p>Simulate the provided batch.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -267,23 +296,6 @@ Running happens either in simulation or reality, depending on the implementation
 </dd>
 </dl>
 </dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.RunnerState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RunnerState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">envs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentState" title="revolve2.core.physics.running._state.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.RunnerState" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>State of a runner.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.RunnerState.envs">
-<span class="sig-name descname"><span class="pre">envs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentState" title="revolve2.core.physics.running._state.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.RunnerState.envs" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.RunnerState.time_seconds">
-<span class="sig-name descname"><span class="pre">time_seconds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.running.RunnerState.time_seconds" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 

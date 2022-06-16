@@ -1,16 +1,9 @@
-import math
-import multiprocessing as mp
-import os
 import tempfile
-from dataclasses import dataclass
-from typing import List, Optional
 
 import mujoco
 import mujoco_viewer
-import numpy as np
 from pyrr import Quaternion, Vector3
 
-from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
 from revolve2.core.physics.running import (
     ActorControl,
@@ -20,6 +13,7 @@ from revolve2.core.physics.running import (
     EnvironmentState,
     Runner,
 )
+from dm_control import mjcf
 
 
 class LocalRunner(Runner):
@@ -32,6 +26,11 @@ class LocalRunner(Runner):
         assets = {}
 
         for env_index, env_descr in enumerate(batch.environments):
+            env_mjcf = mjcf.RootElement(model="environment")
+            env_mjcf.worldbody.add(
+                "geom", name="ground", type="plane", size=[10, 10, 1]
+            )
+
             for actor_index, posed_actor in enumerate(env_descr.actors):
                 urdf = physbot_to_urdf(
                     posed_actor.actor,
@@ -41,17 +40,31 @@ class LocalRunner(Runner):
                 )
 
                 model = mujoco.MjModel.from_xml_string(urdf, assets)
-                data = mujoco.MjData(model)
 
-                viewer = mujoco_viewer.MujocoViewer(model, data)
+                # mujoco can only save to a file, not directly to string,
+                # so we create a temporary file.
+                botfile = tempfile.NamedTemporaryFile(
+                    mode="r+", delete=False, suffix=".urdf"
+                )
+                mujoco.mj_saveLastXML(botfile.name, model)
+                robot = mjcf.from_file(botfile)
+                botfile.close()
 
-                for _ in range(100000):
-                    mujoco.mj_step(model, data)
-                    viewer.render()
+                attachment_frame = env_mjcf.attach(robot)
+                attachment_frame.add("freejoint")
 
-                viewer.close()
+            print(env_mjcf.to_xml_string())
+            model = mujoco.MjModel.from_xml_string(env_mjcf.to_xml_string())
+            data = mujoco.MjData(model)
 
-                break
+            viewer = mujoco_viewer.MujocoViewer(model, data)
+
+            for _ in range(100000):
+                mujoco.mj_step(model, data)
+                viewer.render()
+
+            viewer.close()
+
             break
 
         raise NotImplementedError()

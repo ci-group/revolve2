@@ -3,6 +3,7 @@ import tempfile
 
 import mujoco
 import mujoco_viewer
+from dm_control import mjcf, mujoco, viewer
 from pyrr import Quaternion, Vector3
 
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
@@ -14,9 +15,6 @@ from revolve2.core.physics.running import (
     EnvironmentState,
     Runner,
 )
-from dm_control import mjcf
-from dm_control import mujoco
-from dm_control import viewer
 
 
 class LocalRunner(Runner):
@@ -77,7 +75,14 @@ class LocalRunner(Runner):
                     robot.actuator.add(
                         "position",
                         kp=1.0,
-                        joint=robot.find(namespace="joint", identifier=joint.name),
+                        joint=robot.find(
+                            namespace="joint",
+                            identifier=joint.name,
+                        ),
+                        ctrllimited=True,
+                        ctrlrange=[-joint.range, joint.range],
+                        forcelimited=True,
+                        forcerange=[-joint.effort, joint.effort],
                     )
                     robot.actuator.add(
                         "velocity",

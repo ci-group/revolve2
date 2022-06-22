@@ -341,15 +341,17 @@ class _ActorBuilder:
         )
         joint_orientation = body.orientation * orientation
 
-        body.collisions.append(
-            Collision(
-                f"{name_prefix}_activehingeframe_collision",
-                frame_position,
-                orientation,
-                FRAME_MASS,
-                FRAME_BOUNDING_BOX,
-            )
-        )
+        # TODO disabled because it is inside the other hinge bounding box.
+        # remake the digital model and do something with seperation of visuals and actual bounding boxes
+        # body.collisions.append(
+        #     Collision(
+        #         f"{name_prefix}_activehingeframe_collision",
+        #         frame_position,
+        #         orientation,
+        #         FRAME_MASS,
+        #         FRAME_BOUNDING_BOX,
+        #     )
+        # )
         body.visuals.append(
             Visual(
                 f"{name_prefix}_activehingeframe_visual",

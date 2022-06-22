@@ -16,5 +16,7 @@ class Batch:
     """
     sampling_frequency: float
     control_frequency: float  # Hz. See `sampling_frequency`, but for actor control.
-    control: Callable[[float, ActorControl], None]  # (dt, control) -> None
+    control: Callable[
+        [int, float, ActorControl], None
+    ]  # (environment_index, dt, control) -> None
     environments: List[Environment] = field(default_factory=list, init=False)

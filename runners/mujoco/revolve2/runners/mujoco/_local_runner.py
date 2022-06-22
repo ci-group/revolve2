@@ -1,3 +1,4 @@
+import math
 import tempfile
 
 import mujoco
@@ -14,6 +15,8 @@ from revolve2.core.physics.running import (
     Runner,
 )
 from dm_control import mjcf
+from dm_control import mujoco
+from dm_control import viewer
 
 
 class LocalRunner(Runner):
@@ -27,6 +30,14 @@ class LocalRunner(Runner):
 
         for env_index, env_descr in enumerate(batch.environments):
             env_mjcf = mjcf.RootElement(model="environment")
+
+            env_mjcf.compiler.angle = "radian"
+
+            env_mjcf.option.timestep = 0.02
+            env_mjcf.option.integrator = "RK4"
+
+            env_mjcf.option.gravity = [0, 0, -9.81]
+
             env_mjcf.worldbody.add(
                 "geom",
                 name="ground",
@@ -62,6 +73,18 @@ class LocalRunner(Runner):
                 robot = mjcf.from_file(botfile)
                 botfile.close()
 
+                for joint in posed_actor.actor.joints:
+                    robot.actuator.add(
+                        "position",
+                        kp=1.0,
+                        joint=robot.find(namespace="joint", identifier=joint.name),
+                    )
+                    robot.actuator.add(
+                        "velocity",
+                        kv=0.01,
+                        joint=robot.find(namespace="joint", identifier=joint.name),
+                    )
+
                 attachment_frame = env_mjcf.attach(robot)
                 attachment_frame.add("freejoint")
                 attachment_frame.pos = [
@@ -80,13 +103,22 @@ class LocalRunner(Runner):
             model = mujoco.MjModel.from_xml_string(env_mjcf.to_xml_string())
             data = mujoco.MjData(model)
 
-            viewer = mujoco_viewer.MujocoViewer(model, data)
+            if not self._headless:
+                viewer = mujoco_viewer.MujocoViewer(
+                    model,
+                    data,
+                )
 
             for _ in range(100000):
                 mujoco.mj_step(model, data)
-                viewer.render()
 
-            viewer.close()
+                if not self._headless:
+                    viewer.render()
+
+                # data.ctrl = [0.0, 0.0]
+
+            if not self._headless:
+                viewer.close()
 
             break
 

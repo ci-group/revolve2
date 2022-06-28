@@ -41,9 +41,11 @@ class Simulator:
         runner = LocalRunner()
         await runner.run_batch(batch)
 
-    def _control(self, dt: float, control: ActorControl) -> None:
+    def _control(
+        self, environment_index: int, dt: float, control: ActorControl
+    ) -> None:
         self._controller.step(dt)
-        control.set_dof_targets(0, 0, self._controller.get_dof_targets())
+        control.set_dof_targets(0, self._controller.get_dof_targets())
 
 
 async def main() -> None:
@@ -51,12 +53,12 @@ async def main() -> None:
     rng.seed(5)
 
     body = Body()
-    body.core.left = ActiveHinge(0)
-    body.core.left.attachment = Brick(0)  # ActiveHinge(0)
-    # body.core.left.attachment.attachment = Brick(0.0)
-    # body.core.right = ActiveHinge(math.pi / 2.0)
-    # body.core.right.attachment = ActiveHinge(math.pi / 2.0)
-    # body.core.right.attachment.attachment = Brick(0.0)
+    body.core.left = ActiveHinge(math.pi / 2.0)
+    body.core.left.attachment = ActiveHinge(math.pi / 2.0)
+    body.core.left.attachment.attachment = Brick(0.0)
+    body.core.right = ActiveHinge(math.pi / 2.0)
+    body.core.right.attachment = ActiveHinge(math.pi / 2.0)
+    body.core.right.attachment.attachment = Brick(0.0)
     body.finalize()
 
     brain = BrainCpgNetworkNeighbourRandom(rng)

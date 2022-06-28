@@ -244,10 +244,12 @@ class Optimizer(EAOptimizer[Genotype, float]):
             for environment_result in batch_results.environment_results
         ]
 
-    def _control(self, dt: float, control: ActorControl) -> None:
-        for control_i, controller in enumerate(self._controllers):
-            controller.step(dt)
-            control.set_dof_targets(control_i, 0, controller.get_dof_targets())
+    def _control(
+        self, environment_index: int, dt: float, control: ActorControl
+    ) -> None:
+        controller = self._controllers[environment_index]
+        controller.step(dt)
+        control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod
     def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:

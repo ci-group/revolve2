@@ -4,7 +4,7 @@ from typing import List
 
 import mujoco
 import mujoco_viewer
-from dm_control import mjcf, mujoco, viewer
+from dm_control import mjcf, mujoco
 from pyrr import Quaternion, Vector3
 
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
@@ -16,6 +16,7 @@ from revolve2.core.physics.running import (
     EnvironmentState,
     Runner,
     Environment,
+    EnvironmentResults,
 )
 
 
@@ -29,8 +30,11 @@ class LocalRunner(Runner):
         control_step = 1 / batch.control_frequency
         sample_step = 1 / batch.sampling_frequency
 
+        results = BatchResults([EnvironmentResults([]) for _ in batch.environments])
+
         for env_index, env_descr in enumerate(batch.environments):
             model = mujoco.MjModel.from_xml_string(self._make_mjcf(env_descr))
+            # TODO initial dof state
             data = mujoco.MjData(model)
 
             initial_targets = [
@@ -53,7 +57,9 @@ class LocalRunner(Runner):
             last_sample_time = 0.0
 
             # sample initial state
-            # TODO
+            results.environment_results[env_index].environment_states.append(
+                EnvironmentState(0.0, self._get_actor_states(env_descr, data, model))
+            )
 
             while (time := data.time) < batch.simulation_time:
                 # do control if it is time
@@ -71,7 +77,11 @@ class LocalRunner(Runner):
 
                 # sample state if it is time
                 if time >= last_sample_time + sample_step:
-                    pass  # TODO
+                    results.environment_results[env_index].environment_states.append(
+                        EnvironmentState(
+                            time, self._get_actor_states(env_descr, data, model)
+                        )
+                    )
 
                 # step simulation
                 mujoco.mj_step(model, data)
@@ -83,9 +93,11 @@ class LocalRunner(Runner):
                 viewer.close()
 
             # sample one final time
-            # TODO
+            results.environment_results[env_index].environment_states.append(
+                EnvironmentState(time, self._get_actor_states(env_descr, data, model))
+            )
 
-        raise NotImplementedError()
+        return results
 
     @staticmethod
     def _make_mjcf(env_descr: Environment) -> str:
@@ -171,8 +183,36 @@ class LocalRunner(Runner):
 
         return env_mjcf.to_xml_string()
 
+    @classmethod
+    def _get_actor_states(
+        cls, env_descr: Environment, data: mujoco.MjData, model: mujoco.MjModel
+    ) -> List[ActorState]:
+        return [
+            cls._get_actor_state(i, data, model) for i in range(len(env_descr.actors))
+        ]
+
+    @staticmethod
+    def _get_actor_state(
+        robot_index: int, data: mujoco.MjData, model: mujoco.MjModel
+    ) -> ActorState:
+        bodyid = mujoco.mj_name2id(
+            model,
+            mujoco.mjtObj.mjOBJ_BODY,
+            f"robot_{robot_index}/",  # the slash is added by dm_control. ugly but deal with it
+        )
+        assert bodyid >= 0
+
+        qindex = model.body_jntadr[bodyid]
+
+        position = Vector3(data.qpos[qindex : qindex + 3])
+        orientation = Quaternion(data.qpos[qindex + 3 : qindex + 3 + 4])
+
+        return ActorState(position, orientation)
+
     @staticmethod
     def _set_dof_targets(data: mujoco.MjData, targets: List[float]) -> None:
+        if len(targets) * 2 != len(data.ctrl):
+            raise RuntimeError("Need to set a target for every dof")
         for i, target in enumerate(targets):
             data.ctrl[2 * i] = target
             data.ctrl[2 * i + 1] = 0

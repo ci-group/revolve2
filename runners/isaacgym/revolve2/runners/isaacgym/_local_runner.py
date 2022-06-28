@@ -3,7 +3,7 @@ import multiprocessing as mp
 import os
 import tempfile
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import colored
 import numpy as np
@@ -229,10 +229,16 @@ class LocalRunner(Runner):
                 # do control if it is time
                 if time >= last_control_time + control_step:
                     last_control_time = math.floor(time / control_step) * control_step
-                    control = ActorControl()
-                    self._batch.control(control_step, control)
+                    controls = [ActorControl() for _ in self._batch.environments]
+                    for i, control in enumerate(controls):
+                        self._batch.control(i, control_step, control)
+                    dof_targets = [
+                        (env_index, actor_index, targets)
+                        for env_index, control in enumerate(controls)
+                        for (actor_index, targets) in control._dof_targets
+                    ]
 
-                    for (env_index, actor_index, targets) in control._dof_targets:
+                    for (env_index, actor_index, targets) in dof_targets:
                         env_handle = self._gymenvs[env_index].env
                         actor_handle = self._gymenvs[env_index].actors[actor_index]
                         actor = (

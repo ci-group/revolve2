@@ -6,6 +6,7 @@ import mujoco
 import mujoco_viewer
 from dm_control import mjcf, mujoco
 from pyrr import Quaternion, Vector3
+import logging
 
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
 from revolve2.core.physics.running import (
@@ -27,13 +28,18 @@ class LocalRunner(Runner):
         self._headless = headless
 
     async def run_batch(self, batch: Batch) -> BatchResults:
+        logging.info("Starting simulation batch with mujoco.")
+
         control_step = 1 / batch.control_frequency
         sample_step = 1 / batch.sampling_frequency
 
         results = BatchResults([EnvironmentResults([]) for _ in batch.environments])
 
         for env_index, env_descr in enumerate(batch.environments):
+            logging.info(f"Environment {env_index}")
+
             model = mujoco.MjModel.from_xml_string(self._make_mjcf(env_descr))
+
             # TODO initial dof state
             data = mujoco.MjData(model)
 
@@ -64,6 +70,7 @@ class LocalRunner(Runner):
             while (time := data.time) < batch.simulation_time:
                 # do control if it is time
                 if time >= last_control_time + control_step:
+                    last_control_time = math.floor(time / control_step) * control_step
                     control = ActorControl()
                     batch.control(env_index, control_step, control)
                     actor_targets = control._dof_targets
@@ -77,6 +84,7 @@ class LocalRunner(Runner):
 
                 # sample state if it is time
                 if time >= last_sample_time + sample_step:
+                    last_sample_time = int(time / sample_step) * sample_step
                     results.environment_results[env_index].environment_states.append(
                         EnvironmentState(
                             time, self._get_actor_states(env_descr, data, model)
@@ -97,6 +105,8 @@ class LocalRunner(Runner):
                 EnvironmentState(time, self._get_actor_states(env_descr, data, model))
             )
 
+        logging.info("Finished batch.")
+
         return results
 
     @staticmethod
@@ -107,7 +117,7 @@ class LocalRunner(Runner):
 
         env_mjcf.compiler.angle = "radian"
 
-        env_mjcf.option.timestep = 0.02
+        env_mjcf.option.timestep = 0.0005
         env_mjcf.option.integrator = "RK4"
 
         env_mjcf.option.gravity = [0, 0, -9.81]
@@ -150,19 +160,15 @@ class LocalRunner(Runner):
             for joint in posed_actor.actor.joints:
                 robot.actuator.add(
                     "position",
-                    kp=1.0,
+                    kp=5.0,
                     joint=robot.find(
                         namespace="joint",
                         identifier=joint.name,
                     ),
-                    ctrllimited=True,
-                    ctrlrange=[-joint.range, joint.range],
-                    forcelimited=True,
-                    forcerange=[-joint.effort, joint.effort],
                 )
                 robot.actuator.add(
                     "velocity",
-                    kv=0.01,
+                    kv=0.05,
                     joint=robot.find(namespace="joint", identifier=joint.name),
                 )
 

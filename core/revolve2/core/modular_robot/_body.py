@@ -318,7 +318,7 @@ class _ActorBuilder:
 
         FRAME_MASS = 0.011  # kg
         SERVO1_MASS = 0.058  # kg
-        SERVO2_MASS = 0.0  # kg. we simplify by only using the weight of the first box
+        SERVO2_MASS = 0.02  # kg. we simplify by only using the weight of the first box
 
         SERVO_OFFSET = 0.0299  # meter. distance from frame to servo
         JOINT_OFFSET = 0.0119  # meter. distance from frame to joint

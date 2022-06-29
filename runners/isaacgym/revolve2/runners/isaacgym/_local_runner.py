@@ -21,6 +21,7 @@ from revolve2.core.physics.running import (
     EnvironmentState,
     Runner,
 )
+import logging
 
 
 class LocalRunner(Runner):
@@ -383,7 +384,7 @@ class LocalRunner(Runner):
         return sim_params
 
     async def run_batch(self, batch: Batch) -> BatchResults:
-        print(
+        logging.info(
             "\n--- Begin Isaac Gym log ----------------------------------------------------------------------------"
         )
 
@@ -409,7 +410,7 @@ class LocalRunner(Runner):
         while (environment_result := result_queue.get()) is not None:
             environment_results.append(environment_result)
         process.join()
-        print(
+        logging.info(
             colored.attr("reset")
             + "--- End Isaac Gym log ------------------------------------------------------------------------------\n"
         )

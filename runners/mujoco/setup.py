@@ -19,6 +19,7 @@ setup(
         f"revolve2-core @ file://{os.path.join(revolve2_path, 'core')}",
         "mujoco>=2.2.0",
         "mujoco-python-viewer>=0.0.3",
+        "dm-control>=1.0.3",
     ],
     extras_require={"dev": []},
     zip_safe=False,

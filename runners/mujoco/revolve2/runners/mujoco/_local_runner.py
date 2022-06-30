@@ -3,10 +3,28 @@ import tempfile
 from typing import List
 
 import mujoco
+
 import mujoco_viewer
-from dm_control import mjcf, mujoco
+
+try:
+    import logging
+
+    old_len = len(logging.root.handlers)
+
+    from dm_control import mjcf
+
+    new_len = len(logging.root.handlers)
+
+    assert (
+        old_len + 1 == new_len
+    ), "dm_control not adding logging handler as expected. Maybe they fixed their annoying behaviour? https://github.com/deepmind/dm_control/issues/314https://github.com/deepmind/dm_control/issues/314"
+
+    logging.root.removeHandler(logging.root.handlers[-1])
+except Exception as e:
+    print("Failed to fix absl logging bug", e)
+    pass
+
 from pyrr import Quaternion, Vector3
-import logging
 
 from revolve2.core.physics.actor.urdf import to_urdf as physbot_to_urdf
 from revolve2.core.physics.running import (

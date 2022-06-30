@@ -35,7 +35,6 @@ class RigidBody:
         """
         intertia tensor in local reference frame of this rigid body.
         """
-
         com = self.center_of_mass()
         inertia = Matrix33()
 
@@ -73,9 +72,37 @@ class RigidBody:
                 + (collision.position.y - com.y) ** 2
             )
 
-            global_inertia = local_inertia * collision.orientation + translation
-
+            ori_as_mat = self._quaternion_to_rotation_matrix(collision.orientation)
+            global_inertia = (
+                ori_as_mat * local_inertia * ori_as_mat.transpose() + translation
+            )
             # add to rigid body inertia tensor
             inertia += global_inertia
 
         return inertia
+
+    @staticmethod
+    def _quaternion_to_rotation_matrix(quat: Quaternion) -> Matrix33:
+        # https://automaticaddison.com/how-to-convert-a-quaternion-to-a-rotation-matrix/
+
+        q0 = quat.x
+        q1 = quat.y
+        q2 = quat.z
+        q3 = quat.w
+
+        # First row of the rotation matrix
+        r00 = 2 * (q0 * q0 + q1 * q1) - 1
+        r01 = 2 * (q1 * q2 - q0 * q3)
+        r02 = 2 * (q1 * q3 + q0 * q2)
+
+        # Second row of the rotation matrix
+        r10 = 2 * (q1 * q2 + q0 * q3)
+        r11 = 2 * (q0 * q0 + q2 * q2) - 1
+        r12 = 2 * (q2 * q3 - q0 * q1)
+
+        # Third row of the rotation matrix
+        r20 = 2 * (q1 * q3 - q0 * q2)
+        r21 = 2 * (q2 * q3 + q0 * q1)
+        r22 = 2 * (q0 * q0 + q3 * q3) - 1
+
+        return Matrix33([[r00, r01, r02], [r10, r11, r12], [r20, r21, r22]])

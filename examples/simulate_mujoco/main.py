@@ -1,5 +1,5 @@
 """
-Visualize and run a modular robot using Isaac Gym.
+Visualize and run a modular robot using Mujoco.
 """
 
 import math
@@ -11,7 +11,7 @@ from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick, ModularRobot
 from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighbourRandom
 from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
-from revolve2.runners.isaacgym import LocalRunner
+from revolve2.runners.mujoco import LocalRunner
 
 
 class Simulator:
@@ -38,7 +38,7 @@ class Simulator:
         )
         batch.environments.append(env)
 
-        runner = LocalRunner(LocalRunner.SimParams())
+        runner = LocalRunner()
         await runner.run_batch(batch)
 
     def _control(

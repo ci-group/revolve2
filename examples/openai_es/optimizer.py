@@ -26,7 +26,7 @@ from revolve2.core.physics.running import (
     PosedActor,
     Runner,
 )
-from revolve2.runners.isaacgym import LocalRunner
+from revolve2.runners.mujoco import LocalRunner
 
 
 class Optimizer(OpenaiESOptimizer):
@@ -134,7 +134,7 @@ class Optimizer(OpenaiESOptimizer):
         )
 
     def _init_runner(self) -> None:
-        self._runner = LocalRunner(LocalRunner.SimParams(), headless=True)
+        self._runner = LocalRunner(headless=True)
 
     async def _evaluate_population(
         self,
@@ -199,10 +199,12 @@ class Optimizer(OpenaiESOptimizer):
             ]
         )
 
-    def _control(self, dt: float, control: ActorControl) -> None:
-        for control_i, controller in enumerate(self._controllers):
-            controller.step(dt)
-            control.set_dof_targets(control_i, 0, controller.get_dof_targets())
+    def _control(
+        self, environment_index: int, dt: float, control: ActorControl
+    ) -> None:
+        controller = self._controllers[environment_index]
+        controller.step(dt)
+        control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod
     def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:

@@ -312,13 +312,17 @@ class _ActorBuilder:
         attachment_point: Vector3,
         orientation: Quaternion,
     ) -> None:
-        FRAME_BOUNDING_BOX = Vector3([0.04525, 0.053, 0.0165891])  # meter
+        # this function used to be good but is now a hacky way to create a body that has no self clipping
+        # TODO fix
+
+        FRAME_BOUNDING_BOX = Vector3([0.018, 0.053, 0.0165891])  # meter
+        FRAME_OFFSET = 0.04525
         SERVO1_BOUNDING_BOX = Vector3([0.0583, 0.0512, 0.020])  # meter
         SERVO2_BOUNDING_BOX = Vector3([0.002, 0.053, 0.053])  # meter
 
         FRAME_MASS = 0.011  # kg
         SERVO1_MASS = 0.058  # kg
-        SERVO2_MASS = 0.0  # kg. we simplify by only using the weight of the first box
+        SERVO2_MASS = 0.02  # kg. we simplify by only using the weight of the first box
 
         SERVO_OFFSET = 0.0299  # meter. distance from frame to servo
         JOINT_OFFSET = 0.0119  # meter. distance from frame to joint
@@ -330,6 +334,9 @@ class _ActorBuilder:
         ATTACHMENT_OFFSET = SERVO1_BOUNDING_BOX[0] / 2.0 + SERVO2_BOUNDING_BOX[0]
 
         frame_position = attachment_point + orientation * Vector3(
+            [FRAME_OFFSET / 2.0, 0.0, 0.0]
+        )
+        frame_position_real = attachment_point + orientation * Vector3(
             [FRAME_BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
         )
         servo_body_position = body.position + body.orientation * (
@@ -344,7 +351,7 @@ class _ActorBuilder:
         body.collisions.append(
             Collision(
                 f"{name_prefix}_activehingeframe_collision",
-                frame_position,
+                frame_position_real,
                 orientation,
                 FRAME_MASS,
                 FRAME_BOUNDING_BOX,

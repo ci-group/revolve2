@@ -1,23 +1,19 @@
 """
-Visualize and run a modular robot using Isaac Gym.
+Rerun(watch) a modular robot in isaac gym.
 """
-
-import math
-from random import Random
 
 from pyrr import Quaternion, Vector3
 
 from revolve2.actor_controller import ActorController
-from revolve2.core.modular_robot import ActiveHinge, Body, Brick, ModularRobot
-from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighbourRandom
+from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
-from revolve2.runners.isaacgym import LocalRunner
+from revolve2.runners.mujoco import LocalRunner
 
 
-class Simulator:
+class ModularRobotRerunner:
     _controller: ActorController
 
-    async def simulate(self, robot: ModularRobot, control_frequency: float) -> None:
+    async def rerun(self, robot: ModularRobot, control_frequency: float) -> None:
         batch = Batch(
             simulation_time=1000000,
             sampling_frequency=0.0001,
@@ -38,7 +34,7 @@ class Simulator:
         )
         batch.environments.append(env)
 
-        runner = LocalRunner(LocalRunner.SimParams())
+        runner = LocalRunner(headless=False)
         await runner.run_batch(batch)
 
     def _control(
@@ -48,27 +44,7 @@ class Simulator:
         control.set_dof_targets(0, self._controller.get_dof_targets())
 
 
-async def main() -> None:
-    rng = Random()
-    rng.seed(5)
-
-    body = Body()
-    body.core.left = ActiveHinge(math.pi / 2.0)
-    body.core.left.attachment = ActiveHinge(math.pi / 2.0)
-    body.core.left.attachment.attachment = Brick(0.0)
-    body.core.right = ActiveHinge(math.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(math.pi / 2.0)
-    body.core.right.attachment.attachment = Brick(0.0)
-    body.finalize()
-
-    brain = BrainCpgNetworkNeighbourRandom(rng)
-    robot = ModularRobot(body, brain)
-
-    sim = Simulator()
-    await sim.simulate(robot, 10)
-
-
 if __name__ == "__main__":
-    import asyncio
-
-    asyncio.run(main())
+    print(
+        "This file cannot be ran as a script. Import it and use the contained classes instead."
+    )

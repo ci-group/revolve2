@@ -116,7 +116,7 @@ Sampling frequency is not relevant for this tutorial, but controls how much info
         )
         env = Environment()
 
-    def _control(self, dt: float, control: ActorControl) -> None:
+    def _control(self, environment_index: int, dt: float, control: ActorControl) -> None:
         raise NotImplementedError()
 
 Next, get the actor and controller from the modular robot and save the controller as a class variable for later.
@@ -160,7 +160,7 @@ If there is more than one robot, you need to store each individual controller::
 
     def _control(self, dt: float, control: ActorControl) -> None:
         self._controller.step(dt)
-        control.set_dof_targets(0, 0, self._controller.get_dof_targets())
+        control.set_dof_targets(0, self._controller.get_dof_targets())
 
 ----------------------------
 Running and expected results

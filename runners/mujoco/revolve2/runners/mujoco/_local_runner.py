@@ -228,8 +228,9 @@ class LocalRunner(Runner):
 
         qindex = model.body_jntadr[bodyid]
 
-        position = Vector3(data.qpos[qindex : qindex + 3])
-        orientation = Quaternion(data.qpos[qindex + 3 : qindex + 3 + 4])
+        # explicitly copy because the Vector3 and Quaternion classes don't copy the underlying structure
+        position = Vector3([n for n in data.qpos[qindex : qindex + 3]])
+        orientation = Quaternion([n for n in data.qpos[qindex + 3 : qindex + 3 + 4]])
 
         return ActorState(position, orientation)
 

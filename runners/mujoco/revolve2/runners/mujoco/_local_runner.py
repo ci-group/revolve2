@@ -1,6 +1,6 @@
 import math
 import tempfile
-from typing import List
+from typing import Dict, List
 
 import mujoco
 import mujoco_viewer
@@ -128,8 +128,6 @@ class LocalRunner(Runner):
 
     @staticmethod
     def _make_mjcf(env_descr: Environment) -> str:
-        assets = {}
-
         env_mjcf = mjcf.RootElement(model="environment")
 
         env_mjcf.compiler.angle = "radian"
@@ -163,7 +161,7 @@ class LocalRunner(Runner):
                 Quaternion(),
             )
 
-            model = mujoco.MjModel.from_xml_string(urdf, assets)
+            model = mujoco.MjModel.from_xml_string(urdf)
 
             # mujoco can only save to a file, not directly to string,
             # so we create a temporary file.
@@ -204,7 +202,11 @@ class LocalRunner(Runner):
                 posed_actor.orientation.w,
             ]
 
-        return env_mjcf.to_xml_string()
+        xml = env_mjcf.to_xml_string()
+        if not isinstance(xml, str):
+            raise RuntimeError("Error generating mjcf xml.")
+
+        return xml
 
     @classmethod
     def _get_actor_states(

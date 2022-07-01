@@ -3,7 +3,6 @@ import tempfile
 from typing import List
 
 import mujoco
-
 import mujoco_viewer
 
 try:
@@ -32,10 +31,10 @@ from revolve2.core.physics.running import (
     ActorState,
     Batch,
     BatchResults,
-    EnvironmentState,
-    Runner,
     Environment,
     EnvironmentResults,
+    EnvironmentState,
+    Runner,
 )
 
 

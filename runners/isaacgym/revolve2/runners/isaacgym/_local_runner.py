@@ -1,3 +1,4 @@
+import logging
 import math
 import multiprocessing as mp
 import os
@@ -21,7 +22,6 @@ from revolve2.core.physics.running import (
     EnvironmentState,
     Runner,
 )
-import logging
 
 
 class LocalRunner(Runner):

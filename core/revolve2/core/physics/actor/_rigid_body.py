@@ -35,6 +35,7 @@ class RigidBody:
         """
         intertia tensor in local reference frame of this rigid body.
         """
+
         com = self.center_of_mass()
         inertia = Matrix33()
 

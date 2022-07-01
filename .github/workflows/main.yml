@@ -27,6 +27,8 @@ jobs:
       - name: install runner isaacgym
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
+      - name: install runner mujoco
+        run: pip install ./runners/mujoco[dev]
       - name: install genotype CPPNWIN
         run: |
           sudo apt install libcereal-dev
@@ -64,6 +66,8 @@ jobs:
       - name: install runner isaacgym
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
+      - name: install runner mujoco
+        run: pip install ./runners/mujoco[dev]
       - name: install genotype CPPNWIN
         run: |
           sudo apt install libcereal-dev
@@ -96,6 +100,8 @@ jobs:
       - name: install runner isaacgym
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
+      - name: install runner mujoco
+        run: pip install ./runners/mujoco[dev]
       - name: install genotype CPPNWIN
         run: |
           sudo apt install libcereal-dev

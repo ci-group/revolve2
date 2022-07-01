@@ -7,6 +7,8 @@ echo "examples/simple_optimization:" && \
 mypy simple_optimization && \
 echo "examples/simulate_isaac:" && \
 mypy simulate_isaac && \
+echo "examples/simulate_mujoco:" && \
+mypy simulate_mujoco && \
 echo "examples/openai_es:" && \
 mypy openai_es && \
 echo "examples/rpi_controller_remote:" && \

@@ -39,9 +39,11 @@ class ModularRobotRerunner:
         )
         await runner.run_batch(batch)
 
-    def _control(self, dt: float, control: ActorControl) -> None:
+    def _control(
+        self, environment_index: int, dt: float, control: ActorControl
+    ) -> None:
         self._controller.step(dt)
-        control.set_dof_targets(0, 0, self._controller.get_dof_targets())
+        control.set_dof_targets(0, self._controller.get_dof_targets())
 
 
 if __name__ == "__main__":

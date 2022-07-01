@@ -5,7 +5,7 @@ from sqlalchemy.future import select
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.database.serializers import DbFloat
 from revolve2.core.optimization.ea.generic_ea import DbEAOptimizerIndividual
-from revolve2.runners.isaacgym import ModularRobotRerunner
+from revolve2.runners.mujoco import ModularRobotRerunner
 
 
 async def main() -> None:
@@ -31,7 +31,7 @@ async def main() -> None:
         )[0]
 
     rerunner = ModularRobotRerunner()
-    await rerunner.rerun(develop(genotype), 5)
+    await rerunner.rerun(develop(genotype), 60)
 
 
 if __name__ == "__main__":

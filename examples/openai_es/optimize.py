@@ -29,7 +29,7 @@ async def main() -> None:
 
     SIMULATION_TIME = 10
     SAMPLING_FREQUENCY = 5
-    CONTROL_FREQUENCY = 5
+    CONTROL_FREQUENCY = 60
 
     logging.basicConfig(
         level=logging.INFO,

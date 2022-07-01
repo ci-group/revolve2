@@ -16,7 +16,7 @@ from revolve2.core.modular_robot.brains import (
     make_cpg_network_structure_neighbour,
 )
 from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
-from revolve2.runners.isaacgym import ModularRobotRerunner
+from revolve2.runners.mujoco import ModularRobotRerunner
 
 
 async def main() -> None:

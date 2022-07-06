@@ -6,6 +6,6 @@ from ._make_cpg_network_structure_neighbour import make_cpg_network_structure_ne
 __all__ = [
     "BrainCpgNetworkNeighbour",
     "BrainCpgNetworkNeighbourRandom",
-    "make_cpg_network_structure_neighbour",
     "BrainCpgNetworkStatic",
+    "make_cpg_network_structure_neighbour",
 ]

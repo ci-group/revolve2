@@ -4,9 +4,9 @@ from ._mutate_v1 import mutate_v1
 from ._random_v1 import random_v1
 
 __all__ = [
-    "crossover_v1",
     "Genotype",
     "GenotypeSerializer",
+    "crossover_v1",
     "mutate_v1",
     "random_v1",
 ]

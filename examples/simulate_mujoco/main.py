@@ -65,7 +65,7 @@ async def main() -> None:
     robot = ModularRobot(body, brain)
 
     sim = Simulator()
-    await sim.simulate(robot, 10)
+    await sim.simulate(robot, 60)
 
 
 if __name__ == "__main__":

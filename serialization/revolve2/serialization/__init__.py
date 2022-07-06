@@ -5,9 +5,9 @@ from ._static_data import StaticData, is_static_data
 
 __all__ = [
     "Serializable",
-    "deserialize",
-    "serialize",
     "SerializeError",
     "StaticData",
+    "deserialize",
     "is_static_data",
+    "serialize",
 ]

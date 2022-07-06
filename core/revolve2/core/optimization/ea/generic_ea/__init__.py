@@ -8,10 +8,10 @@ from ._database import (
 from ._optimizer import EAOptimizer
 
 __all__ = [
-    "EAOptimizer",
     "DbEAOptimizer",
     "DbEAOptimizerGeneration",
     "DbEAOptimizerIndividual",
     "DbEAOptimizerParent",
     "DbEAOptimizerState",
+    "EAOptimizer",
 ]

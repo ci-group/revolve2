@@ -42,6 +42,11 @@ jobs:
       - uses: isort/isort-action@master
         with:
           configuration: "--check-only --diff --profile black"
+      - name: sort-all
+        run: |
+          pip install -r ./sort_all/requirements.txt
+          ./sort_all/sort_all.sh
+          [[ -z $(git status -s) ]]
 
   mypy:
     runs-on: ubuntu-20.04

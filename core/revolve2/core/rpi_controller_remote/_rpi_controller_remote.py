@@ -54,7 +54,7 @@ class RpiControllerRemote:
             "revolve2_rpi_controller revolve2_rpi_controller_config.json --log revolve2_rpi_controller_log.json"
         ) as process:
             if process.is_closing():
-                self._conn.wait_closed()
+                await self._conn.wait_closed()
             try:
                 read = await process.stdout.readline()
                 if read == "":

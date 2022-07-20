@@ -1,4 +1,5 @@
 {
+    "hardware": "hatv1",
     "controller_module": "revolve2.actor_controllers.cpg",
     "controller_type": "Cpg",
     "control_frequency": 10,

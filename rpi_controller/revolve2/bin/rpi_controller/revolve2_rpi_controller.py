@@ -11,10 +11,11 @@ import json
 import sys
 import time
 from dataclasses import dataclass
-from typing import Any, List, Optional, cast
+from typing import Any, List, Optional, cast, Union
 
 import jsonschema
 import pigpio
+from adafruit_servokit import ServoKit
 
 from revolve2.actor_controller import ActorController
 from revolve2.serialization import StaticData
@@ -25,6 +26,7 @@ class Program:
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "type": "object",
         "properties": {
+            "hardware": {"type": "string", "enum": ["hatv1", "pca9685"]},
             "controller_module": {"type": "string"},
             "controller_type": {"type": "string"},
             "control_frequency": {"type": "integer", "exclusiveMinimum": 0},
@@ -66,9 +68,11 @@ class Program:
     _control_period: float
     _pins: List[_Pin]
 
-    _gpio: pigpio.pi
+    _gpio: Union[pigpio.pi, ServoKit]
 
     _stop: bool
+
+    _config: Any
 
     @dataclass
     class _LogEntry:
@@ -109,10 +113,10 @@ class Program:
             self._log = []
 
             with open(args.config_file) as file:
-                config = json.load(file)
-            jsonschema.validate(config, self._CONFIG_SCHEMA)
+                self._config = json.load(file)
+            jsonschema.validate(self._config, self._CONFIG_SCHEMA)
 
-            self._load_controller(config)
+            self._load_controller()
 
             if args.all is not None:
                 if args.all == "min":
@@ -171,25 +175,32 @@ class Program:
                 self._LogEntry(int(time * 1000), self._controller.serialize())
             )
 
-    def _load_controller(self, config: Any) -> None:
-        controller_module = importlib.import_module(config["controller_module"])
-        controller_type = getattr(controller_module, config["controller_type"])
+    def _load_controller(self) -> None:
+        controller_module = importlib.import_module(self._config["controller_module"])
+        controller_type = getattr(controller_module, self._config["controller_type"])
 
         if not issubclass(controller_type, ActorController):
             raise ValueError("Controller is not an ActorController")
 
-        self._controller = controller_type.deserialize(config["serialized_controller"])
+        self._controller = controller_type.deserialize(
+            self._config["serialized_controller"]
+        )
 
-        self._control_period = 1.0 / config["control_frequency"]
-        self._init_gpio(config)
+        self._control_period = 1.0 / self._config["control_frequency"]
+        self._init_gpio(self._config)
 
-    def _init_gpio(self, config: Any) -> None:
+    def _init_gpio(self) -> None:
         if not self._dry:
-            self._gpio = pigpio.pi()
-            if not self._gpio.connected:
-                raise RuntimeError("Failed to reach pigpio daemon.")
+            if self._config["hardware"] == "hatv1":
+                self._gpio = pigpio.pi()
+                if not self._gpio.connected:
+                    raise RuntimeError("Failed to reach pigpio daemon.")
+            elif self._config["hardware"] == "pca9685":
+                self._gpio = ServoKit(channels=16)
+            else:
+                raise NotImplementedError()
 
-        gpio_settings = [gpio for gpio in config["gpio"]]
+        gpio_settings = [gpio for gpio in self._config["gpio"]]
         gpio_settings.sort(key=lambda gpio: cast(int, gpio["dof"]))
         i = -1
         for gpio in gpio_settings:
@@ -214,13 +225,19 @@ class Program:
             print(f"Using PWM frequency {self._PWM_FREQUENCY}Hz")
 
         if not self._dry:
-            try:
+            if self._config["hardware"] == "hatv1":
+                try:
+                    for pin in self._pins:
+                        self._gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
+                        self._gpio.set_PWM_range(pin.pin, 2048)
+                        self._gpio.set_PWM_dutycycle(pin.pin, 0)
+                except AttributeError as err:
+                    raise RuntimeError("Could not initialize gpios.") from err
+            elif self._config["hardware"] == "pca9685":
                 for pin in self._pins:
-                    self._gpio.set_PWM_frequency(pin.pin, self._PWM_FREQUENCY)
-                    self._gpio.set_PWM_range(pin.pin, 2048)
-                    self._gpio.set_PWM_dutycycle(pin.pin, 0)
-            except AttributeError as err:
-                raise RuntimeError("Could not initialize gpios.") from err
+                    self._gpio.servo[pin.pin].set_pulse_width_range(0, 2048)
+            else:
+                raise NotImplementedError()
 
     def _set_targets(self, targets: List[float]) -> None:
         if self._debug:
@@ -244,8 +261,7 @@ class Program:
                     -1
                 )  # the motor is attached reversed by design so we need to inverse what it does.
 
-                self._gpio.set_PWM_dutycycle(
-                    pin.pin,
+                angle = (
                     CENTER
                     + (
                         adjust_reversed_motor
@@ -255,6 +271,13 @@ class Program:
                     ),
                 )
 
+                if self._config["hardware"] == "hatv1":
+                    self._gpio.set_PWM_dutycycle(pin.pin, angle)
+                elif self._config["hardware"] == "pca9685":
+                    self._gpio.servo[pin.pin].angle = angle
+                else:
+                    raise NotImplementedError()
+
     def _stop_pwm(self) -> None:
         if self._debug:
             print(
@@ -262,7 +285,13 @@ class Program:
             )
         for pin in self._pins:
             if not self._dry:
-                self._gpio.set_PWM_dutycycle(pin.pin, 0)
+                if self._config["hardware"] == "hatv1":
+                    self._gpio.set_PWM_dutycycle(pin.pin, 0)
+                elif self._config["hardware"] == "pca9685":
+                    raise NotImplementedError()
+                    # TODO turn off servos
+                else:
+                    raise NotImplementedError()
 
 
 def main() -> None:

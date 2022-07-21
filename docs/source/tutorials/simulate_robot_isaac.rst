@@ -93,7 +93,7 @@ To simulate the robot, create a ``Simulator`` class::
         # ...
 
         sim = Simulator()
-        await sim.simulate(robot, 60)
+        await sim.simulate(robot, 10)
 
 A physics simulation environment such as the Isaac Gym environment works with batches of environments.
 A batch provides common arguments between all environments, and an environment describes the physical Actors to be simulated in that environment.

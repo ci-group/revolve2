@@ -38,15 +38,20 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: psf/black@stable
-      - uses: isort/isort-action@master
-        with:
-          configuration: "--check-only --diff --profile black"
+      - name: install_tools
+        run: pip install -r ./codetools/requirements
+      - name: black
+        run: ./codetools/black/check.sh
+      - name: isort
+        run: ./codetools/isort/check.sh
+      - name: pyflakes
+        run: ./codetools/pyflakes/check.sh
       - name: sort-all
         run: |
           pip install -r ./sort_all/requirements.txt
           ./sort_all/sort_all.sh
           [[ -z $(git status -s) ]]
+          git checkout -- .
 
   mypy:
     runs-on: ubuntu-20.04
@@ -78,9 +83,9 @@ jobs:
           sudo apt install libcereal-dev
           pip install ./genotypes/cppnwin[dev]
       - name: install requirements for mypy
-        run: pip install -r ./mypy/requirements.txt
+        run: pip install -r ./codetools/mypy/requirements.txt
       - name: run mypy
-        run: ./mypy/mypy_opensource.sh
+        run: ./codetools/mypy/check_opensource.sh
 
   docs:
     runs-on: ubuntu-20.04

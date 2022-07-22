@@ -39,7 +39,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: install_tools
-        run: pip install -r ./codetools/requirements
+        run: pip install -r ./codetools/requirements.txt
       - name: black
         run: ./codetools/black/check.sh
       - name: isort
@@ -48,8 +48,7 @@ jobs:
         run: ./codetools/pyflakes/check.sh
       - name: sort-all
         run: |
-          pip install -r ./sort_all/requirements.txt
-          ./sort_all/sort_all.sh
+          ./codetools/sort_all/fix.sh
           [[ -z $(git status -s) ]]
           git checkout -- .
 

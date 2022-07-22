@@ -28,3 +28,8 @@ echo "--------------"
 echo "isort"
 echo "--------------"
 ./isort/fix.sh
+
+echo "--------------"
+echo "pydocstyle"
+echo "--------------"
+./pydocstyle/check.sh

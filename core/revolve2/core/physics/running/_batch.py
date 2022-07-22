@@ -1,3 +1,5 @@
+"""Batch class."""
+
 from dataclasses import dataclass, field
 from typing import Callable, List
 
@@ -7,6 +9,8 @@ from ._environment import Environment
 
 @dataclass
 class Batch:
+    """A set of environments and shared parameters for simulation."""
+
     simulation_time: int  # seconds
 
     """
@@ -15,8 +19,16 @@ class Batch:
     but is dependent on the actual step frequency of the simulator.
     """
     sampling_frequency: float
-    control_frequency: float  # Hz. See `sampling_frequency`, but for actor control.
-    control: Callable[
-        [int, float, ActorControl], None
-    ]  # (environment_index, dt, control) -> None
+
+    """Similar to `sampling_frequency` but for how often the control function is called."""
+    control_frequency: float
+
+    """
+    Function called for control during simulation.
+
+    (environment_index, dt, control) -> None
+    """
+    control: Callable[[int, float, ActorControl], None]
+
+    """The environments to simulate."""
     environments: List[Environment] = field(default_factory=list, init=False)

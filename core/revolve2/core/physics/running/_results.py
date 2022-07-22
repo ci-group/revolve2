@@ -1,7 +1,3 @@
-"""
-State class and subclasses used by it.
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -12,9 +8,7 @@ from pyrr import Quaternion, Vector3
 
 @dataclass
 class ActorState:
-    """
-    State of an actor.
-    """
+    """State of an actor."""
 
     position: Vector3
     orientation: Quaternion
@@ -22,9 +16,7 @@ class ActorState:
 
 @dataclass
 class EnvironmentState:
-    """
-    State of an environment.
-    """
+    """State of an environment."""
 
     time_seconds: float
     actor_states: List[ActorState]
@@ -32,17 +24,13 @@ class EnvironmentState:
 
 @dataclass
 class EnvironmentResults:
-    """
-    Result of running an environment
-    """
+    """Result of running an environment."""
 
     environment_states: List[EnvironmentState]
 
 
 @dataclass
 class BatchResults:
-    """
-    Result of running a batch
-    """
+    """Result of running a batch."""
 
     environment_results: List[EnvironmentResults]

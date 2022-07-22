@@ -15,7 +15,6 @@ def is_static_data(to_check: Any) -> TypeGuard[StaticData]:
 
     :param to_check: The data to check.
     """
-
     if (
         to_check is None
         or type(to_check) == bool

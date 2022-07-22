@@ -37,14 +37,14 @@ class OpenaiESOptimizer(ABC, Process):
         Evaluate all individuals in the population, returning their fitnesses.
 
         :population: MxN array with M the population size and N the size of an individual.
-        :return: M long vector with M the population size, representing the fitness of each individual in `population`.
+        :returns: M long vector with M the population size, representing the fitness of each individual in `population`.
         """
 
     @abstractmethod
     def _must_do_next_gen(self) -> bool:
         """
         Decide if the optimizer must do another generation.
-        :return: True if it must.
+        :returns: True if it must.
         """
 
     __database: AsyncEngine

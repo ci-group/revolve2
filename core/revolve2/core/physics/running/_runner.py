@@ -19,6 +19,6 @@ class Runner(ABC):
         """
         Simulate the provided batch.
 
-        :return: List of simulation states in ascending order of time.
+        :returns: List of simulation states in ascending order of time.
         """
         pass

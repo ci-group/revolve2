@@ -8,6 +8,15 @@ from ._static_data import StaticData, is_static_data
 
 
 def serialize(to_serialize: Union[Serializable, StaticData]) -> StaticData:
+    """
+    Deserialize the provided object.
+
+    Abstracts away wether the object is a `Serializable` class or already StaticData.
+    In the latter case the object is returned as is.
+
+    :param to_serialize: The object to serialize.
+    :returns: The serialized object.
+    """
     if isinstance(to_serialize, Serializable):
         return to_serialize.serialize()
     elif is_static_data(to_serialize):
@@ -20,6 +29,13 @@ T = TypeVar("T", Serializable, StaticData)
 
 
 def deserialize(data: StaticData, as_type: Type[T]) -> T:
+    """
+    Deserialize `StaticData` to the given type.
+
+    :param data: The `StaticData` to deserialize from.
+    :param as_type: The type to deserialize to.
+    :returns: The deserialized object.
+    """
     if issubclass(as_type, Serializable):
         return as_type.deserialize(data)
     elif (

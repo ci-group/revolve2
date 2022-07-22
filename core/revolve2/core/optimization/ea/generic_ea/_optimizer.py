@@ -39,7 +39,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         Evaluate a genotype.
 
         :param genotypes: The genotypes to evaluate. Must not be altered.
-        :return: The fitness result.
+        :returns: The fitness result.
         """
 
     @abstractmethod
@@ -53,7 +53,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         Select groups of parents that will create offspring.
 
         :param population: The generation to select sets of parents from. Must not be altered.
-        :return: The selected sets of parents, each integer representing a population index.
+        :returns: The selected sets of parents, each integer representing a population index.
         """
 
     @abstractmethod
@@ -70,7 +70,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
 
         :param individuals: The individuals to choose from.
         :param num_survivors: How many individuals should be selected.
-        :return: Indices of the old survivors and indices of the new survivors.
+        :returns: Indices of the old survivors and indices of the new survivors.
         """
 
     @abstractmethod
@@ -79,7 +79,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         Combine a set of genotypes into a new genotype.
 
         :param parents: The set of genotypes to combine. Must not be altered.
-        :return: The new genotype.
+        :returns: The new genotype.
         """
 
     @abstractmethod
@@ -88,14 +88,14 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         Apply mutation to an genotype to create a new genotype.
 
         :param genotype: The original genotype. Must not be altered.
-        :return: The new genotype.
+        :returns: The new genotype.
         """
 
     @abstractmethod
     def _must_do_next_gen(self) -> bool:
         """
         Decide if the optimizer must do another generation.
-        :return: True if it must.
+        :returns: True if it must.
         """
 
     @abstractmethod

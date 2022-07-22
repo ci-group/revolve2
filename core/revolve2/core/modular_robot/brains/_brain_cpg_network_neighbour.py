@@ -69,7 +69,7 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
         :param connections: Pairs of active hinges corresponding to pairs of cpgs that are connected.
                             Connection is from hinge 0 to hinge 1.
                             Opposite connection is not provided as weights are assumed to be negative.
-        :return: Two lists. The first list contains the internal weights in cpgs, corresponding to `active_hinges`
+        :returns: Two lists. The first list contains the internal weights in cpgs, corresponding to `active_hinges`
                  The second list contains the weights between connected cpgs, corresponding to `connections`
                  The lists should match the order of the input parameters.
         """

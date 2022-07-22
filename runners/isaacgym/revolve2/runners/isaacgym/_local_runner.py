@@ -4,7 +4,7 @@ import multiprocessing as mp
 import os
 import tempfile
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 import colored
 import numpy as np

@@ -2,7 +2,7 @@ import logging
 import pickle
 from abc import ABC, abstractmethod
 from random import Random
-from typing import List, Optional
+from typing import Optional
 
 import numpy as np
 import numpy.typing as npt

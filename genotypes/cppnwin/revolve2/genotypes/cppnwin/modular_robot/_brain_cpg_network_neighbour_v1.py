@@ -1,4 +1,4 @@
-from typing import List, Set, Tuple, cast
+from typing import List, Tuple, cast
 
 import multineat
 

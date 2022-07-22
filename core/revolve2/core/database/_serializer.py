@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generic, List, TypeVar, Union
+from typing import Generic, List, TypeVar
 
 from sqlalchemy.ext.asyncio.session import AsyncSession
 

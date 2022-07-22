@@ -78,7 +78,7 @@ class RpiControllerRemote:
                     ) from err
                 else:
                     raise RpiControllerError(
-                        f"Error when running controller program: <no stderr>"
+                        "Error when running controller program: <no stderr>"
                     ) from err
         logging.info("Successfully ran controller.")
 

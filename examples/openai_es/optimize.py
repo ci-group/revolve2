@@ -1,6 +1,6 @@
 import logging
 import math
-from random import Random, sample
+from random import Random
 
 from optimizer import Optimizer
 
@@ -66,7 +66,7 @@ async def main() -> None:
         )
         optimizer = maybe_optimizer
     else:
-        logging.info(f"No recovery data found. Starting at generation 0.")
+        logging.info("No recovery data found. Starting at generation 0.")
         optimizer = await Optimizer.new(
             database,
             process_id,
@@ -86,7 +86,7 @@ async def main() -> None:
 
     await optimizer.run()
 
-    logging.info(f"Finished optimizing.")
+    logging.info("Finished optimizing.")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import List, cast
+from typing import List
 
 import sqlalchemy
 from sqlalchemy.ext.asyncio.session import AsyncSession

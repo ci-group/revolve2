@@ -3,7 +3,6 @@ Runner class
 """
 
 from abc import ABC, abstractmethod
-from typing import List
 
 from ._batch import Batch
 from ._results import BatchResults

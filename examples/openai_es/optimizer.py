@@ -1,6 +1,6 @@
 import math
 from random import Random
-from typing import List, Tuple
+from typing import List
 
 import numpy as np
 import numpy.typing as npt
@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from revolve2.actor_controller import ActorController
-from revolve2.core.modular_robot import Body, ModularRobot
+from revolve2.core.modular_robot import Body
 from revolve2.core.modular_robot.brains import (
     BrainCpgNetworkStatic,
     make_cpg_network_structure_neighbour,

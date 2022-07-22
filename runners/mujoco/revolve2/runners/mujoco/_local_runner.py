@@ -1,6 +1,6 @@
 import math
 import tempfile
-from typing import Dict, List
+from typing import List
 
 import mujoco
 import mujoco_viewer

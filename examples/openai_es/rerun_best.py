@@ -6,8 +6,6 @@ from sqlalchemy.future import select
 
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.database.serializers import (
-    DbNdarray1xn,
-    DbNdarray1xnItem,
     Ndarray1xnSerializer,
 )
 from revolve2.core.modular_robot import ModularRobot

@@ -24,7 +24,7 @@ async def main() -> None:
         format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
     )
 
-    logging.info(f"Starting optimization")
+    logging.info("Starting optimization")
 
     # random number generator
     rng = Random()
@@ -72,7 +72,7 @@ async def main() -> None:
 
     await optimizer.run()
 
-    logging.info(f"Finished optimizing.")
+    logging.info("Finished optimizing.")
 
 
 if __name__ == "__main__":

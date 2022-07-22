@@ -4,10 +4,9 @@ from dataclasses import dataclass
 from typing import List
 
 import multineat
+from revolve2.core.database import IncompatibleError, Serializer
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
-
-from revolve2.core.database import IncompatibleError, Serializer
 
 from .genotype_schema import DbBase, DbGenotype
 

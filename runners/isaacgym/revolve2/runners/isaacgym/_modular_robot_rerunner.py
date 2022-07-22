@@ -3,7 +3,6 @@ Rerun(watch) a modular robot in isaac gym.
 """
 
 from pyrr import Quaternion, Vector3
-
 from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor

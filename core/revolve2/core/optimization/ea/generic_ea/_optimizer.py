@@ -5,14 +5,13 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Generic, List, Optional, Tuple, Type, TypeVar
 
+from revolve2.core.database import IncompatibleError, Serializer
+from revolve2.core.optimization import Process, ProcessIdGen
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-
-from revolve2.core.database import IncompatibleError, Serializer
-from revolve2.core.optimization import Process, ProcessIdGen
 
 from ._database import (
     DbBase,

@@ -4,7 +4,6 @@ from queue import Queue
 from typing import Any, List, Optional, Set, Tuple
 
 import multineat
-
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick, Core, Module
 
 from .._genotype import Genotype

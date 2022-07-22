@@ -6,7 +6,6 @@ from random import Random
 from genotype import random as random_genotype
 from item import Item
 from optimizer import Optimizer
-
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
 

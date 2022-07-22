@@ -4,16 +4,11 @@ from random import Random
 from typing import List, Tuple
 
 import multineat
+import revolve2.core.optimization.ea.generic_ea.population_management as population_management
+import revolve2.core.optimization.ea.generic_ea.selection as selection
 import sqlalchemy
 from genotype import Genotype, GenotypeSerializer, crossover, develop, mutate
 from pyrr import Quaternion, Vector3
-from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.future import select
-
-import revolve2.core.optimization.ea.generic_ea.population_management as population_management
-import revolve2.core.optimization.ea.generic_ea.selection as selection
 from revolve2.actor_controller import ActorController
 from revolve2.core.database import IncompatibleError
 from revolve2.core.database.serializers import FloatSerializer
@@ -28,6 +23,10 @@ from revolve2.core.physics.running import (
     Runner,
 )
 from revolve2.runners.mujoco import LocalRunner
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.future import select
 
 
 class Optimizer(EAOptimizer[Genotype, float]):

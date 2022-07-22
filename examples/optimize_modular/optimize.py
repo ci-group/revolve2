@@ -4,7 +4,6 @@ from random import Random
 import multineat
 from genotype import random as random_genotype
 from optimizer import Optimizer
-
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
 

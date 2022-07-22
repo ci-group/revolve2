@@ -4,7 +4,6 @@ from typing import List
 
 import numpy as np
 import numpy.typing as npt
-
 from revolve2.actor_controller import ActorController
 from revolve2.serialization import SerializeError, StaticData
 

@@ -7,10 +7,9 @@ import argparse
 
 import matplotlib.pyplot as plt
 import pandas
-from sqlalchemy.future import select
-
 from revolve2.core.database import open_database_sqlite
 from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
+from sqlalchemy.future import select
 
 
 def plot(database: str, process_id: int) -> None:

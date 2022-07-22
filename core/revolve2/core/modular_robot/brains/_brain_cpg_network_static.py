@@ -2,9 +2,8 @@ from typing import List
 
 import numpy as np
 import numpy.typing as npt
-from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
-
 from revolve2.actor_controller import ActorController
+from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
 from revolve2.core.modular_robot import Body, Brain
 
 

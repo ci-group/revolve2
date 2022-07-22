@@ -16,7 +16,6 @@ from typing import Any, List, Optional, Union, cast
 import jsonschema
 import pigpio
 from adafruit_servokit import ServoKit
-
 from revolve2.actor_controller import ActorController
 from revolve2.serialization import StaticData
 

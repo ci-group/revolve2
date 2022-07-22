@@ -7,11 +7,10 @@ from typing import List
 import sqlalchemy
 from item import Item
 from phenotype import Phenotype
+from revolve2.core.database import IncompatibleError, Serializer
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
-
-from revolve2.core.database import IncompatibleError, Serializer
 
 
 @dataclass

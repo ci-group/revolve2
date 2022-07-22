@@ -5,11 +5,8 @@ from typing import List
 import numpy as np
 import numpy.typing as npt
 from pyrr import Quaternion, Vector3
-from revolve2.actor_controllers.cpg import CpgNetworkStructure
-from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlalchemy.ext.asyncio.session import AsyncSession
-
 from revolve2.actor_controller import ActorController
+from revolve2.actor_controllers.cpg import CpgNetworkStructure
 from revolve2.core.modular_robot import Body
 from revolve2.core.modular_robot.brains import (
     BrainCpgNetworkStatic,
@@ -27,6 +24,8 @@ from revolve2.core.physics.running import (
     Runner,
 )
 from revolve2.runners.mujoco import LocalRunner
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
 
 class Optimizer(OpenaiESOptimizer):

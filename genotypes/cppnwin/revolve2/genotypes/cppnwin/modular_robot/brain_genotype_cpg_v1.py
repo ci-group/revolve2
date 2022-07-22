@@ -1,5 +1,4 @@
 import multineat
-
 from revolve2.core.modular_robot import Body
 
 from .._genotype import Genotype

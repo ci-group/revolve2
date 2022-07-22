@@ -7,16 +7,15 @@ from typing import Optional
 import numpy as np
 import numpy.typing as npt
 import sqlalchemy
+from revolve2.core.database import IncompatibleError
+from revolve2.core.database.serializers import DbNdarray1xn, Ndarray1xnSerializer
+from revolve2.core.optimization import Process, ProcessIdGen
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
-
-from revolve2.core.database import IncompatibleError
-from revolve2.core.database.serializers import DbNdarray1xn, Ndarray1xnSerializer
-from revolve2.core.optimization import Process, ProcessIdGen
 
 
 class OpenaiESOptimizer(ABC, Process):

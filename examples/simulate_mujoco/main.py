@@ -6,7 +6,6 @@ import math
 from random import Random
 
 from pyrr import Quaternion, Vector3
-
 from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick, ModularRobot
 from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighbourRandom

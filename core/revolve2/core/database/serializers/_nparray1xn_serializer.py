@@ -6,11 +6,10 @@ from typing import List, cast
 import numpy as np
 import numpy.typing as npt
 import sqlalchemy
+from revolve2.core.database import IncompatibleError
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
-
-from revolve2.core.database import IncompatibleError
 
 from .._serializer import Serializer
 

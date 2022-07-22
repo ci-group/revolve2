@@ -9,8 +9,6 @@ import argparse
 
 import matplotlib.pyplot as plt
 import pandas
-from sqlalchemy.future import select
-
 from revolve2.core.database import open_database_sqlite
 from revolve2.core.database.serializers import DbFloat
 from revolve2.core.optimization.ea.generic_ea import (
@@ -18,6 +16,7 @@ from revolve2.core.optimization.ea.generic_ea import (
     DbEAOptimizerGeneration,
     DbEAOptimizerIndividual,
 )
+from sqlalchemy.future import select
 
 
 def plot(database: str, process_id: int) -> None:

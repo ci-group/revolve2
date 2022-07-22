@@ -3,7 +3,6 @@ from typing import List, Tuple
 
 import numpy as np
 from pyrr import Quaternion, Vector3
-
 from revolve2.core.physics.actor import Actor, Collision, Joint, RigidBody, Visual
 
 from ._active_hinge import ActiveHinge

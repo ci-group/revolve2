@@ -8,7 +8,6 @@ from contextlib import asynccontextmanager
 from typing import AsyncIterator, Tuple
 
 import asyncssh.connection
-
 from revolve2.serialization import StaticData
 
 

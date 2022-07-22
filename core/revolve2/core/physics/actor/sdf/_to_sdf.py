@@ -13,6 +13,14 @@ def to_sdf(
     position: Vector3,
     orientation: Quaternion,
 ) -> str:
+    """
+    Convert an actor to sdf.
+
+    :param physics_robot: The actor to convert.
+    :param name: Name to use for the robot in sdf.
+    :param position: Position to use for the robot.
+    :param orientation: Orientation to use for the robot.
+    """
     sdf = xml.Element("sdf", {"version": "1.6"})
     model = xml.SubElement(sdf, "model", {"name": model_name})
     model.append(_make_pose(position, orientation))

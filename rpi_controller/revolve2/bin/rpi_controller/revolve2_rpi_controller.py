@@ -45,6 +45,7 @@ class Program:
             "serialized_controller": {},
         },
         "required": [
+            "hardware",
             "controller_module",
             "controller_type",
             "control_frequency",
@@ -187,7 +188,7 @@ class Program:
         )
 
         self._control_period = 1.0 / self._config["control_frequency"]
-        self._init_gpio(self._config)
+        self._init_gpio()
 
     def _init_gpio(self) -> None:
         if not self._dry:
@@ -261,14 +262,11 @@ class Program:
                     -1
                 )  # the motor is attached reversed by design so we need to inverse what it does.
 
-                angle = (
-                    CENTER
-                    + (
-                        adjust_reversed_motor
-                        * invert_mul
-                        * min(1, max(-1, target))
-                        * ANGLE60
-                    ),
+                angle = CENTER + (
+                    adjust_reversed_motor
+                    * invert_mul
+                    * min(1, max(-1, target))
+                    * ANGLE60
                 )
 
                 if self._config["hardware"] == "hatv1":

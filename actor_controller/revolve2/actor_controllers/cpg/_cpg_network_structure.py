@@ -6,17 +6,29 @@ import numpy.typing as npt
 
 
 @dataclass(frozen=True)
-class CpgIndex:
+class Cpg:
+    """Identifies a cpg to be used in a cpg network structure."""
+
     index: int
 
 
 @dataclass(frozen=True, init=False)
 class CpgPair:
-    # lowest is automatically set to be the lowest state index of the two
-    cpg_index_lowest: CpgIndex
-    cpg_index_highest: CpgIndex
+    """A pair of cpgs that assures that the first cpg always has the lowest index."""
 
-    def __init__(self, cpg_1: CpgIndex, cpg_2: CpgIndex) -> None:
+    # lowest is automatically set to be the lowest state index of the two
+    cpg_index_lowest: Cpg
+    cpg_index_highest: Cpg
+
+    def __init__(self, cpg_1: Cpg, cpg_2: Cpg) -> None:
+        """
+        Initialize this class.
+
+        The order of the provided cpgs is irrelevant.
+
+        :param cpg_1: One of the cpgs part of the pair.
+        :param cpg_2: The other cpg part of the pair.
+        """
         # hacky but normal variable setting not possible with frozen enabled
         # https://stackoverflow.com/questions/57893902/how-can-i-set-an-attribute-in-a-frozen-dataclass-custom-init-method
         if cpg_1.index < cpg_2.index:
@@ -28,22 +40,39 @@ class CpgPair:
 
 
 class CpgNetworkStructure:
-    cpgs: List[CpgIndex]
+    """
+    Describes the structure of a cpg network.
+
+    Can generate parameters for a cpg network, such as the initial state.
+    """
+
+    cpgs: List[Cpg]
     connections: Set[CpgPair]
 
-    def __init__(self, cpgs: List[CpgIndex], connections: Set[CpgPair]) -> None:
+    def __init__(self, cpgs: List[Cpg], connections: Set[CpgPair]) -> None:
+        """
+        Initialize this class.
+
+        :param cpgs: The cpgs used in the structure.
+        :param connections: The connections between cpgs.
+        """
         assert isinstance(connections, set)
 
         self.cpgs = cpgs
         self.connections = connections
 
     @staticmethod
-    def make_cpgs(num_cpgs: int) -> List[CpgIndex]:
-        return [CpgIndex(index) for index in range(num_cpgs)]
+    def make_cpgs(num_cpgs: int) -> List[Cpg]:
+        """
+        Create a list of cpgs.
+
+        :param num_cgs: The number of cpgs to create.
+        """
+        return [Cpg(index) for index in range(num_cpgs)]
 
     def make_weight_matrix(
         self,
-        internal_weights: Dict[CpgIndex, float],
+        internal_weights: Dict[Cpg, float],
         external_weights: Dict[CpgPair, float],
     ) -> npt.NDArray[np.float_]:
         state_size = self.num_cpgs * 2

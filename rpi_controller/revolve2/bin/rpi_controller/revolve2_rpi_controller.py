@@ -11,7 +11,7 @@ import json
 import sys
 import time
 from dataclasses import dataclass
-from typing import Any, List, Optional, cast, Union
+from typing import Any, List, Optional, Union, cast
 
 import jsonschema
 import pigpio

@@ -11,10 +11,18 @@ class ActorController(Serializable, ABC):
 
     @abstractmethod
     def step(self, dt: float) -> None:
-        """Step forward the controller dt seconds."""
+        """
+        Step the controller dt seconds forward.
+
+        :param df: The number of seconds to step forward.
+        """
         pass
 
     @abstractmethod
     def get_dof_targets(self) -> List[float]:
-        """Get the degree of freedom targets from the controller."""
+        """
+        Get the degree of freedom targets from the controller.
+
+        :returns: The dof targets.
+        """
         pass

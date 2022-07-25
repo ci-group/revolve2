@@ -75,6 +75,12 @@ class CpgNetworkStructure:
         internal_weights: Dict[Cpg, float],
         external_weights: Dict[CpgPair, float],
     ) -> npt.NDArray[np.float_]:
+        """
+        Create a weight matrix from internal and external weights.
+
+        :param internal_weights: The internal weights.
+        :param external_weights: The external weights.
+        """
         state_size = self.num_cpgs * 2
 
         assert set(internal_weights.keys()) == set(self.cpgs)
@@ -98,11 +104,24 @@ class CpgNetworkStructure:
 
     @property
     def num_params(self) -> int:
+        """
+        Get the number of weights in the structure.
+
+        #TODO update the name of this function
+
+        :returns: The number of weights.
+        """
         return len(self.cpgs) + len(self.connections)
 
     def make_weight_matrix_from_params(
         self, params: List[float]
     ) -> npt.NDArray[np.float_]:
+        """
+        Create a weight matrix from a list if weights.
+
+        # TODO fix `params` name to `weights`
+        :param params: The weights to create the matrix from.
+        """
         assert len(params) == self.num_params
 
         internal_weights = {cpg: weight for cpg, weight in zip(self.cpgs, params)}
@@ -115,14 +134,41 @@ class CpgNetworkStructure:
 
     @property
     def num_states(self) -> int:
+        """
+        Get the number of states in a cpg network of this structure.
+
+        This would be twice the number of cpgs.
+
+        :returns: The number of states.
+        """
         return len(self.cpgs) * 2
 
     def make_uniform_state(self, value: float) -> npt.NDArray[np.float_]:
+        """
+        Make a state array by repeating the same value.
+
+        Will match the required number of states in this structure.
+
+        :param value: The value to use for all states
+        :returns: The array of states.
+        """
         return np.full(self.num_states, value)
 
     @property
     def num_cpgs(self) -> int:
+        """
+        Get the number of cpgs in the structure.
+
+        :returns: The number of cpgs.
+        """
         return len(self.cpgs)
 
     def make_uniform_dof_ranges(self, value: float) -> npt.NDArray[np.float_]:
+        """
+        Make an array with the degree of freedom range of all cpg outputs by repeating the same value.
+
+        Will match the required number of cpgs in this structure.
+
+        :returns: The array of dof ranges.
+        """
         return np.full(self.num_cpgs, value)

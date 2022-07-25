@@ -13,9 +13,8 @@ class Serializable(ABC):
         """
         Serialize this object.
 
-        :returns: The serialized object
+        :returns: The serialized object.
         """
-        pass
 
     @classmethod
     @abstractmethod
@@ -23,8 +22,8 @@ class Serializable(ABC):
         """
         Deserialize an instance of this class from `StaticData`.
 
+        This must return an instance of the class implementing this interface.
+
         :param data: The data to deserialize from.
         :returns: The deserialized instance.
         """
-        # This should return an instance of the class implementing this interface
-        pass

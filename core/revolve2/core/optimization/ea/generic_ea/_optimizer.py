@@ -46,7 +46,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         process_id_gen: ProcessIdGen,
     ) -> List[Fitness]:
         """
-        Evaluate a genotype.
+        Evaluate a list of genotypes.
 
         :param genotypes: The genotypes to evaluate. Must not be altered.
         :param database: Database that can be used to store anything you want to save from the evaluation.
@@ -161,7 +161,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         """
         Initialize this class async.
 
-        Called when create an instance using `new`.
+        Called when creating an instance using `new`.
 
         :param database: Database to use for this optimizer.
         :param session: Session to use when saving data to the database during initialization.
@@ -223,7 +223,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         """
         Try to initialize this class async from a database.
 
-        Called when create an instance using `from_database`.
+        Called when creating an instance using `from_database`.
 
         :param database: Database to use for this optimizer.
         :param session: Session to use when loading and saving data to the database during initialization.

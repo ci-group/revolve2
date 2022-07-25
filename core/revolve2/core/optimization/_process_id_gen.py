@@ -8,7 +8,7 @@ class ProcessIdGen:
     _next_id: int
 
     def __init__(self) -> None:
-        """Initialize this class."""
+        """Initialize this object."""
         self._next_id = 0
 
     def gen(self) -> int:

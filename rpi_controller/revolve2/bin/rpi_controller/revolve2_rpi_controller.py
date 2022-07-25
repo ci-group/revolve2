@@ -85,7 +85,7 @@ class Program:
     _log: List[_LogEntry]
 
     def __init__(self) -> None:
-        """Initialize this class."""
+        """Initialize this object."""
         self._stop = False
 
     def main(self) -> None:

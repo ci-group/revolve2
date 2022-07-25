@@ -48,7 +48,7 @@ class Process:
     #    **kwargs: Any
     # ) -> None:
     #    """
-    #    Initialize this class.
+    #    Initialize this object.
     #
     #    Called when creating an instance through 'new'.
     #    Use the session to save initial settings that could be loaded using `ainit_from_database`.
@@ -71,7 +71,7 @@ class Process:
     #     **kwargs: Any
     # ) -> bool:
     #     """
-    #     Initialize this class.
+    #     Initialize this object.
     #
     #     Called when creating an instance through 'from_database'.
     #

@@ -22,7 +22,7 @@ class CpgPair:
 
     def __init__(self, cpg_1: Cpg, cpg_2: Cpg) -> None:
         """
-        Initialize this class.
+        Initialize this object.
 
         The order of the provided cpgs is irrelevant.
 
@@ -51,7 +51,7 @@ class CpgNetworkStructure:
 
     def __init__(self, cpgs: List[Cpg], connections: Set[CpgPair]) -> None:
         """
-        Initialize this class.
+        Initialize this object.
 
         :param cpgs: The cpgs used in the structure.
         :param connections: The connections between cpgs.

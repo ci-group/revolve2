@@ -30,7 +30,7 @@ class BrainCpgNetworkStatic(Brain):
         dof_ranges: npt.NDArray[np.float_],
     ) -> None:
         """
-        Initialize this class.
+        Initialize this object.
 
         :param initial_state: The initial state of each neuron.
         :param num_output_neurons: The number of outputs.

@@ -13,17 +13,18 @@ from ._not_finalized_error import NotFinalizedError
 
 
 class Body:
+    """Body of a modular robot."""
+
     core: Core
     _is_finalized: bool
 
     def __init__(self) -> None:
+        """Initialize this object."""
         self.core = Core(0.0)
         self._is_finalized = False
 
     def finalize(self) -> None:
-        """
-        Finalize the body by assigning ids to all modules.
-        """
+        """Finalize the body by assigning ids to all modules."""
         if self._is_finalized:
             raise RuntimeError("Cannot finalize twice.")
         assigner = _Finalizer(self)
@@ -32,6 +33,11 @@ class Body:
 
     @property
     def is_finalized(self) -> bool:
+        """
+        Check if the robot has been finalized.
+
+        :returns: Wether the robot has been finalized.
+        """
         return self._is_finalized
 
     def to_actor(self) -> Tuple[Actor, List[int]]:
@@ -57,10 +63,12 @@ class Body:
     def grid_position(self, module: Module) -> Vector3:
         """
         Calculate the position of this module in a 3d grid with the core as center.
+
         The distance between all modules is assumed to be one grid cell.
         All module angles must be multiples of 90 degrees.
-        """
 
+        :param module: The module to calculate the position for.
+        """
         # TODO make this into a function that maps the complete robot to a grid
 
         position = Vector3()

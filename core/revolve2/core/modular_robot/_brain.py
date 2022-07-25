@@ -7,6 +7,8 @@ from ._body import Body
 
 
 class Brain(ABC):
+    """Interface for the brain of a modular robot."""
+
     @abstractmethod
     def make_controller(self, body: Body, dof_ids: List[int]) -> ActorController:
         """

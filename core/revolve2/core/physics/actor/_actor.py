@@ -10,12 +10,19 @@ from ._rigid_body import RigidBody
 
 @dataclass
 class Actor:
+    """
+    An actor to be used in a physics environment.
+
+    Consists of a set of rigid bodies and joints connecting them which can possibly move dynamically.
+    """
+
     bodies: List[RigidBody]
     joints: List[Joint]
 
     def calc_aabb(self) -> BoundingBox:
         """
         Calculate the axis aligned bounding box for this actor.
+
         This not the exact bounding box for the actor,
         but the smallest box the actor fits in that is aligned
         with the global axes.

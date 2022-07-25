@@ -11,12 +11,13 @@ def multiple_unique(
     selection_function: Callable[[List[Genotype], List[Fitness]], int],
 ) -> List[int]:
     """
-    Perform selection on population of distinct group, it can be used in the
-    form parent selection or survival selection.
-    It never selects the same individual more than once
-    :param population: list of individuals where to select from
-    :param selection_size: amount of individuals to select
-    :param selection_function:
+    Select multiple distinct individuals from a population using the provided selection function.
+
+    :param population: List of individuals to select from.
+    :param fitnesses: Fitnesses of the population.
+    :param selection_size: Amount of individuals to select.
+    :param selection_function: Function that select a single individual from a population. ([Genotype], [Fitness]) -> index.
+    :returns: Indices of the selected individuals.
     """
     assert len(population) == len(fitnesses)
     assert selection_size < len(population)

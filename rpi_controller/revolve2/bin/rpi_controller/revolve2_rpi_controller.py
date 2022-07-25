@@ -252,18 +252,18 @@ class Program:
 
         for pin, target in zip(self._pins, targets):
             if not self._dry:
+                if pin.invert:
+                    invert_mul = -1
+                else:
+                    invert_mul = 1
+
+                adjust_reversed_motor = (
+                    -1
+                )  # the motor is attached reversed by design so we need to inverse what it does.
+
                 if self._config["hardware"] == "hatv1":
                     CENTER = 157
                     ANGLE60 = 64
-
-                    if pin.invert:
-                        invert_mul = -1
-                    else:
-                        invert_mul = 1
-
-                    adjust_reversed_motor = (
-                        -1
-                    )  # the motor is attached reversed by design so we need to inverse what it does.
 
                     angle = CENTER + (
                         adjust_reversed_motor

@@ -236,7 +236,9 @@ class Program:
                     raise RuntimeError("Could not initialize gpios.") from err
             elif self._config["hardware"] == "pca9685":
                 for pin in self._pins:
-                    self._gpio.servo[pin.pin].set_pulse_width_range(0, 2048)
+                    # self._gpio.servo[pin.pin].set_pulse_width_range(???)
+                    # TODO can set this? to improve accuracy but I have no clue
+                    pass
             else:
                 raise NotImplementedError()
 
@@ -248,30 +250,31 @@ class Program:
             for pin, target in zip(self._pins, targets):
                 print(f"{pin.pin:03d} | {target}")
 
-        CENTER = 157
-        ANGLE60 = 64
-
         for pin, target in zip(self._pins, targets):
             if not self._dry:
-                if pin.invert:
-                    invert_mul = -1
-                else:
-                    invert_mul = 1
-
-                adjust_reversed_motor = (
-                    -1
-                )  # the motor is attached reversed by design so we need to inverse what it does.
-
-                angle = CENTER + (
-                    adjust_reversed_motor
-                    * invert_mul
-                    * min(1, max(-1, target))
-                    * ANGLE60
-                )
-
                 if self._config["hardware"] == "hatv1":
+                    CENTER = 157
+                    ANGLE60 = 64
+
+                    if pin.invert:
+                        invert_mul = -1
+                    else:
+                        invert_mul = 1
+
+                    adjust_reversed_motor = (
+                        -1
+                    )  # the motor is attached reversed by design so we need to inverse what it does.
+
+                    angle = CENTER + (
+                        adjust_reversed_motor
+                        * invert_mul
+                        * min(1, max(-1, target))
+                        * ANGLE60
+                    )
+
                     self._gpio.set_PWM_dutycycle(pin.pin, angle)
                 elif self._config["hardware"] == "pca9685":
+                    angle = 90 + adjust_reversed_motor * invert_mul * target * 60
                     self._gpio.servo[pin.pin].angle = angle
                 else:
                     raise NotImplementedError()
@@ -286,8 +289,7 @@ class Program:
                 if self._config["hardware"] == "hatv1":
                     self._gpio.set_PWM_dutycycle(pin.pin, 0)
                 elif self._config["hardware"] == "pca9685":
-                    raise NotImplementedError()
-                    # TODO turn off servos
+                    self._gpio.servo[pin.pin].fraction = None
                 else:
                     raise NotImplementedError()
 

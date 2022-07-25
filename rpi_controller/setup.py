@@ -16,6 +16,7 @@ setup(
         f"revolve2-actor-controller @ file://{os.path.join(revolve2_path, 'actor_controller')}",
         "pigpio==1.78",
         "jsonschema==4.4.0",
+        "adafruit-circuitpython-servokit==1.3.10",
     ],
     extras_require={"dev": ["types-jsonschema==4.4.1"]},
     zip_safe=False,

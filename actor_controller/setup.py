@@ -18,7 +18,7 @@ setup(
     },
     install_requires=[
         f"revolve2-serialization @ file://{os.path.join(revolve2_path, 'serialization')}",
-        "numpy==1.22.0",
+        "numpy>=1.21.6",
     ],
     extras_require={"dev": []},
     zip_safe=False,

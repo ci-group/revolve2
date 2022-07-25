@@ -35,7 +35,7 @@ async def connect(
         yield RpiControllerRemote(conn)
 
 
-class RpiControllerRemote:\
+class RpiControllerRemote:
     """A wrapper around an ssh connection that allows running of the rpi controller on the controller machine."""
 
     def __init__(self, conn: asyncssh.connection.SSHClientConnection) -> None:

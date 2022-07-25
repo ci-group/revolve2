@@ -7,30 +7,44 @@ T = TypeVar("T")
 
 
 class Serializer(ABC, Generic[T]):
+    """An interface for classes that can serialize class T."""
+
     @classmethod
     @abstractmethod
     async def create_tables(cls, session: AsyncSession) -> None:
         """
-        Creates all tables required for storing objects of type T.
+        Create all tables required for storing objects of type T.
+
+        :param session: Database session used for creating the tables. TODO make sure to require this will not commit. It currently often will.
         """
 
     @classmethod
     @abstractmethod
     def identifying_table(cls) -> str:
         """
-        Returns the name of the primary table used for storing objects of type T.
+        Get the name of the primary table used for storing objects of type T.
+
+        :returns: The name of the primary table.
         """
 
     @classmethod
     @abstractmethod
     async def to_database(cls, session: AsyncSession, objects: List[T]) -> List[int]:
         """
-        Serializes the object to a database using the provided session.
+        Serialize the provided objects to a database using the provided session.
+
+        :param session: Session used when serializing to the database. Implementor must make sure this is not committed.
+        :param objects: The objects to serialize.
+        :return: A list of ids to identify each serialized object.
         """
 
     @classmethod
     @abstractmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> List[T]:
         """
-        Deserializes an object from a database using the provided session.
+        Deserialize a list of objects from a database using the provided session.
+
+        :param session: Session used for deserialization from the database. Implementor must make sure no changes are made to the database.
+        :param ids: Ids identifying the objects to deserialize.
+        :returns: The deserialized objects.
         """

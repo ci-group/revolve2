@@ -27,6 +27,16 @@ Fitness = TypeVar("Fitness")
 
 
 class EAOptimizer(Process, Generic[Genotype, Fitness]):
+    """
+    A generic optimizer implementation for evolutionary algorithms.
+
+    Inherit from this class and implement its abstract methods.
+    See the `Process` parent class on how to make an instance of your implementation.
+    You can run the optimization process using the `run` function.
+
+    Results will be saved every generation in the provided database.
+    """
+
     @abstractmethod
     async def _evaluate_generation(
         self,
@@ -39,6 +49,9 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         Evaluate a genotype.
 
         :param genotypes: The genotypes to evaluate. Must not be altered.
+        :param database: Database that can be used to store anything you want to save from the evaluation.
+        :param process_id: Unique identifier in the completely program specifically made for this function call.
+        :param process_id_gen: Can be used to create more unique identifiers.
         :returns: The fitness result.
         """
 
@@ -53,6 +66,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         Select groups of parents that will create offspring.
 
         :param population: The generation to select sets of parents from. Must not be altered.
+        :param fitnesses: Fitnesses of the population.
         :returns: The selected sets of parents, each integer representing a population index.
         """
 
@@ -66,9 +80,12 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         num_survivors: int,
     ) -> Tuple[List[int], List[int]]:
         """
-        Select survivors from a group of individuals. These will form the next generation.
+        Select survivors from the sets of old and new individuals, which will form the next generation.
 
-        :param individuals: The individuals to choose from.
+        :param old_individuals: Original individuals.
+        :param old_fitnesses: Fitnesses of the original individuals.
+        :param new_individuals: New individuals.
+        :param new_fitnesses: Fitnesses of the new individuals.
         :param num_survivors: How many individuals should be selected.
         :returns: Indices of the old survivors and indices of the new survivors.
         """
@@ -95,12 +112,15 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
     def _must_do_next_gen(self) -> bool:
         """
         Decide if the optimizer must do another generation.
+
         :returns: True if it must.
         """
 
     @abstractmethod
     def _on_generation_checkpoint(self, session: AsyncSession) -> None:
         """
+        Save the results of this generation to the database.
+
         This function is called after a generation is finished and results and state are saved to the database.
         Use it to store state and results of the optimizer.
         The session must not be committed, but it may be flushed.
@@ -139,8 +159,20 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         initial_population: List[Genotype],
     ) -> None:
         """
-        :id: Unique id between all EAOptimizers in this database.
-        :offspring_size: Number of offspring made by the population each generation.
+        Initialize this class async.
+
+        Called when create an instance using `new`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param genotype_type: Type of the genotype generic parameter.
+        :param genotype_serializer: Serializer for serializing genotypes.
+        :param fitness_type: Type of the fitness generic parameter.
+        :param fitness_serializer: Serializer for serializing fitnesses.
+        :param offspring_size: Number of offspring made by the population each generation.
+        :param initial_population: List of genotypes forming generation 0.
         """
         self.__database = database
         self.__genotype_type = genotype_type
@@ -188,6 +220,21 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         fitness_type: Type[Fitness],
         fitness_serializer: Type[Serializer[Fitness]],
     ) -> bool:
+        """
+        Try to initialize this class async from a database.
+
+        Called when create an instance using `from_database`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when loading and saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param genotype_type: Type of the genotype generic parameter.
+        :param genotype_serializer: Serializer for serializing genotypes.
+        :param fitness_type: Type of the fitness generic parameter.
+        :param fitness_serializer: Serializer for serializing fitnesses.
+        :returns: True if the complete object could be deserialized from the database.
+        """
         self.__database = database
         self.__genotype_type = genotype_type
         self.__genotype_serializer = genotype_serializer
@@ -304,6 +351,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         return True
 
     async def run(self) -> None:
+        """Run the optimizer."""
         # evaluate initial population if required
         if self.__latest_fitnesses is None:
             self.__latest_fitnesses = await self.__safe_evaluate_generation(
@@ -408,9 +456,11 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
     def generation_index(self) -> Optional[int]:
         """
         Get the current generation.
-        The initial generation is numbered 0.
-        """
 
+        The initial generation is numbered 0.
+
+        :returns: The current generation.
+        """
         return self.__generation_index
 
     def __gen_next_individual_id(self) -> int:

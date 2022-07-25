@@ -23,7 +23,7 @@ def generational(
     :param old_individuals: Original individuals.
     :param old_fitnesses: Fitnesses of the original individuals.
     :param new_individuals: New individuals.
-    :paramnew_fitnesses: Fitnesses of the new individuals.
+    :param new_fitnesses: Fitnesses of the new individuals.
     :param selection_function: Function selecting a single individual from the new individuals based on its fitness. ([Genotype], [Fitness]) -> index.
     :returns: List of indices of selected individuals from the list of new individuals.
     """

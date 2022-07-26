@@ -27,7 +27,7 @@ class ModularRobot:
         """
         Transform this modular robot in a physics actor and corresponding controller.
 
-        :returns: (the actor, the controller)
+        :return: (the actor, the controller)
         """
         actor, dof_ids = self.body.to_actor()
         controller = self.brain.make_controller(self.body, dof_ids)

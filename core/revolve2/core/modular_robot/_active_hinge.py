@@ -39,7 +39,7 @@ class ActiveHinge(Module):
         """
         Get the module attached to this hinge.
 
-        :returns: The attached module.
+        :return: The attached module.
         """
         return self.children[self.ATTACHMENT]
 

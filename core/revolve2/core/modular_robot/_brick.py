@@ -23,7 +23,7 @@ class Brick(Module):
         """
         Get the module attached to the front of the brick.
 
-        :returns: The attached module.
+        :return: The attached module.
         """
         return self.children[self.FRONT]
 
@@ -41,7 +41,7 @@ class Brick(Module):
         """
         Get the module attached to the right of the brick.
 
-        :returns: The attached module.
+        :return: The attached module.
         """
         return self.children[self.RIGHT]
 
@@ -59,7 +59,7 @@ class Brick(Module):
         """
         Get the module attached to the left of the brick.
 
-        :returns: The attached module.
+        :return: The attached module.
         """
         return self.children[self.LEFT]
 

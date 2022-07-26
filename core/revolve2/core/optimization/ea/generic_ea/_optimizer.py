@@ -52,7 +52,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         :param database: Database that can be used to store anything you want to save from the evaluation.
         :param process_id: Unique identifier in the completely program specifically made for this function call.
         :param process_id_gen: Can be used to create more unique identifiers.
-        :returns: The fitness result.
+        :return: The fitness result.
         """
 
     @abstractmethod
@@ -67,7 +67,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
 
         :param population: The generation to select sets of parents from. Must not be altered.
         :param fitnesses: Fitnesses of the population.
-        :returns: The selected sets of parents, each integer representing a population index.
+        :return: The selected sets of parents, each integer representing a population index.
         """
 
     @abstractmethod
@@ -87,7 +87,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         :param new_individuals: New individuals.
         :param new_fitnesses: Fitnesses of the new individuals.
         :param num_survivors: How many individuals should be selected.
-        :returns: Indices of the old survivors and indices of the new survivors.
+        :return: Indices of the old survivors and indices of the new survivors.
         """
 
     @abstractmethod
@@ -96,7 +96,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         Combine a set of genotypes into a new genotype.
 
         :param parents: The set of genotypes to combine. Must not be altered.
-        :returns: The new genotype.
+        :return: The new genotype.
         """
 
     @abstractmethod
@@ -105,7 +105,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         Apply mutation to an genotype to create a new genotype.
 
         :param genotype: The original genotype. Must not be altered.
-        :returns: The new genotype.
+        :return: The new genotype.
         """
 
     @abstractmethod
@@ -113,7 +113,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         """
         Decide if the optimizer must do another generation.
 
-        :returns: True if it must.
+        :return: True if it must.
         """
 
     @abstractmethod
@@ -233,7 +233,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         :param genotype_serializer: Serializer for serializing genotypes.
         :param fitness_type: Type of the fitness generic parameter.
         :param fitness_serializer: Serializer for serializing fitnesses.
-        :returns: True if the complete object could be deserialized from the database.
+        :return: True if the complete object could be deserialized from the database.
         """
         self.__database = database
         self.__genotype_type = genotype_type
@@ -459,7 +459,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
 
         The initial generation is numbered 0.
 
-        :returns: The current generation.
+        :return: The current generation.
         """
         return self.__generation_index
 

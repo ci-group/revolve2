@@ -109,7 +109,7 @@ class CpgNetworkStructure:
 
         #TODO update the name of this function
 
-        :returns: The number of weights.
+        :return: The number of weights.
         """
         return len(self.cpgs) + len(self.connections)
 
@@ -139,7 +139,7 @@ class CpgNetworkStructure:
 
         This would be twice the number of cpgs.
 
-        :returns: The number of states.
+        :return: The number of states.
         """
         return len(self.cpgs) * 2
 
@@ -150,7 +150,7 @@ class CpgNetworkStructure:
         Will match the required number of states in this structure.
 
         :param value: The value to use for all states
-        :returns: The array of states.
+        :return: The array of states.
         """
         return np.full(self.num_states, value)
 
@@ -159,7 +159,7 @@ class CpgNetworkStructure:
         """
         Get the number of cpgs in the structure.
 
-        :returns: The number of cpgs.
+        :return: The number of cpgs.
         """
         return len(self.cpgs)
 
@@ -169,6 +169,6 @@ class CpgNetworkStructure:
 
         Will match the required number of cpgs in this structure.
 
-        :returns: The array of dof ranges.
+        :return: The array of dof ranges.
         """
         return np.full(self.num_cpgs, value)

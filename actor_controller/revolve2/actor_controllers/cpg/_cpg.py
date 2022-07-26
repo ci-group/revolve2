@@ -75,7 +75,7 @@ class CpgActorController(ActorController):
 
         This will be the first `num_output_neurons` states from the state array.
 
-        :returns: The dof targets.
+        :return: The dof targets.
         """
         return list(
             np.clip(
@@ -89,7 +89,7 @@ class CpgActorController(ActorController):
         """
         Serialize this object.
 
-        :returns: The serialized object.
+        :return: The serialized object.
         """
         return {
             "state": self._state.tolist(),
@@ -104,7 +104,7 @@ class CpgActorController(ActorController):
         Deserialize an instance of this class from `StaticData`.
 
         :param data: The data to deserialize from.
-        :returns: The deserialized instance.
+        :return: The deserialized instance.
         """
         if (
             not type(data) == dict

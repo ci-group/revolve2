@@ -16,5 +16,5 @@ class Brain(ABC):
 
         :body: The body to make the brain for.
         :dof_ids: Map from actor joint index to module id.
-        :returns: The created controller.
+        :return: The created controller.
         """

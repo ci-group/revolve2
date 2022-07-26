@@ -36,7 +36,7 @@ class Body:
         """
         Check if the robot has been finalized.
 
-        :returns: Wether the robot has been finalized.
+        :return: Wether the robot has been finalized.
         """
         return self._is_finalized
 
@@ -44,7 +44,7 @@ class Body:
         """
         Create an actor from this body.
 
-        :returns: (the actor, ids of modules matching the joints in the actor)
+        :return: (the actor, ids of modules matching the joints in the actor)
         """
         if not self.is_finalized:
             raise NotFinalizedError()
@@ -54,7 +54,7 @@ class Body:
         """
         Find all active hinges in the body.
 
-        :returns: A list of all active hinges in the body
+        :return: A list of all active hinges in the body
         """
         if not self.is_finalized:
             raise NotFinalizedError()

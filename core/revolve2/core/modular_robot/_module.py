@@ -35,7 +35,7 @@ class Module:
         """
         Get the children of this module.
 
-        :returns: The list of children.
+        :return: The list of children.
         """
         return self._children
 
@@ -44,7 +44,7 @@ class Module:
         """
         Get the orientation of this model relative to its parent.
 
-        :returns: The orientation.
+        :return: The orientation.
         """
         return self._rotation
 
@@ -55,7 +55,7 @@ class Module:
 
         Only valid after the modular robot body's `finalize` function has been called.
 
-        :returns: This module's id.
+        :return: This module's id.
         """
         if self._id is None:
             raise NotFinalizedError()
@@ -80,7 +80,7 @@ class Module:
         Get the neighbours of this module with a certain range of the module tree.
 
         :param within_range: The range in which modules are considered a neighbour. Minimum is 1.
-        :returns: The neighbouring modules.
+        :return: The neighbouring modules.
         """
         if self._id is None:
             raise NotFinalizedError()

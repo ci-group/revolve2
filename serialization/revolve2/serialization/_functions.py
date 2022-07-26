@@ -15,7 +15,8 @@ def serialize(to_serialize: Union[Serializable, StaticData]) -> StaticData:
     In the latter case the object is returned as is.
 
     :param to_serialize: The object to serialize.
-    :returns: The serialized object.
+    :return: The serialized object.
+    :raises SerializeError: When the object cannot be serialized.
     """
     if isinstance(to_serialize, Serializable):
         return to_serialize.serialize()
@@ -34,7 +35,8 @@ def deserialize(data: StaticData, as_type: Type[T]) -> T:
 
     :param data: The `StaticData` to deserialize from.
     :param as_type: The type to deserialize to.
-    :returns: The deserialized object.
+    :return: The deserialized object.
+    :raises SerializeError: When the object cannot be serialized.
     """
     if issubclass(as_type, Serializable):
         return as_type.deserialize(data)

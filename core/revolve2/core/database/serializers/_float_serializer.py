@@ -28,7 +28,7 @@ class FloatSerializer(Serializer[float]):
         """
         Get the name of the primary table used for storing the floats.
 
-        :returns: The name of the primary table.
+        :return: The name of the primary table.
         """
         return DbFloat.__tablename__
 
@@ -61,7 +61,7 @@ class FloatSerializer(Serializer[float]):
 
         :param session: Session used for deserialization from the database. No changes are made to the database.
         :param ids: Ids identifying the floats to deserialize.
-        :returns: The deserialized floats.
+        :return: The deserialized floats.
         """
         items = (
             (await session.execute(select(DbFloat).filter(DbFloat.id.in_(ids))))

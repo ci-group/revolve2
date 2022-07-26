@@ -24,7 +24,7 @@ def tournament(rng: Random, fitnesses: List[Fitness], k: int) -> int:
     :param rng: Random number generator.
     :param fitnesses: List of finesses of individuals that joint the tournamente.
     :param k: Amount of individuals to participate in tournament.
-    :returns: The index of te individual that won the tournament.
+    :return: The index of te individual that won the tournament.
     """
     assert len(fitnesses) >= k
 

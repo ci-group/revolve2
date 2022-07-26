@@ -32,7 +32,7 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
         """
         Get the name of the primary table used for storing the arrays.
 
-        :returns: The name of the primary table.
+        :return: The name of the primary table.
         """
         return DbNdarray1xn.__tablename__
 
@@ -74,7 +74,7 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
 
         :param session: Session used for deserialization from the database. No changes are made to the database.
         :param ids: Ids identifying the arrays to deserialize.
-        :returns: The deserialized arrays.
+        :return: The deserialized arrays.
         """
         items = (
             (

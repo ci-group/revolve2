@@ -14,6 +14,7 @@ def is_static_data(to_check: Any) -> TypeGuard[StaticData]:
     Check if the provided object is `StaticData`.
 
     :param to_check: The data to check.
+    :returns: If the provided object is `StaticData`.
     """
     if (
         to_check is None

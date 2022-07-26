@@ -46,6 +46,8 @@ jobs:
         run: ./codetools/isort/check.sh
       - name: pydocstyle
         run: ./codetools/pydocstyle/check.sh
+      - name: darglint
+        run: ./codetools/darglint/check.sh
       - name: pyflakes
         run: ./codetools/pyflakes/check.sh
       - name: sort-all

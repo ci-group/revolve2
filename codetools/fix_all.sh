@@ -33,3 +33,8 @@ echo "--------------"
 echo "pydocstyle"
 echo "--------------"
 ./pydocstyle/check.sh
+
+echo "--------------"
+echo "darglint"
+echo "--------------"
+./darglint/check.sh

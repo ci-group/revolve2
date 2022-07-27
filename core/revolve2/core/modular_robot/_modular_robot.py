@@ -25,7 +25,7 @@ class ModularRobot:
 
     def make_actor_and_controller(self) -> Tuple[Actor, ActorController]:
         """
-        Transform this modular robot in a physics actor and corresponding controller.
+        Transform this modular robot into a physics actor and corresponding controller.
 
         :returns: (the actor, the controller)
         """

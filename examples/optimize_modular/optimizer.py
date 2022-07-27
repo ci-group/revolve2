@@ -1,19 +1,16 @@
+"""Optimizer for finding a good modular robot body and brain using CPPNWIN genotypes and simulation using mujoco."""
+
 import math
 import pickle
 from random import Random
 from typing import List, Tuple
 
 import multineat
+import revolve2.core.optimization.ea.generic_ea.population_management as population_management
+import revolve2.core.optimization.ea.generic_ea.selection as selection
 import sqlalchemy
 from genotype import Genotype, GenotypeSerializer, crossover, develop, mutate
 from pyrr import Quaternion, Vector3
-from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.future import select
-
-import revolve2.core.optimization.ea.generic_ea.population_management as population_management
-import revolve2.core.optimization.ea.generic_ea.selection as selection
 from revolve2.actor_controller import ActorController
 from revolve2.core.database import IncompatibleError
 from revolve2.core.database.serializers import FloatSerializer
@@ -28,9 +25,19 @@ from revolve2.core.physics.running import (
     Runner,
 )
 from revolve2.runners.mujoco import LocalRunner
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.future import select
 
 
 class Optimizer(EAOptimizer[Genotype, float]):
+    """
+    Optimizer for the problem.
+
+    Uses the generic EA optimizer as a base.
+    """
+
     _process_id: int
 
     _runner: Runner
@@ -64,6 +71,25 @@ class Optimizer(EAOptimizer[Genotype, float]):
         num_generations: int,
         offspring_size: int,
     ) -> None:
+        """
+        Initialize this class async.
+
+        Called when creating an instance using `new`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param initial_population: List of genotypes forming generation 0.
+        :param rng: Random number generator.
+        :param innov_db_body: Innovation database for the body genotypes.
+        :param innov_db_brain: Innovation database for the brain genotypes.
+        :param simulation_time: Time in second to simulate the robots for.
+        :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
+        :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
+        :param num_generations: Number of generation to run the optimizer for.
+        :param offspring_size: Number of offspring made by the population each generation.
+        """
         await super().ainit_new(
             database=database,
             session=session,
@@ -104,6 +130,21 @@ class Optimizer(EAOptimizer[Genotype, float]):
         innov_db_body: multineat.InnovationDatabase,
         innov_db_brain: multineat.InnovationDatabase,
     ) -> bool:
+        """
+        Try to initialize this class async from a database.
+
+        Called when creating an instance using `from_database`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when loading and saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param rng: Random number generator.
+        :param innov_db_body: Innovation database for the body genotypes.
+        :param innov_db_brain: Innovation database for the brain genotypes.
+        :returns: True if this complete object could be deserialized from the database.
+        :raises IncompatibleError: In case the database is not compatible with this class.
+        """
         if not await super().ainit_from_database(
             database=database,
             session=session,
@@ -283,6 +324,8 @@ DbBase = declarative_base()
 
 
 class DbOptimizerState(DbBase):
+    """Optimizer state."""
+
     __tablename__ = "optimizer"
 
     process_id = sqlalchemy.Column(

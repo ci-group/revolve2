@@ -1,15 +1,10 @@
+"""Visualize and simulate the best robot from the optimization process."""
+
 import math
 
 from optimize import make_body
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.future import select
-
 from revolve2.core.database import open_async_database_sqlite
-from revolve2.core.database.serializers import (
-    DbNdarray1xn,
-    DbNdarray1xnItem,
-    Ndarray1xnSerializer,
-)
+from revolve2.core.database.serializers import Ndarray1xnSerializer
 from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.modular_robot.brains import (
     BrainCpgNetworkStatic,
@@ -17,10 +12,12 @@ from revolve2.core.modular_robot.brains import (
 )
 from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
 from revolve2.runners.mujoco import ModularRobotRerunner
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.future import select
 
 
 async def main() -> None:
-
+    """Run the script."""
     db = open_async_database_sqlite("./database")
     async with AsyncSession(db) as session:
         best_individual = (

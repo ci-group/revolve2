@@ -1,3 +1,5 @@
+"""Installation script."""
+
 import os.path
 import pathlib
 

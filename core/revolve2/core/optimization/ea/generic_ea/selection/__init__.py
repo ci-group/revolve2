@@ -1,3 +1,5 @@
+"""Functions for selecting individuals from populations in EA algorithms."""
+
 from ._multiple_unique import multiple_unique
 from ._tournament import tournament
 

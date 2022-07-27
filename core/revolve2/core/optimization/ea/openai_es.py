@@ -1,12 +1,17 @@
+"""OpenAI ES optimizer and corresponding database model."""
+
 import logging
 import pickle
 from abc import ABC, abstractmethod
 from random import Random
-from typing import List, Optional
+from typing import Optional
 
 import numpy as np
 import numpy.typing as npt
 import sqlalchemy
+from revolve2.core.database import IncompatibleError
+from revolve2.core.database.serializers import DbNdarray1xn, Ndarray1xnSerializer
+from revolve2.core.optimization import Process, ProcessIdGen
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -14,14 +19,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
 from sqlalchemy.orm.exc import MultipleResultsFound, NoResultFound
 
-from revolve2.core.database import IncompatibleError
-from revolve2.core.database.serializers import DbNdarray1xn, Ndarray1xnSerializer
-from revolve2.core.optimization import Process, ProcessIdGen
-
 
 class OpenaiESOptimizer(ABC, Process):
     """
-    OpenAI ES optimizer based on:
+    OpenAI ES optimizer.
+
+    Based on:
     https://gist.github.com/karpathy/77fbb6a8dac5395f1b73e7a89300318d
     https://openai.com/blog/evolution-strategies/
     """
@@ -37,15 +40,19 @@ class OpenaiESOptimizer(ABC, Process):
         """
         Evaluate all individuals in the population, returning their fitnesses.
 
-        :population: MxN array with M the population size and N the size of an individual.
-        :return: M long vector with M the population size, representing the fitness of each individual in `population`.
+        :param database: Database that can be used to store anything you want to save from the evaluation.
+        :param process_id: Unique identifier in the completely program specifically made for this function call.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param population: MxN array with M the population size and N the size of an individual.
+        :returns: M long vector with M the population size, representing the fitness of each individual in `population`.
         """
 
     @abstractmethod
     def _must_do_next_gen(self) -> bool:
         """
         Decide if the optimizer must do another generation.
-        :return: True if it must.
+
+        :returns: True if it must.
         """
 
     __database: AsyncEngine
@@ -74,8 +81,19 @@ class OpenaiESOptimizer(ABC, Process):
         initial_mean: npt.NDArray[np.float_],
     ) -> None:
         """
-        :sigma: standard deviation
-        :initial_mean: Nx1 array
+        Initialize this class async.
+
+        Called when creating an instance using `new`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param rng: Random number generator used in the complete optimization process.
+        :param population_size: Size of the population. OpenAI ES parameter.
+        :param sigma: Standard deviation. OpenAI ES parameter.
+        :param learning_rate: Gain factor for the directional vector. OpenAI ES parameter.
+        :param initial_mean: Nx1 array. Initial guess. OpenAI ES Parameter.
         """
         self.__database = database
         self.__process_id = process_id
@@ -112,6 +130,19 @@ class OpenaiESOptimizer(ABC, Process):
         process_id_gen: ProcessIdGen,
         rng: Random,
     ) -> bool:
+        """
+        Try to initialize this class async from a database.
+
+        Called when creating an instance using `from_database`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when loading and saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param rng: Random number generator used in the complete optimization process. Its state will be overwritten with the serialized state from the database.
+        :returns: True if the complete object could be deserialized from the database.
+        :raises IncompatibleError: In case the database is not compatible with this class.
+        """
         self.__database = database
         self.__process_id = process_id
         self.__process_id_gen = process_id_gen
@@ -167,6 +198,7 @@ class OpenaiESOptimizer(ABC, Process):
         return True
 
     async def run(self) -> None:
+        """Run the optimizer."""
         while self.__safe_must_do_next_gen():
             rng = np.random.Generator(
                 np.random.PCG64(self.__rng.randint(0, 2**63))
@@ -231,9 +263,11 @@ class OpenaiESOptimizer(ABC, Process):
     def generation_number(self) -> Optional[int]:
         """
         Get the current generation.
-        The initial generation is numbered 0.
-        """
 
+        The initial generation is numbered 0.
+
+        :returns: The current generation.
+        """
         return self.__gen_num
 
     def __safe_must_do_next_gen(self) -> bool:
@@ -246,6 +280,8 @@ DbBase = declarative_base()
 
 
 class DbOpenaiESOptimizer(DbBase):
+    """Model for the optimizer itself, containing static parameters."""
+
     __tablename__ = "openaies_optimizer"
 
     process_id = sqlalchemy.Column(
@@ -264,6 +300,8 @@ class DbOpenaiESOptimizer(DbBase):
 
 
 class DbOpenaiESOptimizerState(DbBase):
+    """State of the optimizer."""
+
     __tablename__ = "openaies_optimizer_state"
 
     process_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=False, primary_key=True)
@@ -275,6 +313,8 @@ class DbOpenaiESOptimizerState(DbBase):
 
 
 class DbOpenaiESOptimizerIndividual(DbBase):
+    """An individual with a fitness which may or may not be assigned."""
+
     __tablename__ = "openaies_optimizer_individual"
 
     process_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=False, primary_key=True)

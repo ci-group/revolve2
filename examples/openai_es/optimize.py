@@ -1,15 +1,21 @@
+"""Setup and running of the openai es optimization program."""
+
 import logging
 import math
-from random import Random, sample
+from random import Random
 
 from optimizer import Optimizer
-
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick
 from revolve2.core.optimization import ProcessIdGen
 
 
 def make_body() -> Body:
+    """
+    Create the body to optimize the brain for.
+
+    :returns: The created body.
+    """
     body = Body()
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = ActiveHinge(math.pi / 2.0)
@@ -22,6 +28,7 @@ def make_body() -> Body:
 
 
 async def main() -> None:
+    """Run the optimization process."""
     POPULATION_SIZE = 10
     SIGMA = 0.1
     LEARNING_RATE = 0.05
@@ -66,7 +73,7 @@ async def main() -> None:
         )
         optimizer = maybe_optimizer
     else:
-        logging.info(f"No recovery data found. Starting at generation 0.")
+        logging.info("No recovery data found. Starting at generation 0.")
         optimizer = await Optimizer.new(
             database,
             process_id,
@@ -86,7 +93,7 @@ async def main() -> None:
 
     await optimizer.run()
 
-    logging.info(f"Finished optimizing.")
+    logging.info("Finished optimizing.")
 
 
 if __name__ == "__main__":

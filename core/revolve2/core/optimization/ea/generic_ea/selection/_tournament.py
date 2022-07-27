@@ -7,7 +7,14 @@ TSupportsLessThan = TypeVar("TSupportsLessThan", bound="SupportsLessThan")
 
 
 class SupportsLessThan(Protocol):
+    """Interface for types supporting the < operator."""
+
     def __lt__(self: TSupportsLessThan, other: TSupportsLessThan) -> bool:
+        """
+        Compare two objects using the < operator.
+
+        :param other: The object to compare this with.
+        """
         pass
 
 
@@ -16,11 +23,12 @@ Fitness = TypeVar("Fitness", bound="SupportsLessThan")
 
 def tournament(rng: Random, fitnesses: List[Fitness], k: int) -> int:
     """
-    Perform tournament selection and return the index of the best individual
+    Perform tournament selection and return the index of the best individual.
 
-    :param rng: random number generator
-    :param population: list of individuals where to select from
-    :param k: amount of individuals to participate in tournament
+    :param rng: Random number generator.
+    :param fitnesses: List of finesses of individuals that joint the tournamente.
+    :param k: Amount of individuals to participate in tournament.
+    :returns: The index of te individual that won the tournament.
     """
     assert len(fitnesses) >= k
 

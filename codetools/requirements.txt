@@ -1,0 +1,7 @@
+-r pyflakes/requirements.txt
+-r mypy/requirements.txt
+-r sort_all/requirements.txt
+-r black/requirements.txt
+-r isort/requirements.txt
+-r pydocstyle/requirements.txt
+-r darglint/requirements.txt

@@ -4,12 +4,19 @@ from typing import List
 
 import numpy as np
 import numpy.typing as npt
-
 from revolve2.actor_controller import ActorController
 from revolve2.serialization import SerializeError, StaticData
 
 
 class CpgActorController(ActorController):
+    """
+    Cpg network actor controller.
+
+    A state array that is integrated over time following the differential equation `X'=WX`.
+    W is a weight matrix that is multiplied by the state array.
+    The first `num_output_neurons` are the degree of freedom outputs of the controller.
+    """
+
     _state: npt.NDArray[np.float_]
     _num_output_neurons: int
     _weight_matrix: npt.NDArray[np.float_]  # nxn matrix matching number of neurons
@@ -21,9 +28,14 @@ class CpgActorController(ActorController):
         num_output_neurons: int,
         weight_matrix: npt.NDArray[np.float_],
         dof_ranges: npt.NDArray[np.float_],
-    ):
+    ) -> None:
         """
-        First num_output_neurons will be dof targets
+        Initialize this object.
+
+        :param state: The initial state of the neural network.
+        :param num_output_neurons: The number of output neurons. These will be the first n neurons of the state array.
+        :param weight_matrix: The weight matrix used during integration.
+        :param dof_ranges: Maximum range (half the complete range) of the output of degrees of freedom.
         """
         assert state.ndim == 1
         assert weight_matrix.ndim == 2
@@ -36,6 +48,11 @@ class CpgActorController(ActorController):
         self._dof_ranges = dof_ranges
 
     def step(self, dt: float) -> None:
+        """
+        Step the controller dt seconds forward.
+
+        :param dt: The number of seconds to step forward.
+        """
         self._state = self._rk45(self._state, self._weight_matrix, dt)
 
     @staticmethod
@@ -53,6 +70,13 @@ class CpgActorController(ActorController):
         return state + dt / 6 * (A1 + 2 * (A2 + A3) + A4)
 
     def get_dof_targets(self) -> List[float]:
+        """
+        Get the degree of freedom targets from the controller.
+
+        This will be the first `num_output_neurons` states from the state array.
+
+        :returns: The dof targets.
+        """
         return list(
             np.clip(
                 self._state[0 : self._num_output_neurons],
@@ -62,6 +86,11 @@ class CpgActorController(ActorController):
         )
 
     def serialize(self) -> StaticData:
+        """
+        Serialize this object.
+
+        :returns: The serialized object.
+        """
         return {
             "state": self._state.tolist(),
             "num_output_neurons": self._num_output_neurons,
@@ -71,6 +100,13 @@ class CpgActorController(ActorController):
 
     @classmethod
     def deserialize(cls, data: StaticData) -> CpgActorController:
+        """
+        Deserialize an instance of this class from `StaticData`.
+
+        :param data: The data to deserialize from.
+        :returns: The deserialized instance.
+        :raises SerializeError: If this object cannot be deserialized from the given data.
+        """
         if (
             not type(data) == dict
             or not "state" in data

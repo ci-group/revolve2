@@ -1,3 +1,5 @@
+"""Database schema for CPPNWIN genotype."""
+
 import sqlalchemy
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -5,6 +7,8 @@ DbBase = declarative_base()
 
 
 class DbGenotype(DbBase):
+    """Stores serialized multineat genomes."""
+
     __tablename__ = "cppnwin_genotype"
 
     id = sqlalchemy.Column(

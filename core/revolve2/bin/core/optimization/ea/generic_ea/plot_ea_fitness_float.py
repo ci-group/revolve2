@@ -1,5 +1,6 @@
 """
-Plot average, min, and max fitness over generations, using the results of the evolutionary optimizer.
+Plot average, min, and max fitness over generations using the results of the evolutionary optimizer.
+
 Assumes fitnesses is a floats.
 Installed as ``revolve2_plot_ea_fitness_float``.
 See ``revolve2_plot_ea_fitness_float --help`` for usage.
@@ -9,8 +10,6 @@ import argparse
 
 import matplotlib.pyplot as plt
 import pandas
-from sqlalchemy.future import select
-
 from revolve2.core.database import open_database_sqlite
 from revolve2.core.database.serializers import DbFloat
 from revolve2.core.optimization.ea.generic_ea import (
@@ -18,9 +17,16 @@ from revolve2.core.optimization.ea.generic_ea import (
     DbEAOptimizerGeneration,
     DbEAOptimizerIndividual,
 )
+from sqlalchemy.future import select
 
 
 def plot(database: str, process_id: int) -> None:
+    """
+    Plot fitness as described at the top of this file.
+
+    :param database: Database where the data is stored.
+    :param process_id: Process id of the evolutionary process to plot.
+    """
     # open the database
     db = open_database_sqlite(database)
     # read the optimizer data into a pandas dataframe
@@ -58,6 +64,7 @@ def plot(database: str, process_id: int) -> None:
 
 
 def main() -> None:
+    """Run this file as a command line tool."""
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "database",

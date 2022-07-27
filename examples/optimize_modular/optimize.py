@@ -1,15 +1,17 @@
+"""Setup and running of the optimize modular program."""
+
 import logging
 from random import Random
 
 import multineat
 from genotype import random as random_genotype
 from optimizer import Optimizer
-
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
 
 
 async def main() -> None:
+    """Run the optimization process."""
     # number of initial mutations for body and brain CPPNWIN networks
     NUM_INITIAL_MUTATIONS = 10
 
@@ -26,7 +28,7 @@ async def main() -> None:
         format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
     )
 
-    logging.info(f"Starting optimization")
+    logging.info("Starting optimization")
 
     # random number generator
     rng = Random()
@@ -78,7 +80,7 @@ async def main() -> None:
 
     await optimizer.run()
 
-    logging.info(f"Finished optimizing.")
+    logging.info("Finished optimizing.")
 
 
 if __name__ == "__main__":

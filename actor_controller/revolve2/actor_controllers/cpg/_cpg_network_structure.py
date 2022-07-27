@@ -6,17 +6,29 @@ import numpy.typing as npt
 
 
 @dataclass(frozen=True)
-class CpgIndex:
+class Cpg:
+    """Identifies a cpg to be used in a cpg network structure."""
+
     index: int
 
 
 @dataclass(frozen=True, init=False)
 class CpgPair:
-    # lowest is automatically set to be the lowest state index of the two
-    cpg_index_lowest: CpgIndex
-    cpg_index_highest: CpgIndex
+    """A pair of cpgs that assures that the first cpg always has the lowest index."""
 
-    def __init__(self, cpg_1: CpgIndex, cpg_2: CpgIndex) -> None:
+    # lowest is automatically set to be the lowest state index of the two
+    cpg_index_lowest: Cpg
+    cpg_index_highest: Cpg
+
+    def __init__(self, cpg_1: Cpg, cpg_2: Cpg) -> None:
+        """
+        Initialize this object.
+
+        The order of the provided cpgs is irrelevant.
+
+        :param cpg_1: One of the cpgs part of the pair.
+        :param cpg_2: The other cpg part of the pair.
+        """
         # hacky but normal variable setting not possible with frozen enabled
         # https://stackoverflow.com/questions/57893902/how-can-i-set-an-attribute-in-a-frozen-dataclass-custom-init-method
         if cpg_1.index < cpg_2.index:
@@ -28,24 +40,49 @@ class CpgPair:
 
 
 class CpgNetworkStructure:
-    cpgs: List[CpgIndex]
+    """
+    Describes the structure of a cpg network.
+
+    Can generate parameters for a cpg network, such as the initial state.
+    """
+
+    cpgs: List[Cpg]
     connections: Set[CpgPair]
 
-    def __init__(self, cpgs: List[CpgIndex], connections: Set[CpgPair]) -> None:
+    def __init__(self, cpgs: List[Cpg], connections: Set[CpgPair]) -> None:
+        """
+        Initialize this object.
+
+        :param cpgs: The cpgs used in the structure.
+        :param connections: The connections between cpgs.
+        """
         assert isinstance(connections, set)
 
         self.cpgs = cpgs
         self.connections = connections
 
     @staticmethod
-    def make_cpgs(num_cpgs: int) -> List[CpgIndex]:
-        return [CpgIndex(index) for index in range(num_cpgs)]
+    def make_cpgs(num_cpgs: int) -> List[Cpg]:
+        """
+        Create a list of cpgs.
+
+        :param num_cpgs: The number of cpgs to create.
+        :returns: The created list of cpgs.
+        """
+        return [Cpg(index) for index in range(num_cpgs)]
 
     def make_weight_matrix(
         self,
-        internal_weights: Dict[CpgIndex, float],
+        internal_weights: Dict[Cpg, float],
         external_weights: Dict[CpgPair, float],
     ) -> npt.NDArray[np.float_]:
+        """
+        Create a weight matrix from internal and external weights.
+
+        :param internal_weights: The internal weights.
+        :param external_weights: The external weights.
+        :returns: The created matrix.
+        """
         state_size = self.num_cpgs * 2
 
         assert set(internal_weights.keys()) == set(self.cpgs)
@@ -69,11 +106,25 @@ class CpgNetworkStructure:
 
     @property
     def num_params(self) -> int:
+        """
+        Get the number of weights in the structure.
+
+        #TODO update the name of this function
+
+        :returns: The number of weights.
+        """
         return len(self.cpgs) + len(self.connections)
 
     def make_weight_matrix_from_params(
         self, params: List[float]
     ) -> npt.NDArray[np.float_]:
+        """
+        Create a weight matrix from a list if weights.
+
+        # TODO fix `params` name to `weights`
+        :param params: The weights to create the matrix from.
+        :returns: The created matrix.
+        """
         assert len(params) == self.num_params
 
         internal_weights = {cpg: weight for cpg, weight in zip(self.cpgs, params)}
@@ -86,14 +137,42 @@ class CpgNetworkStructure:
 
     @property
     def num_states(self) -> int:
+        """
+        Get the number of states in a cpg network of this structure.
+
+        This would be twice the number of cpgs.
+
+        :returns: The number of states.
+        """
         return len(self.cpgs) * 2
 
     def make_uniform_state(self, value: float) -> npt.NDArray[np.float_]:
+        """
+        Make a state array by repeating the same value.
+
+        Will match the required number of states in this structure.
+
+        :param value: The value to use for all states
+        :returns: The array of states.
+        """
         return np.full(self.num_states, value)
 
     @property
     def num_cpgs(self) -> int:
+        """
+        Get the number of cpgs in the structure.
+
+        :returns: The number of cpgs.
+        """
         return len(self.cpgs)
 
     def make_uniform_dof_ranges(self, value: float) -> npt.NDArray[np.float_]:
+        """
+        Make an array with the degree of freedom range of all cpg outputs by repeating the same value.
+
+        Will match the required number of cpgs in this structure.
+
+        :param value: The value to use for the whole array.
+        :returns: The array of dof ranges.
+        """
         return np.full(self.num_cpgs, value)

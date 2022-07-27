@@ -38,12 +38,25 @@ from revolve2.core.physics.running import (
 
 
 class LocalRunner(Runner):
+    """Runner for simulating using Mujoco."""
+
     _headless: bool
 
     def __init__(self, headless: bool = False):
+        """
+        Initialize this object.
+
+        :param headless: If True, the simulation will not be rendered. This drastically improves performance.
+        """
         self._headless = headless
 
     async def run_batch(self, batch: Batch) -> BatchResults:
+        """
+        Run the provided batch by simulating each contained environment.
+
+        :param batch: The batch to run.
+        :return: List of simulation states in ascending order of time.
+        """
         logging.info("Starting simulation batch with mujoco.")
 
         control_step = 1 / batch.control_frequency

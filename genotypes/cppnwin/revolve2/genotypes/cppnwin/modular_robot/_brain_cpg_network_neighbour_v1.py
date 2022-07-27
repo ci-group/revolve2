@@ -8,9 +8,22 @@ from revolve2.core.modular_robot.brains import (
 
 
 class BrainCpgNetworkNeighbourV1(ModularRobotBrainCpgNetworkNeighbour):
+    """
+    A CPG brain based on `ModularRobotBrainCpgNetworkNeighbour` that creates weights from a CPPNWIN network.
+
+    Weights are determined by querying the CPPN network with inputs:
+    (hinge1_posx, hinge1_posy, hinge1_posz, hinge2_posx, hinge2_posy, hinge3_posz)
+    If the weight in internal, hinge1 and hinge2 position will be the same.
+    """
+
     _genotype: multineat.Genome
 
     def __init__(self, genotype: multineat.Genome):
+        """
+        Initialize this object.
+
+        :param genotype: A multineat genome used for determining weights.
+        """
         self._genotype = genotype
 
     def _make_weights(

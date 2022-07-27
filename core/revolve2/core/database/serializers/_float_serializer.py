@@ -26,7 +26,7 @@ class FloatSerializer(Serializer[float]):
     @classmethod
     def identifying_table(cls) -> str:
         """
-        Get the name of the primary table used for storing the floats.
+        Get the name of the primary table used for storage.
 
         :return: The name of the primary table.
         """
@@ -37,11 +37,11 @@ class FloatSerializer(Serializer[float]):
         cls, session: AsyncSession, objects: List[float]
     ) -> List[int]:
         """
-        Serialize the provided floats to a database using the provided session.
+        Serialize the provided objects to a database using the provided session.
 
         :param session: Session used when serializing to the database. This session will not be committed by this function.
-        :param objects: The floats to serialize.
-        :return: A list of ids to identify each serialized float.
+        :param objects: The objects to serialize.
+        :return: A list of ids to identify each serialized object.
         """
         items = [DbFloat(value=f) for f in objects]
         session.add_all(items)
@@ -57,11 +57,11 @@ class FloatSerializer(Serializer[float]):
     @classmethod
     async def from_database(cls, session: AsyncSession, ids: List[int]) -> List[float]:
         """
-        Deserialize a list of floats from a database using the provided session.
+        Deserialize a list of objects from a database using the provided session.
 
         :param session: Session used for deserialization from the database. No changes are made to the database.
-        :param ids: Ids identifying the floats to deserialize.
-        :return: The deserialized floats.
+        :param ids: Ids identifying the objects to deserialize.
+        :return: The deserialized objects.
         """
         items = (
             (await session.execute(select(DbFloat).filter(DbFloat.id.in_(ids))))
@@ -78,7 +78,7 @@ DbBase = declarative_base()
 
 
 class DbFloat(DbBase):
-    """Stores all floats."""
+    """Table of floats."""
 
     __tablename__ = "float"
 

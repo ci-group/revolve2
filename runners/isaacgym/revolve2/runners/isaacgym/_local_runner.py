@@ -24,6 +24,8 @@ from revolve2.core.physics.running import (
 
 
 class LocalRunner(Runner):
+    """Runner for simulating using Isaac Gym."""
+
     class _Simulator:
         ENV_SIZE = 0.5
 
@@ -362,12 +364,24 @@ class LocalRunner(Runner):
         headless: bool = False,
         real_time: bool = False,
     ):
+        """
+        Initialize this object.
+
+        :param sim_params: Isaac Gym specific simulation parameters. Default parameters are provided using the `SimParams` method.
+        :param headless: If True, the simulation will not be rendered. This drastically improves performance.
+        :param real_time: If True, the simulation will run in real-time.
+        """
         self._sim_params = sim_params
         self._headless = headless
         self._real_time = real_time
 
     @staticmethod
     def SimParams() -> gymapi.SimParams:
+        """
+        Get default Isaac Gym parameters.
+
+        :returns: The parameters.
+        """
         sim_params = gymapi.SimParams()
         sim_params.dt = 0.02
         sim_params.substeps = 2
@@ -383,6 +397,12 @@ class LocalRunner(Runner):
         return sim_params
 
     async def run_batch(self, batch: Batch) -> BatchResults:
+        """
+        Run the provided batch by simulating each contained environment.
+
+        :param batch: The batch to run.
+        :return: List of simulation states in ascending order of time.
+        """
         logging.info(
             "\n--- Begin Isaac Gym log ----------------------------------------------------------------------------"
         )

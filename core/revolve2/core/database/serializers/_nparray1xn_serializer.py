@@ -30,7 +30,7 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
     @classmethod
     def identifying_table(cls) -> str:
         """
-        Get the name of the primary table used for storing the arrays.
+        Get the name of the primary table used for storage.
 
         :return: The name of the primary table.
         """
@@ -41,11 +41,11 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
         cls, session: AsyncSession, objects: List[npt.NDArray[np.float_]]
     ) -> List[int]:
         """
-        Serialize the provided arrays to a database using the provided session.
+        Serialize the provided objects to a database using the provided session.
 
         :param session: Session used when serializing to the database. This session will not be committed by this function.
-        :param objects: The arrays to serialize.
-        :return: A list of ids to identify each serialized array.
+        :param objects: The objects to serialize.
+        :return: A list of ids to identify each serialized object.
         """
         dblists = [DbNdarray1xn() for _ in objects]
         session.add_all(dblists)
@@ -70,11 +70,11 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
         cls, session: AsyncSession, ids: List[int]
     ) -> List[npt.NDArray[np.float_]]:
         """
-        Deserialize a list of arrays from a database using the provided session.
+        Deserialize a list of objects from a database using the provided session.
 
         :param session: Session used for deserialization from the database. No changes are made to the database.
-        :param ids: Ids identifying the arrays to deserialize.
-        :return: The deserialized arrays.
+        :param ids: Ids identifying the objects to deserialize.
+        :return: The deserialized objects.
         """
         items = (
             (

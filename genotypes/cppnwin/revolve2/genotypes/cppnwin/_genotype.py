@@ -13,22 +13,44 @@ from .genotype_schema import DbBase, DbGenotype
 
 @dataclass
 class Genotype:
+    """A generic CPPNWIN genotype."""
+
     genotype: multineat.Genome
 
 
 class GenotypeSerializer(Serializer[Genotype]):
+    """Serializer for the `Genotype` class."""
+
     @classmethod
     async def create_tables(cls, session: AsyncSession) -> None:
+        """
+        Create all tables required for serialization.
+
+        This function commits. TODO fix this
+        :param session: Database session used for creating the tables.
+        """
         await (await session.connection()).run_sync(DbBase.metadata.create_all)
 
     @classmethod
     def identifying_table(cls) -> str:
+        """
+        Get the name of the primary table used for storage.
+
+        :return: The name of the primary table.
+        """
         return DbGenotype.__tablename__
 
     @classmethod
     async def to_database(
         cls, session: AsyncSession, objects: List[Genotype]
     ) -> List[int]:
+        """
+        Serialize the provided objects to a database using the provided session.
+
+        :param session: Session used when serializing to the database. This session will not be committed by this function.
+        :param objects: The objects to serialize.
+        :return: A list of ids to identify each serialized object.
+        """
         dbfitnesses = [
             DbGenotype(serialized_multineat_genome=o.genotype.Serialize())
             for o in objects
@@ -45,6 +67,13 @@ class GenotypeSerializer(Serializer[Genotype]):
     async def from_database(
         cls, session: AsyncSession, ids: List[int]
     ) -> List[Genotype]:
+        """
+        Deserialize a list of objects from a database using the provided session.
+
+        :param session: Session used for deserialization from the database. No changes are made to the database.
+        :param ids: Ids identifying the objects to deserialize.
+        :return: The deserialized objects.
+        """
         rows = (
             (await session.execute(select(DbGenotype).filter(DbGenotype.id.in_(ids))))
             .scalars()

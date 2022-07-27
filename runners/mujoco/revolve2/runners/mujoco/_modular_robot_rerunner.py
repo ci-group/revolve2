@@ -8,7 +8,7 @@ from revolve2.runners.mujoco import LocalRunner
 
 
 class ModularRobotRerunner:
-    """Rerunner for a single robot that uses mujoco."""
+    """Rerunner for a single robot that uses Mujoco."""
 
     _controller: ActorController
 

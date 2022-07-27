@@ -233,7 +233,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         :param genotype_serializer: Serializer for serializing genotypes.
         :param fitness_type: Type of the fitness generic parameter.
         :param fitness_serializer: Serializer for serializing fitnesses.
-        :return: True if the complete object could be deserialized from the database.
+        :return: True if this complete object could be deserialized from the database.
         """
         self.__database = database
         self.__genotype_type = genotype_type

@@ -1,3 +1,5 @@
+"""Visualize and simulate the best robot from the optimization process."""
+
 import math
 
 from optimize import make_body
@@ -15,7 +17,7 @@ from sqlalchemy.future import select
 
 
 async def main() -> None:
-
+    """Run the script."""
     db = open_async_database_sqlite("./database")
     async with AsyncSession(db) as session:
         best_individual = (

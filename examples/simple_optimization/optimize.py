@@ -1,3 +1,5 @@
+"""Setup and running of the knapsack optimization program."""
+
 from __future__ import annotations
 
 import logging
@@ -11,6 +13,7 @@ from revolve2.core.optimization import ProcessIdGen
 
 
 async def main() -> None:
+    """Run the optimization process."""
     POPULATION_SIZE = 100
     OFFSPRING_SIZE = 100
     NUM_GENERATIONS = 25

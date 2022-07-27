@@ -1,6 +1,4 @@
-"""
-Visualize and run a modular robot using Isaac Gym.
-"""
+"""Visualize and run a modular robot using Isaac Gym."""
 
 import math
 from random import Random
@@ -14,9 +12,22 @@ from revolve2.runners.isaacgym import LocalRunner
 
 
 class Simulator:
+    """
+    Simulator setup.
+
+    Simulates using Isaac Gym.
+    Defines a control function that steps the controller and applies the degrees of freedom the controller provides.
+    """
+
     _controller: ActorController
 
     async def simulate(self, robot: ModularRobot, control_frequency: float) -> None:
+        """
+        Simulate a robot.
+
+        :param robot: The robot to simulate.
+        :param control_frequency: Control frequency for the simulator.
+        """
         batch = Batch(
             simulation_time=1000000,
             sampling_frequency=0.0001,
@@ -48,6 +59,7 @@ class Simulator:
 
 
 async def main() -> None:
+    """Run the simulation."""
     rng = Random()
     rng.seed(5)
 

@@ -1,3 +1,5 @@
+"""Setup and running of the openai es optimization program."""
+
 import logging
 import math
 from random import Random
@@ -9,6 +11,11 @@ from revolve2.core.optimization import ProcessIdGen
 
 
 def make_body() -> Body:
+    """
+    Create the body to optimize the brain for.
+
+    :returns: The created body.
+    """
     body = Body()
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = ActiveHinge(math.pi / 2.0)
@@ -21,6 +28,7 @@ def make_body() -> Body:
 
 
 async def main() -> None:
+    """Run the optimization process."""
     POPULATION_SIZE = 10
     SIGMA = 0.1
     LEARNING_RATE = 0.05

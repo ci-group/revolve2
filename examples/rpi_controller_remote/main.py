@@ -1,3 +1,5 @@
+"""Script that uses rpi controller remote to control a rpi robot as an example."""
+
 import logging
 
 from revolve2.core.rpi_controller_remote import connect
@@ -16,6 +18,7 @@ config = {
 
 
 async def main() -> None:
+    """Run the script."""
     logging.basicConfig(
         level=logging.INFO,
         format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",

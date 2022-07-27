@@ -1,3 +1,5 @@
+"""Optimizer for knapsack problem."""
+
 from __future__ import annotations
 
 import pickle
@@ -20,6 +22,12 @@ from sqlalchemy.future import select
 
 
 class Optimizer(EAOptimizer[Genotype, float]):
+    """
+    Optimizer for knapsack problem.
+
+    Uses the generic EA optimizer as a base.
+    """
+
     _process_id: int
     _rng: Random
     _items: List[Item]
@@ -39,6 +47,22 @@ class Optimizer(EAOptimizer[Genotype, float]):
         max_weight: float,
         num_generations: int,
     ) -> None:
+        """
+        Initialize this class async.
+
+        Called when creating an instance using `new`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param offspring_size: Number of offspring made by the population each generation.
+        :param initial_population: List of genotypes forming generation 0.
+        :param rng: Random number generator.
+        :param items: The items that could be in the knapsack.
+        :param max_weight: Maximum weight of the knapsack.
+        :param num_generation: Number of generation to run the optimizer for.
+        """
         await super().ainit_new(
             database=database,
             session=session,
@@ -76,6 +100,21 @@ class Optimizer(EAOptimizer[Genotype, float]):
         max_weight: float,
         num_generations: int,
     ) -> bool:
+        """
+        Try to initialize this class async from a database.
+
+        Called when creating an instance using `from_database`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when loading and saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param rng: Random number generator.
+        :param items: The items that could be in the knapsack.
+        :param max_weight: Maximum weight of the knapsack.
+        :param num_generation: Number of generation to run the optimizer for.
+        :return: True if this complete object could be deserialized from the database.
+        """
         if not await super().ainit_from_database(
             database=database,
             session=session,
@@ -200,6 +239,8 @@ DbBase = declarative_base()
 
 
 class DbOptimizerState(DbBase):
+    """State of the optimizer."""
+
     __tablename__ = "optimizer_state"
 
     process_id = sqlalchemy.Column(

@@ -1,3 +1,5 @@
+"""Visualize and simulate the best robot from the optimization process."""
+
 from genotype import GenotypeSerializer, develop
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.database.serializers import DbFloat
@@ -8,7 +10,7 @@ from sqlalchemy.future import select
 
 
 async def main() -> None:
-
+    """Run the script."""
     db = open_async_database_sqlite("./database")
     async with AsyncSession(db) as session:
         best_individual = (

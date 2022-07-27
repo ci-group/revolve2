@@ -1,3 +1,5 @@
+"""Setup and running of the optimize modular program."""
+
 import logging
 from random import Random
 
@@ -9,6 +11,7 @@ from revolve2.core.optimization import ProcessIdGen
 
 
 async def main() -> None:
+    """Run the optimization process."""
     # number of initial mutations for body and brain CPPNWIN networks
     NUM_INITIAL_MUTATIONS = 10
 

@@ -1,3 +1,5 @@
+"""Genotype for a modular robot body and brain."""
+
 from dataclasses import dataclass
 from random import Random
 from typing import List
@@ -73,24 +75,46 @@ _MULTINEAT_PARAMS = _make_multineat_params()
 
 @dataclass
 class Genotype:
+    """Genotype for a modular robot."""
+
     body: CppnwinGenotype
     brain: CppnwinGenotype
 
 
 class GenotypeSerializer(Serializer[Genotype]):
+    """Serializer for storing modular robot genotypes."""
+
     @classmethod
     async def create_tables(cls, session: AsyncSession) -> None:
+        """
+        Create all tables required for serialization.
+
+        This function commits. TODO fix this
+        :param session: Database session used for creating the tables.
+        """
         await (await session.connection()).run_sync(DbBase.metadata.create_all)
         await CppnwinGenotypeSerializer.create_tables(session)
 
     @classmethod
     def identifying_table(cls) -> str:
+        """
+        Get the name of the primary table used for storage.
+
+        :return: The name of the primary table.
+        """
         return DbGenotype.__tablename__
 
     @classmethod
     async def to_database(
         cls, session: AsyncSession, objects: List[Genotype]
     ) -> List[int]:
+        """
+        Serialize the provided objects to a database using the provided session.
+
+        :param session: Session used when serializing to the database. This session will not be committed by this function.
+        :param objects: The objects to serialize.
+        :return: A list of ids to identify each serialized object.
+        """
         body_ids = await CppnwinGenotypeSerializer.to_database(
             session, [o.body for o in objects]
         )
@@ -115,6 +139,13 @@ class GenotypeSerializer(Serializer[Genotype]):
     async def from_database(
         cls, session: AsyncSession, ids: List[int]
     ) -> List[Genotype]:
+        """
+        Deserialize a list of objects from a database using the provided session.
+
+        :param session: Session used for deserialization from the database. No changes are made to the database.
+        :param ids: Ids identifying the objects to deserialize.
+        :return: The deserialized objects.
+        """
         rows = (
             (await session.execute(select(DbGenotype).filter(DbGenotype.id.in_(ids))))
             .scalars()
@@ -149,6 +180,14 @@ def random(
     rng: Random,
     num_initial_mutations: int,
 ) -> Genotype:
+    """
+    Create a random genotype.
+
+    :param innov_db_body: Multineat innovation database for the body. See Multineat library.
+    :param innov_db_brain: Multineat innovation database for the brain. See Multineat library.
+    :param rng: Random number generator.
+    :param num_initial_mutations: The number of times to mutate to create a random network. See CPPNWIN genotype.
+    """
     multineat_rng = _multineat_rng_from_random(rng)
 
     body = body_random(
@@ -176,6 +215,17 @@ def mutate(
     innov_db_brain: multineat.InnovationDatabase,
     rng: Random,
 ) -> Genotype:
+    """
+    Mutate a genotype.
+
+    The genotype will not be changed; a mutated copy will be returned.
+
+    :param genotype: The genotype to mutate. This object is not altered.
+    :param innov_db_body: Multineat innovation database for the body. See Multineat library.
+    :param innov_db_brain: Multineat innovation database for the brain. See Multineat library.
+    :param rng: Random number generator.
+    :returns: A mutated copy of the provided genotype.
+    """
     multineat_rng = _multineat_rng_from_random(rng)
 
     return Genotype(
@@ -189,6 +239,14 @@ def crossover(
     parent2: Genotype,
     rng: Random,
 ) -> Genotype:
+    """
+    Perform crossover between two genotypes.
+
+    :param parent1: The first genotype.
+    :param parent2: The second genotype.
+    :param rng: Random number generator.
+    :returns: A newly created genotype.
+    """
     multineat_rng = _multineat_rng_from_random(rng)
 
     return Genotype(
@@ -212,6 +270,12 @@ def crossover(
 
 
 def develop(genotype: Genotype) -> ModularRobot:
+    """
+    Develop the genotype into a modular robot.
+
+    :param genotype: The genotype to create the robot from.
+    :returns: The created robot.
+    """
     body = body_develop(genotype.body)
     brain = brain_develop(genotype.brain, body)
     return ModularRobot(body, brain)
@@ -227,6 +291,8 @@ DbBase = declarative_base()
 
 
 class DbGenotype(DbBase):
+    """Database model for the genotype."""
+
     __tablename__ = "genotype"
 
     id = sqlalchemy.Column(

@@ -1,16 +1,15 @@
+"""Optimizer for finding a good modular robot brain using direct encoding of the CPG brain weights, OpenAI ES algoriothm, and simulation using mujoco."""
+
 import math
 from random import Random
-from typing import List, Tuple
+from typing import List
 
 import numpy as np
 import numpy.typing as npt
 from pyrr import Quaternion, Vector3
-from revolve2.actor_controllers.cpg import CpgNetworkStructure
-from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlalchemy.ext.asyncio.session import AsyncSession
-
 from revolve2.actor_controller import ActorController
-from revolve2.core.modular_robot import Body, ModularRobot
+from revolve2.actor_controllers.cpg import CpgNetworkStructure
+from revolve2.core.modular_robot import Body
 from revolve2.core.modular_robot.brains import (
     BrainCpgNetworkStatic,
     make_cpg_network_structure_neighbour,
@@ -27,9 +26,17 @@ from revolve2.core.physics.running import (
     Runner,
 )
 from revolve2.runners.mujoco import LocalRunner
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
 
 class Optimizer(OpenaiESOptimizer):
+    """
+    Optimizer for the problem.
+
+    Uses the generic EA optimizer as a base.
+    """
+
     _body: Body
     _actor: Actor
     _dof_ids: List[int]
@@ -60,6 +67,25 @@ class Optimizer(OpenaiESOptimizer):
         control_frequency: float,
         num_generations: int,
     ) -> None:
+        """
+        Initialize this class async.
+
+        Called when creating an instance using `new`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param rng: Random number generator.
+        :param population_size: Population size for the OpenAI ES algorithm.
+        :param sigma: Standard deviation for the OpenAI ES algorithm.
+        :param learning_rate: Directional vector gain for OpenAI ES algorithm.
+        :param robot_body: The body to optimize the brain for.
+        :param simulation_time: Time in second to simulate the robots for.
+        :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
+        :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
+        :param num_generations: Number of generation to run the optimizer for.
+        """
         self._body = robot_body
         self._init_actor_and_cpg_network_structure()
 
@@ -100,6 +126,23 @@ class Optimizer(OpenaiESOptimizer):
         control_frequency: float,
         num_generations: int,
     ) -> bool:
+        """
+        Try to initialize this class async from a database.
+
+        Called when creating an instance using `from_database`.
+
+        :param database: Database to use for this optimizer.
+        :param session: Session to use when loading and saving data to the database during initialization.
+        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param process_id_gen: Can be used to create more unique identifiers.
+        :param rng: Random number generator.
+        :param robot_body: The body to optimize the brain for.
+        :param simulation_time: Time in second to simulate the robots for.
+        :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
+        :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
+        :param num_generations: Number of generation to run the optimizer for.
+        :returns: True if this complete object could be deserialized from the database.
+        """
         if not await super().ainit_from_database(
             database=database,
             session=session,

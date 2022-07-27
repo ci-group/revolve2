@@ -8,6 +8,8 @@ from ..actor import Actor
 
 @dataclass
 class PosedActor:
+    """An actor with a position, orientation, and degree of freedom state."""
+
     actor: Actor
     position: Vector3
     orientation: Quaternion

@@ -1,3 +1,5 @@
+"""Classes and functions to describe and work with modular robots as used in the CI Group at VU Amsterdam."""
+
 from ._active_hinge import ActiveHinge
 from ._body import Body
 from ._brain import Brain

@@ -17,6 +17,16 @@ def to_urdf(
     position: Vector3,
     orientation: Quaternion,
 ) -> str:
+    """
+    Convert an actor to urdf.
+
+    :param physics_robot: The actor to convert.
+    :param name: Name to use for the robot in urdf.
+    :param position: Position to use for the robot.
+    :param orientation: Orientation to use for the robot.
+    :returns: The created urdf.
+    :raises RuntimeError: In case the robot cannot be converted to urdf.
+    """
     urdf = xml.Element("robot", {"name": name})
 
     tree: Dict[str, List[Joint]] = {}  # parent to children

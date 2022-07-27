@@ -1,3 +1,5 @@
+"""Structures and interfaces for physics simulation running."""
+
 from ._actor_control import ActorControl
 from ._batch import Batch
 from ._environment import Environment

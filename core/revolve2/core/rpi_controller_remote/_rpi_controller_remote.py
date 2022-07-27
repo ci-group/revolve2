@@ -8,34 +8,50 @@ from contextlib import asynccontextmanager
 from typing import AsyncIterator, Tuple
 
 import asyncssh.connection
-
 from revolve2.serialization import StaticData
 
 
 class RpiControllerError(Exception):
-    pass
+    """Error or when something fails in the RpiControllerRemote."""
 
 
 @asynccontextmanager
 async def connect(
     rpi_ip: str, username: str, password: str
 ) -> AsyncIterator[RpiControllerRemote]:
+    """
+    Connect to the controller machine using ssh and encapsulate that in an instance of `RpiControllerRemote`.
+
+    :param rpi_ip: Ip of the machine.
+    :param username: Username for ssh.
+    :param password: Password for ssh.
+    :yields: A remote controller.
+    """
     async with asyncssh.connection.connect(
         host=rpi_ip, username=username, password=password
     ) as conn:
-        yield RpiControllerRemote(conn)
+        yield RpiControllerRemote(conn)  # TODO yield or return?
 
 
 class RpiControllerRemote:
+    """A wrapper around an ssh connection that allows running of the rpi controller on the controller machine."""
+
     def __init__(self, conn: asyncssh.connection.SSHClientConnection) -> None:
+        """
+        Initialize this object.
+
+        :param conn: Ssh connection to the pi.
+        """
         self._conn = conn
 
     async def run_controller(
         self, config: StaticData, run_time: int
     ) -> Tuple[datetime.datetime, StaticData]:
         """
-        :config: config to use for rpi controller.
-        :run_time: run controller for this many seconds.
+        Run the rpi controller on the controller machine.
+
+        :param config: config to use for rpi controller.
+        :param run_time: run controller for this many seconds.
         :returns: Tuple of controller start time and controller log.
         :raises RpiControllerError: if something fails.
         """
@@ -78,7 +94,7 @@ class RpiControllerRemote:
                     ) from err
                 else:
                     raise RpiControllerError(
-                        f"Error when running controller program: <no stderr>"
+                        "Error when running controller program: <no stderr>"
                     ) from err
         logging.info("Successfully ran controller.")
 

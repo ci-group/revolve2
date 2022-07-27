@@ -1,3 +1,5 @@
+"""Every required for describing actors in physics environments."""
+
 from ._actor import Actor
 from ._bounding_box import BoundingBox
 from ._collision import Collision

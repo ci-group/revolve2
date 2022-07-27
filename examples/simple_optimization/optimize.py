@@ -1,3 +1,5 @@
+"""Setup and running of the knapsack optimization program."""
+
 from __future__ import annotations
 
 import logging
@@ -6,12 +8,12 @@ from random import Random
 from genotype import random as random_genotype
 from item import Item
 from optimizer import Optimizer
-
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
 
 
 async def main() -> None:
+    """Run the optimization process."""
     POPULATION_SIZE = 100
     OFFSPRING_SIZE = 100
     NUM_GENERATIONS = 25
@@ -24,7 +26,7 @@ async def main() -> None:
         format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
     )
 
-    logging.info(f"Starting optimization")
+    logging.info("Starting optimization")
 
     # random number generator
     rng = Random()
@@ -72,7 +74,7 @@ async def main() -> None:
 
     await optimizer.run()
 
-    logging.info(f"Finished optimizing.")
+    logging.info("Finished optimizing.")
 
 
 if __name__ == "__main__":

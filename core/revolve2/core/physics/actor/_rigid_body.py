@@ -10,6 +10,8 @@ from ._visual import Visual
 
 @dataclass
 class RigidBody:
+    """A collection of collision objects with an orientation, position and friction parameters."""
+
     name: str
     position: Vector3
     orientation: Quaternion
@@ -19,13 +21,18 @@ class RigidBody:
     visuals: List[Visual] = field(default_factory=list, init=False)
 
     def mass(self) -> float:
+        """Get the center of mass.
+
+        :returns: The center of mass.
+        """
         return sum(collision.mass for collision in self.collisions)
 
     def center_of_mass(self) -> Vector3:
         """
-        center of mass in local reference frame of this rigid body.
-        """
+        Calculate the center of mass in the local reference frame of this rigid body.
 
+        :returns: The center of mass.
+        """
         return (
             sum(collision.mass * collision.position for collision in self.collisions)
             / self.mass()
@@ -33,9 +40,10 @@ class RigidBody:
 
     def inertia_tensor(self) -> Matrix33:
         """
-        intertia tensor in local reference frame of this rigid body.
-        """
+        Calculate the inertia tensor in the local reference frame of this rigid body.
 
+        :returns: The inertia tensor.
+        """
         com = self.center_of_mass()
         inertia = Matrix33()
 

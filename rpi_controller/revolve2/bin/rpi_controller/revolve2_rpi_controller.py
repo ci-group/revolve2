@@ -1,5 +1,6 @@
 """
 Script to run an ActorController on a Raspberry Pi.
+
 Installed as ``revolve2_rpi_controller``.
 See ``revolve2_rpi_controller --help`` for usage.
 """
@@ -16,12 +17,13 @@ from typing import Any, List, Optional, Union, cast
 import jsonschema
 import pigpio
 from adafruit_servokit import ServoKit
-
 from revolve2.actor_controller import ActorController
 from revolve2.serialization import StaticData
 
 
 class Program:
+    """Encapsulation of the program."""
+
     _CONFIG_SCHEMA = {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "type": "object",
@@ -83,9 +85,11 @@ class Program:
     _log: List[_LogEntry]
 
     def __init__(self) -> None:
+        """Initialize this object."""
         self._stop = False
 
     def main(self) -> None:
+        """Run the program."""
         try:
             parser = argparse.ArgumentParser()
             parser.add_argument("config_file", type=str)
@@ -295,6 +299,7 @@ class Program:
 
 
 def main() -> None:
+    """Run the script."""
     Program().main()
 
 

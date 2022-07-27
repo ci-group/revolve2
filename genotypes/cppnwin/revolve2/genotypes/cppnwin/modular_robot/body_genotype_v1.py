@@ -1,10 +1,11 @@
+"""Functions for CPPNWIN genotypes for a modular robot body."""
+
 import math
 from dataclasses import dataclass
 from queue import Queue
 from typing import Any, List, Optional, Set, Tuple
 
 import multineat
-
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick, Core, Module
 
 from .._genotype import Genotype
@@ -18,6 +19,16 @@ def random_v1(
     output_activation_func: multineat.ActivationFunction,
     num_initial_mutations: int,
 ) -> Genotype:
+    """
+    Create a CPPNWIN genotype for a modular robot body.
+
+    :param innov_db: Multineat innovation database. See Multineat library.
+    :param rng: Random number generator.
+    :param multineat_params: Multineat parameters. See Multineat library.
+    :param output_activation_func: Activation function for the output layer. See Multineat library.
+    :param num_initial_mutations: The number of times to mutate to create a random network.
+    :returns: The created genotype.
+    """
     return base_random_v1(
         innov_db,
         rng,
@@ -41,6 +52,15 @@ class __Module:
 def develop_v1(
     genotype: Genotype,
 ) -> Body:
+    """
+    Develop a CPPNWIN genotype into a modular robot body.
+
+    It is important that the genotype was created using a compatible function.
+
+    :param genotype: The genotype to create the body from.
+    :returns: The create body.
+    :raises RuntimeError: In case a module is encountered that is not supported.
+    """
     max_parts = 10
 
     body_net = multineat.NeuralNetwork()
@@ -91,7 +111,12 @@ def __evaluate_cppn(
     chain_length: int,
 ) -> Tuple[Any, int]:
     """
-    get module type, orientation
+    Get module type and orientation from a multineat CPPN network.
+
+    :param body_net: The CPPN network.
+    :param position: Position of the module.
+    :param chain_length: Tree distance of the module from the core.
+    :returns: (module type, orientation)
     """
     body_net.Input(
         [1.0, position[0], position[1], position[2], chain_length]
@@ -170,7 +195,15 @@ def __rotate(
     a: Tuple[int, int, int], b: Tuple[int, int, int], angle: int
 ) -> Tuple[int, int, int]:
     """
-    rotates a around b. angle from [0,1,2,3]. 90 degrees each
+    Rotates vector a a given angle around b.
+
+    Angle from [0,1,2,3].
+    90 degrees each.
+
+    :param a: Vector a.
+    :param b: Vector b.
+    :param angle: The angle to rotate.
+    :returns: A copy of a, rotated.
     """
     cosangle: int
     sinangle: int

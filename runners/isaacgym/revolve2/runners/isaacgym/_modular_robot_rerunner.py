@@ -1,9 +1,6 @@
-"""
-Rerun(watch) a modular robot in isaac gym.
-"""
+"""Rerun(watch) a modular robot in Isaac Gym."""
 
 from pyrr import Quaternion, Vector3
-
 from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
@@ -11,9 +8,17 @@ from revolve2.runners.isaacgym import LocalRunner
 
 
 class ModularRobotRerunner:
+    """Rerunner for a single robot that uses Isaac Gym."""
+
     _controller: ActorController
 
     async def rerun(self, robot: ModularRobot, control_frequency: float) -> None:
+        """
+        Rerun a single robot.
+
+        :param robot: The robot the simulate.
+        :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
+        """
         batch = Batch(
             simulation_time=1000000,
             sampling_frequency=0.0001,

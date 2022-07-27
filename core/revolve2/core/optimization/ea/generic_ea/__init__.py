@@ -1,3 +1,5 @@
+"""Everything for a generic evolutionary algorithm optimizer."""
+
 from ._database import (
     DbEAOptimizer,
     DbEAOptimizerGeneration,

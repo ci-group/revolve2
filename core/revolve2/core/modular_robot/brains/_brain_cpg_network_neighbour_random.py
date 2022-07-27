@@ -7,9 +7,16 @@ from ._brain_cpg_network_neighbour import BrainCpgNetworkNeighbour
 
 
 class BrainCpgNetworkNeighbourRandom(BrainCpgNetworkNeighbour):
+    """A cpg brain with random weights between neurons."""
+
     _rng: Random
 
     def __init__(self, rng: Random) -> None:
+        """
+        Initialize this object.
+
+        :param rng: Random number generator used for generating the weights.
+        """
         self._rng = rng
 
     def _make_weights(

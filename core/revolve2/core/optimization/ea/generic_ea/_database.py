@@ -1,3 +1,5 @@
+"""SQLAlchemy database model for EA."""
+
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -5,6 +7,8 @@ DbBase = declarative_base()
 
 
 class DbEAOptimizer(DbBase):
+    """Model for the optimizer itself, containing static parameters."""
+
     __tablename__ = "ea_optimizer"
 
     id = Column(
@@ -21,6 +25,8 @@ class DbEAOptimizer(DbBase):
 
 
 class DbEAOptimizerState(DbBase):
+    """State of the optimizer."""
+
     __tablename__ = "ea_optimizer_state"
 
     ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)
@@ -29,6 +35,8 @@ class DbEAOptimizerState(DbBase):
 
 
 class DbEAOptimizerGeneration(DbBase):
+    """A single generation."""
+
     __tablename__ = "ea_optimizer_generation"
 
     ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)
@@ -38,6 +46,12 @@ class DbEAOptimizerGeneration(DbBase):
 
 
 class DbEAOptimizerIndividual(DbBase):
+    """
+    An individual with a fitness which may or may not be assigned.
+
+    Can be part of multiple generations.
+    """
+
     __tablename__ = "ea_optimizer_individual"
 
     ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)
@@ -47,6 +61,8 @@ class DbEAOptimizerIndividual(DbBase):
 
 
 class DbEAOptimizerParent(DbBase):
+    """Parent-child relationship between two individuals."""
+
     __tablename__ = "ea_optimizer_parent"
 
     ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)

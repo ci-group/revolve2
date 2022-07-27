@@ -1,4 +1,5 @@
-import os.path
+"""Installation script."""
+
 import pathlib
 
 from setuptools import find_namespace_packages, setup

@@ -4,6 +4,12 @@ from ._module import Module
 
 
 class ActiveHinge(Module):
+    """
+    An active hinge module for a modular robot.
+
+    This is a rotary joint.
+    """
+
     ATTACHMENT = 0
 
     # angle range of servo
@@ -21,12 +27,27 @@ class ActiveHinge(Module):
     VELOCITY = 6.338968228
 
     def __init__(self, rotation: float):
+        """
+        Initialize this object.
+
+        :param rotation: Orientation of this model relative to its parent.
+        """
         super().__init__(1, rotation)
 
     @property
     def attachment(self) -> Optional[Module]:
+        """
+        Get the module attached to this hinge.
+
+        :returns: The attached module.
+        """
         return self.children[self.ATTACHMENT]
 
     @attachment.setter
     def attachment(self, module: Module) -> None:
+        """
+        Set the module attached to this hinge.
+
+        :param module: The module to attach.
+        """
         self.children[self.ATTACHMENT] = module

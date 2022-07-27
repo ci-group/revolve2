@@ -9,4 +9,5 @@ pip install -e ./genotypes/cppnwin[dev] && \
 pip install -e ./core[dev] && \
 pip install -e ./rpi_controller[dev] && \
 pip install -e ./actor_controller[dev] && \
-pip install -e ./serialization[dev]
+pip install -e ./serialization[dev] && \
+pip install -r ./codetools/requirements.txt

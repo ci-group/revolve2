@@ -61,7 +61,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         :param rng: Random number generator.
         :param items: The items that could be in the knapsack.
         :param max_weight: Maximum weight of the knapsack.
-        :param num_generation: Number of generation to run the optimizer for.
+        :param num_generations: Number of generation to run the optimizer for.
         """
         await super().ainit_new(
             database=database,
@@ -112,8 +112,9 @@ class Optimizer(EAOptimizer[Genotype, float]):
         :param rng: Random number generator.
         :param items: The items that could be in the knapsack.
         :param max_weight: Maximum weight of the knapsack.
-        :param num_generation: Number of generation to run the optimizer for.
-        :return: True if this complete object could be deserialized from the database.
+        :param num_generations: Number of generation to run the optimizer for.
+        :returns: True if this complete object could be deserialized from the database.
+        :raises IncompatibleError: In case the database is not compatible with this class.
         """
         if not await super().ainit_from_database(
             database=database,

@@ -59,6 +59,7 @@ def develop_v1(
 
     :param genotype: The genotype to create the body from.
     :returns: The create body.
+    :raises RuntimeError: In case a module is encountered that is not supported.
     """
     max_parts = 10
 
@@ -110,8 +111,11 @@ def __evaluate_cppn(
     chain_length: int,
 ) -> Tuple[Any, int]:
     """
-    Get module type and orientation.
+    Get module type and orientation from a multineat CPPN network.
 
+    :param body_net: The CPPN network.
+    :param position: Position of the module.
+    :param chain_length: Tree distance of the module from the core.
     :returns: (module type, orientation)
     """
     body_net.Input(
@@ -191,10 +195,15 @@ def __rotate(
     a: Tuple[int, int, int], b: Tuple[int, int, int], angle: int
 ) -> Tuple[int, int, int]:
     """
-    Rotates a around b.
+    Rotates vector a a given angle around b.
 
     Angle from [0,1,2,3].
     90 degrees each.
+
+    :param a: Vector a.
+    :param b: Vector b.
+    :param angle: The angle to rotate.
+    :returns: A copy of a, rotated.
     """
     cosangle: int
     sinangle: int

@@ -23,7 +23,7 @@ class RigidBody:
     def mass(self) -> float:
         """Get the center of mass.
 
-        :return: The center of mass.
+        :returns: The center of mass.
         """
         return sum(collision.mass for collision in self.collisions)
 
@@ -31,7 +31,7 @@ class RigidBody:
         """
         Calculate the center of mass in the local reference frame of this rigid body.
 
-        :return: The center of mass.
+        :returns: The center of mass.
         """
         return (
             sum(collision.mass * collision.position for collision in self.collisions)
@@ -42,7 +42,7 @@ class RigidBody:
         """
         Calculate the inertia tensor in the local reference frame of this rigid body.
 
-        :return: The inertia tensor.
+        :returns: The inertia tensor.
         """
         com = self.center_of_mass()
         inertia = Matrix33()

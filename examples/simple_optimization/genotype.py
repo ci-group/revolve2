@@ -79,7 +79,7 @@ class GenotypeSerializer(Serializer[Genotype]):
         """
         Get the name of the primary table used for storage.
 
-        :return: The name of the primary table.
+        :returns: The name of the primary table.
         """
         return DbGenotype.__tablename__
 
@@ -92,7 +92,7 @@ class GenotypeSerializer(Serializer[Genotype]):
 
         :param session: Session used when serializing to the database. This session will not be committed by this function.
         :param objects: The objects to serialize.
-        :return: A list of ids to identify each serialized object.
+        :returns: A list of ids to identify each serialized object.
         """
         dbobjects = [
             DbGenotype(items="".join(["1" if x else "0" for x in g.items]))
@@ -115,7 +115,8 @@ class GenotypeSerializer(Serializer[Genotype]):
 
         :param session: Session used for deserialization from the database. No changes are made to the database.
         :param ids: Ids identifying the objects to deserialize.
-        :return: The deserialized objects.
+        :returns: The deserialized objects.
+        :raises IncompatibleError: In case the database is not compatible with this serializer.
         """
         rows = (
             (await session.execute(select(DbGenotype).filter(DbGenotype.id.in_(ids))))

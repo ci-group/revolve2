@@ -13,7 +13,12 @@ class ModularRobotRerunner:
     _controller: ActorController
 
     async def rerun(self, robot: ModularRobot, control_frequency: float) -> None:
-        """Rerun a single robot."""
+        """
+        Rerun a single robot.
+
+        :param robot: The robot the simulate.
+        :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
+        """
         batch = Batch(
             simulation_time=1000000,
             sampling_frequency=0.0001,

@@ -32,7 +32,7 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
         """
         Get the name of the primary table used for storage.
 
-        :return: The name of the primary table.
+        :returns: The name of the primary table.
         """
         return DbNdarray1xn.__tablename__
 
@@ -45,7 +45,7 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
 
         :param session: Session used when serializing to the database. This session will not be committed by this function.
         :param objects: The objects to serialize.
-        :return: A list of ids to identify each serialized object.
+        :returns: A list of ids to identify each serialized object.
         """
         dblists = [DbNdarray1xn() for _ in objects]
         session.add_all(dblists)
@@ -74,7 +74,8 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
 
         :param session: Session used for deserialization from the database. No changes are made to the database.
         :param ids: Ids identifying the objects to deserialize.
-        :return: The deserialized objects.
+        :returns: The deserialized objects.
+        :raises IncompatibleError: In case the database is not compatible with this serializer.
         """
         items = (
             (

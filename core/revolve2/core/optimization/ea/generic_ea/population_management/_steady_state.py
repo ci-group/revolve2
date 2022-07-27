@@ -25,7 +25,7 @@ def steady_state(
     :param new_individuals: New individuals.
     :paramnew_fitnesses: Fitnesses of the new individuals.
     :param selection_function: Function selecting a single individual from the combined set of old and new individuals based on its fitness. ([Genotype], [Fitness]) -> index.
-    :return: Tuple of list of indices of selected old individuals and list of indices of selected new individuals.
+    :returns: Tuple of list of indices of selected old individuals and list of indices of selected new individuals.
     """
     assert len(old_individuals) == len(old_fitnesses)
     assert len(new_individuals) == len(new_fitnesses)

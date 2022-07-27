@@ -81,12 +81,13 @@ class Optimizer(EAOptimizer[Genotype, float]):
         :param process_id: Unique identifier in the completely program specifically made for this optimizer.
         :param process_id_gen: Can be used to create more unique identifiers.
         :param initial_population: List of genotypes forming generation 0.
+        :param rng: Random number generator.
         :param innov_db_body: Innovation database for the body genotypes.
         :param innov_db_brain: Innovation database for the brain genotypes.
         :param simulation_time: Time in second to simulate the robots for.
         :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
-        :param num_generation: Number of generation to run the optimizer for.
+        :param num_generations: Number of generation to run the optimizer for.
         :param offspring_size: Number of offspring made by the population each generation.
         """
         await super().ainit_new(
@@ -141,7 +142,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
         :param rng: Random number generator.
         :param innov_db_body: Innovation database for the body genotypes.
         :param innov_db_brain: Innovation database for the brain genotypes.
-        :return: True if this complete object could be deserialized from the database.
+        :returns: True if this complete object could be deserialized from the database.
+        :raises IncompatibleError: In case the database is not compatible with this class.
         """
         if not await super().ainit_from_database(
             database=database,

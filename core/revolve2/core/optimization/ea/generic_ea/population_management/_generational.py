@@ -25,7 +25,7 @@ def generational(
     :param new_individuals: New individuals.
     :param new_fitnesses: Fitnesses of the new individuals.
     :param selection_function: Function selecting a single individual from the new individuals based on its fitness. ([Genotype], [Fitness]) -> index.
-    :return: List of indices of selected individuals from the list of new individuals.
+    :returns: List of indices of selected individuals from the list of new individuals.
     """
     population_size = len(old_individuals)
     selection_pool = new_individuals

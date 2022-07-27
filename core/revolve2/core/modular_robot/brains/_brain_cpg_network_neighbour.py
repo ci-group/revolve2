@@ -22,7 +22,7 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
 
         :body: The body to make the brain for.
         :dof_ids: Map from actor joint index to module id.
-        :return: The created controller.
+        :returns: The created controller.
         """
         # get active hinges and sort them according to dof_ids
         active_hinges_unsorted = body.find_active_hinges()
@@ -77,7 +77,7 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
                             Connection is from hinge 0 to hinge 1.
                             Opposite connection is not provided as weights are assumed to be negative.
         :param body: The body that matches this brain.
-        :return: Two lists. The first list contains the internal weights in cpgs, corresponding to `active_hinges`
+        :returns: Two lists. The first list contains the internal weights in cpgs, corresponding to `active_hinges`
                  The second list contains the weights between connected cpgs, corresponding to `connections`
                  The lists should match the order of the input parameters.
         """

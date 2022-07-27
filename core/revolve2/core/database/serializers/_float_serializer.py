@@ -28,7 +28,7 @@ class FloatSerializer(Serializer[float]):
         """
         Get the name of the primary table used for storage.
 
-        :return: The name of the primary table.
+        :returns: The name of the primary table.
         """
         return DbFloat.__tablename__
 
@@ -41,7 +41,7 @@ class FloatSerializer(Serializer[float]):
 
         :param session: Session used when serializing to the database. This session will not be committed by this function.
         :param objects: The objects to serialize.
-        :return: A list of ids to identify each serialized object.
+        :returns: A list of ids to identify each serialized object.
         """
         items = [DbFloat(value=f) for f in objects]
         session.add_all(items)
@@ -61,7 +61,8 @@ class FloatSerializer(Serializer[float]):
 
         :param session: Session used for deserialization from the database. No changes are made to the database.
         :param ids: Ids identifying the objects to deserialize.
-        :return: The deserialized objects.
+        :returns: The deserialized objects.
+        :raises IncompatibleError: In case the database is not compatible with this serializer.
         """
         items = (
             (await session.execute(select(DbFloat).filter(DbFloat.id.in_(ids))))

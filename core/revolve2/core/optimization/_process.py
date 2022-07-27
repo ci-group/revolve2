@@ -80,7 +80,8 @@ class Process:
     #    :param process_id: Unique identifier in the completely program specifically made for this optimizer.
     #    :param args: Other positional arguments required for the inheriting class.
     #    :param kwargs: Other named arguments required for the inheriting class.
-    #    :return: True if the complete object could be deserialized from the database.
+    #    :returns: True if this complete object could be deserialized from the database.
+    #    :raises IncompatibleError: In case the database is not compatible with this class.
     #     """
     #     pass
 
@@ -101,7 +102,7 @@ class Process:
         :param session: Session to use when saving data to the database during initialization.
         :param args: Other positional arguments required for the inheriting class.
         :param kwargs: Other named arguments required for the inheriting class.
-        :return: An instance of this class.
+        :returns: An instance of this class.
         """
         self = super().__new__(cls)
         async with AsyncSession(database) as session:
@@ -126,7 +127,7 @@ class Process:
         :param process_id: Unique identifier in the completely program specifically made for this optimizer.
         :param args: Other positional arguments required for the inheriting class.
         :param kwargs: Other named arguments required for the inheriting class.
-        :return: An instance of this class or None if the class could not be completely deserialized.
+        :returns: An instance of this class or None if the class could not be completely deserialized.
         :raises SerializeError: If database incompatible.
         """
         self = super().__new__(cls)

@@ -25,7 +25,7 @@ async def connect(
     :param rpi_ip: Ip of the machine.
     :param username: Username for ssh.
     :param password: Password for ssh.
-    :return: A remote controller.
+    :returns: A remote controller.
     """
     async with asyncssh.connection.connect(
         host=rpi_ip, username=username, password=password
@@ -48,7 +48,7 @@ class RpiControllerRemote:
 
         :config: config to use for rpi controller.
         :run_time: run controller for this many seconds.
-        :return: Tuple of controller start time and controller log.
+        :returns: Tuple of controller start time and controller log.
         :raises RpiControllerError: if something fails.
         """
         start_time: datetime.datetime

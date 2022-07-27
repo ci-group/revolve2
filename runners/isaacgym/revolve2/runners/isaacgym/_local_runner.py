@@ -401,7 +401,7 @@ class LocalRunner(Runner):
         Run the provided batch by simulating each contained environment.
 
         :param batch: The batch to run.
-        :return: List of simulation states in ascending order of time.
+        :returns: List of simulation states in ascending order of time.
         """
         logging.info(
             "\n--- Begin Isaac Gym log ----------------------------------------------------------------------------"

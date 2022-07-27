@@ -141,7 +141,8 @@ class Optimizer(OpenaiESOptimizer):
         :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
         :param num_generation: Number of generation to run the optimizer for.
-        :return: True if this complete object could be deserialized from the database.
+        :returns: True if this complete object could be deserialized from the database.
+        :raises IncompatibleError: In case the database is not compatible with this class.
         """
         if not await super().ainit_from_database(
             database=database,

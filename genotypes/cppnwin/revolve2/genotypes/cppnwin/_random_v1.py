@@ -25,6 +25,7 @@ def random_v1(
     :param num_inputs: Number of input for the network.
     :param num_outputs: Number fo outputs for the network.
     :param num_initial_mutations: The number of times to mutate to create a random network.
+    :returns: The created genotype.
     """
     genotype = multineat.Genome(
         0,  # ID

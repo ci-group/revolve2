@@ -23,6 +23,6 @@ class ActorController(Serializable, ABC):
         """
         Get the degree of freedom targets from the controller.
 
-        :return: The dof targets.
+        :returns: The dof targets.
         """
         pass

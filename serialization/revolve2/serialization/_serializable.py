@@ -13,7 +13,7 @@ class Serializable(ABC):
         """
         Serialize this object.
 
-        :return: The serialized object.
+        :returns: The serialized object.
         """
 
     @classmethod
@@ -25,5 +25,5 @@ class Serializable(ABC):
         This must return an instance of the class implementing this interface.
 
         :param data: The data to deserialize from.
-        :return: The deserialized instance.
+        :returns: The deserialized instance.
         """

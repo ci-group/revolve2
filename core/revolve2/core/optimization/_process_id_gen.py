@@ -15,7 +15,7 @@ class ProcessIdGen:
         """
         Generate a new unique id.
 
-        :return: A unique id.
+        :returns: A unique id.
         """
         new_id = self._next_id
         self._next_id += 1
@@ -25,7 +25,7 @@ class ProcessIdGen:
         """
         Get the state of this generator so it can be serialize to a database.
 
-        :return: The state of this generator.
+        :returns: The state of this generator.
         """
         return self._next_id
 

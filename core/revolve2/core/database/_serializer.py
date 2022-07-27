@@ -24,7 +24,7 @@ class Serializer(ABC, Generic[T]):
         """
         Get the name of the primary table used for storing objects of type T.
 
-        :return: The name of the primary table.
+        :returns: The name of the primary table.
         """
 
     @classmethod
@@ -35,7 +35,7 @@ class Serializer(ABC, Generic[T]):
 
         :param session: Session used when serializing to the database. Implementor must make sure this is not committed.
         :param objects: The objects to serialize.
-        :return: A list of ids to identify each serialized object.
+        :returns: A list of ids to identify each serialized object.
         """
 
     @classmethod
@@ -46,5 +46,6 @@ class Serializer(ABC, Generic[T]):
 
         :param session: Session used for deserialization from the database. Implementor must make sure no changes are made to the database.
         :param ids: Ids identifying the objects to deserialize.
-        :return: The deserialized objects.
+        :returns: The deserialized objects.
+        :raises IncompatibleError: In case the database is not compatible with this serializer.
         """

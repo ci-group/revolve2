@@ -44,7 +44,7 @@ class OpenaiESOptimizer(ABC, Process):
         :param process_id: Unique identifier in the completely program specifically made for this function call.
         :param process_id_gen: Can be used to create more unique identifiers.
         :population: MxN array with M the population size and N the size of an individual.
-        :return: M long vector with M the population size, representing the fitness of each individual in `population`.
+        :returns: M long vector with M the population size, representing the fitness of each individual in `population`.
         """
 
     @abstractmethod
@@ -52,7 +52,7 @@ class OpenaiESOptimizer(ABC, Process):
         """
         Decide if the optimizer must do another generation.
 
-        :return: True if it must.
+        :returns: True if it must.
         """
 
     __database: AsyncEngine
@@ -140,7 +140,7 @@ class OpenaiESOptimizer(ABC, Process):
         :param process_id: Unique identifier in the completely program specifically made for this optimizer.
         :param process_id_gen: Can be used to create more unique identifiers.
         :param rng: Random number generator used in the complete optimization process. Its state will be overwritten with the serialized state from the database.
-        :return: True if the complete object could be deserialized from the database.
+        :returns: True if the complete object could be deserialized from the database.
         """
         self.__database = database
         self.__process_id = process_id
@@ -265,7 +265,7 @@ class OpenaiESOptimizer(ABC, Process):
 
         The initial generation is numbered 0.
 
-        :return: The current generation.
+        :returns: The current generation.
         """
         return self.__gen_num
 

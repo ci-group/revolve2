@@ -48,7 +48,7 @@ class BrainCpgNetworkStatic(Brain):
 
         :param body: Body is provided by the parent class but is not used in this implementation.
         :param dof_ids: Dof_ids is provided by the parent class but is not used in this implementation.
-        :return: The created controller.
+        :returns: The created controller.
         """
         return ControllerCpg(
             self._initial_state,

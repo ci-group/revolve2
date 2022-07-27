@@ -24,7 +24,7 @@ class Core(Module):
         """
         Get the module attached to the front of the core.
 
-        :return: The attached module.
+        :returns: The attached module.
         """
         return self.children[self.FRONT]
 
@@ -42,7 +42,7 @@ class Core(Module):
         """
         Get the module attached to the right of the core.
 
-        :return: The attached module.
+        :returns: The attached module.
         """
         return self.children[self.RIGHT]
 
@@ -60,7 +60,7 @@ class Core(Module):
         """
         Get the module attached to the back of the core.
 
-        :return: The attached module.
+        :returns: The attached module.
         """
         return self.children[self.BACK]
 
@@ -78,7 +78,7 @@ class Core(Module):
         """
         Get the module attached to the left of the core.
 
-        :return: The attached module.
+        :returns: The attached module.
         """
         return self.children[self.LEFT]
 

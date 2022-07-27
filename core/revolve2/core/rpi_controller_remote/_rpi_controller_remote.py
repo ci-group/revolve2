@@ -25,19 +25,23 @@ async def connect(
     :param rpi_ip: Ip of the machine.
     :param username: Username for ssh.
     :param password: Password for ssh.
-    :returns: A remote controller.
+    :yields: A remote controller.
     """
     async with asyncssh.connection.connect(
         host=rpi_ip, username=username, password=password
     ) as conn:
-        yield RpiControllerRemote(conn)
+        yield RpiControllerRemote(conn)  # TODO yield or return?
 
 
 class RpiControllerRemote:
     """A wrapper around an ssh connection that allows running of the rpi controller on the controller machine."""
 
     def __init__(self, conn: asyncssh.connection.SSHClientConnection) -> None:
-        """Initialize this object."""
+        """
+        Initialize this object.
+
+        :param conn: Ssh connection to the pi.
+        """
         self._conn = conn
 
     async def run_controller(
@@ -46,8 +50,8 @@ class RpiControllerRemote:
         """
         Run the rpi controller on the controller machine.
 
-        :config: config to use for rpi controller.
-        :run_time: run controller for this many seconds.
+        :param config: config to use for rpi controller.
+        :param run_time: run controller for this many seconds.
         :returns: Tuple of controller start time and controller log.
         :raises RpiControllerError: if something fails.
         """

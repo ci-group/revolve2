@@ -56,6 +56,7 @@ class Module:
         Only valid after the modular robot body's `finalize` function has been called.
 
         :returns: This module's id.
+        :raises NotFinalizedError: In case the robot this is part of was not yet finalized.
         """
         if self._id is None:
             raise NotFinalizedError()
@@ -70,6 +71,7 @@ class Module:
         Don't do this manually but let the modular robot body's `finalize` function do it.
 
         :param id: The id of the module.
+        :raises RuntimeError: In case the id was already set before.
         """
         if self._id is not None:
             raise RuntimeError("Cannot set id twice.")
@@ -81,6 +83,7 @@ class Module:
 
         :param within_range: The range in which modules are considered a neighbour. Minimum is 1.
         :returns: The neighbouring modules.
+        :raises NotFinalizedError: In case it is detected that the modular robot body this module is part of has not been finalized.
         """
         if self._id is None:
             raise NotFinalizedError()

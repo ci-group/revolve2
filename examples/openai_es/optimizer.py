@@ -84,7 +84,7 @@ class Optimizer(OpenaiESOptimizer):
         :param simulation_time: Time in second to simulate the robots for.
         :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
-        :param num_generation: Number of generation to run the optimizer for.
+        :param num_generations: Number of generation to run the optimizer for.
         """
         self._body = robot_body
         self._init_actor_and_cpg_network_structure()
@@ -140,9 +140,8 @@ class Optimizer(OpenaiESOptimizer):
         :param simulation_time: Time in second to simulate the robots for.
         :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
-        :param num_generation: Number of generation to run the optimizer for.
+        :param num_generations: Number of generation to run the optimizer for.
         :returns: True if this complete object could be deserialized from the database.
-        :raises IncompatibleError: In case the database is not compatible with this class.
         """
         if not await super().ainit_from_database(
             database=database,

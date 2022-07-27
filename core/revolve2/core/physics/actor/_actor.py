@@ -28,6 +28,8 @@ class Actor:
         with the global axes.
 
         Not very efficient but it works and is fast enough for our use case
+
+        :returns: The calculated bounding box.
         """
         xmin = 0
         xmax = 0

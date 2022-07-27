@@ -24,7 +24,11 @@ class Body:
         self._is_finalized = False
 
     def finalize(self) -> None:
-        """Finalize the body by assigning ids to all modules."""
+        """
+        Finalize the body by assigning ids to all modules.
+
+        :raises RuntimeError: In case this body has already been finalized before.
+        """
         if self._is_finalized:
             raise RuntimeError("Cannot finalize twice.")
         assigner = _Finalizer(self)
@@ -45,6 +49,7 @@ class Body:
         Create an actor from this body.
 
         :returns: (the actor, ids of modules matching the joints in the actor)
+        :raises NotFinalizedError: In case this body has not yet been finalized.
         """
         if not self.is_finalized:
             raise NotFinalizedError()
@@ -55,6 +60,7 @@ class Body:
         Find all active hinges in the body.
 
         :returns: A list of all active hinges in the body
+        :raises NotFinalizedError: In case this body has not yet been finalized.
         """
         if not self.is_finalized:
             raise NotFinalizedError()
@@ -68,6 +74,8 @@ class Body:
         All module angles must be multiples of 90 degrees.
 
         :param module: The module to calculate the position for.
+        :returns: The calculated position.
+        :raises NotImplementedError: In case a module is encountered that is not supported.
         """
         # TODO make this into a function that maps the complete robot to a grid
 

@@ -51,7 +51,7 @@ class CpgActorController(ActorController):
         """
         Step the controller dt seconds forward.
 
-        :param df: The number of seconds to step forward.
+        :param dt: The number of seconds to step forward.
         """
         self._state = self._rk45(self._state, self._weight_matrix, dt)
 
@@ -105,6 +105,7 @@ class CpgActorController(ActorController):
 
         :param data: The data to deserialize from.
         :returns: The deserialized instance.
+        :raises SerializeError: If this object cannot be deserialized from the given data.
         """
         if (
             not type(data) == dict

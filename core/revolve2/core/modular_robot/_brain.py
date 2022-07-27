@@ -14,7 +14,7 @@ class Brain(ABC):
         """
         Create a controller for the provided body.
 
-        :body: The body to make the brain for.
-        :dof_ids: Map from actor joint index to module id.
+        :param body: The body to make the brain for.
+        :param dof_ids: Map from actor joint index to module id.
         :returns: The created controller.
         """

@@ -24,6 +24,8 @@ def to_urdf(
     :param name: Name to use for the robot in urdf.
     :param position: Position to use for the robot.
     :param orientation: Orientation to use for the robot.
+    :returns: The created urdf.
+    :raises RuntimeError: In case the robot cannot be converted to urdf.
     """
     urdf = xml.Element("robot", {"name": name})
 

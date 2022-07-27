@@ -62,7 +62,6 @@ class FloatSerializer(Serializer[float]):
         :param session: Session used for deserialization from the database. No changes are made to the database.
         :param ids: Ids identifying the objects to deserialize.
         :returns: The deserialized objects.
-        :raises IncompatibleError: In case the database is not compatible with this serializer.
         """
         items = (
             (await session.execute(select(DbFloat).filter(DbFloat.id.in_(ids))))

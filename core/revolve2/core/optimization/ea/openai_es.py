@@ -43,7 +43,7 @@ class OpenaiESOptimizer(ABC, Process):
         :param database: Database that can be used to store anything you want to save from the evaluation.
         :param process_id: Unique identifier in the completely program specifically made for this function call.
         :param process_id_gen: Can be used to create more unique identifiers.
-        :population: MxN array with M the population size and N the size of an individual.
+        :param population: MxN array with M the population size and N the size of an individual.
         :returns: M long vector with M the population size, representing the fitness of each individual in `population`.
         """
 
@@ -141,6 +141,7 @@ class OpenaiESOptimizer(ABC, Process):
         :param process_id_gen: Can be used to create more unique identifiers.
         :param rng: Random number generator used in the complete optimization process. Its state will be overwritten with the serialized state from the database.
         :returns: True if the complete object could be deserialized from the database.
+        :raises IncompatibleError: In case the database is not compatible with this class.
         """
         self.__database = database
         self.__process_id = process_id

@@ -66,7 +66,8 @@ class CpgNetworkStructure:
         """
         Create a list of cpgs.
 
-        :param num_cgs: The number of cpgs to create.
+        :param num_cpgs: The number of cpgs to create.
+        :returns: The created list of cpgs.
         """
         return [Cpg(index) for index in range(num_cpgs)]
 
@@ -80,6 +81,7 @@ class CpgNetworkStructure:
 
         :param internal_weights: The internal weights.
         :param external_weights: The external weights.
+        :returns: The created matrix.
         """
         state_size = self.num_cpgs * 2
 
@@ -121,6 +123,7 @@ class CpgNetworkStructure:
 
         # TODO fix `params` name to `weights`
         :param params: The weights to create the matrix from.
+        :returns: The created matrix.
         """
         assert len(params) == self.num_params
 
@@ -169,6 +172,7 @@ class CpgNetworkStructure:
 
         Will match the required number of cpgs in this structure.
 
+        :param value: The value to use for the whole array.
         :returns: The array of dof ranges.
         """
         return np.full(self.num_cpgs, value)

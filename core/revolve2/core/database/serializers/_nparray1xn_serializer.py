@@ -97,7 +97,7 @@ class Ndarray1xnSerializer(Serializer[npt.NDArray[np.float_]]):
         ]  # cast to int to silence mypy
 
         if len(arrays) != len(ids):
-            IncompatibleError()
+            raise IncompatibleError()
 
         return arrays
 

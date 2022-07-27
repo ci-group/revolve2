@@ -17,9 +17,10 @@ def to_sdf(
     Convert an actor to sdf.
 
     :param physics_robot: The actor to convert.
-    :param name: Name to use for the robot in sdf.
+    :param model_name: Name to use for the robot in sdf.
     :param position: Position to use for the robot.
     :param orientation: Orientation to use for the robot.
+    :returns: The created sdf.
     """
     sdf = xml.Element("sdf", {"version": "1.6"})
     model = xml.SubElement(sdf, "model", {"name": model_name})

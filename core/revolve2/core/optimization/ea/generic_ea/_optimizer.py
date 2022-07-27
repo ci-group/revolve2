@@ -67,6 +67,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
 
         :param population: The generation to select sets of parents from. Must not be altered.
         :param fitnesses: Fitnesses of the population.
+        :param num_parent_groups: Number of groups to create.
         :returns: The selected sets of parents, each integer representing a population index.
         """
 
@@ -124,6 +125,8 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         This function is called after a generation is finished and results and state are saved to the database.
         Use it to store state and results of the optimizer.
         The session must not be committed, but it may be flushed.
+
+        :param session: The session to use for writing to the database. Must not be committed, but can be flushed.
         """
 
     __database: AsyncEngine

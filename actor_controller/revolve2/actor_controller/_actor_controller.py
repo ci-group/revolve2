@@ -14,7 +14,7 @@ class ActorController(Serializable, ABC):
         """
         Step the controller dt seconds forward.
 
-        :param df: The number of seconds to step forward.
+        :param dt: The number of seconds to step forward.
         """
         pass
 

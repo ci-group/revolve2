@@ -33,6 +33,7 @@ class Process:
         Do not call this function.
 
         Instantiate using `new` or `from_database` instead.
+        :raises RuntimeError: Always
         """
         raise RuntimeError("Call 'new' or 'from_database' instead.")
 
@@ -54,9 +55,9 @@ class Process:
     #    Use the session to save initial settings that could be loaded using `ainit_from_database`.
     #    The session must not be commit, but it may be flushed.
     #
-    #    :param database: Database to use for this optimizer.
+    #    :param database: Database to use for this process.
     #    :param session: Session to use when saving data to the database during initialization.
-    #    :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+    #    :param process_id: Unique identifier in the completely program specifically made for this process.
     #    :param args: Other positional arguments required for the inheriting class.
     #    :param kwargs: Other named arguments required for the inheriting class.
     #    """
@@ -75,13 +76,12 @@ class Process:
     #
     #     Called when creating an instance through 'from_database'.
     #
-    #    :param database: Database to use for this optimizer.
+    #    :param database: Database to use for this process.
     #    :param session: Session to use when loading and saving data to the database during initialization.
-    #    :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+    #    :param process_id: Unique identifier in the completely program specifically made for this process.
     #    :param args: Other positional arguments required for the inheriting class.
     #    :param kwargs: Other named arguments required for the inheriting class.
     #    :returns: True if this complete object could be deserialized from the database.
-    #    :raises IncompatibleError: In case the database is not compatible with this class.
     #     """
     #     pass
 
@@ -98,8 +98,8 @@ class Process:
 
         It will be initialized using `ainit_new`.
 
-        :param database: Database to use for this optimizer.
-        :param session: Session to use when saving data to the database during initialization.
+        :param database: Database to use for this process.
+        :param process_id: Unique identifier in the completely program specifically made for this process.
         :param args: Other positional arguments required for the inheriting class.
         :param kwargs: Other named arguments required for the inheriting class.
         :returns: An instance of this class.
@@ -123,12 +123,11 @@ class Process:
 
         It will be initialized using `ainit_from_database`.
 
-        :param database: Database to use for this optimizer.
-        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
+        :param database: Database to use for this process.
+        :param process_id: Unique identifier in the completely program specifically made for this process.
         :param args: Other positional arguments required for the inheriting class.
         :param kwargs: Other named arguments required for the inheriting class.
         :returns: An instance of this class or None if the class could not be completely deserialized.
-        :raises SerializeError: If database incompatible.
         """
         self = super().__new__(cls)
         async with AsyncSession(database) as session:

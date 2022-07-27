@@ -10,7 +10,11 @@ class SupportsLessThan(Protocol):
     """Interface for types supporting the < operator."""
 
     def __lt__(self: TSupportsLessThan, other: TSupportsLessThan) -> bool:
-        """Compare two objects using the < operator."""
+        """
+        Compare two objects using the < operator.
+
+        :param other: The object to compare this with.
+        """
         pass
 
 

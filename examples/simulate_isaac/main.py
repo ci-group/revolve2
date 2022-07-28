@@ -36,12 +36,19 @@ class Simulator:
         )
 
         actor, self._controller = robot.make_actor_and_controller()
+        bounding_box = actor.calc_aabb()
 
         env = Environment()
         env.actors.append(
             PosedActor(
                 actor,
-                Vector3([0.0, 0.0, 0.1]),
+                Vector3(
+                    [
+                        0.0,
+                        0.0,
+                        bounding_box.size.z / 2.0 - bounding_box.offset.z,
+                    ]
+                ),
                 Quaternion(),
                 [0.0 for _ in self._controller.get_dof_targets()],
             )

@@ -29,6 +29,7 @@ def all() -> List[Body]:
         pentapod(),
         queen(),
         squarish(),
+        snake(),
     ]
 
 
@@ -72,6 +73,8 @@ def get(name: str) -> Body:
         return queen()
     elif name == "squarish":
         return squarish()
+    elif name == "snake":
+        return snake()
     else:
         raise ValueError(f"Robot does not exist: {name}")
 
@@ -591,6 +594,52 @@ def squarish() -> Body:
     part2.right.attachment = Brick(-np.pi / 2.0)
     part2.right.attachment.left = Brick(0.0)
     part2.right.attachment.left.left = Brick(0.0)
+
+    body.finalize()
+    return body
+
+
+def snake() -> Body:
+    """
+    Get the snake modular robot.
+
+    :returns: the robot.
+    """
+    body = Body()
+
+    body.core.left = ActiveHinge(0.0)
+    body.core.left.attachment = Brick(0.0)
+    body.core.left.attachment.front = ActiveHinge(np.pi / 2.0)
+    body.core.left.attachment.front.attachment = Brick(-np.pi / 2.0)
+    body.core.left.attachment.front.attachment.front = ActiveHinge(0.0)
+    body.core.left.attachment.front.attachment.front.attachment = Brick(0.0)
+    body.core.left.attachment.front.attachment.front.attachment.front = ActiveHinge(
+        np.pi / 2.0
+    )
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment = (
+        Brick(-np.pi / 2.0)
+    )
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
+        0.0
+    )
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment = Brick(
+        0.0
+    )
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
+        np.pi / 2.0
+    )
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment = Brick(
+        -np.pi / 2.0
+    )
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
+        0.0
+    )
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment = Brick(
+        0.0
+    )
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
+        np.pi / 2.0
+    )
 
     body.finalize()
     return body

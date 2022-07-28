@@ -22,6 +22,7 @@ def all() -> List[Body]:
         park(),
         babyb(),
         garrix(),
+        insect(),
     ]
 
 
@@ -51,6 +52,8 @@ def get(name: str) -> Body:
         return babyb()
     elif name == "garrix":
         return garrix()
+    elif name == "insect":
+        return insect()
     else:
         raise ValueError(f"Robot does not exist: {name}")
 
@@ -349,6 +352,34 @@ def garrix() -> Body:
     part2.left.attachment.attachment.attachment = Brick(0.0)
 
     body.core.left.attachment.attachment.attachment.left.attachment = part2
+
+    body.finalize()
+    return body
+
+
+def insect() -> Body:
+    """
+    Get the insect modular robot.
+
+    :returns: the robot.
+    """
+    body = Body()
+
+    body.core.right = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment = ActiveHinge(-np.pi / 2.0)
+    body.core.right.attachment.attachment = Brick(0.0)
+    body.core.right.attachment.attachment.right = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.front = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment.attachment.left = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment.attachment.left.attachment = Brick(-np.pi / 2.0)
+    body.core.right.attachment.attachment.left.attachment.front = ActiveHinge(
+        np.pi / 2.0
+    )
+    body.core.right.attachment.attachment.left.attachment.right = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.left.attachment.right.attachment = (
+        ActiveHinge(0.0)
+    )
+    body.core.right.attachment.attachment.left.attachment.right.attachment.attachment = ActiveHinge(np.pi / 2.0)
 
     body.finalize()
     return body

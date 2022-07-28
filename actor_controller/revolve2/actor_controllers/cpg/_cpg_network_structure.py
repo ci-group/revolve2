@@ -71,30 +71,30 @@ class CpgNetworkStructure:
         """
         return [Cpg(index) for index in range(num_cpgs)]
 
-    def make_weight_matrix(
+    def make_connection_weights_matrix(
         self,
-        internal_weights: Dict[Cpg, float],
-        external_weights: Dict[CpgPair, float],
+        internal_connection_weights: Dict[Cpg, float],
+        external_connection_weights: Dict[CpgPair, float],
     ) -> npt.NDArray[np.float_]:
         """
         Create a weight matrix from internal and external weights.
 
-        :param internal_weights: The internal weights.
-        :param external_weights: The external weights.
+        :param internal_connection_weights: The internal weights.
+        :param external_connection_weights: The external weights.
         :returns: The created matrix.
         """
         state_size = self.num_cpgs * 2
 
-        assert set(internal_weights.keys()) == set(self.cpgs)
-        assert set(external_weights.keys()) == self.connections
+        assert set(internal_connection_weights.keys()) == set(self.cpgs)
+        assert set(external_connection_weights.keys()) == self.connections
 
         weight_matrix = np.zeros((state_size, state_size))
 
-        for cpg, weight in internal_weights.items():
+        for cpg, weight in internal_connection_weights.items():
             weight_matrix[cpg.index][self.num_cpgs + cpg.index] = weight
             weight_matrix[self.num_cpgs + cpg.index][cpg.index] = -weight
 
-        for cpg_pair, weight in external_weights.items():
+        for cpg_pair, weight in external_connection_weights.items():
             weight_matrix[cpg_pair.cpg_index_lowest.index][
                 cpg_pair.cpg_index_highest.index
             ] = weight
@@ -105,35 +105,36 @@ class CpgNetworkStructure:
         return weight_matrix
 
     @property
-    def num_params(self) -> int:
+    def num_connections(self) -> int:
         """
-        Get the number of weights in the structure.
+        Get the number of connections in the structure.
 
-        #TODO update the name of this function
-
-        :returns: The number of weights.
+        :returns: The number of connections.
         """
         return len(self.cpgs) + len(self.connections)
 
-    def make_weight_matrix_from_params(
+    def make_connection_weights_matrix_from_params(
         self, params: List[float]
     ) -> npt.NDArray[np.float_]:
         """
-        Create a weight matrix from a list if weights.
+        Create a connection weights matrix from a list if connections.
 
-        # TODO fix `params` name to `weights`
-        :param params: The weights to create the matrix from.
+        :param params: The connections to create the matrix from.
         :returns: The created matrix.
         """
-        assert len(params) == self.num_params
+        assert len(params) == len(self.connections)
 
-        internal_weights = {cpg: weight for cpg, weight in zip(self.cpgs, params)}
+        internal_connection_weights = {
+            cpg: weight for cpg, weight in zip(self.cpgs, params)
+        }
 
-        external_weights = {
+        external_connection_weights = {
             pair: weight for pair, weight in zip(self.connections, params)
         }
 
-        return self.make_weight_matrix(internal_weights, external_weights)
+        return self.make_connection_weights_matrix(
+            internal_connection_weights, external_connection_weights
+        )
 
     @property
     def num_states(self) -> int:

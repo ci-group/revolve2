@@ -133,7 +133,7 @@ class Program:
                 self._set_targets([target for _ in self._controller.get_dof_targets()])
                 input("Press enter to stop.\n")
             else:
-                self._set_targets(self._controller.get_dof_targets())
+                self._set_targets(self._controller.get_dof_targets(), careful=True)
                 user = input(
                     "Press enter to start controller. Press enter again to stop.\nOR\nType Q to stop now.\n"
                 )
@@ -246,7 +246,7 @@ class Program:
             else:
                 raise NotImplementedError()
 
-    def _set_targets(self, targets: List[float]) -> None:
+    def _set_targets(self, targets: List[float], careful: bool = False) -> None:
         if self._debug:
             print("Setting pins to:")
             print("pin | target (clamped -1 <= t <= 1)")
@@ -282,6 +282,8 @@ class Program:
                     self._gpio.servo[pin.pin].angle = angle
                 else:
                     raise NotImplementedError()
+            if careful:
+                time.sleep(0.5)
 
     def _stop_pwm(self) -> None:
         if self._debug:

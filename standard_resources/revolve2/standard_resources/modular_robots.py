@@ -26,6 +26,7 @@ def all() -> List[Body]:
         linkin(),
         longleg(),
         penguin(),
+        pentapod(),
     ]
 
 
@@ -63,6 +64,8 @@ def get(name: str) -> Body:
         return longleg()
     elif name == "penguin":
         return penguin()
+    elif name == "pentapod":
+        return pentapod()
     else:
         raise ValueError(f"Robot does not exist: {name}")
 
@@ -497,6 +500,35 @@ def penguin() -> Body:
 
     part2.right.attachment.attachment.attachment.right = Brick(0.0)
     part2.right.attachment.attachment.attachment.right.front = ActiveHinge(np.pi / 2.0)
+
+    body.finalize()
+    return body
+
+
+def pentapod() -> Body:
+    """
+    Get the pentapod modular robot.
+
+    :returns: the robot.
+    """
+    body = Body()
+
+    body.core.right = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment = ActiveHinge(0.0)
+    body.core.right.attachment.attachment = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.attachment = ActiveHinge(-np.pi / 2.0)
+    body.core.right.attachment.attachment.attachment.attachment = Brick(0.0)
+    part2 = body.core.right.attachment.attachment.attachment.attachment
+
+    part2.left = ActiveHinge(0.0)
+    part2.front = ActiveHinge(np.pi / 2.0)
+    part2.front.attachment = Brick(-np.pi / 2.0)
+    part2.front.attachment.left = Brick(0.0)
+    part2.front.attachment.right = ActiveHinge(0.0)
+    part2.front.attachment.front = ActiveHinge(np.pi / 2.0)
+    part2.front.attachment.front.attachment = Brick(-np.pi / 2.0)
+    part2.front.attachment.front.attachment.left = ActiveHinge(0.0)
+    part2.front.attachment.front.attachment.right = ActiveHinge(0.0)
 
     body.finalize()
     return body

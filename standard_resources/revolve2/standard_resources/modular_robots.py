@@ -30,6 +30,7 @@ def all() -> List[Body]:
         queen(),
         squarish(),
         snake(),
+        stingray(),
     ]
 
 
@@ -75,6 +76,8 @@ def get(name: str) -> Body:
         return squarish()
     elif name == "snake":
         return snake()
+    elif name == "stingray":
+        return stingray()
     else:
         raise ValueError(f"Robot does not exist: {name}")
 
@@ -639,6 +642,37 @@ def snake() -> Body:
     )
     body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
         np.pi / 2.0
+    )
+
+    body.finalize()
+    return body
+
+
+def stingray() -> Body:
+    """
+    Get the snake modular robot.
+
+    :returns: the robot.
+    """
+    body = Body()
+
+    body.core.back = ActiveHinge(np.pi / 2.0)
+    body.core.right = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment = ActiveHinge(-np.pi / 2.0)
+    body.core.right.attachment.attachment = Brick(0.0)
+    body.core.right.attachment.attachment.right = Brick(0.0)
+    body.core.right.attachment.attachment.left = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.front = Brick(0.0)
+    body.core.right.attachment.attachment.front.right = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment.attachment.front.front = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment.attachment.front.left = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.front.left.attachment = Brick(0.0)
+    body.core.right.attachment.attachment.front.left.attachment.right = ActiveHinge(
+        np.pi / 2.0
+    )
+    body.core.right.attachment.attachment.front.left.attachment.front = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.front.left.attachment.front.attachment = (
+        Brick(0.0)
     )
 
     body.finalize()

@@ -6,6 +6,7 @@
 pip install -e ./runners/isaacgym[dev] && \
 pip install -e ./runners/mujoco[dev] && \
 pip install -e ./genotypes/cppnwin[dev] && \
+pip install -e ./standard_resources[dev] && \
 pip install -e ./core[dev] && \
 pip install -e ./rpi_controller[dev] && \
 pip install -e ./actor_controller[dev] && \

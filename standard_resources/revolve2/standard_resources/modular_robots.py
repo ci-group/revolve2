@@ -28,6 +28,7 @@ def all() -> List[Body]:
         penguin(),
         pentapod(),
         queen(),
+        squarish(),
     ]
 
 
@@ -69,6 +70,8 @@ def get(name: str) -> Body:
         return pentapod()
     elif name == "queen":
         return queen()
+    elif name == "squarish":
+        return squarish()
     else:
         raise ValueError(f"Robot does not exist: {name}")
 
@@ -561,6 +564,33 @@ def queen() -> Body:
     part2.right.right = Brick(0.0)
     part2.right.right.front = ActiveHinge(np.pi / 2.0)
     part2.right.right.front.attachment = ActiveHinge(0.0)
+
+    body.finalize()
+    return body
+
+
+def squarish() -> Body:
+    """
+    Get the squarish modular robot.
+
+    :returns: the robot.
+    """
+    body = Body()
+
+    body.core.back = ActiveHinge(0.0)
+    body.core.back.attachment = Brick(0.0)
+    body.core.back.attachment.front = ActiveHinge(0.0)
+    body.core.back.attachment.left = ActiveHinge(np.pi / 2.0)
+    body.core.back.attachment.left.attachment = Brick(-np.pi / 2.0)
+    body.core.back.attachment.left.attachment.left = Brick(0.0)
+    part2 = body.core.back.attachment.left.attachment.left
+
+    part2.left = ActiveHinge(np.pi / 2.0)
+    part2.front = ActiveHinge(0.0)
+    part2.right = ActiveHinge(np.pi / 2.0)
+    part2.right.attachment = Brick(-np.pi / 2.0)
+    part2.right.attachment.left = Brick(0.0)
+    part2.right.attachment.left.left = Brick(0.0)
 
     body.finalize()
     return body

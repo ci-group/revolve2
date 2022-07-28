@@ -13,28 +13,28 @@ def all() -> List[Body]:
     :returns: The list of robots.
     """
     return [
-        spider(),
-        gecko(),
         babya(),
-        ant(),
-        salamander(),
-        blokky(),
-        park(),
         babyb(),
+        blokky(),
         garrix(),
+        gecko(),
         insect(),
         linkin(),
         longleg(),
         penguin(),
         pentapod(),
         queen(),
+        salamander(),
         squarish(),
         snake(),
+        spider(),
         stingray(),
         tinlicker(),
         turtle(),
         ww(),
         zappa(),
+        ant(),
+        park(),
     ]
 
 

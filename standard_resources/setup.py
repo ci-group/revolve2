@@ -5,7 +5,7 @@ import pathlib
 
 from setuptools import find_namespace_packages, setup
 
-revolve2_path = pathlib.Path(__file__).parent.parent.parent.resolve()
+revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-standard-resources",

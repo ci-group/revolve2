@@ -12,7 +12,17 @@ def all() -> List[Body]:
 
     :returns: The list of robots.
     """
-    return [spider(), gecko(), babya(), ant(), salamander(), blokky(), park()]
+    return [
+        spider(),
+        gecko(),
+        babya(),
+        ant(),
+        salamander(),
+        blokky(),
+        park(),
+        babyb(),
+        garrix(),
+    ]
 
 
 def get(name: str) -> Body:
@@ -37,6 +47,10 @@ def get(name: str) -> Body:
         return blokky()
     elif name == "park":
         return park()
+    elif name == "babyb":
+        return babyb()
+    elif name == "garrix":
+        return garrix()
     else:
         raise ValueError(f"Robot does not exist: {name}")
 
@@ -268,6 +282,73 @@ def park() -> Body:
     body.core.back.attachment.attachment.front.left.attachment.front.attachment = Brick(
         0.0
     )
+
+    body.finalize()
+    return body
+
+
+def babyb() -> Body:
+    """
+    Get the babyb modular robot.
+
+    :returns: the robot.
+    """
+    body = Body()
+
+    body.core.left = ActiveHinge(np.pi / 2.0)
+    body.core.left.attachment = Brick(-np.pi / 2.0)
+    body.core.left.attachment.front = ActiveHinge(0.0)
+    body.core.left.attachment.front.attachment = Brick(0.0)
+    body.core.left.attachment.front.attachment.front = ActiveHinge(np.pi / 2.0)
+    body.core.left.attachment.front.attachment.front.attachment = Brick(0.0)
+
+    body.core.right = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment = Brick(-np.pi / 2.0)
+    body.core.right.attachment.front = ActiveHinge(0.0)
+    body.core.right.attachment.front.attachment = Brick(0.0)
+    body.core.right.attachment.front.attachment.front = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment.front.attachment.front.attachment = Brick(0.0)
+
+    body.core.front = ActiveHinge(np.pi / 2.0)
+    body.core.front.attachment = Brick(-np.pi / 2.0)
+    body.core.front.attachment.front = ActiveHinge(0.0)
+    body.core.front.attachment.front.attachment = Brick(0.0)
+    body.core.front.attachment.front.attachment.front = ActiveHinge(np.pi / 2.0)
+    body.core.front.attachment.front.attachment.front.attachment = Brick(0.0)
+
+    body.core.back = ActiveHinge(np.pi / 2.0)
+    body.core.back.attachment = Brick(-np.pi / 2.0)
+
+    body.finalize()
+    return body
+
+
+def garrix() -> Body:
+    """
+    Get the garrix modular robot.
+
+    :returns: the robot.
+    """
+    body = Body()
+
+    body.core.front = ActiveHinge(np.pi / 2.0)
+
+    body.core.left = ActiveHinge(np.pi / 2.0)
+    body.core.left.attachment = ActiveHinge(0.0)
+    body.core.left.attachment.attachment = ActiveHinge(-np.pi / 2.0)
+    body.core.left.attachment.attachment.attachment = Brick(0.0)
+    body.core.left.attachment.attachment.attachment.front = Brick(0.0)
+    body.core.left.attachment.attachment.attachment.left = ActiveHinge(0.0)
+
+    part2 = Brick(0.0)
+    part2.right = ActiveHinge(np.pi / 2.0)
+    part2.front = ActiveHinge(np.pi / 2.0)
+    part2.left = ActiveHinge(0.0)
+    part2.left.attachment = ActiveHinge(np.pi / 2.0)
+    part2.left.attachment.attachment = ActiveHinge(-np.pi / 2.0)
+    part2.left.attachment.attachment.attachment = Brick(0.0)
+
+    body.core.left.attachment.attachment.attachment.left.attachment = part2
 
     body.finalize()
     return body

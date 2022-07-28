@@ -23,6 +23,7 @@ def all() -> List[Body]:
         babyb(),
         garrix(),
         insect(),
+        linkin(),
     ]
 
 
@@ -54,6 +55,8 @@ def get(name: str) -> Body:
         return garrix()
     elif name == "insect":
         return insect()
+    elif name == "linkin":
+        return linkin()
     else:
         raise ValueError(f"Robot does not exist: {name}")
 
@@ -379,7 +382,43 @@ def insect() -> Body:
     body.core.right.attachment.attachment.left.attachment.right.attachment = (
         ActiveHinge(0.0)
     )
-    body.core.right.attachment.attachment.left.attachment.right.attachment.attachment = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment.attachment.left.attachment.right.attachment.attachment = ActiveHinge(
+        np.pi / 2.0
+    )
+
+    body.finalize()
+    return body
+
+
+def linkin() -> Body:
+    """
+    Get the linkin modular robot.
+
+    :returns: the robot.
+    """
+    body = Body()
+
+    body.core.back = ActiveHinge(0.0)
+
+    body.core.right = ActiveHinge(np.pi / 2.0)
+    body.core.right.attachment = ActiveHinge(0.0)
+    body.core.right.attachment.attachment = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.attachment = ActiveHinge(-np.pi / 2.0)
+    body.core.right.attachment.attachment.attachment.attachment = Brick(0.0)
+
+    part2 = body.core.right.attachment.attachment.attachment.attachment
+    part2.front = Brick(0.0)
+
+    part2.left = ActiveHinge(0.0)
+    part2.left.attachment = ActiveHinge(0.0)
+
+    part2.right = ActiveHinge(np.pi / 2.0)
+    part2.right.attachment = ActiveHinge(-np.pi / 2.0)
+    part2.right.attachment.attachment = ActiveHinge(0.0)
+    part2.right.attachment.attachment.attachment = ActiveHinge(np.pi / 2.0)
+    part2.right.attachment.attachment.attachment.attachment = ActiveHinge(
+        0.0
+    )
 
     body.finalize()
     return body

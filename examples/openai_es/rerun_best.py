@@ -56,7 +56,9 @@ async def main() -> None:
         cpg_network_structure = make_cpg_network_structure_neighbour(active_hinges)
 
         initial_state = cpg_network_structure.make_uniform_state(0.5 * math.pi / 2.0)
-        weight_matrix = cpg_network_structure.make_weight_matrix_from_params(params)
+        weight_matrix = (
+            cpg_network_structure.make_connection_weights_matrix_from_params(params)
+        )
         dof_ranges = cpg_network_structure.make_uniform_dof_ranges(1.0)
         brain = BrainCpgNetworkStatic(
             initial_state,

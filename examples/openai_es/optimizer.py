@@ -92,7 +92,9 @@ class Optimizer(OpenaiESOptimizer):
         nprng = np.random.Generator(
             np.random.PCG64(rng.randint(0, 2**63))
         )  # rng is currently not numpy, but this would be very convenient. do this until that is resolved.
-        initial_mean = nprng.standard_normal(self._cpg_network_structure.num_params)
+        initial_mean = nprng.standard_normal(
+            self._cpg_network_structure.num_connections
+        )
 
         await super().ainit_new(
             database=database,
@@ -199,8 +201,10 @@ class Optimizer(OpenaiESOptimizer):
             initial_state = self._cpg_network_structure.make_uniform_state(
                 0.5 * math.pi / 2.0
             )
-            weight_matrix = self._cpg_network_structure.make_weight_matrix_from_params(
-                params
+            weight_matrix = (
+                self._cpg_network_structure.make_connection_weights_matrix_from_params(
+                    params
+                )
             )
             dof_ranges = self._cpg_network_structure.make_uniform_dof_ranges(1.0)
             brain = BrainCpgNetworkStatic(

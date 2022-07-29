@@ -27,7 +27,16 @@ class LocalRunner(Runner):
     """Runner for simulating using Isaac Gym."""
 
     class _Simulator:
-        ENV_SIZE = 0.5
+        """Inner simulator implementation."""
+
+        """
+        The offset between multi environments in isaac gym.
+
+        Sadly this must be set to 0, because the simulation shows slightly different results based on the location of the environment.
+        Suspect that this is because of some floating point rounding error.
+        So, for reproducability, all environments will be exactly at the origin.
+        """
+        ENV_SIZE = 0.0
 
         @dataclass
         class GymEnv:

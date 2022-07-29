@@ -8,7 +8,7 @@ revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-serialization",
-    version="0.2.5-alpha3",
+    version="0.2.6-alpha3",
     description="Serialization classes and helper functions for revolve2",
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",

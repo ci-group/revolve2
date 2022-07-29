@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.modular_robot package &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>revolve2.core.modular_robot package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -147,10 +147,13 @@
 </section>
 <section id="module-revolve2.core.modular_robot">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.modular_robot" title="Permalink to this headline"></a></h2>
+<p>Classes and functions to describe and work with modular robots as used in the CI Group at VU Amsterdam.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.ActiveHinge">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActiveHinge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.ActiveHinge" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._module.Module</span></code></a></p>
+<p>An active hinge module for a modular robot.</p>
+<p>This is a rotary joint.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.ActiveHinge.ATTACHMENT">
 <span class="sig-name descname"><span class="pre">ATTACHMENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#revolve2.core.modular_robot.ActiveHinge.ATTACHMENT" title="Permalink to this definition"></a></dt>
@@ -174,7 +177,13 @@
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.ActiveHinge.attachment">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attachment</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.ActiveHinge.attachment" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the module attached to this hinge.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The attached module.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -182,6 +191,7 @@
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Body">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Body</span></span><a class="headerlink" href="#revolve2.core.modular_robot.Body" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Body of a modular robot.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Body.core">
 <span class="sig-name descname"><span class="pre">core</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.modular_robot.Core" title="revolve2.core.modular_robot._core.Core"><span class="pre">Core</span></a></em><a class="headerlink" href="#revolve2.core.modular_robot.Body.core" title="Permalink to this definition"></a></dt>
@@ -191,6 +201,11 @@
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Body.finalize">
 <span class="sig-name descname"><span class="pre">finalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Body.finalize" title="Permalink to this definition"></a></dt>
 <dd><p>Finalize the body by assigning ids to all modules.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – In case this body has already been finalized before.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -201,21 +216,41 @@
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>A list of all active hinges in the body</p>
 </dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#revolve2.core.modular_robot.NotFinalizedError" title="revolve2.core.modular_robot.NotFinalizedError"><strong>NotFinalizedError</strong></a> – In case this body has not yet been finalized.</p>
+</dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Body.grid_position">
 <span class="sig-name descname"><span class="pre">grid_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.objects.vector3.Vector3</span></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Body.grid_position" title="Permalink to this definition"></a></dt>
-<dd><p>Calculate the position of this module in a 3d grid with the core as center.
-The distance between all modules is assumed to be one grid cell.
+<dd><p>Calculate the position of this module in a 3d grid with the core as center.</p>
+<p>The distance between all modules is assumed to be one grid cell.
 All module angles must be multiples of 90 degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>module</strong> – The module to calculate the position for.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The calculated position.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – In case a module is encountered that is not supported.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Body.is_finalized">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_finalized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#revolve2.core.modular_robot.Body.is_finalized" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Check if the robot has been finalized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Wether the robot has been finalized.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Body.to_actor">
@@ -224,6 +259,9 @@ All module angles must be multiples of 90 degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>(the actor, ids of modules matching the joints in the actor)</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#revolve2.core.modular_robot.NotFinalizedError" title="revolve2.core.modular_robot.NotFinalizedError"><strong>NotFinalizedError</strong></a> – In case this body has not yet been finalized.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -234,16 +272,20 @@ All module angles must be multiples of 90 degrees.</p>
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brain">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Brain</span></span><a class="headerlink" href="#revolve2.core.modular_robot.Brain" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Interface for the brain of a modular robot.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brain.make_controller">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_controller</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Brain.make_controller" title="Permalink to this definition"></a></dt>
-<dd><p>Create a controller for the provided body</p>
+<dd><p>Create a controller for the provided body.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Body</dt>
-<dd class="field-odd"><p>The body to make the brain for.</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The body to make the brain for.</p></li>
+<li><p><strong>dof_ids</strong> – Map from actor joint index to module id.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Dof_ids</dt>
-<dd class="field-even"><p>Map from actor joint index to module id.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created controller.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -254,6 +296,7 @@ All module angles must be multiples of 90 degrees.</p>
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brick">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Brick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.Brick" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._module.Module</span></code></a></p>
+<p>A brick module for a modular robot.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brick.FRONT">
 <span class="sig-name descname"><span class="pre">FRONT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#revolve2.core.modular_robot.Brick.FRONT" title="Permalink to this definition"></a></dt>
@@ -272,17 +315,35 @@ All module angles must be multiples of 90 degrees.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brick.front">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">front</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.Brick.front" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the module attached to the front of the brick.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The attached module.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brick.left">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">left</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.Brick.left" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the module attached to the left of the brick.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The attached module.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brick.right">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">right</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.Brick.right" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the module attached to the right of the brick.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The attached module.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -290,6 +351,7 @@ All module angles must be multiples of 90 degrees.</p>
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Core">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.Core" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._module.Module</span></code></a></p>
+<p>The core module of a modular robot.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Core.BACK">
 <span class="sig-name descname"><span class="pre">BACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#revolve2.core.modular_robot.Core.BACK" title="Permalink to this definition"></a></dt>
@@ -313,22 +375,46 @@ All module angles must be multiples of 90 degrees.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Core.back">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">back</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.Core.back" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the module attached to the back of the core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The attached module.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Core.front">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">front</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.Core.front" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the module attached to the front of the core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The attached module.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Core.left">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">left</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.Core.left" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the module attached to the left of the core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The attached module.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Core.right">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">right</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.Core.right" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the module attached to the right of the core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The attached module.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -336,6 +422,7 @@ All module angles must be multiples of 90 degrees.</p>
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.ModularRobot">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModularRobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">brain</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.modular_robot.Brain" title="revolve2.core.modular_robot._brain.Brain"><span class="pre">Brain</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.ModularRobot" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A module robot consisting of a body and brain.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.ModularRobot.body">
 <span class="sig-name descname"><span class="pre">body</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></em><a class="headerlink" href="#revolve2.core.modular_robot.ModularRobot.body" title="Permalink to this definition"></a></dt>
@@ -349,7 +436,13 @@ All module angles must be multiples of 90 degrees.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.ModularRobot.make_actor_and_controller">
 <span class="sig-name descname"><span class="pre">make_actor_and_controller</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="revolve2.actor_controller.html#revolve2.actor_controller.ActorController" title="revolve2.actor_controller._actor_controller.ActorController"><span class="pre">ActorController</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.modular_robot.ModularRobot.make_actor_and_controller" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Transform this modular robot into a physics actor and corresponding controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(the actor, the controller)</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -357,25 +450,60 @@ All module angles must be multiples of 90 degrees.</p>
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Module">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_children</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.Module" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for a module for modular robots.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Module.children">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">children</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.modular_robot.Module.children" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the children of this module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The list of children.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Module.id">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#revolve2.core.modular_robot.Module.id" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the id of this module.</p>
+<p>Only valid after the modular robot body’s <cite>finalize</cite> function has been called.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>This module’s id.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><a class="reference internal" href="#revolve2.core.modular_robot.NotFinalizedError" title="revolve2.core.modular_robot.NotFinalizedError"><strong>NotFinalizedError</strong></a> – In case the robot this is part of was not yet finalized.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Module.neighbours">
 <span class="sig-name descname"><span class="pre">neighbours</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">within_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Module.neighbours" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the neighbours of this module with a certain range of the module tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>within_range</strong> – The range in which modules are considered a neighbour. Minimum is 1.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The neighbouring modules.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#revolve2.core.modular_robot.NotFinalizedError" title="revolve2.core.modular_robot.NotFinalizedError"><strong>NotFinalizedError</strong></a> – In case it is detected that the modular robot body this module is part of has not been finalized.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Module.rotation">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.modular_robot.Module.rotation" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Get the orientation of this model relative to its parent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The orientation.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

@@ -377,7 +377,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
         ActorControl,
         Runner,
     )
-    from revolve2.runners.isaacgym import LocalRunner
+    from revolve2.runners.mujoco import LocalRunner
 
     class Optimizer(EAOptimizer[Genotype, float]):
         _process_id: int
@@ -499,7 +499,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
             return True
 
         def _init_runner(self) -> None:
-            self._runner = LocalRunner(LocalRunner.SimParams(), headless=True)
+            self._runner = LocalRunner(headless=True)
 
         def _select_parents(
             self,
@@ -568,7 +568,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
         ) -> List[float]:
             raise NotImplementedError()
 
-        def _control(self, dt: float, control: ActorControl) -> None:
+        def _control(self, environment_index: int, dt: float, control: ActorControl) -> None:
             raise NotImplementedError()
 
 
@@ -613,7 +613,7 @@ Firstly, there are multiple robots. Store the controllers in their array and cal
 Secondly, the robots have unpredicatable bodies, so use the modular robot's built-in axis aligned bounding box(aabb) function to find out how high off the ground you need to position it.
 And lastly, calculate and return the fitness of the robot, based on the simulation history.::
 
-    from revolve2.runners.isaacgym import LocalRunner
+    from revolve2.runners.mujoco import LocalRunner
     from revolve2.core.physics.running import Batch, Environment, PosedActor, ActorState
     from genotype import develop
     from pyrr import Vector3, Quaternion
@@ -667,10 +667,10 @@ And lastly, calculate and return the fitness of the robot, based on the simulati
             for environment_result in batch_results.environment_results
         ]
 
-    def _control(self, dt: float, control: ActorControl) -> None:
-        for control_i, controller in enumerate(self._controllers):
-            controller.step(dt)
-            control.set_dof_targets(control_i, 0, controller.get_dof_targets())
+    def _control(self, environment_index: int, dt: float, control: ActorControl) -> None:
+        controller = self._controllers[environment_index]
+        controller.step(dt)
+        control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod
     def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:
@@ -713,7 +713,7 @@ You will also need to add some extra constants.::
         NUM_INITIAL_MUTATIONS = 10
 
         SIMULATION_TIME = 10
-        SAMPLING_FREQUENCY = 5
+        SAMPLING_FREQUENCY = 60
         CONTROL_FREQUENCY = 5
 
         # ...
@@ -793,7 +793,7 @@ The script below selects the best robot from the database and lets it walk::
     # rerun_best.py
 
     from genotype import GenotypeSerializer, develop
-    from revolve2.runners.isaacgym import ModularRobotRerunner
+    from revolve2.runners.mujoco import ModularRobotRerunner
     from sqlalchemy.ext.asyncio.session import AsyncSession
     from sqlalchemy.future import select
 

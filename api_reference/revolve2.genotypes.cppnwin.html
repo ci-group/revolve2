@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.genotypes.cppnwin package &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>revolve2.genotypes.cppnwin package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -150,10 +150,12 @@
 </section>
 <section id="module-revolve2.genotypes.cppnwin.genotype_schema">
 <span id="revolve2-genotypes-cppnwin-genotype-schema-module"></span><h2>revolve2.genotypes.cppnwin.genotype_schema module<a class="headerlink" href="#module-revolve2.genotypes.cppnwin.genotype_schema" title="Permalink to this headline"></a></h2>
+<p>Database schema for CPPNWIN genotype.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.genotype_schema.DbGenotype">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DbGenotype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.genotypes.cppnwin.genotype_schema.DbGenotype" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Base</span></code></p>
+<p>Stores serialized multineat genomes.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.genotype_schema.DbGenotype.id">
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.genotype_schema.DbGenotype.id" title="Permalink to this definition"></a></dt>
@@ -169,10 +171,12 @@
 </section>
 <section id="module-revolve2.genotypes.cppnwin">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.genotypes.cppnwin" title="Permalink to this headline"></a></h2>
+<p>CPPNWIN(CPPN With Innovation Numbers) genotype, based on the Multineat library.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.Genotype">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Genotype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genotype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="s"><span class="pre">'multineat.Genome'</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.genotypes.cppnwin.Genotype" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Genotype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genotype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.Genome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.genotypes.cppnwin.Genotype" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A generic CPPNWIN genotype.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.Genotype.genotype">
 <span class="sig-name descname"><span class="pre">genotype</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">multineat._multineat.Genome</span></em><a class="headerlink" href="#revolve2.genotypes.cppnwin.Genotype.genotype" title="Permalink to this definition"></a></dt>
@@ -184,28 +188,61 @@
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.GenotypeSerializer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GenotypeSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.genotypes.cppnwin.GenotypeSerializer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.Serializer" title="revolve2.core.database._serializer.Serializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.database._serializer.Serializer</span></code></a>[<a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.genotypes.cppnwin._genotype.Genotype</span></code></a>]</p>
+<p>Serializer for the <cite>Genotype</cite> class.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.GenotypeSerializer.create_tables">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.GenotypeSerializer.create_tables" title="Permalink to this definition"></a></dt>
-<dd><p>Creates all tables required for storing objects of type T.</p>
+<dd><p>Create all tables required for serialization.</p>
+<p>This function commits. TODO fix this
+:param session: Database session used for creating the tables.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.GenotypeSerializer.from_database">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.GenotypeSerializer.from_database" title="Permalink to this definition"></a></dt>
-<dd><p>Deserializes an object from a database using the provided session.</p>
+<dd><p>Deserialize a list of objects from a database using the provided session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – Session used for deserialization from the database. No changes are made to the database.</p></li>
+<li><p><strong>ids</strong> – Ids identifying the objects to deserialize.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The deserialized objects.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.IncompatibleError" title="revolve2.core.database.IncompatibleError"><strong>IncompatibleError</strong></a> – In case the database is not compatible with this serializer.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.GenotypeSerializer.identifying_table">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identifying_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.GenotypeSerializer.identifying_table" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the name of the primary table used for storing objects of type T.</p>
+<dd><p>Get the name of the primary table used for storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of the primary table.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.GenotypeSerializer.to_database">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.GenotypeSerializer.to_database" title="Permalink to this definition"></a></dt>
-<dd><p>Serializes the object to a database using the provided session.</p>
+<dd><p>Serialize the provided objects to a database using the provided session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – Session used when serializing to the database. This session will not be committed by this function.</p></li>
+<li><p><strong>objects</strong> – The objects to serialize.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of ids to identify each serialized object.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -213,17 +250,68 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.crossover_v1">
 <span class="sig-name descname"><span class="pre">crossover_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent1</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent2</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">multineat_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.Parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.RNG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mate_average</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interspecies_crossover</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.crossover_v1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Perform crossover between two CPPNWIN genotypes.</p>
+<p>Both genotypes will not be altered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent1</strong> – Genotype 1.</p></li>
+<li><p><strong>parent2</strong> – Genotype 2.</p></li>
+<li><p><strong>multineat_params</strong> – Multineat parameters. See Multineat library.</p></li>
+<li><p><strong>rng</strong> – Random number generator.</p></li>
+<li><p><strong>mate_average</strong> – If the weights of matching connections between the parents should be averaged instead of choosing the value from one of the parents. See NEAT algorithm.</p></li>
+<li><p><strong>interspecies_crossover</strong> – TODO description. Choose <cite>False</cite> if you don’t know what this means. See Multineat library algorithm.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Genotype that is the result of crossover.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.mutate_v1">
 <span class="sig-name descname"><span class="pre">mutate_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genotype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">multineat_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.Parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">innov_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.InnovationDatabase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.RNG</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.mutate_v1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Mutate a CPPNWIN genotype.</p>
+<p>The genotype will not be changed; a mutated copy will be returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>genotype</strong> – The genotype to mutate. This object is not altered.</p></li>
+<li><p><strong>multineat_params</strong> – Multineat parameters. See Multineat library.</p></li>
+<li><p><strong>innov_db</strong> – Multineat innovation database. See Multineat library.</p></li>
+<li><p><strong>rng</strong> – Random number generator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A mutated copy of the provided genotype.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.random_v1">
 <span class="sig-name descname"><span class="pre">random_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">innov_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.InnovationDatabase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.RNG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multineat_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.Parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_activation_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.ActivationFunction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_inputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_outputs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_initial_mutations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.random_v1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Create a random CPPNWIN genotype.</p>
+<p>A CPPNWIN network starts empty.
+A random network is created by mutating <cite>num_initial_mutations</cite> times.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>innov_db</strong> – Multineat innovation database. See Multineat library.</p></li>
+<li><p><strong>rng</strong> – Random number generator.</p></li>
+<li><p><strong>multineat_params</strong> – Multineat parameters. See Multineat library.</p></li>
+<li><p><strong>output_activation_func</strong> – Activation function for the output layer. See Multineat library.</p></li>
+<li><p><strong>num_inputs</strong> – Number of input for the network.</p></li>
+<li><p><strong>num_outputs</strong> – Number fo outputs for the network.</p></li>
+<li><p><strong>num_initial_mutations</strong> – The number of times to mutate to create a random network.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created genotype.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>

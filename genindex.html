@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>Index &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -273,13 +273,13 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Core">Core (class in revolve2.core.modular_robot)</a>
 </li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg">Cpg (class in revolve2.actor_controllers.cpg)</a>
+</li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgPair.cpg_index_highest">cpg_index_highest (CpgPair attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgPair.cpg_index_lowest">cpg_index_lowest (CpgPair attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgActorController">CpgActorController (class in revolve2.actor_controllers.cpg)</a>
-</li>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgIndex">CpgIndex (class in revolve2.actor_controllers.cpg)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure">CpgNetworkStructure (class in revolve2.actor_controllers.cpg)</a>
 </li>
@@ -507,7 +507,7 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgIndex.index">index (CpgIndex attribute)</a>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg.index">index (Cpg attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.individual">individual (DbOpenaiESOptimizerIndividual attribute)</a>
 </li>
@@ -575,6 +575,10 @@
       </ul></li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ModularRobot.make_actor_and_controller">make_actor_and_controller() (ModularRobot method)</a>
 </li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_connection_weights_matrix">make_connection_weights_matrix() (CpgNetworkStructure method)</a>
+</li>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_connection_weights_matrix_from_params">make_connection_weights_matrix_from_params() (CpgNetworkStructure method)</a>
+</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain.make_controller">make_controller() (Brain method)</a>
 
       <ul>
@@ -590,10 +594,6 @@
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_uniform_dof_ranges">make_uniform_dof_ranges() (CpgNetworkStructure method)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_uniform_state">make_uniform_state() (CpgNetworkStructure method)</a>
-</li>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_weight_matrix">make_weight_matrix() (CpgNetworkStructure method)</a>
-</li>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_weight_matrix_from_params">make_weight_matrix_from_params() (CpgNetworkStructure method)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Collision.mass">mass (Collision attribute)</a>
 </li>
@@ -720,9 +720,9 @@
 </li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem.nparray1xn_id">nparray1xn_id (DbNdarray1xnItem attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_cpgs">num_cpgs (CpgNetworkStructure property)</a>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_connections">num_connections (CpgNetworkStructure property)</a>
 </li>
-      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_params">num_params (CpgNetworkStructure property)</a>
+      <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_cpgs">num_cpgs (CpgNetworkStructure property)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_states">num_states (CpgNetworkStructure property)</a>
 </li>

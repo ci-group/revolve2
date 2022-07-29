@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.optimization.ea.generic_ea.selection package &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>revolve2.core.optimization.ea.generic_ea.selection package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -142,28 +142,40 @@
 <h1>revolve2.core.optimization.ea.generic_ea.selection package<a class="headerlink" href="#revolve2-core-optimization-ea-generic-ea-selection-package" title="Permalink to this headline"></a></h1>
 <section id="module-revolve2.core.optimization.ea.generic_ea.selection">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.optimization.ea.generic_ea.selection" title="Permalink to this headline"></a></h2>
+<p>Functions for selecting individuals from populations in EA algorithms.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.generic_ea.selection.multiple_unique">
 <span class="sig-name descname"><span class="pre">multiple_unique</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.selection._multiple_unique.Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.selection._multiple_unique.Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.selection._multiple_unique.Genotype</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.selection._multiple_unique.Fitness</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.generic_ea.selection.multiple_unique" title="Permalink to this definition"></a></dt>
-<dd><p>Perform selection on population of distinct group, it can be used in the
-form parent selection or survival selection.
-It never selects the same individual more than once
-:param population: list of individuals where to select from
-:param selection_size: amount of individuals to select
-:param selection_function:</p>
+<dd><p>Select multiple distinct individuals from a population using the provided selection function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>population</strong> – List of individuals to select from.</p></li>
+<li><p><strong>fitnesses</strong> – Fitnesses of the population.</p></li>
+<li><p><strong>selection_size</strong> – Amount of individuals to select.</p></li>
+<li><p><strong>selection_function</strong> – Function that select a single individual from a population. ([Genotype], [Fitness]) -&gt; index.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Indices of the selected individuals.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.generic_ea.selection.tournament">
 <span class="sig-name descname"><span class="pre">tournament</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.selection._tournament.Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.generic_ea.selection.tournament" title="Permalink to this definition"></a></dt>
-<dd><p>Perform tournament selection and return the index of the best individual</p>
+<dd><p>Perform tournament selection and return the index of the best individual.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>rng</strong> – random number generator</p></li>
-<li><p><strong>population</strong> – list of individuals where to select from</p></li>
-<li><p><strong>k</strong> – amount of individuals to participate in tournament</p></li>
+<li><p><strong>rng</strong> – Random number generator.</p></li>
+<li><p><strong>fitnesses</strong> – List of finesses of individuals that joint the tournamente.</p></li>
+<li><p><strong>k</strong> – Amount of individuals to participate in tournament.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The index of te individual that won the tournament.</p>
 </dd>
 </dl>
 </dd></dl>

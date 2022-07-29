@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.genotypes.cppnwin.modular_robot package &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>revolve2.genotypes.cppnwin.modular_robot package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -143,36 +143,99 @@
 </section>
 <section id="module-revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1">
 <span id="revolve2-genotypes-cppnwin-modular-robot-body-genotype-v1-module"></span><h2>revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1 module<a class="headerlink" href="#module-revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1" title="Permalink to this headline"></a></h2>
+<p>Functions for CPPNWIN genotypes for a modular robot body.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1.develop_v1">
 <span class="sig-name descname"><span class="pre">develop_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genotype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1.develop_v1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Develop a CPPNWIN genotype into a modular robot body.</p>
+<p>It is important that the genotype was created using a compatible function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>genotype</strong> – The genotype to create the body from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The create body.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – In case a module is encountered that is not supported.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1.random_v1">
 <span class="sig-name descname"><span class="pre">random_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">innov_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.InnovationDatabase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.RNG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multineat_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.Parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_activation_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.ActivationFunction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_initial_mutations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.modular_robot.body_genotype_v1.random_v1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Create a CPPNWIN genotype for a modular robot body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>innov_db</strong> – Multineat innovation database. See Multineat library.</p></li>
+<li><p><strong>rng</strong> – Random number generator.</p></li>
+<li><p><strong>multineat_params</strong> – Multineat parameters. See Multineat library.</p></li>
+<li><p><strong>output_activation_func</strong> – Activation function for the output layer. See Multineat library.</p></li>
+<li><p><strong>num_initial_mutations</strong> – The number of times to mutate to create a random network.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created genotype.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1">
 <span id="revolve2-genotypes-cppnwin-modular-robot-brain-genotype-cpg-v1-module"></span><h2>revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1 module<a class="headerlink" href="#module-revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1" title="Permalink to this headline"></a></h2>
+<p>Functions for CPPNWIN genotypes for a modular robot CPG brain.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1.develop_v1">
 <span class="sig-name descname"><span class="pre">develop_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genotype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body" title="revolve2.core.modular_robot._body.Body"><span class="pre">Body</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighbourV1" title="revolve2.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbour_v1.BrainCpgNetworkNeighbourV1"><span class="pre">BrainCpgNetworkNeighbourV1</span></a></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1.develop_v1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Develop a CPPNWIN genotype into a <cite>BrainCpgNetworkNeighbourV1</cite> brain.</p>
+<p>It is important that the genotype was created using a compatible function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>genotype</strong> – The genotype to create the brain from.</p></li>
+<li><p><strong>body</strong> – # TODO This parameter is not used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The create brain.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1.random_v1">
 <span class="sig-name descname"><span class="pre">random_v1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">innov_db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.InnovationDatabase</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.RNG</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multineat_params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.Parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_activation_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.ActivationFunction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_initial_mutations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.Genotype" title="revolve2.genotypes.cppnwin._genotype.Genotype"><span class="pre">Genotype</span></a></span></span><a class="headerlink" href="#revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1.random_v1" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Create a CPPNWIN genotype for a modular robot CPG brain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>innov_db</strong> – Multineat innovation database. See Multineat library.</p></li>
+<li><p><strong>rng</strong> – Random number generator.</p></li>
+<li><p><strong>multineat_params</strong> – Multineat parameters. See Multineat library.</p></li>
+<li><p><strong>output_activation_func</strong> – Activation function for the output layer. See Multineat library.</p></li>
+<li><p><strong>num_initial_mutations</strong> – The number of times to mutate to create a random network.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created genotype.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-revolve2.genotypes.cppnwin.modular_robot">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.genotypes.cppnwin.modular_robot" title="Permalink to this headline"></a></h2>
+<p>CPPNWIN genotypes for modular robots.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighbourV1">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkNeighbourV1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">genotype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">multineat._multineat.Genome</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighbourV1" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour" title="revolve2.core.modular_robot.brains._brain_cpg_network_neighbour.BrainCpgNetworkNeighbour"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot.brains._brain_cpg_network_neighbour.BrainCpgNetworkNeighbour</span></code></a></p>
+<p>A CPG brain based on <cite>ModularRobotBrainCpgNetworkNeighbour</cite> that creates weights from a CPPNWIN network.</p>
+<p>Weights are determined by querying the CPPN network with inputs:
+(hinge1_posx, hinge1_posy, hinge1_posz, hinge2_posx, hinge2_posy, hinge3_posz)
+If the weight in internal, hinge1 and hinge2 position will be the same.</p>
 </dd></dl>
 
 </section>

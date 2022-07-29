@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.database.serializers package &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>revolve2.core.database.serializers package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -140,10 +140,12 @@
 <h1>revolve2.core.database.serializers package<a class="headerlink" href="#revolve2-core-database-serializers-package" title="Permalink to this headline"></a></h1>
 <section id="module-revolve2.core.database.serializers">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.database.serializers" title="Permalink to this headline"></a></h2>
+<p>Serializers for common types.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.DbFloat">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DbFloat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.serializers.DbFloat" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Base</span></code></p>
+<p>Table of floats.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.DbFloat.id">
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#revolve2.core.database.serializers.DbFloat.id" title="Permalink to this definition"></a></dt>
@@ -160,6 +162,7 @@
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.DbNdarray1xn">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DbNdarray1xn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.serializers.DbNdarray1xn" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Base</span></code></p>
+<p>Does nothing else than store the ids of all existing arrays.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.DbNdarray1xn.id">
 <span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#revolve2.core.database.serializers.DbNdarray1xn.id" title="Permalink to this definition"></a></dt>
@@ -171,6 +174,7 @@
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.DbNdarray1xnItem">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DbNdarray1xnItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.serializers.DbNdarray1xnItem" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Base</span></code></p>
+<p>Stores the items in all arrays.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.DbNdarray1xnItem.array_index">
 <span class="sig-name descname"><span class="pre">array_index</span></span><a class="headerlink" href="#revolve2.core.database.serializers.DbNdarray1xnItem.array_index" title="Permalink to this definition"></a></dt>
@@ -192,28 +196,58 @@
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.FloatSerializer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FloatSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.serializers.FloatSerializer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.Serializer" title="revolve2.core.database._serializer.Serializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.database._serializer.Serializer</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code>]</p>
+<p>Serializer for storing generic floats.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.FloatSerializer.create_tables">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.database.serializers.FloatSerializer.create_tables" title="Permalink to this definition"></a></dt>
-<dd><p>Creates all tables required for storing objects of type T.</p>
+<dd><p>Create all tables required for serialization.</p>
+<p>This function commits. TODO fix this
+:param session: Database session used for creating the tables.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.FloatSerializer.from_database">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.database.serializers.FloatSerializer.from_database" title="Permalink to this definition"></a></dt>
-<dd><p>Deserializes an object from a database using the provided session.</p>
+<dd><p>Deserialize a list of objects from a database using the provided session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – Session used for deserialization from the database. No changes are made to the database.</p></li>
+<li><p><strong>ids</strong> – Ids identifying the objects to deserialize.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The deserialized objects.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.FloatSerializer.identifying_table">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identifying_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#revolve2.core.database.serializers.FloatSerializer.identifying_table" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the name of the primary table used for storing objects of type T.</p>
+<dd><p>Get the name of the primary table used for storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of the primary table.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.FloatSerializer.to_database">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.database.serializers.FloatSerializer.to_database" title="Permalink to this definition"></a></dt>
-<dd><p>Serializes the object to a database using the provided session.</p>
+<dd><p>Serialize the provided objects to a database using the provided session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – Session used when serializing to the database. This session will not be committed by this function.</p></li>
+<li><p><strong>objects</strong> – The objects to serialize.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of ids to identify each serialized object.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -222,28 +256,61 @@
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.Ndarray1xnSerializer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Ndarray1xnSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.database.serializers.Ndarray1xnSerializer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.Serializer" title="revolve2.core.database._serializer.Serializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.database._serializer.Serializer</span></code></a>[<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>]</p>
+<p>Serializer for 1xN numpy arrays.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.Ndarray1xnSerializer.create_tables">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">create_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.database.serializers.Ndarray1xnSerializer.create_tables" title="Permalink to this definition"></a></dt>
-<dd><p>Creates all tables required for storing objects of type T.</p>
+<dd><p>Create all tables required for serialization.</p>
+<p>This function commits. TODO fix this
+:param session: Database session used for creating the tables.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.Ndarray1xnSerializer.from_database">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.database.serializers.Ndarray1xnSerializer.from_database" title="Permalink to this definition"></a></dt>
-<dd><p>Deserializes an object from a database using the provided session.</p>
+<dd><p>Deserialize a list of objects from a database using the provided session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – Session used for deserialization from the database. No changes are made to the database.</p></li>
+<li><p><strong>ids</strong> – Ids identifying the objects to deserialize.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The deserialized objects.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.IncompatibleError" title="revolve2.core.database.IncompatibleError"><strong>IncompatibleError</strong></a> – In case the database is not compatible with this serializer.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.Ndarray1xnSerializer.identifying_table">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">identifying_table</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#revolve2.core.database.serializers.Ndarray1xnSerializer.identifying_table" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the name of the primary table used for storing objects of type T.</p>
+<dd><p>Get the name of the primary table used for storage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of the primary table.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.database.serializers.Ndarray1xnSerializer.to_database">
 <em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objects</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.database.serializers.Ndarray1xnSerializer.to_database" title="Permalink to this definition"></a></dt>
-<dd><p>Serializes the object to a database using the provided session.</p>
+<dd><p>Serialize the provided objects to a database using the provided session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>session</strong> – Session used when serializing to the database. This session will not be committed by this function.</p></li>
+<li><p><strong>objects</strong> – The objects to serialize.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of ids to identify each serialized object.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

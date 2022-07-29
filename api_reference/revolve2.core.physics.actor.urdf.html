@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.physics.actor.urdf package &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>revolve2.core.physics.actor.urdf package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -141,10 +141,28 @@
 <h1>revolve2.core.physics.actor.urdf package<a class="headerlink" href="#revolve2-core-physics-actor-urdf-package" title="Permalink to this headline"></a></h1>
 <section id="module-revolve2.core.physics.actor.urdf">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.physics.actor.urdf" title="Permalink to this headline"></a></h2>
+<p>Functionality for converting actors to urdf.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.core.physics.actor.urdf.to_urdf">
 <span class="sig-name descname"><span class="pre">to_urdf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">physics_robot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor" title="revolve2.core.physics.actor._actor.Actor"><span class="pre">Actor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.vector3.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.objects.quaternion.Quaternion</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#revolve2.core.physics.actor.urdf.to_urdf" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Convert an actor to urdf.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>physics_robot</strong> – The actor to convert.</p></li>
+<li><p><strong>name</strong> – Name to use for the robot in urdf.</p></li>
+<li><p><strong>position</strong> – Position to use for the robot.</p></li>
+<li><p><strong>orientation</strong> – Orientation to use for the robot.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created urdf.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – In case the robot cannot be converted to urdf.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>

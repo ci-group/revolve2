@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating a modular robot and simulating and visualizing it in the Isaac Gym environment &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>Creating a modular robot and simulating and visualizing it in the Isaac Gym environment &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -224,7 +224,7 @@ Using the brain and body, create a <code class="docutils literal notranslate"><s
     <span class="c1"># ...</span>
 
     <span class="n">sim</span> <span class="o">=</span> <span class="n">Simulator</span><span class="p">()</span>
-    <span class="k">await</span> <span class="n">sim</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">await</span> <span class="n">sim</span><span class="o">.</span><span class="n">simulate</span><span class="p">(</span><span class="n">robot</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>A physics simulation environment such as the Isaac Gym environment works with batches of environments.
@@ -247,7 +247,7 @@ Sampling frequency is not relevant for this tutorial, but controls how much info
     <span class="p">)</span>
     <span class="n">env</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">control</span><span class="p">:</span> <span class="n">ActorControl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">environment_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">control</span><span class="p">:</span> <span class="n">ActorControl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -291,7 +291,7 @@ Modular robots provide a controller that you can use to drive that individual ro
 If there is more than one robot, you need to store each individual controller:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">_control</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">control</span><span class="p">:</span> <span class="n">ActorControl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span>
-    <span class="n">control</span><span class="o">.</span><span class="n">set_dof_targets</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">get_dof_targets</span><span class="p">())</span>
+    <span class="n">control</span><span class="o">.</span><span class="n">set_dof_targets</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_controller</span><span class="o">.</span><span class="n">get_dof_targets</span><span class="p">())</span>
 </pre></div>
 </div>
 </section>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.optimization.ea package &mdash; revolve2 v0.2.5-alpha3 documentation</title>
+  <title>revolve2.core.optimization.ea package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -151,10 +151,12 @@
 </section>
 <section id="module-revolve2.core.optimization.ea.openai_es">
 <span id="revolve2-core-optimization-ea-openai-es-module"></span><h2>revolve2.core.optimization.ea.openai_es module<a class="headerlink" href="#module-revolve2.core.optimization.ea.openai_es" title="Permalink to this headline"></a></h2>
+<p>OpenAI ES optimizer and corresponding database model.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DbOpenaiESOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Base</span></code></p>
+<p>Model for the optimizer itself, containing static parameters.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.initial_mean">
 <span class="sig-name descname"><span class="pre">initial_mean</span></span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.initial_mean" title="Permalink to this definition"></a></dt>
@@ -191,6 +193,7 @@
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DbOpenaiESOptimizerIndividual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Base</span></code></p>
+<p>An individual with a fitness which may or may not be assigned.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.fitness">
 <span class="sig-name descname"><span class="pre">fitness</span></span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.fitness" title="Permalink to this definition"></a></dt>
@@ -222,6 +225,7 @@
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DbOpenaiESOptimizerState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.orm.decl_api.Base</span></code></p>
+<p>State of the optimizer.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.gen_num">
 <span class="sig-name descname"><span class="pre">gen_num</span></span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.gen_num" title="Permalink to this definition"></a></dt>
@@ -248,23 +252,52 @@
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OpenaiESOptimizer</span></span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code>, <a class="reference internal" href="revolve2.core.optimization.html#revolve2.core.optimization.Process" title="revolve2.core.optimization._process.Process"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.optimization._process.Process</span></code></a></p>
-<p>OpenAI ES optimizer based on:
+<p>OpenAI ES optimizer.</p>
+<p>Based on:
 <a class="reference external" href="https://gist.github.com/karpathy/77fbb6a8dac5395f1b73e7a89300318d">https://gist.github.com/karpathy/77fbb6a8dac5395f1b73e7a89300318d</a>
 <a class="reference external" href="https://openai.com/blog/evolution-strategies/">https://openai.com/blog/evolution-strategies/</a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.ainit_from_database">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ainit_from_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.engine.AsyncEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_id_gen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen" title="revolve2.core.optimization._process_id_gen.ProcessIdGen"><span class="pre">ProcessIdGen</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.ainit_from_database" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Try to initialize this class async from a database.</p>
+<p>Called when creating an instance using <cite>from_database</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>database</strong> – Database to use for this optimizer.</p></li>
+<li><p><strong>session</strong> – Session to use when loading and saving data to the database during initialization.</p></li>
+<li><p><strong>process_id</strong> – Unique identifier in the completely program specifically made for this optimizer.</p></li>
+<li><p><strong>process_id_gen</strong> – Can be used to create more unique identifiers.</p></li>
+<li><p><strong>rng</strong> – Random number generator used in the complete optimization process. Its state will be overwritten with the serialized state from the database.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the complete object could be deserialized from the database.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><a class="reference internal" href="revolve2.core.database.html#revolve2.core.database.IncompatibleError" title="revolve2.core.database.IncompatibleError"><strong>IncompatibleError</strong></a> – In case the database is not compatible with this class.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.ainit_new">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ainit_new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.engine.AsyncEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">sqlalchemy.ext.asyncio.session.AsyncSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_id_gen</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen" title="revolve2.core.optimization._process_id_gen.ProcessIdGen"><span class="pre">ProcessIdGen</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">population_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_mean</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.ainit_new" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Sigma</dt>
-<dd class="field-odd"><p>standard deviation</p>
-</dd>
-<dt class="field-even">Initial_mean</dt>
-<dd class="field-even"><p>Nx1 array</p>
+<dd><p>Initialize this class async.</p>
+<p>Called when creating an instance using <cite>new</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>database</strong> – Database to use for this optimizer.</p></li>
+<li><p><strong>session</strong> – Session to use when saving data to the database during initialization.</p></li>
+<li><p><strong>process_id</strong> – Unique identifier in the completely program specifically made for this optimizer.</p></li>
+<li><p><strong>process_id_gen</strong> – Can be used to create more unique identifiers.</p></li>
+<li><p><strong>rng</strong> – Random number generator used in the complete optimization process.</p></li>
+<li><p><strong>population_size</strong> – Size of the population. OpenAI ES parameter.</p></li>
+<li><p><strong>sigma</strong> – Standard deviation. OpenAI ES parameter.</p></li>
+<li><p><strong>learning_rate</strong> – Gain factor for the directional vector. OpenAI ES parameter.</p></li>
+<li><p><strong>initial_mean</strong> – Nx1 array. Initial guess. OpenAI ES Parameter.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -272,20 +305,27 @@
 <dl class="py property">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.generation_number">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">generation_number</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.generation_number" title="Permalink to this definition"></a></dt>
-<dd><p>Get the current generation.
-The initial generation is numbered 0.</p>
+<dd><p>Get the current generation.</p>
+<p>The initial generation is numbered 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The current generation.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.run">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.openai_es.OpenaiESOptimizer.run" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Run the optimizer.</p>
+</dd></dl>
 
 </dd></dl>
 
 </section>
 <section id="module-revolve2.core.optimization.ea">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.optimization.ea" title="Permalink to this headline"></a></h2>
+<p>Optimizers based on evolutionary algorithms.</p>
 </section>
 </section>
 

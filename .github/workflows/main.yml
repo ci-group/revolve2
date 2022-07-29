@@ -24,11 +24,13 @@ jobs:
         run: pip install ./rpi_controller
       - name: install core
         run: pip install ./core
+      - name: install standard_resources
+        run: pip install ./standard_resources
       - name: install runner isaacgym
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install runner mujoco
-        run: pip install ./runners/mujoco[dev]
+        run: pip install ./runners/mujoco
       - name: install genotype CPPNWIN
         run: |
           sudo apt install libcereal-dev
@@ -76,6 +78,8 @@ jobs:
         run: pip install ./rpi_controller[dev]
       - name: install core
         run: pip install ./core[dev]
+      - name: install standard_resources
+        run: pip install ./standard_resources[dev]
       - name: install runner isaacgym
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."
@@ -110,6 +114,8 @@ jobs:
         run: pip install ./rpi_controller[dev]
       - name: install core
         run: pip install ./core[dev]
+      - name: install standard_resources
+        run: pip install ./standard_resources[dev]
       - name: install runner isaacgym
         #run: pip install ./runners/isaacgym[dev]
         run: echo "IsaacGym is not open source so sadly we cannot test this."

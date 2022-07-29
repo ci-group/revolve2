@@ -122,7 +122,7 @@ class CpgNetworkStructure:
         :param params: The connections to create the matrix from.
         :returns: The created matrix.
         """
-        assert len(params) == len(self.connections)
+        assert len(params) == self.num_connections
 
         internal_connection_weights = {
             cpg: weight for cpg, weight in zip(self.cpgs, params)

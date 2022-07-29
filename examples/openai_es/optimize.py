@@ -1,30 +1,12 @@
 """Setup and running of the openai es optimization program."""
 
 import logging
-import math
 from random import Random
 
 from optimizer import Optimizer
 from revolve2.core.database import open_async_database_sqlite
-from revolve2.core.modular_robot import ActiveHinge, Body, Brick
 from revolve2.core.optimization import ProcessIdGen
-
-
-def make_body() -> Body:
-    """
-    Create the body to optimize the brain for.
-
-    :returns: The created body.
-    """
-    body = Body()
-    body.core.left = ActiveHinge(0.0)
-    body.core.left.attachment = ActiveHinge(math.pi / 2.0)
-    body.core.left.attachment.attachment = Brick(0.0)
-    body.core.right = ActiveHinge(0.0)
-    body.core.right.attachment = ActiveHinge(math.pi / 2.0)
-    body.core.right.attachment.attachment = Brick(0.0)
-    body.finalize()
-    return body
+from revolve2.standard_resources.modular_robots import gecko
 
 
 async def main() -> None:
@@ -53,7 +35,7 @@ async def main() -> None:
     # process id generator
     process_id_gen = ProcessIdGen()
 
-    body = make_body()
+    body = gecko()
 
     process_id = process_id_gen.gen()
     maybe_optimizer = await Optimizer.from_database(

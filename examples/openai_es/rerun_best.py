@@ -2,7 +2,6 @@
 
 import math
 
-from optimize import make_body
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.database.serializers import Ndarray1xnSerializer
 from revolve2.core.modular_robot import ModularRobot
@@ -12,6 +11,7 @@ from revolve2.core.modular_robot.brains import (
 )
 from revolve2.core.optimization.ea.openai_es import DbOpenaiESOptimizerIndividual
 from revolve2.runners.mujoco import ModularRobotRerunner
+from revolve2.standard_resources.modular_robots import gecko
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 
@@ -44,7 +44,7 @@ async def main() -> None:
         print(f"fitness: {best_individual.fitness}")
         print(f"params: {params}")
 
-        body = make_body()
+        body = gecko()
 
         actor, dof_ids = body.to_actor()
         active_hinges_unsorted = body.find_active_hinges()

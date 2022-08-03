@@ -39,9 +39,7 @@ class ModularRobotRerunner:
         )
         batch.environments.append(env)
 
-        runner = LocalRunner(
-            sim_params=LocalRunner.SimParams(), headless=False, real_time=True
-        )
+        runner = LocalRunner(real_time=True)
         await runner.run_batch(batch)
 
     def _control(

@@ -55,7 +55,7 @@ class Simulator:
         )
         batch.environments.append(env)
 
-        runner = LocalRunner(LocalRunner.SimParams())
+        runner = LocalRunner()
         await runner.run_batch(batch)
 
     def _control(

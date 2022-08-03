@@ -25,6 +25,27 @@ from revolve2.core.physics.running import (
 from .terrains import flat_terrain_generator
 
 
+def default_sim_params() -> gymapi.SimParams:
+    """
+    Get default Isaac Gym parameters.
+
+    :returns: The parameters.
+    """
+    sim_params = gymapi.SimParams()
+    sim_params.dt = 0.02
+    sim_params.substeps = 2
+    sim_params.up_axis = gymapi.UP_AXIS_Z
+    sim_params.gravity = gymapi.Vec3(0.0, 0.0, -9.81)
+
+    sim_params.physx.solver_type = 1
+    sim_params.physx.num_position_iterations = 4
+    sim_params.physx.num_velocity_iterations = 1
+    sim_params.physx.num_threads = 1
+    sim_params.physx.use_gpu = True
+
+    return sim_params
+
+
 class LocalRunner(Runner):
     """Runner for simulating using Isaac Gym."""
 
@@ -62,11 +83,11 @@ class LocalRunner(Runner):
         def __init__(
             self,
             batch: Batch,
-            sim_params: gymapi.SimParams,
             headless: bool,
             real_time: bool,
             max_gpu_contact_pairs: int,
             terrain_generator: Callable[[gymapi.Gym, gymapi.Sim], None],
+            sim_params: gymapi.SimParams,
         ):
             self._gym = gymapi.acquire_gym()
             self._batch = batch
@@ -369,49 +390,28 @@ class LocalRunner(Runner):
 
     def __init__(
         self,
-        sim_params: gymapi.SimParams,
         headless: bool = False,
         real_time: bool = False,
         max_gpu_contact_pairs: int = 1048576,
         terrain_generator: Callable[
             [gymapi.Gym, gymapi.Sim], None
         ] = flat_terrain_generator,
+        sim_params: gymapi.SimParams = default_sim_params(),
     ):
         """
         Initialize this object.
 
-        :param sim_params: Isaac Gym specific simulation parameters. Default parameters are provided using the `SimParams` method.
         :param headless: If True, the simulation will not be rendered. This drastically improves performance.
         :param real_time: If True, the simulation will run in real-time.
         :param max_gpu_contact_pairs: Maximum number of contacts that can be stored by Isaac Gym. If you get a warning similar to "The application needs to increase PxgDynamicsMemoryConfig::foundLostAggregatePairsCapacity" you need to increase this parameter.
         :param terrain_generator: Function to generate terrain.
+        :param sim_params: Isaac Gym specific simulation parameters. Default parameters are provided using the `default_sim_params` method.
         """
-        self._sim_params = sim_params
         self._headless = headless
         self._real_time = real_time
         self._max_gpu_contact_pairs = max_gpu_contact_pairs
         self._terrain_generator = terrain_generator
-
-    @staticmethod
-    def SimParams() -> gymapi.SimParams:
-        """
-        Get default Isaac Gym parameters.
-
-        :returns: The parameters.
-        """
-        sim_params = gymapi.SimParams()
-        sim_params.dt = 0.02
-        sim_params.substeps = 2
-        sim_params.up_axis = gymapi.UP_AXIS_Z
-        sim_params.gravity = gymapi.Vec3(0.0, 0.0, -9.81)
-
-        sim_params.physx.solver_type = 1
-        sim_params.physx.num_position_iterations = 4
-        sim_params.physx.num_velocity_iterations = 1
-        sim_params.physx.num_threads = 1
-        sim_params.physx.use_gpu = True
-
-        return sim_params
+        self._sim_params = sim_params
 
     async def run_batch(
         self,
@@ -434,11 +434,11 @@ class LocalRunner(Runner):
             args=(
                 result_queue,
                 batch,
-                self._sim_params,
                 self._headless,
                 self._real_time,
                 self._max_gpu_contact_pairs,
                 self._terrain_generator,
+                self._sim_params,
             ),
         )
         process.start()
@@ -462,19 +462,19 @@ class LocalRunner(Runner):
         cls,
         result_queue: mp.Queue,  # type: ignore # TODO
         batch: Batch,
-        sim_params: gymapi.SimParams,
         headless: bool,
         real_time: bool,
         max_gpu_contact_pairs: int,
         terrain_generator: Callable[[gymapi.Gym, gymapi.Sim], None],
+        sim_params: gymapi.SimParams,
     ) -> None:
         _Simulator = cls._Simulator(
-            batch,
-            sim_params,
-            headless,
-            real_time,
-            max_gpu_contact_pairs,
-            terrain_generator,
+            batch=batch,
+            headless=headless,
+            real_time=real_time,
+            max_gpu_contact_pairs=max_gpu_contact_pairs,
+            terrain_generator=terrain_generator,
+            sim_params=sim_params,
         )
         batch_results = _Simulator.run()
         _Simulator.cleanup()

@@ -20,7 +20,7 @@ setup(
     },
     install_requires=[
         f"revolve2-core @ file://{os.path.join(revolve2_path, 'core')}",
-        "isaacgym==1.0rc3",
+        "isaacgym==1.0rc4",
         "colored>=1.4.3",
     ],
     extras_require={"dev": []},

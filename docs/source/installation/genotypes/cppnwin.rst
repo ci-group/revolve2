@@ -1,6 +1,6 @@
-=====================================
-CPPNWIN genotype supplemental package
-=====================================
+================
+CPPNWIN genotype
+================
 This package provides a modular robot genotype based on CPPNWIN.
 
 -------------

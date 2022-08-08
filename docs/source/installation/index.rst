@@ -36,7 +36,6 @@ If you need to edit Revolve2 itself to add new features, it is recommended to in
 ------------
 Install core
 ------------
-
 ``Core`` installs all code and revolve2 packages required for optimization.
 It has only PyPI dependencies and is a pure python package::
 

@@ -1,7 +1,6 @@
 ===============
 Physics runners
 ===============
-
 Physics running is the act of measuring the physical behaviour of an environment over time.
 This can be either in simulation or reality, although currently only simulation is supported.
 

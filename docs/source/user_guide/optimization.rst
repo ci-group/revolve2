@@ -1,7 +1,6 @@
 ============
 Optimization
 ============
-
 The core of Revolve2's optimization framework are processes.
 A process is part of program which state can be recovered in case it is stopped midway.
 Each process is uniquely identified by an integer that is used to store and load it using a database.

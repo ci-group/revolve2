@@ -12,3 +12,4 @@ pip install -e ./rpi_controller[dev] && \
 pip install -e ./actor_controller[dev] && \
 pip install -e ./serialization[dev] && \
 pip install -r ./codetools/requirements.txt
+pip install -r ./docs/requirements.txt

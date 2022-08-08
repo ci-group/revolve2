@@ -1,7 +1,7 @@
 ===============================
 Raspberry Pi controller package
 ===============================
-This package provides a tool for controlling Raspberry Pi GPIO pins using a revolve2 ``ActorController``.
+This package provides a CLI tool for mapping a Revolve2 ``ActorController`` to physical servos on a Raspberry Pi.
 
 -------------
 Prerequisites

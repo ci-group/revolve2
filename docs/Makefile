@@ -3,10 +3,10 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?= -W
+SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SPHINXAPIDOC  ?= sphinx-apidoc
-APIDOCARGS    ?= -o source/api_reference --implicit-namespaces  --tocfile index --doc-project 'API Reference' --maxdepth 1 --templatedir $(THIS_DIR)/source/apidoc_template
+APIDOCARGS    ?= -o source/api_reference --implicit-namespaces --tocfile index --doc-project 'API Reference' --maxdepth 1 --templatedir $(THIS_DIR)/source/apidoc_template
 SOURCEDIR     = source
 BUILDDIR      = build
 

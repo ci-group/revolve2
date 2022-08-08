@@ -17,8 +17,8 @@ Prerequisites
 
 * Tutorial :ref:`tutorials/simple_optimization:A simple optimization process with a database`
 * Tutorial :ref:`tutorials/simulate_robot_isaac:Creating a modular robot and simulating and visualizing it in the Isaac Gym environment`
-* Have the supplementary package ``genotype CPPNWIN`` :ref:`installed <installation/genotypes/cppnwin:CPPNWIN genotype supplemental package>`.
-* Superficial knowledge of the :ref:`CPPNWIN <concepts/cppnwin:CPPNWIN>` genotype, used by ci-group.
+* Have the supplementary package ``genotype CPPNWIN`` :ref:`installed <installation/genotypes/cppnwin:CPPNWIN genotype>`.
+* Superficial knowledge of the CPPNWIN genotype, used by ci-group.
 
 ------------
 Introduction

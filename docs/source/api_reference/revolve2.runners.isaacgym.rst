@@ -1,10 +1,4 @@
 revolve2.runners.isaacgym package
 =================================
 
-Module contents
----------------
-
-.. automodule:: revolve2.runners.isaacgym
-   :members:
-   :undoc-members:
-   :show-inheritance:
+Documentation for this package cannot be automatically generated because Isaac Gym is not open source.

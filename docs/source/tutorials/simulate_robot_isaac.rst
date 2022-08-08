@@ -15,9 +15,9 @@ Prerequisites
 -------------
 
 * Have Revolve2 :ref:`installed <installation/index:Installation>`.
-* Have the supplementary package ``Isaac Gym environment`` :ref:`installed <installation/runners/isaacgym:Isaac Gym environment supplementary package>`.
-* Knowledge of the :ref:`modular robots <concepts/modular_robots:Modular robots>` used in Revolve2.
-* Superficial knowledge of the :ref:`cpg controllers <concepts/cpg:CPG>` used in Revolve2.
+* Have the supplementary package ``Isaac Gym environment`` :ref:`installed <installation/runners/isaacgym:Isaac Gym physics runner>`.
+* Knowledge of the modular robots used in Revolve2.
+* Superficial knowledge of the cpg controllers used in Revolve2.
 * A screen. You will visualize the robot.
 
 ------------
@@ -141,7 +141,7 @@ It is possible to run the simulation in headless mode(no graphics) by passing th
 
     from revolve2.core.physics.env import PosedActor
     from pyrr import Vector3, Quaternion
-    from revolve2.envs.isaacgym import LocalRunner
+    from revolve2.runners.isaacgym import LocalRunner
 
     # ...
 

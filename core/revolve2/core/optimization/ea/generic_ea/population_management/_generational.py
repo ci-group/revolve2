@@ -1,37 +1,28 @@
-from typing import Callable, List, TypeVar
-
-from .. import selection
+from typing import Callable, List, Tuple, TypeVar
 
 Genotype = TypeVar("Genotype")
 Fitness = TypeVar("Fitness")
 
 
 def generational(
-    old_individuals: List[Genotype],
+    old_genotypes: List[Genotype],
     old_fitnesses: List[Fitness],
-    new_individuals: List[Genotype],
+    new_genotypes: List[Genotype],
     new_fitnesses: List[Fitness],
-    selection_function: Callable[[List[Genotype], List[Fitness]], int],
-) -> List[int]:
+    selection_fun: Callable[[int, List[Genotype], List[Fitness]], List[int]],
+) -> Tuple[List[int], List[int]]:
     """
-    Select n unique individuals from only the new individuals using the provided selection function.
+    Select `len(old_genotypes)` individuals using the provided selection function from only the offspring(`new_genotypes`).
 
-    N is the number of old individuals.
-    # TODO this is not actually generational, see issue https://github.com/ci-group/revolve2/issues/142
-    Also known as mu,lambda.
-
-    :param old_individuals: Original individuals.
-    :param old_fitnesses: Fitnesses of the original individuals.
-    :param new_individuals: New individuals.
-    :param new_fitnesses: Fitnesses of the new individuals.
-    :param selection_function: Function selecting a single individual from the new individuals based on its fitness. ([Genotype], [Fitness]) -> index.
-    :returns: List of indices of selected individuals from the list of new individuals.
+    :param old_genotypes: Genotypes of the individuals in the parent population. Ignored and only here for function signature compatibility with `steady_state`.
+    :param old_fitnesses: Fitnesses of the individuals in the parent population. Ignored and only here for function signature compatibility with `steady_state`.
+    :param new_genotypes: Genotypes of the individuals from the offspring.
+    :param new_fitnesses: Fitnesses of the individuals from the offspring.
+    :param selection_fun: Function that selects n individuals from a population based on their genotype and fitness. (n, genotypes, fitnesses) -> indices
+    :returns: (always empty list of indices of selected old individuals, indices of selected individuals from offspring).
     """
-    population_size = len(old_individuals)
-    selection_pool = new_individuals
+    population_size = len(old_genotypes)
+    assert len(new_genotypes) == len(new_fitnesses)
+    assert len(new_fitnesses) >= population_size
 
-    assert len(selection_pool) >= population_size
-
-    return selection.multiple_unique(
-        new_individuals, new_fitnesses, population_size, selection_function
-    )
+    return [], selection_fun(population_size, new_genotypes, new_fitnesses)

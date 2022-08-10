@@ -5,9 +5,9 @@ Fitness = TypeVar("Fitness")  # TODO bounds
 
 
 def multiple_unique(
+    selection_size: int,
     population: List[Genotype],
     fitnesses: List[Fitness],
-    selection_size: int,
     selection_function: Callable[[List[Genotype], List[Fitness]], int],
 ) -> List[int]:
     """

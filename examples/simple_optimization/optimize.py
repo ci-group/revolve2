@@ -40,6 +40,7 @@ async def main() -> None:
 
     # process id generator
     process_id_gen = ProcessIdGen()
+    process_id = process_id_gen.gen()
 
     initial_population = [
         random_genotype(rng, INITIAL_HAS_ITEM_PROB, len(items))
@@ -48,7 +49,7 @@ async def main() -> None:
 
     maybe_optimizer = await Optimizer.from_database(
         database=database,
-        process_id=process_id_gen.gen(),
+        process_id=process_id,
         process_id_gen=process_id_gen,
         rng=rng,
         items=items,
@@ -60,7 +61,7 @@ async def main() -> None:
     else:
         optimizer = await Optimizer.new(
             database=database,
-            process_id=process_id_gen.gen(),
+            process_id=process_id,
             process_id_gen=process_id_gen,
             offspring_size=OFFSPRING_SIZE,
             initial_population=initial_population,

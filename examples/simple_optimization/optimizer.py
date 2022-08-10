@@ -184,9 +184,9 @@ class Optimizer(EAOptimizer[Genotype, float]):
     ) -> List[List[int]]:
         return [
             selection.multiple_unique(
+                2,
                 population,
                 fitnesses,
-                2,
                 lambda _, fitnesses: selection.tournament(self._rng, fitnesses, k=2),
             )
             for _ in range(num_parent_groups)
@@ -207,7 +207,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
             old_fitnesses,
             new_individuals,
             new_fitnesses,
-            lambda _, fitnesses: selection.tournament(self._rng, fitnesses, k=2),
+            selection.topn,
         )
 
     def _crossover(self, parents: List[Genotype]) -> Genotype:

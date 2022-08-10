@@ -509,9 +509,9 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
         ) -> List[List[int]]:
             return [
                 selection.multiple_unique(
+                    2,
                     population,
                     fitnesses,
-                    2,
                     lambda _, fitnesses: selection.tournament(self._rng, fitnesses, k=2),
                 )
                 for _ in range(num_parent_groups)
@@ -720,6 +720,7 @@ You will also need to add some extra constants.::
 
         # process id generator
         process_id_gen = ProcessIdGen()
+        process_id = process_id_gen.gen()
 
         # multineat innovation databases
         innov_db_body = multineat.InnovationDatabase()
@@ -730,7 +731,6 @@ You will also need to add some extra constants.::
             for _ in range(POPULATION_SIZE)
         ]
 
-        process_id = process_id_gen.gen()
         maybe_optimizer = await Optimizer.from_database(
             database=database,
             process_id=process_id,

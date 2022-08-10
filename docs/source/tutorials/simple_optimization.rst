@@ -530,6 +530,7 @@ Running this program should result in a raised ``NotImplementedError``::
 
         # process id generator
         process_id_gen = ProcessIdGen()
+        process_id = process_id_gen.gen()
 
         initial_population = [
             random_genotype(rng, INITIAL_HAS_ITEM_PROB, len(items))
@@ -538,7 +539,7 @@ Running this program should result in a raised ``NotImplementedError``::
 
         maybe_optimizer = await Optimizer.from_database(
             database=database,
-            process_id=0,
+            process_id=process_id,
             process_id_gen=process_id_gen,
             rng=rng,
             items=items,
@@ -550,7 +551,7 @@ Running this program should result in a raised ``NotImplementedError``::
         else:
             optimizer = await Optimizer.new(
                 database=database,
-                process_id=0,
+                process_id=process_id,
                 process_id_gen=process_id_gen,
                 offspring_size=OFFSPRING_SIZE,
                 initial_population=initial_population,
@@ -621,9 +622,9 @@ You can use any selection function that you want, but this tutorial selects pair
     ) -> List[List[int]]:
         return [
             selection.multiple_unique(
+                2,
                 population,
                 fitnesses,
-                2,
                 lambda _, fitnesses: selection.tournament(self._rng, fitnesses, k=2),
             )
             for _ in range(num_parent_groups)

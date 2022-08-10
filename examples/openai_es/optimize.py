@@ -34,10 +34,10 @@ async def main() -> None:
 
     # process id generator
     process_id_gen = ProcessIdGen()
+    process_id = process_id_gen.gen()
 
     body = gecko()
 
-    process_id = process_id_gen.gen()
     maybe_optimizer = await Optimizer.from_database(
         database=database,
         process_id=process_id,

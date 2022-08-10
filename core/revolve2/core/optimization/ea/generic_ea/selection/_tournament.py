@@ -1,24 +1,11 @@
 from __future__ import annotations
 
 from random import Random
-from typing import List, Protocol, TypeVar
+from typing import List, TypeVar
 
-TSupportsLessThan = TypeVar("TSupportsLessThan", bound="SupportsLessThan")
+from ._supports_lt import SupportsLt
 
-
-class SupportsLessThan(Protocol):
-    """Interface for types supporting the < operator."""
-
-    def __lt__(self: TSupportsLessThan, other: TSupportsLessThan) -> bool:
-        """
-        Compare two objects using the < operator.
-
-        :param other: The object to compare this with.
-        """
-        pass
-
-
-Fitness = TypeVar("Fitness", bound="SupportsLessThan")
+Fitness = TypeVar("Fitness", bound="SupportsLt")
 
 
 def tournament(rng: Random, fitnesses: List[Fitness], k: int) -> int:

@@ -39,6 +39,7 @@ async def main() -> None:
 
     # process id generator
     process_id_gen = ProcessIdGen()
+    process_id = process_id_gen.gen()
 
     # multineat innovation databases
     innov_db_body = multineat.InnovationDatabase()
@@ -49,7 +50,6 @@ async def main() -> None:
         for _ in range(POPULATION_SIZE)
     ]
 
-    process_id = process_id_gen.gen()
     maybe_optimizer = await Optimizer.from_database(
         database=database,
         process_id=process_id,

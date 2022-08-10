@@ -63,10 +63,12 @@ class LocalRunner(Runner):
             sim_params: gymapi.SimParams,
             headless: bool,
             real_time: bool,
+            max_gpu_contact_pairs: int,
         ):
             self._gym = gymapi.acquire_gym()
             self._batch = batch
 
+            sim_params.physx.max_gpu_contact_pairs = max_gpu_contact_pairs
             self._sim = self._create_sim(sim_params)
             self._gymenvs = self._create_envs()
 
@@ -366,12 +368,14 @@ class LocalRunner(Runner):
     _sim_params: gymapi.SimParams
     _headless: bool
     _real_time: bool
+    _max_gpu_contact_pairs: int
 
     def __init__(
         self,
         sim_params: gymapi.SimParams,
         headless: bool = False,
         real_time: bool = False,
+        max_gpu_contact_pairs: int = 1048576,
     ):
         """
         Initialize this object.
@@ -379,10 +383,12 @@ class LocalRunner(Runner):
         :param sim_params: Isaac Gym specific simulation parameters. Default parameters are provided using the `SimParams` method.
         :param headless: If True, the simulation will not be rendered. This drastically improves performance.
         :param real_time: If True, the simulation will run in real-time.
+        :param max_gpu_contact_pairs: Maximum number of contacts that can be stored by Isaac Gym. If you get a warning similar to "The application needs to increase PxgDynamicsMemoryConfig::foundLostAggregatePairsCapacity" you need to increase this parameter.
         """
         self._sim_params = sim_params
         self._headless = headless
         self._real_time = real_time
+        self._max_gpu_contact_pairs = max_gpu_contact_pairs
 
     @staticmethod
     def SimParams() -> gymapi.SimParams:
@@ -426,6 +432,7 @@ class LocalRunner(Runner):
                 self._sim_params,
                 self._headless,
                 self._real_time,
+                self._max_gpu_contact_pairs,
             ),
         )
         process.start()
@@ -452,8 +459,11 @@ class LocalRunner(Runner):
         sim_params: gymapi.SimParams,
         headless: bool,
         real_time: bool,
+        max_gpu_contact_pairs: int,
     ) -> None:
-        _Simulator = cls._Simulator(batch, sim_params, headless, real_time)
+        _Simulator = cls._Simulator(
+            batch, sim_params, headless, real_time, max_gpu_contact_pairs
+        )
         batch_results = _Simulator.run()
         _Simulator.cleanup()
         for environment_results in batch_results.environment_results:

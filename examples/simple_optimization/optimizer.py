@@ -202,12 +202,9 @@ class Optimizer(EAOptimizer[Genotype, float]):
     ) -> Tuple[List[int], List[int]]:
         assert len(old_individuals) == num_survivors
 
-        return population_management.steady_state(
-            old_individuals,
+        return population_management.plus(
             old_fitnesses,
-            new_individuals,
             new_fitnesses,
-            lambda _, fitnesses: selection.tournament(self._rng, fitnesses, k=2),
         )
 
     def _crossover(self, parents: List[Genotype]) -> Genotype:

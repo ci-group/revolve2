@@ -6,7 +6,7 @@ Genotype = TypeVar("Genotype")
 Fitness = TypeVar("Fitness")
 
 
-def steady_state(
+def plus_with_selection(
     old_individuals: List[Genotype],
     old_fitnesses: List[Fitness],
     new_individuals: List[Genotype],
@@ -14,17 +14,13 @@ def steady_state(
     selection_function: Callable[[List[Genotype], List[Fitness]], int],
 ) -> Tuple[List[int], List[int]]:
     """
-    Select n unique individuals from the combined set of old and new individuals using the provided selection function.
-
-    N is the number of old individuals.
-    # TODO this is not actually steady state, see issue https://github.com/ci-group/revolve2/issues/142
-    Also known as mu+lambda.
+    Select `len(old_individuals)` unique individuals from the combined set of old and new individuals and their fitnesses using the provided selection function.
 
     :param old_individuals: Original individuals.
     :param old_fitnesses: Fitnesses of the original individuals.
     :param new_individuals: New individuals.
     :param new_fitnesses: Fitnesses of the new individuals.
-    :param selection_function: Function selecting a single individual from the combined set of old and new individuals based on its fitness. ([Genotype], [Fitness]) -> index.
+    :param selection_function: Function selecting a single individual from the combined set of old and new individuals based using their genotype as well as their fitnesses. ([Genotype], [Fitness]) -> index.
     :returns: Tuple of list of indices of selected old individuals and list of indices of selected new individuals.
     """
     assert len(old_individuals) == len(old_fitnesses)

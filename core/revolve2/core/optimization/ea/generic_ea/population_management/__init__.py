@@ -1,6 +1,8 @@
 """Functions for combining populations in EA algorithms."""
 
-from ._generational import generational
-from ._steady_state import steady_state
+from ._comma import comma
+from ._comma_with_selection import comma_with_selection
+from ._plus import plus
+from ._plus_with_selection import plus_with_selection
 
-__all__ = ["generational", "steady_state"]
+__all__ = ["comma", "comma_with_selection", "plus", "plus_with_selection"]

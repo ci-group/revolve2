@@ -220,7 +220,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
     ) -> Tuple[List[int], List[int]]:
         assert len(old_individuals) == num_survivors
 
-        return population_management.steady_state(
+        return population_management.plus_with_selection(
             old_individuals,
             old_fitnesses,
             new_individuals,

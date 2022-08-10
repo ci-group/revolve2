@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.bin.core.optimization.ea namespace &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>revolve2.bin.core.optimization.ea namespace &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -138,9 +142,9 @@
            <div itemprop="articleBody">
              
   <section id="module-revolve2.bin.core.optimization.ea">
-<span id="revolve2-bin-core-optimization-ea-namespace"></span><h1>revolve2.bin.core.optimization.ea namespace<a class="headerlink" href="#module-revolve2.bin.core.optimization.ea" title="Permalink to this headline"></a></h1>
+<span id="revolve2-bin-core-optimization-ea-namespace"></span><h1>revolve2.bin.core.optimization.ea namespace<a class="headerlink" href="#module-revolve2.bin.core.optimization.ea" title="Permalink to this heading"></a></h1>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="revolve2.bin.core.optimization.ea.generic_ea.html">generic_ea</a></li>

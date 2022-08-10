@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Raspberry Pi controller &mdash; revolve2 v0.3.0-beta1 documentation</title>
+  <title>Optimization &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="User Guide" href="../user_guide/index.html" />
-    <link rel="prev" title="CPPNWIN genotype" href="genotypes/cppnwin.html" /> 
+    <link rel="next" title="Database" href="database.html" />
+    <link rel="prev" title="User Guide" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,19 +41,19 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="runners/isaacgym.html">Isaac Gym physics runner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="runners/mujoco.html">Mujoco physics runner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Raspberry Pi actor controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
@@ -128,8 +128,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Installation</a> &raquo;</li>
-      <li>Raspberry Pi controller</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Optimization</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -138,20 +138,17 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="raspberry-pi-controller">
-<h1>Raspberry Pi controller<a class="headerlink" href="#raspberry-pi-controller" title="Permalink to this heading"></a></h1>
-<p>This package provides a CLI tool for mapping a Revolve2 <code class="docutils literal notranslate"><span class="pre">ActorController</span></code> to physical servos on a Raspberry Pi.</p>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
-<p>A Raspberry Pi with Python 3.8 or higher installed.</p>
-</section>
-<section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
-<p>Install the package on your Raspberry Pi:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">rpi_controller</span>
-</pre></div>
-</div>
-</section>
+  <section id="optimization">
+<h1>Optimization<a class="headerlink" href="#optimization" title="Permalink to this heading"></a></h1>
+<p>The core of Revolve2’s optimization framework are processes.
+A process is part of program which state can be recovered in case it is stopped midway.
+Each process is uniquely identified by an integer that is used to store and load it using a database.
+One example process is Revolve2’s generic evolutionary algorithm optimizer which is used in the <a class="reference internal" href="../tutorials/optimize_locomotion.html#optimizing-a-modular-robot-for-locomotion-using-cppnwin-and-isaac-gym"><span class="std std-ref">Optimize locomotion tutorial</span></a>.
+Another example is the evaluate function called by this optimizer.</p>
+<p>A parent class is available for processes that are contained in a class, called <code class="docutils literal notranslate"><span class="pre">Process</span></code>.
+Classes inheriting this class can be instantiated using <code class="docutils literal notranslate"><span class="pre">new</span></code> or <code class="docutils literal notranslate"><span class="pre">from_database</span></code>,
+creating a completely new instance of the class or attempting to load the class state from a database, respectively.
+Both functions are <code class="docutils literal notranslate"><span class="pre">async</span></code>.</p>
 </section>
 
 

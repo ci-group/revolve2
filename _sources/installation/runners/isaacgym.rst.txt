@@ -1,15 +1,15 @@
-===========================================
-Isaac Gym environment supplementary package
-===========================================
-This package provides an environment for simulating physics actors using Isaac Gym.
-It depends on Nvidia's closed source Isaac Gym library version rc3.
+========================
+Isaac Gym physics runner
+========================
+This package provides a physics runner that simulates using Isaac Gym.
+It depends on Nvidia's closed source Isaac Gym library.
 
 -------------
 Prerequisites
 -------------
-Obtain a copy of Isaac Gym version rc3.
-At the time of writing it is available at `<https://developer.nvidia.com/isaac-gym>`_.
-Next, make sure you are in your virtual environment and install Isaac Gym::
+Obtain a copy of Isaac Gym.
+At the time of writing preview 4 is available at `<https://developer.nvidia.com/isaac-gym>`_.
+Next, install it::
 
     pip install <isaacgym_path>/python
 

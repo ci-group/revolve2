@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Concepts &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>Physics runners &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,12 +15,13 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Modular robots" href="modular_robots.html" />
-    <link rel="prev" title="revolve2.bin.rpi_controller namespace" href="../api_reference/revolve2.bin.rpi_controller.html" /> 
+    <link rel="prev" title="Database" href="database.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">User Guide</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="database.html">Database</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -124,7 +128,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Concepts</li>
+          <li><a href="index.html">User Guide</a> &raquo;</li>
+      <li>Physics runners</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -133,15 +138,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="concepts">
-<h1>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline"></a></h1>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="modular_robots.html">Modular robots</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cpg.html">CPG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="cppnwin.html">CPPNWIN</a></li>
-</ul>
-</div>
+  <section id="physics-runners">
+<h1>Physics runners<a class="headerlink" href="#physics-runners" title="Permalink to this heading"></a></h1>
+<p>Physics running is the act of measuring the physical behaviour of an environment over time.
+This can be either in simulation or reality, although currently only simulation is supported.</p>
+<p>Revolve2 provides the interface <code class="docutils literal notranslate"><span class="pre">Runner</span></code> that can run multiple environments in parallel using a <code class="docutils literal notranslate"><span class="pre">Batch</span></code> of <code class="docutils literal notranslate"><span class="pre">Environments</span></code>.
+An environment is a collection of dynamic and static objects of which some are controllable actors.</p>
 </section>
 
 

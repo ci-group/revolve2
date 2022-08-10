@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A simple optimization process with a database &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>A simple optimization process with a database &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -135,17 +139,17 @@
            <div itemprop="articleBody">
              
   <section id="a-simple-optimization-process-with-a-database">
-<h1>A simple optimization process with a database<a class="headerlink" href="#a-simple-optimization-process-with-a-database" title="Permalink to this headline"></a></h1>
+<h1>A simple optimization process with a database<a class="headerlink" href="#a-simple-optimization-process-with-a-database" title="Permalink to this heading"></a></h1>
 <p>The final results of this tutorial are available at <code class="docutils literal notranslate"><span class="pre">&lt;revolve2_source&gt;/examples/simple_optimization&gt;</span></code>.</p>
 <section id="what-you-will-learn">
-<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this headline"></a></h2>
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>How to use the <code class="docutils literal notranslate"><span class="pre">EvolutionaryOptimizer</span></code>.</p></li>
 <li><p>How to use the <code class="docutils literal notranslate"><span class="pre">Database</span></code>.</p></li>
 </ul>
 </section>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Have Revolve2 <a class="reference internal" href="../installation/index.html#installation"><span class="std std-ref">installed</span></a>.</p></li>
 <li><p>No supplementary libraries are required.</p></li>
@@ -153,7 +157,7 @@
 </ul>
 </section>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>You are going to create an evolutionary optimization process that can find a good solution to the <a class="reference external" href="https://en.wikipedia.org/wiki/Knapsack_problem">knapsack problem</a>.
 See also chapter 2.4.2 of <a class="reference external" href="https://www.cs.vu.nl/~gusz/ecbook/Eiben-Smith-Intro2EC-Ch2.pdf">https://www.cs.vu.nl/~gusz/ecbook/Eiben-Smith-Intro2EC-Ch2.pdf</a>.
 The problem is as follows: given a set of items, each with a weight and a value, determine the items to include in a collection so that the total weight is less than or equal to a given limit and the total value is as large as possible.</p>
@@ -167,7 +171,7 @@ The function from genotype to phenotype simply adds items from left to right in 
 The mutation operator will randomly flip each bit with 1/<em>n</em> chance, with <em>n</em> being the length of the bit strings.</p>
 </section>
 <section id="programming-it">
-<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this headline"></a></h2>
+<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this heading"></a></h2>
 <p>Start by creating a file called <code class="docutils literal notranslate"><span class="pre">item.py</span></code>. To represent an item, create a class <code class="docutils literal notranslate"><span class="pre">Item</span></code> that contains a <code class="docutils literal notranslate"><span class="pre">weight</span></code> and a <code class="docutils literal notranslate"><span class="pre">value</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># item.py</span>
 
@@ -656,6 +660,7 @@ Running this program should result in a raised <code class="docutils literal not
 
     <span class="c1"># process id generator</span>
     <span class="n">process_id_gen</span> <span class="o">=</span> <span class="n">ProcessIdGen</span><span class="p">()</span>
+    <span class="n">process_id</span> <span class="o">=</span> <span class="n">process_id_gen</span><span class="o">.</span><span class="n">gen</span><span class="p">()</span>
 
     <span class="n">initial_population</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">random_genotype</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">INITIAL_HAS_ITEM_PROB</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">))</span>
@@ -664,7 +669,7 @@ Running this program should result in a raised <code class="docutils literal not
 
     <span class="n">maybe_optimizer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">from_database</span><span class="p">(</span>
         <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
         <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
         <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
         <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span>
@@ -676,7 +681,7 @@ Running this program should result in a raised <code class="docutils literal not
     <span class="k">else</span><span class="p">:</span>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
-            <span class="n">process_id</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
             <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
             <span class="n">offspring_size</span><span class="o">=</span><span class="n">OFFSPRING_SIZE</span><span class="p">,</span>
             <span class="n">initial_population</span><span class="o">=</span><span class="n">initial_population</span><span class="p">,</span>
@@ -747,9 +752,9 @@ You can use any selection function that you want, but this tutorial selects pair
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
     <span class="k">return</span> <span class="p">[</span>
         <span class="n">selection</span><span class="o">.</span><span class="n">multiple_unique</span><span class="p">(</span>
+            <span class="mi">2</span><span class="p">,</span>
             <span class="n">population</span><span class="p">,</span>
             <span class="n">fitnesses</span><span class="p">,</span>
-            <span class="mi">2</span><span class="p">,</span>
             <span class="k">lambda</span> <span class="n">_</span><span class="p">,</span> <span class="n">fitnesses</span><span class="p">:</span> <span class="n">selection</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="p">,</span> <span class="n">fitnesses</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
         <span class="p">)</span>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_parent_groups</span><span class="p">)</span>
@@ -800,7 +805,7 @@ This tutorial uses a two participant tournament with a steady state population, 
 <p>After all this, your optimization program is finally ready.</p>
 </section>
 <section id="running-and-analyzing">
-<h2>Running and analyzing<a class="headerlink" href="#running-and-analyzing" title="Permalink to this headline"></a></h2>
+<h2>Running and analyzing<a class="headerlink" href="#running-and-analyzing" title="Permalink to this heading"></a></h2>
 <p>Looking at the log of this program, you will see that it creates 25 generations.
 It is not very fast, because the <code class="docutils literal notranslate"><span class="pre">EAOptimizer</span></code> assumes your evaluation is an expensive function and writes to the databases every generation to allow for recovery.
 You will see that if you manually restart the program in the middle of the optimization process it will restart at the last successfully evaluated generation.</p>
@@ -819,7 +824,7 @@ However, Revolve2 provided a script specifically for an EAOptimizer with fitness
 </div>
 </section>
 <section id="contributing">
-<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h2>
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading"></a></h2>
 <p>This marks the end of this tutorial. Feedback and contributions are welcome at Revolve2’s code repository.</p>
 </section>
 </section>

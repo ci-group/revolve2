@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Creating a modular robot and simulating and visualizing it in the Isaac Gym environment &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>Creating a modular robot and simulating and visualizing it in the Isaac Gym environment &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -135,31 +139,31 @@
            <div itemprop="articleBody">
              
   <section id="creating-a-modular-robot-and-simulating-and-visualizing-it-in-the-isaac-gym-environment">
-<h1>Creating a modular robot and simulating and visualizing it in the Isaac Gym environment<a class="headerlink" href="#creating-a-modular-robot-and-simulating-and-visualizing-it-in-the-isaac-gym-environment" title="Permalink to this headline"></a></h1>
+<h1>Creating a modular robot and simulating and visualizing it in the Isaac Gym environment<a class="headerlink" href="#creating-a-modular-robot-and-simulating-and-visualizing-it-in-the-isaac-gym-environment" title="Permalink to this heading"></a></h1>
 <p>The final results of this tutorial are available at <code class="docutils literal notranslate"><span class="pre">&lt;revolve2_source&gt;/examples/simulate_isaac&gt;</span></code>.</p>
 <section id="what-you-will-learn">
-<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this headline"></a></h2>
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>How to create a <code class="docutils literal notranslate"><span class="pre">modular</span> <span class="pre">robot</span></code>.</p></li>
 <li><p>How to use the <code class="docutils literal notranslate"><span class="pre">Isaac</span> <span class="pre">Gym</span> <span class="pre">environment</span></code>.</p></li>
 </ul>
 </section>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Have Revolve2 <a class="reference internal" href="../installation/index.html#installation"><span class="std std-ref">installed</span></a>.</p></li>
-<li><p>Have the supplementary package <code class="docutils literal notranslate"><span class="pre">Isaac</span> <span class="pre">Gym</span> <span class="pre">environment</span></code> <a class="reference internal" href="../installation/runners/isaacgym.html#isaac-gym-environment-supplementary-package"><span class="std std-ref">installed</span></a>.</p></li>
-<li><p>Knowledge of the <a class="reference internal" href="../concepts/modular_robots.html#modular-robots"><span class="std std-ref">modular robots</span></a> used in Revolve2.</p></li>
-<li><p>Superficial knowledge of the <a class="reference internal" href="../concepts/cpg.html#cpg"><span class="std std-ref">cpg controllers</span></a> used in Revolve2.</p></li>
+<li><p>Have the supplementary package <code class="docutils literal notranslate"><span class="pre">Isaac</span> <span class="pre">Gym</span> <span class="pre">environment</span></code> <a class="reference internal" href="../installation/runners/isaacgym.html#isaac-gym-physics-runner"><span class="std std-ref">installed</span></a>.</p></li>
+<li><p>Knowledge of the modular robots used in Revolve2.</p></li>
+<li><p>Superficial knowledge of the cpg controllers used in Revolve2.</p></li>
 <li><p>A screen. You will visualize the robot.</p></li>
 </ul>
 </section>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>You will hand design a modular robot body, generate a random controller for its brain, and simulate it in the Isaac Gym environment.</p>
 </section>
 <section id="programming-it">
-<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this headline"></a></h2>
+<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this heading"></a></h2>
 <p>Start by creating a file called <code class="docutils literal notranslate"><span class="pre">main.py</span></code>. For this tutorial, this is the only file you will need. The Isaac Gym environment uses <code class="docutils literal notranslate"><span class="pre">async</span></code> functions, so create an async main.
 Also add a random object. You will use that later:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">Random</span>
@@ -272,7 +276,7 @@ A controller is the brain that drives these joints:</p>
 It is possible to run the simulation in headless mode(no graphics) by passing the <code class="docutils literal notranslate"><span class="pre">headless</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">LocalRunner</span></code>.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.physics.env</span> <span class="kn">import</span> <span class="n">PosedActor</span>
 <span class="kn">from</span> <span class="nn">pyrr</span> <span class="kn">import</span> <span class="n">Vector3</span><span class="p">,</span> <span class="n">Quaternion</span>
-<span class="kn">from</span> <span class="nn">revolve2.envs.isaacgym</span> <span class="kn">import</span> <span class="n">LocalRunner</span>
+<span class="kn">from</span> <span class="nn">revolve2.runners.isaacgym</span> <span class="kn">import</span> <span class="n">LocalRunner</span>
 
 <span class="c1"># ...</span>
 
@@ -296,20 +300,20 @@ If there is more than one robot, you need to store each individual controller:</
 </div>
 </section>
 <section id="running-and-expected-results">
-<h2>Running and expected results<a class="headerlink" href="#running-and-expected-results" title="Permalink to this headline"></a></h2>
+<h2>Running and expected results<a class="headerlink" href="#running-and-expected-results" title="Permalink to this heading"></a></h2>
 <p>You should now be able to successfully run the simulation and see a two armed robot attempt to move around.</p>
 <a class="reference internal image-reference" href="../_images/simulate_robot_isaac_results.gif"><img alt="../_images/simulate_robot_isaac_results.gif" src="../_images/simulate_robot_isaac_results.gif" style="width: 100%;" /></a>
 <p>The exact class you just created is also readily available at <code class="docutils literal notranslate"><span class="pre">revolve2.analysis.isaacgym.ModularRobotRerunner</span></code>.</p>
 </section>
 <section id="errors">
-<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this headline"></a></h2>
+<h2>Errors<a class="headerlink" href="#errors" title="Permalink to this heading"></a></h2>
 <p>If you do not have an Nvidia graphics card, you can expect the console out put to look like the image below.
 This is no issue.</p>
 <a class="reference internal image-reference" href="../_images/simulate_robot_isaac_errors.png"><img alt="../_images/simulate_robot_isaac_errors.png" src="../_images/simulate_robot_isaac_errors.png" style="width: 100%;" /></a>
 <p>For both with and without an Nvidia graphics card the simulation can fail if you do not have Cuda installed, even though it is not used at all when running on CPU.</p>
 </section>
 <section id="contributing">
-<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h2>
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading"></a></h2>
 <p>This marks the end of this tutorial. Feedback and contributions are welcome at Revolve2’s code repository.</p>
 </section>
 </section>

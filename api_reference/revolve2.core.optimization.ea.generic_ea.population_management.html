@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.optimization.ea.generic_ea.population_management package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>revolve2.core.optimization.ea.generic_ea.population_management package &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -139,52 +143,46 @@
            <div itemprop="articleBody">
              
   <section id="revolve2-core-optimization-ea-generic-ea-population-management-package">
-<h1>revolve2.core.optimization.ea.generic_ea.population_management package<a class="headerlink" href="#revolve2-core-optimization-ea-generic-ea-population-management-package" title="Permalink to this headline"></a></h1>
+<h1>revolve2.core.optimization.ea.generic_ea.population_management package<a class="headerlink" href="#revolve2-core-optimization-ea-generic-ea-population-management-package" title="Permalink to this heading"></a></h1>
 <section id="module-revolve2.core.optimization.ea.generic_ea.population_management">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.optimization.ea.generic_ea.population_management" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.optimization.ea.generic_ea.population_management" title="Permalink to this heading"></a></h2>
 <p>Functions for combining populations in EA algorithms.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.generic_ea.population_management.generational">
-<span class="sig-name descname"><span class="pre">generational</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_individuals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._generational.Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._generational.Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_individuals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._generational.Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._generational.Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._generational.Genotype</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._generational.Fitness</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.generic_ea.population_management.generational" title="Permalink to this definition"></a></dt>
-<dd><p>Select n unique individuals from only the new individuals using the provided selection function.</p>
-<p>N is the number of old individuals.
-# TODO this is not actually generational, see issue <a class="reference external" href="https://github.com/ci-group/revolve2/issues/142">https://github.com/ci-group/revolve2/issues/142</a>
-Also known as mu,lambda.</p>
+<span class="sig-name descname"><span class="pre">generational</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_genotypes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_genotypes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_fun</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Genotype</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Fitness</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.generic_ea.population_management.generational" title="Permalink to this definition"></a></dt>
+<dd><p>Select <cite>len(old_genotypes)</cite> individuals using the provided selection function from only the offspring(<cite>new_genotypes</cite>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>old_individuals</strong> – Original individuals.</p></li>
-<li><p><strong>old_fitnesses</strong> – Fitnesses of the original individuals.</p></li>
-<li><p><strong>new_individuals</strong> – New individuals.</p></li>
-<li><p><strong>new_fitnesses</strong> – Fitnesses of the new individuals.</p></li>
-<li><p><strong>selection_function</strong> – Function selecting a single individual from the new individuals based on its fitness. ([Genotype], [Fitness]) -&gt; index.</p></li>
+<li><p><strong>old_genotypes</strong> – Genotypes of the individuals in the parent population. Ignored and only here for function signature compatibility with <cite>steady_state</cite>.</p></li>
+<li><p><strong>old_fitnesses</strong> – Fitnesses of the individuals in the parent population. Ignored and only here for function signature compatibility with <cite>steady_state</cite>.</p></li>
+<li><p><strong>new_genotypes</strong> – Genotypes of the individuals from the offspring.</p></li>
+<li><p><strong>new_fitnesses</strong> – Fitnesses of the individuals from the offspring.</p></li>
+<li><p><strong>selection_fun</strong> – Function that selects n individuals from a population based on their genotype and fitness. (n, genotypes, fitnesses) -&gt; indices</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>List of indices of selected individuals from the list of new individuals.</p>
+<dd class="field-even"><p>(always empty list of indices of selected old individuals, indices of selected individuals from offspring).</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.core.optimization.ea.generic_ea.population_management.steady_state">
-<span class="sig-name descname"><span class="pre">steady_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_individuals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._steady_state.Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._steady_state.Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_individuals</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._steady_state.Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._steady_state.Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._steady_state.Genotype</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.core.optimization.ea.generic_ea.population_management._steady_state.Fitness</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.generic_ea.population_management.steady_state" title="Permalink to this definition"></a></dt>
-<dd><p>Select n unique individuals from the combined set of old and new individuals using the provided selection function.</p>
-<p>N is the number of old individuals.
-# TODO this is not actually steady state, see issue <a class="reference external" href="https://github.com/ci-group/revolve2/issues/142">https://github.com/ci-group/revolve2/issues/142</a>
-Also known as mu+lambda.</p>
+<span class="sig-name descname"><span class="pre">steady_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">old_genotypes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">old_fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_genotypes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Genotype</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_fitnesses</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Fitness</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_fun</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Genotype</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Fitness</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.optimization.ea.generic_ea.population_management.steady_state" title="Permalink to this definition"></a></dt>
+<dd><p>Select <cite>len(old_genotypes)</cite> individuals using the provided selection function from combined set of old and new individuals.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>old_individuals</strong> – Original individuals.</p></li>
-<li><p><strong>old_fitnesses</strong> – Fitnesses of the original individuals.</p></li>
-<li><p><strong>new_individuals</strong> – New individuals.</p></li>
-<li><p><strong>new_fitnesses</strong> – Fitnesses of the new individuals.</p></li>
-<li><p><strong>selection_function</strong> – Function selecting a single individual from the combined set of old and new individuals based on its fitness. ([Genotype], [Fitness]) -&gt; index.</p></li>
+<li><p><strong>old_genotypes</strong> – Genotypes of the individuals in the parent population.</p></li>
+<li><p><strong>old_fitnesses</strong> – Fitnesses of the individuals in the parent population.</p></li>
+<li><p><strong>new_genotypes</strong> – Genotypes of the individuals from the offspring.</p></li>
+<li><p><strong>new_fitnesses</strong> – Fitnesses of the individuals from the offspring.</p></li>
+<li><p><strong>selection_fun</strong> – Function that selects n individuals from a population based on their genotype and fitness. (n, genotypes, fitnesses) -&gt; indices</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Tuple of list of indices of selected old individuals and list of indices of selected new individuals.</p>
+<dd class="field-even"><p>(indices of selected individuals from parent population, indices of selected individuals from offspring).</p>
 </dd>
 </dl>
 </dd></dl>

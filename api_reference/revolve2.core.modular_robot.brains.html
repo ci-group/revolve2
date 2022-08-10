@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.modular_robot.brains package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>revolve2.core.modular_robot.brains package &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -137,14 +141,14 @@
            <div itemprop="articleBody">
              
   <section id="revolve2-core-modular-robot-brains-package">
-<h1>revolve2.core.modular_robot.brains package<a class="headerlink" href="#revolve2-core-modular-robot-brains-package" title="Permalink to this headline"></a></h1>
+<h1>revolve2.core.modular_robot.brains package<a class="headerlink" href="#revolve2-core-modular-robot-brains-package" title="Permalink to this heading"></a></h1>
 <section id="module-revolve2.core.modular_robot.brains">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.modular_robot.brains" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.modular_robot.brains" title="Permalink to this heading"></a></h2>
 <p>Brain for modular robots.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkNeighbour</span></span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain" title="revolve2.core.modular_robot._brain.Brain"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._brain.Brain</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dd><p>Bases: <a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain" title="revolve2.core.modular_robot._brain.Brain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Brain</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>A CPG brain with active hinges that are connected if they are within 2 jumps in the modular robot tree structure.</p>
 <p>That means, NOT grid coordinates, but tree distance.</p>
 <dl class="py method">
@@ -168,15 +172,15 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbourRandom">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkNeighbourRandom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">random.Random</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbourRandom" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour" title="revolve2.core.modular_robot.brains._brain_cpg_network_neighbour.BrainCpgNetworkNeighbour"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot.brains._brain_cpg_network_neighbour.BrainCpgNetworkNeighbour</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkNeighbourRandom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Random</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbourRandom" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkNeighbour" title="revolve2.core.modular_robot.brains._brain_cpg_network_neighbour.BrainCpgNetworkNeighbour"><code class="xref py py-class docutils literal notranslate"><span class="pre">BrainCpgNetworkNeighbour</span></code></a></p>
 <p>A cpg brain with random weights between neurons.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.brains.BrainCpgNetworkStatic">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkStatic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_output_neurons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ranges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkStatic" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain" title="revolve2.core.modular_robot._brain.Brain"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._brain.Brain</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkStatic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_output_neurons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_ranges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.brains.BrainCpgNetworkStatic" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brain" title="revolve2.core.modular_robot._brain.Brain"><code class="xref py py-class docutils literal notranslate"><span class="pre">Brain</span></code></a></p>
 <p>A CPG brain with cpgs and connections defined by the user.</p>
 <p>A state vector is integrated over time using a weight matrix which multiplication with the state vector sum defines the derivative of the state vector.
 I.e X’ = WX</p>

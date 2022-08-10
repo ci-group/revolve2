@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.modular_robot package &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>revolve2.core.modular_robot package &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -136,9 +140,9 @@
            <div itemprop="articleBody">
              
   <section id="revolve2-core-modular-robot-package">
-<h1>revolve2.core.modular_robot package<a class="headerlink" href="#revolve2-core-modular-robot-package" title="Permalink to this headline"></a></h1>
+<h1>revolve2.core.modular_robot package<a class="headerlink" href="#revolve2-core-modular-robot-package" title="Permalink to this heading"></a></h1>
 <section id="subpackages">
-<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline"></a></h2>
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="revolve2.core.modular_robot.brains.html">brains</a></li>
@@ -146,12 +150,12 @@
 </div>
 </section>
 <section id="module-revolve2.core.modular_robot">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.modular_robot" title="Permalink to this headline"></a></h2>
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.modular_robot" title="Permalink to this heading"></a></h2>
 <p>Classes and functions to describe and work with modular robots as used in the CI Group at VU Amsterdam.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.ActiveHinge">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActiveHinge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.ActiveHinge" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._module.Module</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
 <p>An active hinge module for a modular robot.</p>
 <p>This is a rotary joint.</p>
 <dl class="py attribute">
@@ -224,7 +228,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Body.grid_position">
-<span class="sig-name descname"><span class="pre">grid_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.objects.vector3.Vector3</span></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Body.grid_position" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">grid_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><span class="pre">Module</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Vector3</span></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Body.grid_position" title="Permalink to this definition"></a></dt>
 <dd><p>Calculate the position of this module in a 3d grid with the core as center.</p>
 <p>The distance between all modules is assumed to be one grid cell.
 All module angles must be multiples of 90 degrees.</p>
@@ -271,7 +275,7 @@ All module angles must be multiples of 90 degrees.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brain">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Brain</span></span><a class="headerlink" href="#revolve2.core.modular_robot.Brain" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>Interface for the brain of a modular robot.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brain.make_controller">
@@ -295,7 +299,7 @@ All module angles must be multiples of 90 degrees.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brick">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Brick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.Brick" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._module.Module</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
 <p>A brick module for a modular robot.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Brick.FRONT">
@@ -350,7 +354,7 @@ All module angles must be multiples of 90 degrees.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Core">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.Core" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">revolve2.core.modular_robot._module.Module</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#revolve2.core.modular_robot.Module" title="revolve2.core.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
 <p>The core module of a modular robot.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Core.BACK">

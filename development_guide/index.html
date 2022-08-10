@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CPPNWIN &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>Development Guide &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,11 +15,12 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="CPG" href="cpg.html" /> 
+    <link rel="prev" title="revolve2.bin.rpi_controller namespace" href="../api_reference/revolve2.bin.rpi_controller.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -40,12 +41,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -101,12 +110,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Concepts</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cpg.html">CPG</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Development guide</a></li>
 </ul>
 
         </div>
@@ -123,8 +127,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Concepts</a> &raquo;</li>
-      <li>CPPNWIN</li>
+      <li>Development Guide</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -133,12 +136,28 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cppnwin">
-<h1>CPPNWIN<a class="headerlink" href="#cppnwin" title="Permalink to this headline"></a></h1>
-<p>CPPN with innovation numbers
-CPPN + innovation numbers, crossover, mutation taken from NEAT.
-Name made up by ci-group
-TODO</p>
+  <section id="development-guide">
+<h1>Development Guide<a class="headerlink" href="#development-guide" title="Permalink to this heading"></a></h1>
+<p>It is recommended that you use pip’s <a class="reference internal" href="../installation/index.html#editable-mode"><span class="std std-ref">editable mode</span></a> when developing.</p>
+<section id="continuous-integration">
+<h2>Continuous integration<a class="headerlink" href="#continuous-integration" title="Permalink to this heading"></a></h2>
+<p>Github Actions is used for CI.</p>
+</section>
+<section id="code-tools">
+<h2>Code tools<a class="headerlink" href="#code-tools" title="Permalink to this heading"></a></h2>
+<p>Revolve two code quality is checked by a variety of tools.
+See the <code class="docutils literal notranslate"><span class="pre">codetools</span></code> directory.
+The CI runs these tools automatically.</p>
+</section>
+<section id="documentation">
+<h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>
+<p>This documentation is automatically built by the CI and uploaded to github pages.</p>
+</section>
+<section id="programming-style-and-typing">
+<h2>Programming style and typing<a class="headerlink" href="#programming-style-and-typing" title="Permalink to this heading"></a></h2>
+<p>Revolve2 uses the Black formatter and its opinionated style.
+This as well as typing and docstrings are enforced by the CI.</p>
+</section>
 </section>
 
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,6 +15,7 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -135,10 +139,10 @@
            <div itemprop="articleBody">
              
   <section id="optimizing-a-modular-robot-for-locomotion-using-cppnwin-and-isaac-gym">
-<h1>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym<a class="headerlink" href="#optimizing-a-modular-robot-for-locomotion-using-cppnwin-and-isaac-gym" title="Permalink to this headline"></a></h1>
+<h1>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym<a class="headerlink" href="#optimizing-a-modular-robot-for-locomotion-using-cppnwin-and-isaac-gym" title="Permalink to this heading"></a></h1>
 <p>The final results of this tutorial are available at <code class="docutils literal notranslate"><span class="pre">&lt;revolve2_source&gt;/examples/optimize_modular&gt;</span></code>.</p>
 <section id="what-you-will-learn">
-<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this headline"></a></h2>
+<h2>What you will learn<a class="headerlink" href="#what-you-will-learn" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>How to use the <code class="docutils literal notranslate"><span class="pre">CPPNWIN</span></code> genotype supplementary package.</p></li>
 <li><p>How to combine modular robots with evolutionary optimization.</p></li>
@@ -146,21 +150,21 @@
 </ul>
 </section>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p>Tutorial <a class="reference internal" href="simple_optimization.html#a-simple-optimization-process-with-a-database"><span class="std std-ref">A simple optimization process with a database</span></a></p></li>
 <li><p>Tutorial <a class="reference internal" href="simulate_robot_isaac.html#creating-a-modular-robot-and-simulating-and-visualizing-it-in-the-isaac-gym-environment"><span class="std std-ref">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</span></a></p></li>
-<li><p>Have the supplementary package <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPNWIN</span></code> <a class="reference internal" href="../installation/genotypes/cppnwin.html#cppnwin-genotype-supplemental-package"><span class="std std-ref">installed</span></a>.</p></li>
-<li><p>Superficial knowledge of the <a class="reference internal" href="../concepts/cppnwin.html#cppnwin"><span class="std std-ref">CPPNWIN</span></a> genotype, used by ci-group.</p></li>
+<li><p>Have the supplementary package <code class="docutils literal notranslate"><span class="pre">genotype</span> <span class="pre">CPPNWIN</span></code> <a class="reference internal" href="../installation/genotypes/cppnwin.html#cppnwin-genotype"><span class="std std-ref">installed</span></a>.</p></li>
+<li><p>Superficial knowledge of the CPPNWIN genotype, used by ci-group.</p></li>
 </ul>
 </section>
 <section id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h2>
 <p>You will create a program that optimizes a modular robot body and brain for undirected locomotion.
 That is, a robot that moves as far as possible, no matter the direction.</p>
 </section>
 <section id="programming-it">
-<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this headline"></a></h2>
+<h2>Programming it<a class="headerlink" href="#programming-it" title="Permalink to this heading"></a></h2>
 <p>The code you will write is incrediby similar to the <code class="docutils literal notranslate"><span class="pre">simple</span> <span class="pre">optimization</span></code> tutorial. As with that tutorial it will be convenient to seperate your code in multiple files.
 Create an empty directory and a file <code class="docutils literal notranslate"><span class="pre">optimize.py</span></code>. This will be your program’s entry point.
 The baseline code for this program is similar to the previous tutorials’:</p>
@@ -206,7 +210,7 @@ The baseline code for this program is similar to the previous tutorials’:</p>
 </pre></div>
 </div>
 <section id="the-genotype">
-<h3>The genotype<a class="headerlink" href="#the-genotype" title="Permalink to this headline"></a></h3>
+<h3>The genotype<a class="headerlink" href="#the-genotype" title="Permalink to this heading"></a></h3>
 <p>Start by creating a genotype in a new file called <code class="docutils literal notranslate"><span class="pre">genotype.py</span></code>.
 Let it be the composite of a body and brain genotype, both of type <code class="docutils literal notranslate"><span class="pre">CPPNWIN</span></code>, which is a genotype provided by Revolve2.
 The library also provides a serializer for the CPPNWIN genotype, so creating a serializer for the composite genotype should be trivial:</p>
@@ -476,7 +480,7 @@ You also need parameters for the MultiNEAT innovation databases, one for body an
 </div>
 </section>
 <section id="the-optimizer">
-<h3>The optimizer<a class="headerlink" href="#the-optimizer" title="Permalink to this headline"></a></h3>
+<h3>The optimizer<a class="headerlink" href="#the-optimizer" title="Permalink to this heading"></a></h3>
 <p>The optimizer will look similar to the optimizer from the previous evolutionary optimization tutorial.
 Add the innovation databases, as they will be shared between all genotypes.
 Additionally, instead of a single controller you will store a controller for each individual robot.
@@ -638,9 +642,9 @@ Finally, you can save some of the parameters provided to <code class="docutils l
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]]:</span>
         <span class="k">return</span> <span class="p">[</span>
             <span class="n">selection</span><span class="o">.</span><span class="n">multiple_unique</span><span class="p">(</span>
+                <span class="mi">2</span><span class="p">,</span>
                 <span class="n">population</span><span class="p">,</span>
                 <span class="n">fitnesses</span><span class="p">,</span>
-                <span class="mi">2</span><span class="p">,</span>
                 <span class="k">lambda</span> <span class="n">_</span><span class="p">,</span> <span class="n">fitnesses</span><span class="p">:</span> <span class="n">selection</span><span class="o">.</span><span class="n">tournament</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="p">,</span> <span class="n">fitnesses</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_parent_groups</span><span class="p">)</span>
@@ -824,7 +828,7 @@ This tutorial simply uses the distance traveled on the xy plane:</p>
 </div>
 </section>
 <section id="adding-the-optimizer-to-main">
-<h3>Adding the optimizer to main<a class="headerlink" href="#adding-the-optimizer-to-main" title="Permalink to this headline"></a></h3>
+<h3>Adding the optimizer to main<a class="headerlink" href="#adding-the-optimizer-to-main" title="Permalink to this heading"></a></h3>
 <p>You can now add the finished optimizer to your <code class="docutils literal notranslate"><span class="pre">main</span></code> function.
 You will also need to add some extra constants.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># optimize.py</span>
@@ -848,6 +852,7 @@ You will also need to add some extra constants.:</p>
 
     <span class="c1"># process id generator</span>
     <span class="n">process_id_gen</span> <span class="o">=</span> <span class="n">ProcessIdGen</span><span class="p">()</span>
+    <span class="n">process_id</span> <span class="o">=</span> <span class="n">process_id_gen</span><span class="o">.</span><span class="n">gen</span><span class="p">()</span>
 
     <span class="c1"># multineat innovation databases</span>
     <span class="n">innov_db_body</span> <span class="o">=</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">()</span>
@@ -858,7 +863,6 @@ You will also need to add some extra constants.:</p>
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">POPULATION_SIZE</span><span class="p">)</span>
     <span class="p">]</span>
 
-    <span class="n">process_id</span> <span class="o">=</span> <span class="n">process_id_gen</span><span class="o">.</span><span class="n">gen</span><span class="p">()</span>
     <span class="n">maybe_optimizer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">from_database</span><span class="p">(</span>
         <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
         <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
@@ -897,7 +901,7 @@ You will also need to add some extra constants.:</p>
 </section>
 </section>
 <section id="running-and-analyzing">
-<h2>Running and analyzing<a class="headerlink" href="#running-and-analyzing" title="Permalink to this headline"></a></h2>
+<h2>Running and analyzing<a class="headerlink" href="#running-and-analyzing" title="Permalink to this heading"></a></h2>
 <p>Run <code class="docutils literal notranslate"><span class="pre">optimize.py</span></code> and your robots will evolve.
 Depending on your parameters this can take quite a long time.
 The example parameters used in this example will result in a fast optimization process but yield bad robots.
@@ -911,7 +915,7 @@ Depending on your evolution parameters and the parameters provided to the plotti
 <a class="reference internal image-reference" href="../_images/optimize_locomotion_analysis.png"><img alt="../_images/optimize_locomotion_analysis.png" src="../_images/optimize_locomotion_analysis.png" style="width: 100%;" /></a>
 </section>
 <section id="rerunning">
-<h2>Rerunning<a class="headerlink" href="#rerunning" title="Permalink to this headline"></a></h2>
+<h2>Rerunning<a class="headerlink" href="#rerunning" title="Permalink to this heading"></a></h2>
 <p>Using the <code class="docutils literal notranslate"><span class="pre">ModularRobotRerunner</span></code> from the previous Isaac Gym tutorial you can visualize your best robot.
 The script below selects the best robot from the database and lets it walk:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># rerun_best.py</span>
@@ -960,7 +964,7 @@ The script below selects the best robot from the database and lets it walk:</p>
 </div>
 </section>
 <section id="contributing">
-<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline"></a></h2>
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading"></a></h2>
 <p>This marks the end of this tutorial. Feedback and contributions are welcome at Revolve2’s code repository.</p>
 </section>
 </section>

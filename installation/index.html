@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; revolve2 v0.2.6-alpha3 documentation</title>
+  <title>Installation &mdash; revolve2 v0.3.0-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -15,11 +15,12 @@
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Isaac Gym environment supplementary package" href="runners/isaacgym.html" />
+    <link rel="next" title="Isaac Gym physics runner" href="runners/isaacgym.html" />
     <link rel="prev" title="Revolve2 documentation" href="../index.html" /> 
 </head>
 
@@ -41,12 +42,20 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
@@ -102,12 +111,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../concepts/index.html">Concepts</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cpg.html">CPG</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../concepts/cppnwin.html">CPPNWIN</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
 </ul>
 
         </div>
@@ -134,24 +138,24 @@
            <div itemprop="articleBody">
              
   <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline"></a></h1>
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <p>Revolve2 consists of multiple smaller Python packages.
-Installing the <code class="docutils literal notranslate"><span class="pre">core</span></code> package automatically installs all packages required for optimization.
-Additionally there are optional supplementary packages that contain varying functionality that is not always required.</p>
-<p>If you need to edit revolve2’s code, take a look at <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
+The <code class="docutils literal notranslate"><span class="pre">core</span></code> package and it’s automatically installed dependencies contain everything required for optimization as well as other features that are trivial to install.
+Additionally there are optional supplementary packages that contain varying functionality that is not always required and may be more difficult to install.</p>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline"></a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
 <ul>
 <li><p>Python 3.8 or higher. If you are using the Isaac Gym environment supplementary package, it requires exactly Python 3.8.</p></li>
-<li><p>virtualenv:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip3</span><span class="mf">.8</span> <span class="n">install</span> <span class="n">virtualenv</span>
+<li><p>Pip. If you do not have pip for python 3.8, take a look at the get-pip script: <a class="reference external" href="https://pip.pypa.io/en/stable/installation/">https://pip.pypa.io/en/stable/installation/</a>.</p></li>
+<li><p>Virtualenv:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="mf">.8</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">virtualenv</span>
 </pre></div>
 </div>
 </li>
 </ul>
 </section>
 <section id="create-an-environment">
-<h2>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this headline"></a></h2>
+<h2>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this heading"></a></h2>
 <p>Create a directory for your project, then create a virtual environment:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="mf">.8</span> <span class="o">-</span><span class="n">m</span> <span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span>
 </pre></div>
@@ -160,32 +164,36 @@ Additionally there are optional supplementary packages that contain varying func
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="o">.</span><span class="n">venv</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
 </pre></div>
 </div>
+<p>Leave the <code class="docutils literal notranslate"><span class="pre">.venv</span></code> directory as is and do not manually edit it, unless you know what you are doing.</p>
 </section>
 <section id="download-the-source">
-<h2>Download the source<a class="headerlink" href="#download-the-source" title="Permalink to this headline"></a></h2>
-<p>Download your preferred version from <a class="reference external" href="https://github.com/ci-group/revolve2/releases">https://github.com/ci-group/revolve2/releases</a>.</p>
+<h2>Download the source<a class="headerlink" href="#download-the-source" title="Permalink to this heading"></a></h2>
+<p>Download your preferred version from <a class="reference external" href="https://github.com/ci-group/revolve2/releases">https://github.com/ci-group/revolve2/releases</a>.
+If you need to edit Revolve2 itself to add new features, it is recommended to instead create a fork and clone using git.</p>
 </section>
 <section id="install-core">
-<h2>Install core<a class="headerlink" href="#install-core" title="Permalink to this headline"></a></h2>
+<h2>Install core<a class="headerlink" href="#install-core" title="Permalink to this heading"></a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">Core</span></code> installs all code and revolve2 packages required for optimization.
 It has only PyPI dependencies and is a pure python package:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">core</span>
 </pre></div>
 </div>
+<p>If you need to edit Revolve2 itself to add new features, it is recommended that you use <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
 </section>
 <section id="install-supplementary-packages-optional">
-<h2>Install supplementary packages (Optional)<a class="headerlink" href="#install-supplementary-packages-optional" title="Permalink to this headline"></a></h2>
+<h2>Install supplementary packages (Optional)<a class="headerlink" href="#install-supplementary-packages-optional" title="Permalink to this heading"></a></h2>
 <p>Revolve2 contains additional packages that provide extra functionality. These are fully optional.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="runners/isaacgym.html">Isaac Gym environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runners/isaacgym.html">Isaac Gym physics runner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l1"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rpi_controller.html">Raspberry Pi controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </div>
 </section>
 <section id="editable-mode">
-<h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Permalink to this headline"></a></h2>
+<h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Permalink to this heading"></a></h2>
 <p>If you want to edit revolve2’s code while having it installed, consider using pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">package</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span>
 </pre></div>

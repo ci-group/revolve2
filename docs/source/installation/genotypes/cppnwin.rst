@@ -21,6 +21,14 @@ macOS using Homebrew
 
     brew install cereal
 
+~~~~~~~
+Windows
+~~~~~~~
+Download the cereal library and add it to the ``INCLUDE`` environment variable before installing.
+In powershell::
+
+    $env:INCLUDE = "<path_to_cereal>\include;$env:INCLUDE"   
+
 ~~~~~~~~~~~~~
 Other systems
 ~~~~~~~~~~~~~

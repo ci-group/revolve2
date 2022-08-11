@@ -48,7 +48,6 @@ def plot(database: str, process_id: int) -> None:
         ),
         db,
     )
-    print(df)
     # calculate max min avg
     describe = (
         df[["generation_index", "value"]]

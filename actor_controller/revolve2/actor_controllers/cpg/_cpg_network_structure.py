@@ -125,11 +125,12 @@ class CpgNetworkStructure:
         assert len(params) == self.num_connections
 
         internal_connection_weights = {
-            cpg: weight for cpg, weight in zip(self.cpgs, params)
+            cpg: weight for cpg, weight in zip(self.cpgs, params[: self.num_cpgs])
         }
 
         external_connection_weights = {
-            pair: weight for pair, weight in zip(self.connections, params)
+            pair: weight
+            for pair, weight in zip(self.connections, params[self.num_cpgs :])
         }
 
         return self.make_connection_weights_matrix(

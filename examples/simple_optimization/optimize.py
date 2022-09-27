@@ -9,7 +9,7 @@ from genotype import random as random_genotype
 from item import Item
 from optimizer import Optimizer
 from revolve2.core.database import open_async_database_sqlite
-from revolve2.core.optimization import ProcessIdGen
+from revolve2.core.optimization import DbId
 
 
 async def main() -> None:
@@ -38,9 +38,8 @@ async def main() -> None:
     # database
     database = open_async_database_sqlite("./database")
 
-    # process id generator
-    process_id_gen = ProcessIdGen()
-    process_id = process_id_gen.gen()
+    # unique database identifier for optimizer
+    db_id = DbId.root("simpleopt")
 
     initial_population = [
         random_genotype(rng, INITIAL_HAS_ITEM_PROB, len(items))
@@ -49,8 +48,7 @@ async def main() -> None:
 
     maybe_optimizer = await Optimizer.from_database(
         database=database,
-        process_id=process_id,
-        process_id_gen=process_id_gen,
+        db_id=db_id,
         rng=rng,
         items=items,
         max_weight=MAX_WEIGHT,
@@ -61,8 +59,7 @@ async def main() -> None:
     else:
         optimizer = await Optimizer.new(
             database=database,
-            process_id=process_id,
-            process_id_gen=process_id_gen,
+            db_id=db_id,
             offspring_size=OFFSPRING_SIZE,
             initial_population=initial_population,
             rng=rng,

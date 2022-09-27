@@ -14,7 +14,7 @@ from revolve2.core.modular_robot.brains import (
     BrainCpgNetworkStatic,
     make_cpg_network_structure_neighbour,
 )
-from revolve2.core.optimization import ProcessIdGen
+from revolve2.core.optimization import DbId
 from revolve2.core.optimization.ea.openai_es import OpenaiESOptimizer
 from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.running import (
@@ -55,8 +55,7 @@ class Optimizer(OpenaiESOptimizer):
         self,
         database: AsyncEngine,
         session: AsyncSession,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
         rng: Random,
         population_size: int,
         sigma: float,
@@ -74,8 +73,7 @@ class Optimizer(OpenaiESOptimizer):
 
         :param database: Database to use for this optimizer.
         :param session: Session to use when saving data to the database during initialization.
-        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
-        :param process_id_gen: Can be used to create more unique identifiers.
+        :param db_id: Unique identifier in the completely program specifically made for this optimizer.
         :param rng: Random number generator.
         :param population_size: Population size for the OpenAI ES algorithm.
         :param sigma: Standard deviation for the OpenAI ES algorithm.
@@ -99,8 +97,7 @@ class Optimizer(OpenaiESOptimizer):
         await super().ainit_new(
             database=database,
             session=session,
-            process_id=process_id,
-            process_id_gen=process_id_gen,
+            db_id=db_id,
             rng=rng,
             population_size=population_size,
             sigma=sigma,
@@ -119,8 +116,7 @@ class Optimizer(OpenaiESOptimizer):
         self,
         database: AsyncEngine,
         session: AsyncSession,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
         rng: Random,
         robot_body: Body,
         simulation_time: int,
@@ -135,8 +131,7 @@ class Optimizer(OpenaiESOptimizer):
 
         :param database: Database to use for this optimizer.
         :param session: Session to use when loading and saving data to the database during initialization.
-        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
-        :param process_id_gen: Can be used to create more unique identifiers.
+        :param db_id: Unique identifier in the completely program specifically made for this optimizer.
         :param rng: Random number generator.
         :param robot_body: The body to optimize the brain for.
         :param simulation_time: Time in second to simulate the robots for.
@@ -148,8 +143,7 @@ class Optimizer(OpenaiESOptimizer):
         if not await super().ainit_from_database(
             database=database,
             session=session,
-            process_id=process_id,
-            process_id_gen=process_id_gen,
+            db_id=db_id,
             rng=rng,
         ):
             return False
@@ -184,8 +178,7 @@ class Optimizer(OpenaiESOptimizer):
     async def _evaluate_population(
         self,
         database: AsyncEngine,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
         population: npt.NDArray[np.float_],
     ) -> npt.NDArray[np.float_]:
         batch = Batch(

@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import pandas
 from revolve2.core.database import open_database_sqlite
 from revolve2.core.database.serializers import DbFloat
+from revolve2.core.optimization import DbId
 from revolve2.core.optimization.ea.generic_ea import (
     DbEAOptimizer,
     DbEAOptimizerGeneration,
@@ -20,12 +21,12 @@ from revolve2.core.optimization.ea.generic_ea import (
 from sqlalchemy.future import select
 
 
-def plot(database: str, process_id: int) -> None:
+def plot(database: str, db_id: DbId) -> None:
     """
     Plot fitness as described at the top of this file.
 
     :param database: Database where the data is stored.
-    :param process_id: Process id of the evolutionary process to plot.
+    :param db_id: Id of the evolutionary process to plot.
     """
     # open the database
     db = open_database_sqlite(database)
@@ -37,7 +38,7 @@ def plot(database: str, process_id: int) -> None:
             DbEAOptimizerIndividual,
             DbFloat,
         ).filter(
-            (DbEAOptimizer.process_id == process_id)
+            (DbEAOptimizer.db_id == db_id.fullname)
             & (DbEAOptimizerGeneration.ea_optimizer_id == DbEAOptimizer.id)
             & (DbEAOptimizerIndividual.ea_optimizer_id == DbEAOptimizer.id)
             & (DbEAOptimizerIndividual.fitness_id == DbFloat.id)
@@ -72,12 +73,10 @@ def main() -> None:
         type=str,
         help="The database to plot.",
     )
-    parser.add_argument(
-        "process_id", type=int, help="The id of the ea optimizer to plot."
-    )
+    parser.add_argument("db_id", type=str, help="The id of the ea optimizer to plot.")
     args = parser.parse_args()
 
-    plot(args.database, args.process_id)
+    plot(args.database, DbId(args.db_id))
 
 
 if __name__ == "__main__":

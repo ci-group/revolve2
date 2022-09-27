@@ -5,7 +5,7 @@ from random import Random
 
 from optimizer import Optimizer
 from revolve2.core.database import open_async_database_sqlite
-from revolve2.core.optimization import ProcessIdGen
+from revolve2.core.optimization import DbId
 from revolve2.standard_resources.modular_robots import gecko
 
 
@@ -32,16 +32,14 @@ async def main() -> None:
     # database
     database = open_async_database_sqlite("./database")
 
-    # process id generator
-    process_id_gen = ProcessIdGen()
-    process_id = process_id_gen.gen()
+    # unique database identifier for optimizer
+    db_id = DbId.root("openaies")
 
     body = gecko()
 
     maybe_optimizer = await Optimizer.from_database(
         database=database,
-        process_id=process_id,
-        process_id_gen=process_id_gen,
+        db_id=db_id,
         rng=rng,
         robot_body=body,
         simulation_time=SIMULATION_TIME,
@@ -57,14 +55,13 @@ async def main() -> None:
     else:
         logging.info("No recovery data found. Starting at generation 0.")
         optimizer = await Optimizer.new(
-            database,
-            process_id,
-            process_id_gen,
-            rng,
-            POPULATION_SIZE,
-            SIGMA,
-            LEARNING_RATE,
-            body,
+            database=database,
+            db_id=db_id,
+            rng=rng,
+            population_size=POPULATION_SIZE,
+            sigma=SIGMA,
+            learning_rate=LEARNING_RATE,
+            robot_body=body,
             simulation_time=SIMULATION_TIME,
             sampling_frequency=SAMPLING_FREQUENCY,
             control_frequency=CONTROL_FREQUENCY,

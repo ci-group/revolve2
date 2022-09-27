@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Generic, List, Optional, Tuple, Type, TypeVar
 
 from revolve2.core.database import IncompatibleError, Serializer
-from revolve2.core.optimization import Process, ProcessIdGen
+from revolve2.core.optimization import DbId, Process
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -42,16 +42,14 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         self,
         genotypes: List[Genotype],
         database: AsyncEngine,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
     ) -> List[Fitness]:
         """
         Evaluate a list of genotypes.
 
         :param genotypes: The genotypes to evaluate. Must not be altered.
         :param database: Database that can be used to store anything you want to save from the evaluation.
-        :param process_id: Unique identifier in the completely program specifically made for this function call.
-        :param process_id_gen: Can be used to create more unique identifiers.
+        :param db_id: Unique identifier in the completely program specifically made for this function call.
         :returns: The fitness result.
         """
 
@@ -131,6 +129,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
 
     __database: AsyncEngine
 
+    __db_id: DbId
     __ea_optimizer_id: int
 
     __genotype_type: Type[Genotype]
@@ -139,8 +138,6 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
     __fitness_serializer: Type[Serializer[Fitness]]
 
     __offspring_size: int
-
-    __process_id_gen: ProcessIdGen
 
     __next_individual_id: int
 
@@ -152,8 +149,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         self,
         database: AsyncEngine,
         session: AsyncSession,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
         genotype_type: Type[Genotype],
         genotype_serializer: Type[Serializer[Genotype]],
         fitness_type: Type[Fitness],
@@ -168,8 +164,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
 
         :param database: Database to use for this optimizer.
         :param session: Session to use when saving data to the database during initialization.
-        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
-        :param process_id_gen: Can be used to create more unique identifiers.
+        :param db_id: Unique identifier in the completely program specifically made for this optimizer.
         :param genotype_type: Type of the genotype generic parameter.
         :param genotype_serializer: Serializer for serializing genotypes.
         :param fitness_type: Type of the fitness generic parameter.
@@ -178,12 +173,12 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         :param initial_population: List of genotypes forming generation 0.
         """
         self.__database = database
+        self.__db_id = db_id
         self.__genotype_type = genotype_type
         self.__genotype_serializer = genotype_serializer
         self.__fitness_type = fitness_type
         self.__fitness_serializer = fitness_serializer
         self.__offspring_size = offspring_size
-        self.__process_id_gen = process_id_gen
         self.__next_individual_id = 0
         self.__latest_fitnesses = None
         self.__generation_index = 0
@@ -198,7 +193,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         await self.__fitness_serializer.create_tables(session)
 
         new_opt = DbEAOptimizer(
-            process_id=process_id,
+            db_id=db_id.fullname,
             offspring_size=self.__offspring_size,
             genotype_table=self.__genotype_serializer.identifying_table(),
             fitness_table=self.__fitness_serializer.identifying_table(),
@@ -216,8 +211,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         self,
         database: AsyncEngine,
         session: AsyncSession,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
         genotype_type: Type[Genotype],
         genotype_serializer: Type[Serializer[Genotype]],
         fitness_type: Type[Fitness],
@@ -230,8 +224,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
 
         :param database: Database to use for this optimizer.
         :param session: Session to use when loading and saving data to the database during initialization.
-        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
-        :param process_id_gen: Can be used to create more unique identifiers.
+        :param db_id: Unique identifier in the completely program specifically made for this optimizer.
         :param genotype_type: Type of the genotype generic parameter.
         :param genotype_serializer: Serializer for serializing genotypes.
         :param fitness_type: Type of the fitness generic parameter.
@@ -240,6 +233,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         :raises IncompatibleError: In case the database is not compatible with this class.
         """
         self.__database = database
+        self.__db_id = db_id
         self.__genotype_type = genotype_type
         self.__genotype_serializer = genotype_serializer
         self.__fitness_type = fitness_type
@@ -250,7 +244,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
                 (
                     await session.execute(
                         select(DbEAOptimizer).filter(
-                            DbEAOptimizer.process_id == process_id
+                            DbEAOptimizer.db_id == self.__db_id.fullname
                         )
                     )
                 )
@@ -283,8 +277,6 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
             raise IncompatibleError()  # not possible that there is no saved state but DbEAOptimizer row exists
 
         self.__generation_index = state_row.generation_index
-        self.__process_id_gen = process_id_gen
-        self.__process_id_gen.set_state(state_row.processid_state)
 
         gen_rows = (
             (
@@ -361,11 +353,12 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
             self.__latest_fitnesses = await self.__safe_evaluate_generation(
                 [i.genotype for i in self.__latest_population],
                 self.__database,
-                self.__process_id_gen.gen(),
-                self.__process_id_gen,
+                self.__db_id.branch(f"evaluate{self.__generation_index}"),
             )
             initial_population = self.__latest_population
             initial_fitnesses = self.__latest_fitnesses
+
+            self.__generation_index += 1
         else:
             initial_population = None
             initial_fitnesses = None
@@ -393,8 +386,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
             new_fitnesses = await self.__safe_evaluate_generation(
                 offspring,
                 self.__database,
-                self.__process_id_gen.gen(),
-                self.__process_id_gen,
+                self.__db_id.branch(f"evaluate{self.__generation_index}"),
             )
 
             # combine to create list of individuals
@@ -476,14 +468,12 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         self,
         genotypes: List[Genotype],
         database: AsyncEngine,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
     ) -> List[Fitness]:
         fitnesses = await self._evaluate_generation(
             genotypes=genotypes,
             database=database,
-            process_id=process_id,
-            process_id_gen=process_id_gen,
+            db_id=db_id,
         )
         assert type(fitnesses) == list
         assert len(fitnesses) == len(genotypes)
@@ -599,7 +589,6 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
             DbEAOptimizerState(
                 ea_optimizer_id=self.__ea_optimizer_id,
                 generation_index=self.__generation_index,
-                processid_state=self.__process_id_gen.get_state(),
             )
         )
 

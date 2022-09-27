@@ -3,6 +3,8 @@ from typing import Any, Optional, Type, TypeVar
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
+from ._db_id import DbId
+
 TChild = TypeVar("TChild", bound="Process")
 
 
@@ -44,7 +46,7 @@ class Process:
     #    self,
     #    database: Database,
     #    session: AsyncSession,
-    #    process_id: int,
+    #    db_id: DbId,
     #    *args: Any,
     #    **kwargs: Any
     # ) -> None:
@@ -57,7 +59,7 @@ class Process:
     #
     #    :param database: Database to use for this process.
     #    :param session: Session to use when saving data to the database during initialization.
-    #    :param process_id: Unique identifier in the completely program specifically made for this process.
+    #    :param db_id: Unique identifier in the completely program specifically made for this process.
     #    :param args: Other positional arguments required for the inheriting class.
     #    :param kwargs: Other named arguments required for the inheriting class.
     #    """
@@ -67,7 +69,7 @@ class Process:
     #     self,
     #     database: Database,
     #     session: AsyncSession,
-    #     process_id: int,
+    #     db_id: DbId,
     #     *args: Any,
     #     **kwargs: Any
     # ) -> bool:
@@ -78,7 +80,7 @@ class Process:
     #
     #    :param database: Database to use for this process.
     #    :param session: Session to use when loading and saving data to the database during initialization.
-    #    :param process_id: Unique identifier in the completely program specifically made for this process.
+    #    :param db_id: Unique identifier in the completely program specifically made for this process.
     #    :param args: Other positional arguments required for the inheriting class.
     #    :param kwargs: Other named arguments required for the inheriting class.
     #    :returns: True if this complete object could be deserialized from the database.
@@ -87,11 +89,7 @@ class Process:
 
     @classmethod
     async def new(
-        cls: Type[TChild],
-        database: AsyncEngine,
-        process_id: int,
-        *args: Any,
-        **kwargs: Any
+        cls: Type[TChild], database: AsyncEngine, db_id: DbId, *args: Any, **kwargs: Any
     ) -> TChild:
         """
         Create a new instance of this class.
@@ -99,7 +97,7 @@ class Process:
         It will be initialized using `ainit_new`.
 
         :param database: Database to use for this process.
-        :param process_id: Unique identifier in the completely program specifically made for this process.
+        :param db_id: Unique identifier in the completely program specifically made for this process.
         :param args: Other positional arguments required for the inheriting class.
         :param kwargs: Other named arguments required for the inheriting class.
         :returns: An instance of this class.
@@ -107,16 +105,12 @@ class Process:
         self = super().__new__(cls)
         async with AsyncSession(database) as session:
             async with session.begin():
-                await self.ainit_new(database, session, process_id, *args, **kwargs)  # type: ignore # must have this function, see above
+                await self.ainit_new(database, session, db_id, *args, **kwargs)  # type: ignore # must have this function, see above
         return self
 
     @classmethod
     async def from_database(
-        cls: Type[TChild],
-        database: AsyncEngine,
-        process_id: int,
-        *args: Any,
-        **kwargs: Any
+        cls: Type[TChild], database: AsyncEngine, db_id: DbId, *args: Any, **kwargs: Any
     ) -> Optional[TChild]:
         """
         Create a new instance of this class.
@@ -124,7 +118,7 @@ class Process:
         It will be initialized using `ainit_from_database`.
 
         :param database: Database to use for this process.
-        :param process_id: Unique identifier in the completely program specifically made for this process.
+        :param db_id: Unique identifier in the completely program specifically made for this process.
         :param args: Other positional arguments required for the inheriting class.
         :param kwargs: Other named arguments required for the inheriting class.
         :returns: An instance of this class or None if the class could not be completely deserialized.
@@ -132,7 +126,7 @@ class Process:
         self = super().__new__(cls)
         async with AsyncSession(database) as session:
             if await self.ainit_from_database(  # type: ignore # must have this function, see above
-                database, session, process_id, *args, **kwargs
+                database, session, db_id, *args, **kwargs
             ):
                 return self
             else:

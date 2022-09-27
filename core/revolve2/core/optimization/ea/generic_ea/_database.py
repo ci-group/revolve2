@@ -18,7 +18,7 @@ class DbEAOptimizer(DbBase):
         autoincrement=True,
         primary_key=True,
     )
-    process_id = Column(Integer, nullable=False, unique=True)
+    db_id = Column(String, nullable=False, unique=True)
     offspring_size = Column(Integer, nullable=False)
     genotype_table = Column(String, nullable=False)
     fitness_table = Column(String, nullable=False)
@@ -31,7 +31,6 @@ class DbEAOptimizerState(DbBase):
 
     ea_optimizer_id = Column(Integer, nullable=False, primary_key=True)
     generation_index = Column(Integer, nullable=False, primary_key=True)
-    processid_state = Column(Integer, nullable=False)
 
 
 class DbEAOptimizerGeneration(DbBase):

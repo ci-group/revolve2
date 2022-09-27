@@ -11,7 +11,7 @@ import numpy.typing as npt
 import sqlalchemy
 from revolve2.core.database import IncompatibleError
 from revolve2.core.database.serializers import DbNdarray1xn, Ndarray1xnSerializer
-from revolve2.core.optimization import Process, ProcessIdGen
+from revolve2.core.optimization import DbId, Process
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -33,16 +33,14 @@ class OpenaiESOptimizer(ABC, Process):
     async def _evaluate_population(
         self,
         database: AsyncEngine,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
         population: npt.NDArray[np.float_],
     ) -> npt.NDArray[np.float_]:
         """
         Evaluate all individuals in the population, returning their fitnesses.
 
         :param database: Database that can be used to store anything you want to save from the evaluation.
-        :param process_id: Unique identifier in the completely program specifically made for this function call.
-        :param process_id_gen: Can be used to create more unique identifiers.
+        :param db_id: Unique identifier in the completely program specifically made for this function call.
         :param population: MxN array with M the population size and N the size of an individual.
         :returns: M long vector with M the population size, representing the fitness of each individual in `population`.
         """
@@ -56,8 +54,7 @@ class OpenaiESOptimizer(ABC, Process):
         """
 
     __database: AsyncEngine
-    __process_id: int
-    __process_id_gen: ProcessIdGen
+    __db_id: DbId
 
     __rng: Random
 
@@ -72,8 +69,7 @@ class OpenaiESOptimizer(ABC, Process):
         self,
         database: AsyncEngine,
         session: AsyncSession,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
         rng: Random,
         population_size: int,
         sigma: float,
@@ -87,8 +83,7 @@ class OpenaiESOptimizer(ABC, Process):
 
         :param database: Database to use for this optimizer.
         :param session: Session to use when saving data to the database during initialization.
-        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
-        :param process_id_gen: Can be used to create more unique identifiers.
+        :param db_id: Unique identifier in the completely program specifically made for this optimizer.
         :param rng: Random number generator used in the complete optimization process.
         :param population_size: Size of the population. OpenAI ES parameter.
         :param sigma: Standard deviation. OpenAI ES parameter.
@@ -96,8 +91,7 @@ class OpenaiESOptimizer(ABC, Process):
         :param initial_mean: Nx1 array. Initial guess. OpenAI ES Parameter.
         """
         self.__database = database
-        self.__process_id = process_id
-        self.__process_id_gen = process_id_gen
+        self.__db_id = db_id
 
         self.__rng = rng
 
@@ -113,7 +107,7 @@ class OpenaiESOptimizer(ABC, Process):
 
         dbmeanid = (await Ndarray1xnSerializer.to_database(session, [self.__mean]))[0]
         dbopt = DbOpenaiESOptimizer(
-            process_id=self.__process_id,
+            db_id=self.__db_id.fullname,
             population_size=self.__population_size,
             sigma=self.__sigma,
             learning_rate=self.__learning_rate,
@@ -126,8 +120,7 @@ class OpenaiESOptimizer(ABC, Process):
         self,
         database: AsyncEngine,
         session: AsyncSession,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
         rng: Random,
     ) -> bool:
         """
@@ -137,22 +130,20 @@ class OpenaiESOptimizer(ABC, Process):
 
         :param database: Database to use for this optimizer.
         :param session: Session to use when loading and saving data to the database during initialization.
-        :param process_id: Unique identifier in the completely program specifically made for this optimizer.
-        :param process_id_gen: Can be used to create more unique identifiers.
+        :param db_id: Unique identifier in the completely program specifically made for this optimizer.
         :param rng: Random number generator used in the complete optimization process. Its state will be overwritten with the serialized state from the database.
         :returns: True if the complete object could be deserialized from the database.
         :raises IncompatibleError: In case the database is not compatible with this class.
         """
         self.__database = database
-        self.__process_id = process_id
-        self.__process_id_gen = process_id_gen
+        self.__db_id = db_id
 
         try:
             opt_row = (
                 (
                     await session.execute(
                         select(DbOpenaiESOptimizer).filter(
-                            DbOpenaiESOptimizer.process_id == self.__process_id
+                            DbOpenaiESOptimizer.db_id == self.__db_id.fullname
                         )
                     )
                 )
@@ -172,7 +163,7 @@ class OpenaiESOptimizer(ABC, Process):
             (
                 await session.execute(
                     select(DbOpenaiESOptimizerState)
-                    .filter(DbOpenaiESOptimizerState.process_id == self.__process_id)
+                    .filter(DbOpenaiESOptimizerState.db_id == self.__db_id.fullname)
                     .order_by(DbOpenaiESOptimizerState.gen_num.desc())
                 )
             )
@@ -210,8 +201,7 @@ class OpenaiESOptimizer(ABC, Process):
 
             fitnesses = await self._evaluate_population(
                 self.__database,
-                self.__process_id_gen.gen(),
-                self.__process_id_gen,
+                self.__db_id,
                 population,
             )
 
@@ -230,7 +220,7 @@ class OpenaiESOptimizer(ABC, Process):
                     )[0]
 
                     dbopt = DbOpenaiESOptimizerState(
-                        process_id=self.__process_id,
+                        db_id=self.__db_id.fullname,
                         gen_num=self.__gen_num,
                         mean=db_mean_id,
                         rng=pickle.dumps(self.__rng.getstate()),
@@ -244,7 +234,7 @@ class OpenaiESOptimizer(ABC, Process):
 
                     dbgens = [
                         DbOpenaiESOptimizerIndividual(
-                            process_id=self.__process_id,
+                            db_id=self.__db_id.fullname,
                             gen_num=self.__gen_num,
                             gen_index=index,
                             individual=id,
@@ -284,8 +274,8 @@ class DbOpenaiESOptimizer(DbBase):
 
     __tablename__ = "openaies_optimizer"
 
-    process_id = sqlalchemy.Column(
-        sqlalchemy.Integer,
+    db_id = sqlalchemy.Column(
+        sqlalchemy.String,
         nullable=False,
         unique=True,
         primary_key=True,
@@ -304,7 +294,7 @@ class DbOpenaiESOptimizerState(DbBase):
 
     __tablename__ = "openaies_optimizer_state"
 
-    process_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=False, primary_key=True)
+    db_id = sqlalchemy.Column(sqlalchemy.String, nullable=False, primary_key=True)
     gen_num = sqlalchemy.Column(sqlalchemy.Integer, nullable=False, primary_key=True)
     mean = sqlalchemy.Column(
         sqlalchemy.Integer, sqlalchemy.ForeignKey(DbNdarray1xn.id), nullable=False
@@ -317,7 +307,7 @@ class DbOpenaiESOptimizerIndividual(DbBase):
 
     __tablename__ = "openaies_optimizer_individual"
 
-    process_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=False, primary_key=True)
+    db_id = sqlalchemy.Column(sqlalchemy.String, nullable=False, primary_key=True)
     gen_num = sqlalchemy.Column(sqlalchemy.Integer, nullable=False, primary_key=True)
     gen_index = sqlalchemy.Column(sqlalchemy.Integer, nullable=False, primary_key=True)
     individual = sqlalchemy.Column(

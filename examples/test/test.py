@@ -5,8 +5,9 @@ from revolve2.core.optimization.ea.population.pop_list import (
     tournament,
     topn,
 )
-from typing import List
+from typing import List, Optional
 import numpy as np
+from dataclasses import dataclass
 
 
 class Genotype:
@@ -64,22 +65,38 @@ def evolve(rng: np.random.Generator, pop: TPop) -> TPop:
     )
 
 
-def save_state(gen_index: int, pop: TPop):
+@dataclass
+class State:
+    rng: np.random.Generator
+    pop: TPop
+
+
+def save_state(state: State):
     pass
 
 
-rng = np.random.Generator(np.random.PCG64(0))
+def load_state() -> Optional[State]:
+    pass
 
-initial_pop = TPop(
-    [
-        Individual(Genotype()),
-        Individual(Genotype()),
-        Individual(Genotype()),
-        Individual(Genotype()),
-    ]
-)
-measure(initial_pop)
 
-pop = initial_pop
+state = load_state()
+if state is None:
+    state = State(
+        rng=np.random.Generator(np.random.PCG64(0)),
+        pop=TPop(
+            [
+                Individual(Genotype()),
+                Individual(Genotype()),
+                Individual(Genotype()),
+                Individual(Genotype()),
+            ]
+        ),
+    )
+
+measure(state.pop)
+
+save_state(state)
+
 for _ in range(100):
-    pop = evolve(rng, pop)
+    state.pop = evolve(state.rng, state.pop)
+    save_state(state)

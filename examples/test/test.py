@@ -1,6 +1,8 @@
+import random
 from revolve2.core.optimization.ea.population import Individual
 from revolve2.core.optimization.ea.population.pop_list import (
     PopList,
+    DbPopList,
     multiple_unique,
     tournament,
     topn,
@@ -9,7 +11,6 @@ from typing import List
 import numpy as np
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, String
 from revolve2.core.optimization import DbId
@@ -18,10 +19,16 @@ import pickle
 from revolve2.core.database import open_async_database_sqlite
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import Column
+from sqlalchemy.ext.asyncio import AsyncConnection
 
 
 class Genotype:
-    pass
+    @staticmethod
+    async def prepare_db(conn: AsyncConnection) -> None:
+        pass
+
+    async def to_db(self, ses: AsyncSession) -> Column[Integer]:
+        return 0
 
 
 TPop = PopList[Genotype]
@@ -42,17 +49,11 @@ class Optimizer:
         self.db = open_async_database_sqlite("database")
         async with self.db.begin() as conn:
             await conn.run_sync(DbBase.metadata.create_all)
+            await PopList.prepare_db(conn, Genotype)
 
         if not await self.load_state():
             self.rng = np.random.Generator(np.random.PCG64(0))
-            self.pop = TPop(
-                [
-                    Individual(Genotype()),
-                    Individual(Genotype()),
-                    Individual(Genotype()),
-                    Individual(Genotype()),
-                ]
-            )
+            self.pop = TPop([Individual(Genotype()) for _ in range(100)])
             self.gen_index = 0
             self.measure(self.pop)
 
@@ -62,13 +63,13 @@ class Optimizer:
                     ses.add(dbopt)
                     await ses.flush()
                     self.optimizer_id = dbopt.id
-                    self.save_state(ses)
+                    await self.save_state(ses)
 
         while self.gen_index < 100:
             self.evolve()
             async with AsyncSession(self.db) as ses:
                 async with ses.begin():
-                    self.save_state(ses)
+                    await self.save_state(ses)
 
     async def load_state(self) -> bool:
         async with AsyncSession(self.db) as ses:
@@ -98,18 +99,20 @@ class Optimizer:
                 self.gen_index = state.generation_index
                 self.rng = pickle.loads(state.rng_pickled)
 
-                # TODO load pop
+                self.pop = await PopList.from_db(ses, state.pop_id)
 
                 return True
 
-    def save_state(self, ses: AsyncSession) -> None:
+    async def save_state(self, ses: AsyncSession) -> None:
+        popid = await self.pop.to_db(ses)
+
         dbstate = DbState(
             optimizer_id=self.optimizer_id,
             generation_index=self.gen_index,
             rng_pickled=pickle.dumps(self.rng),
+            pop_id=popid,
         )
         ses.add(dbstate)
-        # TODO save pop
 
     def evolve(self) -> None:
         OFFSPRING_SIZE = 50
@@ -156,7 +159,7 @@ class Optimizer:
         return Genotype()
 
     def measure_displacements(self, genotypes: List[Genotype]) -> List[float]:
-        return [0.0 for _ in genotypes]  # TODO
+        return [random.randint(0, 1000) for _ in genotypes]  # TODO
 
     def measure(self, pop: TPop) -> None:
         displacements = self.measure_displacements(
@@ -197,6 +200,7 @@ class DbState(DbBase):
     )
     generation_index = Column(Integer, nullable=False)
     rng_pickled = Column(String, nullable=False)
+    pop_id = Column(Integer, sqlalchemy.ForeignKey(DbPopList.id), nullable=False)
 
 
 async def main() -> None:

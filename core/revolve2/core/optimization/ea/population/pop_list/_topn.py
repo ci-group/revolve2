@@ -14,7 +14,7 @@ def topn(
     indices = np.argsort(
         [i.measures[measure] for i in original_population.individuals]
         + [i.measures[measure] for i in offspring_population.individuals]
-    )
+    )[: -1 - n : -1]
     return [i for i in indices if i < len(original_population.individuals)], [
         i - len(original_population.individuals)
         for i in indices

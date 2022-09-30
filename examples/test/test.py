@@ -5,9 +5,19 @@ from revolve2.core.optimization.ea.population.pop_list import (
     tournament,
     topn,
 )
-from typing import List, Optional
+from typing import List
 import numpy as np
-from dataclasses import dataclass
+from sqlalchemy.ext.asyncio import AsyncEngine
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncConnection
+from sqlalchemy.future import select
+from sqlalchemy import Column, Integer, String
+from revolve2.core.optimization import DbId
+import sqlalchemy
+import pickle
+from revolve2.core.database import open_async_database_sqlite
+from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy import Column
 
 
 class Genotype:
@@ -17,86 +27,183 @@ class Genotype:
 TPop = PopList[Genotype]
 
 
-def measure_displacements(genotypes: List[Genotype]) -> List[float]:
-    return [0.0 for _ in genotypes]  # TODO
-
-
-def measure(pop: TPop) -> None:
-    displacements = measure_displacements([i.genotype for i in pop.individuals])
-    for individual, displacement in zip(pop.individuals, displacements):
-        individual.measures["displacement"] = displacement
-
-
-def mutate(genotype: Genotype) -> Genotype:
-    return Genotype()  # TODO
-
-
-def crossover(parent1: Genotype, parent2: Genotype) -> Genotype:
-    return Genotype()
-
-
-def evolve(rng: np.random.Generator, pop: TPop) -> TPop:
-    OFFSPRING_SIZE = 50
-    population_size = len(pop.individuals)
-
-    parent_groups = [
-        multiple_unique(pop, 2, lambda pop: tournament(pop, "displacement", rng, k=2))
-        for _ in range(OFFSPRING_SIZE)
-    ]
-
-    offspring = TPop(
-        [
-            Individual(
-                mutate(
-                    crossover(pop.individuals[parents[0]], pop.individuals[parents[1]])
-                )
-            )
-            for parents in parent_groups
-        ]
-    )
-    measure(offspring)
-
-    original_selection, offspring_selection = topn(
-        pop, offspring, measure="displacement", n=population_size
-    )
-
-    return TPop.from_existing_populations(
-        [pop, offspring], [original_selection, offspring_selection], ["displacement"]
-    )
-
-
-@dataclass
-class State:
+class Optimizer:
+    dbid: DbId
+    db: AsyncEngine
     rng: np.random.Generator
     pop: TPop
+    gen_index: int
 
+    optimizer_id: Column[Integer]
 
-def save_state(state: State):
-    pass
+    async def run(self) -> None:
+        self.dbid = DbId.root("opt")
 
+        self.db = open_async_database_sqlite("database")
+        async with self.db.begin() as conn:
+            await conn.run_sync(DbBase.metadata.create_all)
 
-def load_state() -> Optional[State]:
-    pass
+        if not await self.load_state():
+            self.rng = np.random.Generator(np.random.PCG64(0))
+            self.pop = TPop(
+                [
+                    Individual(Genotype()),
+                    Individual(Genotype()),
+                    Individual(Genotype()),
+                    Individual(Genotype()),
+                ]
+            )
+            self.gen_index = 0
+            self.measure(self.pop)
 
+            async with AsyncSession(self.db) as ses:
+                async with ses.begin():
+                    dbopt = DbOptimizer(db_id=self.dbid.fullname)
+                    ses.add(dbopt)
+                    await ses.flush()
+                    self.optimizer_id = dbopt.id
+                    self.save_state(ses)
 
-state = load_state()
-if state is None:
-    state = State(
-        rng=np.random.Generator(np.random.PCG64(0)),
-        pop=TPop(
+        while self.gen_index < 100:
+            self.evolve()
+            async with AsyncSession(self.db) as ses:
+                async with ses.begin():
+                    self.save_state(ses)
+
+    async def load_state(self) -> bool:
+        async with AsyncSession(self.db) as ses:
+            async with ses.begin():
+                dbopt = (
+                    await ses.execute(
+                        select(DbOptimizer).filter(
+                            DbOptimizer.db_id == self.dbid.fullname
+                        )
+                    )
+                ).scalar_one_or_none()
+
+                if dbopt is None:
+                    return False
+
+                self.optimizer_id = dbopt.id
+
+                state = (
+                    await ses.execute(
+                        select(DbState)
+                        .filter(DbState.optimizer_id == self.optimizer_id)
+                        .order_by(DbState.generation_index.desc())
+                        .limit(1)
+                    )
+                ).scalar_one()
+
+                self.gen_index = state.generation_index
+                self.rng = pickle.loads(state.rng_pickled)
+
+                # TODO load pop
+
+                return True
+
+    def save_state(self, ses: AsyncSession) -> None:
+        dbstate = DbState(
+            optimizer_id=self.optimizer_id,
+            generation_index=self.gen_index,
+            rng_pickled=pickle.dumps(self.rng),
+        )
+        ses.add(dbstate)
+        # TODO save pop
+
+    def evolve(self) -> None:
+        OFFSPRING_SIZE = 50
+        population_size = len(self.pop.individuals)
+
+        self.gen_index += 1
+
+        parent_groups = [
+            multiple_unique(
+                self.pop, 2, lambda pop: tournament(pop, "displacement", self.rng, k=2)
+            )
+            for _ in range(OFFSPRING_SIZE)
+        ]
+
+        offspring = TPop(
             [
-                Individual(Genotype()),
-                Individual(Genotype()),
-                Individual(Genotype()),
-                Individual(Genotype()),
+                Individual(
+                    self.mutate(
+                        self.crossover(
+                            self.pop.individuals[parents[0]],
+                            self.pop.individuals[parents[1]],
+                        )
+                    )
+                )
+                for parents in parent_groups
             ]
-        ),
+        )
+        self.measure(offspring)
+
+        original_selection, offspring_selection = topn(
+            self.pop, offspring, measure="displacement", n=population_size
+        )
+
+        self.pop = TPop.from_existing_populations(
+            [self.pop, offspring],
+            [original_selection, offspring_selection],
+            ["displacement"],
+        )
+
+    def mutate(self, genotype: Genotype) -> Genotype:
+        return Genotype()  # TODO
+
+    def crossover(self, parent1: Genotype, parent2: Genotype) -> Genotype:
+        return Genotype()
+
+    def measure_displacements(self, genotypes: List[Genotype]) -> List[float]:
+        return [0.0 for _ in genotypes]  # TODO
+
+    def measure(self, pop: TPop) -> None:
+        displacements = self.measure_displacements(
+            [i.genotype for i in pop.individuals]
+        )
+        for individual, displacement in zip(pop.individuals, displacements):
+            individual.measures["displacement"] = displacement
+
+
+DbBase = declarative_base()
+
+
+class DbOptimizer(DbBase):
+    __tablename__ = "optimizer"
+
+    id = Column(
+        Integer,
+        nullable=False,
+        unique=True,
+        autoincrement=True,
+        primary_key=True,
     )
+    db_id = Column(String, nullable=False, unique=True)
 
-measure(state.pop)
 
-save_state(state)
+class DbState(DbBase):
+    __tablename__ = "state"
 
-for _ in range(100):
-    state.pop = evolve(state.rng, state.pop)
-    save_state(state)
+    id = Column(
+        Integer,
+        nullable=False,
+        unique=True,
+        autoincrement=True,
+        primary_key=True,
+    )
+    optimizer_id = Column(
+        Integer, sqlalchemy.ForeignKey(DbOptimizer.id), nullable=False
+    )
+    generation_index = Column(Integer, nullable=False)
+    rng_pickled = Column(String, nullable=False)
+
+
+async def main() -> None:
+    await Optimizer().run()
+
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())

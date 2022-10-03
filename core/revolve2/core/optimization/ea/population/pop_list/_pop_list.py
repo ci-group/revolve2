@@ -50,30 +50,50 @@ class PopList(Generic[TGenotype, TMeasures]):
         ses.add(dbpoplist)
         await ses.flush()
 
+        measures_ids = [await i.measures.to_db(ses) for i in self.individuals]
+
         items = [
             DbPopListItem(
                 pop_list_id=dbpoplist.id,
                 index=i,
                 genotype_id=(await v.genotype.to_db(ses)),
+                measures_id=mid,
             )
-            for i, v in enumerate(self.individuals)
+            for i, (v, mid) in enumerate(zip(self.individuals, measures_ids))
         ]
         ses.add_all(items)
-
-        dbmeasures = [i.measures.to_row() for i in self.individuals]
-        ses.add_all(dbmeasures)
 
         return dbpoplist.id
 
     @classmethod
     async def from_db(
-        cls: Type[PopList], ses: AsyncSession, id: Column[Integer]
+        cls: Type[PopList],
+        ses: AsyncSession,
+        id: Column[Integer],
+        genotype_type: Type[TGenotype],
+        measures_type: Type[TMeasures],
     ) -> PopList:
-        dbpoplist = (
-            await ses.execute(select(DbPopList).filter(DbPopList.id == id))
-        ).scalar_one_or_none()
-        # TODO
-        return PopList([])
+        dbitems = (
+            await ses.execute(
+                select(DbPopListItem)
+                .filter(DbPopListItem.pop_list_id == id)
+                .order_by(DbPopListItem.index)
+            )
+        ).scalars()
+
+        genotypes_ids, measures_ids = zip(
+            *[(dbitem.genotype_id, dbitem.measures_id) for dbitem in dbitems]
+        )
+
+        genotypes = [await genotype_type.from_db(ses, id) for id in genotypes_ids]
+        measures = [await measures_type.from_db(ses, id) for id in measures_ids]
+
+        return PopList(
+            [
+                Individual(genotype, measures)
+                for genotype, measures in zip(genotypes, measures)
+            ]
+        )
 
 
 DbBase = declarative_base()
@@ -107,3 +127,4 @@ class DbPopListItem(DbBase):
         nullable=False,
     )
     genotype_id = Column(Integer, nullable=False)
+    measures_id = Column(Integer, nullable=False)

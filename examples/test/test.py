@@ -1,3 +1,4 @@
+from __future__ import annotations
 import random
 from revolve2.core.optimization.ea.population import (
     Individual,
@@ -20,7 +21,7 @@ from revolve2.core.optimization import DbId
 import sqlalchemy
 import pickle
 from revolve2.core.database import open_async_database_sqlite
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column
 from sqlalchemy.ext.asyncio import AsyncConnection
 
@@ -37,6 +38,10 @@ class Genotype:
 
     async def to_db(self, ses: AsyncSession) -> Column[Integer]:
         return 0
+
+    @classmethod
+    async def from_db(cls, ses: AsyncSession, id: Column[Integer]) -> Genotype:
+        return Genotype()
 
 
 TPop = PopList[Genotype, Measures]
@@ -57,7 +62,7 @@ class Optimizer:
         self.db = open_async_database_sqlite("database")
         async with self.db.begin() as conn:
             await conn.run_sync(DbBase.metadata.create_all)
-            await PopList.prepare_db(conn, Genotype, Measures)
+            await TPop.prepare_db(conn, Genotype, Measures)
 
         if not await self.load_state():
             self.rng = np.random.Generator(np.random.PCG64(0))
@@ -107,7 +112,7 @@ class Optimizer:
                 self.gen_index = state.generation_index
                 self.rng = pickle.loads(state.rng_pickled)
 
-                self.pop = await PopList.from_db(ses, state.pop_id)
+                self.pop = await TPop.from_db(ses, state.pop_id, Genotype, Measures)
 
                 return True
 

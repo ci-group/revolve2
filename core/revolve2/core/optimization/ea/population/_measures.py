@@ -1,8 +1,11 @@
+from __future__ import annotations
 from typing import Union, TypeVar, Type, get_origin, get_type_hints, get_args, Callable
 from sqlalchemy import Table, MetaData, Column, Integer, Float, String
 from sqlalchemy.ext.asyncio import AsyncConnection
+from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.automap import automap_base
 from dataclasses import dataclass
+from sqlalchemy.future import select
 
 T = TypeVar("T")
 
@@ -65,8 +68,18 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
             async def prepare_db(cls, conn: AsyncConnection) -> None:
                 await conn.run_sync(cls.__db_base.metadata.create_all)
 
-            def to_row(self):
-                return self.table(**{c: self[c] for c in self.__columns})
+            async def to_db(self, ses: AsyncSession) -> Column[Integer]:
+                row = self.table(**{c: self[c] for c in self.__columns})
+                ses.add(row)
+                await ses.flush()
+                return row.id
+
+            @classmethod
+            async def from_db(cls, ses: AsyncSession, id: Column[Integer]) -> Measures:
+                row = (
+                    await ses.execute(select(cls.table).filter(cls.table.id == id))
+                ).scalar_one_or_none()
+                return cls(**{c: getattr(row, c) for c in cls.__columns})
 
             def __getitem__(self, key):
                 assert key in self.__columns, "measure {key} does not exist"

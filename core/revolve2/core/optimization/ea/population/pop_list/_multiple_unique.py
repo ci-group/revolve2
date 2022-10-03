@@ -2,12 +2,13 @@ from typing import List, TypeVar, Callable, Tuple
 from ._pop_list import PopList
 
 TIndividual = TypeVar("TIndividual")
+TMeasures = TypeVar("TMeasures")
 
 
 def multiple_unique(
-    population: PopList[TIndividual],
+    population: PopList[TIndividual, TMeasures],
     selection_size: int,
-    selection_function: Callable[[PopList[TIndividual]], int],
+    selection_function: Callable[[PopList[TIndividual, TMeasures]], int],
 ) -> List[int]:
     assert selection_size < len(population.individuals)
 

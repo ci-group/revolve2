@@ -11,21 +11,24 @@ from sqlalchemy.orm import relationship, declarative_base
 import sqlalchemy
 
 TGenotype = TypeVar("TGenotype")
+TMeasures = TypeVar("TMeasures")
 
 
 @dataclass
-class PopList(Generic[TGenotype]):
-    individuals: List[Individual[TGenotype]]
+class PopList(Generic[TGenotype, TMeasures]):
+    individuals: List[Individual[TGenotype, TMeasures]]
 
     def from_existing_populations(
-        populations: List[PopList[TGenotype]],
+        populations: List[PopList[TGenotype, TMeasures]],
         selections: List[List[int]],
         copied_measures: List[str],
-    ) -> PopList[TGenotype]:
-        new_individuals: List[Individual[TGenotype]] = []
+    ) -> PopList[TGenotype, TMeasures]:
+        new_individuals: List[Individual[TGenotype, TMeasures]] = []
         for pop, selection in zip(populations, selections):
             for i in selection:
-                new_ind = Individual(pop.individuals[i].genotype)
+                new_ind = Individual(
+                    pop.individuals[i].genotype, type(pop.individuals[i].measures)()
+                )
                 for measure in copied_measures:
                     new_ind.measures[measure] = pop.individuals[i].measures[measure]
                 new_individuals.append(new_ind)
@@ -33,8 +36,13 @@ class PopList(Generic[TGenotype]):
         return PopList(new_individuals)
 
     @staticmethod
-    async def prepare_db(conn: AsyncConnection, genotype_type: Type[TGenotype]) -> None:
+    async def prepare_db(
+        conn: AsyncConnection,
+        genotype_type: Type[TGenotype],
+        measures_type: Type[TMeasures],
+    ) -> None:
         await genotype_type.prepare_db(conn)
+        await measures_type.prepare_db(conn)
         await conn.run_sync(DbBase.metadata.create_all)
 
     async def to_db(self, ses: AsyncSession) -> Column[Integer]:
@@ -51,6 +59,9 @@ class PopList(Generic[TGenotype]):
             for i, v in enumerate(self.individuals)
         ]
         ses.add_all(items)
+
+        dbmeasures = [i.measures.to_row() for i in self.individuals]
+        ses.add_all(dbmeasures)
 
         return dbpoplist.id
 

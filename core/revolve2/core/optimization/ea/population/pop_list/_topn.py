@@ -3,11 +3,12 @@ import numpy as np
 from ._pop_list import PopList
 
 TIndividual = TypeVar("TIndividual")
+TMeasures = TypeVar("TMeasures")
 
 
 def topn(
-    original_population: PopList[TIndividual],
-    offspring_population: PopList[TIndividual],
+    original_population: PopList[TIndividual, TMeasures],
+    offspring_population: PopList[TIndividual, TMeasures],
     measure: str,
     n: int,
 ) -> Tuple[List[int], List[int]]:

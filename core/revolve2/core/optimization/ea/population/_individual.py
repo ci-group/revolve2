@@ -1,6 +1,5 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import TypeVar, Generic
-from ._measures import Measures
 
 TGenotype = TypeVar("TGenotype")
 TMeasures = TypeVar("TMeasures")

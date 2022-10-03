@@ -1,5 +1,8 @@
 import random
-from revolve2.core.optimization.ea.population import Individual
+from revolve2.core.optimization.ea.population import (
+    Individual,
+    make_measures,
+)
 from revolve2.core.optimization.ea.population.pop_list import (
     PopList,
     DbPopList,
@@ -7,7 +10,7 @@ from revolve2.core.optimization.ea.population.pop_list import (
     tournament,
     topn,
 )
-from typing import List
+from typing import List, Optional
 import numpy as np
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -22,6 +25,11 @@ from sqlalchemy import Column
 from sqlalchemy.ext.asyncio import AsyncConnection
 
 
+@make_measures(table_name="measures")
+class Measures:
+    displacement: Optional[float] = None
+
+
 class Genotype:
     @staticmethod
     async def prepare_db(conn: AsyncConnection) -> None:
@@ -31,7 +39,7 @@ class Genotype:
         return 0
 
 
-TPop = PopList[Genotype]
+TPop = PopList[Genotype, Measures]
 
 
 class Optimizer:
@@ -49,11 +57,11 @@ class Optimizer:
         self.db = open_async_database_sqlite("database")
         async with self.db.begin() as conn:
             await conn.run_sync(DbBase.metadata.create_all)
-            await PopList.prepare_db(conn, Genotype)
+            await PopList.prepare_db(conn, Genotype, Measures)
 
         if not await self.load_state():
             self.rng = np.random.Generator(np.random.PCG64(0))
-            self.pop = TPop([Individual(Genotype()) for _ in range(100)])
+            self.pop = TPop([Individual(Genotype(), Measures()) for _ in range(100)])
             self.gen_index = 0
             self.measure(self.pop)
 
@@ -135,7 +143,8 @@ class Optimizer:
                             self.pop.individuals[parents[0]],
                             self.pop.individuals[parents[1]],
                         )
-                    )
+                    ),
+                    Measures(),
                 )
                 for parents in parent_groups
             ]

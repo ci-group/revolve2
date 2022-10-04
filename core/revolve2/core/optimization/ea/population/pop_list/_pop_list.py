@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from abc import ABC, abstractmethod
 from typing import Generic, List, Type, TypeVar
 
 from sqlalchemy import Column, Integer
@@ -17,88 +17,132 @@ TGenotype = TypeVar("TGenotype", bound=DbSerializable)
 TMeasures = TypeVar("TMeasures", bound=Measures)
 
 
-@dataclass
-class PopList(Generic[TGenotype, TMeasures]):
+class PopList(DbSerializable, Generic[TGenotype, TMeasures], ABC):
     individuals: List[Individual[TGenotype, TMeasures]]
 
+    @abstractmethod
+    def __init__(self, individuals: List[Individual[TGenotype, TMeasures]]) -> None:
+        pass
+
     @staticmethod
+    @abstractmethod
     def from_existing_populations(
         populations: List[PopList[TGenotype, TMeasures]],
         selections: List[List[int]],
         copied_measures: List[str],
     ) -> PopList[TGenotype, TMeasures]:
-        new_individuals: List[Individual[TGenotype, TMeasures]] = []
-        for pop, selection in zip(populations, selections):
-            for i in selection:
-                new_ind = Individual(
-                    pop.individuals[i].genotype, type(pop.individuals[i].measures)()
+        """
+        Create a population from a set of existing populations using a provided selection from each population and copying the provided measures.
+
+        :param populations: The populations to combine.
+        :param selection: The individuals to select from each population.
+        :param copied_measures: The measures to copy.
+        :returns: The created population.
+        """
+
+
+def PopListTemplate(
+    genotype_type: Type[TGenotype], measures_type: Type[TMeasures]
+) -> Type[PopList[TGenotype, TMeasures]]:
+    class PopListImpl(PopList[TGenotype, TMeasures]):
+        """A population stored as a list of individuals."""
+
+        __genotype_type: Type[TGenotype] = genotype_type
+        __measures_type: Type[TMeasures] = measures_type
+
+        def __init__(self, individuals: List[Individual[TGenotype, TMeasures]]) -> None:
+            self.individuals = individuals
+
+        @staticmethod
+        def from_existing_populations(
+            populations: List[PopList[TGenotype, TMeasures]],
+            selections: List[List[int]],
+            copied_measures: List[str],
+        ) -> PopList[TGenotype, TMeasures]:
+            """
+            Create a population from a set of existing populations using a provided selection from each population and copying the provided measures.
+
+            :param populations: The populations to combine.
+            :param selection: The individuals to select from each population.
+            :param copied_measures: The measures to copy.
+            :returns: The created population.
+            """
+            new_individuals: List[Individual[TGenotype, TMeasures]] = []
+            for pop, selection in zip(populations, selections):
+                for i in selection:
+                    new_ind = Individual(
+                        pop.individuals[i].genotype, type(pop.individuals[i].measures)()
+                    )
+                    for measure in copied_measures:
+                        new_ind.measures[measure] = pop.individuals[i].measures[measure]
+                    new_individuals.append(new_ind)
+
+            return PopListImpl(new_individuals)
+
+        @classmethod
+        async def prepare_db(
+            cls,
+            conn: AsyncConnection,
+        ) -> None:
+
+            await cls.__genotype_type.prepare_db(conn)
+            await cls.__measures_type.prepare_db(conn)
+            await conn.run_sync(DbBase.metadata.create_all)
+
+        async def to_db(self, ses: AsyncSession) -> int:
+            dbpoplist = DbPopList()
+            ses.add(dbpoplist)
+            await ses.flush()
+
+            measures_ids = [await i.measures.to_db(ses) for i in self.individuals]
+
+            items = [
+                DbPopListItem(
+                    pop_list_id=dbpoplist.id,
+                    index=i,
+                    genotype_id=(await v.genotype.to_db(ses)),
+                    measures_id=mid,
                 )
-                for measure in copied_measures:
-                    new_ind.measures[measure] = pop.individuals[i].measures[measure]
-                new_individuals.append(new_ind)
-
-        return PopList(new_individuals)
-
-    @staticmethod
-    async def prepare_db(
-        conn: AsyncConnection,
-        genotype_type: Type[TGenotype],
-        measures_type: Type[TMeasures],
-    ) -> None:
-        await genotype_type.prepare_db(conn)
-        await measures_type.prepare_db(conn)
-        await conn.run_sync(DbBase.metadata.create_all)
-
-    async def to_db(self, ses: AsyncSession) -> int:
-        dbpoplist = DbPopList()
-        ses.add(dbpoplist)
-        await ses.flush()
-
-        measures_ids = [await i.measures.to_db(ses) for i in self.individuals]
-
-        items = [
-            DbPopListItem(
-                pop_list_id=dbpoplist.id,
-                index=i,
-                genotype_id=(await v.genotype.to_db(ses)),
-                measures_id=mid,
-            )
-            for i, (v, mid) in enumerate(zip(self.individuals, measures_ids))
-        ]
-        ses.add_all(items)
-
-        assert dbpoplist.id is not None
-        return dbpoplist.id
-
-    @classmethod
-    async def from_db(
-        cls: Type[PopList[TGenotype, TMeasures]],
-        ses: AsyncSession,
-        id: int,
-        genotype_type: Type[TGenotype],
-        measures_type: Type[TMeasures],
-    ) -> PopList[TGenotype, TMeasures]:
-        dbitems = (
-            await ses.execute(
-                select(DbPopListItem)
-                .filter(DbPopListItem.pop_list_id == id)
-                .order_by(DbPopListItem.index)
-            )
-        ).scalars()
-
-        genotypes_ids, measures_ids = zip(
-            *[(dbitem.genotype_id, dbitem.measures_id) for dbitem in dbitems]
-        )
-
-        genotypes = [await genotype_type.from_db(ses, id) for id in genotypes_ids]
-        measures = [await measures_type.from_db(ses, id) for id in measures_ids]
-
-        return PopList(
-            [
-                Individual(genotype, measures)
-                for genotype, measures in zip(genotypes, measures)
+                for i, (v, mid) in enumerate(zip(self.individuals, measures_ids))
             ]
-        )
+            ses.add_all(items)
+
+            assert dbpoplist.id is not None
+            return dbpoplist.id
+
+        @classmethod
+        async def from_db(
+            cls,
+            ses: AsyncSession,
+            id: int,
+        ) -> PopListImpl:
+            dbitems = (
+                await ses.execute(
+                    select(DbPopListItem)
+                    .filter(DbPopListItem.pop_list_id == id)
+                    .order_by(DbPopListItem.index)
+                )
+            ).scalars()
+
+            genotypes_ids, measures_ids = zip(
+                *[(dbitem.genotype_id, dbitem.measures_id) for dbitem in dbitems]
+            )
+
+            genotypes = [
+                await cls.__genotype_type.from_db(ses, id) for id in genotypes_ids
+            ]
+            measures = [
+                await cls.__measures_type.from_db(ses, id) for id in measures_ids
+            ]
+
+            return PopListImpl(
+                [
+                    Individual(genotype, measures)
+                    for genotype, measures in zip(genotypes, measures)
+                ]
+            )
+
+    return PopListImpl
 
 
 DbBase = declarative_base()

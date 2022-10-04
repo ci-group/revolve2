@@ -25,16 +25,42 @@ T = TypeVar("T")
 
 
 class Measures(DbSerializable, Protocol):
+    """Protocol for measures."""
+
     table: Any  # TODO
 
     def __getitem__(self, key: str) -> Union[int, float, str]:
+        """
+        Get a measure.
+
+        :param key: Name of the measure to get.
+        """
         pass
 
     def __setitem__(self, key: str, value: Union[int, float, str]) -> None:
+        """
+        Set a measure.
+
+        :param key: Name of the measure to set.
+        :param value: New value of the measure.
+        """
         pass
 
 
 def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
+    """
+    Convert a class to a Measures type.
+
+    The class should only have declared and/or defined variables of type [int, float, str] and no functions,
+    similar to a dataclass.
+
+    Example:
+    @make_measures(table_name="my_measures")
+    class MyMeasures:
+        measure1: Optional[float] = None
+        measure2: Optional[str] = "test"
+    """
+
     def impl(cls: Type[T]) -> Type[T]:
         @dataclass
         class ColDescr:

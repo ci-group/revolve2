@@ -13,6 +13,14 @@ def multiple_unique(
     selection_size: int,
     selection_function: Callable[[PopList[TIndividual, TMeasures]], int],
 ) -> List[int]:
+    """
+    Select multiple unique individuals from a population using the provided selection function.
+
+    :param population: The population to select from.
+    :param selection_size: The number of individuals to select.
+    :param selection_function: The function to use to select an individual.
+    :returns: Indices of the selected individuals in the population.
+    """
     assert selection_size < len(population.individuals)
 
     selected_individuals = []

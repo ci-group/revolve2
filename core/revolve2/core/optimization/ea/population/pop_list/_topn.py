@@ -2,11 +2,11 @@ from typing import List, Tuple, TypeVar
 
 import numpy as np
 
-from .._db_serializable import DbSerializable
 from .._measures import Measures
+from .._serializable import Serializable
 from ._pop_list import PopList
 
-TIndividual = TypeVar("TIndividual", bound=DbSerializable)
+TIndividual = TypeVar("TIndividual", bound=Serializable)
 TMeasures = TypeVar("TMeasures", bound=Measures)
 
 

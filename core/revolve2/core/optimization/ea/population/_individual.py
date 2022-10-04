@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 from typing import Generic, TypeVar
 
-from ._db_serializable import DbSerializable
 from ._measures import Measures
+from ._serializable import Serializable
 
-TGenotype = TypeVar("TGenotype", bound=DbSerializable)
+TGenotype = TypeVar("TGenotype", bound=Serializable)
 TMeasures = TypeVar("TMeasures", bound=Measures)
 
 

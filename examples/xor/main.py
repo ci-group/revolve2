@@ -8,7 +8,11 @@ import numpy as np
 import sqlalchemy
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import DbId
-from revolve2.core.optimization.ea.population import Individual, make_measures
+from revolve2.core.optimization.ea.population import (
+    Individual,
+    make_measures,
+    make_serializable,
+)
 from revolve2.core.optimization.ea.population.pop_list import (
     DbPopList,
     PopList,
@@ -18,23 +22,15 @@ from revolve2.core.optimization.ea.population.pop_list import (
     tournament,
 )
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine
+from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 
 
+@make_serializable(table_name="genotype")
 class Genotype:
-    @staticmethod
-    async def prepare_db(conn: AsyncConnection) -> None:
-        pass
-
-    async def to_db(self, ses: AsyncSession) -> Column[Integer]:
-        return 0
-
-    @classmethod
-    async def from_db(cls, ses: AsyncSession, id: Column[Integer]) -> Genotype:
-        return Genotype()
+    pass
 
 
 @make_measures(table_name="measures")

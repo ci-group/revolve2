@@ -19,37 +19,53 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.future import select
 
-from ._serializable import Serializable
-
 T = TypeVar("T")
 
+SerializableSelf = TypeVar("SerializableSelf", bound="Serializable")
 
-class Measures(Serializable, Protocol):
-    """Protocol for measures."""
+
+class Serializable(Protocol):
+    """Protocol for classes that can be serialized to a database."""
 
     table: Any  # TODO
 
-    def __getitem__(self, key: str) -> Union[int, float, str]:
+    @classmethod
+    async def prepare_db(cls, conn: AsyncConnection) -> None:
         """
-        Get a measure.
+        Set up the database, creating tables.
 
-        :param key: Name of the measure to get.
-        """
-        pass
-
-    def __setitem__(self, key: str, value: Union[int, float, str]) -> None:
-        """
-        Set a measure.
-
-        :param key: Name of the measure to set.
-        :param value: New value of the measure.
+        :param conn: Connection to the database.
         """
         pass
 
+    async def to_db(
+        self: SerializableSelf,
+        ses: AsyncSession,
+    ) -> int:
+        """
+        Serialize this object to a database.
 
-def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
+        :param ses: Database session.
+        :returns: Id of the object in the database.
+        """
+        pass
+
+    @classmethod
+    async def from_db(
+        cls: Type[SerializableSelf], ses: AsyncSession, id: int
+    ) -> SerializableSelf:
+        """
+        Deserialize this object from a database.
+
+        :param ses: Database session.
+        :param id: Id of the object in the database.
+        """
+        pass
+
+
+def make_serializable(table_name: str) -> Callable[[Type[T]], Type[T]]:
     """
-    Convert a class to a Measures type.
+    Make a class Serializable.
 
     The class should only have declared and/or defined variables of type [int, float, str] and no functions,
     similar to a dataclass.
@@ -109,7 +125,7 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
         db_base = automap_base(metadata=metadata)
         db_base.prepare()
 
-        class MeasuresImpl(dataclass(cls, eq=False)):  # type: ignore # TODO
+        class SerializableImpl(dataclass(cls, eq=False), Serializable):  # type: ignore # TODO
             __columns = [col.name for col in columns]
             __db_base = db_base
             table = db_base.classes[table_name]
@@ -118,38 +134,20 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
             async def prepare_db(cls, conn: AsyncConnection) -> None:
                 await conn.run_sync(cls.__db_base.metadata.create_all)
 
-            async def to_db(self, ses: AsyncSession) -> Column[Integer]:
+            async def to_db(self, ses: AsyncSession) -> int:
                 row = self.table(**{c: self[c] for c in self.__columns})
                 ses.add(row)
                 await ses.flush()
                 return row.id  # type: ignore # TODO
 
             @classmethod
-            async def from_db(
-                cls, ses: AsyncSession, id: Column[Integer]
-            ) -> MeasuresImpl:
+            async def from_db(cls, ses: AsyncSession, id: int) -> SerializableImpl:
                 row = (
                     await ses.execute(select(cls.table).filter(cls.table.id == id))
                 ).scalar_one_or_none()
                 return cls(**{c: getattr(row, c) for c in cls.__columns})
 
-            def __getitem__(self, key: str) -> Union[int, float, str, None]:
-                assert key in self.__columns, "measure {key} does not exist"
-                val = getattr(self, key)
-                assert (
-                    val is None
-                    or type(val) == int
-                    or type(val) == float
-                    or type(val) == str
-                )
-                return val
-
-            def __setitem__(
-                self, key: str, value: Union[int, float, str, None]
-            ) -> None:
-                setattr(self, key, value)
-
-        return MeasuresImpl
+        return SerializableImpl
 
     return impl
 

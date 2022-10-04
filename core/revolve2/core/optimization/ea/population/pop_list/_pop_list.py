@@ -8,15 +8,15 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 
-from .._db_serializable import DbSerializable
 from .._individual import Individual
 from .._measures import Measures
+from .._serializable import Serializable
 
-TGenotype = TypeVar("TGenotype", bound=DbSerializable)
+TGenotype = TypeVar("TGenotype", bound=Serializable)
 TMeasures = TypeVar("TMeasures", bound=Measures)
 
 
-class PopList(DbSerializable, Protocol[TGenotype, TMeasures]):
+class PopList(Serializable, Protocol[TGenotype, TMeasures]):
     """Interface for the generic PopList class."""
 
     individuals: List[Individual[TGenotype, TMeasures]]
@@ -58,6 +58,8 @@ def PopListTemplate(
 
     class PopListImpl(PopList[TGenotype, TMeasures]):
         """A population stored as a list of individuals."""
+
+        table = DbPopList
 
         __genotype_type: Type[TGenotype] = genotype_type
         __measures_type: Type[TMeasures] = measures_type

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import Generic, List, Type, TypeVar
+from typing import List, Protocol, Type, TypeVar
 
 from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncConnection
@@ -17,15 +16,20 @@ TGenotype = TypeVar("TGenotype", bound=DbSerializable)
 TMeasures = TypeVar("TMeasures", bound=Measures)
 
 
-class PopList(DbSerializable, Generic[TGenotype, TMeasures], ABC):
+class PopList(DbSerializable, Protocol[TGenotype, TMeasures]):
+    """Interface for the generic PopList class."""
+
     individuals: List[Individual[TGenotype, TMeasures]]
 
-    @abstractmethod
     def __init__(self, individuals: List[Individual[TGenotype, TMeasures]]) -> None:
+        """
+        Initialize this object.
+
+        :param individuals: Individuals in the population.
+        """
         pass
 
     @staticmethod
-    @abstractmethod
     def from_existing_populations(
         populations: List[PopList[TGenotype, TMeasures]],
         selections: List[List[int]],
@@ -44,6 +48,14 @@ class PopList(DbSerializable, Generic[TGenotype, TMeasures], ABC):
 def PopListTemplate(
     genotype_type: Type[TGenotype], measures_type: Type[TMeasures]
 ) -> Type[PopList[TGenotype, TMeasures]]:
+    """
+    Create a PopList type using the provided generic parameters.
+
+    :param genotype_type: Type of the genotype.
+    :param measures_type: Type of the measures.
+    :returns: The created PopList type.
+    """
+
     class PopListImpl(PopList[TGenotype, TMeasures]):
         """A population stored as a list of individuals."""
 
@@ -149,6 +161,8 @@ DbBase = declarative_base()
 
 
 class DbPopList(DbBase):
+    """Main table for the PopList."""
+
     __tablename__ = "pop_list"
 
     id = Column(
@@ -161,6 +175,8 @@ class DbPopList(DbBase):
 
 
 class DbPopListItem(DbBase):
+    """Table for items in the PopList."""
+
     __tablename__ = "pop_list_item"
 
     id = Column(

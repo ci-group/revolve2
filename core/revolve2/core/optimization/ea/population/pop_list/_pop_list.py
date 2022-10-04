@@ -71,14 +71,6 @@ def PopListTemplate(
             selections: List[List[int]],
             copied_measures: List[str],
         ) -> PopList[TGenotype, TMeasures]:
-            """
-            Create a population from a set of existing populations using a provided selection from each population and copying the provided measures.
-
-            :param populations: The populations to combine.
-            :param selection: The individuals to select from each population.
-            :param copied_measures: The measures to copy.
-            :returns: The created population.
-            """
             new_individuals: List[Individual[TGenotype, TMeasures]] = []
             for pop, selection in zip(populations, selections):
                 for i in selection:

@@ -133,13 +133,20 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
                 ).scalar_one_or_none()
                 return cls(**{c: getattr(row, c) for c in cls.__columns})
 
-            def __getitem__(self, key: str) -> Union[int, float, str]:
+            def __getitem__(self, key: str) -> Union[int, float, str, None]:
                 assert key in self.__columns, "measure {key} does not exist"
                 val = getattr(self, key)
-                assert type(val) == int or type(val) == float or type(val) == str
+                assert (
+                    val is None
+                    or type(val) == int
+                    or type(val) == float
+                    or type(val) == str
+                )
                 return val
 
-            def __setitem__(self, key: str, value: Union[int, float, str]) -> None:
+            def __setitem__(
+                self, key: str, value: Union[int, float, str, None]
+            ) -> None:
                 setattr(self, key, value)
 
         return MeasuresImpl

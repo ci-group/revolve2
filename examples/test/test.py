@@ -40,12 +40,16 @@ class Genotype:
 @make_measures(table_name="measures")
 class Measures:
     displacement: Optional[float] = None
+    number_legs: Optional[float] = None
 
 
 TPop: PopList[Genotype, Measures] = PopListTemplate(Genotype, Measures)
 
 
 class Optimizer:
+    POPULATION_SIZE: int = 100
+    OFFSPRING_SIZE: int = 50
+
     dbid: DbId
     db: AsyncEngine
     rng: np.random.Generator
@@ -64,7 +68,12 @@ class Optimizer:
 
         if not await self.load_state():
             self.rng = np.random.Generator(np.random.PCG64(0))
-            self.pop = TPop([Individual(Genotype(), Measures()) for _ in range(100)])
+            self.pop = TPop(
+                [
+                    Individual(Genotype(), Measures())
+                    for _ in range(self.POPULATION_SIZE)
+                ]
+            )
             self.gen_index = 0
             self.measure(self.pop)
 
@@ -126,16 +135,13 @@ class Optimizer:
         ses.add(dbstate)
 
     def evolve(self) -> None:
-        OFFSPRING_SIZE = 50
-        population_size = len(self.pop.individuals)
-
         self.gen_index += 1
 
         parent_groups = [
             multiple_unique(
                 self.pop, 2, lambda pop: tournament(pop, "displacement", self.rng, k=2)
             )
-            for _ in range(OFFSPRING_SIZE)
+            for _ in range(self.OFFSPRING_SIZE)
         ]
 
         offspring = TPop(
@@ -155,7 +161,7 @@ class Optimizer:
         self.measure(offspring)
 
         original_selection, offspring_selection = topn(
-            self.pop, offspring, measure="displacement", n=population_size
+            self.pop, offspring, measure="displacement", n=self.POPULATION_SIZE
         )
 
         self.pop = TPop.from_existing_populations(

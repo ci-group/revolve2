@@ -1,13 +1,37 @@
 from __future__ import annotations
-from typing import Union, TypeVar, Type, get_origin, get_type_hints, get_args, Callable
-from sqlalchemy import Table, MetaData, Column, Integer, Float, String
+
+from dataclasses import dataclass
+from typing import (
+    Any,
+    Callable,
+    Protocol,
+    Type,
+    TypeVar,
+    Union,
+    get_args,
+    get_origin,
+    get_type_hints,
+)
+
+from sqlalchemy import Column, Float, Integer, MetaData, String, Table
 from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.automap import automap_base
-from dataclasses import dataclass
 from sqlalchemy.future import select
 
+from ._db_serializable import DbSerializable
+
 T = TypeVar("T")
+
+
+class Measures(DbSerializable, Protocol):
+    table: Any  # TODO
+
+    def __getitem__(self, key: str) -> Union[int, float, str]:
+        pass
+
+    def __setitem__(self, key: str, value: Union[int, float, str]) -> None:
+        pass
 
 
 def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
@@ -18,7 +42,7 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
             xtype: Union[int, float, str]
             nullable: bool
 
-        def make_column(name, xtype) -> ColDescr:
+        def make_column(name: str, xtype: Type[Any]) -> ColDescr:
             if get_origin(xtype) == Union:
                 args = get_args(xtype)
                 assert len(args) == 2, "types must be Type or Optional[Type]"
@@ -59,7 +83,7 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
         db_base = automap_base(metadata=metadata)
         db_base.prepare()
 
-        class Measures(dataclass(cls, eq=False)):
+        class MeasuresImpl(dataclass(cls, eq=False)):  # type: ignore # TODO
             __columns = [col.name for col in columns]
             __db_base = db_base
             table = db_base.classes[table_name]
@@ -72,28 +96,32 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
                 row = self.table(**{c: self[c] for c in self.__columns})
                 ses.add(row)
                 await ses.flush()
-                return row.id
+                return row.id  # type: ignore # TODO
 
             @classmethod
-            async def from_db(cls, ses: AsyncSession, id: Column[Integer]) -> Measures:
+            async def from_db(
+                cls, ses: AsyncSession, id: Column[Integer]
+            ) -> MeasuresImpl:
                 row = (
                     await ses.execute(select(cls.table).filter(cls.table.id == id))
                 ).scalar_one_or_none()
                 return cls(**{c: getattr(row, c) for c in cls.__columns})
 
-            def __getitem__(self, key):
+            def __getitem__(self, key: str) -> Union[int, float, str]:
                 assert key in self.__columns, "measure {key} does not exist"
-                return getattr(self, key)
+                val = getattr(self, key)
+                assert type(val) == int or type(val) == float or type(val) == str
+                return val
 
-            def __setitem__(self, key, value):
+            def __setitem__(self, key: str, value: Union[int, float, str]) -> None:
                 setattr(self, key, value)
 
-        return Measures
+        return MeasuresImpl
 
     return impl
 
 
-def _sqlalchemy_type(type):
+def _sqlalchemy_type(type: Any) -> Union[Type[Integer], Type[Float], Type[String]]:
     if type == int:
         return Integer
     elif type == float:
@@ -101,4 +129,4 @@ def _sqlalchemy_type(type):
     elif type == String:
         return String
     else:
-        return ValueError()
+        raise ValueError()

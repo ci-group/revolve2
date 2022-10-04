@@ -1,14 +1,19 @@
 from __future__ import annotations
 
-from typing import List, TypeVar
-from ._pop_list import PopList
+from typing import TypeVar
+
 import numpy as np
 
-TIndividual = TypeVar("TIndividual")
+from .._db_serializable import DbSerializable
+from .._measures import Measures
+from ._pop_list import PopList
+
+TIndividual = TypeVar("TIndividual", bound=DbSerializable)
+TMeasures = TypeVar("TMeasures", bound=Measures)
 
 
 def tournament(
-    population: PopList[TIndividual],
+    population: PopList[TIndividual, TMeasures],
     measure: str,
     rng: np.random.Generator,
     k: int,
@@ -26,4 +31,4 @@ def tournament(
     fitnesses = [i.measures[measure] for i in population.individuals]
 
     participant_indices = rng.choice(range(len(fitnesses)), size=k)
-    return max(participant_indices, key=lambda i: fitnesses[i])
+    return max(participant_indices, key=lambda i: fitnesses[i])  # type: ignore # TODO

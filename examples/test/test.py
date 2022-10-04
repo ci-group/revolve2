@@ -1,29 +1,26 @@
 from __future__ import annotations
+
+import pickle
 import random
-from revolve2.core.optimization.ea.population import (
-    Individual,
-    make_measures,
-)
-from revolve2.core.optimization.ea.population.pop_list import (
-    PopList,
-    DbPopList,
-    multiple_unique,
-    tournament,
-    topn,
-)
 from typing import List, Optional
+
 import numpy as np
-from sqlalchemy.ext.asyncio import AsyncEngine
+import sqlalchemy
+from revolve2.core.database import open_async_database_sqlite
+from revolve2.core.optimization import DbId
+from revolve2.core.optimization.ea.population import Individual, make_measures
+from revolve2.core.optimization.ea.population.pop_list import (
+    DbPopList,
+    PopList,
+    multiple_unique,
+    topn,
+    tournament,
+)
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.ext.asyncio import AsyncConnection, AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy import Column, Integer, String
-from revolve2.core.optimization import DbId
-import sqlalchemy
-import pickle
-from revolve2.core.database import open_async_database_sqlite
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column
-from sqlalchemy.ext.asyncio import AsyncConnection
 
 
 @make_measures(table_name="measures")

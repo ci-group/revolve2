@@ -1,9 +1,13 @@
-from typing import TypeVar, List, Tuple
+from typing import List, Tuple, TypeVar
+
 import numpy as np
+
+from .._db_serializable import DbSerializable
+from .._measures import Measures
 from ._pop_list import PopList
 
-TIndividual = TypeVar("TIndividual")
-TMeasures = TypeVar("TMeasures")
+TIndividual = TypeVar("TIndividual", bound=DbSerializable)
+TMeasures = TypeVar("TMeasures", bound=Measures)
 
 
 def topn(

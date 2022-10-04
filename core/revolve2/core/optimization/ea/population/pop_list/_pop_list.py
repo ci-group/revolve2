@@ -1,23 +1,27 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from .._individual import Individual
-from typing import List, TypeVar, Generic, Type
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.ext.asyncio import AsyncConnection
-from sqlalchemy.future import select
-from sqlalchemy import Column, Integer
-from sqlalchemy.orm import relationship, declarative_base
-import sqlalchemy
+from typing import Generic, List, Type, TypeVar
 
-TGenotype = TypeVar("TGenotype")
-TMeasures = TypeVar("TMeasures")
+from sqlalchemy import Column, Integer
+from sqlalchemy.ext.asyncio import AsyncConnection
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.future import select
+from sqlalchemy.orm import declarative_base
+
+from .._db_serializable import DbSerializable
+from .._individual import Individual
+from .._measures import Measures
+
+TGenotype = TypeVar("TGenotype", bound=DbSerializable)
+TMeasures = TypeVar("TMeasures", bound=Measures)
 
 
 @dataclass
 class PopList(Generic[TGenotype, TMeasures]):
     individuals: List[Individual[TGenotype, TMeasures]]
 
+    @staticmethod
     def from_existing_populations(
         populations: List[PopList[TGenotype, TMeasures]],
         selections: List[List[int]],
@@ -45,7 +49,7 @@ class PopList(Generic[TGenotype, TMeasures]):
         await measures_type.prepare_db(conn)
         await conn.run_sync(DbBase.metadata.create_all)
 
-    async def to_db(self, ses: AsyncSession) -> Column[Integer]:
+    async def to_db(self, ses: AsyncSession) -> int:
         dbpoplist = DbPopList()
         ses.add(dbpoplist)
         await ses.flush()
@@ -63,16 +67,17 @@ class PopList(Generic[TGenotype, TMeasures]):
         ]
         ses.add_all(items)
 
+        assert dbpoplist.id is not None
         return dbpoplist.id
 
     @classmethod
     async def from_db(
-        cls: Type[PopList],
+        cls: Type[PopList[TGenotype, TMeasures]],
         ses: AsyncSession,
-        id: Column[Integer],
+        id: int,
         genotype_type: Type[TGenotype],
         measures_type: Type[TMeasures],
-    ) -> PopList:
+    ) -> PopList[TGenotype, TMeasures]:
         dbitems = (
             await ses.execute(
                 select(DbPopListItem)

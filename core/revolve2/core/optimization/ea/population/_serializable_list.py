@@ -1,0 +1,172 @@
+from typing import TypeVar, Type, Any, Union, List, Optional, Generic
+from ._serializable import Serializable
+from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncConnection
+from sqlalchemy import Column, Integer
+from sqlalchemy.future import select
+from sqlalchemy.orm import declarative_base
+from sqlalchemy import Column, Float, Integer, String
+
+T = TypeVar("T")
+
+
+class SerializableList(Serializable, List[T], Generic[T]):
+    item_table: Any  # TODO
+
+
+def serializable_list_template(
+    item_type: Type[T], table_name: str, value_column_name: str = "value"
+) -> SerializableList[T]:
+    def basic_type_or_serializable(type: Type[T]) -> bool:
+        """
+        Check whether the given type is a basic type or Serializable, or raises error if neither.
+
+        :param type: The type to check.
+        :returns: True when basic type, false when Serializable.
+        :raises ValueError: When neither.
+        """
+        if type == int or type == float or type == str:
+            return True
+        elif issubclass(type, Serializable):
+            return False
+        else:
+            assert False, "Type must be 'int', 'float', 'str' or 'Serializable'."
+
+    def sqlalchemy_type(type: Any) -> Union[Type[Integer], Type[Float], Type[String]]:
+        if type == int:
+            return Integer
+        elif type == float:
+            return Float
+        elif type == String:
+            return String
+        else:
+            assert False, "Unsupported type."
+
+    is_basic_type = basic_type_or_serializable(item_type)
+
+    DbBase = declarative_base()
+
+    class ListTable(DbBase):
+        """Main table for the PopList."""
+
+        __tablename__ = table_name
+
+        id = Column(
+            Integer,
+            nullable=False,
+            unique=True,
+            autoincrement=True,
+            primary_key=True,
+        )
+
+    if is_basic_type:
+        dbtype = sqlalchemy_type(item_type)
+    else:
+        dbtype = Integer
+
+    class ItemTable(DbBase):
+        """Table for items in the PopList."""
+
+        __tablename__ = f"{table_name}_item"
+
+        id = Column(
+            Integer,
+            nullable=False,
+            unique=True,
+            autoincrement=True,
+            primary_key=True,
+        )
+        list_id = Column(Integer, nullable=False, name=f"{table_name}_id")
+        index = Column(
+            Integer,
+            nullable=False,
+        )
+        value = Column(dbtype, nullable=False, name=value_column_name)
+
+    if is_basic_type:
+
+        class SerializableListImplBasicType(SerializableList[T]):
+            __db_base = DbBase
+            __item_type = item_type
+            __value_columns_name = value_column_name
+
+            table = ListTable
+            item_table = ItemTable
+
+            @classmethod
+            async def prepare_db(cls, conn: AsyncConnection) -> None:
+                await conn.run_sync(cls.__db_base.metadata.create_all)
+
+            async def to_db(
+                self,
+                ses: AsyncSession,
+            ) -> int:
+                dblist = self.table()
+                ses.add(dblist)
+                await ses.flush()
+                assert dblist.id is not None
+
+                items = [
+                    self.item_table(list_id=dblist.id, index=i, value=v)
+                    for i, v in enumerate(self)
+                ]
+                ses.add_all(items)
+
+                return dblist.id
+
+            @classmethod
+            async def from_db(cls, ses: AsyncSession, id: int) -> SerializableList:
+                rows = (
+                    await ses.execute(
+                        select(cls.item_table)
+                        .filter(cls.item_table.value == id)
+                        .order_by(cls.item_table.index)
+                    )
+                ).scalars()
+
+                return cls(
+                    [
+                        cls.item_type(getattr(row, cls.__value_columns_name))
+                        for row in rows
+                    ]
+                )
+
+        return SerializableListImplBasicType
+    else:
+
+        class SerializableListSerializable(SerializableList[T]):
+            __item_type: Type[T] = item_type
+            __db_base = DbBase
+
+            table = ListTable
+            item_table = ItemTable
+
+            @classmethod
+            async def prepare_db(cls, conn: AsyncConnection) -> None:
+                await cls.__item_type.prepare_db(conn)
+                await conn.run_sync(cls.__db_base.metadata.create_all)
+
+            async def to_db(
+                self,
+                ses: AsyncSession,
+            ) -> int:
+                dblist = self.table()
+                ses.add(dblist)
+                await ses.flush()
+                assert dblist.id is not None
+
+                values = [await i.to_db(ses) for i in self]
+
+                items = [
+                    self.item_table(list_id=dblist.id, index=i, value=v)
+                    for i, v in enumerate(values)
+                ]
+                ses.add_all(items)
+
+                return dblist.id
+
+            @classmethod
+            async def from_db(cls, ses: AsyncSession, id: int) -> SerializableList:
+                raise NotImplementedError()
+
+        return SerializableListSerializable

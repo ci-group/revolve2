@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import (
     Any,
     Callable,
-    Protocol,
     Type,
     TypeVar,
     Union,
@@ -18,17 +17,19 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.future import select
+from abc import abstractmethod
 
 from ._serializable import Serializable
 
 T = TypeVar("T")
 
 
-class Measures(Serializable, Protocol):
+class Measures(Serializable):
     """Protocol for measures."""
 
     table: Any  # TODO
 
+    @abstractmethod
     def __getitem__(self, key: str) -> Union[int, float, str]:
         """
         Get a measure.
@@ -37,6 +38,7 @@ class Measures(Serializable, Protocol):
         """
         pass
 
+    @abstractmethod
     def __setitem__(self, key: str, value: Union[int, float, str]) -> None:
         """
         Set a measure.

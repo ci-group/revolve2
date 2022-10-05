@@ -1,7 +1,7 @@
 from __future__ import annotations
-from abc import abstractmethod
 
-from typing import List, Generic, Type, TypeVar, Tuple
+from abc import abstractmethod
+from typing import Generic, List, Tuple, Type, TypeVar
 
 from .._measures import Measures
 from .._serializable import Serializable, make_serializable
@@ -18,6 +18,7 @@ class Individual(Serializable, Generic[TGenotype, TMeasures]):
     measures: TMeasures
 
     def __init__(self, genotype: TGenotype, measures: TMeasures) -> None:
+        """Initialize this object."""
         pass
 
 
@@ -54,7 +55,6 @@ def pop_list_template(
     :param measures_type: Type of the measures.
     :returns: The created PopList type.
     """
-
     IndividualImpl: Type[Individual[TGenotype, TMeasures]] = make_serializable(
         f"{table_name}_individual"
     )(

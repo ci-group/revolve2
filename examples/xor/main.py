@@ -14,8 +14,8 @@ from revolve2.core.optimization.ea.population import (
     serializable_list_template,
 )
 from revolve2.core.optimization.ea.population.pop_list import (
-    pop_list_template,
     multiple_unique,
+    pop_list_template,
     topn,
     tournament,
 )

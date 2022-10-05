@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import (
     Any,
@@ -17,13 +18,12 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.future import select
-from abc import ABC, abstractmethod
 
 SerializableSelf = TypeVar("SerializableSelf", bound="Serializable")
 
 
 class Serializable(ABC):
-    """Protocol for classes that can be serialized to a database."""
+    """Interface for classes that can be serialized to a database."""
 
     table: Any  # TODO
 

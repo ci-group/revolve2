@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import abstractmethod
 from dataclasses import dataclass
 from typing import (
     Any,
@@ -17,7 +18,6 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.future import select
-from abc import abstractmethod
 
 from ._serializable import Serializable
 
@@ -25,7 +25,7 @@ T = TypeVar("T")
 
 
 class Measures(Serializable):
-    """Protocol for measures."""
+    """Interface for measures."""
 
     table: Any  # TODO
 

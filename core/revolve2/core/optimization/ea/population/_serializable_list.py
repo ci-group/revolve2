@@ -1,22 +1,36 @@
 from __future__ import annotations
-from typing import TypeVar, Type, Any, Union, List, Generic
-from ._serializable import Serializable
-from sqlalchemy.ext.asyncio.session import AsyncSession
+
+from typing import Any, Generic, List, Type, TypeVar, Union
+
+from sqlalchemy import Column, Float, Integer, String
 from sqlalchemy.ext.asyncio import AsyncConnection
+from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
-from sqlalchemy import Column, Float, Integer, String
+
+from ._serializable import Serializable
 
 T = TypeVar("T", bound=Union[int, float, str, Serializable])
 
 
 class SerializableList(Serializable, List[T], Generic[T]):
+    """Interface for lists that can be serialized to a database."""
+
     item_table: Any  # TODO
 
 
 def serializable_list_template(
     item_type: Type[T], table_name: str, value_column_name: str = "value"
 ) -> Type[SerializableList[T]]:
+    """
+    Create a SerializableList type using the provided generic parameters.
+
+    :param item_type: Type of the contained items.
+    :param table_name: Name of the corresponding table in the database.
+    :param value_column_name: Name of value column in the database.
+    :returns: The created SerializableList type.
+    """
+
     def basic_type_or_serializable(type: Type[T]) -> bool:
         """
         Check whether the given type is a basic type or Serializable, or raises error if neither.

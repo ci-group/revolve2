@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import TypeVar, Type, Any, Union, List, Optional, Generic
 from ._serializable import Serializable
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -7,7 +8,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Float, Integer, String
 
-T = TypeVar("T")
+T = TypeVar("T", bound=Union[int, float, str, Serializable])
 
 
 class SerializableList(Serializable, List[T], Generic[T]):
@@ -16,7 +17,7 @@ class SerializableList(Serializable, List[T], Generic[T]):
 
 def serializable_list_template(
     item_type: Type[T], table_name: str, value_column_name: str = "value"
-) -> SerializableList[T]:
+) -> Type[SerializableList[T]]:
     def basic_type_or_serializable(type: Type[T]) -> bool:
         """
         Check whether the given type is a basic type or Serializable, or raises error if neither.
@@ -84,8 +85,9 @@ def serializable_list_template(
         value = Column(dbtype, nullable=False, name=value_column_name)
 
     if is_basic_type:
+        TBasicType = TypeVar("TBasicType", bound=Union[int, float, str])
 
-        class SerializableListImplBasicType(SerializableList[T]):
+        class SerializableListImplBasicType(SerializableList[TBasicType]):
             __db_base = DbBase
             __item_type = item_type
 
@@ -106,15 +108,17 @@ def serializable_list_template(
                 assert dblist.id is not None
 
                 items = [
-                    self.item_table(list_id=dblist.id, index=i, value=v)
+                    self.item_table(list_id=dblist.id, index=i, value=v)  # type: ignore # TODO
                     for i, v in enumerate(self)
                 ]
                 ses.add_all(items)
 
-                return dblist.id
+                return int(dblist.id)
 
             @classmethod
-            async def from_db(cls, ses: AsyncSession, id: int) -> SerializableList:
+            async def from_db(
+                cls, ses: AsyncSession, id: int
+            ) -> SerializableListImplBasicType[TBasicType]:
                 rows = (
                     await ses.execute(
                         select(cls.item_table)
@@ -127,8 +131,9 @@ def serializable_list_template(
 
         return SerializableListImplBasicType
     else:
+        TSerializable = TypeVar("TSerializable", bound=Serializable)
 
-        class SerializableListSerializable(SerializableList[T]):
+        class SerializableListSerializable(SerializableList[TSerializable]):
             __db_base = DbBase
             __item_type = item_type
 
@@ -152,15 +157,17 @@ def serializable_list_template(
                 values = [await i.to_db(ses) for i in self]
 
                 items = [
-                    self.item_table(list_id=dblist.id, index=i, value=v)
+                    self.item_table(list_id=dblist.id, index=i, value=v)  # type: ignore # TODO
                     for i, v in enumerate(values)
                 ]
                 ses.add_all(items)
 
-                return dblist.id
+                return int(dblist.id)
 
             @classmethod
-            async def from_db(cls, ses: AsyncSession, id: int) -> SerializableList:
+            async def from_db(
+                cls, ses: AsyncSession, id: int
+            ) -> SerializableListSerializable[TSerializable]:
                 rows = (
                     await ses.execute(
                         select(cls.item_table)

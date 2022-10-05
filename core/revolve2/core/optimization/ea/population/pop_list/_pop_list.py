@@ -6,6 +6,7 @@ from typing import List, Generic, Type, TypeVar, Tuple
 from .._measures import Measures
 from .._serializable import Serializable, make_serializable
 from .._serializable_list import SerializableList, serializable_list_template
+from dataclasses import dataclass
 
 TGenotype = TypeVar("TGenotype", bound=Serializable)
 TMeasures = TypeVar("TMeasures", bound=Measures)
@@ -16,6 +17,9 @@ class Individual(Serializable, Generic[TGenotype, TMeasures]):
 
     genotype: TGenotype
     measures: TMeasures
+
+    def __init__(self, genotype: TGenotype, measures: TMeasures) -> None:
+        pass
 
 
 class PopList(
@@ -52,7 +56,9 @@ def pop_list_template(
     :returns: The created PopList type.
     """
 
-    IndividualImpl = make_serializable(f"{table_name}_individual")(
+    IndividualImpl: Type[Individual[TGenotype, TMeasures]] = make_serializable(
+        f"{table_name}_individual"
+    )(
         type(
             "IndividualImpl",
             (),
@@ -64,7 +70,7 @@ def pop_list_template(
         IndividualImpl, table_name, "individual"
     )
 
-    class PopListImpl(IndividualListImpl, PopList[TGenotype, TMeasures]):
+    class PopListImpl(PopList[TGenotype, TMeasures], IndividualListImpl):  # type: ignore # TODO
         """A population stored as a list of individuals."""
 
         __individual_type = IndividualImpl
@@ -76,7 +82,7 @@ def pop_list_template(
             selections: List[List[int]],
             copied_measures: List[str],
         ) -> PopList[TGenotype, TMeasures]:
-            new_individuals: List[IndividualImpl[TGenotype, TMeasures]] = []
+            new_individuals: List[IndividualImpl[TGenotype, TMeasures]] = []  # type: ignore # TODO
             for pop, selection in zip(populations, selections):
                 for i in selection:
                     new_ind = cls.__individual_type(

@@ -120,16 +120,14 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
             async def prepare_db(cls, conn: AsyncConnection) -> None:
                 await conn.run_sync(cls.__db_base.metadata.create_all)
 
-            async def to_db(self, ses: AsyncSession) -> Column[Integer]:
+            async def to_db(self, ses: AsyncSession) -> int:
                 row = self.table(**{c: self[c] for c in self.__columns})
                 ses.add(row)
                 await ses.flush()
-                return row.id  # type: ignore # TODO
+                return int(row.id)
 
             @classmethod
-            async def from_db(
-                cls, ses: AsyncSession, id: Column[Integer]
-            ) -> MeasuresImpl:
+            async def from_db(cls, ses: AsyncSession, id: int) -> MeasuresImpl:
                 row = (
                     await ses.execute(select(cls.table).filter(cls.table.id == id))
                 ).scalar_one_or_none()

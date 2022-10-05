@@ -26,9 +26,9 @@ def tournament(
     :param k: Amount of individuals to participate in tournament.
     :returns: The index of te individual that won the tournament.
     """
-    assert len(population.individuals) >= k
+    assert len(population) >= k
 
-    fitnesses = [i.measures[measure] for i in population.individuals]
+    fitnesses = [i.measures[measure] for i in population]
 
     participant_indices = rng.choice(range(len(fitnesses)), size=k)
     return max(participant_indices, key=lambda i: fitnesses[i])  # type: ignore # TODO

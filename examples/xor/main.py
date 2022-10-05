@@ -9,14 +9,12 @@ import sqlalchemy
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import DbId
 from revolve2.core.optimization.ea.population import (
-    Individual,
     make_measures,
     make_serializable,
+    serializable_list_template,
 )
 from revolve2.core.optimization.ea.population.pop_list import (
-    DbPopList,
-    PopList,
-    PopListTemplate,
+    pop_list_template,
     multiple_unique,
     topn,
     tournament,
@@ -27,19 +25,20 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 
+ParamList = serializable_list_template(float, "parameters", "parameter")
+
 
 @make_serializable(table_name="genotype")
 class Genotype:
-    pass
+    params: ParamList
 
 
 @make_measures(table_name="measures")
 class Measures:
     displacement: Optional[float] = None
-    number_legs: Optional[float] = None
 
 
-TPop: PopList[Genotype, Measures] = PopListTemplate(Genotype, Measures)
+Population, Individual = pop_list_template("population", Genotype, Measures)
 
 
 class Optimizer:
@@ -49,7 +48,7 @@ class Optimizer:
     dbid: DbId
     db: AsyncEngine
     rng: np.random.Generator
-    pop: TPop
+    pop: Population
     gen_index: int
 
     optimizer_id: Column[Integer]
@@ -60,13 +59,13 @@ class Optimizer:
         self.db = open_async_database_sqlite("database")
         async with self.db.begin() as conn:
             await conn.run_sync(DbBase.metadata.create_all)
-            await TPop.prepare_db(conn)
+            await Population.prepare_db(conn)
 
         if not await self.load_state():
             self.rng = np.random.Generator(np.random.PCG64(0))
-            self.pop = TPop(
+            self.pop = Population(
                 [
-                    Individual(Genotype(), Measures())
+                    Individual(Genotype(params=ParamList([1.0, 2.0, 3.0])), Measures())
                     for _ in range(self.POPULATION_SIZE)
                 ]
             )
@@ -115,7 +114,7 @@ class Optimizer:
                 self.gen_index = state.generation_index
                 self.rng = pickle.loads(state.rng_pickled)
 
-                self.pop = await TPop.from_db(ses, state.pop_id)
+                self.pop = await Population.from_db(ses, state.pop_id)
 
                 return True
 
@@ -140,13 +139,13 @@ class Optimizer:
             for _ in range(self.OFFSPRING_SIZE)
         ]
 
-        offspring = TPop(
+        offspring = Population(
             [
                 Individual(
                     self.mutate(
                         self.crossover(
-                            self.pop.individuals[parents[0]],
-                            self.pop.individuals[parents[1]],
+                            self.pop[parents[0]],
+                            self.pop[parents[1]],
                         )
                     ),
                     Measures(),
@@ -160,26 +159,24 @@ class Optimizer:
             self.pop, offspring, measure="displacement", n=self.POPULATION_SIZE
         )
 
-        self.pop = TPop.from_existing_populations(
+        self.pop = Population.from_existing_populations(
             [self.pop, offspring],
             [original_selection, offspring_selection],
             ["displacement"],
         )
 
     def mutate(self, genotype: Genotype) -> Genotype:
-        return Genotype()  # TODO
+        return Genotype(params=ParamList([1.0, 2.0, 3.0]))  # TODO
 
     def crossover(self, parent1: Genotype, parent2: Genotype) -> Genotype:
-        return Genotype()
+        return Genotype(params=ParamList([1.0, 2.0, 3.0]))  # TODO
 
     def measure_displacements(self, genotypes: List[Genotype]) -> List[float]:
         return [random.randint(0, 1000) for _ in genotypes]  # TODO
 
-    def measure(self, pop: TPop) -> None:
-        displacements = self.measure_displacements(
-            [i.genotype for i in pop.individuals]
-        )
-        for individual, displacement in zip(pop.individuals, displacements):
+    def measure(self, pop: Population) -> None:
+        displacements = self.measure_displacements([i.genotype for i in pop])
+        for individual, displacement in zip(pop, displacements):
             individual.measures["displacement"] = displacement
 
 
@@ -214,7 +211,7 @@ class DbState(DbBase):
     )
     generation_index = Column(Integer, nullable=False)
     rng_pickled = Column(String, nullable=False)
-    pop_id = Column(Integer, sqlalchemy.ForeignKey(DbPopList.id), nullable=False)
+    pop_id = Column(Integer, sqlalchemy.ForeignKey(Population.table.id), nullable=False)
 
 
 async def main() -> None:

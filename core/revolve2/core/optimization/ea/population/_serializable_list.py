@@ -88,7 +88,6 @@ def serializable_list_template(
         class SerializableListImplBasicType(SerializableList[T]):
             __db_base = DbBase
             __item_type = item_type
-            __value_columns_name = value_column_name
 
             table = ListTable
             item_table = ItemTable
@@ -119,24 +118,19 @@ def serializable_list_template(
                 rows = (
                     await ses.execute(
                         select(cls.item_table)
-                        .filter(cls.item_table.value == id)
+                        .filter(cls.item_table.list_id == id)
                         .order_by(cls.item_table.index)
                     )
                 ).scalars()
 
-                return cls(
-                    [
-                        cls.item_type(getattr(row, cls.__value_columns_name))
-                        for row in rows
-                    ]
-                )
+                return cls([cls.__item_type(row.value) for row in rows])
 
         return SerializableListImplBasicType
     else:
 
         class SerializableListSerializable(SerializableList[T]):
-            __item_type: Type[T] = item_type
             __db_base = DbBase
+            __item_type = item_type
 
             table = ListTable
             item_table = ItemTable
@@ -167,6 +161,16 @@ def serializable_list_template(
 
             @classmethod
             async def from_db(cls, ses: AsyncSession, id: int) -> SerializableList:
-                raise NotImplementedError()
+                rows = (
+                    await ses.execute(
+                        select(cls.item_table)
+                        .filter(cls.item_table.list_id == id)
+                        .order_by(cls.item_table.index)
+                    )
+                ).scalars()
+
+                return cls(
+                    [await cls.__item_type.from_db(ses, row.value) for row in rows]
+                )
 
         return SerializableListSerializable

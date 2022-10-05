@@ -26,11 +26,9 @@ def topn(
     :returns: Indices of the selected individuals in their respective populations.
     """
     indices = np.argsort(
-        [i.measures[measure] for i in original_population.individuals]
-        + [i.measures[measure] for i in offspring_population.individuals]
+        [i.measures[measure] for i in original_population]
+        + [i.measures[measure] for i in offspring_population]
     )[: -1 - n : -1]
-    return [i for i in indices if i < len(original_population.individuals)], [
-        i - len(original_population.individuals)
-        for i in indices
-        if i >= len(original_population.individuals)
+    return [i for i in indices if i < len(original_population)], [
+        i - len(original_population) for i in indices if i >= len(original_population)
     ]

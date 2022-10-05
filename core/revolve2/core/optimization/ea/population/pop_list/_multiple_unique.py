@@ -21,7 +21,7 @@ def multiple_unique(
     :param selection_function: The function to use to select an individual.
     :returns: Indices of the selected individuals in the population.
     """
-    assert selection_size < len(population.individuals)
+    assert selection_size < len(population)
 
     selected_individuals = []
     for _ in range(selection_size):

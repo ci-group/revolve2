@@ -111,7 +111,7 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
         db_base = automap_base(metadata=metadata)
         db_base.prepare()
 
-        class MeasuresImpl(dataclass(cls, eq=False)):  # type: ignore # TODO
+        class MeasuresImpl(dataclass(cls, eq=False), Serializable):  # type: ignore # TODO
             __columns = [col.name for col in columns]
             __db_base = db_base
             table = db_base.classes[table_name]

@@ -165,19 +165,20 @@ def make_serializable(table_name: str) -> Callable[[Type[T]], Type[T]]:
             async def __to_db_if_serializable(
                 self, ses: AsyncSession, column_index: int
             ) -> Union[int, float, str]:
+                value = getattr(self, self.__column_names[column_index])
                 if issubclass(self.__column_types[column_index], Serializable):
-                    return await getattr(self, self.__column_names[column_index]).to_db(
-                        ses
-                    )
+                    assert isinstance(value, Serializable)
+                    return await value.to_db(ses)
                 else:
-                    return getattr(self, self.__column_names[column_index])
+                    assert isinstance(value, self.__column_types[column_index])
+                    return value  # type: ignore # TODO
 
             @classmethod
             async def __from_db_if_serializable(
                 cls, ses: AsyncSession, column_index: int, value: Union[int, float, str]
             ) -> Union[int, float, str, Serializable]:
                 if issubclass(cls.__column_types[column_index], Serializable):
-                    return await cls.__column_types[column_index].from_db(ses, value)
+                    return await cls.__column_types[column_index].from_db(ses, value)  # type: ignore # TODO
                 else:
                     return value
 
@@ -199,7 +200,7 @@ def make_serializable(table_name: str) -> Callable[[Type[T]], Type[T]]:
                 )
                 ses.add(row)
                 await ses.flush()
-                return row.id
+                return int(row.id)
 
             @classmethod
             async def from_db(cls, ses: AsyncSession, id: int) -> SerializableImpl:

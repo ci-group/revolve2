@@ -6,7 +6,6 @@ from typing import List, Generic, Type, TypeVar, Tuple
 from .._measures import Measures
 from .._serializable import Serializable, make_serializable
 from .._serializable_list import SerializableList, serializable_list_template
-from dataclasses import dataclass
 
 TGenotype = TypeVar("TGenotype", bound=Serializable)
 TMeasures = TypeVar("TMeasures", bound=Measures)

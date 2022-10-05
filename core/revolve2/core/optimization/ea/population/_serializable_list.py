@@ -1,9 +1,8 @@
 from __future__ import annotations
-from typing import TypeVar, Type, Any, Union, List, Optional, Generic
+from typing import TypeVar, Type, Any, Union, List, Generic
 from ._serializable import Serializable
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import AsyncConnection
-from sqlalchemy import Column, Integer
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, Float, Integer, String

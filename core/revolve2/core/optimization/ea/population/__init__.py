@@ -6,8 +6,8 @@ from ._serializable_list import SerializableList, serializable_list_template
 
 __all__ = [
     "Serializable",
+    "SerializableList",
     "make_measures",
     "make_serializable",
-    "SerializableList",
     "serializable_list_template",
 ]

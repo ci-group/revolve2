@@ -7,8 +7,8 @@ from ._tournament import tournament
 
 __all__ = [
     "PopList",
-    "pop_list_template",
     "multiple_unique",
+    "pop_list_template",
     "topn",
     "tournament",
 ]

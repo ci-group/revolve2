@@ -3,12 +3,6 @@ from abc import abstractmethod
 
 from typing import List, Generic, Type, TypeVar, Tuple
 
-from sqlalchemy import Column, Integer
-from sqlalchemy.ext.asyncio import AsyncConnection
-from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.future import select
-from sqlalchemy.orm import declarative_base
-
 from .._measures import Measures
 from .._serializable import Serializable, make_serializable
 from .._serializable_list import SerializableList, serializable_list_template

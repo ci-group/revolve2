@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import (
     Any,
     Callable,
+    Optional,
     Type,
     TypeVar,
     Union,
@@ -54,12 +55,15 @@ class Serializable(ABC):
     @abstractmethod
     async def from_db(
         cls: Type[SerializableSelf], ses: AsyncSession, id: int
-    ) -> SerializableSelf:
+    ) -> Optional[SerializableSelf]:
         """
         Deserialize this object from a database.
 
+        If id does not exist, returns None.
+
         :param ses: Database session.
         :param id: Id of the object in the database.
+        :returns: The deserialized object or None is id does not exist.
         """
         pass
 

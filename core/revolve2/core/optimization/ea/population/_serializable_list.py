@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Generic, List, Type, TypeVar, Union
+from typing import Any, Generic, List, Type, TypeVar, Union, Optional
 
 from sqlalchemy import Column, Float, Integer, String
 from sqlalchemy.ext.asyncio import AsyncConnection
@@ -131,7 +131,14 @@ def serializable_list_template(
             @classmethod
             async def from_db(
                 cls, ses: AsyncSession, id: int
-            ) -> SerializableListImplBasicType[TBasicType]:
+            ) -> Optional[SerializableListImplBasicType[TBasicType]]:
+                row = (
+                    await ses.execute(select(cls.table).filter(cls.table.id == id))
+                ).scalar_one_or_none()
+
+                if row is None:
+                    return None
+
                 rows = (
                     await ses.execute(
                         select(cls.item_table)
@@ -180,7 +187,14 @@ def serializable_list_template(
             @classmethod
             async def from_db(
                 cls, ses: AsyncSession, id: int
-            ) -> SerializableListSerializable[TSerializable]:
+            ) -> Optional[SerializableListSerializable[TSerializable]]:
+                row = (
+                    await ses.execute(select(cls.table).filter(cls.table.id == id))
+                ).scalar_one_or_none()
+
+                if row is None:
+                    return None
+
                 rows = (
                     await ses.execute(
                         select(cls.item_table)

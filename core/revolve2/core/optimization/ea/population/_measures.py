@@ -11,6 +11,7 @@ from typing import (
     get_args,
     get_origin,
     get_type_hints,
+    Optional,
 )
 
 from sqlalchemy import Column, Float, Integer, MetaData, String, Table
@@ -127,10 +128,16 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
                 return int(row.id)
 
             @classmethod
-            async def from_db(cls, ses: AsyncSession, id: int) -> MeasuresImpl:
+            async def from_db(
+                cls, ses: AsyncSession, id: int
+            ) -> Optional[MeasuresImpl]:
                 row = (
                     await ses.execute(select(cls.table).filter(cls.table.id == id))
                 ).scalar_one_or_none()
+
+                if row is None:
+                    return None
+
                 return cls(**{c: getattr(row, c) for c in cls.__columns})
 
             def __getitem__(self, key: str) -> Union[int, float, str, None]:

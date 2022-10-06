@@ -5,13 +5,13 @@ from dataclasses import dataclass
 from typing import (
     Any,
     Callable,
+    Optional,
     Type,
     TypeVar,
     Union,
     get_args,
     get_origin,
     get_type_hints,
-    Optional,
 )
 
 from sqlalchemy import Column, Float, Integer, MetaData, String, Table
@@ -62,6 +62,9 @@ def make_measures(table_name: str) -> Callable[[Type[T]], Type[T]]:
     class MyMeasures:
         measure1: Optional[float] = None
         measure2: Optional[str] = "test"
+
+    :param table_name: Name of the corresponding table in the database.
+    :returns: Type of the class made Measures.
     """
 
     def impl(cls: Type[T]) -> Type[T]:

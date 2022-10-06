@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Generic, List, Type, TypeVar, Union, Optional
+from typing import Any, Generic, List, Optional, Type, TypeVar, Union
 
 from sqlalchemy import Column, Float, Integer, String
 from sqlalchemy.ext.asyncio import AsyncConnection
@@ -32,13 +32,6 @@ def serializable_list_template(
     """
 
     def basic_type_or_serializable(type: Type[T]) -> bool:
-        """
-        Check whether the given type is a basic type or Serializable, or raises error if neither.
-
-        :param type: The type to check.
-        :returns: True when basic type, false when Serializable.
-        :raises ValueError: When neither.
-        """
         if type == int or type == float or type == str:
             return True
         elif issubclass(type, Serializable):

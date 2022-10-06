@@ -18,7 +18,12 @@ class Individual(Serializable, Generic[TGenotype, TMeasures]):
     measures: TMeasures
 
     def __init__(self, genotype: TGenotype, measures: TMeasures) -> None:
-        """Initialize this object."""
+        """
+        Initialize this object.
+
+        :param genotype: The contained genotype.
+        :param measures: The contained measures.
+        """
         pass
 
 
@@ -39,7 +44,7 @@ class PopList(
         Create a population from a set of existing populations using a provided selection from each population and copying the provided measures.
 
         :param populations: The populations to combine.
-        :param selection: The individuals to select from each population.
+        :param selections: The individuals to select from each population.
         :param copied_measures: The measures to copy.
         :returns: The created population.
         """
@@ -51,6 +56,7 @@ def pop_list_template(
     """
     Create a PopList type using the provided generic parameters.
 
+    :param table_name: Prefix for the names of the tables to use in the database.
     :param genotype_type: Type of the genotype.
     :param measures_type: Type of the measures.
     :returns: The created PopList type.

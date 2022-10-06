@@ -34,21 +34,39 @@ class RngTable(_DbBase):
 
 
 class SerializableRng(Serializable):
+    """Numpy Generator made Serializable."""
+
     table = RngTable
 
     rng: np.random.Generator
 
     def __init__(self, rng: np.random.Generator) -> None:
+        """
+        Initialize this object.
+
+        :param rng: The numpy Generator instance to wrap.
+        """
         self.rng = rng
 
     @classmethod
     async def prepare_db(cls, conn: AsyncConnection) -> None:
+        """
+        Set up the database, creating tables.
+
+        :param conn: Connection to the database.
+        """
         await conn.run_sync(_DbBase.metadata.create_all)
 
     async def to_db(
         self: SerializableRng,
         ses: AsyncSession,
     ) -> int:
+        """
+        Serialize this object to a database.
+
+        :param ses: Database session.
+        :returns: Id of the object in the database.
+        """
         row = RngTable(pickled=pickle.dumps(self.rng))
         ses.add(row)
         await ses.flush()
@@ -59,6 +77,15 @@ class SerializableRng(Serializable):
     async def from_db(
         cls: Type[SerializableRng], ses: AsyncSession, id: int
     ) -> Optional[SerializableRng]:
+        """
+        Deserialize this object from a database.
+
+        If id does not exist, returns None.
+
+        :param ses: Database session.
+        :param id: Id of the object in the database.
+        :returns: The deserialized object or None is id does not exist.
+        """
         row = (
             await ses.execute(select(RngTable).filter(RngTable.id == id))
         ).scalar_one_or_none()

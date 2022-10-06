@@ -70,7 +70,7 @@ class Serializable(ABC):
 
 SerializableTypes = Union[Type[int], Type[float], Type[str], Type[Serializable]]
 
-T = TypeVar("T", bound=SerializableTypes)
+T = TypeVar("T")
 
 
 def make_serializable(table_name: str) -> Callable[[Type[T]], Type[T]]:
@@ -85,6 +85,9 @@ def make_serializable(table_name: str) -> Callable[[Type[T]], Type[T]]:
     class MyMeasures:
         measure1: Optional[float] = None
         measure2: Optional[str] = "test"
+
+    :param table_name: Name of the corresponding table in the database.
+    :returns: Type of the class made Serializable.
     """
 
     def impl(cls: Type[T]) -> Type[T]:  # TODO should be Intersection[T, Serializable]

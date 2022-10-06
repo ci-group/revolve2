@@ -8,8 +8,8 @@ from ._serializable_rng import SerializableRng
 __all__ = [
     "Serializable",
     "SerializableList",
+    "SerializableRng",
     "make_measures",
     "make_serializable",
     "serializable_list_template",
-    "SerializableRng",
 ]

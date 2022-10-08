@@ -1,3 +1,6 @@
+.venv
+database
+
 # Visual Studio Code
 .vscode/
 

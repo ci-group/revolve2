@@ -159,7 +159,7 @@ class LocalRunner(Runner):
         env_mjcf.worldbody.add(
             "light",
             pos=[0, 0, 100],
-            ambient=[0.5, 0.5, 0.5],
+            ambient=[1.0, 1.0, 1.0],
             directional=True,
             castshadow=False,
         )

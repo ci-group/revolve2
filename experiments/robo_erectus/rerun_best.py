@@ -26,7 +26,7 @@ async def main() -> None:
         assert best_individual is not None
 
         print(f"fitness: {best_individual[1].value}")
-
+        
         genotype = (
             await GenotypeSerializer.from_database(
                 session, [best_individual[0].genotype_id]

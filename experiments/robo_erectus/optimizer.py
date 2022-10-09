@@ -9,6 +9,7 @@ import multineat
 import revolve2.core.optimization.ea.generic_ea.population_management as population_management
 import revolve2.core.optimization.ea.generic_ea.selection as selection
 import sqlalchemy
+from measures import displacement_measure, max_relative_to_avg_height
 from genotype import Genotype, GenotypeSerializer, crossover, develop, mutate
 from pyrr import Quaternion, Vector3
 from revolve2.actor_controller import ActorController
@@ -24,6 +25,7 @@ from revolve2.core.physics.running import (
     PosedActor,
     Runner,
 )
+from revolve2.core.physics.running._results import EnvironmentResults
 from revolve2.runners.mujoco import LocalRunner
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
@@ -285,10 +287,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         batch_results = await self._runner.run_batch(batch)
 
         return [
-            self._calculate_fitness(
-                environment_result.environment_states[0].actor_states[0],
-                environment_result.environment_states[-1].actor_states[0],
-            )
+            self._calculate_fitness(environment_result)
             for environment_result in batch_results.environment_results
         ]
 
@@ -300,15 +299,11 @@ class Optimizer(EAOptimizer[Genotype, float]):
         control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod
-    def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:
+    def _calculate_fitness(environment_results: EnvironmentResults) -> float:
         # TODO simulation can continue slightly passed the defined sim time.
 
-        # distance traveled on the xy plane
-        return float(
-            math.sqrt(
-                (begin_state.position[0] - end_state.position[0]) ** 2
-                + ((begin_state.position[1] - end_state.position[1]) ** 2)
-            )
+        return displacement_measure(environment_results) / max_relative_to_avg_height(
+            environment_results
         )
 
     def _on_generation_checkpoint(self, session: AsyncSession) -> None:

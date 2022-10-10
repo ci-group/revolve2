@@ -33,8 +33,8 @@ class SerializableStruct(Serializable):
 
     Example:
     class MyStruct(SerializableStruct, table_name="my_table"):
-        measure1: Optional[float] = None
-        measure2: Optional[str] = "test"
+        measure1: float
+        measure2: Optional[str]
 
     :param table_name: Name of table in database.
     """

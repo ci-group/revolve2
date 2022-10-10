@@ -7,7 +7,6 @@ from typing import Optional
 import numpy as np
 import sqlalchemy
 from revolve2.core.database import open_async_database_sqlite
-from revolve2.core.optimization import DbId
 from revolve2.core.optimization.ea.population import (
     SerializableList,
     SerializableRng,
@@ -62,7 +61,6 @@ class Optimizer:
     POPULATION_SIZE: int = 100
     OFFSPRING_SIZE: int = 50
 
-    dbid: DbId
     db: AsyncEngine
     rng: SerializableRng
     pop: Population
@@ -70,8 +68,6 @@ class Optimizer:
 
     async def run(self) -> None:
         """Run the program."""
-        self.dbid = DbId.root("opt")
-
         self.db = open_async_database_sqlite("database")
         async with self.db.begin() as conn:
             await Population.prepare_db(conn)

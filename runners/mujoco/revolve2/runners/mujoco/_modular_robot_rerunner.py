@@ -12,7 +12,7 @@ class ModularRobotRerunner:
 
     _controller: ActorController
 
-    async def rerun(self, robot: ModularRobot, control_frequency: float) -> None:
+    async def rerun(self, robot: ModularRobot, control_frequency: float, simulation_time=1000000):
         """
         Rerun a single robot.
 
@@ -20,23 +20,13 @@ class ModularRobotRerunner:
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
         """
         batch = Batch(
-            simulation_time=1000000,
+            simulation_time=simulation_time,
             sampling_frequency=0.0001,
             control_frequency=control_frequency,
             control=self._control,
         )
 
-        actor, self._controller = robot.make_actor_and_controller()
-
-        env = Environment()
-        env.actors.append(
-            PosedActor(
-                actor,
-                Vector3([0.0, 0.0, 0.1]),
-                Quaternion(),
-                [0.0 for _ in self._controller.get_dof_targets()],
-            )
-        )
+        env, self._controller = ModularRobotRerunner.robot_to_env(robot)
         batch.environments.append(env)
 
         runner = LocalRunner(headless=False)
@@ -47,6 +37,22 @@ class ModularRobotRerunner:
     ) -> None:
         self._controller.step(dt)
         control.set_dof_targets(0, self._controller.get_dof_targets())
+
+
+    @staticmethod
+    def robot_to_env(robot: ModularRobot) -> Environment:
+        """Constructs an Environment object and contoller for a single robot."""
+        actor, controller = robot.make_actor_and_controller()
+        env = Environment()
+        env.actors.append(
+            PosedActor(
+                actor,
+                Vector3([0.0, 0.0, 0.1]),
+                Quaternion(),
+                [0.0 for _ in controller.get_dof_targets()],
+            )
+        )
+        return env, controller
 
 
 if __name__ == "__main__":

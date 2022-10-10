@@ -1,4 +1,5 @@
 .venv
+deps/
 database
 
 # Visual Studio Code

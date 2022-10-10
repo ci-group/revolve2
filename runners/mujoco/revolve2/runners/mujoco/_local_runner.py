@@ -65,9 +65,10 @@ class LocalRunner(Runner):
         results = BatchResults([EnvironmentResults([]) for _ in batch.environments])
 
         for env_index, env_descr in enumerate(batch.environments):
-            logging.info(f"Environment {env_index}")
+            logging.info(f"Environment {env_index} (of {len(batch.environments)})")
 
-            model = mujoco.MjModel.from_xml_string(self._make_mjcf(env_descr))
+            xml_string = self._make_mjcf(env_descr)
+            model = mujoco.MjModel.from_xml_string(xml_string)
 
             # TODO initial dof state
             data = mujoco.MjData(model)
@@ -244,6 +245,12 @@ class LocalRunner(Runner):
         # explicitly copy because the Vector3 and Quaternion classes don't copy the underlying structure
         position = Vector3([n for n in data.qpos[qindex : qindex + 3]])
         orientation = Quaternion([n for n in data.qpos[qindex + 3 : qindex + 3 + 4]])
+
+        #contacts = data.contact
+        #for c in contacts:
+        #    # TODO: check if c.geom1 or c.geom2 are the ground plane!
+        #    # TODO: how to lookup an mjData object given its ID?
+        #    pass
 
         return ActorState(position, orientation)
 

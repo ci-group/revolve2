@@ -1,6 +1,8 @@
+#!/usr/bin/env python3
 """Setup and running of the optimize modular program."""
 
 import logging
+import os
 from random import Random
 
 import multineat
@@ -9,11 +11,17 @@ from optimizer import Optimizer
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
 
+EXPERIMENT_NAME = "default"
+DATABASE_DIR = os.path.join('./database', EXPERIMENT_NAME)
+ANALYSIS_DIR = os.path.join(DATABASE_DIR, "analysis/")
+
+def ensure_dirs():
+    if not os.path.isdir(ANALYSIS_DIR):
+        os.mkdir(ANALYSIS_DIR)
 
 async def main() -> None:
     """Run the optimization process."""
     RNG_SEED = 420
-    EXPERIMENT_NAME = "default"
 
     # number of initial mutations for body and brain CPPNWIN networks
     NUM_INITIAL_MUTATIONS = 10
@@ -62,8 +70,10 @@ async def main() -> None:
         process_id_gen=process_id_gen,
     )
     if maybe_optimizer is not None:
+        print("initilized with existing database ")
         optimizer = maybe_optimizer
     else:
+        print("initialized from scratch...")
         optimizer = await Optimizer.new(
             database=database,
             process_id=process_id,

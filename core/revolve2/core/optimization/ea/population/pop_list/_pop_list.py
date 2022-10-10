@@ -9,11 +9,11 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 
-from .._measures import Measures
+from .._measures import SerializableMeasures
 from .._serializable import Serializable
 
 TGenotype = TypeVar("TGenotype", bound=Serializable)
-TMeasures = TypeVar("TMeasures", bound=Measures)
+TMeasures = TypeVar("TMeasures", bound=SerializableMeasures)
 
 
 @dataclass
@@ -33,7 +33,7 @@ class PopList(List[Individual[TGenotype, TMeasures]], Serializable):
     item_table: Any
 
     @classmethod
-    def __init_subclass__(cls, /, table_name: str, **kwargs: Dict[str, Any]):
+    def __init_subclass__(cls, /, table_name: str, **kwargs: Dict[str, Any]) -> None:
         """
         Initialize this object.
 

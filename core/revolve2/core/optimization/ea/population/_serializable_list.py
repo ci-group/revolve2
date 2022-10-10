@@ -24,7 +24,7 @@ class SerializableList(List[T], Serializable):
     @classmethod
     def __init_subclass__(
         cls, /, table_name: str, value_column_name: str, **kwargs: Dict[str, Any]
-    ):
+    ) -> None:
         """
         Initialize this object.
 

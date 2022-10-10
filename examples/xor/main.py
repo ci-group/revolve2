@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Optional
 
 import numpy as np
@@ -9,9 +10,9 @@ import sqlalchemy
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization.ea.population import (
     SerializableList,
+    SerializableMeasures,
     SerializableRng,
-    make_measures,
-    make_serializable,
+    SerializableStruct,
 )
 from revolve2.core.optimization.ea.population.pop_list import (
     Individual,
@@ -35,21 +36,21 @@ class ParamList(
     pass
 
 
-@make_serializable(table_name="genotype")
-class Genotype:
+@dataclass
+class Genotype(SerializableStruct, table_name="genotype"):
     """Genotype for the neural network parameters."""
 
     params: ParamList
 
 
-@make_measures(table_name="measures")
-class Measures:
+@dataclass()
+class Measures(SerializableMeasures, table_name="measures"):
     """Measures of a genotype/phenotype."""
 
     displacement: Optional[float] = None
 
 
-class Population(PopList[Genotype, Measures], table_name="population"):  # type: ignore # TODO
+class Population(PopList[Genotype, Measures], table_name="population"):
     """A population of individuals consisting of the above Genotype and Measures."""
 
     pass
@@ -78,7 +79,7 @@ class Optimizer:
             self.rng = SerializableRng(np.random.Generator(np.random.PCG64(0)))
             self.pop = Population(
                 [
-                    Individual(Genotype(params=ParamList([1.0, 2.0, 3.0])), Measures())  # type: ignore # TODO
+                    Individual(Genotype(params=ParamList([1.0, 2.0, 3.0])), Measures())
                     for _ in range(self.POPULATION_SIZE)
                 ]
             )
@@ -140,11 +141,9 @@ class Optimizer:
 
         parent_groups = [
             multiple_unique(
-                self.pop,  # type: ignore # TODO
+                self.pop,
                 2,
-                lambda pop: tournament(
-                    pop, "displacement", self.rng.rng, k=2  # type: ignore # TODO
-                ),
+                lambda pop: tournament(pop, "displacement", self.rng.rng, k=2),
             )
             for _ in range(self.OFFSPRING_SIZE)
         ]
@@ -154,8 +153,8 @@ class Optimizer:
                 Individual(
                     self.mutate(
                         self.crossover(
-                            self.pop[parents[0]],  # type: ignore # TODO
-                            self.pop[parents[1]],  # type: ignore # TODO
+                            self.pop[parents[0]].genotype,
+                            self.pop[parents[1]].genotype,
                         )
                     ),
                     Measures(),
@@ -166,7 +165,7 @@ class Optimizer:
         self.measure(offspring)
 
         original_selection, offspring_selection = topn(
-            self.pop, offspring, measure="displacement", n=self.POPULATION_SIZE  # type: ignore # TODO
+            self.pop, offspring, measure="displacement", n=self.POPULATION_SIZE
         )
 
         self.pop = Population.from_existing_populations(  # type: ignore # TODO
@@ -182,7 +181,7 @@ class Optimizer:
         :param genotype: The genotype to mutate. Object is not altered.
         :returns: The mutated genotype.
         """
-        return Genotype(params=ParamList([1.0, 2.0, 3.0]))  # type: ignore # TODO
+        return Genotype(params=ParamList([1.0, 2.0, 3.0]))
 
     def crossover(self, parent1: Genotype, parent2: Genotype) -> Genotype:
         """
@@ -192,7 +191,7 @@ class Optimizer:
         :param parent2: The second genotype.
         :returns: The create genotype.
         """
-        return Genotype(params=ParamList([1.0, 2.0, 3.0]))  # type: ignore # TODO
+        return Genotype(params=ParamList([1.0, 2.0, 3.0]))
 
     def measure(self, pop: Population) -> None:
         """
@@ -202,7 +201,7 @@ class Optimizer:
         """
         displacements = [int(self.rng.rng.integers(0, 1000)) for _ in pop]
         for individual, displacement in zip(pop, displacements):
-            individual.measures["displacement"] = displacement  # type: ignore # TODO
+            individual.measures["displacement"] = displacement
 
 
 DbBase = declarative_base()

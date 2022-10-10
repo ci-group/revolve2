@@ -1,13 +1,20 @@
-from typing import List, Tuple, TypeVar
+from typing import List, Tuple, TypeVar, Union
 
 import numpy as np
+from typing_extensions import TypeGuard
 
-from .._measures import Measures
+from .._measures import SerializableMeasures
 from .._serializable import Serializable
 from ._pop_list import PopList
 
 TIndividual = TypeVar("TIndividual", bound=Serializable)
-TMeasures = TypeVar("TMeasures", bound=Measures)
+TMeasures = TypeVar("TMeasures", bound=SerializableMeasures)
+
+
+def _is_number_list(
+    xs: List[Union[int, float, str, None]]
+) -> TypeGuard[List[Tuple[int, float]]]:
+    return all(isinstance(x, int) or isinstance(x, float) for x in xs)
 
 
 def topn(
@@ -25,10 +32,12 @@ def topn(
     :param n: The number of individual to select.
     :returns: Indices of the selected individuals in their respective populations.
     """
-    indices = np.argsort(
-        [i.measures[measure] for i in original_population]
-        + [i.measures[measure] for i in offspring_population]
-    )[: -1 - n : -1]
+    measures = [i.measures[measure] for i in original_population] + [
+        i.measures[measure] for i in offspring_population
+    ]
+    assert _is_number_list(measures)
+
+    indices = np.argsort(measures)[: -1 - n : -1]
     return [i for i in indices if i < len(original_population)], [
         i - len(original_population) for i in indices if i >= len(original_population)
     ]

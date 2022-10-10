@@ -4,12 +4,12 @@ from typing import TypeVar
 
 import numpy as np
 
-from .._measures import Measures
+from .._measures import SerializableMeasures
 from .._serializable import Serializable
 from ._pop_list import PopList
 
 TIndividual = TypeVar("TIndividual", bound=Serializable)
-TMeasures = TypeVar("TMeasures", bound=Measures)
+TMeasures = TypeVar("TMeasures", bound=SerializableMeasures)
 
 
 def tournament(

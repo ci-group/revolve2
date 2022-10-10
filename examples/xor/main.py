@@ -9,14 +9,15 @@ import sqlalchemy
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import DbId
 from revolve2.core.optimization.ea.population import (
+    SerializableList,
     SerializableRng,
     make_measures,
     make_serializable,
-    serializable_list_template,
 )
 from revolve2.core.optimization.ea.population.pop_list import (
+    Individual,
+    PopList,
     multiple_unique,
-    pop_list_template,
     topn,
     tournament,
 )
@@ -26,14 +27,20 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 
-ParamList = serializable_list_template(float, "parameters", "parameter")
+
+class ParamList(
+    SerializableList[float], table_name="parameters", value_column_name="parameter"
+):
+    """A list of parameters."""
+
+    pass
 
 
 @make_serializable(table_name="genotype")
 class Genotype:
     """Genotype for the neural network parameters."""
 
-    params: ParamList  # type: ignore # TODO
+    params: ParamList
 
 
 @make_measures(table_name="measures")
@@ -43,7 +50,10 @@ class Measures:
     displacement: Optional[float] = None
 
 
-Population, Individual = pop_list_template("population", Genotype, Measures)  # type: ignore # TODO
+class Population(PopList[Genotype, Measures], table_name="population"):  # type: ignore # TODO
+    """A population of individuals consisting of the above Genotype and Measures."""
+
+    pass
 
 
 class Optimizer:
@@ -55,7 +65,7 @@ class Optimizer:
     dbid: DbId
     db: AsyncEngine
     rng: SerializableRng
-    pop: Population  # type: ignore # TODO
+    pop: Population
     gen_index: int
 
     async def run(self) -> None:
@@ -89,7 +99,7 @@ class Optimizer:
         """Save the state of the program."""
         async with AsyncSession(self.db) as ses:
             async with ses.begin():
-                popid = await self.pop.to_db(ses)  # type: ignore # TODO
+                popid = await self.pop.to_db(ses)
 
                 dbstate = DbState(
                     generation_index=self.gen_index,
@@ -122,7 +132,9 @@ class Optimizer:
                 assert maybe_rng is not None
                 self.rng = maybe_rng
 
-                self.pop = await Population.from_db(ses, state.pop_id)
+                maybe_pop = await Population.from_db(ses, state.pop_id)
+                assert maybe_pop is not None
+                self.pop = maybe_pop  # type: ignore # TODO
 
                 return True
 
@@ -141,7 +153,7 @@ class Optimizer:
             for _ in range(self.OFFSPRING_SIZE)
         ]
 
-        offspring = Population(  # type: ignore # TODO
+        offspring = Population(
             [
                 Individual(
                     self.mutate(
@@ -161,7 +173,7 @@ class Optimizer:
             self.pop, offspring, measure="displacement", n=self.POPULATION_SIZE  # type: ignore # TODO
         )
 
-        self.pop = Population.from_existing_populations(
+        self.pop = Population.from_existing_populations(  # type: ignore # TODO
             [self.pop, offspring],
             [original_selection, offspring_selection],
             ["displacement"],
@@ -186,15 +198,15 @@ class Optimizer:
         """
         return Genotype(params=ParamList([1.0, 2.0, 3.0]))  # type: ignore # TODO
 
-    def measure(self, pop: Population) -> None:  # type: ignore # TODO
+    def measure(self, pop: Population) -> None:
         """
         Measure all individuals in a population.
 
         :param pop: The population.
         """
-        displacements = self.rng.rng.randint(0, 1000)  # type: ignore # TODO
-        for individual, displacement in zip(pop, displacements):  # type: ignore # TODO
-            individual.measures["displacement"] = displacement
+        displacements = [int(self.rng.rng.integers(0, 1000)) for _ in pop]
+        for individual, displacement in zip(pop, displacements):
+            individual.measures["displacement"] = displacement  # type: ignore # TODO
 
 
 DbBase = declarative_base()

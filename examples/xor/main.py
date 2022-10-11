@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import List, Optional
 
 import numpy as np
 import sqlalchemy
@@ -47,7 +47,15 @@ class Genotype(SerializableStruct, table_name="genotype"):
 class Measures(SerializableMeasures, table_name="measures"):
     """Measures of a genotype/phenotype."""
 
-    displacement: Optional[float] = None
+    result00: Optional[float] = None
+    result10: Optional[float] = None
+    result01: Optional[float] = None
+    result11: Optional[float] = None
+    error00: Optional[float] = None
+    error10: Optional[float] = None
+    error01: Optional[float] = None
+    error11: Optional[float] = None
+    fitness: Optional[float] = None
 
 
 class Population(PopList[Genotype, Measures], table_name="population"):
@@ -59,8 +67,10 @@ class Population(PopList[Genotype, Measures], table_name="population"):
 class Optimizer:
     """Program that optimizes the neural network parameters."""
 
+    NUM_PARAMS: int = 9
     POPULATION_SIZE: int = 100
     OFFSPRING_SIZE: int = 50
+    MUTATE_STD: float = 0.05
 
     db: AsyncEngine
     rng: SerializableRng
@@ -76,10 +86,21 @@ class Optimizer:
             await conn.run_sync(DbBase.metadata.create_all)
 
         if not await self.load_state():
-            self.rng = SerializableRng(np.random.Generator(np.random.PCG64(0)))
+            rng_seed = 0
+            self.rng = SerializableRng(np.random.Generator(np.random.PCG64(rng_seed)))
             self.pop = Population(
                 [
-                    Individual(Genotype(params=ParamList([1.0, 2.0, 3.0])), Measures())
+                    Individual(
+                        Genotype(
+                            params=ParamList(
+                                [
+                                    float(v)
+                                    for v in self.rng.rng.random(size=self.NUM_PARAMS)
+                                ]
+                            )
+                        ),
+                        Measures(),
+                    )
                     for _ in range(self.POPULATION_SIZE)
                 ]
             )
@@ -88,7 +109,7 @@ class Optimizer:
 
             await self.save_state()
 
-        while self.gen_index < 100:
+        while self.gen_index < 300:
             self.evolve()
             await self.save_state()
 
@@ -143,7 +164,7 @@ class Optimizer:
             multiple_unique(
                 self.pop,
                 2,
-                lambda pop: tournament(pop, "displacement", self.rng.rng, k=2),
+                lambda pop: tournament(pop, "fitness", self.rng.rng, k=2),
             )
             for _ in range(self.OFFSPRING_SIZE)
         ]
@@ -165,13 +186,23 @@ class Optimizer:
         self.measure(offspring)
 
         original_selection, offspring_selection = topn(
-            self.pop, offspring, measure="displacement", n=self.POPULATION_SIZE
+            self.pop, offspring, measure="fitness", n=self.POPULATION_SIZE
         )
 
         self.pop = Population.from_existing_populations(  # type: ignore # TODO
             [self.pop, offspring],
             [original_selection, offspring_selection],
-            ["displacement"],
+            [  # TODO make them not copied measures
+                "result00",
+                "result10",
+                "result01",
+                "result11",
+                "error00",
+                "error10",
+                "error01",
+                "error11",
+                "fitness",
+            ],
         )
 
     def mutate(self, genotype: Genotype) -> Genotype:
@@ -181,7 +212,17 @@ class Optimizer:
         :param genotype: The genotype to mutate. Object is not altered.
         :returns: The mutated genotype.
         """
-        return Genotype(params=ParamList([1.0, 2.0, 3.0]))
+        return Genotype(
+            params=ParamList(
+                [
+                    float(v)
+                    for v in (
+                        self.rng.rng.normal(scale=self.MUTATE_STD, size=self.NUM_PARAMS)
+                        + genotype.params
+                    )
+                ]
+            )
+        )
 
     def crossover(self, parent1: Genotype, parent2: Genotype) -> Genotype:
         """
@@ -191,7 +232,14 @@ class Optimizer:
         :param parent2: The second genotype.
         :returns: The create genotype.
         """
-        return Genotype(params=ParamList([1.0, 2.0, 3.0]))
+        return Genotype(
+            params=ParamList(
+                [
+                    b1 if self.rng.rng.random() < 0.5 else b2
+                    for b1, b2 in zip(parent1.params, parent2.params)
+                ]
+            )
+        )
 
     def measure(self, pop: Population) -> None:
         """
@@ -199,9 +247,46 @@ class Optimizer:
 
         :param pop: The population.
         """
-        displacements = [int(self.rng.rng.integers(0, 1000)) for _ in pop]
-        for individual, displacement in zip(pop, displacements):
-            individual.measures["displacement"] = displacement
+        for individual in pop:
+            self.measure_one(individual)
+
+    def measure_one(self, individual: Individual[Genotype, Measures]) -> None:
+        """
+        Measure one individual.
+
+        :param individual: The individual to measure.
+        """
+
+        def relu(val: float) -> float:
+            return max(0, val)
+
+        def evaluate_network(
+            params: List[float], input1: float, input2: float
+        ) -> float:
+            # usually you would do this with matrix multiplications and numpy,
+            # but leaving it manualy for clarity
+            n0 = relu(input1 * params[0] + input2 * params[1] + params[2])
+            n1 = relu(input1 * params[3] + input2 * params[4] + params[5])
+            return relu(n0 * params[6] + n1 * params[7] + params[8])
+
+        ios = [(0, 0, 0), (1, 0, 1), (0, 1, 1), (1, 1, 0)]
+
+        results = [
+            evaluate_network(individual.genotype.params, io[0], io[1]) for io in ios
+        ]
+        errors = [abs(result - io[2]) for result, io in zip(results, ios)]
+
+        individual.measures.result00 = results[0]
+        individual.measures.result10 = results[1]
+        individual.measures.result01 = results[2]
+        individual.measures.result11 = results[3]
+
+        individual.measures.error00 = errors[0]
+        individual.measures.error10 = errors[1]
+        individual.measures.error01 = errors[2]
+        individual.measures.error11 = errors[3]
+
+        individual.measures.fitness = sum([-(err**2) for err in errors])
 
 
 DbBase = declarative_base()

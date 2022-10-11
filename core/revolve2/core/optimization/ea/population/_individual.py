@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Generic, TypeVar
+from typing import Generic, Optional, TypeVar
 
 from revolve2.core.database import Serializable
 
@@ -15,3 +15,4 @@ class Individual(Generic[TGenotype, TMeasures]):
 
     genotype: TGenotype
     measures: TMeasures
+    database_id: Optional[int] = None

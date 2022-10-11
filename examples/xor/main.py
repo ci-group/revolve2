@@ -8,9 +8,9 @@ from typing import List, Optional
 import numpy as np
 import sqlalchemy
 from revolve2.core.database import (
+    SerializableFrozenStruct,
     SerializableList,
     SerializableRng,
-    SerializableStruct,
     open_async_database_sqlite,
 )
 from revolve2.core.optimization.ea.population import Individual, SerializableMeasures
@@ -36,13 +36,13 @@ class ParamList(
 
 
 @dataclass
-class Genotype(SerializableStruct, table_name="genotype"):
+class Genotype(SerializableFrozenStruct, table_name="genotype"):
     """Genotype for the neural network parameters."""
 
     params: ParamList
 
 
-@dataclass()
+@dataclass
 class Measures(SerializableMeasures, table_name="measures"):
     """Measures of a genotype/phenotype."""
 

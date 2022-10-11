@@ -1,6 +1,6 @@
 from typing import Any, Dict, Union
 
-from ._serializable_struct import SerializableStruct
+from revolve2.core.database import SerializableStruct
 
 
 class SerializableMeasures(SerializableStruct, table_name=None):

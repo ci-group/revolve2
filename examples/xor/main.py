@@ -7,15 +7,14 @@ from typing import List, Optional
 
 import numpy as np
 import sqlalchemy
-from revolve2.core.database import open_async_database_sqlite
-from revolve2.core.optimization.ea.population import (
+from revolve2.core.database import (
     SerializableList,
-    SerializableMeasures,
     SerializableRng,
     SerializableStruct,
+    open_async_database_sqlite,
 )
+from revolve2.core.optimization.ea.population import Individual, SerializableMeasures
 from revolve2.core.optimization.ea.population.pop_list import (
-    Individual,
     PopList,
     multiple_unique,
     topn,

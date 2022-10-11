@@ -1,27 +1,19 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Any, Dict, Generic, List, Optional, Type, TypeVar, get_args
+from typing import Any, Dict, List, Optional, Type, TypeVar, get_args
 
+from revolve2.core.database import Serializable
 from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 
-from .._measures import SerializableMeasures
-from .._serializable import Serializable
+from .._individual import Individual
+from .._serializable_measures import SerializableMeasures
 
 TGenotype = TypeVar("TGenotype", bound=Serializable)
 TMeasures = TypeVar("TMeasures", bound=SerializableMeasures)
-
-
-@dataclass
-class Individual(Generic[TGenotype, TMeasures]):
-    """An individual in a population."""
-
-    genotype: TGenotype
-    measures: TMeasures
 
 
 class PopList(List[Individual[TGenotype, TMeasures]], Serializable):

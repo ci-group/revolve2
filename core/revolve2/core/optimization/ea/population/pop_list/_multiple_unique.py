@@ -1,7 +1,8 @@
 from typing import Callable, List, TypeVar
 
-from .._measures import SerializableMeasures
-from .._serializable import Serializable
+from revolve2.core.database import Serializable
+
+from .._serializable_measures import SerializableMeasures
 from ._pop_list import PopList
 
 TIndividual = TypeVar("TIndividual", bound=Serializable)

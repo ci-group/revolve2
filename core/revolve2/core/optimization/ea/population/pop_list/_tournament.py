@@ -3,9 +3,9 @@ from __future__ import annotations
 from typing import TypeVar
 
 import numpy as np
+from revolve2.core.database import Serializable
 
-from .._measures import SerializableMeasures
-from .._serializable import Serializable
+from .._serializable_measures import SerializableMeasures
 from ._pop_list import PopList
 
 TIndividual = TypeVar("TIndividual", bound=Serializable)

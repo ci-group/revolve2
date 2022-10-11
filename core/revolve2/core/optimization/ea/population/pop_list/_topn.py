@@ -1,10 +1,10 @@
 from typing import List, Tuple, TypeVar, Union
 
 import numpy as np
+from revolve2.core.database import Serializable
 from typing_extensions import TypeGuard
 
-from .._measures import SerializableMeasures
-from .._serializable import Serializable
+from .._serializable_measures import SerializableMeasures
 from ._pop_list import PopList
 
 TIndividual = TypeVar("TIndividual", bound=Serializable)

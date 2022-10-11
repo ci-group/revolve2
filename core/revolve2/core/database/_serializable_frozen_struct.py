@@ -8,6 +8,7 @@ from typing import (
     Type,
     TypeVar,
     Union,
+    cast,
     get_args,
     get_origin,
     get_type_hints,
@@ -149,31 +150,40 @@ class SerializableFrozenStruct(Serializable):
                 await col.type.prepare_db(conn)
         await conn.run_sync(cls.__db_base.metadata.create_all)
 
-    async def to_db(
-        self: Self,
-        ses: AsyncSession,
-    ) -> int:
+    @classmethod
+    async def to_db_multiple(
+        cls: Type[Self], ses: AsyncSession, objects: List[Self]
+    ) -> List[int]:
         """
-        Serialize this object to a database.
+        Serialize multiple objects to a database.
 
         :param ses: Database session.
-        :returns: Id of the object in the database.
+        :param objects: The objects to serialize.
+        :returns: Ids of the objects in the database.
         """
-        if self.__db_id is None:
-            row = self.table(
-                **{
-                    col.name: (await getattr(self, col.name).to_db(ses))
-                    if issubclass(col.type, Serializable)
-                    else getattr(self, col.name)
-                    for col in self._columns
-                }
-            )
+        new_objects = [o for o in objects if o.__db_id is None]
 
-            ses.add(row)
-            await ses.flush()
-            self.__db_id = int(row.id)
+        args: Dict[str, Union[List[int], List[float], List[str]]] = {}
 
-        return self.__db_id
+        for col in cls._columns:
+            if issubclass(col.type, Serializable):
+                args[col.name] = await col.type.to_db_multiple(
+                    ses, [getattr(o, col.name) for o in new_objects]
+                )
+            else:
+                args[col.name] = [getattr(o, col.name) for o in new_objects]
+
+        rows = [
+            cls.table(**{name: val[i] for name, val in args.items()})
+            for i in range(len(new_objects))
+        ]
+
+        ses.add_all(rows)
+        await ses.flush()
+        for o, row in zip(new_objects, rows):
+            o.__db_id = int(row.id)
+
+        return [cast(int, o.__db_id) for o in objects]
 
     @classmethod
     async def from_db(cls: Type[Self], ses: AsyncSession, id: int) -> Optional[Self]:

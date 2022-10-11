@@ -155,28 +155,35 @@ class SerializableStruct(Serializable):
                 await col.type.prepare_db(conn)
         await conn.run_sync(cls.__db_base.metadata.create_all)
 
-    async def to_db(
-        self: Self,
-        ses: AsyncSession,
-    ) -> int:
+    @classmethod
+    async def to_db_multiple(
+        cls: Type[Self], ses: AsyncSession, objects: List[Self]
+    ) -> List[int]:
         """
-        Serialize this object to a database.
+        Serialize multiple objects to a database.
 
         :param ses: Database session.
-        :returns: Id of the object in the database.
+        :param objects: The objects to serialize.
+        :returns: Ids of the objects in the database.
         """
-        row = self.table(
-            **{
-                col.name: (await getattr(self, col.name).to_db(ses))
-                if issubclass(col.type, Serializable)
-                else getattr(self, col.name)
-                for col in self._columns
-            }
-        )
+        args: Dict[str, Union[List[int], List[float], List[str]]] = {}
 
-        ses.add(row)
+        for col in cls._columns:
+            if issubclass(col.type, Serializable):
+                args[col.name] = await col.type.to_db_multiple(
+                    ses, [getattr(o, col.name) for o in objects]
+                )
+            else:
+                args[col.name] = [getattr(o, col.name) for o in objects]
+
+        rows = [
+            cls.table(**{name: val[i] for name, val in args.items()})
+            for i in range(len(objects))
+        ]
+
+        ses.add_all(rows)
         await ses.flush()
-        return int(row.id)
+        return [int(row.id) for row in rows]
 
     @classmethod
     async def from_db(cls: Type[Self], ses: AsyncSession, id: int) -> Optional[Self]:

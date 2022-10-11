@@ -86,33 +86,53 @@ class PopList(List[Individual[TGenotype, TMeasures]], Serializable):
         await cls.__measures_type.prepare_db(conn)
         await conn.run_sync(cls.__db_base.metadata.create_all)  # type: ignore # TODO
 
-    async def to_db(
-        self,
-        ses: AsyncSession,
-    ) -> int:
+    @classmethod
+    async def to_db_multiple(
+        cls, ses: AsyncSession, objects: List[PopList[TGenotype, TMeasures]]
+    ) -> List[int]:
         """
-        Serialize this object to a database.
+        Serialize multiple objects to a database.
 
         :param ses: Database session.
-        :returns: Id of the object in the database.
+        :param objects: The objects to serialize.
+        :returns: Ids of the objects in the database.
         """
-        dblist = self.table()
-        ses.add(dblist)
+        dblists = [cls.table() for _ in objects]
+        ses.add_all(dblists)
         await ses.flush()
-        assert dblist.id is not None
+        db_ids: List[int] = [int(l.id) for l in dblists]
 
-        ids = [
-            (await individual.genotype.to_db(ses), await individual.measures.to_db(ses))
-            for individual in self
-        ]
+        combined_genotypes = [i.genotype for o in objects for i in o]
+        combined_measures = [i.measures for o in objects for i in o]
+        combined_genotype_ids = await cls.__genotype_type.to_db_multiple(
+            ses, combined_genotypes
+        )
+        combined_value_ids = await cls.__measures_type.to_db_multiple(
+            ses, combined_measures
+        )
 
-        items = [
-            self.item_table(list_id=dblist.id, index=i, genotype=gid, measures=mid)
-            for i, (gid, mid) in enumerate(ids)
-        ]
+        items = []
+        i = 0
+        for object, db_id in zip(objects, db_ids):
+            for index, (genotype_id, value_id) in enumerate(
+                zip(
+                    combined_genotype_ids[i : i + len(object)],
+                    combined_value_ids[i : i + len(object)],
+                )
+            ):
+                items.append(
+                    cls.item_table(
+                        list_id=db_id,
+                        index=index,
+                        genotype=genotype_id,
+                        measures=value_id,
+                    )
+                )
+            i += len(object)
+
         ses.add_all(items)
 
-        return int(dblist.id)
+        return db_ids
 
     @classmethod
     async def from_db(

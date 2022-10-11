@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import pickle
-from typing import Optional, Type
+from typing import List, Optional, Type
 
 import numpy as np
 from sqlalchemy import Column, Integer, LargeBinary
@@ -57,21 +57,21 @@ class SerializableRng(Serializable):
         """
         await conn.run_sync(_DbBase.metadata.create_all)
 
-    async def to_db(
-        self: SerializableRng,
-        ses: AsyncSession,
-    ) -> int:
+    @classmethod
+    async def to_db_multiple(
+        cls: Type[SerializableRng], ses: AsyncSession, objects: List[SerializableRng]
+    ) -> List[int]:
         """
-        Serialize this object to a database.
+        Serialize multiple objects to a database.
 
         :param ses: Database session.
-        :returns: Id of the object in the database.
+        :param objects: The objects to serialize.
+        :returns: Ids of the objects in the database.
         """
-        row = RngTable(pickled=pickle.dumps(self.rng))
-        ses.add(row)
+        rows = [RngTable(pickled=pickle.dumps(o.rng)) for o in objects]
+        ses.add_all(rows)
         await ses.flush()
-        assert row.id is not None
-        return row.id
+        return [int(r.id) for r in rows]  # type: ignore # we know id cannot be None # TODO
 
     @classmethod
     async def from_db(

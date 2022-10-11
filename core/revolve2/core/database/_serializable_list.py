@@ -100,33 +100,42 @@ class SerializableList(List[T], Serializable):
         """
         await conn.run_sync(cls.__db_base.metadata.create_all)  # type: ignore # TODO
 
-    async def to_db(
-        self,
-        ses: AsyncSession,
-    ) -> int:
+    @classmethod
+    async def to_db_multiple(
+        cls, ses: AsyncSession, objects: List[SerializableList[T]]
+    ) -> List[int]:
         """
-        Serialize this object to a database.
+        Serialize multiple objects to a database.
 
         :param ses: Database session.
-        :returns: Id of the object in the database.
+        :param objects: The objects to serialize.
+        :returns: Ids of the objects in the database.
         """
-        dblist = self.table()
-        ses.add(dblist)
+        dblists = [cls.table() for _ in objects]
+        ses.add_all(dblists)
         await ses.flush()
-        assert dblist.id is not None
+        db_ids: List[int] = [int(l.id) for l in dblists]
 
-        if self.__is_basic_type:
-            values = [i for i in self]
+        if cls.__is_basic_type:
+            combined_values = [i for o in objects for i in o]
         else:
-            values = [await i.to_db(ses) for i in self]  # type: ignore # We know it only contains values of type Serializable
+            combined_unserialized_values = [i for o in objects for i in o]
+            combined_values = await cls.__item_type.to_db_multiple(
+                ses, combined_unserialized_values
+            )
 
-        items = [
-            self.item_table(list_id=dblist.id, index=i, value=v)
-            for i, v in enumerate(values)
-        ]
+        items = []
+        i = 0
+        for object, db_id in zip(objects, db_ids):
+            for index, value in enumerate(
+                combined_values[i : i + len(object)],
+            ):
+                items.append(cls.item_table(list_id=db_id, index=index, value=value))
+            i += len(object)
+
         ses.add_all(items)
 
-        return int(dblist.id)
+        return db_ids
 
     @classmethod
     async def from_db(cls, ses: AsyncSession, id: int) -> Optional[SerializableList[T]]:

@@ -13,5 +13,7 @@ cd "$(dirname "$0")"
 # mypy openai_es && \
 # echo "examples/rpi_controller_remote:" && \
 # mypy rpi_controller_remote
-echo "examples/xor:" && \
+# echo "examples/xor:" && \
+# mypy xor
+echo "examples/de:" && \
 mypy xor

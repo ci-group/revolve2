@@ -30,7 +30,7 @@ async def main() -> None:
     parser.add_argument("-w", "--wandb", action="store_true")
     parser.add_argument("--wandb_os_logs", action="store_true")
     args = parser.parse_args()
-
+    
     wandb.init(
         mode="online" if args.wandb else "disabled",
         project="robo-erectus",
@@ -41,6 +41,7 @@ async def main() -> None:
             _disable_meta=not args.wandb_os_logs,
         ),
     )
+    wandb.run.name = f"{args.experiment_name}__{wandb.run.name}"
 
     logging.basicConfig(
         level=logging.INFO,

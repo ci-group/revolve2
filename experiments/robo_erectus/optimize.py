@@ -21,14 +21,15 @@ async def main() -> None:
     parser.add_argument("-n", "--experiment_name", type=str, default="default")
     parser.add_argument("--rng_seed", type=int, default=420)
     parser.add_argument("--num_initial_mutations", type=int, default=10)
-    parser.add_argument("--simulation_time", type=int, default=30)
+    parser.add_argument("-t", "--simulation_time", type=int, default=30)
     parser.add_argument("--sampling_frequency", type=int, default=10)
     parser.add_argument("--control_frequency", type=int, default=10)
-    parser.add_argument("--population_size", type=int, default=10)
+    parser.add_argument("-p", "--population_size", type=int, default=10)
     parser.add_argument("--offspring_size", type=int, default=10)
     parser.add_argument("-g", "--num_generations", type=int, default=50)
     parser.add_argument("-w", "--wandb", action="store_true")
     parser.add_argument("--wandb_os_logs", action="store_true")
+    parser.add_argument("-d", "--debug", action="store_true")
     args = parser.parse_args()
     
     wandb.init(
@@ -44,7 +45,7 @@ async def main() -> None:
     wandb.run.name = f"{args.experiment_name}__{wandb.run.name}"
 
     logging.basicConfig(
-        level=logging.INFO,
+        level=logging.INFO if not args.debug else logging.DEBUG,
         format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
     )
 

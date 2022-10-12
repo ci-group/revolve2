@@ -1,6 +1,7 @@
 """Optimizer for finding a good modular robot body and brain using CPPNWIN genotypes and simulation using mujoco."""
 
 import math
+import logging
 import pickle
 import wandb
 from random import Random
@@ -194,8 +195,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
         return True
 
-    def _init_runner(self) -> None:
-        self._runner = LocalRunner(headless=True)
+    def _init_runner(self, headless=True) -> None:
+        self._runner = LocalRunner(headless=headless)
 
     def _select_parents(
         self,
@@ -265,6 +266,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         self._controllers = []
 
         for genotype in genotypes:
+            # here the actual controllers are created:
             actor, controller = develop(genotype).make_actor_and_controller()
             bounding_box = actor.calc_aabb()
             self._controllers.append(controller)
@@ -288,8 +290,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
         batch_results = await self._runner.run_batch(batch)
 
         fitness = [
-            self._calculate_fitness(environment_result)
-            for environment_result in batch_results.environment_results
+            self._calculate_fitness(environment_result, environment)
+            for environment_result, environment in zip(batch_results.environment_results, batch.environments)
         ]
 
         wandb.log(
@@ -303,6 +305,9 @@ class Optimizer(EAOptimizer[Genotype, float]):
                 "max_height_relative_to_avg_height": wandb.Histogram(
                     [max_height_relative_to_avg_height_measure(r) for r in batch_results.environment_results]
                 ),
+                "ground_contact_measure":  wandb.Histogram(
+                    [ground_contact_measure(r) for r in batch_results.environment_results]
+                ),
             }
         )
 
@@ -311,15 +316,19 @@ class Optimizer(EAOptimizer[Genotype, float]):
     def _control(
         self, environment_index: int, dt: float, control: ActorControl
     ) -> None:
+        """controller for batch that influnces models in simulation"""
         controller = self._controllers[environment_index]
         controller.step(dt)
         control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod
-    def _calculate_fitness(environment_results: EnvironmentResults) -> float:
+    def _calculate_fitness(environment_results: EnvironmentResults, environment: Environment) -> float:
         # TODO simulation can continue slightly passed the defined sim time.
 
-        return displacement_measure(environment_results) / max_height_relative_to_avg_height_measure(
+        logging.debug(f'calculating fitness using sample of {len(environment_results.environment_states)} environment states')
+        ground_measure = ground_contact_measure(environment_results) # set to 1.0 if you don't want it
+        logging.debug(f"ground_measure = {ground_measure:0.3f}")
+        return ground_measure * displacement_measure(environment_results) / max_height_relative_to_avg_height_measure(
             environment_results
         )
 

@@ -110,6 +110,7 @@ class LocalRunner(Runner):
                         for actor_target in actor_targets
                         for target in actor_target[1]
                     ]
+                    # set target angles of the joints
                     self._set_dof_targets(data, targets)
 
                 # sample state if it is time
@@ -233,10 +234,11 @@ class LocalRunner(Runner):
     def _get_actor_state(
         robot_index: int, data: mujoco.MjData, model: mujoco.MjModel
     ) -> ActorState:
+        robotname = f"robot_{robot_index}/"  # the slash is added by dm_control. ugly but deal with it
         bodyid = mujoco.mj_name2id(
             model,
             mujoco.mjtObj.mjOBJ_BODY,
-            f"robot_{robot_index}/",  # the slash is added by dm_control. ugly but deal with it
+            robotname,
         )
         assert bodyid >= 0
 
@@ -246,13 +248,27 @@ class LocalRunner(Runner):
         position = Vector3([n for n in data.qpos[qindex : qindex + 3]])
         orientation = Quaternion([n for n in data.qpos[qindex + 3 : qindex + 3 + 4]])
 
-        #contacts = data.contact
-        #for c in contacts:
-        #    # TODO: check if c.geom1 or c.geom2 are the ground plane!
-        #    # TODO: how to lookup an mjData object given its ID?
-        #    pass
+        contacts = data.contact
+        # https://mujoco.readthedocs.io/en/latest/overview.html#floating-objects
+        groundid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, 'ground')
 
-        return ActorState(position, orientation)
+
+        geomids = set() # ids of geometries in contact with ground
+        for c in contacts:
+            if groundid in [c.geom1, c.geom2] and c.geom1 != c.geom2:
+                otherid = c.geom1 if c.geom2 == groundid else c.geom2
+                othername = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, otherid)
+                #logging.debug(f"found ground collision with geom ID: {otherid} (name '{othername}')")
+                if not othername.startswith(robotname):
+                    continue # ensure contact is with part of the robot (e.g. not obstacle and ground)
+                geomids.add(otherid)
+
+        #if len(geomids) > 0:
+        #    logging.debug(f"found {len(geomids)} total geoms in contact with ground")
+        #    names = list([mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, curid) for curid in geomids])
+        #    logging.debug(names)
+
+        return ActorState(position, orientation, geomids, model.ngeom)
 
     @staticmethod
     def _set_dof_targets(data: mujoco.MjData, targets: List[float]) -> None:

@@ -12,7 +12,7 @@ def displacement_measure(environment_results: EnvironmentResults) -> float:
     return float(distance)
 
 
-def max_relative_to_avg_height(environment_results: EnvironmentResults) -> float:
+def max_height_relative_to_avg_height_measure(environment_results: EnvironmentResults) -> float:
     heights = [
         environment_results.environment_states[i + 1].actor_states[0].position[2]
         for i in range(len(environment_results.environment_states) - 1)

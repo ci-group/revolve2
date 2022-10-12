@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Setup and running of the optimize modular program."""
 
+import argparse
 import logging
-import os
+import wandb
 from random import Random
 
 import multineat
@@ -11,42 +12,47 @@ from optimizer import Optimizer
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
 
-EXPERIMENT_NAME = "default"
-DATABASE_DIR = os.path.join('./database', EXPERIMENT_NAME)
-ANALYSIS_DIR = os.path.join(DATABASE_DIR, "analysis/")
-
-def ensure_dirs():
-    if not os.path.isdir(ANALYSIS_DIR):
-        os.mkdir(ANALYSIS_DIR)
 
 async def main() -> None:
     """Run the optimization process."""
-    RNG_SEED = 420
 
-    # number of initial mutations for body and brain CPPNWIN networks
-    NUM_INITIAL_MUTATIONS = 10
+    parser = argparse.ArgumentParser()
+    # TODO: generate name based on timestamp by default & handle loading latest one in rerun_best.py
+    parser.add_argument("--experiment_name", type=str, default="default")
+    parser.add_argument("--rng_seed", type=int, default=420)
+    parser.add_argument("--num_initial_mutations", type=int, default=10)
+    parser.add_argument("--simulation_time", type=int, default=30)
+    parser.add_argument("--sampling_frequency", type=int, default=10)
+    parser.add_argument("--control_frequency", type=int, default=10)
+    parser.add_argument("--population_size", type=int, default=10)
+    parser.add_argument("--offspring_size", type=int, default=10)
+    parser.add_argument("-g", "--num_generations", type=int, default=50)
+    parser.add_argument("-w", "--wandb", action="store_true")
+    parser.add_argument("--wandb_os_logs", action="store_true")
+    args = parser.parse_args()
 
-    SIMULATION_TIME = 30
-    SAMPLING_FREQUENCY = 10
-    CONTROL_FREQUENCY = 10
-
-    POPULATION_SIZE = 10
-    OFFSPRING_SIZE = 10
-    NUM_GENERATIONS = 50
+    wandb.init(
+        mode="online" if args.wandb else "disabled",
+        project="robo-erectus-test",
+        entity="ea-research",
+        config=vars(args),
+        settings=wandb.Settings(
+            _disable_stats=not args.wandb_os_logs,
+            _disable_meta=not args.wandb_os_logs,
+        ),
+    )
 
     logging.basicConfig(
         level=logging.INFO,
         format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
     )
 
-    logging.info("Starting optimization")
-
     # random number generator
     rng = Random()
-    rng.seed(RNG_SEED)
+    rng.seed(args.rng_seed)
 
     # database
-    database = open_async_database_sqlite(f"./database/{EXPERIMENT_NAME}")
+    database = open_async_database_sqlite(f"./database/{args.experiment_name}")
 
     # process id generator
     process_id_gen = ProcessIdGen()
@@ -57,8 +63,8 @@ async def main() -> None:
     innov_db_brain = multineat.InnovationDatabase()
 
     initial_population = [
-        random_genotype(innov_db_body, innov_db_brain, rng, NUM_INITIAL_MUTATIONS)
-        for _ in range(POPULATION_SIZE)
+        random_genotype(innov_db_body, innov_db_brain, rng, args.num_initial_mutations)
+        for _ in range(args.population_size)
     ]
 
     maybe_optimizer = await Optimizer.from_database(
@@ -70,10 +76,11 @@ async def main() -> None:
         process_id_gen=process_id_gen,
     )
     if maybe_optimizer is not None:
-        print("initilized with existing database ")
+        print("Initilized with existing database...")
+        # TODO: if run is already finished, don't log it to wandb
         optimizer = maybe_optimizer
     else:
-        print("initialized from scratch...")
+        print("Initialized a new experiment...")
         optimizer = await Optimizer.new(
             database=database,
             process_id=process_id,
@@ -82,14 +89,14 @@ async def main() -> None:
             process_id_gen=process_id_gen,
             innov_db_body=innov_db_body,
             innov_db_brain=innov_db_brain,
-            simulation_time=SIMULATION_TIME,
-            sampling_frequency=SAMPLING_FREQUENCY,
-            control_frequency=CONTROL_FREQUENCY,
-            num_generations=NUM_GENERATIONS,
-            offspring_size=OFFSPRING_SIZE,
+            simulation_time=args.simulation_time,
+            sampling_frequency=args.sampling_frequency,
+            control_frequency=args.control_frequency,
+            num_generations=args.num_generations,
+            offspring_size=args.offspring_size,
         )
 
-    logging.info("Starting optimization process..")
+    logging.info("Starting optimization process...")
 
     await optimizer.run()
 

@@ -13,17 +13,32 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from revolve2.core.physics.running import Environment
 from revolve2.runners.mujoco import LocalRunner
-import mujoco
 
-from optimize import EXPERIMENT_NAME, DATABASE_DIR, ANALYSIS_DIR, ensure_dirs
+
+def ensure_dirs(analysis_dir):
+    if not os.path.isdir(analysis_dir):
+        os.mkdir(analysis_dir)
+
 
 async def main() -> None:
     """Run the script."""
-    parser = argparse.ArgumentParser(description='reruns simulation for all time best robot')
-    parser.add_argument('-t', '--time', type=float, default=1000000, help='time (secs) for which to run the simulation')
+    parser = argparse.ArgumentParser(
+        description="reruns simulation for all time best robot"
+    )
+    parser.add_argument(
+        "-t",
+        "--time",
+        type=float,
+        default=1000000,
+        help="time (secs) for which to run the simulation",
+    )
+    parser.add_argument("--experiment_name", type=str, default="default")
     args = parser.parse_args()
 
-    db = open_async_database_sqlite(DATABASE_DIR)
+    database_dir = os.path.join("./database", args.experiment_name)
+    analysis_dir = os.path.join(database_dir, "analysis/")
+
+    db = open_async_database_sqlite(database_dir)
     async with AsyncSession(db) as session:
         best_individual = (
             await session.execute(
@@ -36,7 +51,7 @@ async def main() -> None:
         assert best_individual is not None
 
         print(f"fitness: {best_individual[1].value:0.5f}")
-        
+
         genotype = (
             await GenotypeSerializer.from_database(
                 session, [best_individual[0].genotype_id]
@@ -49,18 +64,19 @@ async def main() -> None:
     env, _ = ModularRobotRerunner.robot_to_env(robot)
 
     # output env to a MJCF (xml) file (based on LocalRunner.run_batch())
-    ensure_dirs()
+    ensure_dirs(analysis_dir)
     xml_string = LocalRunner._make_mjcf(env)
-    #model = mujoco.MjModel.from_xml_string(xml_string)
-    #data = mujoco.MjData(model)
-    xml_path = os.path.join(ANALYSIS_DIR, 'best.xml')
-    with open(xml_path, 'w') as f:
+    # model = mujoco.MjModel.from_xml_string(xml_string)
+    # data = mujoco.MjData(model)
+    xml_path = os.path.join(analysis_dir, "best.xml")
+    with open(xml_path, "w") as f:
         f.write(xml_string)
     print(f"wrote file: '{xml_path}'")
 
     # run simulation
     print(f"starting simulation for {args.time} secs...")
     await rerunner.rerun(robot, 60, simulation_time=args.time)
+
 
 if __name__ == "__main__":
     import asyncio

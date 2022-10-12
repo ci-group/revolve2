@@ -1,6 +1,7 @@
 .venv
 deps/
-database
+database/
+wandb/
 
 # Visual Studio Code
 .vscode/

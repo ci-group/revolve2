@@ -2,6 +2,7 @@
 
 import math
 import pickle
+import wandb
 from random import Random
 from typing import List, Tuple
 
@@ -9,7 +10,7 @@ import multineat
 import revolve2.core.optimization.ea.generic_ea.population_management as population_management
 import revolve2.core.optimization.ea.generic_ea.selection as selection
 import sqlalchemy
-from measures import displacement_measure, max_relative_to_avg_height
+from measures import *
 from genotype import Genotype, GenotypeSerializer, crossover, develop, mutate
 from pyrr import Quaternion, Vector3
 from revolve2.actor_controller import ActorController
@@ -286,10 +287,26 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
         batch_results = await self._runner.run_batch(batch)
 
-        return [
+        fitness = [
             self._calculate_fitness(environment_result)
             for environment_result in batch_results.environment_results
         ]
+
+        wandb.log(
+            {
+                "max_fitness": max(fitness),
+                "avg_fitness": sum(fitness) / len(fitness),
+                "min_fitness": min(fitness),
+                "displacement": wandb.Histogram(
+                    [displacement_measure(r) for r in batch_results.environment_results]
+                ),
+                "max_height_relative_to_avg_height": wandb.Histogram(
+                    [max_height_relative_to_avg_height_measure(r) for r in batch_results.environment_results]
+                ),
+            }
+        )
+
+        return fitness
 
     def _control(
         self, environment_index: int, dt: float, control: ActorControl
@@ -302,7 +319,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
     def _calculate_fitness(environment_results: EnvironmentResults) -> float:
         # TODO simulation can continue slightly passed the defined sim time.
 
-        return displacement_measure(environment_results) / max_relative_to_avg_height(
+        return displacement_measure(environment_results) / max_height_relative_to_avg_height_measure(
             environment_results
         )
 

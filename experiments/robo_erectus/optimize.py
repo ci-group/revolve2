@@ -18,7 +18,7 @@ async def main() -> None:
 
     parser = argparse.ArgumentParser()
     # TODO: generate name based on timestamp by default & handle loading latest one in rerun_best.py
-    parser.add_argument("--experiment_name", type=str, default="default")
+    parser.add_argument("-n", "--experiment_name", type=str, default="default")
     parser.add_argument("--rng_seed", type=int, default=420)
     parser.add_argument("--num_initial_mutations", type=int, default=10)
     parser.add_argument("--simulation_time", type=int, default=30)
@@ -33,7 +33,7 @@ async def main() -> None:
 
     wandb.init(
         mode="online" if args.wandb else "disabled",
-        project="robo-erectus-test",
+        project="robo-erectus",
         entity="ea-research",
         config=vars(args),
         settings=wandb.Settings(

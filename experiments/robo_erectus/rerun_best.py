@@ -32,7 +32,7 @@ async def main() -> None:
         default=1000000,
         help="time (secs) for which to run the simulation",
     )
-    parser.add_argument("--experiment_name", type=str, default="default")
+    parser.add_argument("-n", "--experiment_name", type=str, default="default")
     args = parser.parse_args()
 
     database_dir = os.path.join("./database", args.experiment_name)

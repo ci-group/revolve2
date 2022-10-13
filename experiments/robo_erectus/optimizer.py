@@ -291,22 +291,32 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
         fitness = [
             self._calculate_fitness(environment_result, environment)
-            for environment_result, environment in zip(batch_results.environment_results, batch.environments)
+            for environment_result, environment in zip(
+                batch_results.environment_results, batch.environments
+            )
+        ]
+        displacement = [
+            displacement_measure(r) for r in batch_results.environment_results
         ]
 
         wandb.log(
             {
-                "max_fitness": max(fitness),
-                "avg_fitness": sum(fitness) / len(fitness),
-                "min_fitness": min(fitness),
-                "displacement": wandb.Histogram(
-                    [displacement_measure(r) for r in batch_results.environment_results]
-                ),
+                "fitness_max": max(fitness),
+                "fitness_avg": sum(fitness) / len(fitness),
+                "fitness_min": min(fitness),
+                "displacement_avg": sum(displacement) / len(displacement),
+                "displacement": wandb.Histogram(displacement),
                 "max_height_relative_to_avg_height": wandb.Histogram(
-                    [max_height_relative_to_avg_height_measure(r) for r in batch_results.environment_results]
+                    [
+                        max_height_relative_to_avg_height_measure(r)
+                        for r in batch_results.environment_results
+                    ]
                 ),
-                "ground_contact_measure":  wandb.Histogram(
-                    [ground_contact_measure(r) for r in batch_results.environment_results]
+                "ground_contact_measure": wandb.Histogram(
+                    [
+                        ground_contact_measure(r)
+                        for r in batch_results.environment_results
+                    ]
                 ),
             }
         )
@@ -322,14 +332,23 @@ class Optimizer(EAOptimizer[Genotype, float]):
         control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod
-    def _calculate_fitness(environment_results: EnvironmentResults, environment: Environment) -> float:
+    def _calculate_fitness(
+        environment_results: EnvironmentResults, environment: Environment
+    ) -> float:
         # TODO simulation can continue slightly passed the defined sim time.
 
-        logging.debug(f'calculating fitness using sample of {len(environment_results.environment_states)} environment states')
-        ground_measure = ground_contact_measure(environment_results) # set to 1.0 if you don't want it
-        logging.debug(f"ground_measure = {ground_measure:0.3f}")
-        return ground_measure * displacement_measure(environment_results) / max_height_relative_to_avg_height_measure(
+        logging.debug(
+            f"calculating fitness using sample of {len(environment_results.environment_states)} environment states"
+        )
+        ground_measure = ground_contact_measure(
             environment_results
+        )  # set to 1.0 if you don't want it
+        logging.debug(f"ground_measure = {ground_measure:0.3f}")
+        return (
+            ground_measure
+            * displacement_measure(environment_results)
+            / max_height_relative_to_avg_height_measure(environment_results)
+            / max_height_relative_to_avg_height_measure(environment_results)
         )
 
     def _on_generation_checkpoint(self, session: AsyncSession) -> None:

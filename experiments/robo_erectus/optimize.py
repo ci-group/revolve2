@@ -31,7 +31,7 @@ async def main() -> None:
     parser.add_argument("--wandb_os_logs", action="store_true")
     parser.add_argument("-d", "--debug", action="store_true")
     args = parser.parse_args()
-    
+
     wandb.init(
         mode="online" if args.wandb else "disabled",
         project="robo-erectus",

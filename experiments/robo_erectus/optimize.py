@@ -11,14 +11,16 @@ from genotype import random as random_genotype
 from optimizer import Optimizer
 from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization import ProcessIdGen
+from utilities import *
 
 
 async def main() -> None:
     """Run the optimization process."""
 
     parser = argparse.ArgumentParser()
-    # TODO: generate name based on timestamp by default & handle loading latest one in rerun_best.py
-    parser.add_argument("-n", "--experiment_name", type=str, default="default")
+    parser.add_argument("-n", "--run_name", type=str, default="default")
+    parser.add_argument("-l", "--resume_latest", action="store_true")
+    parser.add_argument("-r", "--resume", action="store_true")
     parser.add_argument("--rng_seed", type=int, default=420)
     parser.add_argument("--num_initial_mutations", type=int, default=10)
     parser.add_argument("-t", "--simulation_time", type=int, default=30)
@@ -32,6 +34,8 @@ async def main() -> None:
     parser.add_argument("-d", "--debug", action="store_true")
     args = parser.parse_args()
 
+    ensure_dirs(DATABASE_PATH)
+
     wandb.init(
         mode="online" if args.wandb else "disabled",
         project="robo-erectus",
@@ -42,7 +46,21 @@ async def main() -> None:
             _disable_meta=not args.wandb_os_logs,
         ),
     )
-    wandb.run.name = f"{args.experiment_name}__{wandb.run.name}"
+
+    if args.resume_latest:
+        full_run_name = get_latest_run()
+    elif args.resume:
+        full_run_name = find_dir(DATABASE_PATH, args.run_name)
+    else:
+        full_run_name = f"{args.run_name}__{wandb.run.name}"
+
+    if full_run_name is None:
+        print("Run not found...")
+        exit()
+
+    database_dir = os.path.join(DATABASE_PATH, full_run_name)
+    wandb.run.name = full_run_name
+    set_latest_run(full_run_name)
 
     logging.basicConfig(
         level=logging.INFO if not args.debug else logging.DEBUG,
@@ -54,7 +72,7 @@ async def main() -> None:
     rng.seed(args.rng_seed)
 
     # database
-    database = open_async_database_sqlite(f"./database/{args.experiment_name}")
+    database = open_async_database_sqlite(database_dir)
 
     # process id generator
     process_id_gen = ProcessIdGen()

@@ -301,10 +301,12 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
         wandb.log(
             {
+                "displacement_max": max(displacement),
+                "displacement_avg": sum(displacement) / len(displacement),
+                "displacement_min": min(displacement),
                 "fitness_max": max(fitness),
                 "fitness_avg": sum(fitness) / len(fitness),
                 "fitness_min": min(fitness),
-                "displacement_avg": sum(displacement) / len(displacement),
                 "displacement": wandb.Histogram(displacement),
                 "max_height_relative_to_avg_height": wandb.Histogram(
                     [

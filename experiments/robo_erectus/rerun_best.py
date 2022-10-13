@@ -11,13 +11,8 @@ from revolve2.core.optimization.ea.generic_ea import DbEAOptimizerIndividual
 from revolve2.runners.mujoco import ModularRobotRerunner
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
-from revolve2.core.physics.running import Environment
 from revolve2.runners.mujoco import LocalRunner
-
-
-def ensure_dirs(analysis_dir):
-    if not os.path.isdir(analysis_dir):
-        os.mkdir(analysis_dir)
+from utilities import *
 
 
 async def main() -> None:
@@ -32,11 +27,26 @@ async def main() -> None:
         default=1000000,
         help="time (secs) for which to run the simulation",
     )
-    parser.add_argument("-n", "--experiment_name", type=str, default="default")
+    parser.add_argument("-l", "--load_latest", action="store_true")
+    parser.add_argument("-n", "--run_name", type=str, default="default")
     args = parser.parse_args()
 
-    database_dir = os.path.join("./database", args.experiment_name)
-    analysis_dir = os.path.join(database_dir, "analysis/")
+    ensure_dirs(DATABASE_PATH)
+
+    if args.load_latest:
+        full_run_name = get_latest_run()
+    else:
+        full_run_name = find_dir(DATABASE_PATH, args.run_name)
+
+    if full_run_name is None:
+        print("Run not found...")
+        exit()
+    else:
+        print(f'Run found - "{full_run_name}"')
+
+    database_dir = os.path.join(DATABASE_PATH, full_run_name)
+    analysis_dir = os.path.join(database_dir, ANALYSIS_DIR_NAME)
+    ensure_dirs(analysis_dir)
 
     db = open_async_database_sqlite(database_dir)
     async with AsyncSession(db) as session:
@@ -64,7 +74,6 @@ async def main() -> None:
     env, _ = ModularRobotRerunner.robot_to_env(robot)
 
     # output env to a MJCF (xml) file (based on LocalRunner.run_batch())
-    ensure_dirs(analysis_dir)
     xml_string = LocalRunner._make_mjcf(env)
     # model = mujoco.MjModel.from_xml_string(xml_string)
     # data = mujoco.MjData(model)

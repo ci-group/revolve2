@@ -12,7 +12,9 @@ class ModularRobotRerunner:
 
     _controller: ActorController
 
-    async def rerun(self, robot: ModularRobot, control_frequency: float, simulation_time=1000000):
+    async def rerun(
+        self, robot: ModularRobot, control_frequency: float, simulation_time=1000000
+    ):
         """
         Rerun a single robot.
 
@@ -37,7 +39,6 @@ class ModularRobotRerunner:
     ) -> None:
         self._controller.step(dt)
         control.set_dof_targets(0, self._controller.get_dof_targets())
-
 
     @staticmethod
     def robot_to_env(robot: ModularRobot) -> Environment:

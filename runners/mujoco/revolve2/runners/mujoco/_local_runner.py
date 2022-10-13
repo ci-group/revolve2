@@ -250,20 +250,19 @@ class LocalRunner(Runner):
 
         contacts = data.contact
         # https://mujoco.readthedocs.io/en/latest/overview.html#floating-objects
-        groundid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, 'ground')
+        groundid = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "ground")
 
-
-        geomids = set() # ids of geometries in contact with ground
+        geomids = set()  # ids of geometries in contact with ground
         for c in contacts:
             if groundid in [c.geom1, c.geom2] and c.geom1 != c.geom2:
                 otherid = c.geom1 if c.geom2 == groundid else c.geom2
                 othername = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, otherid)
-                #logging.debug(f"found ground collision with geom ID: {otherid} (name '{othername}')")
+                # logging.debug(f"found ground collision with geom ID: {otherid} (name '{othername}')")
                 if not othername.startswith(robotname):
-                    continue # ensure contact is with part of the robot (e.g. not obstacle and ground)
+                    continue  # ensure contact is with part of the robot (e.g. not obstacle and ground)
                 geomids.add(otherid)
 
-        #if len(geomids) > 0:
+        # if len(geomids) > 0:
         #    logging.debug(f"found {len(geomids)} total geoms in contact with ground")
         #    names = list([mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, curid) for curid in geomids])
         #    logging.debug(names)

@@ -160,6 +160,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         fitness_serializer: Type[Serializer[Fitness]],
         offspring_size: int,
         initial_population: List[Genotype],
+        fitness_function: str
     ) -> None:
         """
         Initialize this class async.
@@ -187,6 +188,7 @@ class EAOptimizer(Process, Generic[Genotype, Fitness]):
         self.__next_individual_id = 0
         self.__latest_fitnesses = None
         self.__generation_index = 0
+        self.__fitness_funciton = fitness_function
 
         self.__latest_population = [
             _Individual(self.__gen_next_individual_id(), g, [])

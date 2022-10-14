@@ -33,6 +33,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
+import fitness as ft
 
 
 class Optimizer(EAOptimizer[Genotype, float]):
@@ -59,6 +60,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
     _num_generations: int
 
+    _fitness_function: str
+
     async def ainit_new(  # type: ignore # TODO for now ignoring mypy complaint about LSP problem, override parent's ainit
         self,
         database: AsyncEngine,
@@ -74,6 +77,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         control_frequency: float,
         num_generations: int,
         offspring_size: int,
+        fitness_function: str,
     ) -> None:
         """
         Initialize this class async.
@@ -105,6 +109,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
             fitness_serializer=FloatSerializer,
             offspring_size=offspring_size,
             initial_population=initial_population,
+            fitness_function=fitness_function,
         )
 
         self._process_id = process_id
@@ -116,6 +121,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         self._sampling_frequency = sampling_frequency
         self._control_frequency = control_frequency
         self._num_generations = num_generations
+        self._fitness_function = fitness_function
 
         # create database structure if not exists
         # TODO this works but there is probably a better way
@@ -290,7 +296,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         batch_results = await self._runner.run_batch(batch)
 
         fitness = [
-            self._calculate_fitness(environment_result, environment)
+            ft.calculate(self, environment_result)
             for environment_result, environment in zip(
                 batch_results.environment_results, batch.environments
             )
@@ -332,26 +338,6 @@ class Optimizer(EAOptimizer[Genotype, float]):
         controller = self._controllers[environment_index]
         controller.step(dt)
         control.set_dof_targets(0, controller.get_dof_targets())
-
-    @staticmethod
-    def _calculate_fitness(
-        environment_results: EnvironmentResults, environment: Environment
-    ) -> float:
-        # TODO simulation can continue slightly passed the defined sim time.
-
-        logging.debug(
-            f"calculating fitness using sample of {len(environment_results.environment_states)} environment states"
-        )
-        ground_measure = ground_contact_measure(
-            environment_results
-        )  # set to 1.0 if you don't want it
-        logging.debug(f"ground_measure = {ground_measure:0.3f}")
-        return (
-            ground_measure
-            * displacement_measure(environment_results)
-            / max_height_relative_to_avg_height_measure(environment_results)
-            / max_height_relative_to_avg_height_measure(environment_results)
-        )
 
     def _on_generation_checkpoint(self, session: AsyncSession) -> None:
         session.add(

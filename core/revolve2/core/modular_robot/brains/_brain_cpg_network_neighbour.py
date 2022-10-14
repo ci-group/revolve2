@@ -40,9 +40,10 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
             for pair in cpg_network_structure.connections
         ]
 
-        (internal_weights, external_weights) = self._make_weights(
+        (internal_weights, external_weights, sensor_weights) = self._make_weights(
             active_hinges, connections, body
         )
+        sensor_weights = cpg_network_structure.transfer_sensor_weights(sensor_weights)
         weight_matrix = cpg_network_structure.make_connection_weights_matrix(
             {
                 cpg: weight
@@ -59,7 +60,7 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
         dof_ranges = cpg_network_structure.make_uniform_dof_ranges(1.0)
 
         return ControllerCpg(
-            initial_state, cpg_network_structure.num_cpgs, weight_matrix, dof_ranges
+            initial_state, cpg_network_structure.num_cpgs, weight_matrix, dof_ranges, sensor_weights
         )
 
     @abstractmethod

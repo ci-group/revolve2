@@ -4,6 +4,7 @@ from typing import List
 
 import mujoco
 import mujoco_viewer
+from revolve2.core.modular_robot._sensor import SensorData as sensors
 
 try:
     import logging
@@ -102,7 +103,12 @@ class LocalRunner(Runner):
                 if time >= last_control_time + control_step:
                     last_control_time = math.floor(time / control_step) * control_step
                     control = ActorControl()
-                    batch.control(env_index, control_step, control)
+
+                    # get random sensor inputs
+                    num_cpgs = len(initial_targets)
+                    _, sensor_inputs = sensors.get_random_data(num_cpgs)
+                    batch.control(env_index, control_step, control, sensor_inputs)
+                    
                     actor_targets = control._dof_targets
                     actor_targets.sort(key=lambda t: t[0])
                     targets = [

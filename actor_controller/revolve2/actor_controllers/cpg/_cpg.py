@@ -21,6 +21,7 @@ class CpgActorController(ActorController):
     _num_output_neurons: int
     _weight_matrix: npt.NDArray[np.float_]  # nxn matrix matching number of neurons
     _dof_ranges: npt.NDArray[np.float_]
+    _sensor_weights: npt.NDArray[np.float_]
 
     def __init__(
         self,
@@ -28,6 +29,7 @@ class CpgActorController(ActorController):
         num_output_neurons: int,
         weight_matrix: npt.NDArray[np.float_],
         dof_ranges: npt.NDArray[np.float_],
+        sensor_weights: npt.NDArray[np.float_]
     ) -> None:
         """
         Initialize this object.
@@ -36,24 +38,28 @@ class CpgActorController(ActorController):
         :param num_output_neurons: The number of output neurons. These will be the first n neurons of the state array.
         :param weight_matrix: The weight matrix used during integration.
         :param dof_ranges: Maximum range (half the complete range) of the output of degrees of freedom.
+        :param dof_ranges: The weights of sensor inputs
         """
         assert state.ndim == 1
         assert weight_matrix.ndim == 2
         assert weight_matrix.shape[0] == weight_matrix.shape[1]
         assert state.shape[0] == weight_matrix.shape[0]
+        assert sensor_weights.shape[0] == state.shape[0] / 2
 
         self._state = state
         self._num_output_neurons = num_output_neurons
         self._weight_matrix = weight_matrix
         self._dof_ranges = dof_ranges
+        self._sensor_weights = sensor_weights
 
-    def step(self, dt: float) -> None:
+    def step(self, dt: float, sensor_inputs: List[int]) -> None:
         """
         Step the controller dt seconds forward.
 
         :param dt: The number of seconds to step forward.
         """
         self._state = self._rk45(self._state, self._weight_matrix, dt)
+        self._state = self.add_sensor_feedback(self._state, sensor_inputs)
 
     @staticmethod
     def _rk45(
@@ -68,6 +74,16 @@ class CpgActorController(ActorController):
         A3: npt.NDArray[np.float_] = np.matmul(A, (state + dt / 2 * A2))
         A4: npt.NDArray[np.float_] = np.matmul(A, (state + dt * A3))
         return state + dt / 6 * (A1 + 2 * (A2 + A3) + A4)
+
+    def add_sensor_feedback(self, states, sensor_inputs):
+        sensor_inputs = np.array(sensor_inputs)
+        # sensor_inputs * sensor weights --> sensor feedbacks, then pad it to the size of states
+        # this is how states looks like: [x1, x2, x3, ..., xn, y1, y2, y3, ..., yn]
+        feedback = np.pad(sensor_inputs*self._sensor_weights,(0,sensor_inputs.shape[0]),'constant')
+        states = states + feedback
+        # TODO not sure if directly adding feedback and then pass a sigmoid function is a proper way to adjust dof targets
+        states = 2 / (1 + np.exp(-2*states)) - 1
+        return states
 
     def get_dof_targets(self) -> List[float]:
         """

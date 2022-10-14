@@ -72,7 +72,25 @@ class BrainCpgNetworkNeighbourV1(ModularRobotBrainCpgNetworkNeighbour):
             ]
         ]
 
-        return (internal_weights, external_weights)
+        sensor_weights = [
+            self._evaluate_network(
+                brain_net,
+                [
+                    1.0,
+                    float(pos.x),
+                    float(pos.y),
+                    float(0),
+                    float(pos.x),
+                    float(pos.y),
+                    float(0),
+                ],
+            )
+            for pos in [
+                body.grid_position(active_hinge) for active_hinge in active_hinges
+            ]
+        ]
+
+        return (internal_weights, external_weights, sensor_weights)
 
     @staticmethod
     def _evaluate_network(

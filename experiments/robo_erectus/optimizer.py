@@ -326,11 +326,11 @@ class Optimizer(EAOptimizer[Genotype, float]):
         return fitness
 
     def _control(
-        self, environment_index: int, dt: float, control: ActorControl
+        self, environment_index: int, dt: float, control: ActorControl, sensor_inputs: List[int]
     ) -> None:
         """controller for batch that influnces models in simulation"""
         controller = self._controllers[environment_index]
-        controller.step(dt)
+        controller.step(dt, sensor_inputs)
         control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod

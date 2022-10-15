@@ -1,8 +1,8 @@
 {
-    "editor.tabSize": 4,
-    "editor.detectIndentation": true,
-    "[python]": {
-      "editor.formatOnSave": true,
-      "editor.defaultFormatter": "ms-python.black-formatter",
-    },
+  "editor.tabSize": 4,
+  "editor.detectIndentation": true,
+  "python.formatting.provider": "black",
+  "[python]": {
+    "editor.formatOnSave": true,
+  },
 }

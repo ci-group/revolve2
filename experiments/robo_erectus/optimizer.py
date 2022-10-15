@@ -33,7 +33,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
-import fitness as ft
+from fitness import fitness_functions
 
 
 class Optimizer(EAOptimizer[Genotype, float]):
@@ -109,7 +109,6 @@ class Optimizer(EAOptimizer[Genotype, float]):
             fitness_serializer=FloatSerializer,
             offspring_size=offspring_size,
             initial_population=initial_population,
-            fitness_function=fitness_function,
         )
 
         self._process_id = process_id
@@ -198,6 +197,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
         self._innov_db_body.Deserialize(opt_row.innov_db_body)
         self._innov_db_brain = innov_db_brain
         self._innov_db_brain.Deserialize(opt_row.innov_db_brain)
+
+        self._fitness_function = opt_row.fitness_function
 
         return True
 
@@ -295,8 +296,9 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
         batch_results = await self._runner.run_batch(batch)
 
+        print(self._fitness_function)
         fitness = [
-            ft.calculate(self, environment_result)
+            fitness_functions[self._fitness_function](environment_result)
             for environment_result, environment in zip(
                 batch_results.environment_results, batch.environments
             )
@@ -351,6 +353,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
                 sampling_frequency=self._sampling_frequency,
                 control_frequency=self._control_frequency,
                 num_generations=self._num_generations,
+                fitness_function=self._fitness_function,
             )
         )
 
@@ -378,3 +381,4 @@ class DbOptimizerState(DbBase):
     sampling_frequency = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     control_frequency = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     num_generations = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    fitness_function = sqlalchemy.Column(sqlalchemy.String, nullable=False)

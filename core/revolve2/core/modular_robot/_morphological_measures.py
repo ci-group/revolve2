@@ -46,6 +46,13 @@ class MorphologicalMeasures:
     """Active hinges which have all slots filled with other modules."""
     filled_active_hinges: List[ActiveHinge]
 
+    """
+    Bricks that are only connected to one other module.
+
+    Both children and parent are counted.
+    """
+    single_neighbour_bricks: List[Brick]
+
     def __init__(self, body: Body) -> None:
         if not body.is_finalized:
             raise NotFinalizedError()
@@ -140,13 +147,13 @@ class MorphologicalMeasures:
     @property
     def max_potentionally_filled_core_and_bricks(self) -> int:
         """
-        Maximum number of core and bricks that could potentially be filled with this set of modules if rearranged in an optimal way.
+        Get the maximum number of core and bricks that could potentially be filled with this set of modules if rearranged in an optimal way.
 
         This calculates 'b_max' from the paper.
 
         :returns: The calculated number.
         """
-        # Snake arrangement is optimal
+        # Snake-like is an optimal arrangement.
         #
         #   H H H H
         #   | | | |
@@ -157,7 +164,7 @@ class MorphologicalMeasures:
         # Every extra brick(B) requires 3 modules:
         # The bricks itself and two other modules for its sides(here displayed as H).
         # However, the core and final brick require three each to fill, which is cheaper than another brick.
-        pot_max_filled = (self.num_modules - 2) // 3
+        pot_max_filled = max(0, (self.num_modules - 2) // 3)
 
         # Enough bricks must be available for this strategy.
         # We can count the core as the first brick.
@@ -168,12 +175,62 @@ class MorphologicalMeasures:
     @property
     def filled_core_and_bricks_proportion(self) -> float:
         """
-        Get the ratio between filled cores and bricks and how many that potentially could have been.
+        Get the ratio between filled cores and bricks and how many that potentially could have been if this set of modules was rearranged in an optimal way.
 
         This calculates 'branching' from the paper.
 
         :returns: The proportion.
         """
+        if self.max_potentionally_filled_core_and_bricks == 0:
+            return 0.0
+
         return (
             self.filled_bricks + (1 if self.core_is_filled else 0)
         ) / self.max_potentionally_filled_core_and_bricks
+
+    @property
+    def num_single_neighbour_bricks(self) -> int:
+        """
+        Get the number of bricks that are only connected to one other module.
+
+        Both children and parent are counted.
+
+        :returns: The number of bricks.
+        """
+        return len(self.single_neighbour_bricks)
+
+    @property
+    def max_potential_single_neighbour_bricks(self) -> int:
+        """
+        Get the maximum number of bricks that could potentially have only one neighbour if this set of modules was rearranged in an optimal way.
+
+        This calculates "l_max" from the paper.
+
+        :returns: The calculated number.
+        """
+        # Snake-like is an optimal arrangement.
+        #
+        #   B B B B
+        #   | | | |
+        # C-B-B-B-B-B
+        #   | | | |
+        #   B B B B
+        #
+        # Active hinges are irrelevant because they can always be placed in between two modules without affecting this number.
+
+        return self.num_bricks - ((self.num_bricks + 1) // 3)
+
+    @property
+    def single_neighbour_bricks_proportion(self) -> float:
+        """
+        Get the ratio between bricks with a single neighbour and with how many bricks that potentionally could have been if this set of modules was rearranged in an optimal way.
+
+        :returns: The proportion.
+        """
+        if self.max_potential_single_neighbour_bricks == 0:
+            return 0.0
+
+        return (
+            self.num_single_neighbour_bricks
+            / self.max_potential_single_neighbour_bricks
+        )

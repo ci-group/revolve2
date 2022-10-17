@@ -53,6 +53,20 @@ class MorphologicalMeasures:
     """
     single_neighbour_bricks: List[Brick]
 
+    """
+    Bricks that are connected to exactly two other modules.
+
+    Both children and parent are counted.
+    """
+    double_neighbour_bricks: List[Brick]
+
+    """
+    Active hinges that are connected to exactly two other modules.
+
+    Both children and parent are counted.
+    """
+    double_neighbour_active_hinges: List[ActiveHinge]
+
     def __init__(self, body: Body) -> None:
         if not body.is_finalized:
             raise NotFinalizedError()
@@ -164,6 +178,11 @@ class MorphologicalMeasures:
         # Every extra brick(B) requires 3 modules:
         # The bricks itself and two other modules for its sides(here displayed as H).
         # However, the core and final brick require three each to fill, which is cheaper than another brick.
+        #
+        # Expected sequence:
+        # | num modules | 1 2 3 4 5 6 7 8 9 10 11 12 14
+        # | return val  | 0 0 0 0 1 1 1 2 2 2  3  3  3
+
         pot_max_filled = max(0, (self.num_modules - 2) // 3)
 
         # Enough bricks must be available for this strategy.
@@ -210,20 +229,26 @@ class MorphologicalMeasures:
         """
         # Snake-like is an optimal arrangement.
         #
-        #   B B B B
-        #   | | | |
-        # C-B-B-B-B-B
-        #   | | | |
-        #   B B B B
+        #   B B B B B
+        #   | | | | |
+        # B-C-B-B-B-B-B
+        #   | | | | |
+        #   B B B B B
         #
         # Active hinges are irrelevant because they can always be placed in between two modules without affecting this number.
+        #
+        # Expected sequence:
+        # | num bricks | 0 1 2 3 4 5 6 7 8 9
+        # | return val | 0 1 2 3 4 4 5 6 6 7
 
-        return self.num_bricks - ((self.num_bricks + 1) // 3)
+        return self.num_bricks - max(0, (self.num_bricks - 2) // 3)
 
     @property
     def single_neighbour_bricks_proportion(self) -> float:
         """
         Get the ratio between bricks with a single neighbour and with how many bricks that potentionally could have been if this set of modules was rearranged in an optimal way.
+
+        This calculates limb proportion from the paper.
 
         :returns: The proportion.
         """
@@ -234,3 +259,58 @@ class MorphologicalMeasures:
             self.num_single_neighbour_bricks
             / self.max_potential_single_neighbour_bricks
         )
+
+    @property
+    def num_double_neighbour_bricks(self) -> int:
+        """
+        Get the number of bricks that are connected to exactly two other modules.
+
+        Both children and parent are counted.
+
+        :returns: The number of bricks.
+        """
+        return len(self.double_neighbour_bricks)
+
+    @property
+    def num_double_neighbour_active_hinges(self) -> int:
+        """
+        Get the number of active hinges that are connected to exactly two other modules.
+
+        Both children and parent are counted.
+
+        :returns: The number of active hinges.
+        """
+        return len(self.double_neighbour_active_hinges)
+
+    @property
+    def potential_double_neighbour_bricks_and_active_hinges(self) -> int:
+        """
+        Get the maximum number of bricks and active hinges that could potentially have exactly two neighbours if this set of modules was rearranged in an optimal way.
+
+        This calculates e_max from the paper.
+
+        :returns: The calculated number.
+        """
+        #
+        # C-M-M-M-M-M
+        #
+        # Snake in direction is optimal, no matter whether modules are bricks or active hinges.
+        #
+        # Simply add up the number of bricks and active hinges and subtract 1 for the final module.
+
+        return max(0, self.num_bricks + self.num_active_hinges - 1)
+
+    def double_neighbour_bricks_and_active_hinges_proportion(self) -> float:
+        """
+        Get the ratio between the number of bricks and active hinges with exactly two neighbours and how many that could potentially have been if this set of modules was rearranged in an optimal way.
+
+        This calculate length of limbs proportion from the paper.
+
+        :returns: The proportion.
+        """
+        if self.potential_double_neighbour_bricks_and_active_hinges == 0:
+            return 0.0
+
+        return (
+            self.num_double_neighbour_bricks + self.num_double_neighbour_active_hinges
+        ) / self.potential_double_neighbour_bricks_and_active_hinges

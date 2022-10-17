@@ -2,6 +2,7 @@
 deps/
 database/
 wandb/
+.DS_Store
 
 # Visual Studio Code
 .vscode/

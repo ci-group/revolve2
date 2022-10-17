@@ -178,9 +178,3 @@ class CpgNetworkStructure:
         :returns: The array of dof ranges.
         """
         return np.full(self.num_cpgs, value)
-
-    def transfer_sensor_weights(self, weights: List[float]) -> npt.NDArray[np.float_]:
-        """
-        Transfer sensor weights list to ndarray.
-        """
-        return np.array(weights)

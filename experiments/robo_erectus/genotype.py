@@ -23,6 +23,12 @@ from revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1 import (
 from revolve2.genotypes.cppnwin.modular_robot.brain_genotype_cpg_v1 import (
     random_v1 as brain_random,
 )
+from sensor_feedback_lib.brain_genotype_cpg_v1 import (
+    develop_v1 as feedback_brain_develop,
+)
+from sensor_feedback_lib.brain_genotype_cpg_v1 import (
+    random_v1 as feedback_brain_random,
+)
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.future import select
@@ -180,6 +186,7 @@ def random(
     innov_db_brain: multineat.InnovationDatabase,
     rng: Random,
     num_initial_mutations: int,
+    use_feedback: bool,
 ) -> Genotype:
     """
     Create a random genotype.
@@ -200,13 +207,22 @@ def random(
         num_initial_mutations,
     )
 
-    brain = brain_random(
-        innov_db_brain,
-        multineat_rng,
-        _MULTINEAT_PARAMS,
-        multineat.ActivationFunction.SIGNED_SINE,
-        num_initial_mutations,
-    )
+    if use_feedback:
+        brain = feedback_brain_random(
+            innov_db_brain,
+            multineat_rng,
+            _MULTINEAT_PARAMS,
+            multineat.ActivationFunction.SIGNED_SINE,
+            num_initial_mutations,
+        )
+    else:
+        brain = brain_random(
+            innov_db_brain,
+            multineat_rng,
+            _MULTINEAT_PARAMS,
+            multineat.ActivationFunction.SIGNED_SINE,
+            num_initial_mutations,
+        )
 
     return Genotype(body, brain)
 
@@ -271,7 +287,7 @@ def crossover(
     )
 
 
-def develop(genotype: Genotype) -> ModularRobot:
+def develop(genotype: Genotype, use_feedback: bool) -> ModularRobot:
     """
     Develop the genotype into a modular robot.
 
@@ -279,7 +295,10 @@ def develop(genotype: Genotype) -> ModularRobot:
     :returns: The created robot.
     """
     body = body_develop(genotype.body)
-    brain = brain_develop(genotype.brain, body)
+    if use_feedback:
+        brain = feedback_brain_develop(genotype.brain, body)
+    else:
+        brain = brain_develop(genotype.brain, body)
     return ModularRobot(body, brain)
 
 

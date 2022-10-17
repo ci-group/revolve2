@@ -2,7 +2,7 @@ from typing import List, Tuple, cast
 
 import multineat
 from revolve2.core.modular_robot import ActiveHinge, Body
-from revolve2.core.modular_robot.brains import (
+from ._brain_cpg_network_neighbour import (
     BrainCpgNetworkNeighbour as ModularRobotBrainCpgNetworkNeighbour,
 )
 
@@ -72,7 +72,25 @@ class BrainCpgNetworkNeighbourV1(ModularRobotBrainCpgNetworkNeighbour):
             ]
         ]
 
-        return (internal_weights, external_weights)
+        sensor_weights = [
+            self._evaluate_network(
+                brain_net,
+                [
+                    1.0,
+                    float(pos.x),
+                    float(pos.y),
+                    float(2),
+                    float(pos.x),
+                    float(pos.y),
+                    float(2),
+                ],
+            )
+            for pos in [
+                body.grid_position(active_hinge) for active_hinge in active_hinges
+            ]
+        ]
+
+        return (internal_weights, external_weights, sensor_weights)
 
     @staticmethod
     def _evaluate_network(

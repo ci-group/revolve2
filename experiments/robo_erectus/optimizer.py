@@ -5,7 +5,7 @@ import logging
 import pickle
 import wandb
 from random import Random
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 import multineat
 import revolve2.core.optimization.ea.generic_ea.population_management as population_management
@@ -29,6 +29,7 @@ from revolve2.core.physics.running import (
 )
 from revolve2.core.physics.running._results import EnvironmentResults
 from revolve2.runners.mujoco import LocalRunner
+from sensor_feedback_lib._local_runner import LocalRunner as Feedback_LocalRunner
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
@@ -61,6 +62,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
     _num_generations: int
 
     _fitness_function: str
+    _use_feedback: bool
 
     async def ainit_new(  # type: ignore # TODO for now ignoring mypy complaint about LSP problem, override parent's ainit
         self,
@@ -78,6 +80,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         num_generations: int,
         offspring_size: int,
         fitness_function: str,
+        use_feedback: bool,
     ) -> None:
         """
         Initialize this class async.
@@ -112,7 +115,6 @@ class Optimizer(EAOptimizer[Genotype, float]):
         )
 
         self._process_id = process_id
-        self._init_runner()
         self._innov_db_body = innov_db_body
         self._innov_db_brain = innov_db_brain
         self._rng = rng
@@ -121,6 +123,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
         self._control_frequency = control_frequency
         self._num_generations = num_generations
         self._fitness_function = fitness_function
+        self._use_feedback = use_feedback
+        self._init_runner()
 
         # create database structure if not exists
         # TODO this works but there is probably a better way
@@ -199,11 +203,15 @@ class Optimizer(EAOptimizer[Genotype, float]):
         self._innov_db_brain.Deserialize(opt_row.innov_db_brain)
 
         self._fitness_function = opt_row.fitness_function
+        self._use_feedback = opt_row.use_feedback
 
         return True
 
     def _init_runner(self, headless=True) -> None:
-        self._runner = LocalRunner(headless=headless)
+        if self._use_feedback:
+            self._runner = Feedback_LocalRunner(headless=headless)
+        else:
+            self._runner = LocalRunner(headless=headless)
 
     def _select_parents(
         self,
@@ -263,18 +271,28 @@ class Optimizer(EAOptimizer[Genotype, float]):
         process_id: int,
         process_id_gen: ProcessIdGen,
     ) -> List[float]:
-        batch = Batch(
-            simulation_time=self._simulation_time,
-            sampling_frequency=self._sampling_frequency,
-            control_frequency=self._control_frequency,
-            control=self._control,
-        )
+        if self._use_feedback:
+            batch = Batch(
+                simulation_time=self._simulation_time,
+                sampling_frequency=self._sampling_frequency,
+                control_frequency=self._control_frequency,
+                control=self._feedback_control,
+            )
+        else:
+            batch = Batch(
+                simulation_time=self._simulation_time,
+                sampling_frequency=self._sampling_frequency,
+                control_frequency=self._control_frequency,
+                control=self._control,
+            )
 
         self._controllers = []
 
         for genotype in genotypes:
             # here the actual controllers are created:
-            actor, controller = develop(genotype).make_actor_and_controller()
+            actor, controller = develop(
+                genotype, self._use_feedback
+            ).make_actor_and_controller()
             bounding_box = actor.calc_aabb()
             self._controllers.append(controller)
             env = Environment()
@@ -296,7 +314,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
         batch_results = await self._runner.run_batch(batch)
 
-        print(self._fitness_function)
+        print(f"fitness_function: {self._fitness_function}")
         fitness = [
             fitness_functions[self._fitness_function](environment_result)
             for environment_result, environment in zip(
@@ -334,7 +352,19 @@ class Optimizer(EAOptimizer[Genotype, float]):
         return fitness
 
     def _control(
-        self, environment_index: int, dt: float, control: ActorControl, sensor_inputs: List[int]
+        self, environment_index: int, dt: float, control: ActorControl
+    ) -> None:
+        """controller for batch that influnces models in simulation"""
+        controller = self._controllers[environment_index]
+        controller.step(dt)
+        control.set_dof_targets(0, controller.get_dof_targets())
+
+    def _feedback_control(
+        self,
+        environment_index: int,
+        dt: float,
+        control: ActorControl,
+        sensor_inputs: List[int],
     ) -> None:
         """controller for batch that influnces models in simulation"""
         controller = self._controllers[environment_index]

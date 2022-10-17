@@ -4,6 +4,7 @@ from typing import List
 
 import mujoco
 import mujoco_viewer
+from experiments.robo_erectus.sensor_feedback_lib._sensor import SensorData
 
 try:
     import logging
@@ -59,6 +60,8 @@ class LocalRunner(Runner):
         """
         logging.info("Starting simulation batch with mujoco.")
 
+        sensors = SensorData()
+
         control_step = 1 / batch.control_frequency
         sample_step = 1 / batch.sampling_frequency
 
@@ -102,7 +105,21 @@ class LocalRunner(Runner):
                 if time >= last_control_time + control_step:
                     last_control_time = math.floor(time / control_step) * control_step
                     control = ActorControl()
-                    batch.control(env_index, control_step, control)
+
+                    # get random sensor inputs
+                    # num_cpgs = len(initial_targets)
+                    # _, sensor_inputs = sensors.get_random_data(num_cpgs)
+                    groundcontacts = self._get_actor_states(env_descr, data, model)[
+                        0
+                    ].groundcontacts
+                    geom_bodyids = model.geom_bodyid
+                    sensors.set_touch_states(
+                        groundcontacts, geom_bodyids, len(initial_targets)
+                    )
+                    sensor_inputs = sensors.get_sensor_inputs()
+
+                    batch.control(env_index, control_step, control, sensor_inputs)
+
                     actor_targets = control._dof_targets
                     actor_targets.sort(key=lambda t: t[0])
                     targets = [
@@ -234,7 +251,8 @@ class LocalRunner(Runner):
     def _get_actor_state(
         robot_index: int, data: mujoco.MjData, model: mujoco.MjModel
     ) -> ActorState:
-        robotname = f"robot_{robot_index}/"  # the slash is added by dm_control. ugly but deal with it
+        # the slash is added by dm_control. ugly but deal with it
+        robotname = f"robot_{robot_index}/"
         bodyid = mujoco.mj_name2id(
             model,
             mujoco.mjtObj.mjOBJ_BODY,
@@ -259,7 +277,8 @@ class LocalRunner(Runner):
                 othername = mujoco.mj_id2name(model, mujoco.mjtObj.mjOBJ_GEOM, otherid)
                 # logging.debug(f"found ground collision with geom ID: {otherid} (name '{othername}')")
                 if not othername.startswith(robotname):
-                    continue  # ensure contact is with part of the robot (e.g. not obstacle and ground)
+                    # ensure contact is with part of the robot (e.g. not obstacle and ground)
+                    continue
                 geomids.add(otherid)
 
         # if len(geomids) > 0:

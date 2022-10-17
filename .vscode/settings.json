@@ -3,6 +3,7 @@
   "editor.detectIndentation": true,
   "python.formatting.provider": "black",
   "[python]": {
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": true
   },
+  "editor.formatOnSave": true,
 }

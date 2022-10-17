@@ -3,10 +3,13 @@ from abc import ABC, abstractmethod
 from typing import List, Tuple
 
 from revolve2.actor_controller import ActorController
-from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
+from ._cpg import CpgActorController as ControllerCpg
 from revolve2.core.modular_robot import ActiveHinge, Body, Brain
 
-from ._make_cpg_network_structure_neighbour import make_cpg_network_structure_neighbour
+from revolve2.core.modular_robot.brains import make_cpg_network_structure_neighbour
+
+import numpy as np
+import numpy.typing as npt
 
 
 class BrainCpgNetworkNeighbour(Brain, ABC):
@@ -40,9 +43,12 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
             for pair in cpg_network_structure.connections
         ]
 
-        (internal_weights, external_weights) = self._make_weights(
+        (internal_weights, external_weights, sensor_weights) = self._make_weights(
             active_hinges, connections, body
         )
+
+        sensor_weights = self.transfer_sensor_weights(sensor_weights)
+
         weight_matrix = cpg_network_structure.make_connection_weights_matrix(
             {
                 cpg: weight
@@ -59,8 +65,18 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
         dof_ranges = cpg_network_structure.make_uniform_dof_ranges(1.0)
 
         return ControllerCpg(
-            initial_state, cpg_network_structure.num_cpgs, weight_matrix, dof_ranges
+            initial_state,
+            cpg_network_structure.num_cpgs,
+            weight_matrix,
+            dof_ranges,
+            sensor_weights,
         )
+
+    def transfer_sensor_weights(self, weights: List[float]) -> npt.NDArray[np.float_]:
+        """
+        Transfer sensor weights list to ndarray.
+        """
+        return np.array(weights)
 
     @abstractmethod
     def _make_weights(

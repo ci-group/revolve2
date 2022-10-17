@@ -6,6 +6,7 @@ import random
 class SensorData:
     _roations: List[float]
     _touch_states: List[int]
+    _num_cpgs: int
 
     def __init__(self,
         rotations: List[float] = None,
@@ -14,6 +15,25 @@ class SensorData:
 
         self._roations = rotations
         self._touch_states = touch_states
+    
+    def set_touch_states(self, groundcontacts, geom_bodyids, num_cpgs):
+        touch_states = []
+        for geom_id in groundcontacts:
+            # the actual number of bodies is less 1 than model.nbody(mujoco.MjModel) 
+            touch_states.append(geom_bodyids[geom_id]-1)
+        # n_body = n_joint + 1
+        assert len(set(touch_states)) <= num_cpgs + 1
+        self._touch_states = list(set(touch_states))
+        self._num_cpgs = num_cpgs
+
+    def get_sensor_inputs(self):
+        if self._num_cpgs == 0:
+            return []
+        sensor_inputs = np.zeros(self._num_cpgs)
+        for module_id in self._touch_states:
+            # n_body = n_joint + 1, if module i touch ground, then joint i-1 need to adjust angle.
+            sensor_inputs[int(module_id-1)] = 1
+        return sensor_inputs
 
     @staticmethod
     def get_random_data(num_cpgs):

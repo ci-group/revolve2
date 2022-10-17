@@ -32,10 +32,16 @@ async def main() -> None:
     parser.add_argument("-w", "--wandb", action="store_true")
     parser.add_argument("--wandb_os_logs", action="store_true")
     parser.add_argument("-d", "--debug", action="store_true")
-    parser.add_argument("-f", "--fitness_function", default="displacement_height_groundcontact")
+    parser.add_argument(
+        "-f", "--fitness_function", default="displacement_height_groundcontact"
+    )
+    parser.add_argument("--use_feedback", action="store_true")
     args = parser.parse_args()
 
     ensure_dirs(DATABASE_PATH)
+
+    if args.use_feedback:
+        print("<<< On feedback Mode >>>")
 
     wandb.init(
         mode="online" if args.wandb else "disabled",
@@ -84,7 +90,13 @@ async def main() -> None:
     innov_db_brain = multineat.InnovationDatabase()
 
     initial_population = [
-        random_genotype(innov_db_body, innov_db_brain, rng, args.num_initial_mutations)
+        random_genotype(
+            innov_db_body,
+            innov_db_brain,
+            rng,
+            args.num_initial_mutations,
+            args.use_feedback,
+        )
         for _ in range(args.population_size)
     ]
 
@@ -116,6 +128,7 @@ async def main() -> None:
             num_generations=args.num_generations,
             offspring_size=args.offspring_size,
             fitness_function=args.fitness_function,
+            use_feedback=args.use_feedback,
         )
 
     logging.info("Starting optimization process...")

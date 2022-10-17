@@ -67,6 +67,27 @@ class MorphologicalMeasures:
     """
     double_neighbour_active_hinges: List[ActiveHinge]
 
+    """
+    Depth of the bounding box around the body.
+
+    forward/backward axis for the core module.
+    """
+    bounding_box_depth: int
+
+    """
+    Width of the bounding box around the body.
+
+    right/left axis for the core module.
+    """
+    bounding_box_width: int
+
+    """
+    Height of the bounding box around the body.
+
+    up/down axis for the core module.
+    """
+    bounding_box_height: int
+
     def __init__(self, body: Body) -> None:
         if not body.is_finalized:
             raise NotFinalizedError()
@@ -300,6 +321,7 @@ class MorphologicalMeasures:
 
         return max(0, self.num_bricks + self.num_active_hinges - 1)
 
+    @property
     def double_neighbour_bricks_and_active_hinges_proportion(self) -> float:
         """
         Get the ratio between the number of bricks and active hinges with exactly two neighbours and how many that could potentially have been if this set of modules was rearranged in an optimal way.
@@ -314,3 +336,27 @@ class MorphologicalMeasures:
         return (
             self.num_double_neighbour_bricks + self.num_double_neighbour_active_hinges
         ) / self.potential_double_neighbour_bricks_and_active_hinges
+
+    @property
+    def bounding_box_volume(self) -> int:
+        """
+        Get the volume of the bounding box.
+
+        This calculates m_area from the paper.
+
+        :returns: The volume.
+        """
+        return (
+            self.bounding_box_width * self.bounding_box_height * self.bounding_box_depth
+        )
+
+    @property
+    def bounding_box_volume_coverage(self) -> float:
+        """
+        The proportion of the bounding box that is filled with modules.
+
+        This calculates 'coverage' from the paper.
+
+        :returns: The proportion.
+        """
+        return self.num_modules / self.bounding_box_volume

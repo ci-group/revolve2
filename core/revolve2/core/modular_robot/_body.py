@@ -1,5 +1,6 @@
 import math
-from typing import List, Tuple, Optional
+from dataclasses import dataclass
+from typing import List, Optional, Tuple
 
 import numpy as np
 from pyrr import Quaternion, Vector3
@@ -10,8 +11,6 @@ from ._brick import Brick
 from ._core import Core
 from ._module import Module
 from ._not_finalized_error import NotFinalizedError
-from dataclasses import dataclass
-import math
 
 
 class Body:
@@ -141,6 +140,8 @@ class Body:
 
         :returns: The created grid with cells set to either a Module or None and a tuple representing the position of the core.
         :raises NotImplementedError: In case a module is encountered that is not supported.
+
+        # noqa: DAR402 NotImplementedError
         """
         return _GridMaker().make_grid(self)
 
@@ -195,9 +196,9 @@ class _GridMaker:
         width = maxy - miny
         height = maxz - minz
 
-        grid = []
+        grid: List[List[List[Optional[Module]]]] = []
         for _ in range(depth + 1):
-            y = []
+            y: List[List[Optional[Module]]] = []
             for _ in range(width + 1):
                 y.append([None] * (height + 1))
             grid.append(y)

@@ -1,11 +1,13 @@
-from ._body import Body
-from ._not_finalized_error import NotFinalizedError
-from ._active_hinge import ActiveHinge
-from ._brick import Brick
-from ._module import Module
-from ._core import Core
 from typing import List, Optional, Tuple
+
 import numpy as np
+
+from ._active_hinge import ActiveHinge
+from ._body import Body
+from ._brick import Brick
+from ._core import Core
+from ._module import Module
+from ._not_finalized_error import NotFinalizedError
 
 
 class MorphologicalMeasures:
@@ -87,6 +89,12 @@ class MorphologicalMeasures:
     z_symmetry: float
 
     def __init__(self, body: Body) -> None:
+        """
+        Initialize this object.
+
+        :param body: The body to measure.
+        :raises NotFinalizedError: In case the body is not yet finalized.
+        """
         if not body.is_finalized:
             raise NotFinalizedError()
 
@@ -133,7 +141,8 @@ class MorphologicalMeasures:
             raise NotImplementedError()
 
         for child in module.children:
-            self.__aggregate_modules_recur(child)
+            if child is not None:
+                self.__aggregate_modules_recur(child)
 
     def __calculate_core_is_filled(self) -> bool:
         return all([child is not None for child in self.core.children])
@@ -166,7 +175,7 @@ class MorphologicalMeasures:
             if sum([0 if child is None else 1 for child in brick.children]) == 1
         ]
 
-    def __calculate_double_neighbour_active_hinges(self) -> List[Brick]:
+    def __calculate_double_neighbour_active_hinges(self) -> List[ActiveHinge]:
         return [
             active_hinge
             for active_hinge in self.active_hinges
@@ -262,8 +271,8 @@ class MorphologicalMeasures:
         :returns: The number of modules.
         """
         return (
-            len(self.num_filled_bricks)
-            + len(self.num_active_hinges)
+            self.num_filled_bricks
+            + self.num_active_hinges
             + (1 if self.core_is_filled else 0)
         )
 
@@ -313,7 +322,7 @@ class MorphologicalMeasures:
             return 0.0
 
         return (
-            self.filled_bricks + (1 if self.core_is_filled else 0)
+            len(self.filled_bricks) + (1 if self.core_is_filled else 0)
         ) / self.max_potentionally_filled_core_and_bricks
 
     @property
@@ -441,7 +450,7 @@ class MorphologicalMeasures:
     @property
     def bounding_box_volume_coverage(self) -> float:
         """
-        The proportion of the bounding box that is filled with modules.
+        Get the proportion of the bounding box that is filled with modules.
 
         This calculates 'coverage' from the paper.
 

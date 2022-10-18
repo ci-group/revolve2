@@ -2,7 +2,6 @@ from ._body import Body
 from ._not_finalized_error import NotFinalizedError
 from ._active_hinge import ActiveHinge
 from ._brick import Brick
-from ._module import Module
 from typing import List
 
 
@@ -10,13 +9,18 @@ class MorphologicalMeasures:
     """
     Modular robot morphological measures.
 
+    Only works for robot with only right angle module rotations (90 degrees).
+    Some measures only work for 2d robots, which is noted in their docstring.
+
     Some measures are based on the following paper:
     Miras, K., Haasdijk, E., Glette, K., Eiben, A.E. (2018).
-    Search Space Analysis of Evolvable Robot Morphologies.\
+    Search Space Analysis of Evolvable Robot Morphologies.
     In: Sim, K., Kaufmann, P. (eds) Applications of Evolutionary Computation.
     EvoApplications 2018. Lecture Notes in Computer Science(), vol 10784. Springer, Cham.
     https://doi.org/10.1007/978-3-319-77538-8_47
     """
+
+    is_2d: bool
 
     bricks: List[Brick]
     active_hinges: List[ActiveHinge]
@@ -87,6 +91,27 @@ class MorphologicalMeasures:
     up/down axis for the core module.
     """
     bounding_box_height: int
+
+    """
+    X-axis symmetry according to the paper.
+
+    X-axis is defined as forward/backward for the core module
+    """
+    x_symmetry: float
+
+    """
+    Y-axis symmetry according to the paper.
+
+    Y-axis is defined as left/right for the core module.
+    """
+    y_symmetry: float
+
+    """
+    Z-axis symmetry according to the paper.
+
+    Z-axis is defined as up/down for the core module.
+    """
+    z_symmetry: float
 
     def __init__(self, body: Body) -> None:
         if not body.is_finalized:
@@ -265,11 +290,11 @@ class MorphologicalMeasures:
         return self.num_bricks - max(0, (self.num_bricks - 2) // 3)
 
     @property
-    def single_neighbour_bricks_proportion(self) -> float:
+    def single_neighbour_brick_proportion(self) -> float:
         """
         Get the ratio between bricks with a single neighbour and with how many bricks that potentionally could have been if this set of modules was rearranged in an optimal way.
 
-        This calculates limb proportion from the paper.
+        This calculates limb proportion(extremities) from the paper.
 
         :returns: The proportion.
         """
@@ -322,11 +347,11 @@ class MorphologicalMeasures:
         return max(0, self.num_bricks + self.num_active_hinges - 1)
 
     @property
-    def double_neighbour_bricks_and_active_hinges_proportion(self) -> float:
+    def double_neighbour_brick_and_active_hinge_proportion(self) -> float:
         """
         Get the ratio between the number of bricks and active hinges with exactly two neighbours and how many that could potentially have been if this set of modules was rearranged in an optimal way.
 
-        This calculate length of limbs proportion from the paper.
+        This calculate length of limbs proportion(extensiveness) from the paper.
 
         :returns: The proportion.
         """
@@ -360,3 +385,71 @@ class MorphologicalMeasures:
         :returns: The proportion.
         """
         return self.num_modules / self.bounding_box_volume
+
+    @property
+    def branching(self) -> float:
+        """
+        Get the 'branching' measurement from the paper.
+
+        Alias for filled_core_and_bricks_proportion.
+
+        :returns: Branching measurement.
+        """
+        return self.filled_core_and_bricks_proportion
+
+    @property
+    def limbs(self) -> float:
+        """
+        Get the 'limbs' measurement from the paper.
+
+        Alias for single_neighbour_brick_proportion.
+
+        :returns: Limbs measurement.
+        """
+        return self.single_neighbour_brick_proportion
+
+    @property
+    def length_of_limbs(self) -> float:
+        """
+        Get the 'length of limbs' measurement from the paper.
+
+        Alias for double_neighbour_brick_and_active_hinge_proportion.
+
+        :returns: Length of limbs measurement.
+        """
+        return self.double_neighbour_brick_and_active_hinge_proportion
+
+    @property
+    def coverage(self) -> float:
+        """
+        Get the 'coverage' measurement from the paper.
+
+        Alias for bounding_box_volume_coverage.
+
+        :returns: Coverage measurement.
+        """
+        return self.bounding_box_volume_coverage
+
+    @property
+    def proportion_2d(self) -> float:
+        """
+        Get the 'proportion' measurement from the paper.
+
+        Only for 2d robots.
+
+        :returns: Proportion measurement.
+        """
+        assert self.is_2d
+
+        return min(self.bounding_box_depth, self.bounding_box_width) / max(
+            self.bounding_box_depth, self.bounding_box_width
+        )
+
+    @property
+    def symmetry(self) -> float:
+        """
+        Get the 'symmetry' measurement from the paper, but extended to 3d.
+
+        :returns: Symmetry measurement.
+        """
+        return max(self.x_symmetry, self.y_symmetry, self.z_symmetry)

@@ -6,8 +6,6 @@ from ._module import Module
 from ._core import Core
 from typing import List, Optional, Tuple
 import numpy as np
-import math
-from pyrr import Vector3, Quaternion
 
 
 class MorphologicalMeasures:
@@ -25,9 +23,12 @@ class MorphologicalMeasures:
     https://doi.org/10.1007/978-3-319-77538-8_47
     """
 
+    """As created by the body class."""
     body_as_grid: List[List[List[Optional[Module]]]]
+    """Position of the core in 'body_as_grid'."""
     core_grid_position: Tuple[int, int, int]
 
+    """If the robot is two dimensional, i.e. all module rotations are 0 degrees."""
     is_2d: bool
 
     core: Core

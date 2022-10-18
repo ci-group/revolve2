@@ -2,7 +2,12 @@ from ._body import Body
 from ._not_finalized_error import NotFinalizedError
 from ._active_hinge import ActiveHinge
 from ._brick import Brick
-from typing import List
+from ._module import Module
+from ._core import Core
+from typing import List, Optional, Tuple
+import numpy as np
+import math
+from pyrr import Vector3, Quaternion
 
 
 class MorphologicalMeasures:
@@ -20,26 +25,14 @@ class MorphologicalMeasures:
     https://doi.org/10.1007/978-3-319-77538-8_47
     """
 
+    body_as_grid: List[List[List[Optional[Module]]]]
+    core_grid_position: Tuple[int, int, int]
+
     is_2d: bool
 
+    core: Core
     bricks: List[Brick]
     active_hinges: List[ActiveHinge]
-
-    """
-    Vertical active hinges.
-
-    This means their axis of rotation is vertical ('up/down').
-    The hinge itself thus moves left and right.
-    """
-    active_hinges_vertical: List[ActiveHinge]
-
-    """
-    Horizontal active hinges.
-
-    This means their axis of rotation is horizontal ('left/right').
-    The hinge itself thus moves up and down.
-    """
-    active_hinges_horizontal: List[ActiveHinge]
 
     """If all slots of the core are filled with other modules."""
     core_is_filled: bool
@@ -72,27 +65,6 @@ class MorphologicalMeasures:
     double_neighbour_active_hinges: List[ActiveHinge]
 
     """
-    Depth of the bounding box around the body.
-
-    forward/backward axis for the core module.
-    """
-    bounding_box_depth: int
-
-    """
-    Width of the bounding box around the body.
-
-    right/left axis for the core module.
-    """
-    bounding_box_width: int
-
-    """
-    Height of the bounding box around the body.
-
-    up/down axis for the core module.
-    """
-    bounding_box_height: int
-
-    """
     X-axis symmetry according to the paper.
 
     X-axis is defined as forward/backward for the core module
@@ -117,10 +89,124 @@ class MorphologicalMeasures:
         if not body.is_finalized:
             raise NotFinalizedError()
 
-        self.__count_modules(body)
+        self.body_as_grid, self.core_grid_position = body.to_grid()
 
-    def __count_modules(self, body: Body) -> None:
-        pass
+        self.is_2d = self.__calculate_is_2d(body)
+        self.__aggregate_modules(body)
+        self.core_is_filled = self.__calculate_core_is_filled()
+        self.filled_bricks = self.__calculate_filled_bricks()
+        self.filled_active_hinges = self.__calculate_filled_active_hinges()
+        self.single_neighbour_bricks = self.__calculate_single_neighbour_bricks()
+        self.double_neighbour_bricks = self.__calculate_double_neighbour_bricks()
+        self.double_neighbour_active_hinges = (
+            self.__calculate_double_neighbour_active_hinges()
+        )
+        self.__calculate_symmetries()
+
+    @classmethod
+    def __calculate_is_2d(cls, body: Body) -> bool:
+        return cls.__calculate_is_2d_recur(body.core)
+
+    @classmethod
+    def __calculate_is_2d_recur(cls, module: Module) -> bool:
+        return all(
+            [np.isclose(module.rotation, 0.0)]
+            + [
+                cls.__calculate_is_2d_recur(child)
+                for child in module.children
+                if child is not None
+            ]
+        )
+
+    def __aggregate_modules(self, body: Body) -> None:
+        self.__aggregate_modules_recur(body.core)
+
+    def __aggregate_modules_recur(self, module: Module) -> None:
+        if isinstance(module, Core):
+            self.core = module
+        elif isinstance(module, Brick):
+            self.bricks.append(module)
+        elif isinstance(module, ActiveHinge):
+            self.active_hinges.append(module)
+        else:
+            raise NotImplementedError()
+
+        for child in module.children:
+            self.__aggregate_modules_recur(child)
+
+    def __calculate_core_is_filled(self) -> bool:
+        return all([child is not None for child in self.core.children])
+
+    def __calculate_filled_bricks(self) -> List[Brick]:
+        return [
+            brick
+            for brick in self.bricks
+            if all([child is not None for child in brick.children])
+        ]
+
+    def __calculate_filled_active_hinges(self) -> List[ActiveHinge]:
+        return [
+            active_hinge
+            for active_hinge in self.active_hinges
+            if all([child is not None for child in active_hinge.children])
+        ]
+
+    def __calculate_single_neighbour_bricks(self) -> List[Brick]:
+        return [
+            brick
+            for brick in self.bricks
+            if all([child is None for child in brick.children])
+        ]
+
+    def __calculate_double_neighbour_bricks(self) -> List[Brick]:
+        return [
+            brick
+            for brick in self.bricks
+            if sum([0 if child is None else 1 for child in brick.children]) == 1
+        ]
+
+    def __calculate_double_neighbour_active_hinges(self) -> List[Brick]:
+        return [
+            active_hinge
+            for active_hinge in self.active_hinges
+            if sum([0 if child is None else 1 for child in active_hinge.children]) == 1
+        ]
+
+    def __calculate_symmetries(self) -> None:
+        raise NotImplementedError()
+
+    @property
+    def bounding_box_depth(self) -> int:
+        """
+        Get the depth of the bounding box around the body.
+
+        Forward/backward axis for the core module.
+
+        :returns: The depth.
+        """
+        return len(self.body_as_grid)
+
+    @property
+    def bounding_box_width(self) -> int:
+        """
+        Get the width of the bounding box around the body.
+
+        Right/left axis for the core module.
+
+        :returns: The width.
+        """
+        return len(self.body_as_grid[0])
+
+    @property
+    def bounding_box_height(self) -> int:
+        """
+        Get the height of the bounding box around the body.
+
+        Up/down axis for the core module.
+
+        :returns: The height.
+        """
+        return len(self.body_as_grid[0][0])
 
     @property
     def num_modules(self) -> int:
@@ -148,30 +234,6 @@ class MorphologicalMeasures:
         :returns: The number of active hinges.
         """
         return len(self.active_hinges)
-
-    @property
-    def num_active_hinges_vertical(self) -> int:
-        """
-        Get the number of vertical active hinges.
-
-        This means their axis of rotation is vertical ('up/down').
-        The hinge itself thus moves left and right.
-
-        :returns: The number of vertical active hinges.
-        """
-        return len(self.active_hinges_vertical)
-
-    @property
-    def num_active_hinges_horizontal(self) -> int:
-        """
-        Get the number of horizontal active hinges.
-
-        This means their axis of rotation is horizontal ('left/right').
-        The hinge itself thus moves up and down.
-
-        :returns: The number of horizontal active hinges.
-        """
-        return len(self.active_hinges_horizontal)
 
     @property
     def num_filled_bricks(self) -> int:

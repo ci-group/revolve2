@@ -67,6 +67,17 @@ class Body:
             raise NotFinalizedError()
         return _ActiveHingeFinder().find(self)
 
+    def find_bricks(self) -> List[Brick]:
+        """
+        Find all bricks in the body.
+
+        :returns: A list of all bricks in the body
+        :raises NotFinalizedError: In case this body has not yet been finalized.
+        """
+        if not self.is_finalized:
+            raise NotFinalizedError()
+        return _BrickFinder().find(self)
+
     def grid_position(self, module: Module) -> Vector3:
         """
         Calculate the position of this module in a 3d grid with the core as center.
@@ -583,6 +594,24 @@ class _ActiveHingeFinder:
     def _find_recur(self, module: Module) -> None:
         if isinstance(module, ActiveHinge):
             self._active_hinges.append(module)
+        for child in module.children:
+            if child is not None:
+                self._find_recur(child)
+
+
+class _BrickFinder:
+    _bricks: List[Brick]
+
+    def __init__(self) -> None:
+        self._bricks = []
+
+    def find(self, body: Body) -> List[Brick]:
+        self._find_recur(body.core)
+        return self._bricks
+
+    def _find_recur(self, module: Module) -> None:
+        if isinstance(module, Brick):
+            self._bricks.append(module)
         for child in module.children:
             if child is not None:
                 self._find_recur(child)

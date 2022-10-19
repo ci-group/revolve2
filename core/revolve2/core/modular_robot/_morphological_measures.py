@@ -104,7 +104,9 @@ class MorphologicalMeasures:
         self.body_as_grid, self.core_grid_position = body.to_grid()
 
         self.is_2d = self.__calculate_is_2d(body)
-        self.__aggregate_modules(body)
+        self.core = body.core
+        self.bricks = body.find_bricks()
+        self.active_hinges = body.find_active_hinges()
         self.core_is_filled = self.__calculate_core_is_filled()
         self.filled_bricks = self.__calculate_filled_bricks()
         self.filled_active_hinges = self.__calculate_filled_active_hinges()
@@ -131,25 +133,6 @@ class MorphologicalMeasures:
                 if child is not None
             ]
         )
-
-    def __aggregate_modules(self, body: Body) -> None:
-        self.bricks = []
-        self.active_hinges = []
-        self.__aggregate_modules_recur(body.core)
-
-    def __aggregate_modules_recur(self, module: Module) -> None:
-        if isinstance(module, Core):
-            self.core = module
-        elif isinstance(module, Brick):
-            self.bricks.append(module)
-        elif isinstance(module, ActiveHinge):
-            self.active_hinges.append(module)
-        else:
-            raise NotImplementedError()
-
-        for child in module.children:
-            if child is not None:
-                self.__aggregate_modules_recur(child)
 
     def __calculate_core_is_filled(self) -> bool:
         return all([child is not None for child in self.core.children])

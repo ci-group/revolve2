@@ -7,6 +7,7 @@ from ._brick import Brick
 from ._core import Core
 from ._modular_robot import ModularRobot
 from ._module import Module
+from ._morphological_measures import MorphologicalMeasures
 from ._not_finalized_error import NotFinalizedError
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "Core",
     "ModularRobot",
     "Module",
+    "MorphologicalMeasures",
     "NotFinalizedError",
 ]

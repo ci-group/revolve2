@@ -68,25 +68,28 @@ class MorphologicalMeasures:
     double_neighbour_active_hinges: List[ActiveHinge]
 
     """
-    X-axis symmetry according to the paper.
+    X/Y-plane symmetry according to the paper but in 3D.
 
     X-axis is defined as forward/backward for the core module
-    """
-    x_symmetry: float
-
-    """
-    Y-axis symmetry according to the paper.
-
     Y-axis is defined as left/right for the core module.
     """
-    y_symmetry: float
+    xy_symmetry: float
 
     """
-    Z-axis symmetry according to the paper.
+    X/Z-plane symmetry according to the paper but in 3D.
 
+    X-axis is defined as forward/backward for the core module
     Z-axis is defined as up/down for the core module.
     """
-    z_symmetry: float
+    xz_symmetry: float
+
+    """
+    Y/Z-plane symmetry according to the paper but in 3D.
+
+    Y-axis is defined as left/right for the core module.
+    Z-axis is defined as up/down for the core module.
+    """
+    yz_symmetry: float
 
     def __init__(self, body: Body) -> None:
         """
@@ -110,7 +113,9 @@ class MorphologicalMeasures:
         self.double_neighbour_active_hinges = (
             self.__calculate_double_neighbour_active_hinges()
         )
-        self.__calculate_symmetries()
+        self.xy_symmetry = self.__calculate_xy_symmetry()
+        self.xz_symmetry = self.__calculate_xz_symmetry()
+        self.yz_symmetry = self.__calculate_yz_symmetry()
 
     @classmethod
     def __calculate_is_2d(cls, body: Body) -> bool:
@@ -128,6 +133,8 @@ class MorphologicalMeasures:
         )
 
     def __aggregate_modules(self, body: Body) -> None:
+        self.bricks = []
+        self.active_hinges = []
         self.__aggregate_modules_recur(body.core)
 
     def __aggregate_modules_recur(self, module: Module) -> None:
@@ -182,8 +189,80 @@ class MorphologicalMeasures:
             if sum([0 if child is None else 1 for child in active_hinge.children]) == 1
         ]
 
-    def __calculate_symmetries(self) -> None:
-        raise NotImplementedError()
+    def __calculate_xy_symmetry(self) -> float:
+        num_along_plane = 0
+        for x in range(self.bounding_box_depth):
+            for y in range(self.bounding_box_width):
+                if self.body_as_grid[x][y][self.core_grid_position[2]] is not None:
+                    num_along_plane += 1
+
+        if num_along_plane == self.num_modules:
+            return 0.0
+
+        num_symmetrical = 0
+        for x in range(self.bounding_box_depth):
+            for y in range(self.bounding_box_width):
+                for z in range(1, (self.bounding_box_height - 1) // 2 + 1):
+                    if self.body_as_grid[x][y][
+                        self.core_grid_position[2] + z
+                    ] is not None and type(
+                        self.body_as_grid[x][y][self.core_grid_position[2] + z]
+                    ) == type(
+                        self.body_as_grid[x][y][self.core_grid_position[2] - z]
+                    ):
+                        num_symmetrical += 2
+
+        return num_symmetrical / (self.num_modules - num_along_plane)
+
+    def __calculate_xz_symmetry(self) -> float:
+        num_along_plane = 0
+        for x in range(self.bounding_box_depth):
+            for z in range(self.bounding_box_height):
+                if self.body_as_grid[x][self.core_grid_position[1]][z] is not None:
+                    num_along_plane += 1
+
+        if num_along_plane == self.num_modules:
+            return 0.0
+
+        num_symmetrical = 0
+        for x in range(self.bounding_box_depth):
+            for z in range(self.bounding_box_height):
+                for y in range(1, (self.bounding_box_width - 1) // 2 + 1):
+                    if self.body_as_grid[x][self.core_grid_position[1] + y][
+                        z
+                    ] is not None and type(
+                        self.body_as_grid[x][self.core_grid_position[1] + y][z]
+                    ) == type(
+                        self.body_as_grid[x][self.core_grid_position[1] - y][z]
+                    ):
+                        num_symmetrical += 2
+
+        return num_symmetrical / (self.num_modules - num_along_plane)
+
+    def __calculate_yz_symmetry(self) -> float:
+        num_along_plane = 0
+        for y in range(self.bounding_box_width):
+            for z in range(self.bounding_box_height):
+                if self.body_as_grid[self.core_grid_position[0]][y][z] is not None:
+                    num_along_plane += 1
+
+        if num_along_plane == self.num_modules:
+            return 0.0
+
+        num_symmetrical = 0
+        for y in range(self.bounding_box_width):
+            for z in range(self.bounding_box_height):
+                for x in range(1, (self.bounding_box_depth - 1) // 2 + 1):
+                    if self.body_as_grid[self.core_grid_position[0] + x][y][
+                        z
+                    ] is not None and type(
+                        self.body_as_grid[self.core_grid_position[0] + x][y][z]
+                    ) == type(
+                        self.body_as_grid[self.core_grid_position[0] - x][y][z]
+                    ):
+                        num_symmetrical += 2
+
+        return num_symmetrical / (self.num_modules - num_along_plane)
 
     @property
     def bounding_box_depth(self) -> int:
@@ -524,4 +603,4 @@ class MorphologicalMeasures:
 
         :returns: Symmetry measurement.
         """
-        return max(self.x_symmetry, self.y_symmetry, self.z_symmetry)
+        return max(self.xy_symmetry, self.xz_symmetry, self.yz_symmetry)

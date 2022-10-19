@@ -175,6 +175,7 @@ class _GridMaker:
         z: int
         module: Module
 
+    _core_pos: Tuple[int, int, int]
     _cells: List[_Cell]
 
     def __init__(self) -> None:
@@ -192,25 +193,21 @@ class _GridMaker:
         minz = min([cell.z for cell in self._cells])
         maxz = max([cell.z for cell in self._cells])
 
-        depth = maxx - minx
-        width = maxy - miny
-        height = maxz - minz
+        depth = maxx - minx + 1
+        width = maxy - miny + 1
+        height = maxz - minz + 1
 
         grid: List[List[List[Optional[Module]]]] = []
-        for _ in range(depth + 1):
+        for _ in range(depth):
             y: List[List[Optional[Module]]] = []
-            for _ in range(width + 1):
-                y.append([None] * (height + 1))
+            for _ in range(width):
+                y.append([None] * (height))
             grid.append(y)
 
-        core_pos: Tuple[int, int, int]
-
         for cell in self._cells:
-            grid[cell.x][cell.y][cell.z] = cell.module
-            if isinstance(cell.module, Core):
-                core_pos = (cell.x, cell.y, cell.z)
+            grid[cell.x - minx][cell.y - miny][cell.z - minz] = cell.module
 
-        return grid, core_pos
+        return grid, (-minx, -miny, -minz)
 
     def _make_grid_recur(
         self, module: Module, position: Vector3, orientation: Quaternion

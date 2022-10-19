@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.3.1-beta1 documentation</title>
+  <title>Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym &mdash; revolve2 v0.3.2-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -504,7 +504,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
 <span class="kn">from</span> <span class="nn">revolve2.actor_controller</span> <span class="kn">import</span> <span class="n">ActorController</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">IncompatibleError</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.database.serializers</span> <span class="kn">import</span> <span class="n">FloatSerializer</span>
-<span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">ProcessIdGen</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">DbId</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.optimization.ea.generic_ea</span> <span class="kn">import</span> <span class="n">EAOptimizer</span>
 <span class="kn">from</span> <span class="nn">revolve2.core.physics.running</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">ActorControl</span><span class="p">,</span>
@@ -513,7 +513,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
 <span class="kn">from</span> <span class="nn">revolve2.runners.mujoco</span> <span class="kn">import</span> <span class="n">LocalRunner</span>
 
 <span class="k">class</span> <span class="nc">Optimizer</span><span class="p">(</span><span class="n">EAOptimizer</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
-    <span class="n">_process_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">_db_id</span><span class="p">:</span> <span class="n">DbId</span>
 
     <span class="n">_runner</span><span class="p">:</span> <span class="n">Runner</span>
 
@@ -534,8 +534,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">database</span><span class="p">:</span> <span class="n">AsyncEngine</span><span class="p">,</span>
         <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="p">:</span> <span class="n">ProcessIdGen</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="p">:</span> <span class="n">DbId</span><span class="p">,</span>
         <span class="n">initial_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span>
         <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
         <span class="n">innov_db_body</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
@@ -549,8 +548,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
         <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">ainit_new</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
             <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
-            <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
-            <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
+            <span class="n">db_id</span><span class="o">=</span><span class="n">db_id</span><span class="p">,</span>
             <span class="n">genotype_type</span><span class="o">=</span><span class="n">Genotype</span><span class="p">,</span>
             <span class="n">genotype_serializer</span><span class="o">=</span><span class="n">GenotypeSerializer</span><span class="p">,</span>
             <span class="n">fitness_type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
@@ -559,7 +557,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
             <span class="n">initial_population</span><span class="o">=</span><span class="n">initial_population</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_process_id</span> <span class="o">=</span> <span class="n">process_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db_id</span> <span class="o">=</span> <span class="n">db_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_runner</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_innov_db_body</span> <span class="o">=</span> <span class="n">innov_db_body</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_innov_db_brain</span> <span class="o">=</span> <span class="n">innov_db_brain</span>
@@ -579,8 +577,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">database</span><span class="p">:</span> <span class="n">AsyncEngine</span><span class="p">,</span>
         <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="p">:</span> <span class="n">ProcessIdGen</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="p">:</span> <span class="n">DbId</span><span class="p">,</span>
         <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
         <span class="n">innov_db_body</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
         <span class="n">innov_db_brain</span><span class="p">:</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">,</span>
@@ -588,8 +585,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
         <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">ainit_from_database</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
             <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
-            <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
-            <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
+            <span class="n">db_id</span><span class="o">=</span><span class="n">db_id</span><span class="p">,</span>
             <span class="n">genotype_type</span><span class="o">=</span><span class="n">Genotype</span><span class="p">,</span>
             <span class="n">genotype_serializer</span><span class="o">=</span><span class="n">GenotypeSerializer</span><span class="p">,</span>
             <span class="n">fitness_type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
@@ -597,14 +593,14 @@ Finally, you can save some of the parameters provided to <code class="docutils l
         <span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_process_id</span> <span class="o">=</span> <span class="n">process_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db_id</span> <span class="o">=</span> <span class="n">db_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_init_runner</span><span class="p">()</span>
 
         <span class="n">opt_row</span> <span class="o">=</span> <span class="p">(</span>
             <span class="p">(</span>
                 <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
                     <span class="n">select</span><span class="p">(</span><span class="n">DbOptimizerState</span><span class="p">)</span>
-                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">DbOptimizerState</span><span class="o">.</span><span class="n">process_id</span> <span class="o">==</span> <span class="n">process_id</span><span class="p">)</span>
+                    <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">DbOptimizerState</span><span class="o">.</span><span class="n">db_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_db_id</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
                     <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">DbOptimizerState</span><span class="o">.</span><span class="n">generation_index</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -674,7 +670,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
     <span class="k">def</span> <span class="nf">_on_generation_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
             <span class="n">DbOptimizerState</span><span class="p">(</span>
-                <span class="n">process_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_process_id</span><span class="p">,</span>
+                <span class="n">db_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_id</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span>
                 <span class="n">generation_index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generation_index</span><span class="p">,</span>
                 <span class="n">rng</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="o">.</span><span class="n">getstate</span><span class="p">()),</span>
                 <span class="n">innov_db_body</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_innov_db_body</span><span class="o">.</span><span class="n">Serialize</span><span class="p">(),</span>
@@ -696,8 +692,7 @@ Finally, you can save some of the parameters provided to <code class="docutils l
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">genotypes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span>
         <span class="n">database</span><span class="p">:</span> <span class="n">AsyncEngine</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="p">:</span> <span class="n">ProcessIdGen</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="p">:</span> <span class="n">DbId</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
@@ -711,8 +706,8 @@ Finally, you can save some of the parameters provided to <code class="docutils l
 <span class="k">class</span> <span class="nc">DbOptimizerState</span><span class="p">(</span><span class="n">DbBase</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;optimizer&quot;</span>
 
-    <span class="n">process_id</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
-        <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+    <span class="n">db_id</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">String</span><span class="p">,</span>
         <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
@@ -756,8 +751,7 @@ And lastly, calculate and return the fitness of the robot, based on the simulati
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">genotypes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span>
     <span class="n">database</span><span class="p">:</span> <span class="n">AsyncEngine</span><span class="p">,</span>
-    <span class="n">process_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">process_id_gen</span><span class="p">:</span> <span class="n">ProcessIdGen</span><span class="p">,</span>
+    <span class="n">db_id</span><span class="p">:</span> <span class="n">DbId</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
     <span class="n">batch</span> <span class="o">=</span> <span class="n">Batch</span><span class="p">(</span>
         <span class="n">simulation_time</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_simulation_time</span><span class="p">,</span>
@@ -834,7 +828,7 @@ You will also need to add some extra constants.:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># optimize.py</span>
 
 <span class="kn">import</span> <span class="nn">multineat</span>
-<span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">ProcessIdGen</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">DbId</span>
 <span class="kn">from</span> <span class="nn">genotype</span> <span class="kn">import</span> <span class="n">random</span> <span class="k">as</span> <span class="n">random_genotype</span>
 <span class="kn">from</span> <span class="nn">optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span>
 
@@ -850,9 +844,8 @@ You will also need to add some extra constants.:</p>
 
     <span class="c1"># ...</span>
 
-    <span class="c1"># process id generator</span>
-    <span class="n">process_id_gen</span> <span class="o">=</span> <span class="n">ProcessIdGen</span><span class="p">()</span>
-    <span class="n">process_id</span> <span class="o">=</span> <span class="n">process_id_gen</span><span class="o">.</span><span class="n">gen</span><span class="p">()</span>
+    <span class="c1"># unique database identifier for optimizer</span>
+    <span class="n">db_id</span> <span class="o">=</span> <span class="n">DbId</span><span class="o">.</span><span class="n">root</span><span class="p">(</span><span class="s2">&quot;optmodular&quot;</span><span class="p">)</span>
 
     <span class="c1"># multineat innovation databases</span>
     <span class="n">innov_db_body</span> <span class="o">=</span> <span class="n">multineat</span><span class="o">.</span><span class="n">InnovationDatabase</span><span class="p">()</span>
@@ -865,21 +858,19 @@ You will also need to add some extra constants.:</p>
 
     <span class="n">maybe_optimizer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">from_database</span><span class="p">(</span>
         <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="o">=</span><span class="n">db_id</span><span class="p">,</span>
         <span class="n">innov_db_body</span><span class="o">=</span><span class="n">innov_db_body</span><span class="p">,</span>
         <span class="n">innov_db_brain</span><span class="o">=</span><span class="n">innov_db_brain</span><span class="p">,</span>
         <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">maybe_optimizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="n">maybe_optimizer</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
-            <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
+            <span class="n">db_id</span><span class="o">=</span><span class="n">db_id</span><span class="p">,</span>
             <span class="n">initial_population</span><span class="o">=</span><span class="n">initial_population</span><span class="p">,</span>
             <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
-            <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
             <span class="n">innov_db_body</span><span class="o">=</span><span class="n">innov_db_body</span><span class="p">,</span>
             <span class="n">innov_db_brain</span><span class="o">=</span><span class="n">innov_db_brain</span><span class="p">,</span>
             <span class="n">simulation_time</span><span class="o">=</span><span class="n">SIMULATION_TIME</span><span class="p">,</span>

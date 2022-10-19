@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A simple optimization process with a database &mdash; revolve2 v0.3.1-beta1 documentation</title>
+  <title>A simple optimization process with a database &mdash; revolve2 v0.3.2-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -326,7 +326,7 @@ To use it, inherit from it and fill in its abstract functions:</p>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.asyncio.session</span> <span class="kn">import</span> <span class="n">AsyncSession</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.ext.asyncio</span> <span class="kn">import</span> <span class="n">AsyncEngine</span>
-<span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">ProcessIdGen</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">DbId</span>
 
 <span class="c1"># ...</span>
 
@@ -345,8 +345,7 @@ To use it, inherit from it and fill in its abstract functions:</p>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">genotypes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span>
         <span class="n">database</span><span class="p">:</span> <span class="n">AsyncEngine</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="p">:</span> <span class="n">ProcessIdGen</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="p">:</span> <span class="n">DbId</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">()</span>
 
@@ -394,8 +393,7 @@ Start with the <code class="docutils literal notranslate"><span class="pre">aini
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">database</span><span class="p">:</span> <span class="n">AsyncEngine</span><span class="p">,</span>
         <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="p">:</span> <span class="n">ProcessIdGen</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="p">:</span> <span class="n">DbId</span><span class="p">,</span>
         <span class="n">offspring_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
         <span class="n">initial_population</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span>
         <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
@@ -408,10 +406,9 @@ Start with the <code class="docutils literal notranslate"><span class="pre">aini
 <p>The first four parameters are present in the <code class="docutils literal notranslate"><span class="pre">ainit_new</span></code> of each class inheriting from <code class="docutils literal notranslate"><span class="pre">Process</span></code>.
 <code class="docutils literal notranslate"><span class="pre">database</span></code> is an SQLAlchemy database object and <code class="docutils literal notranslate"><span class="pre">session</span></code> is an open session with that database.
 The latter can be used to do some initial setup in the database when this object is created.
-<code class="docutils literal notranslate"><span class="pre">proces_id</span></code> is a unique identifier for this optimizer.
+<code class="docutils literal notranslate"><span class="pre">db_id</span></code> is a unique identifier for this optimizer.
 There can be multiple optimization processes in one Revolve2 program, possibly nested.
-This id can, for example, be used to identify the data corresponding with this optimizer when multiple optimizers are using the same database table.
-<code class="docutils literal notranslate"><span class="pre">process_id_gen</span></code> is an object that can create new unique identifiers, in the case this class needs to create sub-optimizers.</p>
+This id can, for example, be used to identify the data corresponding with this optimizer when multiple optimizers are using the same database table.</p>
 <p>The rest of the parameters are specific to either <code class="docutils literal notranslate"><span class="pre">EAOptimizer</span></code> or this class and should be self-explanatory.
 <code class="docutils literal notranslate"><span class="pre">rng</span></code> is the random object that will be used by the object. Later, the optimizer will serialize the state of the rng to the database and load it whenever <code class="docutils literal notranslate"><span class="pre">ainit_from_database</span></code> is called.</p>
 <p>Next, implement the body of the function. The following will not compile because some classes have not yet been created:</p>
@@ -420,7 +417,7 @@ This id can, for example, be used to identify the data corresponding with this o
 <span class="c1"># ...</span>
 
 <span class="k">class</span> <span class="nc">Optimizer</span><span class="p">(</span><span class="n">EAOptimizer</span><span class="p">[</span><span class="n">Genotype</span><span class="p">,</span> <span class="nb">float</span><span class="p">]):</span>
-    <span class="n">_process_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">_db_id</span><span class="p">:</span> <span class="n">DbId</span>
     <span class="n">_rng</span><span class="p">:</span> <span class="n">Random</span>
     <span class="n">_items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">]</span>
     <span class="n">_max_weight</span><span class="p">:</span> <span class="nb">float</span>
@@ -432,8 +429,7 @@ This id can, for example, be used to identify the data corresponding with this o
         <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">ainit_new</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
             <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
-            <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
-            <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
+            <span class="n">db_id</span><span class="o">=</span><span class="n">db_id</span><span class="p">,</span>
             <span class="n">genotype_type</span><span class="o">=</span><span class="n">Genotype</span><span class="p">,</span>
             <span class="n">genotype_serializer</span><span class="o">=</span><span class="n">GenotypeSerializer</span><span class="p">,</span>
             <span class="n">fitness_type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
@@ -442,7 +438,7 @@ This id can, for example, be used to identify the data corresponding with this o
             <span class="n">initial_population</span><span class="o">=</span><span class="n">initial_population</span><span class="p">,</span>
         <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_process_id</span> <span class="o">=</span> <span class="n">process_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_db_id</span> <span class="o">=</span> <span class="n">db_id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_rng</span> <span class="o">=</span> <span class="n">rng</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="n">items</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_max_weight</span> <span class="o">=</span> <span class="n">max_weight</span>
@@ -477,8 +473,8 @@ The current generation index can be used as a unique identifier as the <code cla
 <span class="k">class</span> <span class="nc">DbOptimizerState</span><span class="p">(</span><span class="n">DbBase</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;optimizer_state&quot;</span>
 
-    <span class="n">process_id</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
-        <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span>
+    <span class="n">db_id</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span>
+        <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">String</span><span class="p">,</span>
         <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">)</span>
@@ -578,7 +574,7 @@ Using SQLAlchemy this is straightforward:</p>
 <span class="k">def</span> <span class="nf">_on_generation_checkpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
         <span class="n">DbOptimizerState</span><span class="p">(</span>
-            <span class="n">process_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_process_id</span><span class="p">,</span>
+            <span class="n">db_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_db_id</span><span class="o">.</span><span class="n">fullname</span><span class="p">,</span>
             <span class="n">generation_index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">generation_index</span><span class="p">,</span>
             <span class="n">rng</span><span class="o">=</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rng</span><span class="o">.</span><span class="n">getstate</span><span class="p">()),</span>
         <span class="p">)</span>
@@ -587,8 +583,8 @@ Using SQLAlchemy this is straightforward:</p>
 </div>
 <p>Loading the state is done in the <code class="docutils literal notranslate"><span class="pre">ainit_from_database</span></code> function.
 It is very similar to <code class="docutils literal notranslate"><span class="pre">ainit_new</span></code> but instead of initializing the database you read the current state of the optimizer.
-Here you will see the <code class="docutils literal notranslate"><span class="pre">process_id</span></code> can be used to retrieve the data corresponding with this optimizer.
-The return value of this function represents if an object with the provided <code class="docutils literal notranslate"><span class="pre">process_id</span></code> is present in the database:</p>
+Here you will see the database id can be used to retrieve the data corresponding with this optimizer.
+The return value of this function represents if an object with the provided database id is present in the database:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">revolve2.core.database</span> <span class="kn">import</span> <span class="n">IncompatibleError</span>
 <span class="kn">from</span> <span class="nn">sqlalchemy.future</span> <span class="kn">import</span> <span class="n">select</span>
 
@@ -598,8 +594,7 @@ The return value of this function represents if an object with the provided <cod
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">database</span><span class="p">:</span> <span class="n">AsyncEngine</span><span class="p">,</span>
     <span class="n">session</span><span class="p">:</span> <span class="n">AsyncSession</span><span class="p">,</span>
-    <span class="n">process_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="n">process_id_gen</span><span class="p">:</span> <span class="n">ProcessIdGen</span><span class="p">,</span>
+    <span class="n">db_id</span><span class="p">:</span> <span class="n">DbId</span><span class="p">,</span>
     <span class="n">rng</span><span class="p">:</span> <span class="n">Random</span><span class="p">,</span>
     <span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Item</span><span class="p">],</span>
     <span class="n">max_weight</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -608,8 +603,7 @@ The return value of this function represents if an object with the provided <cod
     <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">ainit_from_database</span><span class="p">(</span>
         <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
         <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="o">=</span><span class="n">db_id</span><span class="p">,</span>
         <span class="n">genotype_type</span><span class="o">=</span><span class="n">Genotype</span><span class="p">,</span>
         <span class="n">genotype_serializer</span><span class="o">=</span><span class="n">GenotypeSerializer</span><span class="p">,</span>
         <span class="n">fitness_type</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span>
@@ -617,7 +611,7 @@ The return value of this function represents if an object with the provided <cod
     <span class="p">):</span>
         <span class="k">return</span> <span class="kc">False</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">_process_id</span> <span class="o">=</span> <span class="n">process_id</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_db_id</span> <span class="o">=</span> <span class="n">db_id</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_items</span> <span class="o">=</span> <span class="n">items</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_max_weight</span> <span class="o">=</span> <span class="n">max_weight</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_num_generations</span> <span class="o">=</span> <span class="n">num_generations</span>
@@ -626,7 +620,7 @@ The return value of this function represents if an object with the provided <cod
         <span class="p">(</span>
             <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
                 <span class="n">select</span><span class="p">(</span><span class="n">DbOptimizerState</span><span class="p">)</span>
-                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">DbOptimizerState</span><span class="o">.</span><span class="n">process_id</span> <span class="o">==</span> <span class="n">process_id</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">DbOptimizerState</span><span class="o">.</span><span class="n">db_id</span> <span class="o">==</span> <span class="n">db_id</span><span class="o">.</span><span class="n">fullname</span><span class="p">)</span>
                 <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="n">DbOptimizerState</span><span class="o">.</span><span class="n">generation_index</span><span class="o">.</span><span class="n">desc</span><span class="p">())</span>
             <span class="p">)</span>
         <span class="p">)</span>
@@ -645,11 +639,11 @@ The return value of this function represents if an object with the provided <cod
 </pre></div>
 </div>
 <p>The optimizer can now be added to the <code class="docutils literal notranslate"><span class="pre">main</span></code> function.
-Create a new <code class="docutils literal notranslate"><span class="pre">ProcessIdGen</span></code> object that manages the ids in your program, initialize a population, and start the optimizer.
+Create a root database id, initialize a population, and start the optimizer.
 Running this program should result in a raised <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># optimize.py</span>
 
-<span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">ProcessIdGen</span>
+<span class="kn">from</span> <span class="nn">revolve2.core.optimization</span> <span class="kn">import</span> <span class="n">DbId</span>
 <span class="kn">from</span> <span class="nn">genotype</span> <span class="kn">import</span> <span class="n">random</span> <span class="k">as</span> <span class="n">random_genotype</span>
 <span class="kn">from</span> <span class="nn">optimizer</span> <span class="kn">import</span> <span class="n">Optimizer</span>
 
@@ -658,9 +652,8 @@ Running this program should result in a raised <code class="docutils literal not
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># ...</span>
 
-    <span class="c1"># process id generator</span>
-    <span class="n">process_id_gen</span> <span class="o">=</span> <span class="n">ProcessIdGen</span><span class="p">()</span>
-    <span class="n">process_id</span> <span class="o">=</span> <span class="n">process_id_gen</span><span class="o">.</span><span class="n">gen</span><span class="p">()</span>
+    <span class="c1"># unique database identifier for optimizer</span>
+    <span class="n">db_id</span> <span class="o">=</span> <span class="n">DbId</span><span class="o">.</span><span class="n">root</span><span class="p">(</span><span class="s2">&quot;simpleopt&quot;</span><span class="p">)</span>
 
     <span class="n">initial_population</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">random_genotype</span><span class="p">(</span><span class="n">rng</span><span class="p">,</span> <span class="n">INITIAL_HAS_ITEM_PROB</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">items</span><span class="p">))</span>
@@ -669,8 +662,7 @@ Running this program should result in a raised <code class="docutils literal not
 
     <span class="n">maybe_optimizer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">from_database</span><span class="p">(</span>
         <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="o">=</span><span class="n">db_id</span><span class="p">,</span>
         <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
         <span class="n">items</span><span class="o">=</span><span class="n">items</span><span class="p">,</span>
         <span class="n">max_weight</span><span class="o">=</span><span class="n">MAX_WEIGHT</span><span class="p">,</span>
@@ -681,8 +673,7 @@ Running this program should result in a raised <code class="docutils literal not
     <span class="k">else</span><span class="p">:</span>
         <span class="n">optimizer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">Optimizer</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
             <span class="n">database</span><span class="o">=</span><span class="n">database</span><span class="p">,</span>
-            <span class="n">process_id</span><span class="o">=</span><span class="n">process_id</span><span class="p">,</span>
-            <span class="n">process_id_gen</span><span class="o">=</span><span class="n">process_id_gen</span><span class="p">,</span>
+            <span class="n">db_id</span><span class="o">=</span><span class="n">db_id</span><span class="p">,</span>
             <span class="n">offspring_size</span><span class="o">=</span><span class="n">OFFSPRING_SIZE</span><span class="p">,</span>
             <span class="n">initial_population</span><span class="o">=</span><span class="n">initial_population</span><span class="p">,</span>
             <span class="n">rng</span><span class="o">=</span><span class="n">rng</span><span class="p">,</span>
@@ -712,8 +703,7 @@ The evaluation of an individual is defined to be the total value of its containe
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">genotypes</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Genotype</span><span class="p">],</span>
         <span class="n">database</span><span class="p">:</span> <span class="n">AsyncEngine</span><span class="p">,</span>
-        <span class="n">process_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">process_id_gen</span><span class="p">:</span> <span class="n">ProcessIdGen</span><span class="p">,</span>
+        <span class="n">db_id</span><span class="p">:</span> <span class="n">DbId</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
         <span class="n">phenotypes</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">develop</span><span class="p">(</span><span class="n">genotype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_items</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_max_weight</span><span class="p">)</span> <span class="k">for</span> <span class="n">genotype</span> <span class="ow">in</span> <span class="n">genotypes</span>

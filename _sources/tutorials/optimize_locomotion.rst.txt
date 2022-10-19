@@ -371,7 +371,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
     from revolve2.actor_controller import ActorController
     from revolve2.core.database import IncompatibleError
     from revolve2.core.database.serializers import FloatSerializer
-    from revolve2.core.optimization import ProcessIdGen
+    from revolve2.core.optimization import DbId
     from revolve2.core.optimization.ea.generic_ea import EAOptimizer
     from revolve2.core.physics.running import (
         ActorControl,
@@ -380,7 +380,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
     from revolve2.runners.mujoco import LocalRunner
 
     class Optimizer(EAOptimizer[Genotype, float]):
-        _process_id: int
+        _db_id: DbId
 
         _runner: Runner
 
@@ -401,8 +401,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
             self,
             database: AsyncEngine,
             session: AsyncSession,
-            process_id: int,
-            process_id_gen: ProcessIdGen,
+            db_id: DbId,
             initial_population: List[Genotype],
             rng: Random,
             innov_db_body: multineat.InnovationDatabase,
@@ -416,8 +415,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
             await super().ainit_new(
                 database=database,
                 session=session,
-                process_id=process_id,
-                process_id_gen=process_id_gen,
+                db_id=db_id,
                 genotype_type=Genotype,
                 genotype_serializer=GenotypeSerializer,
                 fitness_type=float,
@@ -426,7 +424,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
                 initial_population=initial_population,
             )
 
-            self._process_id = process_id
+            self._db_id = db_id
             self._init_runner()
             self._innov_db_body = innov_db_body
             self._innov_db_brain = innov_db_brain
@@ -446,8 +444,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
             self,
             database: AsyncEngine,
             session: AsyncSession,
-            process_id: int,
-            process_id_gen: ProcessIdGen,
+            db_id: DbId,
             rng: Random,
             innov_db_body: multineat.InnovationDatabase,
             innov_db_brain: multineat.InnovationDatabase,
@@ -455,8 +452,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
             if not await super().ainit_from_database(
                 database=database,
                 session=session,
-                process_id=process_id,
-                process_id_gen=process_id_gen,
+                db_id=db_id,
                 genotype_type=Genotype,
                 genotype_serializer=GenotypeSerializer,
                 fitness_type=float,
@@ -464,14 +460,14 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
             ):
                 return False
 
-            self._process_id = process_id
+            self._db_id = db_id
             self._init_runner()
 
             opt_row = (
                 (
                     await session.execute(
                         select(DbOptimizerState)
-                        .filter(DbOptimizerState.process_id == process_id)
+                        .filter(DbOptimizerState.db_id == self._db_id.fullname)
                         .order_by(DbOptimizerState.generation_index.desc())
                     )
                 )
@@ -541,7 +537,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
         def _on_generation_checkpoint(self, session: AsyncSession) -> None:
             session.add(
                 DbOptimizerState(
-                    process_id=self._process_id,
+                    db_id=self._db_id.fullname,
                     generation_index=self.generation_index,
                     rng=pickle.dumps(self._rng.getstate()),
                     innov_db_body=self._innov_db_body.Serialize(),
@@ -563,8 +559,7 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
             self,
             genotypes: List[Genotype],
             database: AsyncEngine,
-            process_id: int,
-            process_id_gen: ProcessIdGen,
+            db_id: DbId,
         ) -> List[float]:
             raise NotImplementedError()
 
@@ -578,8 +573,8 @@ Finally, you can save some of the parameters provided to ``ainit_new`` in the da
     class DbOptimizerState(DbBase):
         __tablename__ = "optimizer"
 
-        process_id = sqlalchemy.Column(
-            sqlalchemy.Integer,
+        db_id = sqlalchemy.Column(
+            sqlalchemy.String,
             nullable=False,
             primary_key=True,
         )
@@ -624,8 +619,7 @@ And lastly, calculate and return the fitness of the robot, based on the simulati
         self,
         genotypes: List[Genotype],
         database: AsyncEngine,
-        process_id: int,
-        process_id_gen: ProcessIdGen,
+        db_id: DbId,
     ) -> List[float]:
         batch = Batch(
             simulation_time=self._simulation_time,
@@ -702,7 +696,7 @@ You will also need to add some extra constants.::
     # optimize.py
 
     import multineat
-    from revolve2.core.optimization import ProcessIdGen
+    from revolve2.core.optimization import DbId
     from genotype import random as random_genotype
     from optimizer import Optimizer
 
@@ -718,9 +712,8 @@ You will also need to add some extra constants.::
 
         # ...
 
-        # process id generator
-        process_id_gen = ProcessIdGen()
-        process_id = process_id_gen.gen()
+        # unique database identifier for optimizer
+        db_id = DbId.root("optmodular")
 
         # multineat innovation databases
         innov_db_body = multineat.InnovationDatabase()
@@ -733,21 +726,19 @@ You will also need to add some extra constants.::
 
         maybe_optimizer = await Optimizer.from_database(
             database=database,
-            process_id=process_id,
+            db_id=db_id,
             innov_db_body=innov_db_body,
             innov_db_brain=innov_db_brain,
             rng=rng,
-            process_id_gen=process_id_gen,
         )
         if maybe_optimizer is not None:
             optimizer = maybe_optimizer
         else:
             optimizer = await Optimizer.new(
                 database=database,
-                process_id=process_id,
+                db_id=db_id,
                 initial_population=initial_population,
                 rng=rng,
-                process_id_gen=process_id_gen,
                 innov_db_body=innov_db_body,
                 innov_db_brain=innov_db_brain,
                 simulation_time=SIMULATION_TIME,

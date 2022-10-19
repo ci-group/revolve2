@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; revolve2 v0.3.1-beta1 documentation</title>
+  <title>Index &mdash; revolve2 v0.3.2-beta1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="_static/favicon.png"/>
@@ -156,11 +156,15 @@
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  | <a href="#V"><strong>V</strong></a>
+ | <a href="#X"><strong>X</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
  
 </div>
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.active_hinges">active_hinges (MorphologicalMeasures attribute)</a>
+</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.ActiveHinge">ActiveHinge (class in revolve2.core.modular_robot)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Actor">Actor (class in revolve2.core.physics.actor)</a>
@@ -175,10 +179,10 @@
 </li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.Environment.actors">actors (Environment attribute)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.ActorState">ActorState (class in revolve2.core.physics.running)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.ActorState">ActorState (class in revolve2.core.physics.running)</a>
+</li>
       <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.EAOptimizer.ainit_from_database">ainit_from_database() (EAOptimizer method)</a>
 
       <ul>
@@ -223,9 +227,21 @@
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Joint.body2">body2 (Joint attribute)</a>
 </li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.body_as_grid">body_as_grid (MorphologicalMeasures attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Collision.bounding_box">bounding_box (Collision attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.bounding_box_depth">bounding_box_depth (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.bounding_box_height">bounding_box_height (MorphologicalMeasures property)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Collision.bounding_box">bounding_box (Collision attribute)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.bounding_box_volume">bounding_box_volume (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.bounding_box_volume_coverage">bounding_box_volume_coverage (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.bounding_box_width">bounding_box_width (MorphologicalMeasures property)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.BoundingBox">BoundingBox (class in revolve2.core.physics.actor)</a>
 </li>
@@ -241,7 +257,13 @@
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.brains.html#revolve2.core.modular_robot.brains.BrainCpgNetworkStatic">BrainCpgNetworkStatic (class in revolve2.core.modular_robot.brains)</a>
 </li>
+      <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.DbId.branch">branch() (DbId method)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.branching">branching (MorphologicalMeasures property)</a>
+</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brick">Brick (class in revolve2.core.modular_robot)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.bricks">bricks (MorphologicalMeasures attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -273,9 +295,17 @@
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.core">core (Body attribute)</a>
 </li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Core">Core (class in revolve2.core.modular_robot)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.core">core (MorphologicalMeasures attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Core">Core (class in revolve2.core.modular_robot)</a>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.core_grid_position">core_grid_position (MorphologicalMeasures attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.core_is_filled">core_is_filled (MorphologicalMeasures attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.coverage">coverage (MorphologicalMeasures property)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.Cpg">Cpg (class in revolve2.actor_controllers.cpg)</a>
 </li>
@@ -309,6 +339,16 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer.db_id">db_id (DbEAOptimizer attribute)</a>
+
+      <ul>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.db_id">(DbOpenaiESOptimizer attribute)</a>
+</li>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.db_id">(DbOpenaiESOptimizerIndividual attribute)</a>
+</li>
+        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.db_id">(DbOpenaiESOptimizerState attribute)</a>
+</li>
+      </ul></li>
       <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer">DbEAOptimizer (class in revolve2.core.optimization.ea.generic_ea)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerGeneration">DbEAOptimizerGeneration (class in revolve2.core.optimization.ea.generic_ea)</a>
@@ -323,12 +363,14 @@
 </li>
       <li><a href="api_reference/revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.genotype_schema.DbGenotype">DbGenotype (class in revolve2.genotypes.cppnwin.genotype_schema)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xn">DbNdarray1xn (class in revolve2.core.database.serializers)</a>
+      <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.DbId">DbId (class in revolve2.core.optimization)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem">DbNdarray1xnItem (class in revolve2.core.database.serializers)</a>
+      <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xn">DbNdarray1xn (class in revolve2.core.database.serializers)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem">DbNdarray1xnItem (class in revolve2.core.database.serializers)</a>
+</li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer">DbOpenaiESOptimizer (class in revolve2.core.optimization.ea.openai_es)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual">DbOpenaiESOptimizerIndividual (class in revolve2.core.optimization.ea.openai_es)</a>
@@ -350,6 +392,12 @@
 </li>
       </ul></li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.PosedActor.dof_states">dof_states (PosedActor attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.double_neighbour_active_hinges">double_neighbour_active_hinges (MorphologicalMeasures attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.double_neighbour_brick_and_active_hinge_proportion">double_neighbour_brick_and_active_hinge_proportion (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.double_neighbour_bricks">double_neighbour_bricks (MorphologicalMeasures attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.dynamic_friction">dynamic_friction (RigidBody attribute)</a>
 </li>
@@ -395,9 +443,17 @@
 <h2 id="F">F</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.filled_active_hinges">filled_active_hinges (MorphologicalMeasures attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.filled_bricks">filled_bricks (MorphologicalMeasures attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.filled_core_and_bricks_proportion">filled_core_and_bricks_proportion (MorphologicalMeasures property)</a>
+</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.finalize">finalize() (Body method)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.find_active_hinges">find_active_hinges() (Body method)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.find_bricks">find_bricks() (Body method)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.fitness">fitness (DbOpenaiESOptimizerIndividual attribute)</a>
 </li>
@@ -407,6 +463,8 @@
 </li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.FloatSerializer">FloatSerializer (class in revolve2.core.database.serializers)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.FloatSerializer.from_database">from_database() (FloatSerializer class method)</a>
 
       <ul>
@@ -419,8 +477,6 @@
         <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.Serializer.from_database">(Serializer class method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brick.FRONT">FRONT (Brick attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brick.front">front (Brick property)</a>
@@ -429,14 +485,14 @@
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Core.front">front (Core property)</a>
 </li>
+      <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.DbId.fullname">fullname (DbId property)</a>
+</li>
   </ul></td>
 </tr></table>
 
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen.gen">gen() (ProcessIdGen method)</a>
-</li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.gen_index">gen_index (DbOpenaiESOptimizerIndividual attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.gen_num">gen_num (DbOpenaiESOptimizerIndividual attribute)</a>
@@ -475,8 +531,6 @@
         <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgActorController.get_dof_targets">(CpgActorController method)</a>
 </li>
       </ul></li>
-      <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen.get_state">get_state() (ProcessIdGen method)</a>
-</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.grid_position">grid_position() (Body method)</a>
 </li>
   </ul></td>
@@ -529,6 +583,8 @@
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.initial_rng">initial_rng (DbOpenaiESOptimizer attribute)</a>
 </li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.is_2d">is_2d (MorphologicalMeasures attribute)</a>
+</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.is_finalized">is_finalized (Body property)</a>
 </li>
       <li><a href="api_reference/revolve2.serialization.html#revolve2.serialization.is_static_data">is_static_data() (in module revolve2.serialization)</a>
@@ -555,13 +611,17 @@
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brick.LEFT">LEFT (Brick attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Brick.left">left (Brick property)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Core.LEFT">LEFT (Core attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Core.left">left (Core property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.length_of_limbs">length_of_limbs (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.limbs">limbs (MorphologicalMeasures property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -602,6 +662,10 @@
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Collision.mass">mass (Collision attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.mass">mass() (RigidBody method)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.max_potential_single_neighbour_bricks">max_potential_single_neighbour_bricks (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.max_potentionally_filled_core_and_bricks">max_potentionally_filled_core_and_bricks (MorphologicalMeasures property)</a>
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.mean">mean (DbOpenaiESOptimizerState attribute)</a>
 </li>
@@ -692,6 +756,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module">Module (class in revolve2.core.modular_robot)</a>
 </li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures">MorphologicalMeasures (class in revolve2.core.modular_robot)</a>
+</li>
       <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.selection.html#revolve2.core.optimization.ea.generic_ea.selection.multiple_unique">multiple_unique() (in module revolve2.core.optimization.ea.generic_ea.selection)</a>
 </li>
       <li><a href="api_reference/revolve2.genotypes.cppnwin.html#revolve2.genotypes.cppnwin.mutate_v1">mutate_v1() (in module revolve2.genotypes.cppnwin)</a>
@@ -716,17 +782,35 @@
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.neighbours">neighbours() (Module method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.Process.new">new() (Process class method)</a>
 </li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.NotFinalizedError">NotFinalizedError</a>
 </li>
       <li><a href="api_reference/revolve2.core.database.serializers.html#revolve2.core.database.serializers.DbNdarray1xnItem.nparray1xn_id">nparray1xn_id (DbNdarray1xnItem attribute)</a>
 </li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_active_hinges">num_active_hinges (MorphologicalMeasures property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_bricks">num_bricks (MorphologicalMeasures property)</a>
+</li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_connections">num_connections (CpgNetworkStructure property)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_cpgs">num_cpgs (CpgNetworkStructure property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_double_neighbour_active_hinges">num_double_neighbour_active_hinges (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_double_neighbour_bricks">num_double_neighbour_bricks (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_filled_active_hinges">num_filled_active_hinges (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_filled_bricks">num_filled_bricks (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_filled_modules">num_filled_modules (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_modules">num_modules (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.num_single_neighbour_bricks">num_single_neighbour_bricks (MorphologicalMeasures property)</a>
 </li>
       <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_states">num_states (CpgNetworkStructure property)</a>
 </li>
@@ -792,23 +876,13 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.potential_double_neighbour_bricks_and_active_hinges">potential_double_neighbour_bricks_and_active_hinges (MorphologicalMeasures property)</a>
+</li>
       <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.Process">Process (class in revolve2.core.optimization)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizer.process_id">process_id (DbEAOptimizer attribute)</a>
-
-      <ul>
-        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.process_id">(DbOpenaiESOptimizer attribute)</a>
-</li>
-        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerIndividual.process_id">(DbOpenaiESOptimizerIndividual attribute)</a>
-</li>
-        <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.process_id">(DbOpenaiESOptimizerState attribute)</a>
-</li>
-      </ul></li>
-      <li><a href="api_reference/revolve2.core.optimization.ea.generic_ea.html#revolve2.core.optimization.ea.generic_ea.DbEAOptimizerState.processid_state">processid_state (DbEAOptimizerState attribute)</a>
-</li>
-      <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen">ProcessIdGen (class in revolve2.core.optimization)</a>
-</li>
       <li><a href="api_reference/revolve2.bin.rpi_controller.html#revolve2.bin.rpi_controller.revolve2_rpi_controller.Program">Program (class in revolve2.bin.rpi_controller.revolve2_rpi_controller)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.proportion_2d">proportion_2d (MorphologicalMeasures property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -1101,6 +1175,8 @@
 </li>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizerState.rng">rng (DbOpenaiESOptimizerState attribute)</a>
 </li>
+      <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.DbId.root">root() (DbId class method)</a>
+</li>
       <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Module.rotation">rotation (Module property)</a>
 </li>
       <li><a href="api_reference/revolve2.core.rpi_controller_remote.html#revolve2.core.rpi_controller_remote.RpiControllerRemote">RpiControllerRemote (class in revolve2.core.rpi_controller_remote)</a>
@@ -1141,15 +1217,17 @@
 </li>
       <li><a href="api_reference/revolve2.core.database.html#revolve2.core.database.Serializer">Serializer (class in revolve2.core.database)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.ActorControl.set_dof_targets">set_dof_targets() (ActorControl method)</a>
 </li>
-      <li><a href="api_reference/revolve2.core.optimization.html#revolve2.core.optimization.ProcessIdGen.set_state">set_state() (ProcessIdGen method)</a>
-</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_reference/revolve2.core.optimization.ea.html#revolve2.core.optimization.ea.openai_es.DbOpenaiESOptimizer.sigma">sigma (DbOpenaiESOptimizer attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.running.html#revolve2.core.physics.running.Batch.simulation_time">simulation_time (Batch attribute)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.single_neighbour_brick_proportion">single_neighbour_brick_proportion (MorphologicalMeasures property)</a>
+</li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.single_neighbour_bricks">single_neighbour_bricks (MorphologicalMeasures attribute)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.BoundingBox.size">size (BoundingBox attribute)</a>
 </li>
@@ -1163,6 +1241,8 @@
         <li><a href="api_reference/revolve2.actor_controllers.cpg.html#revolve2.actor_controllers.cpg.CpgActorController.step">(CpgActorController method)</a>
 </li>
       </ul></li>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.symmetry">symmetry (MorphologicalMeasures property)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -1185,6 +1265,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.Body.to_grid">to_grid() (Body method)</a>
+</li>
       <li><a href="api_reference/revolve2.core.physics.actor.sdf.html#revolve2.core.physics.actor.sdf.to_sdf">to_sdf() (in module revolve2.core.physics.actor.sdf)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.urdf.html#revolve2.core.physics.actor.urdf.to_urdf">to_urdf() (in module revolve2.core.physics.actor.urdf)</a>
@@ -1214,6 +1296,26 @@
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.Visual">Visual (class in revolve2.core.physics.actor)</a>
 </li>
       <li><a href="api_reference/revolve2.core.physics.actor.html#revolve2.core.physics.actor.RigidBody.visuals">visuals (RigidBody attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="X">X</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.xy_symmetry">xy_symmetry (MorphologicalMeasures attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.xz_symmetry">xz_symmetry (MorphologicalMeasures attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_reference/revolve2.core.modular_robot.html#revolve2.core.modular_robot.MorphologicalMeasures.yz_symmetry">yz_symmetry (MorphologicalMeasures attribute)</a>
 </li>
   </ul></td>
 </tr></table>

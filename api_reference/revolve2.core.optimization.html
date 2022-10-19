@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.optimization package &mdash; revolve2 v0.3.1-beta1 documentation</title>
+  <title>revolve2.core.optimization package &mdash; revolve2 v0.3.2-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -153,6 +153,53 @@
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.core.optimization" title="Permalink to this heading"></a></h2>
 <p>Tools and interfaces for, and implementations of optimizers.</p>
 <dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.optimization.DbId">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DbId</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_DbId__fullname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.optimization.DbId" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Identifier in a database.</p>
+<p>Can can create children identifiers, forming a tree structure.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.optimization.DbId.branch">
+<span class="sig-name descname"><span class="pre">branch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.optimization.DbId" title="revolve2.core.optimization._db_id.DbId"><span class="pre">DbId</span></a></span></span><a class="headerlink" href="#revolve2.core.optimization.DbId.branch" title="Permalink to this definition"></a></dt>
+<dd><p>Create a child id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – Identifier for the child. Make sure this is unique relative to the current id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created id.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="revolve2.core.optimization.DbId.fullname">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fullname</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.core.optimization.DbId.fullname" title="Permalink to this definition"></a></dt>
+<dd><p>Get the string representation of this id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The representation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.optimization.DbId.root">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.optimization.DbId" title="revolve2.core.optimization._db_id.DbId"><span class="pre">DbId</span></a></span></span><a class="headerlink" href="#revolve2.core.optimization.DbId.root" title="Permalink to this definition"></a></dt>
+<dd><p>Create the root of an id tree.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>name</strong> – Name of the root id.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The created id.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.optimization.Process">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Process</span></span><a class="headerlink" href="#revolve2.core.optimization.Process" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -173,14 +220,14 @@ So, to get proper typing (in python 3.8) the user must simply remember to implem
 these two functions.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.optimization.Process.from_database">
-<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">TChild</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.optimization.Process.from_database" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_database</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.optimization.DbId" title="revolve2.core.optimization._db_id.DbId"><span class="pre">DbId</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">TChild</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.core.optimization.Process.from_database" title="Permalink to this definition"></a></dt>
 <dd><p>Create a new instance of this class.</p>
 <p>It will be initialized using <cite>ainit_from_database</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>database</strong> – Database to use for this process.</p></li>
-<li><p><strong>process_id</strong> – Unique identifier in the completely program specifically made for this process.</p></li>
+<li><p><strong>db_id</strong> – Unique identifier in the completely program specifically made for this process.</p></li>
 <li><p><strong>args</strong> – Other positional arguments required for the inheriting class.</p></li>
 <li><p><strong>kwargs</strong> – Other named arguments required for the inheriting class.</p></li>
 </ul>
@@ -193,61 +240,20 @@ these two functions.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.optimization.Process.new">
-<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">process_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TChild</span></span></span><a class="headerlink" href="#revolve2.core.optimization.Process.new" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">AsyncEngine</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.optimization.DbId" title="revolve2.core.optimization._db_id.DbId"><span class="pre">DbId</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TChild</span></span></span><a class="headerlink" href="#revolve2.core.optimization.Process.new" title="Permalink to this definition"></a></dt>
 <dd><p>Create a new instance of this class.</p>
 <p>It will be initialized using <cite>ainit_new</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>database</strong> – Database to use for this process.</p></li>
-<li><p><strong>process_id</strong> – Unique identifier in the completely program specifically made for this process.</p></li>
+<li><p><strong>db_id</strong> – Unique identifier in the completely program specifically made for this process.</p></li>
 <li><p><strong>args</strong> – Other positional arguments required for the inheriting class.</p></li>
 <li><p><strong>kwargs</strong> – Other named arguments required for the inheriting class.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>An instance of this class.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="revolve2.core.optimization.ProcessIdGen">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProcessIdGen</span></span><a class="headerlink" href="#revolve2.core.optimization.ProcessIdGen" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Generator for process ids unique within this program.</p>
-<p>Must always be called in the same order during reruns of the program or when attempting recovery, or you will lose reproducability.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.optimization.ProcessIdGen.gen">
-<span class="sig-name descname"><span class="pre">gen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ProcessIdGen.gen" title="Permalink to this definition"></a></dt>
-<dd><p>Generate a new unique id.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A unique id.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.optimization.ProcessIdGen.get_state">
-<span class="sig-name descname"><span class="pre">get_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ProcessIdGen.get_state" title="Permalink to this definition"></a></dt>
-<dd><p>Get the state of this generator so it can be serialize to a database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>The state of this generator.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="revolve2.core.optimization.ProcessIdGen.set_state">
-<span class="sig-name descname"><span class="pre">set_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.optimization.ProcessIdGen.set_state" title="Permalink to this definition"></a></dt>
-<dd><p>Set the state of this generator so it can be deserialized from a database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>state</strong> – The state to deserialize from.</p>
 </dd>
 </dl>
 </dd></dl>

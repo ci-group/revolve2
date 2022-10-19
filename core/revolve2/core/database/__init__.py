@@ -3,6 +3,7 @@
 from ._incompatible_error import IncompatibleError
 from ._serializable import Serializable
 from ._serializable_frozen_struct import SerializableFrozenStruct
+from ._serializable_incrementable_struct import SerializableIncrementableStruct
 from ._serializable_list import SerializableList
 from ._serializable_rng import SerializableRng
 from ._serializable_struct import SerializableStruct
@@ -13,6 +14,7 @@ __all__ = [
     "IncompatibleError",
     "Serializable",
     "SerializableFrozenStruct",
+    "SerializableIncrementableStruct",
     "SerializableList",
     "SerializableRng",
     "SerializableStruct",

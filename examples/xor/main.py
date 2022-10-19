@@ -6,11 +6,11 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 import numpy as np
-import sqlalchemy
 from revolve2.core.database import (
     SerializableFrozenStruct,
     SerializableList,
     SerializableRng,
+    SerializableIncrementableStruct,
     open_async_database_sqlite,
 )
 from revolve2.core.optimization.ea.population import Individual, SerializableMeasures
@@ -20,11 +20,9 @@ from revolve2.core.optimization.ea.population.pop_list import (
     topn,
     tournament,
 )
-from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import declarative_base
 
 
 class ParamList(
@@ -63,6 +61,18 @@ class Population(PopList[Genotype, Measures], table_name="population"):
     pass
 
 
+@dataclass
+class ProgramState(
+    SerializableIncrementableStruct,
+    table_name="program_state",
+):
+    """State of the program."""
+
+    rng: SerializableRng
+    population: Population
+    generation_index: int
+
+
 class Optimizer:
     """Program that optimizes the neural network parameters."""
 
@@ -72,29 +82,31 @@ class Optimizer:
     MUTATE_STD: float = 0.05
 
     db: AsyncEngine
-    rng: SerializableRng
-    pop: Population
-    gen_index: int
+
+    state: ProgramState
 
     async def run(self) -> None:
         """Run the program."""
         self.db = open_async_database_sqlite("database")
         async with self.db.begin() as conn:
-            await Population.prepare_db(conn)
-            await SerializableRng.prepare_db(conn)
-            await conn.run_sync(DbBase.metadata.create_all)
+            await ProgramState.prepare_db(conn)
 
         if not await self.load_state():
             rng_seed = 0
-            self.rng = SerializableRng(np.random.Generator(np.random.PCG64(rng_seed)))
-            self.pop = Population(
+            initial_rng = SerializableRng(
+                np.random.Generator(np.random.PCG64(rng_seed))
+            )
+
+            initial_population = Population(
                 [
                     Individual(
                         Genotype(
                             params=ParamList(
                                 [
                                     float(v)
-                                    for v in self.rng.rng.random(size=self.NUM_PARAMS)
+                                    for v in initial_rng.rng.random(
+                                        size=self.NUM_PARAMS
+                                    )
                                 ]
                             )
                         ),
@@ -103,12 +115,19 @@ class Optimizer:
                     for _ in range(self.POPULATION_SIZE)
                 ]
             )
-            self.gen_index = 0
-            self.measure(self.pop)
+            self.measure(initial_population)
+
+            initial_generation_index = 0
+
+            self.state = ProgramState(
+                rng=initial_rng,
+                population=initial_population,
+                generation_index=initial_generation_index,
+            )
 
             await self.save_state()
 
-        while self.gen_index < 300:
+        while self.state.generation_index < 300:
             self.evolve()
             await self.save_state()
 
@@ -116,14 +135,7 @@ class Optimizer:
         """Save the state of the program."""
         async with AsyncSession(self.db) as ses:
             async with ses.begin():
-                popid = await self.pop.to_db(ses)
-
-                dbstate = DbState(
-                    generation_index=self.gen_index,
-                    rng_id=await self.rng.to_db(ses),
-                    pop_id=popid,
-                )
-                ses.add(dbstate)
+                await self.state.to_db(ses)
 
     async def load_state(self) -> bool:
         """
@@ -133,37 +145,18 @@ class Optimizer:
         """
         async with AsyncSession(self.db) as ses:
             async with ses.begin():
-                state = (
-                    await ses.execute(
-                        select(DbState)
-                        .order_by(DbState.generation_index.desc())
-                        .limit(1)
-                    )
-                ).scalar_one_or_none()
-
-                if state is None:
-                    return False
-
-                self.gen_index = state.generation_index
-                maybe_rng = await SerializableRng.from_db(ses, state.rng_id)
-                assert maybe_rng is not None
-                self.rng = maybe_rng
-
-                maybe_pop = await Population.from_db(ses, state.pop_id)
-                assert maybe_pop is not None
-                self.pop = maybe_pop  # type: ignore # TODO
-
-                return True
+                state = await ProgramState.from_db(ses, 0)
+                return state is not None
 
     def evolve(self) -> None:
         """Iterate one generation further."""
-        self.gen_index += 1
+        self.state.generation_index += 1
 
         parent_groups = [
             multiple_unique(
-                self.pop,
+                self.state.population,
                 2,
-                lambda pop: tournament(pop, "fitness", self.rng.rng, k=2),
+                lambda pop: tournament(pop, "fitness", self.state.rng.rng, k=2),
             )
             for _ in range(self.OFFSPRING_SIZE)
         ]
@@ -173,8 +166,8 @@ class Optimizer:
                 Individual(
                     self.mutate(
                         self.crossover(
-                            self.pop[parents[0]].genotype,
-                            self.pop[parents[1]].genotype,
+                            self.state.population[parents[0]].genotype,
+                            self.state.population[parents[1]].genotype,
                         )
                     ),
                     Measures(),
@@ -185,11 +178,11 @@ class Optimizer:
         self.measure(offspring)
 
         original_selection, offspring_selection = topn(
-            self.pop, offspring, measure="fitness", n=self.POPULATION_SIZE
+            self.state.population, offspring, measure="fitness", n=self.POPULATION_SIZE
         )
 
-        self.pop = Population.from_existing_populations(  # type: ignore # TODO
-            [self.pop, offspring],
+        self.state.population = Population.from_existing_populations(  # type: ignore # TODO
+            [self.state.population, offspring],
             [original_selection, offspring_selection],
             [  # TODO make them not copied measures
                 "result00",
@@ -216,7 +209,9 @@ class Optimizer:
                 [
                     float(v)
                     for v in (
-                        self.rng.rng.normal(scale=self.MUTATE_STD, size=self.NUM_PARAMS)
+                        self.state.rng.rng.normal(
+                            scale=self.MUTATE_STD, size=self.NUM_PARAMS
+                        )
                         + genotype.params
                     )
                 ]
@@ -234,7 +229,7 @@ class Optimizer:
         return Genotype(
             params=ParamList(
                 [
-                    b1 if self.rng.rng.random() < 0.5 else b2
+                    b1 if self.state.rng.rng.random() < 0.5 else b2
                     for b1, b2 in zip(parent1.params, parent2.params)
                 ]
             )
@@ -286,28 +281,6 @@ class Optimizer:
         individual.measures.error11 = errors[3]
 
         individual.measures.fitness = sum([-(err**2) for err in errors])
-
-
-DbBase = declarative_base()
-
-
-class DbState(DbBase):
-    """Database model for optimizer state."""
-
-    __tablename__ = "state"
-
-    id = Column(
-        Integer,
-        nullable=False,
-        unique=True,
-        autoincrement=True,
-        primary_key=True,
-    )
-    generation_index = Column(Integer, nullable=False)
-    rng_id = Column(
-        Integer, sqlalchemy.ForeignKey(SerializableRng.table.id), nullable=False
-    )
-    pop_id = Column(Integer, sqlalchemy.ForeignKey(Population.table.id), nullable=False)
 
 
 async def main() -> None:

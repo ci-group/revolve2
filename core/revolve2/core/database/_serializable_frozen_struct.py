@@ -30,7 +30,7 @@ class SerializableFrozenStruct(Serializable):
     Similar to SerializableStruct, but it is assumed the class is immutable.
 
     As such an object will never be saved to the database twice.
-    Instead the database id is stored and will be directly returned at an attempt to save the object again.
+    Instead the database id is stored and will be directly returned on an attempt to save the object again.
     """
 
     @dataclass

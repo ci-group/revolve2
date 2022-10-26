@@ -8,7 +8,6 @@ from typing import (
     Type,
     TypeVar,
     Union,
-    cast,
     get_args,
     get_origin,
     get_type_hints,
@@ -19,6 +18,8 @@ from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.future import select
+from sqlalchemy.orm import subqueryload
+from sqlalchemy import func
 
 from ._serializable import Serializable
 
@@ -30,7 +31,7 @@ class SerializableIncrementableStruct(Serializable):
     Similar to SerializableStruct, but the database object can be identified by both its id and the tuple of item_id and version_id.
 
     Everytime an object with the same item_id is saved its version_id is incremented.
-    An extra function is added to retrieve the object with an item_id and the latest version_id.
+    An extra function is added to retrieve an object using its item_id, automatically getting the latest version.
     """
 
     @dataclass
@@ -49,7 +50,9 @@ class SerializableIncrementableStruct(Serializable):
 
     _columns: List[__Column]
     __db_base: Any  # TODO type
-    __db_id: Optional[int] = None
+
+    item_id: Optional[int] = None
+    version: Optional[int] = None
 
     @classmethod
     def __init_subclass__(
@@ -86,7 +89,11 @@ class SerializableIncrementableStruct(Serializable):
                 unique=True,
                 autoincrement=True,
             ),
-            Column("item_id", Integer, nullable=False),
+            Column(
+                "item_id",
+                Integer,
+                nullable=False,
+            ),
             Column("version", Integer, nullable=False),
             *[
                 Column(col.name, cls.__sqlalchemy_type(col.type), nullable=nullable)
@@ -173,17 +180,47 @@ class SerializableIncrementableStruct(Serializable):
             else:
                 args[col.name] = [getattr(o, col.name) for o in objects]
 
+        next_item_id: int = (
+            await ses.execute(select(func.coalesce(func.max(cls.table.item_id), 0) + 1))
+        ).scalar_one()
+
+        for object in objects:
+            if object.item_id is None:
+                object.item_id = next_item_id
+                next_item_id += 1
+
+        versions: List[int] = [
+            (
+                await ses.execute(
+                    select(
+                        func.coalesce(
+                            func.max(cls.table.version).filter(
+                                cls.table.item_id == o.item_id
+                            ),
+                            0,
+                        )
+                        + 1
+                    )
+                )
+            ).scalar_one()
+            for o in objects
+        ]
+
+        for object, version in zip(objects, versions):
+            object.version = version
+
         rows = [
             cls.table(
-                item_id=0,
-                version=0,
+                item_id=o.item_id,
+                version=version,
                 **{name: val[i] for name, val in args.items()},
             )
-            for i in range(len(objects))
+            for i, o in enumerate(objects)
         ]
 
         ses.add_all(rows)
         await ses.flush()
+
         return [int(row.id) for row in rows]
 
     @classmethod
@@ -197,16 +234,23 @@ class SerializableIncrementableStruct(Serializable):
         :param id: Id of the object in the database.
         :returns: The deserialized object or None is id does not exist.
         """
-        return None  # TODO
         row = (
             await ses.execute(select(cls.table).filter(cls.table.id == id))
         ).scalar_one_or_none()
 
         return cls(
+            item_id=row.item_id,
+            version=row.version,
             **{
                 col.name: (await col.type.from_db(ses, getattr(row, col.name)))
                 if issubclass(col.type, Serializable)
                 else getattr(row, col.name)
                 for col in cls._columns
-            }
+            },
         )
+
+    @classmethod
+    async def from_db_latest(
+        cls: Type[Self], ses: AsyncSession, item_id: int
+    ) -> Optional[Self]:
+        raise NotImplementedError()

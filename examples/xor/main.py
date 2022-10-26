@@ -145,7 +145,7 @@ class Optimizer:
         """
         async with AsyncSession(self.db) as ses:
             async with ses.begin():
-                state = await ProgramState.from_db(ses, 0)
+                state = await ProgramState.from_db_latest(ses, 1)
                 return state is not None
 
     def evolve(self) -> None:

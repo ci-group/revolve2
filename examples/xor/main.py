@@ -8,9 +8,9 @@ from typing import List, Optional
 import numpy as np
 from revolve2.core.database import (
     SerializableFrozenStruct,
+    SerializableIncrementableStruct,
     SerializableList,
     SerializableRng,
-    SerializableIncrementableStruct,
     open_async_database_sqlite,
 )
 from revolve2.core.optimization.ea.population import Individual, SerializableMeasures
@@ -22,7 +22,6 @@ from revolve2.core.optimization.ea.population.pop_list import (
 )
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
-from sqlalchemy.future import select
 
 
 class ParamList(
@@ -145,8 +144,12 @@ class Optimizer:
         """
         async with AsyncSession(self.db) as ses:
             async with ses.begin():
-                self.state = await ProgramState.from_db_latest(ses, 1)
-                return self.state is not None
+                maybe_state = await ProgramState.from_db_latest(ses, 1)
+                if maybe_state is None:
+                    return False
+                else:
+                    self.state = maybe_state
+                    return True
 
     def evolve(self) -> None:
         """Iterate one generation further."""

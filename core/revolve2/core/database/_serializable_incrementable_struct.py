@@ -13,13 +13,11 @@ from typing import (
     get_type_hints,
 )
 
-from sqlalchemy import Column, Float, Integer, MetaData, String, Table
+from sqlalchemy import Column, Float, Integer, MetaData, String, Table, func
 from sqlalchemy.ext.asyncio import AsyncConnection
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.future import select
-from sqlalchemy.orm import subqueryload
-from sqlalchemy import func
 
 from ._serializable import Serializable
 
@@ -232,11 +230,14 @@ class SerializableIncrementableStruct(Serializable):
 
         :param ses: Database session.
         :param id: Id of the object in the database.
-        :returns: The deserialized object or None is id does not exist.
+        :returns: The deserialized object or None if id does not exist.
         """
         row = (
             await ses.execute(select(cls.table).filter(cls.table.id == id))
         ).scalar_one_or_none()
+
+        if row is None:
+            return None
 
         object = cls(
             **{
@@ -255,6 +256,15 @@ class SerializableIncrementableStruct(Serializable):
     async def from_db_latest(
         cls: Type[Self], ses: AsyncSession, item_id: int
     ) -> Optional[Self]:
+        """
+        Deserialize the latest version of this object with the the given item id.
+
+        If no object exists, returns None.
+
+        :param ses: Database session.
+        :param item_id: Item id of the object.
+        :returns: The deserialized object or None if no object with the item id exists.
+        """
         row = (
             await ses.execute(
                 select(cls.table)

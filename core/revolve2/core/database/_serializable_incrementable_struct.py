@@ -238,9 +238,7 @@ class SerializableIncrementableStruct(Serializable):
             await ses.execute(select(cls.table).filter(cls.table.id == id))
         ).scalar_one_or_none()
 
-        return cls(
-            item_id=row.item_id,
-            version=row.version,
+        object = cls(
             **{
                 col.name: (await col.type.from_db(ses, getattr(row, col.name)))
                 if issubclass(col.type, Serializable)
@@ -248,9 +246,36 @@ class SerializableIncrementableStruct(Serializable):
                 for col in cls._columns
             },
         )
+        object.item_id = int(row.item_id)
+        object.version = int(row.version)
+
+        return object
 
     @classmethod
     async def from_db_latest(
         cls: Type[Self], ses: AsyncSession, item_id: int
     ) -> Optional[Self]:
-        raise NotImplementedError()
+        row = (
+            await ses.execute(
+                select(cls.table)
+                .filter(cls.table.item_id == item_id)
+                .order_by(cls.table.version.desc())
+                .limit(1)
+            )
+        ).scalar_one_or_none()
+
+        if row is None:
+            return None
+
+        object = cls(
+            **{
+                col.name: (await col.type.from_db(ses, getattr(row, col.name)))
+                if issubclass(col.type, Serializable)
+                else getattr(row, col.name)
+                for col in cls._columns
+            },
+        )
+        object.item_id = int(row.item_id)
+        object.version = int(row.version)
+
+        return object

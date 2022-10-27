@@ -9,10 +9,9 @@ import numpy as np
 from revolve2.core.database import (
     SerializableFrozenStruct,
     SerializableIncrementableStruct,
-    SerializableList,
-    SerializableRng,
     open_async_database_sqlite,
 )
+from revolve2.core.database.std import Parameters, Rng
 from revolve2.core.optimization.ea.population import Individual, SerializableMeasures
 from revolve2.core.optimization.ea.population.pop_list import (
     PopList,
@@ -24,19 +23,11 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 
-class ParamList(
-    SerializableList[float], table_name="parameters", value_column_name="parameter"
-):
-    """A list of parameters."""
-
-    pass
-
-
 @dataclass
 class Genotype(SerializableFrozenStruct, table_name="genotype"):
     """Genotype for the neural network parameters."""
 
-    params: ParamList
+    params: Parameters
 
 
 @dataclass
@@ -67,7 +58,7 @@ class ProgramState(
 ):
     """State of the program."""
 
-    rng: SerializableRng
+    rng: Rng
     population: Population
     generation_index: int
 
@@ -92,15 +83,13 @@ class Optimizer:
 
         if not await self.load_state():
             rng_seed = 0
-            initial_rng = SerializableRng(
-                np.random.Generator(np.random.PCG64(rng_seed))
-            )
+            initial_rng = Rng(np.random.Generator(np.random.PCG64(rng_seed)))
 
             initial_population = Population(
                 [
                     Individual(
                         Genotype(
-                            params=ParamList(
+                            params=Parameters(
                                 [
                                     float(v)
                                     for v in initial_rng.rng.random(
@@ -208,7 +197,7 @@ class Optimizer:
         :returns: The mutated genotype.
         """
         return Genotype(
-            params=ParamList(
+            params=Parameters(
                 [
                     float(v)
                     for v in (
@@ -230,7 +219,7 @@ class Optimizer:
         :returns: The create genotype.
         """
         return Genotype(
-            params=ParamList(
+            params=Parameters(
                 [
                     b1 if self.state.rng.rng.random() < 0.5 else b2
                     for b1, b2 in zip(parent1.params, parent2.params)

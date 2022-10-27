@@ -10,13 +10,13 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import declarative_base
 
-from ._serializable import Serializable
+from .._serializable import Serializable
 
 _DbBase = declarative_base()
 
 
 class RngTable(_DbBase):
-    """Main table for SerializableRng."""
+    """Main table for Rng."""
 
     __tablename__ = "rng"
 
@@ -33,7 +33,7 @@ class RngTable(_DbBase):
     )
 
 
-class SerializableRng(Serializable):
+class Rng(Serializable):
     """Numpy Generator made Serializable."""
 
     table = RngTable
@@ -59,7 +59,7 @@ class SerializableRng(Serializable):
 
     @classmethod
     async def to_db_multiple(
-        cls: Type[SerializableRng], ses: AsyncSession, objects: List[SerializableRng]
+        cls: Type[Rng], ses: AsyncSession, objects: List[Rng]
     ) -> List[int]:
         """
         Serialize multiple objects to a database.
@@ -74,9 +74,7 @@ class SerializableRng(Serializable):
         return [int(r.id) for r in rows]  # type: ignore # we know id cannot be None # TODO
 
     @classmethod
-    async def from_db(
-        cls: Type[SerializableRng], ses: AsyncSession, id: int
-    ) -> Optional[SerializableRng]:
+    async def from_db(cls: Type[Rng], ses: AsyncSession, id: int) -> Optional[Rng]:
         """
         Deserialize this object from a database.
 
@@ -95,4 +93,4 @@ class SerializableRng(Serializable):
 
         loaded = pickle.loads(row.pickled)
         assert isinstance(loaded, np.random.Generator)
-        return SerializableRng(loaded)
+        return Rng(loaded)

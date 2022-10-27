@@ -13,7 +13,7 @@ echo "examples/openai_es:" && \
 mypy openai_es && \
 echo "examples/rpi_controller_remote:" && \
 mypy rpi_controller_remote
-echo "examples/ga:" && \
-mypy ga
-echo "examples/de:" && \
-mypy de
+echo "examples/xor_ga:" && \
+mypy xor_ga
+echo "examples/xor_de:" && \
+mypy xor_de

@@ -7,12 +7,15 @@ from typing import List, Optional
 
 import numpy as np
 from revolve2.core.database import (
-    SerializableFrozenStruct,
     SerializableIncrementableStruct,
     open_async_database_sqlite,
 )
-from revolve2.core.database.std import Parameters, Rng
-from revolve2.core.optimization.ea.population import Individual, SerializableMeasures
+from revolve2.core.database.std import Rng
+from revolve2.core.optimization.ea.population import (
+    Individual,
+    Parameters,
+    SerializableMeasures,
+)
 from revolve2.core.optimization.ea.population.pop_list import (
     PopList,
     multiple_unique,
@@ -22,12 +25,7 @@ from revolve2.core.optimization.ea.population.pop_list import (
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-
-@dataclass
-class Genotype(SerializableFrozenStruct, table_name="genotype"):
-    """Genotype for the neural network parameters."""
-
-    params: Parameters
+Genotype = Parameters
 
 
 @dataclass
@@ -89,14 +87,10 @@ class Optimizer:
                 [
                     Individual(
                         Genotype(
-                            params=Parameters(
-                                [
-                                    float(v)
-                                    for v in initial_rng.rng.random(
-                                        size=self.NUM_PARAMS
-                                    )
-                                ]
-                            )
+                            [
+                                float(v)
+                                for v in initial_rng.rng.random(size=self.NUM_PARAMS)
+                            ]
                         ),
                         Measures(),
                     )
@@ -197,17 +191,15 @@ class Optimizer:
         :returns: The mutated genotype.
         """
         return Genotype(
-            params=Parameters(
-                [
-                    float(v)
-                    for v in (
-                        self.state.rng.rng.normal(
-                            scale=self.MUTATE_STD, size=self.NUM_PARAMS
-                        )
-                        + genotype.params
+            [
+                float(v)
+                for v in (
+                    self.state.rng.rng.normal(
+                        scale=self.MUTATE_STD, size=self.NUM_PARAMS
                     )
-                ]
-            )
+                    + genotype
+                )
+            ]
         )
 
     def crossover(self, parent1: Genotype, parent2: Genotype) -> Genotype:
@@ -219,12 +211,10 @@ class Optimizer:
         :returns: The create genotype.
         """
         return Genotype(
-            params=Parameters(
-                [
-                    b1 if self.state.rng.rng.random() < 0.5 else b2
-                    for b1, b2 in zip(parent1.params, parent2.params)
-                ]
-            )
+            [
+                b1 if self.state.rng.rng.random() < 0.5 else b2
+                for b1, b2 in zip(parent1, parent2)
+            ]
         )
 
     def measure(self, pop: Population) -> None:
@@ -257,9 +247,7 @@ class Optimizer:
 
         ios = [(0, 0, 0), (1, 0, 1), (0, 1, 1), (1, 1, 0)]
 
-        results = [
-            evaluate_network(individual.genotype.params, io[0], io[1]) for io in ios
-        ]
+        results = [evaluate_network(individual.genotype, io[0], io[1]) for io in ios]
         errors = [abs(result - io[2]) for result, io in zip(results, ios)]
 
         individual.measures.result00 = results[0]

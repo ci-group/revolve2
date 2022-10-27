@@ -7,22 +7,21 @@ from typing import List, Optional
 
 import numpy as np
 from revolve2.core.database import (
-    SerializableFrozenStruct,
     SerializableIncrementableStruct,
     open_async_database_sqlite,
 )
-from revolve2.core.database.std import Parameters, Rng
-from revolve2.core.optimization.ea.population import Individual, SerializableMeasures
+from revolve2.core.database.std import Rng
+from revolve2.core.optimization.ea.algorithms import de_offspring
+from revolve2.core.optimization.ea.population import (
+    Individual,
+    Parameters,
+    SerializableMeasures,
+)
 from revolve2.core.optimization.ea.population.pop_list import PopList, topn
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-
-@dataclass
-class Genotype(SerializableFrozenStruct, table_name="genotype"):
-    """Genotype for the neural network parameters."""
-
-    params: Parameters
+Genotype = Parameters
 
 
 @dataclass
@@ -85,14 +84,10 @@ class Optimizer:
                 [
                     Individual(
                         Genotype(
-                            params=Parameters(
-                                [
-                                    float(v)
-                                    for v in initial_rng.rng.random(
-                                        size=self.NUM_PARAMS
-                                    )
-                                ]
-                            )
+                            [
+                                float(v)
+                                for v in initial_rng.rng.random(size=self.NUM_PARAMS)
+                            ]
                         ),
                         Measures(),
                     )
@@ -140,30 +135,18 @@ class Optimizer:
         """Iterate one generation further."""
         self.state.generation_index += 1
 
-        offspring_inds: List[Individual] = []
+        offspring = Population(
+            [
+                Individual(genotype, Measures())
+                for genotype in de_offspring(
+                    self.state.population,
+                    self.state.rng,
+                    self.DIFFERENTIAL_WEIGHT,
+                    self.CROSSOVER_PROBABILITY,
+                )
+            ]
+        )
 
-        for individual_i, individual in enumerate(self.state.population):
-            sub_pop = self.state.population[individual_i:]
-            selection = self.state.rng.rng.choice(range(len(sub_pop)), 3)
-
-            x = np.array(individual.genotype.params)
-            a = np.array(sub_pop[selection[0]].genotype.params)
-            b = np.array(sub_pop[selection[1]].genotype.params)
-            c = np.array(sub_pop[selection[2]].genotype.params)
-
-            y = a + self.DIFFERENTIAL_WEIGHT * (b - c)
-
-            crossover_mask = self.state.rng.rng.binomial(
-                n=1, p=self.CROSSOVER_PROBABILITY, size=self.NUM_PARAMS
-            )
-
-            child = crossover_mask * x + (1.0 - crossover_mask) * y
-
-            offspring_inds.append(
-                Individual(Genotype(Parameters([float(v) for v in child])), Measures())
-            )
-
-        offspring = Population(offspring_inds)
         self.measure(offspring)
 
         original_selection, offspring_selection = topn(
@@ -216,9 +199,7 @@ class Optimizer:
 
         ios = [(0, 0, 0), (1, 0, 1), (0, 1, 1), (1, 1, 0)]
 
-        results = [
-            evaluate_network(individual.genotype.params, io[0], io[1]) for io in ios
-        ]
+        results = [evaluate_network(individual.genotype, io[0], io[1]) for io in ios]
         errors = [abs(result - io[2]) for result, io in zip(results, ios)]
 
         individual.measures.result00 = results[0]

@@ -2,6 +2,7 @@
 
 from ._incompatible_error import IncompatibleError
 from ._serializable import Serializable
+from ._serializable_frozen_list import SerializableFrozenList
 from ._serializable_frozen_struct import SerializableFrozenStruct
 from ._serializable_incrementable_struct import SerializableIncrementableStruct
 from ._serializable_list import SerializableList
@@ -12,6 +13,7 @@ from ._sqlite import open_async_database_sqlite, open_database_sqlite
 __all__ = [
     "IncompatibleError",
     "Serializable",
+    "SerializableFrozenList",
     "SerializableFrozenStruct",
     "SerializableIncrementableStruct",
     "SerializableList",

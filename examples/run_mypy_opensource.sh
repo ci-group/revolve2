@@ -16,4 +16,4 @@ mypy rpi_controller_remote
 echo "examples/xor:" && \
 mypy xor
 echo "examples/de:" && \
-mypy xor
+mypy de

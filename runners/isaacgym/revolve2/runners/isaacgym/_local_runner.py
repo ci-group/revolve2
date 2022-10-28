@@ -21,6 +21,7 @@ from revolve2.core.physics.running import (
     EnvironmentState,
     Runner,
 )
+
 from .terrains import flat_terrain_generator
 
 
@@ -364,6 +365,7 @@ class LocalRunner(Runner):
     _headless: bool
     _real_time: bool
     _max_gpu_contact_pairs: int
+    _terrain_generator: Callable[[gymapi.Gym, gymapi.Sim], None]
 
     def __init__(
         self,
@@ -371,6 +373,9 @@ class LocalRunner(Runner):
         headless: bool = False,
         real_time: bool = False,
         max_gpu_contact_pairs: int = 1048576,
+        terrain_generator: Callable[
+            [gymapi.Gym, gymapi.Sim], None
+        ] = flat_terrain_generator,
     ):
         """
         Initialize this object.
@@ -379,11 +384,13 @@ class LocalRunner(Runner):
         :param headless: If True, the simulation will not be rendered. This drastically improves performance.
         :param real_time: If True, the simulation will run in real-time.
         :param max_gpu_contact_pairs: Maximum number of contacts that can be stored by Isaac Gym. If you get a warning similar to "The application needs to increase PxgDynamicsMemoryConfig::foundLostAggregatePairsCapacity" you need to increase this parameter.
+        :param terrain_generator: Function to generate terrain.
         """
         self._sim_params = sim_params
         self._headless = headless
         self._real_time = real_time
         self._max_gpu_contact_pairs = max_gpu_contact_pairs
+        self._terrain_generator = terrain_generator
 
     @staticmethod
     def SimParams() -> gymapi.SimParams:
@@ -409,9 +416,6 @@ class LocalRunner(Runner):
     async def run_batch(
         self,
         batch: Batch,
-        terrain_generator: Callable[
-            [gymapi.Gym, gymapi.Sim], None
-        ] = flat_terrain_generator,
     ) -> BatchResults:
         """
         Run the provided batch by simulating each contained environment.
@@ -434,7 +438,7 @@ class LocalRunner(Runner):
                 self._headless,
                 self._real_time,
                 self._max_gpu_contact_pairs,
-                terrain_generator,
+                self._terrain_generator,
             ),
         )
         process.start()

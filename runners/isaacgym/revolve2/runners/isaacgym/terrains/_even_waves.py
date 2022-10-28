@@ -7,6 +7,12 @@ from isaacgym.terrain_utils import (
 
 
 def even_waves_terrain_generator(gym: gymapi.Gym, sim: gymapi.Sim) -> None:
+    """
+    Generate a terrain of waves.
+
+    :param gym: Isaac gym.
+    :param sim: Isaac Gym sim.
+    """
     horizontal_scale = 0.0125  # [m] 0.25 0.0125
     vertical_scale = 0.00025  # [m] 0.005 0.00025
     heightfield = wave_terrain(

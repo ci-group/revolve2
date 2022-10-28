@@ -7,6 +7,12 @@ from isaacgym.terrain_utils import (
 
 
 def rugged_terrain_generator(gym: gymapi.Gym, sim: gymapi.Sim) -> None:
+    """
+    Generate a rugged terrain.
+
+    :param gym: Isaac gym.
+    :param sim: Isaac Gym sim.
+    """
     horizontal_scale = 0.25  # [m]
     vertical_scale = 0.005  # [m]
     heightfield = random_uniform_terrain(

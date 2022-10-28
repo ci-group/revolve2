@@ -21,6 +21,7 @@ from revolve2.core.physics.running import (
     EnvironmentState,
     Runner,
 )
+from .terrains import flat_terrain_generator
 
 
 class LocalRunner(Runner):
@@ -408,7 +409,9 @@ class LocalRunner(Runner):
     async def run_batch(
         self,
         batch: Batch,
-        terrain_generator: Callable[[gymapi.Gym, gymapi.Sim], None],
+        terrain_generator: Callable[
+            [gymapi.Gym, gymapi.Sim], None
+        ] = flat_terrain_generator,
     ) -> BatchResults:
         """
         Run the provided batch by simulating each contained environment.

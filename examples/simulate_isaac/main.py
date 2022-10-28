@@ -9,7 +9,6 @@ from revolve2.core.modular_robot import ActiveHinge, Body, Brick, ModularRobot
 from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighbourRandom
 from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
 from revolve2.runners.isaacgym import LocalRunner
-from revolve2.runners.isaacgym.terrains import pyramid_terrain_generator
 
 
 class Simulator:
@@ -57,7 +56,7 @@ class Simulator:
         batch.environments.append(env)
 
         runner = LocalRunner(LocalRunner.SimParams())
-        await runner.run_batch(batch, pyramid_terrain_generator)
+        await runner.run_batch(batch)
 
     def _control(
         self, environment_index: int, dt: float, control: ActorControl

@@ -9,7 +9,7 @@ revolve2_path = pathlib.Path(__file__).parent.parent.parent.resolve()
 
 setup(
     name="revolve2-genotypes-cppnwin",
-    version="0.3.2-beta1",
+    version="0.3.3-beta1",
     description="CPPNWIN genotype for modular robots from Revolve2",
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",

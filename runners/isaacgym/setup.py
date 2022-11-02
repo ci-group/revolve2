@@ -9,7 +9,7 @@ revolve2_path = pathlib.Path(__file__).parent.parent.parent.resolve()
 
 setup(
     name="revolve2-runners-isaacgym",
-    version="0.3.3-beta1",
+    version="0.3.4-beta1",
     description="Isaac Gym runner for Revolve2",
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",

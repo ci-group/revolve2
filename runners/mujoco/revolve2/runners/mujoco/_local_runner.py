@@ -1,11 +1,10 @@
+import concurrent.futures
 import math
-from random import sample
 import tempfile
-from typing import List, Callable
+from typing import Callable, List
 
 import mujoco
 import mujoco_viewer
-import concurrent.futures
 
 try:
     import logging

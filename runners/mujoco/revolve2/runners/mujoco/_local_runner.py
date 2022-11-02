@@ -1,9 +1,11 @@
 import math
+from random import sample
 import tempfile
-from typing import List
+from typing import List, Callable
 
 import mujoco
 import mujoco_viewer
+import concurrent.futures
 
 try:
     import logging
@@ -41,14 +43,105 @@ class LocalRunner(Runner):
     """Runner for simulating using Mujoco."""
 
     _headless: bool
+    _num_simulators: int
 
-    def __init__(self, headless: bool = False):
+    def __init__(self, headless: bool = False, num_simulators: int = 1):
         """
         Initialize this object.
 
         :param headless: If True, the simulation will not be rendered. This drastically improves performance.
+        :param num_simulators: The number of simulators to deploy in parallel. They will take one core each but will share space on the main python thread for calculating control.
         """
+        assert (
+            headless or num_simulators == 1
+        ), "Cannot have parallel simulators when visualizing."
+
         self._headless = headless
+        self._num_simulators = num_simulators
+
+    @classmethod
+    def _run_environment(
+        cls,
+        env_index: int,
+        env_descr: Environment,
+        headless: bool,
+        control_step: float,
+        sample_step: float,
+        simulation_time: int,
+        control: Callable[[int, float, ActorControl], None],
+    ) -> EnvironmentResults:
+        logging.info(f"Environment {env_index}")
+
+        model = mujoco.MjModel.from_xml_string(cls._make_mjcf(env_descr))
+
+        # TODO initial dof state
+        data = mujoco.MjData(model)
+
+        initial_targets = [
+            dof_state
+            for posed_actor in env_descr.actors
+            for dof_state in posed_actor.dof_states
+        ]
+        cls._set_dof_targets(data, initial_targets)
+
+        for posed_actor in env_descr.actors:
+            posed_actor.dof_states
+
+        if not headless:
+            viewer = mujoco_viewer.MujocoViewer(
+                model,
+                data,
+            )
+
+        last_control_time = 0.0
+        last_sample_time = 0.0
+
+        results = EnvironmentResults([])
+
+        # sample initial state
+        results.environment_states.append(
+            EnvironmentState(0.0, cls._get_actor_states(env_descr, data, model))
+        )
+
+        while (time := data.time) < simulation_time:
+            # do control if it is time
+            if time >= last_control_time + control_step:
+                last_control_time = math.floor(time / control_step) * control_step
+                control_user = ActorControl()
+                control(env_index, control_step, control_user)
+                actor_targets = control_user._dof_targets
+                actor_targets.sort(key=lambda t: t[0])
+                targets = [
+                    target
+                    for actor_target in actor_targets
+                    for target in actor_target[1]
+                ]
+                cls._set_dof_targets(data, targets)
+
+            # sample state if it is time
+            if time >= last_sample_time + sample_step:
+                last_sample_time = int(time / sample_step) * sample_step
+                results.environment_states.append(
+                    EnvironmentState(
+                        time, cls._get_actor_states(env_descr, data, model)
+                    )
+                )
+
+            # step simulation
+            mujoco.mj_step(model, data)
+
+            if not headless:
+                viewer.render()
+
+        if not headless:
+            viewer.close()
+
+        # sample one final time
+        results.environment_states.append(
+            EnvironmentState(time, cls._get_actor_states(env_descr, data, model))
+        )
+
+        return results
 
     async def run_batch(self, batch: Batch) -> BatchResults:
         """
@@ -62,77 +155,23 @@ class LocalRunner(Runner):
         control_step = 1 / batch.control_frequency
         sample_step = 1 / batch.sampling_frequency
 
-        results = BatchResults([EnvironmentResults([]) for _ in batch.environments])
-
-        for env_index, env_descr in enumerate(batch.environments):
-            logging.info(f"Environment {env_index}")
-
-            model = mujoco.MjModel.from_xml_string(self._make_mjcf(env_descr))
-
-            # TODO initial dof state
-            data = mujoco.MjData(model)
-
-            initial_targets = [
-                dof_state
-                for posed_actor in env_descr.actors
-                for dof_state in posed_actor.dof_states
-            ]
-            self._set_dof_targets(data, initial_targets)
-
-            for posed_actor in env_descr.actors:
-                posed_actor.dof_states
-
-            if not self._headless:
-                viewer = mujoco_viewer.MujocoViewer(
-                    model,
-                    data,
+        with concurrent.futures.ThreadPoolExecutor(
+            max_workers=self._num_simulators
+        ) as executor:
+            futures = [
+                executor.submit(
+                    self._run_environment,
+                    env_index,
+                    env_descr,
+                    self._headless,
+                    control_step,
+                    sample_step,
+                    batch.simulation_time,
+                    batch.control,
                 )
-
-            last_control_time = 0.0
-            last_sample_time = 0.0
-
-            # sample initial state
-            results.environment_results[env_index].environment_states.append(
-                EnvironmentState(0.0, self._get_actor_states(env_descr, data, model))
-            )
-
-            while (time := data.time) < batch.simulation_time:
-                # do control if it is time
-                if time >= last_control_time + control_step:
-                    last_control_time = math.floor(time / control_step) * control_step
-                    control = ActorControl()
-                    batch.control(env_index, control_step, control)
-                    actor_targets = control._dof_targets
-                    actor_targets.sort(key=lambda t: t[0])
-                    targets = [
-                        target
-                        for actor_target in actor_targets
-                        for target in actor_target[1]
-                    ]
-                    self._set_dof_targets(data, targets)
-
-                # sample state if it is time
-                if time >= last_sample_time + sample_step:
-                    last_sample_time = int(time / sample_step) * sample_step
-                    results.environment_results[env_index].environment_states.append(
-                        EnvironmentState(
-                            time, self._get_actor_states(env_descr, data, model)
-                        )
-                    )
-
-                # step simulation
-                mujoco.mj_step(model, data)
-
-                if not self._headless:
-                    viewer.render()
-
-            if not self._headless:
-                viewer.close()
-
-            # sample one final time
-            results.environment_results[env_index].environment_states.append(
-                EnvironmentState(time, self._get_actor_states(env_descr, data, model))
-            )
+                for env_index, env_descr in enumerate(batch.environments)
+            ]
+            results = BatchResults([future.result() for future in futures])
 
         logging.info("Finished batch.")
 

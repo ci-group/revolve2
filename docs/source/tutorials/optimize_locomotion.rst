@@ -795,7 +795,7 @@ The script below selects the best robot from the database and lets it walk::
 
     async def main() -> None:
 
-        db = open_async_database_sqlite("./database")
+        db = open_async_database_sqlite("./database", create=True)
         async with AsyncSession(db) as session:
             best_individual = (
                 await session.execute(

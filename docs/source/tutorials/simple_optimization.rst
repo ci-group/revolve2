@@ -181,7 +181,7 @@ Whenever you need to interact with the database, refer to SQLAlchemy's documenta
         # ...
 
         # database
-        database = open_async_database_sqlite("./database")
+        database = open_async_database_sqlite("./database", create=True)
 
 Moving away from the ``main`` function, Revolve2 provides an ``EAOptimizer`` class, which helps setting up an evolutionary algorithm optimization process.
 To use it, inherit from it and fill in its abstract functions::

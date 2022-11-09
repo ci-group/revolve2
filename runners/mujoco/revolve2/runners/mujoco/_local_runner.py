@@ -91,6 +91,7 @@ class LocalRunner(Runner):
                 model,
                 data,
             )
+            viewer._render_every_frame = False  # Private but functionality is not exposed and for now it breaks nothing.
 
         last_control_time = 0.0
         last_sample_time = 0.0

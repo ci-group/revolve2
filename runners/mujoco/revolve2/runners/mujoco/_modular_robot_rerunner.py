@@ -1,11 +1,17 @@
 """Rerun(watch) a modular robot in Mujoco."""
 
-from typing import List, Union
+from typing import List, Optional, Union
 
 from pyrr import Quaternion, Vector3
 from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ModularRobot
-from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
+from revolve2.core.physics.running import (
+    ActorControl,
+    Batch,
+    Environment,
+    PosedActor,
+    RecordSettings,
+)
 from revolve2.runners.mujoco import LocalRunner
 
 
@@ -20,6 +26,7 @@ class ModularRobotRerunner:
         control_frequency: float,
         simulation_time: int = 1000000,
         start_paused: bool = False,
+        record_settings: Optional[RecordSettings] = None,
     ) -> None:
         """
         Rerun a single robot.
@@ -28,6 +35,7 @@ class ModularRobotRerunner:
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
         :param simulation_time: How long to rerun each robot for.
         :param start_paused: If True, start the simulation paused. Only possible when not in headless mode.
+        :param record_settings: Optional settings for recording the runnings. If None, no recording is made.
         """
         if isinstance(robots, ModularRobot):
             robots = [robots]
@@ -64,7 +72,7 @@ class ModularRobotRerunner:
             batch.environments.append(env)
 
         runner = LocalRunner(headless=False, start_paused=start_paused)
-        await runner.run_batch(batch)
+        await runner.run_batch(batch, record_settings=record_settings)
 
     def _control(
         self, environment_index: int, dt: float, control: ActorControl

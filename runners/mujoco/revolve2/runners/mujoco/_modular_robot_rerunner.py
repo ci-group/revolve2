@@ -19,6 +19,7 @@ class ModularRobotRerunner:
         robots: Union[ModularRobot, List[ModularRobot]],
         control_frequency: float,
         simulation_time: int = 1000000,
+        start_paused: bool = False,
     ) -> None:
         """
         Rerun a single robot.
@@ -26,6 +27,7 @@ class ModularRobotRerunner:
         :param robots: One or more robots to simulate.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
         :param simulation_time: How long to rerun each robot for.
+        :param start_paused: If True, start the simulation paused. Only possible when not in headless mode.
         """
         if isinstance(robots, ModularRobot):
             robots = [robots]
@@ -61,7 +63,7 @@ class ModularRobotRerunner:
             )
             batch.environments.append(env)
 
-        runner = LocalRunner(headless=False)
+        runner = LocalRunner(headless=False, start_paused=start_paused)
         await runner.run_batch(batch)
 
     def _control(

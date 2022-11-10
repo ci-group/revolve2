@@ -42,20 +42,32 @@ class LocalRunner(Runner):
     """Runner for simulating using Mujoco."""
 
     _headless: bool
+    _start_paused: bool
     _num_simulators: int
 
-    def __init__(self, headless: bool = False, num_simulators: int = 1):
+    def __init__(
+        self,
+        headless: bool = False,
+        start_paused: bool = False,
+        num_simulators: int = 1,
+    ):
         """
         Initialize this object.
 
         :param headless: If True, the simulation will not be rendered. This drastically improves performance.
+        :param start_paused: If True, start the simulation paused. Only possible when not in headless mode.
         :param num_simulators: The number of simulators to deploy in parallel. They will take one core each but will share space on the main python thread for calculating control.
         """
         assert (
             headless or num_simulators == 1
         ), "Cannot have parallel simulators when visualizing."
 
+        assert not (
+            headless and start_paused
+        ), "Cannot start simulation paused in headless mode."
+
         self._headless = headless
+        self._start_paused = start_paused
         self._num_simulators = num_simulators
 
     @classmethod
@@ -64,6 +76,7 @@ class LocalRunner(Runner):
         env_index: int,
         env_descr: Environment,
         headless: bool,
+        start_paused: bool,
         control_step: float,
         sample_step: float,
         simulation_time: int,
@@ -92,6 +105,7 @@ class LocalRunner(Runner):
                 data,
             )
             viewer._render_every_frame = False  # Private but functionality is not exposed and for now it breaks nothing.
+            viewer._paused = start_paused
 
         last_control_time = 0.0
         last_sample_time = 0.0
@@ -164,6 +178,7 @@ class LocalRunner(Runner):
                     env_index,
                     env_descr,
                     self._headless,
+                    self._start_paused,
                     control_step,
                     sample_step,
                     batch.simulation_time,

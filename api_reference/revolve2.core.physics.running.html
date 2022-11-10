@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.physics.running package &mdash; revolve2 v0.3.4-beta1 documentation</title>
+  <title>revolve2.core.physics.running package &mdash; revolve2 v0.3.5-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -303,6 +303,23 @@ but is dependent on the actual step frequency of the simulator.</p>
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.RecordSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RecordSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">24</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.RecordSettings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Settings for recording physics running.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.RecordSettings.fps">
+<span class="sig-name descname"><span class="pre">fps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#revolve2.core.physics.running.RecordSettings.fps" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.RecordSettings.video_directory">
+<span class="sig-name descname"><span class="pre">video_directory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.core.physics.running.RecordSettings.video_directory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Runner">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Runner</span></span><a class="headerlink" href="#revolve2.core.physics.running.Runner" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
@@ -310,11 +327,14 @@ but is dependent on the actual step frequency of the simulator.</p>
 <p>Running happens either in simulation or reality, depending on the implementation.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Runner.run_batch">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.running.Batch" title="revolve2.core.physics.running._batch.Batch"><span class="pre">Batch</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.physics.running.BatchResults" title="revolve2.core.physics.running._results.BatchResults"><span class="pre">BatchResults</span></a></span></span><a class="headerlink" href="#revolve2.core.physics.running.Runner.run_batch" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.running.Batch" title="revolve2.core.physics.running._batch.Batch"><span class="pre">Batch</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.RecordSettings" title="revolve2.core.physics.running._record_settings.RecordSettings"><span class="pre">RecordSettings</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.physics.running.BatchResults" title="revolve2.core.physics.running._results.BatchResults"><span class="pre">BatchResults</span></a></span></span><a class="headerlink" href="#revolve2.core.physics.running.Runner.run_batch" title="Permalink to this definition"></a></dt>
 <dd><p>Run the provided batch by simulating each contained environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>batch</strong> – The batch to run.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> – The batch to run.</p></li>
+<li><p><strong>record_settings</strong> – Optional settings for recording the runnings. If None, no recording is made.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>List of simulation states in ascending order of time.</p>

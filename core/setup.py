@@ -9,7 +9,7 @@ revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-core",
-    version="0.3.4-beta1",
+    version="0.3.5-beta1",
     description="Core package for revolve2",
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",

@@ -136,26 +136,25 @@ class LocalRunner(Runner):
                 for actor_index, posed_actor in enumerate(env_descr.actors):
                     # sadly isaac gym can only read robot descriptions from a file,
                     # so we create a temporary file.
-                    botfile = tempfile.NamedTemporaryFile(
-                        mode="r+", delete=False, suffix=".urdf"
-                    )
-                    botfile.writelines(
-                        physbot_to_urdf(
-                            posed_actor.actor,
-                            f"robot_{actor_index}",
-                            Vector3(),
-                            Quaternion(),
+                    with tempfile.NamedTemporaryFile(
+                        mode="r+", delete=True, suffix="_isaacgym.urdf"
+                    ) as botfile:
+                        botfile.writelines(
+                            physbot_to_urdf(
+                                posed_actor.actor,
+                                f"robot_{actor_index}",
+                                Vector3(),
+                                Quaternion(),
+                            )
                         )
-                    )
-                    botfile.close()
-                    asset_root = os.path.dirname(botfile.name)
-                    urdf_file = os.path.basename(botfile.name)
-                    asset_options = gymapi.AssetOptions()
-                    asset_options.angular_damping = 0.0
-                    actor_asset = self._gym.load_urdf(
-                        self._sim, asset_root, urdf_file, asset_options
-                    )
-                    os.remove(botfile.name)
+                        botfile.flush()
+                        asset_root = os.path.dirname(botfile.name)
+                        urdf_file = os.path.basename(botfile.name)
+                        asset_options = gymapi.AssetOptions()
+                        asset_options.angular_damping = 0.0
+                        actor_asset = self._gym.load_urdf(
+                            self._sim, asset_root, urdf_file, asset_options
+                        )
 
                     if actor_asset is None:
                         raise RuntimeError()

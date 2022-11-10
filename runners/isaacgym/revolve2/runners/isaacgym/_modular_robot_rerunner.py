@@ -15,13 +15,17 @@ class ModularRobotRerunner:
     _controllers: List[ActorController]
 
     async def rerun(
-        self, robots: Union[ModularRobot, List[ModularRobot]], control_frequency: float
+        self,
+        robots: Union[ModularRobot, List[ModularRobot]],
+        control_frequency: float,
+        simulation_time: int = 1000000,
     ) -> None:
         """
         Rerun a single robot.
 
         :param robots: One or more robots to simulate.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
+        :param simulation_time: How long to rerun each robot for.
         """
         if isinstance(robots, ModularRobot):
             robots = [robots]
@@ -29,7 +33,7 @@ class ModularRobotRerunner:
         self._controllers = []
 
         batch = Batch(
-            simulation_time=1000000,
+            simulation_time=simulation_time,
             sampling_frequency=0.0001,
             control_frequency=control_frequency,
             control=self._control,

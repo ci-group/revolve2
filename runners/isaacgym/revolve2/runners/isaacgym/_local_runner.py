@@ -19,6 +19,7 @@ from revolve2.core.physics.running import (
     BatchResults,
     EnvironmentResults,
     EnvironmentState,
+    RecordSettings,
     Runner,
 )
 
@@ -413,15 +414,19 @@ class LocalRunner(Runner):
         self._sim_params = sim_params
 
     async def run_batch(
-        self,
-        batch: Batch,
+        self, batch: Batch, record_settings: Optional[RecordSettings] = None
     ) -> BatchResults:
         """
         Run the provided batch by simulating each contained environment.
 
         :param batch: The batch to run.
+        :param record_settings: Optional settings for recording the runnings. If None, no recording is made.
         :returns: List of simulation states in ascending order of time.
+        :raises NotImplementedError: Video recording is not yet supported.
         """
+        if record_settings is not None:
+            raise NotImplementedError()  # TODO
+
         logging.info(
             "\n--- Begin Isaac Gym log ----------------------------------------------------------------------------"
         )

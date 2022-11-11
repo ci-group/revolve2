@@ -36,7 +36,7 @@ async def main() -> None:
     items = [Item(rng.randrange(0, 100), rng.randrange(0, 100)) for _ in range(100)]
 
     # database
-    database = open_async_database_sqlite("./database")
+    database = open_async_database_sqlite("./database", create=True)
 
     # unique database identifier for optimizer
     db_id = DbId.root("simpleopt")

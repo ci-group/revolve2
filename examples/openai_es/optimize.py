@@ -30,7 +30,7 @@ async def main() -> None:
     rng.seed(0)
 
     # database
-    database = open_async_database_sqlite("./database")
+    database = open_async_database_sqlite("./database", create=True)
 
     # unique database identifier for optimizer
     db_id = DbId.root("openaies")

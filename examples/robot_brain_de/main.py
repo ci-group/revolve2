@@ -2,23 +2,25 @@
 
 from __future__ import annotations
 
+import logging
 import math
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional
 
 import numpy as np
 import revolve2.standard_resources.modular_robots as standard_robots
 from pyrr import Quaternion, Vector3
-from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgNetworkStructure
-from revolve2.core.database import SerializableIncrementableStruct
+from revolve2.core.database import (
+    SerializableIncrementableStruct,
+    open_async_database_sqlite,
+)
 from revolve2.core.database.std import Rng
 from revolve2.core.modular_robot import Body, ModularRobot
 from revolve2.core.modular_robot.brains import (
     BrainCpgNetworkStatic,
     make_cpg_network_structure_neighbour,
 )
-from revolve2.core.database import open_async_database_sqlite
 from revolve2.core.optimization.ea.algorithms import bounce_parameters, de_offspring
 from revolve2.core.optimization.ea.population import (
     Individual,
@@ -26,13 +28,15 @@ from revolve2.core.optimization.ea.population import (
     SerializableMeasures,
 )
 from revolve2.core.optimization.ea.population.pop_list import PopList, replace_if_better
-from revolve2.core.physics.running import ActorControl, ActorState, Batch
+from revolve2.core.physics.environment_actor_controller import (
+    EnvironmentActorController,
+)
+from revolve2.core.physics.running import ActorState, Batch
 from revolve2.core.physics.running import Environment as PhysicsEnv
 from revolve2.core.physics.running import PosedActor, Runner
 from revolve2.runners.mujoco import LocalRunner
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
-import logging
 
 Genotype = Parameters
 
@@ -60,27 +64,6 @@ class ProgramState(
     rng: Rng
     population: Population
     generation_index: int
-
-
-class EnvironmentController:
-    actor_controllers: List[ActorController]
-
-    def __init__(self) -> None:
-        self.actor_controllers = []
-
-    def control(self, environment_index: int, dt: float, control: ActorControl) -> None:
-        """
-        Control one of the simulated environments.
-
-        This is provided as a callback to the runner.
-
-        :param environment_index: The environment to control for.
-        :param dt: Time since last call to this function.
-        :param control: Interface for controlling the environment.
-        """
-        controller = self.actor_controllers[environment_index]
-        controller.step(dt)
-        control.set_dof_targets(0, controller.get_dof_targets())
 
 
 class DERobotBrainOptimizer:
@@ -214,13 +197,10 @@ class DERobotBrainOptimizer:
 
         :param population: The population.
         """
-        environment_controller = EnvironmentController()
-
         batch = Batch(
             simulation_time=self.SIMULATION_TIME,
             sampling_frequency=self.SAMPLING_FREQUENCY,
             control_frequency=self.CONTROL_FREQUENCY,
-            control=environment_controller.control,
         )
 
         for individual in population:
@@ -244,8 +224,7 @@ class DERobotBrainOptimizer:
                 self.BODY, brain
             ).make_actor_and_controller()
             bounding_box = actor.calc_aabb()
-            environment_controller.actor_controllers.append(controller)
-            env = PhysicsEnv()
+            env = PhysicsEnv(EnvironmentActorController(controller))
             env.actors.append(
                 PosedActor(
                     actor,
@@ -292,6 +271,7 @@ class DERobotBrainOptimizer:
 
 
 async def main() -> None:
+    """Run the optimization process."""
     RNG_SEED = 0
     DATABASE_NAME = "robot_brain_de_db"
 

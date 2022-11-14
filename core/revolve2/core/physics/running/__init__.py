@@ -3,6 +3,7 @@
 from ._actor_control import ActorControl
 from ._batch import Batch
 from ._environment import Environment
+from ._environment_controller import EnvironmentController
 from ._posed_actor import PosedActor
 from ._record_settings import RecordSettings
 from ._results import ActorState, BatchResults, EnvironmentResults, EnvironmentState
@@ -14,6 +15,7 @@ __all__ = [
     "Batch",
     "BatchResults",
     "Environment",
+    "EnvironmentController",
     "EnvironmentResults",
     "EnvironmentState",
     "PosedActor",

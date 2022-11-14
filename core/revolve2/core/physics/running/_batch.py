@@ -1,9 +1,8 @@
 """Batch class."""
 
 from dataclasses import dataclass, field
-from typing import Callable, List
+from typing import List
 
-from ._actor_control import ActorControl
 from ._environment import Environment
 
 
@@ -22,13 +21,6 @@ class Batch:
 
     """Similar to `sampling_frequency` but for how often the control function is called."""
     control_frequency: float
-
-    """
-    Function called for control during simulation.
-
-    (environment_index, dt, control) -> None
-    """
-    control: Callable[[int, float, ActorControl], None]
 
     """The environments to simulate."""
     environments: List[Environment] = field(default_factory=list, init=False)

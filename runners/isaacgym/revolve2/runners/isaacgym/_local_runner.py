@@ -260,8 +260,9 @@ class LocalRunner(Runner):
                 if time >= last_control_time + control_step:
                     last_control_time = math.floor(time / control_step) * control_step
                     controls = [ActorControl() for _ in self._batch.environments]
-                    for i, control in enumerate(controls):
-                        self._batch.control(i, control_step, control)
+                    for control, env in zip(controls, self._batch.environments):
+                        env.controller.control(control_step, control)
+
                     dof_targets = [
                         (env_index, actor_index, targets)
                         for env_index, control in enumerate(controls)

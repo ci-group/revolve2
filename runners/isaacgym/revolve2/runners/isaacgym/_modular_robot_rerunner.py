@@ -3,22 +3,16 @@
 from typing import List, Optional, Union
 
 from pyrr import Quaternion, Vector3
-from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ModularRobot
-from revolve2.core.physics.running import (
-    ActorControl,
-    Batch,
-    Environment,
-    PosedActor,
-    RecordSettings,
+from revolve2.core.physics.environment_actor_controller import (
+    EnvironmentActorController,
 )
+from revolve2.core.physics.running import Batch, Environment, PosedActor, RecordSettings
 from revolve2.runners.isaacgym import LocalRunner
 
 
 class ModularRobotRerunner:
     """Rerunner for one or more robots that uses Isaac Gym."""
-
-    _controllers: List[ActorController]
 
     async def rerun(
         self,
@@ -38,21 +32,16 @@ class ModularRobotRerunner:
         if isinstance(robots, ModularRobot):
             robots = [robots]
 
-        self._controllers = []
-
         batch = Batch(
             simulation_time=simulation_time,
             sampling_frequency=0.0001,
             control_frequency=control_frequency,
-            control=self._control,
         )
 
         for robot in robots:
             actor, controller = robot.make_actor_and_controller()
             bounding_box = actor.calc_aabb()
-            self._controllers.append(controller)
-
-            env = Environment()
+            env = Environment(EnvironmentActorController(controller))
             env.actors.append(
                 PosedActor(
                     actor,
@@ -71,14 +60,6 @@ class ModularRobotRerunner:
 
         runner = LocalRunner(real_time=True)
         await runner.run_batch(batch, record_settings=record_settings)
-
-    def _control(
-        self, environment_index: int, dt: float, control: ActorControl
-    ) -> None:
-        self._controllers[environment_index].step(dt)
-        control.set_dof_targets(
-            0, self._controllers[environment_index].get_dof_targets()
-        )
 
 
 if __name__ == "__main__":

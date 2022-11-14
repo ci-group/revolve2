@@ -314,7 +314,7 @@ Whenever you need to interact with the database, refer to SQLAlchemy’s documen
     <span class="c1"># ...</span>
 
     <span class="c1"># database</span>
-    <span class="n">database</span> <span class="o">=</span> <span class="n">open_async_database_sqlite</span><span class="p">(</span><span class="s2">&quot;./database&quot;</span><span class="p">)</span>
+    <span class="n">database</span> <span class="o">=</span> <span class="n">open_async_database_sqlite</span><span class="p">(</span><span class="s2">&quot;./database&quot;</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Moving away from the <code class="docutils literal notranslate"><span class="pre">main</span></code> function, Revolve2 provides an <code class="docutils literal notranslate"><span class="pre">EAOptimizer</span></code> class, which helps setting up an evolutionary algorithm optimization process.

@@ -923,7 +923,7 @@ The script below selects the best robot from the database and lets it walk:</p>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 
-    <span class="n">db</span> <span class="o">=</span> <span class="n">open_async_database_sqlite</span><span class="p">(</span><span class="s2">&quot;./database&quot;</span><span class="p">)</span>
+    <span class="n">db</span> <span class="o">=</span> <span class="n">open_async_database_sqlite</span><span class="p">(</span><span class="s2">&quot;./database&quot;</span><span class="p">,</span> <span class="n">create</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">AsyncSession</span><span class="p">(</span><span class="n">db</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
         <span class="n">best_individual</span> <span class="o">=</span> <span class="p">(</span>
             <span class="k">await</span> <span class="n">session</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>

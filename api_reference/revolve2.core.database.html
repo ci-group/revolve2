@@ -227,28 +227,40 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.core.database.open_async_database_sqlite">
-<span class="sig-name descname"><span class="pre">open_async_database_sqlite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_root_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncEngine</span></span></span><a class="headerlink" href="#revolve2.core.database.open_async_database_sqlite" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">open_async_database_sqlite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_root_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">AsyncEngine</span></span></span><a class="headerlink" href="#revolve2.core.database.open_async_database_sqlite" title="Permalink to this definition"></a></dt>
 <dd><p>Open an SQLAlchemy SQLite async database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>db_root_directory</strong> – Directory to store/load the database in/from.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db_root_directory</strong> – Directory to store/load the database in/from.</p></li>
+<li><p><strong>create</strong> – If true, database will be created. If false, error will be raised.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The opened database.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – In case the database doesn’t exist but <cite>create</cite> is False</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="revolve2.core.database.open_database_sqlite">
-<span class="sig-name descname"><span class="pre">open_database_sqlite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_root_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Engine</span></span></span><a class="headerlink" href="#revolve2.core.database.open_database_sqlite" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">open_database_sqlite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">db_root_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">create</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Engine</span></span></span><a class="headerlink" href="#revolve2.core.database.open_database_sqlite" title="Permalink to this definition"></a></dt>
 <dd><p>Open an SQLAlchemy SQLite database.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>db_root_directory</strong> – Directory to store/load the database in/from.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>db_root_directory</strong> – Directory to store/load the database in/from.</p></li>
+<li><p><strong>create</strong> – If true, database will be created. If false, error will be raised.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>The opened database.</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – In case the database doesn’t exist but <cite>create</cite> is False</p>
 </dd>
 </dl>
 </dd></dl>

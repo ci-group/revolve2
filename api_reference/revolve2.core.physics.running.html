@@ -185,20 +185,13 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Batch">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.physics.running.ActorControl" title="revolve2.core.physics.running._actor_control.ActorControl"><span class="pre">ActorControl</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.Batch" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.Batch" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A set of environments and shared parameters for simulation.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.core.physics.running.Batch.control">
-<span class="sig-name descname"><span class="pre">control</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.physics.running.ActorControl" title="revolve2.core.physics.running._actor_control.ActorControl"><span class="pre">ActorControl</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.Batch.control" title="Permalink to this definition"></a></dt>
-<dd><p>The environments to simulate.</p>
-</dd></dl>
-
-<dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Batch.control_frequency">
 <span class="sig-name descname"><span class="pre">control_frequency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.running.Batch.control_frequency" title="Permalink to this definition"></a></dt>
-<dd><p>Function called for control during simulation.</p>
-<p>(environment_index, dt, control) -&gt; None</p>
+<dd><p>The environments to simulate.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -236,13 +229,39 @@ but is dependent on the actual step frequency of the simulator.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Environment">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Environment</span></span><a class="headerlink" href="#revolve2.core.physics.running.Environment" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">controller</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentController" title="revolve2.core.physics.running._environment_controller.EnvironmentController"><span class="pre">EnvironmentController</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.Environment" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A list of posed actors.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Environment.actors">
 <span class="sig-name descname"><span class="pre">actors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.PosedActor" title="revolve2.core.physics.running._posed_actor.PosedActor"><span class="pre">PosedActor</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.Environment.actors" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.Environment.controller">
+<span class="sig-name descname"><span class="pre">controller</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.physics.running.EnvironmentController" title="revolve2.core.physics.running._environment_controller.EnvironmentController"><span class="pre">EnvironmentController</span></a></em><a class="headerlink" href="#revolve2.core.physics.running.Environment.controller" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentController">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentController</span></span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentController" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Interface for control in physics running.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.EnvironmentController.control">
+<span class="sig-name descname"><span class="pre">control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actor_control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.core.physics.running.ActorControl" title="revolve2.core.physics.running._actor_control.ActorControl"><span class="pre">ActorControl</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.core.physics.running.EnvironmentController.control" title="Permalink to this definition"></a></dt>
+<dd><p>Control the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt</strong> – Time since last call to this function.</p></li>
+<li><p><strong>actor_control</strong> – Object used to interface with the environment.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

@@ -17,3 +17,5 @@ echo "examples/xor_ga:" && \
 mypy xor_ga
 echo "examples/xor_de:" && \
 mypy xor_de
+echo "examples/robot_brain_de:" && \
+mypy robot_brain_de

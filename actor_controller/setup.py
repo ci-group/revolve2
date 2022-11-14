@@ -9,7 +9,7 @@ revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-actor-controller",
-    version="0.3.5-beta1",
+    version="0.3.6-beta1",
     description="Individual Actor controller for revolve2",
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",

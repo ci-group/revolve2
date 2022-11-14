@@ -7,8 +7,39 @@ from pyrr import Quaternion, Vector3
 from revolve2.actor_controller import ActorController
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick, ModularRobot
 from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighbourRandom
-from revolve2.core.physics.running import ActorControl, Batch, Environment, PosedActor
+from revolve2.core.physics.running import (
+    ActorControl,
+    Batch,
+    Environment,
+    EnvironmentController,
+    PosedActor,
+)
 from revolve2.runners.mujoco import LocalRunner
+
+
+# This is exactly the same as the revolve class `revolve2.core.physics.environment_actor_controller.EnvironmentActorController`
+class EnvironmentActorController(EnvironmentController):
+    """An environment controller for an environment with a single actor that uses a provided ActorController."""
+
+    actor_controller: ActorController
+
+    def __init__(self, actor_controller: ActorController) -> None:
+        """
+        Initialize this object.
+
+        :param actor_controller: The actor controller to use for the single actor in the environment.
+        """
+        self.actor_controller = actor_controller
+
+    def control(self, dt: float, actor_control: ActorControl) -> None:
+        """
+        Control the single actor in the environment using an ActorController.
+
+        :param dt: Time since last call to this function.
+        :param actor_control: Object used to interface with the environment.
+        """
+        self.actor_controller.step(dt)
+        actor_control.set_dof_targets(0, self.actor_controller.get_dof_targets())
 
 
 class Simulator:
@@ -18,8 +49,6 @@ class Simulator:
     Simulates using Mujoco.
     Defines a control function that steps the controller and applies the degrees of freedom the controller provides.
     """
-
-    _controller: ActorController
 
     async def simulate(self, robot: ModularRobot, control_frequency: float) -> None:
         """
@@ -32,13 +61,12 @@ class Simulator:
             simulation_time=1000000,
             sampling_frequency=0.0001,
             control_frequency=control_frequency,
-            control=self._control,
         )
 
-        actor, self._controller = robot.make_actor_and_controller()
+        actor, controller = robot.make_actor_and_controller()
         bounding_box = actor.calc_aabb()
 
-        env = Environment()
+        env = Environment(EnvironmentActorController(controller))
         env.actors.append(
             PosedActor(
                 actor,
@@ -50,19 +78,13 @@ class Simulator:
                     ]
                 ),
                 Quaternion(),
-                [0.0 for _ in self._controller.get_dof_targets()],
+                [0.0 for _ in controller.get_dof_targets()],
             )
         )
         batch.environments.append(env)
 
         runner = LocalRunner()
         await runner.run_batch(batch)
-
-    def _control(
-        self, environment_index: int, dt: float, control: ActorControl
-    ) -> None:
-        self._controller.step(dt)
-        control.set_dof_targets(0, self._controller.get_dof_targets())
 
 
 async def main() -> None:

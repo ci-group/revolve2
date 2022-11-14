@@ -2,7 +2,7 @@ import concurrent.futures
 import math
 import os
 import tempfile
-from typing import Callable, List, Optional
+from typing import List, Optional
 
 import cv2
 import mujoco
@@ -86,7 +86,6 @@ class LocalRunner(Runner):
         control_step: float,
         sample_step: float,
         simulation_time: int,
-        control: Callable[[int, float, ActorControl], None],
     ) -> EnvironmentResults:
         logging.info(f"Environment {env_index}")
 
@@ -142,7 +141,7 @@ class LocalRunner(Runner):
             if time >= last_control_time + control_step:
                 last_control_time = math.floor(time / control_step) * control_step
                 control_user = ActorControl()
-                control(env_index, control_step, control_user)
+                env_descr.controller.control(control_step, control_user)
                 actor_targets = control_user._dof_targets
                 actor_targets.sort(key=lambda t: t[0])
                 targets = [
@@ -234,7 +233,6 @@ class LocalRunner(Runner):
                     control_step,
                     sample_step,
                     batch.simulation_time,
-                    batch.control,
                 )
                 for env_index, env_descr in enumerate(batch.environments)
             ]

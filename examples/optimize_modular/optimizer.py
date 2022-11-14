@@ -11,13 +11,14 @@ import revolve2.core.optimization.ea.generic_ea.selection as selection
 import sqlalchemy
 from genotype import Genotype, GenotypeSerializer, crossover, develop, mutate
 from pyrr import Quaternion, Vector3
-from revolve2.actor_controller import ActorController
 from revolve2.core.database import IncompatibleError
 from revolve2.core.database.serializers import FloatSerializer
 from revolve2.core.optimization import DbId
 from revolve2.core.optimization.ea.generic_ea import EAOptimizer
+from revolve2.core.physics.environment_actor_controller import (
+    EnvironmentActorController,
+)
 from revolve2.core.physics.running import (
-    ActorControl,
     ActorState,
     Batch,
     Environment,
@@ -41,8 +42,6 @@ class Optimizer(EAOptimizer[Genotype, float]):
     _db_id: DbId
 
     _runner: Runner
-
-    _controllers: List[ActorController]
 
     _innov_db_body: multineat.InnovationDatabase
     _innov_db_brain: multineat.InnovationDatabase
@@ -249,16 +248,12 @@ class Optimizer(EAOptimizer[Genotype, float]):
             simulation_time=self._simulation_time,
             sampling_frequency=self._sampling_frequency,
             control_frequency=self._control_frequency,
-            control=self._control,
         )
-
-        self._controllers = []
 
         for genotype in genotypes:
             actor, controller = develop(genotype).make_actor_and_controller()
             bounding_box = actor.calc_aabb()
-            self._controllers.append(controller)
-            env = Environment()
+            env = Environment(EnvironmentActorController(controller))
             env.actors.append(
                 PosedActor(
                     actor,
@@ -284,13 +279,6 @@ class Optimizer(EAOptimizer[Genotype, float]):
             )
             for environment_result in batch_results.environment_results
         ]
-
-    def _control(
-        self, environment_index: int, dt: float, control: ActorControl
-    ) -> None:
-        controller = self._controllers[environment_index]
-        controller.step(dt)
-        control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod
     def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:

@@ -7,7 +7,6 @@ from typing import List
 import numpy as np
 import numpy.typing as npt
 from pyrr import Quaternion, Vector3
-from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgNetworkStructure
 from revolve2.core.modular_robot import Body
 from revolve2.core.modular_robot.brains import (
@@ -17,8 +16,10 @@ from revolve2.core.modular_robot.brains import (
 from revolve2.core.optimization import DbId
 from revolve2.core.optimization.ea.openai_es import OpenaiESOptimizer
 from revolve2.core.physics.actor import Actor
+from revolve2.core.physics.environment_actor_controller import (
+    EnvironmentActorController,
+)
 from revolve2.core.physics.running import (
-    ActorControl,
     ActorState,
     Batch,
     Environment,
@@ -43,7 +44,6 @@ class Optimizer(OpenaiESOptimizer):
     _cpg_network_structure: CpgNetworkStructure
 
     _runner: Runner
-    _controllers: List[ActorController]
 
     _simulation_time: int
     _sampling_frequency: float
@@ -185,10 +185,7 @@ class Optimizer(OpenaiESOptimizer):
             simulation_time=self._simulation_time,
             sampling_frequency=self._sampling_frequency,
             control_frequency=self._control_frequency,
-            control=self._control,
         )
-
-        self._controllers = []
 
         for params in population:
             initial_state = self._cpg_network_structure.make_uniform_state(
@@ -209,8 +206,7 @@ class Optimizer(OpenaiESOptimizer):
             controller = brain.make_controller(self._body, self._dof_ids)
 
             bounding_box = self._actor.calc_aabb()
-            self._controllers.append(controller)
-            env = Environment()
+            env = Environment(EnvironmentActorController(controller))
             env.actors.append(
                 PosedActor(
                     self._actor,
@@ -238,13 +234,6 @@ class Optimizer(OpenaiESOptimizer):
                 for environment_result in batch_results.environment_results
             ]
         )
-
-    def _control(
-        self, environment_index: int, dt: float, control: ActorControl
-    ) -> None:
-        controller = self._controllers[environment_index]
-        controller.step(dt)
-        control.set_dof_targets(0, controller.get_dof_targets())
 
     @staticmethod
     def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:

@@ -15,6 +15,7 @@ from revolve2.core.physics.running import (
     PosedActor,
 )
 from revolve2.runners.isaacgym import LocalRunner
+from revolve2.standard_resources import terrains
 
 
 # This is exactly the same as the revolve class `revolve2.core.physics.environment_actor_controller.EnvironmentActorController`
@@ -67,6 +68,7 @@ class Simulator:
         bounding_box = actor.calc_aabb()
 
         env = Environment(EnvironmentActorController(controller))
+        env.static_geometries.extend(terrains.flat().static_geometry)
         env.actors.append(
             PosedActor(
                 actor,

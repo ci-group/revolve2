@@ -26,6 +26,7 @@ from revolve2.core.physics.running import (
     Runner,
 )
 from revolve2.runners.mujoco import LocalRunner
+from revolve2.standard_resources import terrains
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
@@ -38,6 +39,8 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
     Uses the generic EA optimizer as a base.
     """
+
+    _TERRAIN = terrains.flat()
 
     _db_id: DbId
 
@@ -254,6 +257,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
             actor, controller = develop(genotype).make_actor_and_controller()
             bounding_box = actor.calc_aabb()
             env = Environment(EnvironmentActorController(controller))
+            env.static_geometries.extend(self._TERRAIN.static_geometry)
             env.actors.append(
                 PosedActor(
                     actor,

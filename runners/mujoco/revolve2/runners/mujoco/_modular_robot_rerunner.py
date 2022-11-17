@@ -1,6 +1,6 @@
 """Rerun(watch) a modular robot in Mujoco."""
 
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Type
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.modular_robot import ModularRobot
@@ -21,6 +21,7 @@ class ModularRobotRerunner:
         simulation_time: int = 1000000,
         start_paused: bool = False,
         record_settings: Optional[RecordSettings] = None,
+        env_class: Type[Environment] = Environment,
     ) -> None:
         """
         Rerun a single robot.
@@ -30,6 +31,7 @@ class ModularRobotRerunner:
         :param simulation_time: How long to rerun each robot for.
         :param start_paused: If True, start the simulation paused. Only possible when not in headless mode.
         :param record_settings: Optional settings for recording the runnings. If None, no recording is made.
+        :param env_class: The type of environment to use (if deriving  Environment with a useful `amend` method)
         """
         if isinstance(robots, ModularRobot):
             robots = [robots]
@@ -43,7 +45,7 @@ class ModularRobotRerunner:
         for robot in robots:
             actor, controller = robot.make_actor_and_controller()
             bounding_box = actor.calc_aabb()
-            env = Environment(EnvironmentActorController(controller))
+            env = env_class(EnvironmentActorController(controller))
             env.actors.append(
                 PosedActor(
                     actor,

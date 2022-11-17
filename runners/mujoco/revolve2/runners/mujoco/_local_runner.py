@@ -317,6 +317,8 @@ class LocalRunner(Runner):
                 posed_actor.orientation.w,
             ]
 
+        env_descr.amend(env_mjcf)
+
         xml = env_mjcf.to_xml_string()
         if not isinstance(xml, str):
             raise RuntimeError("Error generating mjcf xml.")

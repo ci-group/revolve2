@@ -40,6 +40,7 @@ from revolve2.core.physics.running import (
     EnvironmentState,
     RecordSettings,
     Runner,
+    geometry,
 )
 
 
@@ -89,7 +90,7 @@ class LocalRunner(Runner):
     ) -> EnvironmentResults:
         logging.info(f"Environment {env_index}")
 
-        model = mujoco.MjModel.from_xml_string(cls._make_mjcf(env_descr))
+        model = cls._make_model(env_descr)
 
         # TODO initial dof state
         data = mujoco.MjData(model)
@@ -243,7 +244,7 @@ class LocalRunner(Runner):
         return results
 
     @staticmethod
-    def _make_mjcf(env_descr: Environment) -> str:
+    def _make_model(env_descr: Environment) -> mujoco.MjModel:
         env_mjcf = mjcf.RootElement(model="environment")
 
         env_mjcf.compiler.angle = "radian"
@@ -253,13 +254,43 @@ class LocalRunner(Runner):
 
         env_mjcf.option.gravity = [0, 0, -9.81]
 
-        env_mjcf.worldbody.add(
-            "geom",
-            name="ground",
-            type="plane",
-            size=[10, 10, 1],
-            rgba=[0.2, 0.2, 0.2, 1],
-        )
+        heightmaps: List[geometry.Heightmap] = []
+        for geo in env_descr.static_geometries:
+            if isinstance(geo, geometry.Plane):
+                env_mjcf.worldbody.add(
+                    "geom",
+                    type="plane",
+                    pos=[geo.position.x, geo.position.y, geo.position.z],
+                    size=[geo.size.x / 2.0, geo.size.y / 2.0, 1.0],
+                    rgba=[geo.color.x, geo.color.y, geo.color.z, 1.0],
+                )
+            elif isinstance(geo, geometry.Heightmap):
+                env_mjcf.asset.add(
+                    "hfield",
+                    name=f"hfield_{len(heightmaps)}",
+                    nrow=len(geo.heights),
+                    ncol=len(geo.heights[0]),
+                    size=[geo.size.x, geo.size.y, geo.size.z, geo.base_thickness],
+                )
+
+                env_mjcf.worldbody.add(
+                    "geom",
+                    type="hfield",
+                    hfield=f"hfield_{len(heightmaps)}",
+                    pos=[geo.position.x, geo.position.y, geo.position.z],
+                    quat=[
+                        geo.orientation.x,
+                        geo.orientation.y,
+                        geo.orientation.z,
+                        geo.orientation.w,
+                    ],
+                    # size=[geo.size.x, geo.size.y, 1.0],
+                    rgba=[geo.color.x, geo.color.y, geo.color.z, 1.0],
+                )
+                heightmaps.append(geo)
+            else:
+                raise NotImplementedError()
+
         env_mjcf.worldbody.add(
             "light",
             pos=[0, 0, 100],
@@ -345,7 +376,20 @@ class LocalRunner(Runner):
         if not isinstance(xml, str):
             raise RuntimeError("Error generating mjcf xml.")
 
-        return xml
+        model = mujoco.MjModel.from_xml_string(xml)
+
+        # set height map values
+        offset = 0
+
+        for heightmap in heightmaps:
+            for x in range(len(heightmap.heights)):
+                for y in range(len(heightmap.heights[0])):
+                    model.hfield_data[
+                        y * len(heightmap.heights) + x
+                    ] = heightmap.heights[x][y]
+            offset += len(heightmap.heights) * len(heightmap.heights[0])
+
+        return model
 
     @classmethod
     def _get_actor_states(

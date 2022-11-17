@@ -27,6 +27,7 @@ from revolve2.core.physics.running import (
     Runner,
 )
 from revolve2.runners.mujoco import LocalRunner
+from revolve2.standard_resources import terrains
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
@@ -37,6 +38,8 @@ class Optimizer(OpenaiESOptimizer):
 
     Uses the generic EA optimizer as a base.
     """
+
+    _TERRAIN = terrains.flat()
 
     _body: Body
     _actor: Actor
@@ -207,6 +210,7 @@ class Optimizer(OpenaiESOptimizer):
 
             bounding_box = self._actor.calc_aabb()
             env = Environment(EnvironmentActorController(controller))
+            env.static_geometries.extend(self._TERRAIN.static_geometry)
             env.actors.append(
                 PosedActor(
                     self._actor,

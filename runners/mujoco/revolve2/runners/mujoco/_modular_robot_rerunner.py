@@ -4,6 +4,7 @@ from typing import List, Optional, Union
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.modular_robot import ModularRobot
+from revolve2.core.physics import Terrain
 from revolve2.core.physics.environment_actor_controller import (
     EnvironmentActorController,
 )
@@ -18,6 +19,7 @@ class ModularRobotRerunner:
         self,
         robots: Union[ModularRobot, List[ModularRobot]],
         control_frequency: float,
+        terrain: Terrain,
         simulation_time: int = 1000000,
         start_paused: bool = False,
         record_settings: Optional[RecordSettings] = None,
@@ -27,6 +29,7 @@ class ModularRobotRerunner:
 
         :param robots: One or more robots to simulate.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
+        :param terrain: The terrain to use.
         :param simulation_time: How long to rerun each robot for.
         :param start_paused: If True, start the simulation paused. Only possible when not in headless mode.
         :param record_settings: Optional settings for recording the runnings. If None, no recording is made.
@@ -58,6 +61,7 @@ class ModularRobotRerunner:
                     [0.0 for _ in controller.get_dof_targets()],
                 )
             )
+            env.static_geometries.extend(terrain.static_geometry)
             batch.environments.append(env)
 
         runner = LocalRunner(headless=False, start_paused=start_paused)

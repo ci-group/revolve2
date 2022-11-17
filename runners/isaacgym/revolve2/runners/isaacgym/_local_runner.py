@@ -124,6 +124,11 @@ class LocalRunner(Runner):
             num_per_row = int(math.sqrt(len(self._batch.environments)))
 
             for env_index, env_descr in enumerate(self._batch.environments):
+                if len(env_descr.static_geometries) != 0:
+                    raise NotImplementedError(
+                        "Environment abstraction not supported for Isaac Gym runner."
+                    )
+
                 env = self._gym.create_env(
                     self._sim,
                     gymapi.Vec3(-self.ENV_SIZE, -self.ENV_SIZE, 0.0),

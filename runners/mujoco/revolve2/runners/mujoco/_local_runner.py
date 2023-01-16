@@ -282,10 +282,13 @@ class LocalRunner(Runner):
             # mujoco can only save to a file, not directly to string,
             # so we create a temporary file.
             with tempfile.NamedTemporaryFile(
-                mode="r+", delete=True, suffix="_mujoco.urdf"
+                mode="r+", delete=False, suffix="_mujoco.urdf"
             ) as botfile:
                 mujoco.mj_saveLastXML(botfile.name, model)
                 robot = mjcf.from_file(botfile)
+            # if the temporary file still exists, delete it
+            if os.path.isfile(botfile.name):
+                os.remove(botfile.name)
 
             for joint in posed_actor.actor.joints:
                 robot.actuator.add(

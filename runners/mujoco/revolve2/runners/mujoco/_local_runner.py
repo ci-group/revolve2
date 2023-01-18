@@ -281,22 +281,33 @@ class LocalRunner(Runner):
 
             # mujoco can only save to a file, not directly to string,
             # so we create a temporary file.
-            with tempfile.NamedTemporaryFile(
-                mode="r+", delete=False, suffix="_mujoco.urdf"
-            ) as botfile:
-                # to make sure the temp file is always deleted,
-                # an error catching is needed, in case the xml saving fails and crashes the program
-                try:
+            try:
+                with tempfile.NamedTemporaryFile(
+                    mode="r+", delete=True, suffix="_mujoco.urdf"
+                ) as botfile:
                     mujoco.mj_saveLastXML(botfile.name, model)
                     robot = mjcf.from_file(botfile)
-                    # On Windows, an open file can’t be deleted, and hence it has to be closed first before removing
-                    botfile.close()
-                    os.remove(botfile.name)
-                except Exception as e:
-                    print(e)
-                    # On Windows, an open file can’t be deleted, and hence it has to be closed first before removing
-                    botfile.close()
-                    os.remove(botfile.name)
+            # handle an exception when tthe xml saving fails, it's almost certain to occur on Windows
+            # since NamedTemporaryFile can't be opened twice when the file is still open.
+            except Exception as e:
+                print(repr(e))
+                print("Setting 'delete' parameter to False so that the xml can be saved")
+                with tempfile.NamedTemporaryFile(
+                    mode="r+", delete=False, suffix="_mujoco.urdf"
+                ) as botfile:
+                    # to make sure the temp file is always deleted,
+                    # an error catching is needed, in case the xml saving fails and crashes the program
+                    try:
+                        mujoco.mj_saveLastXML(botfile.name, model)
+                        robot = mjcf.from_file(botfile)
+                        # On Windows, an open file can’t be deleted, and hence it has to be closed first before removing
+                        botfile.close()
+                        os.remove(botfile.name)
+                    except Exception as e:
+                        print(repr(e))
+                        # On Windows, an open file can’t be deleted, and hence it has to be closed first before removing
+                        botfile.close()
+                        os.remove(botfile.name)
 
             for joint in posed_actor.actor.joints:
                 robot.actuator.add(

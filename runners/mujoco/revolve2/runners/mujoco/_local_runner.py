@@ -287,7 +287,7 @@ class LocalRunner(Runner):
                 ) as botfile:
                     mujoco.mj_saveLastXML(botfile.name, model)
                     robot = mjcf.from_file(botfile)
-            # handle an exception when tthe xml saving fails, it's almost certain to occur on Windows
+            # handle an exception when the xml saving fails, it's almost certain to occur on Windows
             # since NamedTemporaryFile can't be opened twice when the file is still open.
             except Exception as e:
                 print(repr(e))

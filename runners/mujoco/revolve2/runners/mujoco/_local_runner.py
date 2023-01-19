@@ -291,7 +291,9 @@ class LocalRunner(Runner):
             # since NamedTemporaryFile can't be opened twice when the file is still open.
             except Exception as e:
                 print(repr(e))
-                print("Setting 'delete' parameter to False so that the xml can be saved")
+                print(
+                    "Setting 'delete' parameter to False so that the xml can be saved"
+                )
                 with tempfile.NamedTemporaryFile(
                     mode="r+", delete=False, suffix="_mujoco.urdf"
                 ) as botfile:

@@ -115,11 +115,13 @@ class CpgActorController(ActorController):
             or not "num_output_neurons" in data
             or not type(data["num_output_neurons"]) is int
             or not "weight_matrix" in data
+            or not type(data["weight_matrix"]) == list
             or not all(
                 type(r) == list and all(type(c) == float for c in r)
                 for r in data["weight_matrix"]
             )
             or not "dof_ranges" in data
+            or not type(data["dof_ranges"]) == list
             or not all(type(r) == float for r in data["dof_ranges"])
         ):
             raise SerializeError()

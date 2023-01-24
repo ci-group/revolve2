@@ -249,7 +249,7 @@ class LocalRunner(Runner):
 
         env_mjcf.compiler.angle = "radian"
 
-        env_mjcf.option.timestep = 0.0005
+        env_mjcf.option.timestep = 0.002
         env_mjcf.option.integrator = "RK4"
 
         env_mjcf.option.gravity = [0, 0, -9.81]

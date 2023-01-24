@@ -3,8 +3,9 @@
 import logging
 
 from revolve2.core.rpi_controller_remote import connect
+from revolve2.serialization import StaticData
 
-config = {
+config: StaticData = {
     "controller_module": "revolve2.actor_controllers.cpg",
     "controller_type": "Cpg",
     "control_frequency": 10,

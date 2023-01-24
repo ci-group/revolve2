@@ -15,7 +15,10 @@ setup(
     url="https://github.com/ci-group/revolve2",
     packages=find_namespace_packages(),
     package_data={"revolve2.standard_resources": ["py.typed"]},
-    install_requires=[f"revolve2-core @ file://{os.path.join(revolve2_path, 'core')}"],
+    install_requires=[
+        f"revolve2-core @ file://{os.path.join(revolve2_path, 'core')}",
+        "noise==1.2.2",
+    ],
     extras_require={"dev": []},
     zip_safe=False,
 )

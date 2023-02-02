@@ -138,6 +138,23 @@ class Body:
 
         return position
 
+    def to_tree_coordinates(
+            self
+    ) -> List[Tuple[Module, Vector3]]:
+        """
+        Extract tree-coordinates for every module
+
+        Turtle walks the body topology to extract tree coordinates assuming that
+        all modules are of the same size
+
+        :return: The list of module/coordinates
+        :raises NotImplementedError: In case a module is encountered that is not supported.
+        """
+        return [
+            (c.module, Vector3(value=[c.x, c.y, c.z])) for c
+            in _GridMaker().compute_coordinates(self)
+        ]
+
     def to_grid(
         self,
     ) -> Tuple[List[List[List[Optional[Module]]]], Tuple[int, int, int]]:
@@ -195,7 +212,7 @@ class _GridMaker:
     def make_grid(
         self, body: Body
     ) -> Tuple[List[List[List[Optional[Module]]]], Tuple[int, int, int]]:
-        self._make_grid_recur(body.core, Vector3(), Quaternion())
+        self.compute_coordinates(body.core, Vector3(), Quaternion())
 
         minx = min([cell.x for cell in self._cells])
         maxx = max([cell.x for cell in self._cells])
@@ -220,7 +237,11 @@ class _GridMaker:
 
         return grid, (-minx, -miny, -minz)
 
-    def _make_grid_recur(
+    def compute_coordinates(self, body: Body) -> List[_Cell]:
+        self._compute_coordinates_recur(body.core, Vector3(), Quaternion())
+        return self._cells
+
+    def _compute_coordinates_recur(
         self, module: Module, position: Vector3, orientation: Quaternion
     ) -> None:
         self._cells.append(
@@ -245,7 +266,7 @@ class _GridMaker:
                         * Quaternion.from_eulers([child.rotation, 0, 0])
                     )
 
-                    self._make_grid_recur(
+                    self._compute_coordinates_recur(
                         child, position + rotation * Vector3([1.0, 0.0, 0.0]), rotation
                     )
         elif isinstance(module, Brick):
@@ -265,7 +286,7 @@ class _GridMaker:
                         * Quaternion.from_eulers([child.rotation, 0, 0])
                     )
 
-                    self._make_grid_recur(
+                    self._compute_coordinates_recur(
                         child, position + rotation * Vector3([1.0, 0.0, 0.0]), rotation
                     )
         elif isinstance(module, ActiveHinge):
@@ -276,7 +297,7 @@ class _GridMaker:
 
                 rotation = Quaternion.from_eulers([child.rotation, 0.0, 0.0])
 
-                self._make_grid_recur(
+                self._compute_coordinates_recur(
                     child, position + rotation * Vector3([1.0, 0.0, 0.0]), rotation
                 )
         else:

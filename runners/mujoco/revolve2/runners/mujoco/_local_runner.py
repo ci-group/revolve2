@@ -2,7 +2,7 @@ import concurrent.futures
 import math
 import os
 import tempfile
-from typing import List, Optional
+from typing import List, Optional, Union, Callable
 
 import cv2
 import mujoco
@@ -137,6 +137,7 @@ class LocalRunner(Runner):
         )
 
         while (time := data.time) < simulation_time:
+
             # do control if it is time
             if time >= last_control_time + control_step:
                 last_control_time = math.floor(time / control_step) * control_step
@@ -173,19 +174,7 @@ class LocalRunner(Runner):
             if record_settings is not None and time >= last_video_time + video_step:
                 last_video_time = int(time / video_step) * video_step
 
-                # https://github.com/deepmind/mujoco/issues/285 (see also record.cc)
-                img: npt.NDArray[np.uint8] = np.empty(
-                    (viewer.viewport.height, viewer.viewport.width, 3),
-                    dtype=np.uint8,
-                )
-
-                mujoco.mjr_readPixels(
-                    rgb=img,
-                    depth=None,
-                    viewport=viewer.viewport,
-                    con=viewer.ctx,
-                )
-                img = np.flip(img, axis=0)  # img is upside down initially
+                img = viewer.read_pixels()
                 video.write(img)
 
         if not headless or record_settings is not None:
@@ -243,12 +232,15 @@ class LocalRunner(Runner):
         return results
 
     @staticmethod
-    def _make_mjcf(env_descr: Environment) -> str:
+    def _make_mjcf(env_descr: Environment,
+                   amender: Union[None, Callable[[mjcf.RootElement], None]]) \
+        -> str:
+
         env_mjcf = mjcf.RootElement(model="environment")
 
         env_mjcf.compiler.angle = "radian"
 
-        env_mjcf.option.timestep = 0.0005
+        env_mjcf.option.timestep = 0.002
         env_mjcf.option.integrator = "RK4"
 
         env_mjcf.option.gravity = [0, 0, -9.81]
@@ -302,22 +294,22 @@ class LocalRunner(Runner):
                     joint=robot.find(namespace="joint", identifier=joint.name),
                 )
 
+            # add a tracking camera (strangely does not work after attaching)
+            dist = 1
+            x, y, z = posed_actor.position
+            robot.worldbody.add("camera", name="tracker", mode="track",
+                                dclass=robot.full_identifier,
+                                pos=[x, y + dist, z + dist],
+                                euler=[-math.pi / 4., 0, math.pi])
+
             attachment_frame = env_mjcf.attach(robot)
             attachment_frame.add("freejoint")
-            attachment_frame.pos = [
-                posed_actor.position.x,
-                posed_actor.position.y,
-                posed_actor.position.z,
-            ]
+            attachment_frame.pos = [*posed_actor.position]
 
-            attachment_frame.quat = [
-                posed_actor.orientation.x,
-                posed_actor.orientation.y,
-                posed_actor.orientation.z,
-                posed_actor.orientation.w,
-            ]
+            attachment_frame.quat = [*posed_actor.orientation]
 
-        env_descr.amend(env_mjcf)
+        if amender is not None:
+            amender(env_mjcf)
 
         xml = env_mjcf.to_xml_string()
         if not isinstance(xml, str):

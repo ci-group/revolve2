@@ -3,6 +3,7 @@
 from typing import List, Optional, Union, Type
 
 from pyrr import Quaternion, Vector3
+
 from revolve2.core.modular_robot import ModularRobot
 from revolve2.core.physics.environment_actor_controller import (
     EnvironmentActorController,

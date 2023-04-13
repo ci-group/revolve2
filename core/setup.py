@@ -21,7 +21,6 @@ setup(
     install_requires=[
         f"revolve2-actor-controller @ file://{os.path.join(revolve2_path, 'actor_controller')}",
         "numpy>=1.21.2",
-        "rootpath>=0.1.1",
         "matplotlib>=3.4.3",
         "scipy>=1.7.1",
         "pyrr>=0.10.3",
@@ -29,7 +28,6 @@ setup(
         "asyncssh>=2.9.0",
         "aiosqlite>=0.17.0",
         "pandas>=1.4.2",
-        "codecov @ git+https://github.com/codecov/codecov-python.git@v2.1.12",
     ],
     extras_require={"dev": ["sqlalchemy[mypy]>=1.4.28"]},
     zip_safe=False,

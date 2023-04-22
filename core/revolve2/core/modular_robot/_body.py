@@ -295,7 +295,7 @@ class _GridMaker:
             if child is not None:
                 assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
 
-                rotation = Quaternion.from_eulers([child.rotation, 0.0, 0.0])
+                rotation = orientation * Quaternion.from_eulers([child.rotation, 0.0, 0.0])
 
                 self._compute_coordinates_recur(
                     child, position + rotation * Vector3([1.0, 0.0, 0.0]), rotation

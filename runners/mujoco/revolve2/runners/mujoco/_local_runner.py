@@ -279,10 +279,18 @@ class LocalRunner(Runner):
                 mujoco.mj_saveLastXML(botfile.name, model)
                 robot = mjcf.from_file(botfile)
 
+            ctrl_range = 1.0    # What for?
+            ctrl_range_str = f"-{ctrl_range} {ctrl_range}"
+            force_range = 4.0   # limits force of actuator (prevent jumping)
+            force_range_str = f"-{force_range} {force_range}"
             for joint in posed_actor.actor.joints:
+                robot.find(namespace="joint", identifier=joint.name).armature = "0.2"
                 robot.actuator.add(
                     "position",
-                    kp=5.0,
+                    # kp=5.0,
+                    kp=10000,
+                    ctrlrange=ctrl_range_str,
+                    forcerange=force_range_str,
                     joint=robot.find(
                         namespace="joint",
                         identifier=joint.name,
@@ -290,28 +298,45 @@ class LocalRunner(Runner):
                 )
                 robot.actuator.add(
                     "velocity",
-                    kv=0.05,
+                    # kv=0.05,
+                    kv=0.1,
+                    ctrlrange=ctrl_range_str,
+                    forcerange=force_range_str,
                     joint=robot.find(namespace="joint", identifier=joint.name),
                 )
 
             # add a tracking camera (strangely does not work after attaching)
             dist = 1
-            x, y, z = posed_actor.position
             robot.worldbody.add("camera", name="tracker", mode="track",
                                 dclass=robot.full_identifier,
-                                pos=[x, y + dist, z + dist],
-                                euler=[-math.pi / 4., 0, math.pi])
+                                pos=[-dist, 0, +dist],
+                                euler=[0, -math.pi / 4., -math.pi/2])
+
+            # Try to add fps camera to the front
+            aabb = posed_actor.actor.calc_aabb()
+            fps_cam_pos = [
+                aabb.offset.x + aabb.size.x / 2,
+                aabb.offset.y,
+                aabb.offset.z
+            ]
+            robot.worldbody.add("camera", name="vision", mode="fixed", dclass=robot.full_identifier,
+                                pos=fps_cam_pos, xyaxes="0 -1 0 0 0 1")
+            robot.worldbody.add('site',
+                                name=robot.full_identifier[:-2] + "_camera",
+                                pos=fps_cam_pos, rgba=[0, 0, 1, 1],
+                                type="ellipsoid", size=[0.0001, 0.025, 0.025])
 
             attachment_frame = env_mjcf.attach(robot)
             attachment_frame.add("freejoint")
             attachment_frame.pos = [*posed_actor.position]
-
-            attachment_frame.quat = [*posed_actor.orientation]
+            attachment_frame.quat = "1 0 0 0"  #[*posed_actor.orientation]  # TODO Rotation is flipped here
+            # Mujoco default quaternion is [1,0,0,0] and pyrr is [0,0,0,1]
 
         if amender is not None:
             amender(env_mjcf)
 
         xml = env_mjcf.to_xml_string()
+        # print(xml)
         if not isinstance(xml, str):
             raise RuntimeError("Error generating mjcf xml.")
 

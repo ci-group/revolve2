@@ -246,7 +246,8 @@ class LocalRunner(Runner):
         return results
 
     @staticmethod
-    def _make_model(env_descr: Environment, simulation_timestep: float = 0.001) -> mujoco.MjModel:
+    def _make_model(env_descr: Environment, simulation_timestep: float = 0.001
+    ) -> mujoco.MjModel:
         env_mjcf = mjcf.RootElement(model="environment")
 
         env_mjcf.compiler.angle = "radian"

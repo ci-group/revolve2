@@ -52,6 +52,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
     _rng: Random
 
     _simulation_time: int
+    _simulation_timestep: float
     _sampling_frequency: float
     _control_frequency: float
 
@@ -67,6 +68,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         innov_db_body: multineat.InnovationDatabase,
         innov_db_brain: multineat.InnovationDatabase,
         simulation_time: int,
+        simulation_timestep: float,
         sampling_frequency: float,
         control_frequency: float,
         num_generations: int,
@@ -85,6 +87,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         :param innov_db_body: Innovation database for the body genotypes.
         :param innov_db_brain: Innovation database for the brain genotypes.
         :param simulation_time: Time in second to simulate the robots for.
+        :param simulation_timestep: Simulation time step in seconds.
         :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
         :param num_generations: Number of generation to run the optimizer for.
@@ -108,6 +111,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
         self._innov_db_brain = innov_db_brain
         self._rng = rng
         self._simulation_time = simulation_time
+        self._simulation_timestep = simulation_timestep
         self._sampling_frequency = sampling_frequency
         self._control_frequency = control_frequency
         self._num_generations = num_generations
@@ -173,6 +177,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
             raise IncompatibleError
 
         self._simulation_time = opt_row.simulation_time
+        self._simulation_timestep = opt_row.simulation_timestep
         self._sampling_frequency = opt_row.sampling_frequency
         self._control_frequency = opt_row.control_frequency
         self._num_generations = opt_row.num_generations
@@ -249,6 +254,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
     ) -> List[float]:
         batch = Batch(
             simulation_time=self._simulation_time,
+            simulation_timestep=self._simulation_timestep,
             sampling_frequency=self._sampling_frequency,
             control_frequency=self._control_frequency,
         )
@@ -305,6 +311,7 @@ class Optimizer(EAOptimizer[Genotype, float]):
                 innov_db_body=self._innov_db_body.Serialize(),
                 innov_db_brain=self._innov_db_brain.Serialize(),
                 simulation_time=self._simulation_time,
+                simulation_timestep=self._simulation_timestep,
                 sampling_frequency=self._sampling_frequency,
                 control_frequency=self._control_frequency,
                 num_generations=self._num_generations,
@@ -332,6 +339,7 @@ class DbOptimizerState(DbBase):
     innov_db_body = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     innov_db_brain = sqlalchemy.Column(sqlalchemy.String, nullable=False)
     simulation_time = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    simulation_timestep = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     sampling_frequency = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     control_frequency = sqlalchemy.Column(sqlalchemy.Float, nullable=False)
     num_generations = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)

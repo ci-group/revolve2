@@ -16,6 +16,7 @@ async def main() -> None:
     NUM_INITIAL_MUTATIONS = 10
 
     SIMULATION_TIME = 10
+    SIMULATION_TIMESTEP = 0.001
     SAMPLING_FREQUENCY = 5
     CONTROL_FREQUENCY = 60
 
@@ -67,6 +68,7 @@ async def main() -> None:
             innov_db_body=innov_db_body,
             innov_db_brain=innov_db_brain,
             simulation_time=SIMULATION_TIME,
+            simulation_timestep=SIMULATION_TIMESTEP,
             sampling_frequency=SAMPLING_FREQUENCY,
             control_frequency=CONTROL_FREQUENCY,
             num_generations=NUM_GENERATIONS,

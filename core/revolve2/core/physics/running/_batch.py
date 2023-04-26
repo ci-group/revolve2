@@ -27,7 +27,7 @@ class Batch:
     Simulation time step in seconds. This is an important parameter that affects the trade-off between speed and accuracy,
     as well as the stability of the robot model.
     Smaller values of this parameter generally result in better accuracy and stability.
-    However, the specific value of this parameter may vary depending on the robot model being simulated.
+    However, the specific value of this parameter may vary depending on the environments being simulated and other batch parameters.
     """
 
     control_frequency: float

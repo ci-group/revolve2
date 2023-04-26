@@ -17,6 +17,7 @@ async def main() -> None:
     NUM_GENERATIONS = 3
 
     SIMULATION_TIME = 10
+    SIMULATION_TIMESTEP = 0.001
     SAMPLING_FREQUENCY = 5
     CONTROL_FREQUENCY = 60
 
@@ -43,6 +44,7 @@ async def main() -> None:
         rng=rng,
         robot_body=body,
         simulation_time=SIMULATION_TIME,
+        simulation_timestep=SIMULATION_TIMESTEP,
         sampling_frequency=SAMPLING_FREQUENCY,
         control_frequency=CONTROL_FREQUENCY,
         num_generations=NUM_GENERATIONS,
@@ -63,6 +65,7 @@ async def main() -> None:
             learning_rate=LEARNING_RATE,
             robot_body=body,
             simulation_time=SIMULATION_TIME,
+            simulation_timestep=SIMULATION_TIMESTEP,
             sampling_frequency=SAMPLING_FREQUENCY,
             control_frequency=CONTROL_FREQUENCY,
             num_generations=NUM_GENERATIONS,

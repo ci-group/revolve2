@@ -60,6 +60,7 @@ class Simulator:
         """
         batch = Batch(
             simulation_time=1000000,
+            simulation_timestep=0.001,
             sampling_frequency=0.0001,
             control_frequency=control_frequency,
         )

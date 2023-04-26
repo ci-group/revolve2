@@ -49,6 +49,7 @@ class Optimizer(OpenaiESOptimizer):
     _runner: Runner
 
     _simulation_time: int
+    _simulation_timestep: float
     _sampling_frequency: float
     _control_frequency: float
 
@@ -65,6 +66,7 @@ class Optimizer(OpenaiESOptimizer):
         learning_rate: float,
         robot_body: Body,
         simulation_time: int,
+        simulation_timestep: float,
         sampling_frequency: float,
         control_frequency: float,
         num_generations: int,
@@ -83,6 +85,7 @@ class Optimizer(OpenaiESOptimizer):
         :param learning_rate: Directional vector gain for OpenAI ES algorithm.
         :param robot_body: The body to optimize the brain for.
         :param simulation_time: Time in second to simulate the robots for.
+        :param simulation_timestep: Simulation time step in seconds.
         :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
         :param num_generations: Number of generation to run the optimizer for.
@@ -111,6 +114,7 @@ class Optimizer(OpenaiESOptimizer):
         self._init_runner()
 
         self._simulation_time = simulation_time
+        self._simulation_timestep = simulation_timestep
         self._sampling_frequency = sampling_frequency
         self._control_frequency = control_frequency
         self._num_generations = num_generations
@@ -123,6 +127,7 @@ class Optimizer(OpenaiESOptimizer):
         rng: Random,
         robot_body: Body,
         simulation_time: int,
+        simulation_timestep: float,
         sampling_frequency: float,
         control_frequency: float,
         num_generations: int,
@@ -138,6 +143,7 @@ class Optimizer(OpenaiESOptimizer):
         :param rng: Random number generator.
         :param robot_body: The body to optimize the brain for.
         :param simulation_time: Time in second to simulate the robots for.
+        :param simulation_timestep: Simulation time step in seconds.
         :param sampling_frequency: Sampling frequency for the simulation. See `Batch` class from physics running.
         :param control_frequency: Control frequency for the simulation. See `Batch` class from physics running.
         :param num_generations: Number of generation to run the optimizer for.
@@ -157,6 +163,7 @@ class Optimizer(OpenaiESOptimizer):
         self._init_runner()
 
         self._simulation_time = simulation_time
+        self._simulation_timestep = simulation_timestep
         self._sampling_frequency = sampling_frequency
         self._control_frequency = control_frequency
         self._num_generations = num_generations
@@ -186,6 +193,7 @@ class Optimizer(OpenaiESOptimizer):
     ) -> npt.NDArray[np.float_]:
         batch = Batch(
             simulation_time=self._simulation_time,
+            simulation_timestep=self._simulation_timestep,
             sampling_frequency=self._sampling_frequency,
             control_frequency=self._control_frequency,
         )

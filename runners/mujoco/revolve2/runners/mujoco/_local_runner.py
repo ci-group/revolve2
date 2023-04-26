@@ -87,10 +87,11 @@ class LocalRunner(Runner):
         control_step: float,
         sample_step: float,
         simulation_time: int,
+        simulation_timestep: float,
     ) -> EnvironmentResults:
         logging.info(f"Environment {env_index}")
 
-        model = cls._make_model(env_descr)
+        model = cls._make_model(env_descr, simulation_timestep)
 
         # TODO initial dof state
         data = mujoco.MjData(model)
@@ -234,6 +235,7 @@ class LocalRunner(Runner):
                     control_step,
                     sample_step,
                     batch.simulation_time,
+                    batch.simulation_timestep,
                 )
                 for env_index, env_descr in enumerate(batch.environments)
             ]
@@ -244,12 +246,14 @@ class LocalRunner(Runner):
         return results
 
     @staticmethod
-    def _make_model(env_descr: Environment) -> mujoco.MjModel:
+    def _make_model(
+        env_descr: Environment, simulation_timestep: float = 0.001
+    ) -> mujoco.MjModel:
         env_mjcf = mjcf.RootElement(model="environment")
 
         env_mjcf.compiler.angle = "radian"
 
-        env_mjcf.option.timestep = 0.002
+        env_mjcf.option.timestep = simulation_timestep
         env_mjcf.option.integrator = "RK4"
 
         env_mjcf.option.gravity = [0, 0, -9.81]

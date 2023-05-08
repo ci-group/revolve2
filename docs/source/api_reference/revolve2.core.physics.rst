@@ -1,6 +1,11 @@
 revolve2.core.physics package
 =============================
 
+.. automodule:: revolve2.core.physics
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -10,10 +15,10 @@ Subpackages
    actor <revolve2.core.physics.actor>
    running <revolve2.core.physics.running>
 
-Module contents
----------------
+Submodules
+----------
 
-.. automodule:: revolve2.core.physics
-   :members:
-   :undoc-members:
-   :show-inheritance:
+.. toctree::
+   :maxdepth: 1
+
+   environment_actor_controller <revolve2.core.physics.environment_actor_controller>

@@ -1,12 +1,7 @@
-"""Classes and interfaces for working with databases."""
+"""Standard SQLAlchemy models and different ways to open databases."""
 
-from ._incompatible_error import IncompatibleError
-from ._serializer import Serializer
+from ._has_id import HasId
+from ._open_method import OpenMethod
 from ._sqlite import open_async_database_sqlite, open_database_sqlite
 
-__all__ = [
-    "IncompatibleError",
-    "Serializer",
-    "open_async_database_sqlite",
-    "open_database_sqlite",
-]
+__all__ = ["HasId", "OpenMethod", "open_async_database_sqlite", "open_database_sqlite"]

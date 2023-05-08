@@ -15,4 +15,5 @@ Subpackages
    runners <revolve2.runners>
    actor_controller <revolve2.actor_controller>
    actor_controllers <revolve2.actor_controllers>
+   standard_resources <revolve2.standard_resources>
    bin <revolve2.bin>

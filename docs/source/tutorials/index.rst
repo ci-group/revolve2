@@ -1,10 +1,5 @@
 =========
 Tutorials
 =========
-
-.. toctree::
-   :maxdepth: 2
-
-   simple_optimization
-   simulate_robot_isaac
-   optimize_locomotion
+The existing tutorials were out of date after the latest update.
+New tutorials will be added soon.

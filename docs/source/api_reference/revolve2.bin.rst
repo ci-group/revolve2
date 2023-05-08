@@ -9,5 +9,4 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   core <revolve2.bin.core>
    rpi_controller <revolve2.bin.rpi_controller>

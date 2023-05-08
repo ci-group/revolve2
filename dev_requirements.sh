@@ -15,3 +15,5 @@ pip install -e ./actor_controller[dev] && \
 pip install -e ./serialization[dev] && \
 pip install -r ./codetools/requirements.txt
 pip install -r ./docs/requirements.txt
+pip install -r ./examples/robot_bodybrain_ea/requirements.txt
+pip install -r ./examples/robot_brain_cmaes/requirements.txt

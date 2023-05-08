@@ -6,7 +6,7 @@
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SPHINXAPIDOC  ?= sphinx-apidoc
-APIDOCARGS    ?= -o source/api_reference --implicit-namespaces --tocfile index --doc-project 'API Reference' --maxdepth 1 --templatedir $(THIS_DIR)/source/apidoc_template
+APIDOCARGS    ?= -o source/api_reference --implicit-namespaces --module-first --separate --tocfile index --doc-project 'API Reference' --maxdepth 1 --templatedir $(THIS_DIR)/source/apidoc_template
 SOURCEDIR     = source
 BUILDDIR      = build
 
@@ -20,9 +20,11 @@ apidoc:
 	@$(SPHINXAPIDOC) ../core/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../genotypes/cppnwin/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../runners/isaacgym/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../runners/mujoco/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../serialization/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../actor_controller/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../rpi_controller/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../standard_resources/revolve2 $(APIDOCARGS)
 
 apidoc_overwrite:
 	APIDOCARGS="$(APIDOCARGS) -f" $(MAKE) apidoc

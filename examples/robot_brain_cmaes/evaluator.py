@@ -1,20 +1,17 @@
 import asyncio
 import math
+from typing import List, Tuple
 
+import numpy as np
+import numpy.typing as npt
 from pyrr import Quaternion, Vector3
+from revolve2.actor_controllers.cpg import CpgNetworkStructure
+from revolve2.core.modular_robot.brains import BrainCpgNetworkStatic
 from revolve2.core.physics import Terrain
+from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.environment_actor_controller import (
     EnvironmentActorController,
 )
-from revolve2.core.physics.running import ActorState, Batch
-from revolve2.core.physics.running import PosedActor, Runner
-from revolve2.runners.mujoco import LocalRunner
-from revolve2.standard_resources import terrains
-from revolve2.core.physics.actor import Actor
-from revolve2.actor_controllers.cpg import CpgNetworkStructure
-import numpy.typing as npt
-import numpy as np
-from revolve2.core.modular_robot.brains import BrainCpgNetworkStatic
 from revolve2.core.physics.running import (
     ActorState,
     Batch,
@@ -22,7 +19,8 @@ from revolve2.core.physics.running import (
     PosedActor,
     Runner,
 )
-from typing import Tuple, List
+from revolve2.runners.mujoco import LocalRunner
+from revolve2.standard_resources import terrains
 
 
 class Evaluator:

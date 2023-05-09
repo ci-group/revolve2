@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from revolve2.core.optimization.ea.parameters import Parameters as GenericParameters
+import config
+import numpy as np
 from base import Base
 from revolve2.core.database import HasId
-import numpy as np
-import config
+from revolve2.core.optimization.ea.parameters import Parameters as GenericParameters
 
 
 class Genotype(Base, HasId, GenericParameters):

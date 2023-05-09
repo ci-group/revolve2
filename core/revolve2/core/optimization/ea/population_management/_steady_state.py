@@ -9,7 +9,7 @@ def steady_state(
     old_fitnesses: List[Fitness],
     new_genotypes: List[Genotype],
     new_fitnesses: List[Fitness],
-    selection_fun: Callable[[int, List[Genotype], List[Fitness]], List[int]],
+    selection_fun: Callable[[int, List[Genotype], List[Fitness]], Tuple[int, ...]],
 ) -> Tuple[List[int], List[int]]:
     """
     Select `len(old_genotypes)` individuals using the provided selection function from combined set of old and new individuals.

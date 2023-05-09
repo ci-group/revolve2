@@ -24,16 +24,10 @@ setup(
         "matplotlib>=3.4.3",
         "scipy>=1.7.1",
         "pyrr>=0.10.3",
-        "sqlalchemy>=1.4.28,<2",
+        "sqlalchemy>=2.0.0",
         "asyncssh>=2.9.0",
         "aiosqlite>=0.17.0",
-        "pandas>=1.4.2",
     ],
     extras_require={"dev": ["sqlalchemy[mypy]>=1.4.28"]},
     zip_safe=False,
-    entry_points={
-        "console_scripts": [
-            "revolve2_plot_ea_fitness_float=revolve2.bin.core.optimization.ea.generic_ea.plot_ea_fitness_float:main",
-        ]
-    },
 )

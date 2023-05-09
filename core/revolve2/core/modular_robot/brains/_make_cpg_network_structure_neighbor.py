@@ -4,7 +4,7 @@ from revolve2.actor_controllers.cpg import CpgNetworkStructure, CpgPair
 from revolve2.core.modular_robot import ActiveHinge
 
 
-def make_cpg_network_structure_neighbour(
+def make_cpg_network_structure_neighbor(
     active_hinges: List[ActiveHinge],
 ) -> CpgNetworkStructure:
     """

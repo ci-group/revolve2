@@ -1,13 +1,10 @@
-from typing import (
-    List,
-    TypeVar,
-)
+from typing import List, TypeVar
 
 import sqlalchemy.ext.orderinglist
 import sqlalchemy.orm as orm
-from revolve2.core.database import HasId
 from base import Base
 from parameters import Parameters
+from revolve2.core.database import HasId
 
 TIndividual = TypeVar("TIndividual")
 

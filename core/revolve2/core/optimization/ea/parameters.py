@@ -1,10 +1,9 @@
+from dataclasses import field
+from typing import Tuple
+
 import sqlalchemy.orm as orm
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
-from typing import (
-    Tuple,
-)
-from dataclasses import field
 
 
 class Parameters(orm.MappedAsDataclass):

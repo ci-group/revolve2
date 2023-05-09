@@ -1,22 +1,21 @@
-import logging
-import numpy as np
-from evaluator import Evaluator
 import hashlib
-import config
-from revolve2.core.database import open_database_sqlite, OpenCheck
-from base import Base
-import cma
-from revolve2.standard_resources.modular_robots import gecko
-from revolve2.core.modular_robot import Body
+import logging
 from typing import Tuple
-from revolve2.core.physics.actor import Actor
-from revolve2.actor_controllers.cpg import CpgNetworkStructure
-from revolve2.core.modular_robot.brains import (
-    make_cpg_network_structure_neighbor,
-)
-from sqlalchemy.orm import Session
-from parameters import Parameters
+
+import cma
+import config
+import numpy as np
+from base import Base
+from evaluator import Evaluator
 from generation import Generation
+from parameters import Parameters
+from revolve2.actor_controllers.cpg import CpgNetworkStructure
+from revolve2.core.database import OpenCheck, open_database_sqlite
+from revolve2.core.modular_robot import Body
+from revolve2.core.modular_robot.brains import make_cpg_network_structure_neighbor
+from revolve2.core.physics.actor import Actor
+from revolve2.standard_resources.modular_robots import gecko
+from sqlalchemy.orm import Session
 
 
 def robot_to_actor_cpg(body: Body) -> Tuple[Actor, CpgNetworkStructure]:

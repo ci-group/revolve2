@@ -1,8 +1,8 @@
-from revolve2.core.optimization.ea.parameters import Parameters as GenericParameters
-from base import Base
-import sqlalchemy.orm as orm
-from revolve2.core.database import HasId
 import sqlalchemy
+import sqlalchemy.orm as orm
+from base import Base
+from revolve2.core.database import HasId
+from revolve2.core.optimization.ea.parameters import Parameters as GenericParameters
 
 
 class Parameters(Base, HasId, GenericParameters):

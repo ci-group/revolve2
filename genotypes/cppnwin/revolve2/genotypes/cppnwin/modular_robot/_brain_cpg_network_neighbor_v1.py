@@ -3,13 +3,13 @@ from typing import List, Tuple, cast
 import multineat
 from revolve2.core.modular_robot import ActiveHinge, Body
 from revolve2.core.modular_robot.brains import (
-    BrainCpgNetworkNeighbour as ModularRobotBrainCpgNetworkNeighbour,
+    BrainCpgNetworkNeighbor as ModularRobotBrainCpgNetworkNeighbor,
 )
 
 
-class BrainCpgNetworkNeighbourV1(ModularRobotBrainCpgNetworkNeighbour):
+class BrainCpgNetworkNeighborV1(ModularRobotBrainCpgNetworkNeighbor):
     """
-    A CPG brain based on `ModularRobotBrainCpgNetworkNeighbour` that creates weights from a CPPNWIN network.
+    A CPG brain based on `ModularRobotBrainCpgNetworkNeighbor` that creates weights from a CPPNWIN network.
 
     Weights are determined by querying the CPPN network with inputs:
     (hinge1_posx, hinge1_posy, hinge1_posz, hinge2_posx, hinge2_posy, hinge3_posz)

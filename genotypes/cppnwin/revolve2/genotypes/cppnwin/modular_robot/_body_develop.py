@@ -1,5 +1,3 @@
-"""Functions for CPPNWIN genotypes for a modular robot body."""
-
 import math
 from dataclasses import dataclass
 from queue import Queue
@@ -7,37 +5,6 @@ from typing import Any, List, Optional, Set, Tuple
 
 import multineat
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick, Core, Module
-
-from .._genotype import Genotype
-from .._random_v1 import random_v1 as base_random_v1
-
-
-def random_v1(
-    innov_db: multineat.InnovationDatabase,
-    rng: multineat.RNG,
-    multineat_params: multineat.Parameters,
-    output_activation_func: multineat.ActivationFunction,
-    num_initial_mutations: int,
-) -> Genotype:
-    """
-    Create a CPPNWIN genotype for a modular robot body.
-
-    :param innov_db: Multineat innovation database. See Multineat library.
-    :param rng: Random number generator.
-    :param multineat_params: Multineat parameters. See Multineat library.
-    :param output_activation_func: Activation function for the output layer. See Multineat library.
-    :param num_initial_mutations: The number of times to mutate to create a random network.
-    :returns: The created genotype.
-    """
-    return base_random_v1(
-        innov_db,
-        rng,
-        multineat_params,
-        output_activation_func,
-        5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
-        5,  # empty, brick, activehinge, rot0, rot90
-        num_initial_mutations,
-    )
 
 
 @dataclass
@@ -49,8 +16,8 @@ class __Module:
     module_reference: Module
 
 
-def develop_v1(
-    genotype: Genotype,
+def develop(
+    genotype: multineat.Genome,
 ) -> Body:
     """
     Develop a CPPNWIN genotype into a modular robot body.
@@ -64,7 +31,7 @@ def develop_v1(
     max_parts = 10
 
     body_net = multineat.NeuralNetwork()
-    genotype.genotype.BuildPhenotype(body_net)
+    genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
     grid: Set[Tuple[int, int, int]] = set()
@@ -96,7 +63,7 @@ def develop_v1(
 
         for (index, rotation) in children:
             if part_count < max_parts:
-                child = ___add_child(body_net, module, index, rotation, grid)
+                child = __add_child(body_net, module, index, rotation, grid)
                 if child is not None:
                     to_explore.put(child)
                     part_count += 1
@@ -136,7 +103,7 @@ def __evaluate_cppn(
     return (module_type, rotation)
 
 
-def ___add_child(
+def __add_child(
     body_net: multineat.NeuralNetwork,
     module: __Module,
     child_index: int,

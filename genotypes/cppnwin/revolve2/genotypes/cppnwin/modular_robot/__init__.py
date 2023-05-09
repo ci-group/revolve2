@@ -1,5 +1,7 @@
 """CPPNWIN genotypes for modular robots."""
 
-from ._brain_cpg_network_neighbour_v1 import BrainCpgNetworkNeighbourV1
+from ._body_genotype import BodyGenotype
+from ._brain_cpg_network_neighbor_v1 import BrainCpgNetworkNeighborV1
+from ._brain_genotype_cpg import BrainGenotypeCpg
 
-__all__ = ["BrainCpgNetworkNeighbourV1"]
+__all__ = ["BodyGenotype", "BrainCpgNetworkNeighborV1", "BrainGenotypeCpg"]

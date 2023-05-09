@@ -1,9 +1,7 @@
 import multineat
 
-from ._genotype import Genotype
 
-
-def random_v1(
+def random_multineat_genotype(
     innov_db: multineat.InnovationDatabase,
     rng: multineat.RNG,
     multineat_params: multineat.Parameters,
@@ -11,9 +9,9 @@ def random_v1(
     num_inputs: int,
     num_outputs: int,
     num_initial_mutations: int,
-) -> Genotype:
+) -> multineat.Genome:
     """
-    Create a random CPPNWIN genotype.
+    Create a random multineat genotype.
 
     A CPPNWIN network starts empty.
     A random network is created by mutating `num_initial_mutations` times.
@@ -49,4 +47,4 @@ def random_v1(
             rng,
         )
 
-    return Genotype(genotype)
+    return genotype

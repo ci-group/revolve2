@@ -3,10 +3,10 @@ from typing import List, Tuple
 
 from revolve2.core.modular_robot import ActiveHinge, Body
 
-from ._brain_cpg_network_neighbour import BrainCpgNetworkNeighbour
+from ._brain_cpg_network_neighbor import BrainCpgNetworkNeighbor
 
 
-class BrainCpgNetworkNeighbourRandom(BrainCpgNetworkNeighbour):
+class BrainCpgNetworkNeighborRandom(BrainCpgNetworkNeighbor):
     """A cpg brain with random weights between neurons."""
 
     _rng: Random

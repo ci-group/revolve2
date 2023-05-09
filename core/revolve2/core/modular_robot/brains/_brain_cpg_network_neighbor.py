@@ -6,10 +6,10 @@ from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
 from revolve2.core.modular_robot import ActiveHinge, Body, Brain
 
-from ._make_cpg_network_structure_neighbour import make_cpg_network_structure_neighbour
+from ._make_cpg_network_structure_neighbor import make_cpg_network_structure_neighbor
 
 
-class BrainCpgNetworkNeighbour(Brain, ABC):
+class BrainCpgNetworkNeighbor(Brain, ABC):
     """
     A CPG brain with active hinges that are connected if they are within 2 jumps in the modular robot tree structure.
 
@@ -31,7 +31,7 @@ class BrainCpgNetworkNeighbour(Brain, ABC):
         }
         active_hinges = [active_hinge_map[id] for id in dof_ids]
 
-        cpg_network_structure = make_cpg_network_structure_neighbour(active_hinges)
+        cpg_network_structure = make_cpg_network_structure_neighbor(active_hinges)
         connections = [
             (
                 active_hinges[pair.cpg_index_lowest.index],

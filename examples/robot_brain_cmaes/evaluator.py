@@ -57,6 +57,7 @@ class Evaluator:
         batch = Batch(
             simulation_time=SIMULATION_TIME,
             sampling_frequency=SAMPLING_FREQUENCY,
+            simulation_timestep=0.001,
             control_frequency=CONTROL_FREQUENCY,
         )
 

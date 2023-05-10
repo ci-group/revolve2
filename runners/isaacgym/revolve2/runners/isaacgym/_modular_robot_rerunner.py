@@ -35,6 +35,7 @@ class ModularRobotRerunner:
         batch = Batch(
             simulation_time=simulation_time,
             sampling_frequency=0.0001,
+            simulation_timestep=0.001,
             control_frequency=control_frequency,
         )
 

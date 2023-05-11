@@ -2,9 +2,8 @@ from typing import List
 
 import numpy as np
 import numpy.typing as npt
-import numpy as np
-from population import Population
 from genotype import Genotype
+from population import Population
 
 
 def de_offspring(

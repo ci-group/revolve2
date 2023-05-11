@@ -2,18 +2,18 @@
 
 import hashlib
 import logging
-from typing import List, Tuple
+from typing import Tuple, cast
 
 import config
 import numpy as np
 from base import Base
+from de_offspring import de_offspring
 from generation import Generation
 from genotype import Genotype
 from individual import Individual
 from population import Population
 from revolve2.core.database import OpenCheck, open_database_sqlite
 from sqlalchemy.orm import Session
-from de_offspring import de_offspring
 from topn import topn
 
 ParamTuple = Tuple[float, float, float, float, float, float, float, float, float]
@@ -44,7 +44,10 @@ def evaluate(parameters: ParamTuple) -> Tuple[float, float, float, float, float]
     results = [evaluate_network(parameters, io[0], io[1]) for io in ios]
     errors = tuple(float(abs(result - io[2])) for result, io in zip(results, ios))
 
-    return (sum([-(err**2) for err in errors]),) + errors
+    return cast(
+        Tuple[float, float, float, float, float],
+        (sum([-(err**2) for err in errors]),) + errors,
+    )
 
 
 def main() -> None:
@@ -75,7 +78,8 @@ def main() -> None:
     ]
     logging.info("Evaluating initial population.")
     initial_fitnesses = [
-        evaluate(genotype.parameters)[0] for genotype in initial_genotypes
+        evaluate(cast(ParamTuple, genotype.parameters))[0]
+        for genotype in initial_genotypes
     ]
 
     population = Population(
@@ -105,7 +109,8 @@ def main() -> None:
             config.CROSSOVER_PROBABILITY,
         )
         offspring_fitnesses = [
-            evaluate(genotype.parameters)[0] for genotype in offspring_genotypes
+            evaluate(cast(ParamTuple, genotype.parameters))[0]
+            for genotype in offspring_genotypes
         ]
         offspring_population = Population(
             [

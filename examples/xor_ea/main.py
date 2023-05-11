@@ -2,10 +2,9 @@
 
 import hashlib
 import logging
-from typing import List, Tuple
+from typing import List, Tuple, cast
 
 import config
-import multineat
 import numpy as np
 from base import Base
 from generation import Generation
@@ -24,15 +23,18 @@ def select_parents(
     population: Population,
     offspring_size: int,
 ) -> List[Tuple[int, int]]:
-    return [
-        selection.multiple_unique(
-            2,
-            [individual.genotype for individual in population.individuals],
-            [individual.fitness for individual in population.individuals],
-            lambda _, fitnesses: selection.tournament(rng, fitnesses, k=1),
-        )
-        for _ in range(offspring_size)
-    ]
+    return cast(
+        List[Tuple[int, int]],
+        [
+            selection.multiple_unique(
+                2,
+                [individual.genotype for individual in population.individuals],
+                [individual.fitness for individual in population.individuals],
+                lambda _, fitnesses: selection.tournament(rng, fitnesses, k=1),
+            )
+            for _ in range(offspring_size)
+        ],
+    )
 
 
 def select_survivors(
@@ -96,7 +98,10 @@ def evaluate(parameters: ParamTuple) -> Tuple[float, float, float, float, float]
     results = [evaluate_network(parameters, io[0], io[1]) for io in ios]
     errors = tuple(float(abs(result - io[2])) for result, io in zip(results, ios))
 
-    return (sum([-(err**2) for err in errors]),) + errors
+    return cast(
+        Tuple[float, float, float, float, float],
+        (sum([-(err**2) for err in errors]),) + errors,
+    )
 
 
 def main() -> None:
@@ -127,7 +132,8 @@ def main() -> None:
     ]
     logging.info("Evaluating initial population.")
     initial_fitnesses = [
-        evaluate(genotype.parameters)[0] for genotype in initial_genotypes
+        evaluate(cast(ParamTuple, genotype.parameters))[0]
+        for genotype in initial_genotypes
     ]
     population = Population(
         [
@@ -159,7 +165,8 @@ def main() -> None:
             for parent1_i, parent2_i in parents
         ]
         offspring_fitnesses = [
-            evaluate(genotype.parameters)[0] for genotype in offspring_genotypes
+            evaluate(cast(ParamTuple, genotype.parameters))[0]
+            for genotype in offspring_genotypes
         ]
         offspring_population = Population(
             [

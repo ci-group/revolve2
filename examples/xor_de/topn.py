@@ -1,6 +1,7 @@
-from population import Population
-from typing import Tuple, List
+from typing import List, Tuple
+
 import numpy as np
+from population import Population
 
 
 def topn(

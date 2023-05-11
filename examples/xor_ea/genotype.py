@@ -37,13 +37,13 @@ class Genotype(Base, HasId, GenericParameters):
         :returns: A mutated copy of the provided genotype.
         """
         return Genotype(
-            [
+            tuple(
                 float(v)
                 for v in (
                     rng.normal(scale=config.MUTATE_STD, size=config.NUM_PARAMETERS)
                     + self.parameters
                 )
-            ]
+            )
         )
 
     @classmethod
@@ -62,8 +62,8 @@ class Genotype(Base, HasId, GenericParameters):
         :returns: A newly created genotype.
         """
         return Genotype(
-            [
+            tuple(
                 b1 if rng.random() < 0.5 else b2
                 for b1, b2 in zip(parent1.parameters, parent2.parameters)
-            ]
+            )
         )

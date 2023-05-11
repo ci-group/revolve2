@@ -36,11 +36,12 @@ def main() -> None:
     )
 
     # create a unique seed and initialize the random number generator
+    # TODO Initialize rng and use it for cma. Currently cma is not reproducable.
     rng_seed = int(
         hashlib.sha256(f"robot_brain_cmaes_seed{config.RNG_SEED}".encode()).hexdigest(),
         16,
     )
-    rng = np.random.Generator(np.random.PCG64(rng_seed))
+    _ = np.random.Generator(np.random.PCG64(rng_seed))
 
     evaluator = Evaluator(
         headless=True,
@@ -65,8 +66,7 @@ def main() -> None:
         [],
     )
 
-    # TODO set cma seed
-    options = cma.CMAOptions()
+    options = cma.CMAOptions
     options.set("bounds", [-1.0, 1.0])
     opt = cma.CMAEvolutionStrategy(initial_mean, config.INITIAL_STD, options)
     while generation.generation_index < config.NUM_GENERATIONS:

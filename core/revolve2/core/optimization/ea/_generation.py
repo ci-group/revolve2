@@ -21,6 +21,21 @@ TPopulation = TypeVar("TPopulation")
 
 
 class Generation(HasId, orm.MappedAsDataclass, Generic[TPopulation]):
+    """
+    Generic SQLAlchemy model for a generation.
+
+    Inherit from this to create your own generation type and table.
+
+    The generic parameter `TPopulation` refers to the user-defined population type.
+    This parameter cannot be a forward reference.
+
+    For example:
+    ```
+    class MyGeneration(Base, Generation[MyPopulation]):
+        __tablename__ = "my_generation"
+    ```
+    """
+
     # -------------------------------------
     # Class members interesting to the user
     # -------------------------------------
@@ -28,8 +43,11 @@ class Generation(HasId, orm.MappedAsDataclass, Generic[TPopulation]):
         generation_index: orm.Mapped[int] = orm.mapped_column(
             nullable=False, unique=True
         )
-        population_id: orm.Mapped[int] = orm.mapped_column(
-            sqlalchemy.ForeignKey("population.id"), nullable=False, init=False
+        _population_id: orm.Mapped[int] = orm.mapped_column(
+            "population_id",
+            sqlalchemy.ForeignKey("population.id"),
+            nullable=False,
+            init=False,
         )
         population: orm.Mapped[TPopulation] = orm.relationship()
 
@@ -39,20 +57,26 @@ class Generation(HasId, orm.MappedAsDataclass, Generic[TPopulation]):
     else:
 
         @orm.declared_attr
-        def generation_index(cls) -> orm.Mapped[int]:
+        def generation_index(cls) -> orm.Mapped[int]:  # noqa
             return cls.__generation_index_impl()
 
         @orm.declared_attr
-        def population_id(cls) -> orm.Mapped[int]:
+        def _population_id(cls) -> orm.Mapped[int]:
             return cls.__population_id_impl()
 
         @orm.declared_attr
-        def population(cls) -> orm.Mapped[TPopulation]:
+        def population(cls) -> orm.Mapped[TPopulation]:  # noqa
             return cls.__population_impl()
 
     __type_tpopulation: ClassVar[Type[TPopulation]]  # type: ignore[misc]
 
     def __init_subclass__(cls: Type[Self], /, **kwargs: Dict[str, Any]) -> None:
+        """
+        Initialize a version of this class when it is subclassed.
+
+        Gets the actual type of `TPopulation` and stores it for later use.
+        :param kwargs: Remaining arguments passed to super.
+        """
         generic_types = init_subclass_get_generic_args(cls, Generation)
         assert len(generic_types) == 1
         cls.__type_tpopulation = generic_types[0]

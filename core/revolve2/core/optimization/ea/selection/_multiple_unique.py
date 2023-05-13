@@ -1,22 +1,22 @@
 from typing import Callable, List, Tuple, TypeVar, cast
 
-Genotype = TypeVar("Genotype")
+Individual = TypeVar("Individual")
 Fitness = TypeVar("Fitness")  # TODO bounds
 
 
 def multiple_unique(
     selection_size: int,
-    population: List[Genotype],
+    population: List[Individual],
     fitnesses: List[Fitness],
-    selection_function: Callable[[List[Genotype], List[Fitness]], int],
+    selection_function: Callable[[List[Individual], List[Fitness]], int],
 ) -> Tuple[int, ...]:  # TODO return type can be know by selection size
     """
     Select multiple distinct individuals from a population using the provided selection function.
 
+    :param selection_size: Amount of of individuals to select.
     :param population: List of individuals to select from.
     :param fitnesses: Fitnesses of the population.
-    :param selection_size: Amount of individuals to select.
-    :param selection_function: Function that select a single individual from a population. ([Genotype], [Fitness]) -> index.
+    :param selection_function: Function that select a single individual from a population. ([Individual], [Fitness]) -> index.
     :returns: Indices of the selected individuals.
     """
     assert len(population) == len(fitnesses)

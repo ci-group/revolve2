@@ -1,3 +1,5 @@
+"""de_offspring function."""
+
 from typing import List
 
 import numpy as np

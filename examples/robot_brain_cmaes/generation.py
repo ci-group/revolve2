@@ -1,3 +1,5 @@
+"""Generation class."""
+
 from typing import List, TypeVar
 
 import sqlalchemy.ext.orderinglist
@@ -10,6 +12,8 @@ TIndividual = TypeVar("TIndividual")
 
 
 class Generation(Base, HasId):
+    """SQLAlchemy model for a generation."""
+
     __tablename__ = "generation"
 
     generation_index: orm.Mapped[int] = orm.mapped_column(nullable=False, unique=True)

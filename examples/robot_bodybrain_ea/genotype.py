@@ -1,4 +1,4 @@
-"""Genotype for a modular robot body and brain."""
+"""Genotype class."""
 
 from __future__ import annotations
 
@@ -11,6 +11,8 @@ from revolve2.genotypes.cppnwin.modular_robot import BodyGenotype, BrainGenotype
 
 
 class Genotype(Base, HasId, BodyGenotype, BrainGenotypeCpg):
+    """SQLAlchemy model for a genotype for a modular robot body and brain."""
+
     __tablename__ = "genotype"
 
     @classmethod
@@ -28,7 +30,6 @@ class Genotype(Base, HasId, BodyGenotype, BrainGenotypeCpg):
         :param rng: Random number generator.
         :returns: The created genotype.
         """
-
         body = cls.random_body(innov_db_body, rng)
         brain = cls.random_brain(innov_db_brain, rng)
 
@@ -50,7 +51,6 @@ class Genotype(Base, HasId, BodyGenotype, BrainGenotypeCpg):
         :param rng: Random number generator.
         :returns: A mutated copy of the provided genotype.
         """
-
         body = self.mutate_body(innov_db_body, rng)
         brain = self.mutate_brain(innov_db_brain, rng)
 
@@ -71,7 +71,6 @@ class Genotype(Base, HasId, BodyGenotype, BrainGenotypeCpg):
         :param rng: Random number generator.
         :returns: A newly created genotype.
         """
-
         body = cls.crossover_body(parent1, parent2, rng)
         brain = cls.crossover_brain(parent1, parent2, rng)
 
@@ -81,7 +80,6 @@ class Genotype(Base, HasId, BodyGenotype, BrainGenotypeCpg):
         """
         Develop the genotype into a modular robot.
 
-        :param genotype: The genotype to create the robot from.
         :returns: The created robot.
         """
         body = self.develop_body()

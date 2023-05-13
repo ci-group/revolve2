@@ -1,3 +1,5 @@
+"""Configuration parameters for this example."""
+
 RNG_SEED = 1001209834
 NUM_SIMULATORS = 8
 SIMULATION_TIME = 30

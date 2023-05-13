@@ -1,3 +1,5 @@
+"""Plot the fitness over generations for a previous optimization process."""
+
 import logging
 
 import config
@@ -6,17 +8,18 @@ import pandas
 from generation import Generation
 from individual import Individual
 from population import Population
-from revolve2.core.database import OpenCheck, open_database_sqlite
+from revolve2.core.database import OpenMethod, open_database_sqlite
 from sqlalchemy import select
 
 
 def main() -> None:
+    """Run the program."""
     logging.basicConfig(
         level=logging.INFO,
         format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
     )
 
-    db = open_database_sqlite(config.DATABASE_FILE, OpenCheck.OPEN_IF_EXISTS)
+    db = open_database_sqlite(config.DATABASE_FILE, OpenMethod.OPEN_IF_EXISTS)
     df = pandas.read_sql(
         select(Generation.generation_index, Individual.fitness)
         .join(Generation.population)  # type: ignore[misc] # TODO must be possible to type this properly

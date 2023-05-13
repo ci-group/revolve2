@@ -1,3 +1,5 @@
+"""Configuration parameters for this example."""
+
 RNG_SEED = 245713412312
 DATABASE_FILE = "results/run0.sqlite"
 POPULATION_SIZE = 50

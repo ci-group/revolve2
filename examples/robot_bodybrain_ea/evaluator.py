@@ -1,6 +1,8 @@
+"""Evaluator class."""
+
 import asyncio
 import math
-from typing import List, Optional
+from typing import List
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.modular_robot import ModularRobot
@@ -10,12 +12,14 @@ from revolve2.core.physics.environment_actor_controller import (
 )
 from revolve2.core.physics.running import ActorState, Batch
 from revolve2.core.physics.running import Environment as PhysicsEnv
-from revolve2.core.physics.running import PosedActor, RecordSettings, Runner
+from revolve2.core.physics.running import PosedActor, Runner
 from revolve2.runners.mujoco import LocalRunner
 from revolve2.standard_resources import terrains
 
 
 class Evaluator:
+    """Provides evaluation of robots."""
+
     _runner: Runner
     _terrain: Terrain
     _simulation_time: int
@@ -30,6 +34,15 @@ class Evaluator:
         sampling_frequency: int,
         control_frequency: int,
     ) -> None:
+        """
+        Initialize this object.
+
+        :param headless: `headless` parameter for the physics runner.
+        :param num_simulators: `num_simulators` parameter for the physics runner.
+        :param simulation_time: `simulation_time` parameter for created batches passed to the physics runner.
+        :param sampling_frequency: `sampling_frequency` parameter for created batches passed to the physics runner.
+        :param control_frequency: `control_frequency` parameter for created batches passed to the physics runner.
+        """
         self._runner = LocalRunner(headless=headless, num_simulators=num_simulators)
         self._terrain = terrains.flat()
         self._simulation_time = simulation_time
@@ -39,8 +52,15 @@ class Evaluator:
     def evaluate(
         self,
         robots: List[ModularRobot],
-        record_settings: Optional[RecordSettings] = None,
     ) -> List[float]:
+        """
+        Evaluate multiple robots.
+
+        Fitness is the distance traveled on the xy plane.
+
+        :param robots: The robots to simulate.
+        :returns: Fitnesses of the robots.
+        """
         batch = Batch(
             simulation_time=self._simulation_time,
             sampling_frequency=self._sampling_frequency,
@@ -69,9 +89,7 @@ class Evaluator:
             env.static_geometries.extend(self._terrain.static_geometry)
             batch.environments.append(env)
 
-        batch_results = asyncio.run(
-            self._runner.run_batch(batch, record_settings=record_settings)
-        )
+        batch_results = asyncio.run(self._runner.run_batch(batch, record_settings=None))
 
         fitnesses = [
             self._calculate_fitness(

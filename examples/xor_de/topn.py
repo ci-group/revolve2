@@ -1,3 +1,5 @@
+"""topn function."""
+
 from typing import List, Tuple
 
 import numpy as np
@@ -14,7 +16,6 @@ def topn(
 
     :param original_population: The first population to consider.
     :param offspring_population: The second population to consider.
-    :param measure: The measure to rank by.
     :param n: The number of individual to select.
     :returns: Indices of the selected individuals in their respective populations. Original, offspring.
     """

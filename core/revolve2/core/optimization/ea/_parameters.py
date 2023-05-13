@@ -7,6 +7,8 @@ from sqlalchemy.engine import Connection
 
 
 class Parameters(orm.MappedAsDataclass):
+    """An SQLAlchemy mixing that provides a parameters column that is a tuple of floats."""
+
     parameters: Tuple[float, ...] = field(
         default=()
     )  # TODO must have a default argument because kw_only does not exist on python 3.8.

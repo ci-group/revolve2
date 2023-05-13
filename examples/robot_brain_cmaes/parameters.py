@@ -1,11 +1,15 @@
+"""Parameter class."""
+
 import sqlalchemy
 import sqlalchemy.orm as orm
 from base import Base
 from revolve2.core.database import HasId
-from revolve2.core.optimization.ea.parameters import Parameters as GenericParameters
+from revolve2.core.optimization.ea import Parameters as GenericParameters
 
 
 class Parameters(Base, HasId, GenericParameters):
+    """SQLAlchemy model for parameters."""
+
     __tablename__ = "parameters"
 
     generation_id: orm.Mapped[int] = orm.mapped_column(

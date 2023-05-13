@@ -1,3 +1,5 @@
+"""Evaluator class."""
+
 import asyncio
 import math
 from typing import List, Tuple
@@ -24,6 +26,8 @@ from revolve2.standard_resources import terrains
 
 
 class Evaluator:
+    """Provides evaluation of robots."""
+
     _runner: Runner
     _terrain: Terrain
     _simulation_time: int
@@ -38,6 +42,15 @@ class Evaluator:
         sampling_frequency: int,
         control_frequency: int,
     ) -> None:
+        """
+        Initialize this object.
+
+        :param headless: `headless` parameter for the physics runner.
+        :param num_simulators: `num_simulators` parameter for the physics runner.
+        :param simulation_time: `simulation_time` parameter for created batches passed to the physics runner.
+        :param sampling_frequency: `sampling_frequency` parameter for created batches passed to the physics runner.
+        :param control_frequency: `control_frequency` parameter for created batches passed to the physics runner.
+        """
         self._runner = LocalRunner(headless=headless, num_simulators=num_simulators)
         self._terrain = terrains.flat()
         self._simulation_time = simulation_time
@@ -50,15 +63,21 @@ class Evaluator:
         cpg_network_structure: CpgNetworkStructure,
         solutions: List[Tuple[float, ...]],
     ) -> npt.NDArray[np.float_]:
-        SIMULATION_TIME = 30
-        SAMPLING_FREQUENCY = 5
-        CONTROL_FREQUENCY = 60
+        """
+        Evaluate multiple robots.
 
+        Fitness is the distance traveled on the xy plane.
+
+        :param actor: The actor to simulate.
+        :param cpg_network_structure: cpg structure for the brain.
+        :param solutions: Solutions to evaluate.
+        :returns: Fitnesses of the solutions.
+        """
         batch = Batch(
-            simulation_time=SIMULATION_TIME,
-            sampling_frequency=SAMPLING_FREQUENCY,
+            simulation_time=self._simulation_time,
+            sampling_frequency=self._sampling_frequency,
             simulation_timestep=0.001,
-            control_frequency=CONTROL_FREQUENCY,
+            control_frequency=self._control_frequency,
         )
 
         for params in solutions:

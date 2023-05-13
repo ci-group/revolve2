@@ -58,6 +58,8 @@ _MULTINEAT_PARAMS = _make_multineat_params()
 
 
 class BrainGenotypeCpg(orm.MappedAsDataclass):
+    """An SQLAlchemy model for a CPPNWIN cpg brain genotype."""
+
     _NUM_INITIAL_MUTATIONS = 5
 
     brain: multineat.Genome
@@ -77,7 +79,6 @@ class BrainGenotypeCpg(orm.MappedAsDataclass):
 
         :param innov_db: Multineat innovation database. See Multineat library.
         :param rng: Random number generator.
-        :param num_initial_mutations: The number of times to mutate to create a random network. See CPPNWIN genotype.
         :returns: The created genotype.
         """
         multineat_rng = multineat_rng_from_random(rng)
@@ -151,7 +152,6 @@ class BrainGenotypeCpg(orm.MappedAsDataclass):
         """
         Develop the genotype into a modular robot.
 
-        :param genotype: The genotype to create the robot from.
         :returns: The created robot.
         """
         return BrainCpgNetworkNeighborV1(self.brain)

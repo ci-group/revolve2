@@ -5,7 +5,6 @@ on: [push, pull_request]
 jobs:
   test_install:
     runs-on: ubuntu-20.04
-
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
@@ -35,6 +34,10 @@ jobs:
         run: |
           sudo apt install libcereal-dev
           pip install ./genotypes/cppnwin
+      - name: install examples requirements
+        run: |
+          pip install -r examples/robot_bodybrain_ea/requirements.txt
+          pip install -r examples/robot_brain_cmaes/requirements.txt
 
   check_format:
     runs-on: ubuntu-20.04
@@ -89,6 +92,10 @@ jobs:
         run: |
           sudo apt install libcereal-dev
           pip install ./genotypes/cppnwin[dev]
+      - name: install examples requirements
+        run: |
+          pip install -r examples/robot_bodybrain_ea/requirements.txt
+          pip install -r examples/robot_brain_cmaes/requirements.txt
       - name: install requirements for mypy
         run: pip install -r ./codetools/mypy/requirements.txt
       - name: run mypy

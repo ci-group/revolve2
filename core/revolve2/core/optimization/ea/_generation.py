@@ -29,11 +29,10 @@ class Generation(HasId, orm.MappedAsDataclass, Generic[TPopulation]):
     The generic parameter `TPopulation` refers to the user-defined population type.
     This parameter cannot be a forward reference.
 
-    For example:
-    ```
-    class MyGeneration(Base, Generation[MyPopulation]):
-        __tablename__ = "my_generation"
-    ```
+    For example::
+
+        class MyGeneration(Base, Generation[MyPopulation]):
+            __tablename__ = "my_generation"
     """
 
     # -------------------------------------

@@ -1,9 +1,12 @@
 revolve2.bin.rpi\_controller namespace
 ======================================
 
-revolve2\_rpi\_controller
--------------------------------------------------------------
+.. py:module:: revolve2.bin.rpi_controller
 
-.. automodule:: revolve2.bin.rpi_controller.revolve2_rpi_controller
-   :undoc-members:
-   :show-inheritance:
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   revolve2_rpi_controller <revolve2.bin.rpi_controller.revolve2_rpi_controller>

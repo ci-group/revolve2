@@ -9,18 +9,8 @@ revolve2.standard\_resources package
 Submodules
 ----------
 
-revolve2.standard\_resources.modular\_robots module
----------------------------------------------------
+.. toctree::
+   :maxdepth: 1
 
-.. automodule:: revolve2.standard_resources.modular_robots
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-revolve2.standard\_resources.terrains module
---------------------------------------------
-
-.. automodule:: revolve2.standard_resources.terrains
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   modular_robots <revolve2.standard_resources.modular_robots>
+   terrains <revolve2.standard_resources.terrains>

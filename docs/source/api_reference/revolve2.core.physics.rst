@@ -18,10 +18,7 @@ Subpackages
 Submodules
 ----------
 
-revolve2.core.physics.environment\_actor\_controller module
------------------------------------------------------------
+.. toctree::
+   :maxdepth: 1
 
-.. automodule:: revolve2.core.physics.environment_actor_controller
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   environment_actor_controller <revolve2.core.physics.environment_actor_controller>

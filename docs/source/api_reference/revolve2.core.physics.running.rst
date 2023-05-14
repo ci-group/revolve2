@@ -9,10 +9,7 @@ revolve2.core.physics.running package
 Submodules
 ----------
 
-revolve2.core.physics.running.geometry module
----------------------------------------------
+.. toctree::
+   :maxdepth: 1
 
-.. automodule:: revolve2.core.physics.running.geometry
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   geometry <revolve2.core.physics.running.geometry>

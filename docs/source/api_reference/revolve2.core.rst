@@ -1,6 +1,11 @@
 revolve2.core package
 =====================
 
+.. automodule:: revolve2.core
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -12,11 +17,3 @@ Subpackages
    optimization <revolve2.core.optimization>
    physics <revolve2.core.physics>
    rpi_controller_remote <revolve2.core.rpi_controller_remote>
-
-Module contents
----------------
-
-.. automodule:: revolve2.core
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,6 +1,11 @@
 revolve2.core.physics.actor package
 ===================================
 
+.. automodule:: revolve2.core.physics.actor
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Subpackages
 -----------
 
@@ -9,11 +14,3 @@ Subpackages
 
    sdf <revolve2.core.physics.actor.sdf>
    urdf <revolve2.core.physics.actor.urdf>
-
-Module contents
----------------
-
-.. automodule:: revolve2.core.physics.actor
-   :members:
-   :undoc-members:
-   :show-inheritance:

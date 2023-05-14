@@ -33,11 +33,10 @@ class Individual(HasId, orm.MappedAsDataclass, Generic[TGenotype]):
     which should have an `id` field that will be used as a foreign key reference.
     This parameter cannot be a forward reference.
 
-    For example:
-    ```
-    class MyIndividual(Base, Individual[MyGenotype], population_table="my_population"):
-        __tablename__ = "my_individual"
-    ```
+    For example::
+
+        class MyIndividual(Base, Individual[MyGenotype], population_table="my_population"):
+            __tablename__ = "my_individual"
     """
 
     # -------------------------------------

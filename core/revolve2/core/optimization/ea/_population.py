@@ -30,11 +30,10 @@ class Population(HasId, orm.MappedAsDataclass, Generic[TIndividual]):
     The generic parameter `TIndividual` refers to the user-defined individual type.
     This parameter cannot be a forward reference.
 
-    For example:
-    ```
-    class MyPopulation(Base, Population[MyIndividual]):
-        __tablename__ = "my_population"
-    ```
+    For example::
+
+        class MyPopulation(Base, Population[MyIndividual]):
+            __tablename__ = "my_population"
     """
 
     # -------------------------------------

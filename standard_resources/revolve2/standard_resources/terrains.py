@@ -38,9 +38,11 @@ def crater(
     r"""
     Create a crater-like terrain with rugged floor using a heightmap.
 
-    |            |
-     \_        .'
-       '.,^_..'
+    It will look like::
+
+        |            |
+         \_        .'
+           '.,^_..'
 
     A combination of the rugged and bowl heightmaps.
 
@@ -62,7 +64,7 @@ def crater(
         num_edges=num_edges,
         density=1.5,
     )
-    bowl = bowl_heighmap(num_edges=num_edges)
+    bowl = bowl_heightmap(num_edges=num_edges)
 
     max_height = ruggedness + curviness
     if max_height == 0.0:
@@ -92,7 +94,9 @@ def rugged_heightmap(
     """
     Create a rugged terrain heightmap.
 
-    ..^.__,^._.-.
+    It will look like::
+
+        ..^.__,^._.-.
 
     TODO The maximum height of the heightmap is not actually 1, but it maybe should be.
     It is around [-1,1] but not exactly.
@@ -119,15 +123,17 @@ def rugged_heightmap(
     )
 
 
-def bowl_heighmap(
+def bowl_heightmap(
     num_edges: Tuple[int, int],
 ) -> npt.NDArray[np.float_]:
     r"""
     Create a terrain heightmap in the shape of a bowl.
 
-    |         |
-     \       /
-      '.___.'
+    It will look like::
+
+        |         |
+         \       /
+          '.___.'
 
     The height of the edges of the bowl is 1.0 and the center is 0.0.
 

@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: "3.8.x"
@@ -39,7 +39,7 @@ jobs:
   check_format:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: install_tools
         run: pip install -r ./codetools/requirements.txt
       - name: black
@@ -61,7 +61,7 @@ jobs:
   mypy:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: "3.8.x"
@@ -97,7 +97,7 @@ jobs:
   docs:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
           python-version: "3.8.x"

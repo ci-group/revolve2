@@ -127,7 +127,7 @@ def main() -> None:
     # open the database
     dbengine = open_database_sqlite(
         config.DATABASE_FILE,
-        open_method=OpenMethod.OVERWITE_IF_EXISTS,  # TODO change to not exists after development
+        open_method=OpenMethod.NOT_EXISTS_AND_CREATE,
     )
     Base.metadata.create_all(dbengine)
 

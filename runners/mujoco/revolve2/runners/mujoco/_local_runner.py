@@ -372,11 +372,12 @@ class LocalRunner(Runner):
                 posed_actor.position.z,
             ]
 
+            # in mjcf w is first, not last.
             attachment_frame.quat = [
+                posed_actor.orientation.w,
                 posed_actor.orientation.x,
                 posed_actor.orientation.y,
                 posed_actor.orientation.z,
-                posed_actor.orientation.w,
             ]
 
         xml = env_mjcf.to_xml_string()

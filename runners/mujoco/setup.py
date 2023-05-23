@@ -20,9 +20,10 @@ setup(
     install_requires=[
         f"revolve2-core @ file://{os.path.join(revolve2_path, 'core')}",
         "mujoco>=2.2.0",
-        "mujoco-python-viewer @ git+https://github.com/rohanpsingh/mujoco-python-viewer@d61433f3991294da455751659925839452b9597e",
+        "mujoco-python-viewer>=0.1.2",
         "dm-control>=1.0.3",
         "opencv-python>=4.6.0.66",
+        "pyyaml>=6.0",  # this dependency is only here because it is missing from the mujoco-python-viewer package.
     ],
     extras_require={"dev": []},
     zip_safe=False,

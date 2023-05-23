@@ -2,6 +2,7 @@
 
 from ._active_hinge import ActiveHinge
 from ._body import Body
+from ._body_state import BodyState
 from ._brain import Brain
 from ._brick import Brick
 from ._core import Core
@@ -13,6 +14,7 @@ from ._not_finalized_error import NotFinalizedError
 __all__ = [
     "ActiveHinge",
     "Body",
+    "BodyState",
     "Brain",
     "Brick",
     "Core",

@@ -13,18 +13,13 @@ from genotype import Genotype, GenotypeSerializer, crossover, develop, mutate
 from pyrr import Quaternion, Vector3
 from revolve2.core.database import IncompatibleError
 from revolve2.core.database.serializers import FloatSerializer
+from revolve2.core.modular_robot import BodyState
 from revolve2.core.optimization import DbId
 from revolve2.core.optimization.ea.generic_ea import EAOptimizer
 from revolve2.core.physics.environment_actor_controller import (
     EnvironmentActorController,
 )
-from revolve2.core.physics.running import (
-    ActorState,
-    Batch,
-    Environment,
-    PosedActor,
-    Runner,
-)
+from revolve2.core.physics.running import Batch, Environment, PosedActor, Runner
 from revolve2.runners.mujoco import LocalRunner
 from revolve2.standard_resources import terrains
 from sqlalchemy.ext.asyncio import AsyncEngine
@@ -259,8 +254,10 @@ class Optimizer(EAOptimizer[Genotype, float]):
             control_frequency=self._control_frequency,
         )
 
-        for genotype in genotypes:
-            actor, controller = develop(genotype).make_actor_and_controller()
+        modular_robots = [develop(genotype) for genotype in genotypes]
+
+        for robot in modular_robots:
+            actor, controller = robot.make_actor_and_controller()
             bounding_box = actor.calc_aabb()
             env = Environment(EnvironmentActorController(controller))
             env.static_geometries.extend(self._TERRAIN.static_geometry)
@@ -284,21 +281,27 @@ class Optimizer(EAOptimizer[Genotype, float]):
 
         return [
             self._calculate_fitness(
-                environment_result.environment_states[0].actor_states[0],
-                environment_result.environment_states[-1].actor_states[0],
+                robot.body.body_state_from_actor_state(
+                    environment_result.environment_states[0].actor_states[0]
+                ),
+                robot.body.body_state_from_actor_state(
+                    environment_result.environment_states[-1].actor_states[0]
+                ),
             )
-            for environment_result in batch_results.environment_results
+            for robot, environment_result in zip(
+                modular_robots, batch_results.environment_results
+            )
         ]
 
     @staticmethod
-    def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:
+    def _calculate_fitness(begin_state: BodyState, end_state: BodyState) -> float:
         # TODO simulation can continue slightly passed the defined sim time.
 
         # distance traveled on the xy plane
         return float(
             math.sqrt(
-                (begin_state.position[0] - end_state.position[0]) ** 2
-                + ((begin_state.position[1] - end_state.position[1]) ** 2)
+                (begin_state.core_position[0] - end_state.core_position[0]) ** 2
+                + ((begin_state.core_position[1] - end_state.core_position[1]) ** 2)
             )
         )
 

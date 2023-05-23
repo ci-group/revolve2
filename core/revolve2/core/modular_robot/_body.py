@@ -5,8 +5,10 @@ from typing import List, Optional, Tuple
 import numpy as np
 from pyrr import Quaternion, Vector3
 from revolve2.core.physics.actor import Actor, Collision, Joint, RigidBody, Visual
+from revolve2.core.physics.running._results import ActorState
 
 from ._active_hinge import ActiveHinge
+from ._body_state import BodyState
 from ._brick import Brick
 from ._core import Core
 from ._module import Module
@@ -155,6 +157,17 @@ class Body:
         # noqa: DAR402 NotImplementedError
         """
         return _GridMaker().make_grid(self)
+
+    def body_state_from_actor_state(self, actor_state: ActorState) -> BodyState:
+        """
+        Transform an actor state (part of a simulation result) to modular robot body space.
+
+        :param actor_state: The actor state to convert from.
+        :returns: The transformed actor state.
+        """
+        return BodyState(
+            core_position=actor_state.position, core_orientation=actor_state.orientation
+        )
 
 
 class _Finalizer:

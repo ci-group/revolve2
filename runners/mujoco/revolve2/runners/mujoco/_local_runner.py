@@ -347,6 +347,9 @@ class LocalRunner(Runner):
                         os.remove(botfile.name)
 
             for joint in posed_actor.actor.joints:
+                # Add rotor inertia to joints. This value is arbitrarily chosen and appears stable enough.
+                # Fine-tuning the armature value might be needed later.
+                robot.find(namespace="joint", identifier=joint.name).armature = "0.002"
                 robot.actuator.add(
                     "position",
                     kp=5.0,

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.modular_robot package &mdash; revolve2 v0.3.9-beta1 documentation</title>
+  <title>revolve2.core.modular_robot package &mdash; revolve2 v0.3.10-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -196,6 +196,20 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Body</span></span><a class="headerlink" href="#revolve2.core.modular_robot.Body" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Body of a modular robot.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.Body.body_state_from_actor_state">
+<span class="sig-name descname"><span class="pre">body_state_from_actor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.core.physics.running.html#revolve2.core.physics.running.ActorState" title="revolve2.core.physics.running._results.ActorState"><span class="pre">ActorState</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.core.modular_robot.BodyState" title="revolve2.core.modular_robot._body_state.BodyState"><span class="pre">BodyState</span></a></span></span><a class="headerlink" href="#revolve2.core.modular_robot.Body.body_state_from_actor_state" title="Permalink to this definition"></a></dt>
+<dd><p>Transform an actor state (part of a simulation result) to modular robot body space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>actor_state</strong> – The actor state to convert from.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The transformed actor state.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.modular_robot.Body.core">
 <span class="sig-name descname"><span class="pre">core</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.core.modular_robot.Core" title="revolve2.core.modular_robot._core.Core"><span class="pre">Core</span></a></em><a class="headerlink" href="#revolve2.core.modular_robot.Body.core" title="Permalink to this definition"></a></dt>
@@ -301,6 +315,23 @@ All module angles must be multiples of 90 degrees.</p>
 </dl>
 <p># noqa: DAR402 NotImplementedError</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.BodyState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BodyState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">core_position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">core_orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Quaternion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.modular_robot.BodyState" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>State of a modular robot body.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.BodyState.core_orientation">
+<span class="sig-name descname"><span class="pre">core_orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Quaternion</span></em><a class="headerlink" href="#revolve2.core.modular_robot.BodyState.core_orientation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.modular_robot.BodyState.core_position">
+<span class="sig-name descname"><span class="pre">core_position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Vector3</span></em><a class="headerlink" href="#revolve2.core.modular_robot.BodyState.core_position" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

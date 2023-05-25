@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.core.physics.running package &mdash; revolve2 v0.3.9-beta1 documentation</title>
+  <title>revolve2.core.physics.running package &mdash; revolve2 v0.3.10-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -185,32 +185,42 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Batch">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.Batch" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_timestep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.core.physics.running.Batch" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A set of environments and shared parameters for simulation.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Batch.control_frequency">
 <span class="sig-name descname"><span class="pre">control_frequency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.running.Batch.control_frequency" title="Permalink to this definition"></a></dt>
-<dd><p>The environments to simulate.</p>
+<dd><p>Similar to <cite>sampling_frequency</cite> but for how often the control function is called.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Batch.environments">
 <span class="sig-name descname"><span class="pre">environments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.core.physics.running.Environment" title="revolve2.core.physics.running._environment.Environment"><span class="pre">Environment</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.core.physics.running.Batch.environments" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>The environments to simulate.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Batch.sampling_frequency">
 <span class="sig-name descname"><span class="pre">sampling_frequency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.running.Batch.sampling_frequency" title="Permalink to this definition"></a></dt>
-<dd><p>Similar to <cite>sampling_frequency</cite> but for how often the control function is called.</p>
+<dd><p>Hz. Frequency for state sampling during the simulation.
+The simulator will attempt to follow this as closely as possible,
+but is dependent on the actual step frequency of the simulator.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.core.physics.running.Batch.simulation_time">
 <span class="sig-name descname"><span class="pre">simulation_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#revolve2.core.physics.running.Batch.simulation_time" title="Permalink to this definition"></a></dt>
-<dd><p>Hz. Frequency for state sampling during the simulation.
-The simulator will attempt to follow this as closely as possible,
-but is dependent on the actual step frequency of the simulator.</p>
+<dd><p>The duration for which each robot should be rerun.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.core.physics.running.Batch.simulation_timestep">
+<span class="sig-name descname"><span class="pre">simulation_timestep</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.core.physics.running.Batch.simulation_timestep" title="Permalink to this definition"></a></dt>
+<dd><p>Simulation time step in seconds. This is an important parameter that affects the trade-off between speed and accuracy,
+as well as the stability of the robot model.
+Smaller values of this parameter generally result in better accuracy and stability.
+However, the specific value of this parameter may vary depending on the environments being simulated and other batch parameters.</p>
 </dd></dl>
 
 </dd></dl>

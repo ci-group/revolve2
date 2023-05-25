@@ -9,7 +9,7 @@ revolve2_path = pathlib.Path(__file__).parent.parent.resolve()
 
 setup(
     name="revolve2-standard-resources",
-    version="0.3.9-beta1",
+    version="0.3.10-beta1",
     description="Standard resources such as environments and robots that can be used for testing and research.",
     author="Computational Intelligence Group Vrije Universiteit",
     url="https://github.com/ci-group/revolve2",

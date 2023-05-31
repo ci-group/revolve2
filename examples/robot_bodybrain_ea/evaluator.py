@@ -5,12 +5,12 @@ import math
 from typing import List
 
 from pyrr import Quaternion, Vector3
-from revolve2.core.modular_robot import ModularRobot
+from revolve2.core.modular_robot import BodyState, ModularRobot
 from revolve2.core.physics import Terrain
 from revolve2.core.physics.environment_actor_controller import (
     EnvironmentActorController,
 )
-from revolve2.core.physics.running import ActorState, Batch
+from revolve2.core.physics.running import Batch
 from revolve2.core.physics.running import Environment as PhysicsEnv
 from revolve2.core.physics.running import PosedActor, Runner
 from revolve2.runners.mujoco import LocalRunner
@@ -93,17 +93,23 @@ class Evaluator:
 
         fitnesses = [
             self._calculate_fitness(
-                environment_result.environment_states[0].actor_states[0],
-                environment_result.environment_states[-1].actor_states[0],
+                robot.body.body_state_from_actor_state(
+                    environment_result.environment_states[0].actor_states[0]
+                ),
+                robot.body.body_state_from_actor_state(
+                    environment_result.environment_states[-1].actor_states[0]
+                ),
             )
-            for environment_result in batch_results.environment_results
+            for robot, environment_result in zip(
+                robots, batch_results.environment_results
+            )
         ]
         return fitnesses
 
     @staticmethod
-    def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:
+    def _calculate_fitness(begin_state: BodyState, end_state: BodyState) -> float:
         # distance traveled on the xy plane
         return math.sqrt(
-            (begin_state.position[0] - end_state.position[0]) ** 2
-            + ((begin_state.position[1] - end_state.position[1]) ** 2)
+            (begin_state.core_position[0] - end_state.core_position[0]) ** 2
+            + ((begin_state.core_position[1] - end_state.core_position[1]) ** 2)
         )

@@ -75,7 +75,8 @@ def main() -> None:
     Base.metadata.create_all(dbengine)
 
     # get the actor and cpg network structure for the body of choice
-    actor, cpg_network_structure = robot_to_actor_cpg(gecko())
+    body = gecko()
+    actor, cpg_network_structure = robot_to_actor_cpg(body)
 
     # initial parameter values for the brain
     initial_mean = cpg_network_structure.num_connections * [0.5]
@@ -101,7 +102,9 @@ def main() -> None:
         solutions = [tuple(float(p) for p in params) for params in opt.ask()]
 
         # evaluate them. invert because fitness maximizes, but cma minimizes
-        fitnesses = -1.0 * evaluator.evaluate(actor, cpg_network_structure, solutions)
+        fitnesses = -1.0 * evaluator.evaluate(
+            body, actor, cpg_network_structure, solutions
+        )
 
         # tell cma the fitnesses
         opt.tell(solutions, fitnesses)

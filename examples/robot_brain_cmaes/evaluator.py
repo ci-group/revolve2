@@ -8,19 +8,14 @@ import numpy as np
 import numpy.typing as npt
 from pyrr import Quaternion, Vector3
 from revolve2.actor_controllers.cpg import CpgNetworkStructure
+from revolve2.core.modular_robot import Body, BodyState
 from revolve2.core.modular_robot.brains import BrainCpgNetworkStatic
 from revolve2.core.physics import Terrain
 from revolve2.core.physics.actor import Actor
 from revolve2.core.physics.environment_actor_controller import (
     EnvironmentActorController,
 )
-from revolve2.core.physics.running import (
-    ActorState,
-    Batch,
-    Environment,
-    PosedActor,
-    Runner,
-)
+from revolve2.core.physics.running import Batch, Environment, PosedActor, Runner
 from revolve2.runners.mujoco import LocalRunner
 from revolve2.standard_resources import terrains
 
@@ -59,6 +54,7 @@ class Evaluator:
 
     def evaluate(
         self,
+        body: Body,
         actor: Actor,
         cpg_network_structure: CpgNetworkStructure,
         solutions: List[Tuple[float, ...]],
@@ -68,6 +64,7 @@ class Evaluator:
 
         Fitness is the distance traveled on the xy plane.
 
+        :param body: Modular body of the robot.
         :param actor: The actor to simulate.
         :param cpg_network_structure: cpg structure for the brain.
         :param solutions: Solutions to evaluate.
@@ -122,17 +119,21 @@ class Evaluator:
         return np.array(
             [
                 self._calculate_fitness(
-                    environment_result.environment_states[0].actor_states[0],
-                    environment_result.environment_states[-1].actor_states[0],
+                    body.body_state_from_actor_state(
+                        environment_result.environment_states[0].actor_states[0]
+                    ),
+                    body.body_state_from_actor_state(
+                        environment_result.environment_states[-1].actor_states[0]
+                    ),
                 )
                 for environment_result in batch_results.environment_results
             ]
         )
 
     @staticmethod
-    def _calculate_fitness(begin_state: ActorState, end_state: ActorState) -> float:
+    def _calculate_fitness(begin_state: BodyState, end_state: BodyState) -> float:
         # distance traveled on the xy plane
         return math.sqrt(
-            (begin_state.position[0] - end_state.position[0]) ** 2
-            + ((begin_state.position[1] - end_state.position[1]) ** 2)
+            (begin_state.core_position[0] - end_state.core_position[0]) ** 2
+            + ((begin_state.core_position[1] - end_state.core_position[1]) ** 2)
         )

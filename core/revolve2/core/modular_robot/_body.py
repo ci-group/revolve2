@@ -91,8 +91,6 @@ class Body:
         :returns: The calculated position.
         :raises NotImplementedError: In case a module is encountered that is not supported.
         """
-        # TODO make this into a function that maps the complete robot to a grid
-
         position = Vector3()
 
         parent = module._parent
@@ -241,7 +239,7 @@ class _GridMaker:
         )
 
         if isinstance(module, Core):
-            for (child_index, angle) in [
+            for child_index, angle in [
                 (Core.FRONT, 0.0),
                 (Core.BACK, math.pi),
                 (Core.LEFT, math.pi / 2.0),
@@ -262,7 +260,7 @@ class _GridMaker:
                         child, position + rotation * Vector3([1.0, 0.0, 0.0]), rotation
                     )
         elif isinstance(module, Brick):
-            for (child_index, angle) in [
+            for child_index, angle in [
                 (Brick.FRONT, 0.0),
                 (Brick.LEFT, math.pi / 2.0),
                 (Brick.RIGHT, math.pi / 2.0 * 3),
@@ -389,7 +387,7 @@ class _ActorBuilder:
             )
         )
 
-        for (name_suffix, child_index, angle) in [
+        for name_suffix, child_index, angle in [
             ("front", Core.FRONT, 0.0),
             ("back", Core.BACK, math.pi),
             ("left", Core.LEFT, math.pi / 2.0),
@@ -446,7 +444,7 @@ class _ActorBuilder:
             )
         )
 
-        for (name_suffix, child_index, angle) in [
+        for name_suffix, child_index, angle in [
             ("front", Brick.FRONT, 0.0),
             ("left", Brick.LEFT, math.pi / 2.0),
             ("right", Brick.RIGHT, math.pi / 2.0 * 3),
@@ -475,9 +473,6 @@ class _ActorBuilder:
         attachment_point: Vector3,
         orientation: Quaternion,
     ) -> None:
-        # this function used to be good but is now a hacky way to create a body that has no self clipping
-        # TODO fix
-
         FRAME_BOUNDING_BOX = Vector3([0.018, 0.053, 0.0165891])  # meter
         FRAME_OFFSET = 0.04525
         SERVO1_BOUNDING_BOX = Vector3([0.0583, 0.0512, 0.020])  # meter

@@ -1,7 +1,10 @@
-from typing import Callable, List, Tuple, TypeVar, cast
+from typing import Callable, List, TypeVar
+
+import numpy as np
+import numpy.typing as npt
 
 Individual = TypeVar("Individual")
-Fitness = TypeVar("Fitness")  # TODO bounds
+Fitness = TypeVar("Fitness")
 
 
 def multiple_unique(
@@ -9,7 +12,7 @@ def multiple_unique(
     population: List[Individual],
     fitnesses: List[Fitness],
     selection_function: Callable[[List[Individual], List[Fitness]], int],
-) -> Tuple[int, ...]:  # TODO return type can be know by selection size
+) -> npt.NDArray[np.float_]:
     """
     Select multiple distinct individuals from a population using the provided selection function.
 
@@ -30,4 +33,4 @@ def multiple_unique(
             if selected_individual not in selected_individuals:
                 selected_individuals.append(selected_individual)
                 new_individual = True
-    return cast(Tuple[int, int], tuple(selected_individuals))
+    return np.array(selected_individuals)

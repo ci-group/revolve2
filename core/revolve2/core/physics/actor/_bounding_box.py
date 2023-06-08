@@ -3,8 +3,6 @@ from dataclasses import dataclass
 from pyrr import Vector3
 
 
-# TODO replace with pyrr aabb
-# TODO merge with collision?
 @dataclass
 class BoundingBox:
     """A box with a position."""

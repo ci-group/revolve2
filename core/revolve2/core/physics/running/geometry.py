@@ -19,7 +19,7 @@ class Geometry:
 class Plane(Geometry):
     """A flat plane geometry."""
 
-    size: Vector3  # z is ignored because a plane has 0 thickness # TODO use some kind of vector3
+    size: Vector3  # z is ignored because a plane has 0 thickness
     color: Vector3 = Vector3([0.2, 0.2, 0.2])
 
 

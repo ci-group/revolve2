@@ -30,7 +30,7 @@ async def connect(
     async with asyncssh.connection.connect(
         host=rpi_ip, username=username, password=password
     ) as conn:
-        yield RpiControllerRemote(conn)  # TODO yield or return?
+        yield RpiControllerRemote(conn)
 
 
 class RpiControllerRemote:

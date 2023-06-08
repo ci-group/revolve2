@@ -4,9 +4,7 @@ from typing import List, TypeVar
 
 import numpy as np
 
-from ._supports_lt import SupportsLt
-
-Fitness = TypeVar("Fitness", bound="SupportsLt")
+Fitness = TypeVar("Fitness")
 
 
 def tournament(rng: np.random.Generator, fitnesses: List[Fitness], k: int) -> int:
@@ -22,4 +20,3 @@ def tournament(rng: np.random.Generator, fitnesses: List[Fitness], k: int) -> in
 
     participant_indices = rng.choice(range(len(fitnesses)), size=k)
     return max(participant_indices, key=lambda i: fitnesses[i])  # type: ignore[no-any-return]
-    # TODO fix typing

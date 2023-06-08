@@ -59,11 +59,7 @@ class CpgActorController(ActorController):
     def _rk45(
         state: npt.NDArray[np.float_], A: npt.NDArray[np.float_], dt: float
     ) -> npt.NDArray[np.float_]:
-        # TODO The scipy implementation of this function is very slow for some reason.
-        # investigate the performance and accuracy differences
-        A1: npt.NDArray[np.float_] = np.matmul(
-            A, state
-        )  # TODO matmul doesn't seem to be properly typed.
+        A1: npt.NDArray[np.float_] = np.matmul(A, state)
         A2: npt.NDArray[np.float_] = np.matmul(A, (state + dt / 2 * A1))
         A3: npt.NDArray[np.float_] = np.matmul(A, (state + dt / 2 * A2))
         A4: npt.NDArray[np.float_] = np.matmul(A, (state + dt * A3))

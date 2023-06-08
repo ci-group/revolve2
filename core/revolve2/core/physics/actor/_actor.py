@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple
+from typing import List, Tuple, TypeAlias, cast
 
 from pyrr import Quaternion, Vector3
 
@@ -127,18 +127,25 @@ class Actor:
         )
 
 
+_Coordinates: TypeAlias = Tuple[
+    Vector3, Vector3, Vector3, Vector3, Vector3, Vector3, Vector3, Vector3
+]
+
+
 @dataclass
 class _Box:
     # The 8 coordinates of the box. Order is irrelevant.
-    coordinates: Tuple[
-        Vector3, Vector3, Vector3, Vector3, Vector3, Vector3, Vector3, Vector3
-    ]
+    coordinates: _Coordinates
 
     def rotate(self, rotation: Quaternion) -> None:
-        self.coordinates = tuple(rotation * coord for coord in self.coordinates)  # type: ignore # TODO this whole file needs a cleanup
+        self.coordinates = cast(
+            _Coordinates, tuple(rotation * coord for coord in self.coordinates)
+        )
 
     def translate(self, offset: Vector3) -> None:
-        self.coordinates = tuple(coord + offset for coord in self.coordinates)  # type: ignore # TODO this whole file needs a cleanup
+        self.coordinates = cast(
+            _Coordinates, tuple(coord + offset for coord in self.coordinates)
+        )
 
     def aabb(self) -> BoundingBox:
         xmax = max([coord.x for coord in self.coordinates])

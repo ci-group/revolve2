@@ -115,7 +115,7 @@ def main() -> None:
         generation = Generation(
             generation.generation_index + 1,
             [
-                Parameters(parameters=solution, fitness=fitness)
+                Parameters(parameters=solution, fitness=-fitness)
                 for solution, fitness in zip(solutions, fitnesses)
             ],
         )

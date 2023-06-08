@@ -93,7 +93,6 @@ class LocalRunner(Runner):
 
         model = cls._make_model(env_descr, simulation_timestep)
 
-        # TODO initial dof state
         data = mujoco.MjData(model)
 
         initial_targets = [

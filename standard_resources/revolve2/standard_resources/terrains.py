@@ -98,7 +98,7 @@ def rugged_heightmap(
 
         ..^.__,^._.-.
 
-    TODO The maximum height of the heightmap is not actually 1, but it maybe should be.
+    Be aware: the maximum height of the heightmap is not actually 1.
     It is around [-1,1] but not exactly.
 
     :param size: Size of the heightmap.

@@ -241,7 +241,8 @@ class Program:
             elif self._config["hardware"] == "pca9685":
                 for pin in self._pins:
                     # self._gpio.servo[pin.pin].set_pulse_width_range(???)
-                    # TODO can set this? to improve accuracy but I have no clue
+                    # can set this? to improve accuracy but I have no clue
+                    # above comments are old but should disappear soon with the rewrite of rpi controller.
                     pass
             else:
                 raise NotImplementedError()

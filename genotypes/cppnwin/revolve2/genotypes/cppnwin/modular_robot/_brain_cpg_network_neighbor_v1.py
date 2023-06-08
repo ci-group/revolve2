@@ -80,4 +80,4 @@ class BrainCpgNetworkNeighborV1(ModularRobotBrainCpgNetworkNeighbor):
     ) -> float:
         network.Input(inputs)
         network.ActivateAllLayers()
-        return cast(float, network.Output()[0])  # TODO missing multineat typing
+        return cast(float, network.Output()[0])

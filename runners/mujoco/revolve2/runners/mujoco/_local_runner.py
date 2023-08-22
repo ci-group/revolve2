@@ -117,7 +117,7 @@ class LocalRunner(Runner):
         if record_settings is not None:
             video_step = 1 / record_settings.fps
             video_file_path = f"{record_settings.video_directory}/{env_index}.mp4"
-            fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+            fourcc = cv2.VideoWriter.fourcc(*"mp4v")
             video = cv2.VideoWriter(
                 video_file_path,
                 fourcc,

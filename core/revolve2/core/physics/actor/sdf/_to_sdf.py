@@ -92,12 +92,9 @@ def to_sdf(
         xml.SubElement(limit, "effort").text = "1.765800e-01"
         xml.SubElement(limit, "velocity").text = "5.235988e+00"
 
-    return cast(
-        str,
-        minidom.parseString(
-            xml.tostring(sdf, encoding="unicode", method="xml")
-        ).toprettyxml(indent="    "),
-    )
+    return minidom.parseString(
+        xml.tostring(sdf, encoding="unicode", method="xml")
+    ).toprettyxml(indent="    ")
 
 
 def _quaternion_to_euler(quaternion: Quaternion) -> Tuple[float, float, float]:

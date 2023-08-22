@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.8.x"
+          python-version: "3.10.x"
       - name: create virtualenv
         run: |
           pip install virtualenv
@@ -25,9 +25,6 @@ jobs:
         run: pip install ./core
       - name: install standard_resources
         run: pip install ./standard_resources
-      - name: install runner isaacgym
-        #run: pip install ./runners/isaacgym[dev]
-        run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install runner mujoco
         run: pip install ./runners/mujoco
       - name: install genotype CPPNWIN
@@ -67,7 +64,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.8.x"
+          python-version: "3.10.x"
       - name: create virtualenv
         run: |
           pip install virtualenv
@@ -83,9 +80,6 @@ jobs:
         run: pip install ./core[dev]
       - name: install standard_resources
         run: pip install ./standard_resources[dev]
-      - name: install runner isaacgym
-        #run: pip install ./runners/isaacgym[dev]
-        run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install runner mujoco
         run: pip install ./runners/mujoco[dev]
       - name: install genotype CPPNWIN
@@ -107,7 +101,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.8.x"
+          python-version: "3.10.x"
       - name: create virtualenv
         run: |
           pip install virtualenv
@@ -123,9 +117,6 @@ jobs:
         run: pip install ./core[dev]
       - name: install standard_resources
         run: pip install ./standard_resources[dev]
-      - name: install runner isaacgym
-        #run: pip install ./runners/isaacgym[dev]
-        run: echo "IsaacGym is not open source so sadly we cannot test this."
       - name: install runner mujoco
         run: pip install ./runners/mujoco[dev]
       - name: install genotype CPPNWIN

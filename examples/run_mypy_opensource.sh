@@ -7,8 +7,6 @@ echo "examples/robot_brain_cmaes:" && \
 mypy robot_brain_cmaes && \
 echo "examples/rpi_controller_remote:" && \
 mypy rpi_controller_remote && \
-echo "examples/simulate_isaac:" && \
-echo "isaacgym not open source. skipping.." && \
 echo "examples/simulate_mujoco:" && \
 mypy simulate_mujoco && \
 echo "examples/xor_de:" && \

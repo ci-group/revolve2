@@ -20,7 +20,7 @@ packages = [{ include = "revolve2" }]
 revolve2_rpi_controller = "revolve2.bin.rpi_controller.revolve2_rpi_controller:main"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 revolve2-actor-controller = { path = "../actor_controller", develop = true }
 pigpio = "^1.78"
 jsonschema = "^4.4.0"

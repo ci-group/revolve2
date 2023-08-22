@@ -19,7 +19,6 @@ help:
 apidoc:
 	@$(SPHINXAPIDOC) ../core/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../genotypes/cppnwin/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../runners/isaacgym/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../runners/mujoco/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../serialization/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../actor_controller/revolve2 $(APIDOCARGS)

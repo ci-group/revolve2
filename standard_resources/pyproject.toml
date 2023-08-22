@@ -17,7 +17,7 @@ classifiers = [
 packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.10"
 revolve2-core = { path = "../core", develop = true }
 noise = "^1.2.2"
 

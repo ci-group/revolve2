@@ -59,12 +59,9 @@ def to_urdf(
     for el in _make_links(root, tree, -position, orientation.inverse):
         urdf.append(el)
 
-    return cast(
-        str,
-        minidom.parseString(
-            xml.tostring(urdf, encoding="unicode", method="xml")
-        ).toprettyxml(indent="    "),
-    )  # TODO for some reason the stubs for parseString have no proper return type. investigate
+    return minidom.parseString(
+        xml.tostring(urdf, encoding="unicode", method="xml")
+    ).toprettyxml(indent="    ")
 
 
 def _make_links(

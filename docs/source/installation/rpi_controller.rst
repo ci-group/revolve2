@@ -6,7 +6,7 @@ This package provides a CLI tool for mapping a Revolve2 ``ActorController`` to p
 -------------
 Prerequisites
 -------------
-A Raspberry Pi with Python 3.8 or higher installed.
+A Raspberry Pi with Python 3.10 or higher installed.
 
 -------
 Install

@@ -8,18 +8,18 @@ Additionally there are optional supplementary packages that contain varying func
 -------------
 Prerequisites
 -------------
-* Python 3.8 or higher. If you are using the Isaac Gym environment supplementary package, it requires exactly Python 3.8.
-* Pip. If you do not have pip for python 3.8, take a look at the get-pip script: `<https://pip.pypa.io/en/stable/installation/>`_.
+* Python 3.10 or higher.
+* Pip. If you do not have pip for python 3.10, take a look at the get-pip script: `<https://pip.pypa.io/en/stable/installation/>`_.
 * Virtualenv::
 
-    python3.8 -m pip install virtualenv
+    python3.10 -m pip install virtualenv
 
 ---------------------
 Create an environment
 ---------------------
 Create a directory for your project, then create a virtual environment::
 
-    python3.8 -m virtualenv .venv
+    python3.10 -m virtualenv .venv
 
 Activate the virtual environment::
 
@@ -51,7 +51,6 @@ Revolve2 contains additional packages that provide extra functionality. These ar
 .. toctree::
    :maxdepth: 1
 
-   Isaac Gym physics runner <runners/isaacgym>
    Mujoco physics runner <runners/mujoco>
    CPPNWIN genotype <genotypes/cppnwin>
    Raspberry Pi actor controller <rpi_controller>

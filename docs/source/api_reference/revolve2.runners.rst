@@ -9,5 +9,4 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   isaacgym <revolve2.runners.isaacgym>
    mujoco <revolve2.runners.mujoco>

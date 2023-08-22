@@ -5,7 +5,6 @@
 
 cd "$(dirname "$0")"
 
-pip install -e ./runners/isaacgym[dev] && \
 pip install -e ./runners/mujoco[dev] && \
 pip install -e ./genotypes/cppnwin[dev] && \
 pip install -e ./standard_resources[dev] && \

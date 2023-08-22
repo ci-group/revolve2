@@ -11,7 +11,7 @@ class Parameters(orm.MappedAsDataclass):
 
     parameters: Tuple[float, ...] = field(
         default=()
-    )  # TODO must have a default argument because kw_only does not exist on python 3.8.
+    )  # TODO must have a default argument because kw_only does not exist on python 3.8. TODO we now use python 3.10
 
     _serialized_parameters: orm.Mapped[str] = orm.mapped_column(
         "serialized_parameters", init=False, nullable=False

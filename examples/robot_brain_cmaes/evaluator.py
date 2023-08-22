@@ -10,11 +10,8 @@ from pyrr import Quaternion, Vector3
 from revolve2.actor_controllers.cpg import CpgNetworkStructure
 from revolve2.core.modular_robot import Body, BodyState
 from revolve2.core.modular_robot.brains import BrainCpgNetworkStatic
-from revolve2.core.physics import Terrain
+from revolve2.core.physics import EnvironmentActorController, Terrain
 from revolve2.core.physics.actor import Actor
-from revolve2.core.physics.environment_actor_controller import (
-    EnvironmentActorController,
-)
 from revolve2.core.physics.running import Batch, Environment, PosedActor, Runner
 from revolve2.runners.mujoco import LocalRunner
 from revolve2.standard_resources import terrains

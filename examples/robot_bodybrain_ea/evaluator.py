@@ -6,10 +6,7 @@ from typing import List
 
 from pyrr import Quaternion, Vector3
 from revolve2.core.modular_robot import BodyState, ModularRobot
-from revolve2.core.physics import Terrain
-from revolve2.core.physics.environment_actor_controller import (
-    EnvironmentActorController,
-)
+from revolve2.core.physics import EnvironmentActorController, Terrain
 from revolve2.core.physics.running import Batch
 from revolve2.core.physics.running import Environment as PhysicsEnv
 from revolve2.core.physics.running import PosedActor, Runner

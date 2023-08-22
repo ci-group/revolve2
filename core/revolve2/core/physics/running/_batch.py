@@ -1,7 +1,7 @@
 """Batch class."""
 
 from dataclasses import dataclass, field
-from typing import List
+from typing import List, Optional
 
 from ._environment import Environment
 
@@ -10,9 +10,10 @@ from ._environment import Environment
 class Batch:
     """A set of environments and shared parameters for simulation."""
 
-    simulation_time: int  # seconds
+    simulation_time: Optional[int]  # seconds
     """
-    The duration for which each robot should be rerun.
+    The duration for which each robot should be simulated.
+    If set to 'None', the simulation will run indefinitely.
     """
 
     sampling_frequency: float

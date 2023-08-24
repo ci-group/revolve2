@@ -7,51 +7,86 @@ You learn:
 """
 
 import logging
-import numpy as np
+
 import config
+import numpy as np
+import numpy.typing as npt
+from evaluate import evaluate
 from genotype import Genotype
+from individual import Individual
+from revolve2.core.optimization.ea import population_management, selection
 from revolve2.standard_resources.logging import setup_logging
-from parameters import Parameters
 
-def evaluate_network(params: Parameters, inputs: np.ndarray[float, 2]) -> float:
+
+def select_parents(
+    rng: np.random.Generator,
+    population: list[Individual],
+    offspring_size: int,
+) -> npt.NDArray[np.float_]:
     """
-    Pass two inputs through a fully connected relu network.
+    Select pairs of parents using a tournament.
 
-    :param params: The parameters to evaluate.
-    :param input1: First input for network.
-    :param input2: Second input for network.
-    :returns: The output of the network.
+    :param rng: Random number generator.
+    :param population: The population to select from.
+    :param offspring_size: The number of parent pairs to select.
+    :returns: Pairs of indices of selected parents. offspring_size x 2 ints.
     """
-    # First layer
-    n0 = np.maximum(0, np.dot(params[:2], inputs) + params[2])
-    n1 = np.maximum(0, np.dot(params[3:5], inputs) + params[5])
-    
-    # Second layer
-    output = np.maximum(0, n0 * params[6] + n1 * params[7] + params[8])
-    
-    return output
+    return np.array(
+        [
+            selection.multiple_unique(
+                2,
+                [individual.genotype for individual in population],
+                [individual.fitness for individual in population],
+                lambda _, fitnesses: selection.tournament(rng, fitnesses, k=1),
+            )
+            for _ in range(offspring_size)
+        ],
+    )
 
 
-
-
-def evaluate(parameters: Parameters) -> np.ndarray[float, 5]:
+def select_survivors(
+    rng: np.random.Generator,
+    original_population: list[Individual],
+    offspring_population: list[Individual],
+) -> list[Individual]:
     """
-    Measure one set of parameters.
+    Select survivors using a tournament.
 
-    :param parameters: The parameters to measure.
-    :returns: Sum of squared errors and each individual error.
+    :param rng: Random number generator.
+    :param original_population: The population the parents come from.
+    :param offspring_population: The offspring.
+    :returns: A newly created population.
     """
-    inputs = np.array([[0, 0], [1, 0], [0, 1], [1, 1]])
-    expected_outputs = np.array([0,1,1,0])
+    original_survivors, offspring_survivors = population_management.steady_state(
+        [i.genotype for i in original_population],
+        [i.fitness for i in original_population],
+        [i.genotype for i in offspring_population],
+        [i.fitness for i in offspring_population],
+        lambda n, genotypes, fitnesses: selection.multiple_unique(
+            n,
+            genotypes,
+            fitnesses,
+            lambda _, fitnesses: selection.tournament(rng, fitnesses, k=2),
+        ),
+    )
 
-    outputs = np.array([evaluate_network(parameters, input) for input in inputs])
-
-    return -np.abs(outputs - expected_outputs)**2
+    return [
+        Individual(
+            original_population[i].genotype,
+            original_population[i].fitness,
+        )
+        for i in original_survivors
+    ] + [
+        Individual(
+            offspring_population[i].genotype,
+            offspring_population[i].fitness,
+        )
+        for i in offspring_survivors
+    ]
 
 
 def main() -> None:
     """Run the program."""
-
     # Set up standard logging.
     # This decides the level of severity of logged messages we want to display.
     # By default this is 'INFO' or more severe, and 'DEBUG' is excluded.
@@ -59,7 +94,7 @@ def main() -> None:
     # If logging is not set up, important messages can be missed.
     setup_logging()
 
-    # Set up the random number generater.
+    # Set up the random number generator.
     rng = np.random.Generator(np.random.PCG64(config.RNG_SEED))
 
     # Create an initial population.
@@ -76,77 +111,56 @@ def main() -> None:
     # Evaluate the initial population.
     logging.info("Evaluating initial population.")
     initial_fitnesses = [
-        evaluate(genotype.parameters)
-        for genotype in initial_genotypes
+        evaluate(genotype.parameters) for genotype in initial_genotypes
     ]
-    population = Population(
-        [
-            Individual(genotype, fitness)
-            for genotype, fitness in zip(initial_genotypes, initial_fitnesses)
-        ]
-    )
 
-    # create initial generation from initial population
-    generation = Generation(
-        0,
-        population,
-    )
+    # Create a population of individuals, combining genotype with fitness.
+    population = [
+        Individual(genotype, fitness)
+        for genotype, fitness in zip(initial_genotypes, initial_fitnesses)
+    ]
 
-    # save the initial generation
-    logging.info("Saving initial population.")
-    with Session(dbengine, expire_on_commit=False) as ses:
-        ses.add(generation)
-        ses.commit()
+    # Set the current generation to 0.
+    generation_index = 0
 
-    # below is the actual optimization process
+    # Start the actual optimization process.
     logging.info("Start optimization process.")
-    while generation.generation_index < config.NUM_GENERATIONS:
-        logging.info(
-            f"Generation {generation.generation_index + 1} / {config.NUM_GENERATIONS}."
-        )
+    while generation_index < config.NUM_GENERATIONS:
+        logging.info(f"Generation {generation_index + 1} / {config.NUM_GENERATIONS}.")
 
-        # create offspring
-        parents = select_parents(rng, generation.population, config.OFFSPRING_SIZE)
+        # Create offspring.
+        parents = select_parents(rng, population, config.OFFSPRING_SIZE)
         offspring_genotypes = [
             Genotype.crossover(
-                generation.population.individuals[parent1_i].genotype,
-                generation.population.individuals[parent2_i].genotype,
+                population[parent1_i].genotype,
+                population[parent2_i].genotype,
                 rng,
             ).mutate(rng)
             for parent1_i, parent2_i in parents
         ]
 
-        # evaluate the offspring
+        # Evaluate the offspring.
         offspring_fitnesses = [
-            evaluate(cast(ParamTuple, genotype.parameters))[0]
-            for genotype in offspring_genotypes
+            evaluate(genotype.parameters) for genotype in offspring_genotypes
         ]
 
-        # make an intermediate offspring population
-        offspring_population = Population(
-            [
-                Individual(genotype, fitness)
-                for genotype, fitness in zip(offspring_genotypes, offspring_fitnesses)
-            ]
-        )
+        logging.info(f"Max fitness: {max(offspring_fitnesses)}")
 
-        # create the next population by selecting survivors
-        survived_population = select_survivors(
+        # Make an intermediate offspring population.
+        offspring_population = [
+            Individual(genotype, fitness)
+            for genotype, fitness in zip(offspring_genotypes, offspring_fitnesses)
+        ]
+
+        # Create the next generation by selecting survivors between original population and offspring.
+        population = select_survivors(
             rng,
-            generation.population,
+            population,
             offspring_population,
         )
 
-        # make it into then next generation
-        generation = Generation(
-            generation.generation_index + 1,
-            survived_population,
-        )
-
-        # save the newly created generation
-        with Session(dbengine, expire_on_commit=False) as ses:
-            ses.add(generation)
-            ses.commit()
+        # Increase the generation index counter.
+        generation_index += 1
 
 
 if __name__ == "__main__":

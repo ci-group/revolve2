@@ -1,7 +1,6 @@
 """Configuration parameters for this example."""
 
 RNG_SEED = 234570909
-DATABASE_FILE = "results/run0.sqlite"
 POPULATION_SIZE = 50
 OFFSPRING_SIZE = 25
 NUM_GENERATIONS = 200

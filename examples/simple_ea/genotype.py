@@ -2,17 +2,18 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import config
 import numpy as np
-from dataclasses import dataclass
-from parameters import Parameters
+import numpy.typing as npt
 
 
 @dataclass
 class Genotype:
     """A genotype that is a list of parameters."""
 
-    parameters: Parameters
+    parameters: npt.NDArray[np.float_]
 
     @classmethod
     def random(

@@ -1,11 +1,13 @@
 """Individual class."""
 
-from base import Base
+from dataclasses import dataclass
+
 from genotype import Genotype
-from revolve2.core.optimization.ea import Individual as GenericIndividual
 
 
-class Individual(Base, GenericIndividual[Genotype], population_table="population"):
-    """SQLAlchemy model of an individual."""
+@dataclass
+class Individual:
+    """An individual in a population."""
 
-    __tablename__ = "individual"
+    genotype: Genotype
+    fitness: float

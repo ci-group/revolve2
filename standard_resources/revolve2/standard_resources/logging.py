@@ -1,3 +1,5 @@
+"""Functions to work with logging in a standardized way."""
+
 import logging
 
 

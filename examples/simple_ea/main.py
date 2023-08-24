@@ -117,9 +117,9 @@ def main() -> None:
     # If you have varying hyper parameters in your experiment they should also be included in this seed.
     run = 0
     seed_as_string = f"experiment_seed_{config.RNG_SEED}_run{run}"
-    # Convert the seed to an int.
+    # Convert the seed to an integer.
     final_rng_seed = seed_from_string(seed_as_string)
-    rng = np.random.Generator(np.random.PCG64(final_rng_seed))
+    rng = make_rng(final_rng_seed)
 
     # Create an initial population.
     # This is also where we print our first log message.

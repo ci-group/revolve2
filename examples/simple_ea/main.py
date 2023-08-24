@@ -4,6 +4,7 @@ Optimize a neural network to calculate XOR, using an evolutionary algorithm.
 You learn:
 - How to create a simple evolutionary loop.
 - Basic use of logging.
+- Use of the random number generator and the importance of the random seed.
 """
 
 import logging
@@ -16,6 +17,7 @@ from genotype import Genotype
 from individual import Individual
 from revolve2.core.optimization.ea import population_management, selection
 from revolve2.standard_resources.logging import setup_logging
+from revolve2.standard_resources.rng import make_rng, seed_from_string
 
 
 def select_parents(
@@ -94,8 +96,30 @@ def main() -> None:
     # If logging is not set up, important messages can be missed.
     setup_logging()
 
-    # Set up the random number generator.
-    rng = np.random.Generator(np.random.PCG64(config.RNG_SEED))
+    # Next, set up the random number generator (rng).
+    # A rng is not actually random; its randomness comes from an initial source.
+    # This is what we call the 'seed'.
+    # If you use the same seed, the rng will produce the exact same random numbers.
+    # This is how you can make experiments reproducible.
+    # It is important that you use a single rng instance in your program.
+    # That means you never use the globally defined random number generators, but always the one defined below.\
+    # If you don't, your experiment is not reproducible.
+    # Reproducibility also means that if you want to do multiple repetitions, or runs, of the same experiment,
+    # they must use different seeds.
+    # If you don't, your seperate runs will have the same results.
+
+    # First define the seed as a string, unique to your experiment and run.
+    # The first part of the string is a number that chose by hand (RNG_SEED).
+    # It identifies your experiment.
+    # This should be unique within your research, so you never create the same rng between two seperate experiments.
+    # The second part identifies the current run of the experiment.
+    # In this simple example we have only one run that we call run 0.
+    # If you have varying hyper parameters in your experiment they should also be included in this seed.
+    run = 0
+    seed_as_string = f"experiment_seed_{config.RNG_SEED}_run{run}"
+    # Convert the seed to an int.
+    final_rng_seed = seed_from_string(seed_as_string)
+    rng = np.random.Generator(np.random.PCG64(final_rng_seed))
 
     # Create an initial population.
     # This is also where we print our first log message.

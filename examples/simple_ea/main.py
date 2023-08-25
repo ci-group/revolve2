@@ -3,7 +3,6 @@ Optimize a neural network to calculate XOR, using an evolutionary algorithm.
 
 You learn:
 - How to create a simple evolutionary loop.
-- Basic use of logging.
 """
 
 import logging
@@ -88,18 +87,12 @@ def select_survivors(
 def main() -> None:
     """Run the program."""
     # Set up standard logging.
-    # This decides the level of severity of logged messages we want to display.
-    # By default this is 'INFO' or more severe, and 'DEBUG' is excluded.
-    # Furthermore, a standard message layout is set up.
-    # If logging is not set up, important messages can be missed.
     setup_logging()
 
     # Set up the random number generater.
     rng = np.random.Generator(np.random.PCG64(config.RNG_SEED))
 
     # Create an initial population.
-    # This is also where we print our first log message.
-    # We use the 'info' function to give the message the 'INFO' severity.
     logging.info("Generating initial population.")
     initial_genotypes = [
         Genotype.random(

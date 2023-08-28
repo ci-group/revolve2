@@ -10,14 +10,21 @@ You learn:
   Either use your own preferred method, or look at the SQLAlchemy database abstraction commonly used in Revolve2.
 """
 
-from revolve2.standard_resources.logging import setup_logging
-import numpy as np
-import config
 import logging
-from revolve2.standard_resources.rng import seed_from_string, make_rng
+
+import config
+import numpy as np
+from revolve2.standard_resources.logging import setup_logging
+from revolve2.standard_resources.rng import make_rng, seed_from_string
 
 
 def run_experiment(num_samples: int, probability: int) -> None:
+    """
+    Run all runs of an experiment using the provided parameters.
+
+    :param num_samples: The number of samples to use for this experiment.
+    :param probability: The probablity to use for this experiment.
+    """
     # Create a list where we will store the success ratio for each repetition.
     success_ratios = []
 
@@ -54,6 +61,7 @@ def run_experiment(num_samples: int, probability: int) -> None:
 
 
 def main() -> None:
+    """Run the simulation."""
     # Set up standard logging.
     # This decides the level of severity of logged messages we want to display.
     # By default this is 'INFO' or more severe, and 'DEBUG' is excluded.

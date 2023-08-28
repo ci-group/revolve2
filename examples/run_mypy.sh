@@ -12,10 +12,4 @@ mypy simulate_single_robot && \
 echo "examples/evaluate_single_robot:" && \
 mypy evaluate_single_robot && \
 echo "examples/evaluate_multiple_isolated_robots:" && \
-mypy evaluate_multiple_isolated_robots && \
-echo "examples/simple_ea:" && \
-mypy simple_ea && \
-echo "examples/xor_de:" && \
-mypy xor_de && \
-echo "examples/xor_ea:" && \
-mypy xor_ea
+mypy evaluate_multiple_isolated_robots

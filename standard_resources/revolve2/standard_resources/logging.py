@@ -26,10 +26,10 @@ def setup_logging(level: int = logging.INFO, file_name: str | None = None) -> No
             format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
             handlers=[logging.FileHandler(file_name), logging.StreamHandler()],
         )
-        logging.info("=======================================")
-        logging.info("=======================================")
-        logging.info("=======================================")
-        logging.info("New log starts here.")
-        logging.info("=======================================")
-        logging.info("=======================================")
-        logging.info("=======================================")
+    logging.info("=======================================")
+    logging.info("=======================================")
+    logging.info("=======================================")
+    logging.info("New log starts here.")
+    logging.info("=======================================")
+    logging.info("=======================================")
+    logging.info("=======================================")

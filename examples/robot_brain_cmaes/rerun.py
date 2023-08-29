@@ -6,6 +6,7 @@ from evaluator import Evaluator
 from revolve2.core.modular_robot.brains import (
     body_to_actor_and_cpg_network_structure_neighbour,
 )
+from revolve2.standard_resources.logging import setup_logging
 
 # These are set of parameters that we optimized using CMA-ES.
 # You can copy your own parameters from the optimization output log.
@@ -30,6 +31,8 @@ PARAMS = np.array(
 
 def main() -> None:
     """Perform the rerun."""
+    setup_logging()
+
     _, cpg_network_structure = body_to_actor_and_cpg_network_structure_neighbour(
         config.BODY
     )

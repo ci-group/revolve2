@@ -71,6 +71,7 @@ def main() -> None:
 
         logging.info(f"{opt.result.xbest=} {opt.result.fbest=}")
 
+        # Increase the generation index counter.
         generation_index += 1
 
 

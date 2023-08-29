@@ -19,7 +19,6 @@ from revolve2.core.modular_robot.brains import (
     body_to_actor_and_cpg_network_structure_neighbour,
 )
 from revolve2.standard_resources.logging import setup_logging
-from revolve2.standard_resources.modular_robots import gecko
 from revolve2.standard_resources.rng import seed_from_string
 
 
@@ -27,16 +26,19 @@ def main() -> None:
     """Run the experiment."""
     setup_logging(file_name="log.txt")
 
+    # Get the actor and cpg network structure for the body of choice
+    # The cpg network structure describes the connections between neurons in the cpg brain.
+    _, cpg_network_structure = body_to_actor_and_cpg_network_structure_neighbour(
+        config.BODY
+    )
+
     # Intialize the evaluator that will be used to evaluate robots
     evaluator = Evaluator(
         headless=True,
         num_simulators=config.NUM_SIMULATORS,
+        cpg_network_structure=cpg_network_structure,
+        body=config.BODY,
     )
-
-    # Get the actor and cpg network structure for the body of choice
-    # The cpg network structure describes the connections between neurons in the cpg brain.
-    body = gecko()
-    _, cpg_network_structure = body_to_actor_and_cpg_network_structure_neighbour(body)
 
     # Initial parameter values for the brain
     initial_mean = cpg_network_structure.num_connections * [0.5]
@@ -65,7 +67,7 @@ def main() -> None:
         solutions = opt.ask()
 
         # Evaluate them. Invert because fitness maximizes, but cma minimizes
-        fitnesses = -evaluator.evaluate(body, cpg_network_structure, solutions)
+        fitnesses = -evaluator.evaluate(solutions)
 
         # Tell cma the fitnesses
         opt.tell(solutions, fitnesses)

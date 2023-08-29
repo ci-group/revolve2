@@ -20,6 +20,7 @@ from revolve2.standard_resources import fitness_functions, terrains
 from revolve2.standard_resources.simulation import (
     create_batch_multiple_isolated_robots_standard,
 )
+from revolve2.actor_controllers.cpg import CpgNetworkStructure
 
 
 class Evaluator:
@@ -27,14 +28,15 @@ class Evaluator:
 
     _runner: Runner
     _terrain: Terrain
-    _simulation_time: int
-    _sampling_frequency: int
-    _control_frequency: int
+    _cpg_network_structure: CpgNetworkStructure
+    _body: Body
 
     def __init__(
         self,
         headless: bool,
         num_simulators: int,
+        cpg_network_structure: CpgNetworkStructure,
+        body: Body,
     ) -> None:
         """
         Initialize this object.
@@ -44,11 +46,11 @@ class Evaluator:
         """
         self._runner = LocalRunner(headless=headless, num_simulators=num_simulators)
         self._terrain = terrains.flat()
+        self._cpg_network_structure = cpg_network_structure
+        self._body = body
 
     def evaluate(
         self,
-        body: Body,
-        cpg_network_structure: CpgNetworkStructure,
         solutions: List[npt.NDArray[np.float_]],
     ) -> npt.NDArray[np.float_]:
         """
@@ -64,10 +66,10 @@ class Evaluator:
         # Create robots from the brain parameters.
         robots = [
             ModularRobot(
-                body,
+                self._body,
                 BrainCpgNetworkStatic.create_simple(
                     params=params,
-                    cpg_network_structure=cpg_network_structure,
+                    cpg_network_structure=self._cpg_network_structure,
                     initial_state_uniform=math.pi / 2.0,
                     dof_range_uniform=1.0,
                 ),
@@ -82,7 +84,7 @@ class Evaluator:
         results = asyncio.run(self._runner.run_batch(batch))
 
         body_states = get_body_states_multiple_isolated_robots(
-            [body for _ in solutions], results
+            [self._body for _ in solutions], results
         )
         xy_displacements = [
             fitness_functions.xy_displacement(body_state_begin, body_state_end)

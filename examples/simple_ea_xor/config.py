@@ -1,6 +1,5 @@
 """Configuration parameters for this example."""
 
-RNG_SEED = 234570909
 POPULATION_SIZE = 50
 OFFSPRING_SIZE = 25
 NUM_GENERATIONS = 200

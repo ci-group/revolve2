@@ -8,7 +8,6 @@ You learn:
 
 import asyncio
 
-import numpy as np
 from revolve2.core.modular_robot import (
     ActiveHinge,
     Body,
@@ -19,6 +18,7 @@ from revolve2.core.modular_robot import (
 from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighborRandom
 from revolve2.runners.mujoco import LocalRunner
 from revolve2.standard_resources import terrains
+from revolve2.standard_resources.rng import make_rng
 from revolve2.standard_resources.simulation import create_batch_single_robot_standard
 
 
@@ -51,7 +51,7 @@ def main() -> None:
     """Run the simulation."""
     # Set up a random number generater, used later.
     RNG_SEED = 5
-    rng = np.random.Generator(np.random.PCG64(RNG_SEED))
+    rng = make_rng(RNG_SEED)
 
     # Create a body for the robot.
     body = make_body()

@@ -1,6 +1,8 @@
 """
 Optimize a neural network to calculate XOR, using an evolutionary algorithm.
 
+To better understand, first look at the 'experiment_setup' example.
+
 You learn:
 - How to create a simple evolutionary loop.
 """
@@ -15,6 +17,7 @@ from genotype import Genotype
 from individual import Individual
 from revolve2.core.optimization.ea import population_management, selection
 from revolve2.standard_resources.logging import setup_logging
+from revolve2.standard_resources.rng import make_rng_time_seed
 
 
 def select_parents(
@@ -90,7 +93,7 @@ def main() -> None:
     setup_logging()
 
     # Set up the random number generater.
-    rng = np.random.Generator(np.random.PCG64(config.RNG_SEED))
+    rng = make_rng_time_seed()
 
     # Create an initial population.
     logging.info("Generating initial population.")

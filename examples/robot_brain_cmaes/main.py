@@ -19,7 +19,7 @@ from revolve2.core.modular_robot.brains import (
     body_to_actor_and_cpg_network_structure_neighbour,
 )
 from revolve2.standard_resources.logging import setup_logging
-from revolve2.standard_resources.rng import seed_from_string
+from revolve2.standard_resources.rng import seed_from_time
 
 
 def main() -> None:
@@ -49,10 +49,7 @@ def main() -> None:
     options.set("bounds", [-1.0, 1.0])
     # The cma package uses its own internal rng.
     # Instead of creating our own numpy rng, we use our seed to initialize cma.
-    rng_seed_str = f"robot_brain_cmaes_{config.RNG_SEED}"
-    rng_seed_int = (
-        seed_from_string(rng_seed_str) % 2**32
-    )  # Cma seed must be smaller than 2**32
+    rng_seed_int = seed_from_time() % 2**32  # Cma seed must be smaller than 2**32
     options.set("seed", rng_seed_int)
     opt = cma.CMAEvolutionStrategy(initial_mean, config.INITIAL_STD, options)
 

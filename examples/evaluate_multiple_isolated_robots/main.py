@@ -10,7 +10,6 @@ You learn:
 
 import asyncio
 
-import numpy as np
 from revolve2.core.modular_robot import (
     ModularRobot,
     get_body_states_multiple_isolated_robots,
@@ -19,6 +18,7 @@ from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighborRandom
 from revolve2.runners.mujoco import LocalRunner
 from revolve2.standard_resources import fitness_functions, modular_robots
 from revolve2.standard_resources import terrains as standard_terrains
+from revolve2.standard_resources.rng import make_rng
 from revolve2.standard_resources.simulation import (
     create_batch_multiple_isolated_robots_standard,
 )
@@ -28,7 +28,7 @@ def main() -> None:
     """Run the simulation."""
     # Set up a random number generater.
     RNG_SEED = 5
-    rng = np.random.Generator(np.random.PCG64(RNG_SEED))
+    rng = make_rng(RNG_SEED)
 
     # Create the robots.
     bodies = [

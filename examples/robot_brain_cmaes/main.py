@@ -58,7 +58,7 @@ def main() -> None:
 
     generation_index = 0
 
-    # run cma for the defined number of generations
+    # Run cma for the defined number of generations
     logging.info("Start optimization process.")
     while generation_index < config.NUM_GENERATIONS:
         logging.info(f"Generation {generation_index + 1} / {config.NUM_GENERATIONS}.")

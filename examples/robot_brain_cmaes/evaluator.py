@@ -20,7 +20,6 @@ from revolve2.standard_resources import fitness_functions, terrains
 from revolve2.standard_resources.simulation import (
     create_batch_multiple_isolated_robots_standard,
 )
-from revolve2.actor_controllers.cpg import CpgNetworkStructure
 
 
 class Evaluator:
@@ -43,6 +42,8 @@ class Evaluator:
 
         :param headless: `headless` parameter for the physics runner.
         :param num_simulators: `num_simulators` parameter for the physics runner.
+        :param cpg_network_structure: Cpg structure for the brain.
+        :param body:Modular body of the robot.
         """
         self._runner = LocalRunner(headless=headless, num_simulators=num_simulators)
         self._terrain = terrains.flat()
@@ -58,8 +59,6 @@ class Evaluator:
 
         Fitness is the distance traveled on the xy plane.
 
-        :param body: Modular body of the robot.
-        :param cpg_network_structure: cpg structure for the brain.
         :param solutions: Solutions to evaluate.
         :returns: Fitnesses of the solutions.
         """

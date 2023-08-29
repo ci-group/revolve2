@@ -22,7 +22,7 @@ def create_batch_single_robot_standard(
     simulation_time: Optional[int] = STANDARD_SIMULATION_TIME,
 ) -> Batch:
     """
-    Create a simulation batch for a single robot from that robot and a terrain.
+    Create a simulation batch for a single robot from that robot and a terrain using standard parameters.
 
     :param robot: The robot to simulate.
     :param terrain: The terrain to put the robot in.
@@ -45,7 +45,7 @@ def create_batch_multiple_isolated_robots_standard(
     simulation_time: Optional[int] = STANDARD_SIMULATION_TIME,
 ) -> Batch:
     """
-    Create a simulation batch for multiple robots that do not interact.
+    Create a simulation batch for multiple robots that do not interact using standard parameters.
 
     :param robots: The robots to simulate.
     :param terrains: The terrain to put each robot in.

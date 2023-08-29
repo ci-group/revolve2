@@ -42,7 +42,7 @@ def run_experiment(num_samples: int, probability: int) -> None:
         # Revolve2 helps you here by letting you define the seed as a string.
 
         # This string should be unique for your experiment and run
-        rng_seed_str = f"trivial_experiment_repetition_{repetition}_num_samples_{num_samples}_probability_{probability}"
+        rng_seed_str = f"trivial_experiment_repetition_{config.RNG_SEED}_{repetition}_num_samples_{num_samples}_probability_{probability}"
         rng_seed_int = seed_from_string(rng_seed_str)
         logging.info(f"Rng seed: {rng_seed_int} | {rng_seed_str}")
 
@@ -67,7 +67,8 @@ def main() -> None:
     # By default this is 'INFO' or more severe, and 'DEBUG' is excluded.
     # Furthermore, a standard message layout is set up.
     # If logging is not set up, important messages can be missed.
-    setup_logging()
+    # We also provide a file name, so the log will be written to both the console and that file.
+    setup_logging(file_name="log.txt")
 
     # Let's print a simple message.
     # We use the 'info' function to give the message the 'INFO' severity.

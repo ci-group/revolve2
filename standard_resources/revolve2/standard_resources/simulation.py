@@ -43,6 +43,7 @@ def create_batch_multiple_isolated_robots_standard(
     robots: List[ModularRobot],
     terrains: List[Terrain],
     simulation_time: Optional[int] = STANDARD_SIMULATION_TIME,
+    control_frequency: float = STANDARD_CONTROL_FREQUENCY,
 ) -> Batch:
     """
     Create a simulation batch for multiple robots that do not interact using standard parameters.
@@ -50,6 +51,7 @@ def create_batch_multiple_isolated_robots_standard(
     :param robots: The robots to simulate.
     :param terrains: The terrain to put each robot in.
     :param simulation_time: How long to simulate for. The default argument is standard, but you can set a different value if you want to.
+    :param control_frequency: The frequency at which the control function is called. The argument is standard, but you can set a different value if you want to.
     :returns: The created batch, ready for simulation.
     """
     return create_batch_multiple_isolated_robots(
@@ -58,5 +60,5 @@ def create_batch_multiple_isolated_robots_standard(
         simulation_time=simulation_time,
         sampling_frequency=STANDARD_SAMPLING_FREQUENCY,
         simulation_timestep=STANDARD_SIMULATION_TIMESTEP,
-        control_frequency=STANDARD_CONTROL_FREQUENCY,
+        control_frequency=control_frequency,
     )

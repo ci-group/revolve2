@@ -14,8 +14,8 @@ import logging
 
 import config
 import numpy as np
+import revolve2.standard_resources.rng
 from revolve2.standard_resources.logging import setup_logging
-from revolve2.standard_resources.rng import make_rng, seed_from_string
 
 
 def run_experiment(num_samples: int, probability: int) -> None:
@@ -39,15 +39,15 @@ def run_experiment(num_samples: int, probability: int) -> None:
         # Using the same seed makes our experiment reproducible,
         # but using the same seed between two seperate experiments will generate the same numbers (usually bad).
         # As such we create a unique seed for each experiment and run.
-        # Revolve2 helps you here by letting you define the seed as a string.
+        # We will do this by creating a seed based on the current time.
+        # This seed will be stored in the logs.
+        # If we ever need to reproduce our results we can then use the seed from the log instead of generating a new one.
+        # The function automatically logs the seed for you, so you cannot forget to.
+        rng = revolve2.standard_resources.rng.make_rng_time_seed()
 
-        # This string should be unique for your experiment and run
-        rng_seed_str = f"trivial_experiment_repetition_{config.RNG_SEED}_{repetition}_num_samples_{num_samples}_probability_{probability}"
-        rng_seed_int = seed_from_string(rng_seed_str)
-        logging.info(f"Rng seed: {rng_seed_int} | {rng_seed_str}")
-
-        # Create the rng using the seed.
-        rng = make_rng(rng_seed_int)
+        # If you run with a set seed, use the following lines instead.
+        # SEED = 1234
+        # rng = revolve2.standard_resources.rng.make_rng(SEED)
 
         # Perform the experiment, sampling from a binomial distribution using the given paramaters.
         samples = rng.binomial(n=1, p=probability, size=num_samples)

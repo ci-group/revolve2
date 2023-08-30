@@ -10,7 +10,6 @@
 - simulate_single_robot
 - evaluate_single_robot
 - evaluate_multiple_isolated_robots
-- TODO something with raspberry controllers
 
 ## Optimizing robots
 - robot_brain_cmaes

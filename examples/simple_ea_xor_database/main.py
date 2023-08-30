@@ -238,8 +238,7 @@ def main() -> None:
     # and we must manually figure out what to do with the existing database.
     # (maybe throw away?)
     dbengine = open_database_sqlite(
-        config.DATABASE_FILE,
-        open_method=OpenMethod.OVERWITE_IF_EXISTS,  # TODO
+        config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
     )
     # Create the structure of the database.
     # Take a look at the 'Base' class.

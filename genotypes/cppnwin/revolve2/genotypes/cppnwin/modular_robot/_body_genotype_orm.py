@@ -58,7 +58,7 @@ def _make_multineat_params() -> multineat.Parameters:
 _MULTINEAT_PARAMS = _make_multineat_params()
 
 
-class BodyGenotypeOrm(orm.MappedAsDataclass):
+class BodyGenotypeOrm(orm.MappedAsDataclass, kw_only=True):
     """SQLAlchemy model for a CPPNWIN body genotype."""
 
     _NUM_INITIAL_MUTATIONS = 5
@@ -94,7 +94,7 @@ class BodyGenotypeOrm(orm.MappedAsDataclass):
             num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
         )
 
-        return BodyGenotypeOrm(body)
+        return BodyGenotypeOrm(body=body)
 
     def mutate_body(
         self,
@@ -113,7 +113,7 @@ class BodyGenotypeOrm(orm.MappedAsDataclass):
         multineat_rng = multineat_rng_from_random(rng)
 
         return BodyGenotypeOrm(
-            self.body.MutateWithConstraints(
+            body=self.body.MutateWithConstraints(
                 False,
                 multineat.SearchMode.BLENDED,
                 innov_db,
@@ -140,7 +140,7 @@ class BodyGenotypeOrm(orm.MappedAsDataclass):
         multineat_rng = multineat_rng_from_random(rng)
 
         return BodyGenotypeOrm(
-            parent1.body.MateWithConstraints(
+            body=parent1.body.MateWithConstraints(
                 parent2.body,
                 False,
                 False,

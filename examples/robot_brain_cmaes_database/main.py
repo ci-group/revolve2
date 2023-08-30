@@ -38,7 +38,7 @@ def run_experiment(dbengine: Engine) -> None:
     logging.info("----------------")
     logging.info("Start experiment")
 
-    # Creat an rng seed.
+    # Create an rng seed.
     rng_seed = seed_from_time() % 2**32  # Cma seed must be smaller than 2**32.
 
     # Create and save the experiment instance.
@@ -84,8 +84,6 @@ def run_experiment(dbengine: Engine) -> None:
         # Tell cma the fitnesses.
         opt.tell(solutions, fitnesses)
 
-        logging.info(f"{opt.result.xbest=} {opt.result.fbest=}")
-
         # From the samples and fitnesses, create a population that we can save.
         population = Population(
             [
@@ -113,7 +111,7 @@ def main() -> None:
 
     # Open the database, only if it does not already exists.
     dbengine = open_database_sqlite(
-        config.DATABASE_FILE, open_method=OpenMethod.OVERWITE_IF_EXISTS
+        config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
     )
     # Create the structure of the database.
     Base.metadata.create_all(dbengine)

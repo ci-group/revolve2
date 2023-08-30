@@ -1,39 +1,21 @@
 """
-This example adds a database to the 'simple_ea_xor' example.
+This is the 'robot_bodybrain_ea' example, but with added saving of results to a database.
 
-Naturally, look at that example first.
+Definitely first look at the 'robot_bodybrain_ea' and 'simple_ea_xor_database' examples.
+Many explanation comments are omitted here.
 
 You learn:
-- How save intermediate an final results to a database using the SQLAlchemy ORM.
-
-Beforehand you should have:
-- A basic understanding of relational databases.
-- An understanding of dataclasses is beneficial.
-
-Introduction:
-In the previous example, all results were written to the console.
-We would like to store all interesting data we come across in a more structured way.
-There are many options, such as saving text to files, various kinds of databases, or others such as the 'weights and biases' service.
-Here we choose to use the SQLite database.
-This a local relational database stored in a single file that is designed to be as simple as possible.
-It is very beneficial to have a basic understanding of relational databases, as this tutorial will not explain them in-depth.
-
-To simplify working with this database, we will use to 'object-relational mapping' (ORM) library 'SQLAlchemy'.
-This software lets you declare the database structure in Python, simply by creating classes simular to Python's 'dataclass'.
-If you do not know what a dataclass is, it is worth looking that up.
-However, it will probably also become apparent how SQLAlchemy works without that knowledge.
-The main addition in this tutorial is that some classes are changed or added to follow this ORM description.
-If at any point you do not understand something related to SQLAlchemy,
-be aware that it is a third-party library with an extensive documentation available to you online.
+- Nothing new in particular, but this can be a good starting point for your own experiments.
 """
 
 import logging
 
 import config
+import multineat
 import numpy as np
 import numpy.typing as npt
 from base import Base
-from evaluate import evaluate
+from evaluator import Evaluator
 from experiment import Experiment
 from generation import Generation
 from genotype import Genotype
@@ -117,6 +99,22 @@ def select_survivors(
     )
 
 
+def find_best_robot(
+    current_best: Individual | None, population: list[Individual]
+) -> Individual:
+    """
+    Return the best robot between the population and the current best individual.
+
+    :param current_best: The current best individual.
+    :param population: The population.
+    :returns: The best individual.
+    """
+    return max(
+        population + [] if current_best is None else [current_best],
+        key=lambda x: x.fitness,
+    )
+
+
 def run_experiment(dbengine: Engine) -> None:
     """
     Run an experiment.
@@ -127,26 +125,29 @@ def run_experiment(dbengine: Engine) -> None:
     logging.info("Start experiment")
 
     # Set up the random number generater.
-    # We are manually generating the seed, because we are going to save it in our database.
     rng_seed = seed_from_time()
     rng = make_rng(rng_seed)
 
-    # Create a new experiment instance.
+    # Create and save the experiment instance.
     experiment = Experiment(rng_seed=rng_seed)
-
-    # Save it to the database.
-    # A session manages multiple changes to a database,
-    # which then can either be committed(accepted) or a rolled back(aborted) in case something bad happens in our code.
-    # We add the experiment and commit as nothing can go wrong.
     logging.info("Saving experiment configuration.")
     with Session(dbengine) as session:
         session.add(experiment)
         session.commit()
 
+    # Intialize the evaluator that will be used to evaluate robots.
+    evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS)
+
+    # CPPN innovation databases.
+    innov_db_body = multineat.InnovationDatabase()
+    innov_db_brain = multineat.InnovationDatabase()
+
     # Create an initial population.
     logging.info("Generating initial population.")
     initial_genotypes = [
         Genotype.random(
+            innov_db_body=innov_db_body,
+            innov_db_brain=innov_db_brain,
             rng=rng,
         )
         for _ in range(config.POPULATION_SIZE)
@@ -154,20 +155,21 @@ def run_experiment(dbengine: Engine) -> None:
 
     # Evaluate the initial population.
     logging.info("Evaluating initial population.")
-    initial_fitnesses = [
-        evaluate(genotype.parameters) for genotype in initial_genotypes
-    ]
+    initial_fitnesses = evaluator.evaluate(
+        [genotype.develop() for genotype in initial_genotypes]
+    )
 
     # Create a population of individuals, combining genotype with fitness.
     population = Population(
         [
             Individual(genotype, fitness)
-            for genotype, fitness in zip(initial_genotypes, initial_fitnesses)
+            for genotype, fitness in zip(
+                initial_genotypes, initial_fitnesses, strict=True
+            )
         ]
     )
 
     # Finish the zeroth generation and save it to the database.
-    # The generation references the experiment so we later know which experiment it was part of.
     generation = Generation(
         experiment=experiment, generation_index=0, population=population
     )
@@ -190,14 +192,14 @@ def run_experiment(dbengine: Engine) -> None:
                 population.individuals[parent1_i].genotype,
                 population.individuals[parent2_i].genotype,
                 rng,
-            ).mutate(rng)
+            ).mutate(innov_db_body, innov_db_brain, rng)
             for parent1_i, parent2_i in parents
         ]
 
         # Evaluate the offspring.
-        offspring_fitnesses = [
-            evaluate(genotype.parameters) for genotype in offspring_genotypes
-        ]
+        offspring_fitnesses = evaluator.evaluate(
+            [genotype.develop() for genotype in offspring_genotypes]
+        )
 
         # Make an intermediate offspring population.
         offspring_population = Population(
@@ -207,7 +209,7 @@ def run_experiment(dbengine: Engine) -> None:
             ]
         )
 
-        # Create the next generation by selecting survivors between original population and offspring.
+        # Create the next population by selecting survivors.
         population = select_survivors(
             rng,
             population,
@@ -232,17 +234,13 @@ def main() -> None:
     setup_logging(file_name="log.txt")
 
     # Open the database, only if it does not already exists.
-    # If it did something when wrong in a previous run of this program,
-    # and we must manually figure out what to do with the existing database.
-    # (maybe throw away?)
     dbengine = open_database_sqlite(
         config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
     )
     # Create the structure of the database.
-    # Take a look at the 'Base' class.
     Base.metadata.create_all(dbengine)
 
-    # We are running several repetitions of the same experiment.
+    # Run the experiment several times.
     for _ in range(config.NUM_REPETITIONS):
         run_experiment(dbengine)
 

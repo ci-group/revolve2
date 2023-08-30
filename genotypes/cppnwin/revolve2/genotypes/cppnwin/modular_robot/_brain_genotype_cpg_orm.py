@@ -57,7 +57,7 @@ def _make_multineat_params() -> multineat.Parameters:
 _MULTINEAT_PARAMS = _make_multineat_params()
 
 
-class BrainGenotypeCpgOrm(orm.MappedAsDataclass):
+class BrainGenotypeCpgOrm(orm.MappedAsDataclass, kw_only=True):
     """An SQLAlchemy model for a CPPNWIN cpg brain genotype."""
 
     _NUM_INITIAL_MUTATIONS = 5
@@ -93,7 +93,7 @@ class BrainGenotypeCpgOrm(orm.MappedAsDataclass):
             num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
         )
 
-        return BrainGenotypeCpgOrm(brain)
+        return BrainGenotypeCpgOrm(brain=brain)
 
     def mutate_brain(
         self,
@@ -112,7 +112,7 @@ class BrainGenotypeCpgOrm(orm.MappedAsDataclass):
         multineat_rng = multineat_rng_from_random(rng)
 
         return BrainGenotypeCpgOrm(
-            self.brain.MutateWithConstraints(
+            brain=self.brain.MutateWithConstraints(
                 False,
                 multineat.SearchMode.BLENDED,
                 innov_db,
@@ -139,7 +139,7 @@ class BrainGenotypeCpgOrm(orm.MappedAsDataclass):
         multineat_rng = multineat_rng_from_random(rng)
 
         return BrainGenotypeCpgOrm(
-            parent1.brain.MateWithConstraints(
+            brain=parent1.brain.MateWithConstraints(
                 parent2.brain,
                 False,
                 False,

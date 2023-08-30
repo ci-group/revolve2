@@ -9,6 +9,8 @@ echo "examples/experiment_setup:" && \
 mypy experiment_setup && \
 echo "examples/robot_bodybrain_ea:" && \
 mypy robot_bodybrain_ea && \
+echo "examples/robot_bodybrain_ea_database:" && \
+mypy robot_bodybrain_ea_database && \
 echo "examples/robot_brain_cmaes:" && \
 mypy robot_brain_cmaes && \
 echo "examples/robot_brain_cmaes_database:" && \

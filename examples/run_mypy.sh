@@ -11,6 +11,8 @@ echo "examples/robot_bodybrain_ea:" && \
 mypy robot_bodybrain_ea && \
 echo "examples/robot_brain_cmaes:" && \
 mypy robot_brain_cmaes && \
+echo "examples/robot_brain_cmaes_database:" && \
+mypy robot_brain_cmaes_database && \
 echo "examples/rpi_controller_remote:" && \
 mypy rpi_controller_remote && \
 echo "examples/simple_ea_xor:" && \

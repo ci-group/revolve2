@@ -138,7 +138,7 @@ def run_experiment(dbengine: Engine) -> None:
     # A session manages multiple changes to a database,
     # which then can either be committed(accepted) or a rolled back(aborted) in case something bad happens in our code.
     # We add the experiment and commit as nothing can go wrong.
-    logging.info("Saving experiment object.")
+    logging.info("Saving experiment configuration.")
     with Session(dbengine) as session:
         session.add(experiment)
         session.commit()

@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import config
 import numpy as np
-from revolve2.core.optimization.ea import Parameters as GenericParameters
-from revolve2.core.database import HasId
 from base import Base
+from revolve2.core.database import HasId
+from revolve2.core.optimization.ea import Parameters as GenericParameters
 
 
 class Genotype(Base, HasId, GenericParameters):

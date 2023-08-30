@@ -2,11 +2,11 @@
 
 from dataclasses import dataclass
 
-from genotype import Genotype
-from base import Base
-import sqlalchemy.orm as orm
-from revolve2.core.database import HasId
 import sqlalchemy
+import sqlalchemy.orm as orm
+from base import Base
+from genotype import Genotype
+from revolve2.core.database import HasId
 
 
 @dataclass

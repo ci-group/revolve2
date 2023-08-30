@@ -1,9 +1,9 @@
 """Population class."""
 
+import sqlalchemy.ext.orderinglist
+import sqlalchemy.orm as orm
 from base import Base
 from individual import Individual
-import sqlalchemy.orm as orm
-import sqlalchemy.ext.orderinglist
 from revolve2.core.database import HasId
 
 

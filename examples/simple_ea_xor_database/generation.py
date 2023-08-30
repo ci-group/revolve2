@@ -1,11 +1,11 @@
 """Generation class."""
 
-from base import Base
-from population import Population
-import sqlalchemy.orm as orm
 import sqlalchemy
-from revolve2.core.database import HasId
+import sqlalchemy.orm as orm
+from base import Base
 from experiment import Experiment
+from population import Population
+from revolve2.core.database import HasId
 
 
 class Generation(Base, HasId):

@@ -1,8 +1,8 @@
+import numpy as np
+import numpy.typing as npt
 import sqlalchemy.orm as orm
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
-import numpy.typing as npt
-import numpy as np
 
 
 class Parameters(orm.MappedAsDataclass):

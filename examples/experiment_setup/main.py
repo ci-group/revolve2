@@ -18,7 +18,7 @@ import revolve2.standard_resources.rng
 from revolve2.standard_resources.logging import setup_logging
 
 
-def run_experiment(num_samples: int, probability: int) -> None:
+def run_experiment(num_samples: int, probability: float) -> None:
     """
     Run all runs of an experiment using the provided parameters.
 

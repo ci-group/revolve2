@@ -1,8 +1,8 @@
-"""Experiment class"""
+"""Experiment class."""
 
-from revolve2.core.database import HasId
-from base import Base
 import sqlalchemy.orm as orm
+from base import Base
+from revolve2.core.database import HasId
 
 
 class Experiment(Base, HasId):

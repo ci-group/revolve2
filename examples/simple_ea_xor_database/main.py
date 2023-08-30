@@ -1,5 +1,5 @@
 """
-This example adds a database to the 'simple_ea_xor' examle.
+This example adds a database to the 'simple_ea_xor' example.
 
 Naturally, look at that example first.
 
@@ -32,19 +32,19 @@ import logging
 import config
 import numpy as np
 import numpy.typing as npt
+from base import Base
 from evaluate import evaluate
+from experiment import Experiment
+from generation import Generation
 from genotype import Genotype
 from individual import Individual
+from population import Population
+from revolve2.core.database import OpenMethod, open_database_sqlite
 from revolve2.core.optimization.ea import population_management, selection
 from revolve2.standard_resources.logging import setup_logging
-from revolve2.standard_resources.rng import seed_from_time, make_rng
-from revolve2.core.database import OpenMethod, open_database_sqlite
-from base import Base
+from revolve2.standard_resources.rng import make_rng, seed_from_time
 from sqlalchemy.engine import Engine
-from experiment import Experiment
 from sqlalchemy.orm import Session
-from population import Population
-from generation import Generation
 
 
 def select_parents(
@@ -118,6 +118,11 @@ def select_survivors(
 
 
 def run_experiment(dbengine: Engine) -> None:
+    """
+    Run an experiment.
+
+    :param dbengine: An openened database with matching initialize database structure.
+    """
     logging.info("----------------")
     logging.info("Start experiment")
 

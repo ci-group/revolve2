@@ -62,10 +62,11 @@ def main() -> None:
 
     plt.figure()
 
+    # Plot max
     plt.plot(
         agg_per_generation["generation_index"],
         agg_per_generation["max_fitness_mean"],
-        label="Max Fitness Mean",
+        label="Max fitness",
         color="b",
     )
     plt.fill_between(
@@ -76,10 +77,11 @@ def main() -> None:
         alpha=0.2,
     )
 
+    # Plot mean
     plt.plot(
         agg_per_generation["generation_index"],
         agg_per_generation["mean_fitness_mean"],
-        label="Mean Fitness Mean",
+        label="Mean fitness",
         color="r",
     )
     plt.fill_between(
@@ -94,7 +96,7 @@ def main() -> None:
 
     plt.xlabel("Generation index")
     plt.ylabel("Fitness")
-    plt.title("Mean and max fitness across experiments")
+    plt.title("Mean and max fitness across repetitions with std as shade")
     plt.legend()
     plt.show()
 

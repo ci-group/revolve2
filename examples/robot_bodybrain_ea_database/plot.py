@@ -1,22 +1,19 @@
-"""
-Plot fitness over generations for all experiments, averaged.
-"""
+"""Plot fitness over generations for all experiments, averaged."""
 
 import config
-from revolve2.standard_resources.logging import setup_logging
-from revolve2.core.database import OpenMethod, open_database_sqlite
+import matplotlib.pyplot as plt
 import pandas
+from experiment import Experiment
 from generation import Generation
 from individual import Individual
 from population import Population
-import matplotlib.pyplot as plt
+from revolve2.core.database import OpenMethod, open_database_sqlite
+from revolve2.standard_resources.logging import setup_logging
 from sqlalchemy import select
-from experiment import Experiment
 
 
 def main() -> None:
     """Run the program."""
-
     setup_logging()
 
     dbengine = open_database_sqlite(

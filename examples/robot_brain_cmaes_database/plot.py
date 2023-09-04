@@ -62,8 +62,6 @@ def main() -> None:
 
     plt.figure()
 
-    print(agg_per_generation)
-
     # Plot max
     plt.plot(
         agg_per_generation["generation_index"],

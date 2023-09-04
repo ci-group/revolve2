@@ -78,11 +78,12 @@ def run_experiment(dbengine: Engine) -> None:
         # Get the sampled solutions(parameters) from cma.
         solutions = opt.ask()
 
-        # Evaluate them. Invert because fitness maximizes, but cma minimizes.
-        fitnesses = -evaluator.evaluate(solutions)
+        # Evaluate them.
+        fitnesses = evaluator.evaluate(solutions)
 
         # Tell cma the fitnesses.
-        opt.tell(solutions, fitnesses)
+        # Provide them negated, as cma minimizes but we want to maximize.
+        opt.tell(solutions, -fitnesses)
 
         # From the samples and fitnesses, create a population that we can save.
         population = Population(
@@ -95,7 +96,7 @@ def run_experiment(dbengine: Engine) -> None:
         # Make it all into a generation and save it to the database.
         generation = Generation(
             experiment=experiment,
-            generation_index=opt.countiter + 1,
+            generation_index=opt.countiter,
             population=population,
         )
         logging.info("Saving generation.")

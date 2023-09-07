@@ -15,17 +15,12 @@ def setup_logging(level: int = logging.INFO, file_name: str | None = None) -> No
     # By default, we are interested in messages of level 'info' and the more severe 'warning', 'error', and 'critical',
     # and we exclude the less severe 'debug'.
     # Furthermore, we specify the format in which we want the messages to be printed.
-    if file_name is None:
-        logging.basicConfig(
-            level=logging.INFO,
-            format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
-        )
-    else:
-        logging.basicConfig(
-            level=logging.INFO,
-            format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
-            handlers=[logging.FileHandler(file_name), logging.StreamHandler()],
-        )
+    logging.basicConfig(
+        level=level,
+        format="[%(asctime)s] [%(levelname)s] [%(module)s] %(message)s",
+    )
+    if file_name is not None:
+        logging.root.handlers.append(logging.FileHandler(file_name))
     logging.info("=======================================")
     logging.info("=======================================")
     logging.info("=======================================")

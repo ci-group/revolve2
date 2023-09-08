@@ -1,7 +1,7 @@
-revolve2.runners namespace
+revolve2.simulators namespace
 ==========================
 
-.. py:module:: revolve2.runners
+.. py:module:: revolve2.simulators
 
 Subpackages
 -----------
@@ -9,4 +9,4 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   mujoco <revolve2.runners.mujoco>
+   mujoco <revolve2.simulators.mujoco>

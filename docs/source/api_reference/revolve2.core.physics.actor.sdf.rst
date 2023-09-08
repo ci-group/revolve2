@@ -1,7 +1,7 @@
-revolve2.core.physics.actor.sdf package
+revolve2.simulation.actor.sdf package
 =======================================
 
-.. automodule:: revolve2.core.physics.actor.sdf
+.. automodule:: revolve2.simulation.actor.sdf
    :members:
    :undoc-members:
    :show-inheritance:

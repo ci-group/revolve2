@@ -95,7 +95,7 @@ jobs:
       - name: install requirements for mypy
         run: pip install -r ./codetools/mypy/requirements.txt
       - name: run mypy
-        run: ./codetools/mypy/check_opensource.sh
+        run: ./codetools/mypy/check.sh
 
   docs:
     runs-on: ubuntu-20.04

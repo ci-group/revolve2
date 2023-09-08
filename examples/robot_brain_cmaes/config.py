@@ -1,6 +1,6 @@
 """Configuration parameters for this example."""
 
-from revolve2.standard_resources.modular_robots import gecko
+from revolve2.ci_group.modular_robots import gecko
 
 NUM_SIMULATORS = 8
 INITIAL_STD = 0.5

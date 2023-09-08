@@ -2,17 +2,15 @@
 
 import asyncio
 
-from revolve2.core.modular_robot import (
+from revolve2.ci_group import fitness_functions, terrains
+from revolve2.ci_group.simulation import create_batch_multiple_isolated_robots_standard
+from revolve2.modular_robot import (
     ModularRobot,
     get_body_states_multiple_isolated_robots,
 )
-from revolve2.core.physics import Terrain
-from revolve2.core.physics.running import Runner
-from revolve2.runners.mujoco import LocalRunner
-from revolve2.standard_resources import fitness_functions, terrains
-from revolve2.standard_resources.simulation import (
-    create_batch_multiple_isolated_robots_standard,
-)
+from revolve2.simulation import Terrain
+from revolve2.simulation.running import Runner
+from revolve2.simulators.mujoco import LocalRunner
 
 
 class Evaluator:

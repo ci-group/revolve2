@@ -2,7 +2,7 @@
 
 import sqlalchemy.orm as orm
 from base import Base
-from revolve2.core.database import HasId
+from revolve2.experimentation.database import HasId
 
 
 class Experiment(Base, HasId):

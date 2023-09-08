@@ -1,7 +1,7 @@
-revolve2.core.database package
+revolve2.experimentation.database package
 ==============================
 
-.. automodule:: revolve2.core.database
+.. automodule:: revolve2.experimentation.database
    :members:
    :undoc-members:
    :show-inheritance:

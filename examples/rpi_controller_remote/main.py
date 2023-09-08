@@ -2,7 +2,7 @@
 
 import logging
 
-from revolve2.core.rpi_controller_remote import connect
+from revolve2.rpi_controller_remote import connect
 from revolve2.serialization import StaticData
 
 config: StaticData = {

@@ -1,7 +1,7 @@
-revolve2.core.physics.environment\_actor\_controller module
+revolve2.simulation.environment\_actor\_controller module
 ===========================================================
 
-.. automodule:: revolve2.core.physics.environment_actor_controller
+.. automodule:: revolve2.simulation.environment_actor_controller
    :members:
    :undoc-members:
    :show-inheritance:

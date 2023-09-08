@@ -1,7 +1,7 @@
-revolve2.core.optimization package
+revolve2.experimentation.optimization package
 ==================================
 
-.. automodule:: revolve2.core.optimization
+.. automodule:: revolve2.experimentation.optimization
    :members:
    :undoc-members:
    :show-inheritance:
@@ -12,4 +12,4 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   ea <revolve2.core.optimization.ea>
+   ea <revolve2.experimentation.optimization.ea>

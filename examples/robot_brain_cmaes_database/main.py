@@ -19,12 +19,12 @@ from generation import Generation
 from genotype import Genotype
 from individual import Individual
 from population import Population
-from revolve2.core.database import OpenMethod, open_database_sqlite
-from revolve2.core.modular_robot.brains import (
+from revolve2.ci_group.logging import setup_logging
+from revolve2.ci_group.rng import seed_from_time
+from revolve2.experimentation.database import OpenMethod, open_database_sqlite
+from revolve2.modular_robot.brains import (
     body_to_actor_and_cpg_network_structure_neighbour,
 )
-from revolve2.standard_resources.logging import setup_logging
-from revolve2.standard_resources.rng import seed_from_time
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 

@@ -14,8 +14,8 @@ import logging
 
 import config
 import numpy as np
-import revolve2.standard_resources.rng
-from revolve2.standard_resources.logging import setup_logging
+import revolve2.ci_group.rng
+from revolve2.ci_group.logging import setup_logging
 
 
 def run_experiment(num_samples: int, probability: float) -> None:
@@ -43,11 +43,11 @@ def run_experiment(num_samples: int, probability: float) -> None:
         # This seed will be stored in the logs.
         # If we ever need to reproduce our results we can then use the seed from the log instead of generating a new one.
         # The function automatically logs the seed for you, so you cannot forget to.
-        rng = revolve2.standard_resources.rng.make_rng_time_seed()
+        rng = revolve2.ci_group.rng.make_rng_time_seed()
 
         # If you run with a set seed, use the following lines instead.
         # SEED = 1234
-        # rng = revolve2.standard_resources.rng.make_rng(SEED)
+        # rng = revolve2.ci_group.rng.make_rng(SEED)
 
         # Perform the experiment, sampling from a binomial distribution using the given paramaters.
         samples = rng.binomial(n=1, p=probability, size=num_samples)

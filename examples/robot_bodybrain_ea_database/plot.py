@@ -7,8 +7,8 @@ from experiment import Experiment
 from generation import Generation
 from individual import Individual
 from population import Population
-from revolve2.core.database import OpenMethod, open_database_sqlite
-from revolve2.standard_resources.logging import setup_logging
+from revolve2.ci_group.logging import setup_logging
+from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from sqlalchemy import select
 
 

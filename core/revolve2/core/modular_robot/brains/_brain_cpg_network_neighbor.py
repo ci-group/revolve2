@@ -6,7 +6,9 @@ from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
 from revolve2.core.modular_robot import ActiveHinge, Body, Brain
 
-from ._make_cpg_network_structure_neighbor import make_cpg_network_structure_neighbor
+from ._make_cpg_network_structure_neighbor import (
+    active_hinges_to_cpg_network_structure_neighbor,
+)
 
 
 class BrainCpgNetworkNeighbor(Brain, ABC):
@@ -31,7 +33,9 @@ class BrainCpgNetworkNeighbor(Brain, ABC):
         }
         active_hinges = [active_hinge_map[id] for id in dof_ids]
 
-        cpg_network_structure = make_cpg_network_structure_neighbor(active_hinges)
+        cpg_network_structure = active_hinges_to_cpg_network_structure_neighbor(
+            active_hinges
+        )
         connections = [
             (
                 active_hinges[pair.cpg_index_lowest.index],

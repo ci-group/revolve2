@@ -2,18 +2,17 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import multineat
 import numpy as np
-from base import Base
-from revolve2.core.database import HasId
 from revolve2.core.modular_robot import ModularRobot
 from revolve2.genotypes.cppnwin.modular_robot import BodyGenotype, BrainGenotypeCpg
 
 
-class Genotype(Base, HasId, BodyGenotype, BrainGenotypeCpg):
-    """SQLAlchemy model for a genotype for a modular robot body and brain."""
-
-    __tablename__ = "genotype"
+@dataclass
+class Genotype(BodyGenotype, BrainGenotypeCpg):
+    """A genotype for a body and brain using CPPN."""
 
     @classmethod
     def random(

@@ -1,10 +1,8 @@
 """Configuration parameters for this example."""
 
-RNG_SEED = 1001209834
+from revolve2.standard_resources.modular_robots import gecko
+
 NUM_SIMULATORS = 8
-SIMULATION_TIME = 30
-SAMPLING_FREQUENCY = 5
-CONTROL_FREQUENCY = 60
-DATABASE_FILE = "results/run0.sqlite"
 INITIAL_STD = 0.5
 NUM_GENERATIONS = 100
+BODY = gecko()

@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, Union
 
 from ._module import Module
+from ._right_angles import RightAngles
 
 
 class Core(Module):
@@ -11,13 +12,17 @@ class Core(Module):
     BACK = 2
     LEFT = 3
 
-    def __init__(self, rotation: float):
+    def __init__(self, rotation: Union[float, RightAngles]):
         """
         Initialize this object.
 
         :param rotation: Orientation of this model relative to its parent.
         """
-        super().__init__(4, rotation)
+        if isinstance(rotation, RightAngles):
+            rotation_converted = rotation.value
+        else:
+            rotation_converted = rotation
+        super().__init__(4, rotation_converted)
 
     @property
     def front(self) -> Optional[Module]:

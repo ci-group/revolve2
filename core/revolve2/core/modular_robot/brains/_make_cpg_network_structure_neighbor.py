@@ -1,10 +1,32 @@
 from typing import List, Set
 
 from revolve2.actor_controllers.cpg import CpgNetworkStructure, CpgPair
-from revolve2.core.modular_robot import ActiveHinge
+from revolve2.core.modular_robot import ActiveHinge, Body
+from revolve2.core.physics.actor import Actor
 
 
-def make_cpg_network_structure_neighbor(
+def body_to_actor_and_cpg_network_structure_neighbour(
+    body: Body,
+) -> tuple[Actor, CpgNetworkStructure]:
+    """
+    Convert a body to an actor and get it's corresponding cpg network structure.
+
+    :param body: The body to convert.
+    :returns: A tuple of the actor and cpg network structure.
+    """
+    actor, dof_ids = body.to_actor()
+    id_to_hinge = {
+        active_hinge.id: active_hinge for active_hinge in body.find_active_hinges()
+    }
+    active_hinges = [id_to_hinge[dof_id] for dof_id in dof_ids]
+    cpg_network_structure = active_hinges_to_cpg_network_structure_neighbor(
+        active_hinges
+    )
+
+    return actor, cpg_network_structure
+
+
+def active_hinges_to_cpg_network_structure_neighbor(
     active_hinges: List[ActiveHinge],
 ) -> CpgNetworkStructure:
     """

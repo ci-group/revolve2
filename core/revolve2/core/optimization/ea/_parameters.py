@@ -1,17 +1,18 @@
-from dataclasses import field
-from typing import Tuple
-
+import numpy as np
+import numpy.typing as npt
 import sqlalchemy.orm as orm
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
 
 
 class Parameters(orm.MappedAsDataclass):
-    """An SQLAlchemy mixing that provides a parameters column that is a tuple of floats."""
+    """
+    An SQLAlchemy mixing that provides a parameters column that is a tuple of floats.
 
-    parameters: Tuple[float, ...] = field(
-        default=()
-    )  # TODO must have a default argument because kw_only does not exist on python 3.8. TODO we now use python 3.10
+    The parameters are saved in the database as string of semicolon seperated floats.
+    """
+
+    parameters: npt.NDArray[np.float_]
 
     _serialized_parameters: orm.Mapped[str] = orm.mapped_column(
         "serialized_parameters", init=False, nullable=False
@@ -30,6 +31,6 @@ def _update_serialized_parameters(
 
 @event.listens_for(Parameters, "load", propagate=True)
 def _deserialize_parameters(target: Parameters, context: orm.QueryContext) -> None:
-    target.parameters = tuple(
+    target.parameters = np.array(
         float(p) for p in target._serialized_parameters.split(";")
     )

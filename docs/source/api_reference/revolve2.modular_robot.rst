@@ -1,5 +1,5 @@
-revolve2.experimentation.modular\_robot package
-====================================
+revolve2.modular\_robot package
+===============================
 
 .. automodule:: revolve2.modular_robot
    :members:

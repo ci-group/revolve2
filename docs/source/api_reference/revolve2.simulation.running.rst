@@ -1,5 +1,5 @@
 revolve2.simulation.running package
-=====================================
+===================================
 
 .. automodule:: revolve2.simulation.running
    :members:

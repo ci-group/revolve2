@@ -17,13 +17,15 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 apidoc:
-	@$(SPHINXAPIDOC) ../core/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../genotypes/cppnwin/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../runners/mujoco/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../serialization/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../actor_controller/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../ci_group/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../experimentation/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../modular_robot/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../rpi_controller/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../standard_resources/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../rpi_controller_remote/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../serialization/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../simulation/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../simulators/mujoco/revolve2 $(APIDOCARGS)
 
 apidoc_overwrite:
 	APIDOCARGS="$(APIDOCARGS) -f" $(MAKE) apidoc

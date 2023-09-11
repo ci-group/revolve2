@@ -1,5 +1,5 @@
 revolve2.experimentation.genotypes.cppnwin package
-==================================
+==================================================
 
 .. automodule:: revolve2.experimentation.genotypes.cppnwin
    :members:

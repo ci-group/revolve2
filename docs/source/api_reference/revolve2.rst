@@ -9,11 +9,13 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   core <revolve2.experimentation>
-   serialization <revolve2.serialization>
-   genotypes <revolve2.genotypes>
-   runners <revolve2.simulators>
    actor_controller <revolve2.actor_controller>
    actor_controllers <revolve2.actor_controllers>
-   standard_resources <revolve2.ci_group>
    bin <revolve2.bin>
+   ci_group <revolve2.ci_group>
+   experimentation <revolve2.experimentation>
+   modular_robot <revolve2.modular_robot>
+   rpi_controller_remote <revolve2.rpi_controller_remote>
+   serialization <revolve2.serialization>
+   simulation <revolve2.simulation>
+   simulators <revolve2.simulators>

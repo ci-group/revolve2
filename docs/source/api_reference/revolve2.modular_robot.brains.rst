@@ -1,5 +1,5 @@
-revolve2.experimentation.modular\_robot.brains package
-===========================================
+revolve2.modular\_robot.brains package
+======================================
 
 .. automodule:: revolve2.modular_robot.brains
    :members:

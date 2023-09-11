@@ -1,5 +1,5 @@
 revolve2.experimentation.optimization.ea package
-=====================================
+================================================
 
 .. automodule:: revolve2.experimentation.optimization.ea
    :members:

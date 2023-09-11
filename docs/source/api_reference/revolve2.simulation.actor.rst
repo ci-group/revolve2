@@ -1,5 +1,5 @@
 revolve2.simulation.actor package
-===================================
+=================================
 
 .. automodule:: revolve2.simulation.actor
    :members:

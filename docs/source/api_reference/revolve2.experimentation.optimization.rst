@@ -1,5 +1,5 @@
 revolve2.experimentation.optimization package
-==================================
+=============================================
 
 .. automodule:: revolve2.experimentation.optimization
    :members:

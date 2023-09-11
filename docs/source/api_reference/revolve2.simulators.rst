@@ -1,5 +1,5 @@
 revolve2.simulators namespace
-==========================
+=============================
 
 .. py:module:: revolve2.simulators
 

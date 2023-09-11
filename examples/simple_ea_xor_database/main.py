@@ -19,7 +19,7 @@ This a local relational database stored in a single file that is designed to be 
 It is very beneficial to have a basic understanding of relational databases, as this tutorial will not explain them in-depth.
 
 To simplify working with this database, we will use to 'object-relational mapping' (ORM) library 'SQLAlchemy'.
-This software lets you declare the database structure in Python, simply by creating classes simular to Python's 'dataclass'.
+This software lets you declare the database structure in Python, simply by creating classes similar to Python's 'dataclass'.
 If you do not know what a dataclass is, it is worth looking that up.
 However, it will probably also become apparent how SQLAlchemy works without that knowledge.
 The main addition in this tutorial is that some classes are changed or added to follow this ORM description.

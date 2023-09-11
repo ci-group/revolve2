@@ -1,7 +1,10 @@
-revolve2.experimentation.genotypes namespace
-============================================
+revolve2.experimentation.genotypes package
+==========================================
 
-.. py:module:: revolve2.experimentation.genotypes
+.. automodule:: revolve2.experimentation.genotypes
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------

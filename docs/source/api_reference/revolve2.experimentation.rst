@@ -1,7 +1,10 @@
-revolve2.experimentation namespace
-==================================
+revolve2.experimentation package
+================================
 
-.. py:module:: revolve2.experimentation
+.. automodule:: revolve2.experimentation
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------
@@ -10,4 +13,5 @@ Subpackages
    :maxdepth: 1
 
    database <revolve2.experimentation.database>
+   genotypes <revolve2.experimentation.genotypes>
    optimization <revolve2.experimentation.optimization>

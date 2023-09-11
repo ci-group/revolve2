@@ -43,15 +43,11 @@ class Individual(HasId, orm.MappedAsDataclass, Generic[TGenotype]):
     # Class members interesting to the user
     # -------------------------------------
     if TYPE_CHECKING:
-        _population_id: orm.Mapped[int] = orm.mapped_column(
-            "population_id", nullable=False, init=False
+        population_id: orm.Mapped[int] = orm.mapped_column(nullable=False, init=False)
+        population_index: orm.Mapped[int] = orm.mapped_column(
+            nullable=False, init=False
         )
-        _population_index: orm.Mapped[int] = orm.mapped_column(
-            "population_index", nullable=False, init=False
-        )
-        _genotype_id: orm.Mapped[int] = orm.mapped_column(
-            "genotype_id", nullable=False, init=False
-        )
+        genotype_id: orm.Mapped[int] = orm.mapped_column(nullable=False, init=False)
         genotype: orm.Mapped[TGenotype] = orm.relationship()
         fitness: orm.Mapped[float] = orm.mapped_column(nullable=False)
 
@@ -61,15 +57,15 @@ class Individual(HasId, orm.MappedAsDataclass, Generic[TGenotype]):
     else:
 
         @orm.declared_attr
-        def _population_id(cls) -> orm.Mapped[int]:
+        def population_id(cls) -> orm.Mapped[int]:  # noqa
             return cls.__population_id_impl()
 
         @orm.declared_attr
-        def _population_index(cls) -> orm.Mapped[int]:
+        def population_index(cls) -> orm.Mapped[int]:  # noqa
             return cls.__population_index_impl()
 
         @orm.declared_attr
-        def _genotype_id(cls) -> orm.Mapped[int]:
+        def genotype_id(cls) -> orm.Mapped[int]:  # noqa
             return cls.__genotype_id_impl()
 
         @orm.declared_attr

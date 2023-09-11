@@ -86,7 +86,7 @@ class LocalRunner(Runner):
         start_paused: bool,
         control_step: float,
         sample_step: float,
-        simulation_time: int,
+        simulation_time: Optional[int],
         simulation_timestep: float,
     ) -> EnvironmentResults:
         logging.info(f"Environment {env_index}")
@@ -138,7 +138,9 @@ class LocalRunner(Runner):
             EnvironmentState(0.0, cls._get_actor_states(env_descr, data, model))
         )
 
-        while (time := data.time) < simulation_time:
+        while (time := data.time) < (
+            float("inf") if simulation_time is None else simulation_time
+        ):
             # do control if it is time
             if time >= last_control_time + control_step:
                 last_control_time = math.floor(time / control_step) * control_step

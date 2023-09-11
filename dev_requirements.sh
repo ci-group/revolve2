@@ -5,11 +5,13 @@
 
 cd "$(dirname "$0")"
 
-pip install -e ./runners/mujoco[dev] && \
-pip install -e ./genotypes/cppnwin[dev] && \
-pip install -e ./standard_resources[dev] && \
-pip install -e ./core[dev] && \
+pip install -e ./ci_group[dev] && \
+pip install -e ./simulators/mujoco[dev] && \
+pip install -e ./experimentation[dev] && \
+pip install -e ./rpi_controller_remote[dev] && \
 pip install -e ./rpi_controller[dev] && \
+pip install -e ./modular_robot[dev] && \
+pip install -e ./simulation[dev] && \
 pip install -e ./actor_controller[dev] && \
 pip install -e ./serialization[dev] && \
 pip install -r ./codetools/requirements.txt

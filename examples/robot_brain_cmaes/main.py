@@ -15,11 +15,11 @@ import logging
 import cma
 import config
 from evaluator import Evaluator
-from revolve2.core.modular_robot.brains import (
+from revolve2.ci_group.logging import setup_logging
+from revolve2.ci_group.rng import seed_from_time
+from revolve2.modular_robot.brains import (
     body_to_actor_and_cpg_network_structure_neighbour,
 )
-from revolve2.standard_resources.logging import setup_logging
-from revolve2.standard_resources.rng import seed_from_time
 
 
 def main() -> None:

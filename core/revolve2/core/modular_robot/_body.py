@@ -1,6 +1,5 @@
 import math
 from dataclasses import dataclass
-from typing import List, Optional, Tuple
 
 import numpy as np
 from pyrr import Quaternion, Vector3
@@ -47,7 +46,7 @@ class Body:
         """
         return self._is_finalized
 
-    def to_actor(self) -> Tuple[Actor, List[int]]:
+    def to_actor(self) -> tuple[Actor, list[int]]:
         """
         Create an actor from this body.
 
@@ -58,7 +57,7 @@ class Body:
             raise NotFinalizedError()
         return _ActorBuilder().build(self)
 
-    def find_active_hinges(self) -> List[ActiveHinge]:
+    def find_active_hinges(self) -> list[ActiveHinge]:
         """
         Find all active hinges in the body.
 
@@ -69,7 +68,7 @@ class Body:
             raise NotFinalizedError()
         return _ActiveHingeFinder().find(self)
 
-    def find_bricks(self) -> List[Brick]:
+    def find_bricks(self) -> list[Brick]:
         """
         Find all bricks in the body.
 
@@ -140,7 +139,7 @@ class Body:
 
     def to_grid(
         self,
-    ) -> Tuple[List[List[List[Optional[Module]]]], Tuple[int, int, int]]:
+    ) -> tuple[list[list[list[Module | None]]], tuple[int, int, int]]:
         """
         Convert the tree structure to a grid.
 
@@ -197,15 +196,15 @@ class _GridMaker:
         z: int
         module: Module
 
-    _core_pos: Tuple[int, int, int]
-    _cells: List[_Cell]
+    _core_pos: tuple[int, int, int]
+    _cells: list[_Cell]
 
     def __init__(self) -> None:
         self._cells = []
 
     def make_grid(
         self, body: Body
-    ) -> Tuple[List[List[List[Optional[Module]]]], Tuple[int, int, int]]:
+    ) -> tuple[list[list[list[Module | None]]], tuple[int, int, int]]:
         self._make_grid_recur(body.core, Vector3(), Quaternion())
 
         minx = min([cell.x for cell in self._cells])
@@ -219,9 +218,9 @@ class _GridMaker:
         width = maxy - miny + 1
         height = maxz - minz + 1
 
-        grid: List[List[List[Optional[Module]]]] = []
+        grid: list[list[list[Module | None]]] = []
         for _ in range(depth):
-            y: List[List[Optional[Module]]] = []
+            y: list[list[Module | None]] = []
             for _ in range(width):
                 y.append([None] * (height))
             grid.append(y)
@@ -299,9 +298,9 @@ class _ActorBuilder:
     _DYNAMIC_FRICTION = 1.0
 
     robot: Actor
-    dof_ids: List[int]
+    dof_ids: list[int]
 
-    def build(self, body: Body) -> Tuple[Actor, List[int]]:
+    def build(self, body: Body) -> tuple[Actor, list[int]]:
         self.robot = Actor([], [])
         self.dof_ids = []
 
@@ -590,12 +589,12 @@ class _ActorBuilder:
 
 
 class _ActiveHingeFinder:
-    _active_hinges: List[ActiveHinge]
+    _active_hinges: list[ActiveHinge]
 
     def __init__(self) -> None:
         self._active_hinges = []
 
-    def find(self, body: Body) -> List[ActiveHinge]:
+    def find(self, body: Body) -> list[ActiveHinge]:
         self._find_recur(body.core)
         return self._active_hinges
 
@@ -608,12 +607,12 @@ class _ActiveHingeFinder:
 
 
 class _BrickFinder:
-    _bricks: List[Brick]
+    _bricks: list[Brick]
 
     def __init__(self) -> None:
         self._bricks = []
 
-    def find(self, body: Body) -> List[Brick]:
+    def find(self, body: Body) -> list[Brick]:
         self._find_recur(body.core)
         return self._bricks
 

@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import Dict, List, Set
 
 import numpy as np
 import numpy.typing as npt
@@ -46,10 +45,10 @@ class CpgNetworkStructure:
     Can generate parameters for a cpg network, such as the initial state.
     """
 
-    cpgs: List[Cpg]
-    connections: Set[CpgPair]
+    cpgs: list[Cpg]
+    connections: set[CpgPair]
 
-    def __init__(self, cpgs: List[Cpg], connections: Set[CpgPair]) -> None:
+    def __init__(self, cpgs: list[Cpg], connections: set[CpgPair]) -> None:
         """
         Initialize this object.
 
@@ -62,7 +61,7 @@ class CpgNetworkStructure:
         self.connections = connections
 
     @staticmethod
-    def make_cpgs(num_cpgs: int) -> List[Cpg]:
+    def make_cpgs(num_cpgs: int) -> list[Cpg]:
         """
         Create a list of cpgs.
 
@@ -73,8 +72,8 @@ class CpgNetworkStructure:
 
     def make_connection_weights_matrix(
         self,
-        internal_connection_weights: Dict[Cpg, float],
-        external_connection_weights: Dict[CpgPair, float],
+        internal_connection_weights: dict[Cpg, float],
+        external_connection_weights: dict[CpgPair, float],
     ) -> npt.NDArray[np.float_]:
         """
         Create a weight matrix from internal and external weights.
@@ -114,7 +113,7 @@ class CpgNetworkStructure:
         return len(self.cpgs) + len(self.connections)
 
     def make_connection_weights_matrix_from_params(
-        self, params: List[float]
+        self, params: list[float]
     ) -> npt.NDArray[np.float_]:
         """
         Create a connection weights matrix from a list if connections.

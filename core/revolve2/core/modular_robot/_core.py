@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 from ._module import Module
 from ._right_angles import RightAngles
 
@@ -12,7 +10,7 @@ class Core(Module):
     BACK = 2
     LEFT = 3
 
-    def __init__(self, rotation: Union[float, RightAngles]):
+    def __init__(self, rotation: float | RightAngles):
         """
         Initialize this object.
 
@@ -25,7 +23,7 @@ class Core(Module):
         super().__init__(4, rotation_converted)
 
     @property
-    def front(self) -> Optional[Module]:
+    def front(self) -> Module | None:
         """
         Get the module attached to the front of the core.
 
@@ -43,7 +41,7 @@ class Core(Module):
         self.children[self.FRONT] = module
 
     @property
-    def right(self) -> Optional[Module]:
+    def right(self) -> Module | None:
         """
         Get the module attached to the right of the core.
 
@@ -61,7 +59,7 @@ class Core(Module):
         self.children[self.RIGHT] = module
 
     @property
-    def back(self) -> Optional[Module]:
+    def back(self) -> Module | None:
         """
         Get the module attached to the back of the core.
 
@@ -79,7 +77,7 @@ class Core(Module):
         self.children[self.BACK] = module
 
     @property
-    def left(self) -> Optional[Module]:
+    def left(self) -> Module | None:
         """
         Get the module attached to the left of the core.
 

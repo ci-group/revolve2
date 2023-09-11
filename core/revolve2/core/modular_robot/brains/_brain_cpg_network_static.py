@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import List
-
 import numpy as np
 import numpy.typing as npt
 from revolve2.actor_controller import ActorController
@@ -76,7 +74,7 @@ class BrainCpgNetworkStatic(Brain):
             dof_ranges,
         )
 
-    def make_controller(self, body: Body, dof_ids: List[int]) -> ActorController:
+    def make_controller(self, body: Body, dof_ids: list[int]) -> ActorController:
         """
         Create a controller from this brain.
 

@@ -1,7 +1,4 @@
 """Standard simulation functions and parameters."""
-
-from typing import List, Optional
-
 from revolve2.core.modular_robot import (
     ModularRobot,
     create_batch_multiple_isolated_robots,
@@ -19,7 +16,7 @@ STANDARD_CONTROL_FREQUENCY = 60
 def create_batch_single_robot_standard(
     robot: ModularRobot,
     terrain: Terrain,
-    simulation_time: Optional[int] = STANDARD_SIMULATION_TIME,
+    simulation_time: int | None = STANDARD_SIMULATION_TIME,
     sampling_frequency: float = STANDARD_SAMPLING_FREQUENCY,
     simulation_timestep: float = STANDARD_SIMULATION_TIMESTEP,
     control_frequency: float = STANDARD_CONTROL_FREQUENCY,
@@ -46,9 +43,9 @@ def create_batch_single_robot_standard(
 
 
 def create_batch_multiple_isolated_robots_standard(
-    robots: List[ModularRobot],
-    terrains: List[Terrain],
-    simulation_time: Optional[int] = STANDARD_SIMULATION_TIME,
+    robots: list[ModularRobot],
+    terrains: list[Terrain],
+    simulation_time: int | None = STANDARD_SIMULATION_TIME,
     sampling_frequency: float = STANDARD_SAMPLING_FREQUENCY,
     simulation_timestep: float = STANDARD_SIMULATION_TIMESTEP,
     control_frequency: float = STANDARD_CONTROL_FREQUENCY,

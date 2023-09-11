@@ -231,7 +231,7 @@ def main() -> None:
     # Set up standard logging.
     setup_logging(file_name="log.txt")
 
-    # Open the database, only if it does not already exists.
+    # Open the database, only if it does not already exist.
     # If it did something when wrong in a previous run of this program,
     # and we must manually figure out what to do with the existing database.
     # (maybe throw away?)

@@ -20,22 +20,28 @@ def create_batch_single_robot_standard(
     robot: ModularRobot,
     terrain: Terrain,
     simulation_time: Optional[int] = STANDARD_SIMULATION_TIME,
+    sampling_frequency: float = STANDARD_SAMPLING_FREQUENCY,
+    simulation_timestep: float = STANDARD_SIMULATION_TIMESTEP,
+    control_frequency: float = STANDARD_CONTROL_FREQUENCY,
 ) -> Batch:
     """
     Create a simulation batch for a single robot from that robot and a terrain using standard parameters.
 
     :param robot: The robot to simulate.
     :param terrain: The terrain to put the robot in.
-    :param simulation_time: How long to simulate for. The default argument is standard, but you can set a different value if you want to.
+    :param simulation_time: See `Batch` class.
+    :param sampling_frequency: See `Batch` class.
+    :param simulation_timestep: See `Batch` class.
+    :param control_frequency: See `Batch` class.
     :returns: The created batch, ready for simulation.
     """
     return create_batch_single_robot(
         robot=robot,
         terrain=terrain,
         simulation_time=simulation_time,
-        sampling_frequency=STANDARD_SAMPLING_FREQUENCY,
-        simulation_timestep=STANDARD_SIMULATION_TIMESTEP,
-        control_frequency=STANDARD_CONTROL_FREQUENCY,
+        sampling_frequency=sampling_frequency,
+        simulation_timestep=simulation_timestep,
+        control_frequency=control_frequency,
     )
 
 

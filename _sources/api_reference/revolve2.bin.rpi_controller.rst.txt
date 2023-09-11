@@ -6,10 +6,7 @@ revolve2.bin.rpi\_controller namespace
 Submodules
 ----------
 
-revolve2.bin.rpi\_controller.revolve2\_rpi\_controller module
--------------------------------------------------------------
+.. toctree::
+   :maxdepth: 1
 
-.. automodule:: revolve2.bin.rpi_controller.revolve2_rpi_controller
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   revolve2_rpi_controller <revolve2.bin.rpi_controller.revolve2_rpi_controller>

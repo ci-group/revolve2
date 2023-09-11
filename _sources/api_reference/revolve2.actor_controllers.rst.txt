@@ -1,7 +1,10 @@
-revolve2.actor\_controllers namespace
-=====================================
+revolve2.actor\_controllers package
+===================================
 
-.. py:module:: revolve2.actor_controllers
+.. automodule:: revolve2.actor_controllers
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 Subpackages
 -----------

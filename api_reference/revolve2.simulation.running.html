@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>revolve2.simulation.running package &mdash; revolve2 v0.3.10-beta1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="revolve2.simulation.running.geometry module" href="revolve2.simulation.running.geometry.html" />
+    <link rel="prev" title="revolve2.simulation.actor.urdf package" href="revolve2.simulation.actor.urdf.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            revolve2
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="revolve2.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controller.html">actor_controller</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controllers.html">actor_controllers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.actor_controllers.cpg.html">cpg</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.bin.html">bin</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.rpi_controller.html">rpi_controller</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.bin.rpi_controller.revolve2_rpi_controller.html">revolve2_rpi_controller</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.ci_group.html">ci_group</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.fitness_functions.html">fitness_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.logging.html">logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.modular_robots.html">modular_robots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.rng.html">rng</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.simulation.html">simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.terrains.html">terrains</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.experimentation.html">experimentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.experimentation.database.html">database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.experimentation.genotypes.html">genotypes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.experimentation.genotypes.cppnwin.html">cppnwin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.experimentation.optimization.html">optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.experimentation.optimization.ea.html">ea</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.modular_robot.html">modular_robot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.modular_robot.brains.html">brains</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.rpi_controller_remote.html">rpi_controller_remote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="revolve2.simulation.html">simulation</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="revolve2.simulation.actor.html">actor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.actor.sdf.html">sdf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.actor.urdf.html">urdf</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">running</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.running.geometry.html">geometry</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.simulators.html">simulators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.simulators.mujoco.html">mujoco</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">revolve2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="revolve2.html">revolve2 namespace</a></li>
+          <li class="breadcrumb-item"><a href="revolve2.simulation.html">revolve2.simulation package</a></li>
+      <li class="breadcrumb-item active">revolve2.simulation.running package</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-revolve2.simulation.running">
+<span id="revolve2-simulation-running-package"></span><h1>revolve2.simulation.running package<a class="headerlink" href="#module-revolve2.simulation.running" title="Permalink to this heading"></a></h1>
+<p>Structures and interfaces for physics simulation running.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.ActorControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActorControl</span></span><a class="headerlink" href="#revolve2.simulation.running.ActorControl" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Interface for controlling degrees of freedom of actors in a simulation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.simulation.running.ActorControl.set_dof_targets">
+<span class="sig-name descname"><span class="pre">set_dof_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.simulation.running.ActorControl.set_dof_targets" title="Permalink to this definition"></a></dt>
+<dd><p>Set the degrees of freedom of an actor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>actor</strong> – The actor to control.</p></li>
+<li><p><strong>targets</strong> – The targets to set.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.ActorState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActorState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Quaternion</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.running.ActorState" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>State of an actor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.ActorState.orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Quaternion</span></em><a class="headerlink" href="#revolve2.simulation.running.ActorState.orientation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.ActorState.position">
+<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Vector3</span></em><a class="headerlink" href="#revolve2.simulation.running.ActorState.position" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Batch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">simulation_timestep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">control_frequency</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.running.Batch" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A set of environments and shared parameters for simulation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Batch.control_frequency">
+<span class="sig-name descname"><span class="pre">control_frequency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.simulation.running.Batch.control_frequency" title="Permalink to this definition"></a></dt>
+<dd><p>Similar to <cite>sampling_frequency</cite> but for how often the control function is called.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Batch.environments">
+<span class="sig-name descname"><span class="pre">environments</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.running.Environment" title="revolve2.simulation.running._environment.Environment"><span class="pre">Environment</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.running.Batch.environments" title="Permalink to this definition"></a></dt>
+<dd><p>The environments to simulate.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Batch.sampling_frequency">
+<span class="sig-name descname"><span class="pre">sampling_frequency</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.simulation.running.Batch.sampling_frequency" title="Permalink to this definition"></a></dt>
+<dd><p>Hz. Frequency for state sampling during the simulation.
+The simulator will attempt to follow this as closely as possible,
+but is dependent on the actual step frequency of the simulator.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Batch.simulation_time">
+<span class="sig-name descname"><span class="pre">simulation_time</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#revolve2.simulation.running.Batch.simulation_time" title="Permalink to this definition"></a></dt>
+<dd><p>The duration for which each robot should be simulated.
+If set to ‘None’, the simulation will run indefinitely.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Batch.simulation_timestep">
+<span class="sig-name descname"><span class="pre">simulation_timestep</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.simulation.running.Batch.simulation_timestep" title="Permalink to this definition"></a></dt>
+<dd><p>Simulation time step in seconds. This is an important parameter that affects the trade-off between speed and accuracy,
+as well as the stability of the robot model.
+Smaller values of this parameter generally result in better accuracy and stability.
+However, the specific value of this parameter may vary depending on the environments being simulated and other batch parameters.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.BatchResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BatchResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environment_results</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.running.EnvironmentResults" title="revolve2.simulation.running._results.EnvironmentResults"><span class="pre">EnvironmentResults</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.running.BatchResults" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Result of running a batch.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.BatchResults.environment_results">
+<span class="sig-name descname"><span class="pre">environment_results</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.running.EnvironmentResults" title="revolve2.simulation.running._results.EnvironmentResults"><span class="pre">EnvironmentResults</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.running.BatchResults.environment_results" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Environment">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Environment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">controller</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.simulation.running.EnvironmentController" title="revolve2.simulation.running._environment_controller.EnvironmentController"><span class="pre">EnvironmentController</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.running.Environment" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A list of posed actors.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Environment.actors">
+<span class="sig-name descname"><span class="pre">actors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.running.PosedActor" title="revolve2.simulation.running._posed_actor.PosedActor"><span class="pre">PosedActor</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.running.Environment.actors" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Environment.controller">
+<span class="sig-name descname"><span class="pre">controller</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.simulation.running.EnvironmentController" title="revolve2.simulation.running._environment_controller.EnvironmentController"><span class="pre">EnvironmentController</span></a></em><a class="headerlink" href="#revolve2.simulation.running.Environment.controller" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Environment.static_geometries">
+<span class="sig-name descname"><span class="pre">static_geometries</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="revolve2.simulation.running.geometry.html#revolve2.simulation.running.geometry.Geometry" title="revolve2.simulation.running.geometry.Geometry"><span class="pre">Geometry</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.running.Environment.static_geometries" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.EnvironmentController">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentController</span></span><a class="headerlink" href="#revolve2.simulation.running.EnvironmentController" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Interface for control in physics running.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.simulation.running.EnvironmentController.control">
+<span class="sig-name descname"><span class="pre">control</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actor_control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.simulation.running.ActorControl" title="revolve2.simulation.running._actor_control.ActorControl"><span class="pre">ActorControl</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.simulation.running.EnvironmentController.control" title="Permalink to this definition"></a></dt>
+<dd><p>Control the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dt</strong> – Time since last call to this function.</p></li>
+<li><p><strong>actor_control</strong> – Object used to interface with the environment.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.EnvironmentResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentResults</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">environment_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.running.EnvironmentState" title="revolve2.simulation.running._results.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.running.EnvironmentResults" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Result of running an environment.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.EnvironmentResults.environment_states">
+<span class="sig-name descname"><span class="pre">environment_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.running.EnvironmentState" title="revolve2.simulation.running._results.EnvironmentState"><span class="pre">EnvironmentState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.running.EnvironmentResults.environment_states" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.EnvironmentState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">actor_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.running.ActorState" title="revolve2.simulation.running._results.ActorState"><span class="pre">ActorState</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.running.EnvironmentState" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>State of an environment.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.EnvironmentState.actor_states">
+<span class="sig-name descname"><span class="pre">actor_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.running.ActorState" title="revolve2.simulation.running._results.ActorState"><span class="pre">ActorState</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.running.EnvironmentState.actor_states" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.EnvironmentState.time_seconds">
+<span class="sig-name descname"><span class="pre">time_seconds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.simulation.running.EnvironmentState.time_seconds" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.PosedActor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PosedActor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.simulation.actor.html#revolve2.simulation.actor.Actor" title="revolve2.simulation.actor._actor.Actor"><span class="pre">Actor</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.running.PosedActor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An actor with a position, orientation, and degree of freedom state.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.PosedActor.actor">
+<span class="sig-name descname"><span class="pre">actor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="revolve2.simulation.actor.html#revolve2.simulation.actor.Actor" title="revolve2.simulation.actor._actor.Actor"><span class="pre">Actor</span></a></em><a class="headerlink" href="#revolve2.simulation.running.PosedActor.actor" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.PosedActor.dof_states">
+<span class="sig-name descname"><span class="pre">dof_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.running.PosedActor.dof_states" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.PosedActor.orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Quaternion</span></em><a class="headerlink" href="#revolve2.simulation.running.PosedActor.orientation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.PosedActor.position">
+<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Vector3</span></em><a class="headerlink" href="#revolve2.simulation.running.PosedActor.position" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.RecordSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RecordSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video_directory</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">24</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.running.RecordSettings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Settings for recording physics running.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.RecordSettings.fps">
+<span class="sig-name descname"><span class="pre">fps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#revolve2.simulation.running.RecordSettings.fps" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.running.RecordSettings.video_directory">
+<span class="sig-name descname"><span class="pre">video_directory</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.simulation.running.RecordSettings.video_directory" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Runner">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Runner</span></span><a class="headerlink" href="#revolve2.simulation.running.Runner" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Interface class for physics runners.</p>
+<p>Running happens either in simulation or reality, depending on the implementation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.simulation.running.Runner.run_batch">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">run_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.simulation.running.Batch" title="revolve2.simulation.running._batch.Batch"><span class="pre">Batch</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.simulation.running.RecordSettings" title="revolve2.simulation.running._record_settings.RecordSettings"><span class="pre">RecordSettings</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.simulation.running.BatchResults" title="revolve2.simulation.running._results.BatchResults"><span class="pre">BatchResults</span></a></span></span><a class="headerlink" href="#revolve2.simulation.running.Runner.run_batch" title="Permalink to this definition"></a></dt>
+<dd><p>Run the provided batch by simulating each contained environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>batch</strong> – The batch to run.</p></li>
+<li><p><strong>record_settings</strong> – Optional settings for recording the runnings. If None, no recording is made.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of simulation states in ascending order of time.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="revolve2.simulation.running.geometry.html">geometry</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Computational Intelligence Group, Vrije Universiteit Amsterdam &amp; Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

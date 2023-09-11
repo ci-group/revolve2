@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>revolve2.actor_controllers.cpg package &mdash; revolve2 v0.3.10-beta1 documentation</title>
@@ -13,15 +13,13 @@
   <![endif]-->
   
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="revolve2.bin namespace" href="revolve2.bin.html" />
-    <link rel="prev" title="revolve2.actor_controllers namespace" href="revolve2.actor_controllers.html" /> 
+    <link rel="prev" title="revolve2.actor_controllers package" href="revolve2.actor_controllers.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -29,12 +27,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> revolve2
-            <img src="../_static/logo.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            revolve2
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -42,7 +44,6 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/isaacgym.html">Isaac Gym physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
@@ -56,57 +57,61 @@
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/simple_optimization.html">A simple optimization process with a database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/simulate_robot_isaac.html">Creating a modular robot and simulating and visualizing it in the Isaac Gym environment</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tutorials/optimize_locomotion.html">Optimizing a modular robot for locomotion using CPPNWIN and Isaac Gym</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="revolve2.html">API Reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="revolve2.core.html">core</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.core.database.html">database</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.database.serializers.html">serializers</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.core.modular_robot.html">modular_robot</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.modular_robot.brains.html">brains</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.core.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.optimization.ea.html">ea</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.core.physics.html">physics</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.actor.html">actor</a></li>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.core.physics.running.html">running</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.core.rpi_controller_remote.html">rpi_controller_remote</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.genotypes.html">genotypes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.genotypes.cppnwin.html">cppnwin</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.genotypes.cppnwin.modular_robot.html">modular_robot</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="revolve2.runners.html">runners</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.runners.isaacgym.html">isaacgym</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.actor_controller.html">actor_controller</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="revolve2.actor_controllers.html">actor_controllers</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">cpg</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.bin.html">bin</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.core.html">core</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.bin.core.optimization.html">optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.rpi_controller.html">rpi_controller</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.bin.rpi_controller.revolve2_rpi_controller.html">revolve2_rpi_controller</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="revolve2.bin.rpi_controller.html">rpi_controller</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.ci_group.html">ci_group</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.fitness_functions.html">fitness_functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.logging.html">logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.modular_robots.html">modular_robots</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.rng.html">rng</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.simulation.html">simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.ci_group.terrains.html">terrains</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.experimentation.html">experimentation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.experimentation.database.html">database</a></li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.experimentation.genotypes.html">genotypes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.experimentation.genotypes.cppnwin.html">cppnwin</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.experimentation.optimization.html">optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.experimentation.optimization.ea.html">ea</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.modular_robot.html">modular_robot</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.modular_robot.brains.html">brains</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.rpi_controller_remote.html">rpi_controller_remote</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.simulation.html">simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.simulation.actor.html">actor</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.actor.sdf.html">sdf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.actor.urdf.html">urdf</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.simulation.running.html">running</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.running.geometry.html">geometry</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="revolve2.simulators.html">simulators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="revolve2.simulators.mujoco.html">mujoco</a></li>
 </ul>
 </li>
 </ul>
@@ -127,10 +132,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="revolve2.html">revolve2 namespace</a> &raquo;</li>
-          <li><a href="revolve2.actor_controllers.html">revolve2.actor_controllers namespace</a> &raquo;</li>
-      <li>revolve2.actor_controllers.cpg package</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="revolve2.html">revolve2 namespace</a></li>
+          <li class="breadcrumb-item"><a href="revolve2.actor_controllers.html">revolve2.actor_controllers package</a></li>
+      <li class="breadcrumb-item active">revolve2.actor_controllers.cpg package</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -139,10 +144,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="revolve2-actor-controllers-cpg-package">
-<h1>revolve2.actor_controllers.cpg package<a class="headerlink" href="#revolve2-actor-controllers-cpg-package" title="Permalink to this heading"></a></h1>
-<section id="module-revolve2.actor_controllers.cpg">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-revolve2.actor_controllers.cpg" title="Permalink to this heading"></a></h2>
+  <section id="module-revolve2.actor_controllers.cpg">
+<span id="revolve2-actor-controllers-cpg-package"></span><h1>revolve2.actor_controllers.cpg package<a class="headerlink" href="#module-revolve2.actor_controllers.cpg" title="Permalink to this heading"></a></h1>
 <p>Actor controller implementations.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.Cpg">
@@ -169,13 +172,13 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">StaticData</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#revolve2.actor_controllers.cpg.CpgActorController" title="revolve2.actor_controllers.cpg._cpg.CpgActorController"><span class="pre">CpgActorController</span></a></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgActorController.deserialize" title="Permalink to this definition"></a></dt>
 <dd><p>Deserialize an instance of this class from <cite>StaticData</cite>.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – The data to deserialize from.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The deserialized instance.</p>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="revolve2.serialization.html#revolve2.serialization.SerializeError" title="revolve2.serialization.SerializeError"><strong>SerializeError</strong></a> – If this object cannot be deserialized from the given data.</p>
 </dd>
 </dl>
@@ -183,11 +186,11 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.CpgActorController.get_dof_targets">
-<span class="sig-name descname"><span class="pre">get_dof_targets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgActorController.get_dof_targets" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_dof_targets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgActorController.get_dof_targets" title="Permalink to this definition"></a></dt>
 <dd><p>Get the degree of freedom targets from the controller.</p>
 <p>This will be the first <cite>num_output_neurons</cite> states from the state array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The dof targets.</p>
 </dd>
 </dl>
@@ -198,7 +201,7 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 <span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">StaticData</span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgActorController.serialize" title="Permalink to this definition"></a></dt>
 <dd><p>Serialize this object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The serialized object.</p>
 </dd>
 </dl>
@@ -209,7 +212,7 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 <span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgActorController.step" title="Permalink to this definition"></a></dt>
 <dd><p>Step the controller dt seconds forward.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>dt</strong> – The number of seconds to step forward.</p>
 </dd>
 </dl>
@@ -219,32 +222,32 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.CpgNetworkStructure">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CpgNetworkStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.CpgPair" title="revolve2.actor_controllers.cpg._cpg_network_structure.CpgPair"><span class="pre">CpgPair</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CpgNetworkStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.CpgPair" title="revolve2.actor_controllers.cpg._cpg_network_structure.CpgPair"><span class="pre">CpgPair</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Describes the structure of a cpg network.</p>
 <p>Can generate parameters for a cpg network, such as the initial state.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.CpgNetworkStructure.connections">
-<span class="sig-name descname"><span class="pre">connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.CpgPair" title="revolve2.actor_controllers.cpg._cpg_network_structure.CpgPair"><span class="pre">CpgPair</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.connections" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.CpgPair" title="revolve2.actor_controllers.cpg._cpg_network_structure.CpgPair"><span class="pre">CpgPair</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.connections" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.CpgNetworkStructure.cpgs">
-<span class="sig-name descname"><span class="pre">cpgs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.cpgs" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">cpgs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.cpgs" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.CpgNetworkStructure.make_connection_weights_matrix">
-<span class="sig-name descname"><span class="pre">make_connection_weights_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">internal_connection_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_connection_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.CpgPair" title="revolve2.actor_controllers.cpg._cpg_network_structure.CpgPair"><span class="pre">CpgPair</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_connection_weights_matrix" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_connection_weights_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">internal_connection_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">external_connection_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.CpgPair" title="revolve2.actor_controllers.cpg._cpg_network_structure.CpgPair"><span class="pre">CpgPair</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_connection_weights_matrix" title="Permalink to this definition"></a></dt>
 <dd><p>Create a weight matrix from internal and external weights.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>internal_connection_weights</strong> – The internal weights.</p></li>
 <li><p><strong>external_connection_weights</strong> – The external weights.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The created matrix.</p>
 </dd>
 </dl>
@@ -252,13 +255,13 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.CpgNetworkStructure.make_connection_weights_matrix_from_params">
-<span class="sig-name descname"><span class="pre">make_connection_weights_matrix_from_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_connection_weights_matrix_from_params" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">make_connection_weights_matrix_from_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_connection_weights_matrix_from_params" title="Permalink to this definition"></a></dt>
 <dd><p>Create a connection weights matrix from a list if connections.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>params</strong> – The connections to create the matrix from.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The created matrix.</p>
 </dd>
 </dl>
@@ -266,13 +269,13 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 
 <dl class="py method">
 <dt class="sig sig-object py" id="revolve2.actor_controllers.cpg.CpgNetworkStructure.make_cpgs">
-<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_cpgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_cpgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_cpgs" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_cpgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_cpgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.actor_controllers.cpg.Cpg" title="revolve2.actor_controllers.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.make_cpgs" title="Permalink to this definition"></a></dt>
 <dd><p>Create a list of cpgs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>num_cpgs</strong> – The number of cpgs to create.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The created list of cpgs.</p>
 </dd>
 </dl>
@@ -284,10 +287,10 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 <dd><p>Make an array with the degree of freedom range of all cpg outputs by repeating the same value.</p>
 <p>Will match the required number of cpgs in this structure.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>value</strong> – The value to use for the whole array.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The array of dof ranges.</p>
 </dd>
 </dl>
@@ -299,10 +302,10 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 <dd><p>Make a state array by repeating the same value.</p>
 <p>Will match the required number of states in this structure.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>value</strong> – The value to use for all states</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The array of states.</p>
 </dd>
 </dl>
@@ -313,7 +316,7 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_connections" title="Permalink to this definition"></a></dt>
 <dd><p>Get the number of connections in the structure.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of connections.</p>
 </dd>
 </dl>
@@ -324,7 +327,7 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_cpgs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#revolve2.actor_controllers.cpg.CpgNetworkStructure.num_cpgs" title="Permalink to this definition"></a></dt>
 <dd><p>Get the number of cpgs in the structure.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of cpgs.</p>
 </dd>
 </dl>
@@ -336,7 +339,7 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 <dd><p>Get the number of states in a cpg network of this structure.</p>
 <p>This would be twice the number of cpgs.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of states.</p>
 </dd>
 </dl>
@@ -361,7 +364,6 @@ The first <cite>num_output_neurons</cite> are the degree of freedom outputs of t
 
 </dd></dl>
 
-</section>
 </section>
 
 

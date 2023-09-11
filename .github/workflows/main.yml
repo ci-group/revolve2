@@ -15,22 +15,26 @@ jobs:
           pip install virtualenv
           virtualenv .venv
           . .venv/bin/activate
+      # Do this in reverse order of the things depending on each other.
+      # Probably gives us the best failure insights.
       - name: install serialization
         run: pip install ./serialization
       - name: install actor_controller
         run: pip install ./actor_controller
+      - name: install simulation
+        run: pip install ./simulation
+      - name: install modular_robot
+        run: pip install ./modular_robot
       - name: install rpi_controller
         run: pip install ./rpi_controller
-      - name: install core
-        run: pip install ./core
-      - name: install standard_resources
-        run: pip install ./standard_resources
-      - name: install runner mujoco
-        run: pip install ./runners/mujoco
-      - name: install genotype CPPNWIN
-        run: |
-          sudo apt install libcereal-dev
-          pip install ./genotypes/cppnwin
+      - name: install rpi_controller_remote
+        run: pip install ./rpi_controller_remote
+      - name: install experimentation
+        run: pip install ./experimentation
+      - name: install simulators/mujoco
+        run: pip install ./simulators/mujoco
+      - name: install ci_group
+        run: pip install ./ci_group
       - name: install examples requirements
         run: |
           pip install -r examples/robot_bodybrain_ea_database/requirements.txt
@@ -75,18 +79,20 @@ jobs:
         run: pip install ./serialization[dev]
       - name: install actor_controller
         run: pip install ./actor_controller[dev]
+      - name: install simulation
+        run: pip install ./simulation[dev]
+      - name: install modular_robot
+        run: pip install ./modular_robot[dev]
       - name: install rpi_controller
         run: pip install ./rpi_controller[dev]
-      - name: install core
-        run: pip install ./core[dev]
-      - name: install standard_resources
-        run: pip install ./standard_resources[dev]
-      - name: install runner mujoco
-        run: pip install ./runners/mujoco[dev]
-      - name: install genotype CPPNWIN
-        run: |
-          sudo apt install libcereal-dev
-          pip install ./genotypes/cppnwin[dev]
+      - name: install rpi_controller_remote
+        run: pip install ./rpi_controller_remote[dev]
+      - name: install experimentation
+        run: pip install ./experimentation[dev]
+      - name: install simulators/mujoco
+        run: pip install ./simulators/mujoco[dev]
+      - name: install ci_group
+        run: pip install ./ci_group[dev]
       - name: install examples requirements
         run: |
           pip install -r examples/robot_bodybrain_ea_database/requirements.txt
@@ -95,7 +101,7 @@ jobs:
       - name: install requirements for mypy
         run: pip install -r ./codetools/mypy/requirements.txt
       - name: run mypy
-        run: ./codetools/mypy/check_opensource.sh
+        run: ./codetools/mypy/check.sh
 
   docs:
     runs-on: ubuntu-20.04
@@ -110,21 +116,23 @@ jobs:
           virtualenv .venv
           . .venv/bin/activate
       - name: install serialization
-        run: pip install ./serialization[dev]
+        run: pip install ./serialization
       - name: install actor_controller
-        run: pip install ./actor_controller[dev]
+        run: pip install ./actor_controller
+      - name: install simulation
+        run: pip install ./simulation
+      - name: install modular_robot
+        run: pip install ./modular_robot
       - name: install rpi_controller
-        run: pip install ./rpi_controller[dev]
-      - name: install core
-        run: pip install ./core[dev]
-      - name: install standard_resources
-        run: pip install ./standard_resources[dev]
-      - name: install runner mujoco
-        run: pip install ./runners/mujoco[dev]
-      - name: install genotype CPPNWIN
-        run: |
-          sudo apt install libcereal-dev
-          pip install ./genotypes/cppnwin[dev]
+        run: pip install ./rpi_controller
+      - name: install rpi_controller_remote
+        run: pip install ./rpi_controller_remote
+      - name: install experimentation
+        run: pip install ./experimentation
+      - name: install simulators/mujoco
+        run: pip install ./simulators/mujoco
+      - name: install ci_group
+        run: pip install ./ci_group
       - name: install requirements for sphinx
         run: pip install -r ./docs/requirements.txt
       - name: sphinx

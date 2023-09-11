@@ -7,7 +7,7 @@ cd "$(dirname "$0")"
 echo "--------------"
 echo "mypy"
 echo "--------------"
-./mypy/check_all.sh
+./mypy/check.sh
 
 echo "--------------"
 echo "pyflakes"

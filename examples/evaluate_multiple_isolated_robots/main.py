@@ -10,19 +10,17 @@ You learn:
 
 import asyncio
 
-from revolve2.core.modular_robot import (
+from revolve2.ci_group import fitness_functions, modular_robots
+from revolve2.ci_group import terrains as standard_terrains
+from revolve2.ci_group.logging import setup_logging
+from revolve2.ci_group.rng import make_rng
+from revolve2.ci_group.simulation import create_batch_multiple_isolated_robots_standard
+from revolve2.modular_robot import (
     ModularRobot,
     get_body_states_multiple_isolated_robots,
 )
-from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighborRandom
-from revolve2.runners.mujoco import LocalRunner
-from revolve2.standard_resources import fitness_functions, modular_robots
-from revolve2.standard_resources import terrains as standard_terrains
-from revolve2.standard_resources.logging import setup_logging
-from revolve2.standard_resources.rng import make_rng
-from revolve2.standard_resources.simulation import (
-    create_batch_multiple_isolated_robots_standard,
-)
+from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
+from revolve2.simulators.mujoco import LocalRunner
 
 
 def main() -> None:

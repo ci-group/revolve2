@@ -18,6 +18,7 @@ from revolve2.core.modular_robot import (
 from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighborRandom
 from revolve2.runners.mujoco import LocalRunner
 from revolve2.standard_resources import terrains
+from revolve2.standard_resources.logging import setup_logging
 from revolve2.standard_resources.rng import make_rng
 from revolve2.standard_resources.simulation import create_batch_single_robot_standard
 
@@ -28,6 +29,9 @@ def make_body() -> Body:
 
     :returns: The created body.
     """
+    # Set up standard logging.
+    setup_logging()
+
     # A modular robot body follows a 'tree' structure.
     # The 'Body' class automatically creates a center 'core'.
     # From here, other modular can be attached.

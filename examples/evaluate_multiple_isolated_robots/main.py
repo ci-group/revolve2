@@ -18,6 +18,7 @@ from revolve2.core.modular_robot.brains import BrainCpgNetworkNeighborRandom
 from revolve2.runners.mujoco import LocalRunner
 from revolve2.standard_resources import fitness_functions, modular_robots
 from revolve2.standard_resources import terrains as standard_terrains
+from revolve2.standard_resources.logging import setup_logging
 from revolve2.standard_resources.rng import make_rng
 from revolve2.standard_resources.simulation import (
     create_batch_multiple_isolated_robots_standard,
@@ -26,6 +27,9 @@ from revolve2.standard_resources.simulation import (
 
 def main() -> None:
     """Run the simulation."""
+    # Set up standard logging.
+    setup_logging()
+
     # Set up a random number generater.
     RNG_SEED = 5
     rng = make_rng(RNG_SEED)

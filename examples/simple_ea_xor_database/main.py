@@ -4,7 +4,7 @@ This example adds a database to the 'simple_ea_xor' example.
 Naturally, look at that example first.
 
 You learn:
-- How save intermediate an final results to a database using the SQLAlchemy ORM.
+- How to save intermediate and final results to a database using the SQLAlchemy ORM.
 
 Beforehand you should have:
 - A basic understanding of relational databases.

@@ -1,5 +1,3 @@
-from typing import Optional
-
 from revolve2.core.physics import Terrain, create_environment_single_actor
 from revolve2.core.physics.running import Batch
 
@@ -9,7 +7,7 @@ from ._modular_robot import ModularRobot
 def create_batch_single_robot(
     robot: ModularRobot,
     terrain: Terrain,
-    simulation_time: Optional[int],
+    simulation_time: int | None,
     sampling_frequency: float,
     simulation_timestep: float,
     control_frequency: float,

@@ -5,7 +5,7 @@ import datetime
 import json
 import logging
 from contextlib import asynccontextmanager
-from typing import AsyncIterator, Tuple
+from typing import AsyncIterator
 
 import asyncssh.connection
 from revolve2.serialization import StaticData
@@ -46,7 +46,7 @@ class RpiControllerRemote:
 
     async def run_controller(
         self, config: StaticData, run_time: int
-    ) -> Tuple[datetime.datetime, StaticData]:
+    ) -> tuple[datetime.datetime, StaticData]:
         """
         Run the rpi controller on the controller machine.
 

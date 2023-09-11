@@ -1,6 +1,6 @@
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
-from typing import Tuple, cast
+from typing import cast
 
 from pyrr import Quaternion, Vector3
 
@@ -97,7 +97,7 @@ def to_sdf(
     ).toprettyxml(indent="    ")
 
 
-def _quaternion_to_euler(quaternion: Quaternion) -> Tuple[float, float, float]:
+def _quaternion_to_euler(quaternion: Quaternion) -> tuple[float, float, float]:
     import warnings
 
     from scipy.spatial.transform import Rotation
@@ -126,7 +126,7 @@ def _make_visual(
     name: str,
     position: Vector3,
     orientation: Quaternion,
-    color: Tuple[float, float, float],
+    color: tuple[float, float, float],
     model: str,
 ) -> xml.Element:
     visual = xml.Element("visual", {"name": name})

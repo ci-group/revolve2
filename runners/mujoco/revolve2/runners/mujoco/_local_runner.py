@@ -2,7 +2,6 @@ import concurrent.futures
 import math
 import os
 import tempfile
-from typing import List, Optional
 
 import cv2
 import mujoco
@@ -82,11 +81,11 @@ class LocalRunner(Runner):
         env_index: int,
         env_descr: Environment,
         headless: bool,
-        record_settings: Optional[RecordSettings],
+        record_settings: RecordSettings | None,
         start_paused: bool,
         control_step: float,
         sample_step: float,
-        simulation_time: Optional[int],
+        simulation_time: int | None,
         simulation_timestep: float,
     ) -> EnvironmentResults:
         logging.info(f"Environment {env_index}")
@@ -205,7 +204,7 @@ class LocalRunner(Runner):
         return results
 
     async def run_batch(
-        self, batch: Batch, record_settings: Optional[RecordSettings] = None
+        self, batch: Batch, record_settings: RecordSettings | None = None
     ) -> BatchResults:
         """
         Run the provided batch by simulating each contained environment.
@@ -259,7 +258,7 @@ class LocalRunner(Runner):
 
         env_mjcf.option.gravity = [0, 0, -9.81]
 
-        heightmaps: List[geometry.Heightmap] = []
+        heightmaps: list[geometry.Heightmap] = []
         for geo in env_descr.static_geometries:
             if isinstance(geo, geometry.Plane):
                 env_mjcf.worldbody.add(
@@ -403,7 +402,7 @@ class LocalRunner(Runner):
     @classmethod
     def _get_actor_states(
         cls, env_descr: Environment, data: mujoco.MjData, model: mujoco.MjModel
-    ) -> List[ActorState]:
+    ) -> list[ActorState]:
         return [
             cls._get_actor_state(i, data, model) for i in range(len(env_descr.actors))
         ]
@@ -428,7 +427,7 @@ class LocalRunner(Runner):
         return ActorState(position, orientation)
 
     @staticmethod
-    def _set_dof_targets(data: mujoco.MjData, targets: List[float]) -> None:
+    def _set_dof_targets(data: mujoco.MjData, targets: list[float]) -> None:
         if len(targets) * 2 != len(data.ctrl):
             raise RuntimeError("Need to set a target for every dof")
         for i, target in enumerate(targets):

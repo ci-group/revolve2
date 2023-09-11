@@ -1,12 +1,9 @@
 """Standard modular robots."""
-
-from typing import List
-
 import numpy as np
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick
 
 
-def all() -> List[Body]:
+def all() -> list[Body]:
     """
     Get a list of all standard module robots.
 

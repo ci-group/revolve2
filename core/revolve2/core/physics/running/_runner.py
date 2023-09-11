@@ -1,7 +1,6 @@
 """Runner class."""
 
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from ._batch import Batch
 from ._record_settings import RecordSettings
@@ -17,7 +16,7 @@ class Runner(ABC):
 
     @abstractmethod
     async def run_batch(
-        self, batch: Batch, record_settings: Optional[RecordSettings] = None
+        self, batch: Batch, record_settings: RecordSettings | None = None
     ) -> BatchResults:
         """
         Run the provided batch by simulating each contained environment.

@@ -1,13 +1,4 @@
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    ClassVar,
-    Dict,
-    ForwardRef,
-    Generic,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Any, ClassVar, ForwardRef, Generic, Type, TypeVar
 
 import sqlalchemy
 import sqlalchemy.orm as orm
@@ -69,7 +60,7 @@ class Generation(HasId, orm.MappedAsDataclass, Generic[TPopulation]):
 
     __type_tpopulation: ClassVar[Type[TPopulation]]  # type: ignore[misc]
 
-    def __init_subclass__(cls: Type[Self], /, **kwargs: Dict[str, Any]) -> None:
+    def __init_subclass__(cls: Type[Self], /, **kwargs: dict[str, Any]) -> None:
         """
         Initialize a version of this class when it is subclassed.
 

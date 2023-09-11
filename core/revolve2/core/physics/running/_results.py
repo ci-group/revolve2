@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List
 
 from pyrr import Quaternion, Vector3
 
@@ -19,18 +18,18 @@ class EnvironmentState:
     """State of an environment."""
 
     time_seconds: float
-    actor_states: List[ActorState]
+    actor_states: list[ActorState]
 
 
 @dataclass
 class EnvironmentResults:
     """Result of running an environment."""
 
-    environment_states: List[EnvironmentState]
+    environment_states: list[EnvironmentState]
 
 
 @dataclass
 class BatchResults:
     """Result of running a batch."""
 
-    environment_results: List[EnvironmentResults]
+    environment_results: list[EnvironmentResults]

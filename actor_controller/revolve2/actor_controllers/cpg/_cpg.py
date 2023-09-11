@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import List
-
 import numpy as np
 import numpy.typing as npt
 from revolve2.actor_controller import ActorController
@@ -65,7 +63,7 @@ class CpgActorController(ActorController):
         A4: npt.NDArray[np.float_] = np.matmul(A, (state + dt * A3))
         return state + dt / 6 * (A1 + 2 * (A2 + A3) + A4)
 
-    def get_dof_targets(self) -> List[float]:
+    def get_dof_targets(self) -> list[float]:
         """
         Get the degree of freedom targets from the controller.
 

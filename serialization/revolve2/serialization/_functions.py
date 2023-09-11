@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from typing import Type, TypeVar, Union
+from typing import Type, TypeVar
 
 from ._serializable import Serializable
 from ._serialize_error import SerializeError
 from ._static_data import StaticData, is_static_data
 
 
-def serialize(to_serialize: Union[Serializable, StaticData]) -> StaticData:
+def serialize(to_serialize: Serializable | StaticData) -> StaticData:
     """
     Deserialize the provided object.
 

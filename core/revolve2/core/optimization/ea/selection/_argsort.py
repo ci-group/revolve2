@@ -1,11 +1,11 @@
-from typing import List, Sequence, TypeVar
+from typing import Sequence, TypeVar
 
 from ._supports_lt import SupportsLt
 
 Item = TypeVar("Item", bound="SupportsLt")
 
 
-def argsort(seq: Sequence[Item]) -> List[int]:
+def argsort(seq: Sequence[Item]) -> list[int]:
     """
     Get the indices of the sequence sorted by value.
 

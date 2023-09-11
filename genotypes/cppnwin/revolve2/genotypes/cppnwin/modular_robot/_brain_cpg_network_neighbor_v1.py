@@ -1,4 +1,4 @@
-from typing import List, Tuple, cast
+from typing import cast
 
 import multineat
 from revolve2.core.modular_robot import ActiveHinge, Body
@@ -28,10 +28,10 @@ class BrainCpgNetworkNeighborV1(ModularRobotBrainCpgNetworkNeighbor):
 
     def _make_weights(
         self,
-        active_hinges: List[ActiveHinge],
-        connections: List[Tuple[ActiveHinge, ActiveHinge]],
+        active_hinges: list[ActiveHinge],
+        connections: list[tuple[ActiveHinge, ActiveHinge]],
         body: Body,
-    ) -> Tuple[List[float], List[float]]:
+    ) -> tuple[list[float], list[float]]:
         brain_net = multineat.NeuralNetwork()
         self._genotype.BuildPhenotype(brain_net)
 
@@ -76,7 +76,7 @@ class BrainCpgNetworkNeighborV1(ModularRobotBrainCpgNetworkNeighbor):
 
     @staticmethod
     def _evaluate_network(
-        network: multineat.NeuralNetwork, inputs: List[float]
+        network: multineat.NeuralNetwork, inputs: list[float]
     ) -> float:
         network.Input(inputs)
         network.ActivateAllLayers()

@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from revolve2.core.physics.running import EnvironmentResults
 
 from ._body import Body
@@ -8,7 +6,7 @@ from ._body_state import BodyState
 
 def get_body_states_single_robot(
     body: Body, environment_results: EnvironmentResults
-) -> Tuple[BodyState, BodyState]:
+) -> tuple[BodyState, BodyState]:
     """
     Get the first and last body state of a robot from a simulation simulating only a single robot.
 

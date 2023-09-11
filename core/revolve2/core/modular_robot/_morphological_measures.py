@@ -1,5 +1,3 @@
-from typing import List, Optional, Tuple
-
 import numpy as np
 
 from ._active_hinge import ActiveHinge
@@ -26,46 +24,46 @@ class MorphologicalMeasures:
     """
 
     """As created by the body class."""
-    body_as_grid: List[List[List[Optional[Module]]]]
+    body_as_grid: list[list[list[Module | None]]]
     """Position of the core in 'body_as_grid'."""
-    core_grid_position: Tuple[int, int, int]
+    core_grid_position: tuple[int, int, int]
 
     """If the robot is two dimensional, i.e. all module rotations are 0 degrees."""
     is_2d: bool
 
     core: Core
-    bricks: List[Brick]
-    active_hinges: List[ActiveHinge]
+    bricks: list[Brick]
+    active_hinges: list[ActiveHinge]
 
     """If all slots of the core are filled with other modules."""
     core_is_filled: bool
 
     """Bricks which have all slots filled with other modules."""
-    filled_bricks: List[Brick]
+    filled_bricks: list[Brick]
 
     """Active hinges which have all slots filled with other modules."""
-    filled_active_hinges: List[ActiveHinge]
+    filled_active_hinges: list[ActiveHinge]
 
     """
     Bricks that are only connected to one other module.
 
     Both children and parent are counted.
     """
-    single_neighbour_bricks: List[Brick]
+    single_neighbour_bricks: list[Brick]
 
     """
     Bricks that are connected to exactly two other modules.
 
     Both children and parent are counted.
     """
-    double_neighbour_bricks: List[Brick]
+    double_neighbour_bricks: list[Brick]
 
     """
     Active hinges that are connected to exactly two other modules.
 
     Both children and parent are counted.
     """
-    double_neighbour_active_hinges: List[ActiveHinge]
+    double_neighbour_active_hinges: list[ActiveHinge]
 
     """
     X/Y-plane symmetry according to the paper but in 3D.
@@ -137,35 +135,35 @@ class MorphologicalMeasures:
     def __calculate_core_is_filled(self) -> bool:
         return all([child is not None for child in self.core.children])
 
-    def __calculate_filled_bricks(self) -> List[Brick]:
+    def __calculate_filled_bricks(self) -> list[Brick]:
         return [
             brick
             for brick in self.bricks
             if all([child is not None for child in brick.children])
         ]
 
-    def __calculate_filled_active_hinges(self) -> List[ActiveHinge]:
+    def __calculate_filled_active_hinges(self) -> list[ActiveHinge]:
         return [
             active_hinge
             for active_hinge in self.active_hinges
             if all([child is not None for child in active_hinge.children])
         ]
 
-    def __calculate_single_neighbour_bricks(self) -> List[Brick]:
+    def __calculate_single_neighbour_bricks(self) -> list[Brick]:
         return [
             brick
             for brick in self.bricks
             if all([child is None for child in brick.children])
         ]
 
-    def __calculate_double_neighbour_bricks(self) -> List[Brick]:
+    def __calculate_double_neighbour_bricks(self) -> list[Brick]:
         return [
             brick
             for brick in self.bricks
             if sum([0 if child is None else 1 for child in brick.children]) == 1
         ]
 
-    def __calculate_double_neighbour_active_hinges(self) -> List[ActiveHinge]:
+    def __calculate_double_neighbour_active_hinges(self) -> list[ActiveHinge]:
         return [
             active_hinge
             for active_hinge in self.active_hinges

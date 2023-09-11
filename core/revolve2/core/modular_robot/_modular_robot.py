@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from revolve2.actor_controller import ActorController
 from revolve2.core.physics.actor import Actor
 
@@ -23,7 +21,7 @@ class ModularRobot:
         self.body = body
         self.brain = brain
 
-    def make_actor_and_controller(self) -> Tuple[Actor, ActorController]:
+    def make_actor_and_controller(self) -> tuple[Actor, ActorController]:
         """
         Transform this modular robot into a physics actor and corresponding controller.
 

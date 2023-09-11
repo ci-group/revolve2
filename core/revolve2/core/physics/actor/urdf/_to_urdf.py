@@ -1,7 +1,7 @@
 import warnings
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
-from typing import Dict, List, Optional, Tuple, cast
+from typing import cast
 
 import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
@@ -29,7 +29,7 @@ def to_urdf(
     """
     urdf = xml.Element("robot", {"name": name})
 
-    tree: Dict[str, List[Joint]] = {}  # parent to children
+    tree: dict[str, list[Joint]] = {}  # parent to children
     seen_children = set()
     for joint in physics_robot.joints:
         if joint.body2.name in seen_children:
@@ -41,7 +41,7 @@ def to_urdf(
             tree[joint.body1.name] = []
         tree[joint.body1.name].append(joint)
 
-    root: Optional[RigidBody] = None
+    root: RigidBody | None = None
     for body in physics_robot.bodies:
         if body.name not in seen_children:
             if root is not None:
@@ -66,10 +66,10 @@ def to_urdf(
 
 def _make_links(
     body: RigidBody,
-    tree: Dict[str, List[Joint]],
+    tree: dict[str, list[Joint]],
     link_pos: Vector3,
     link_ori: Quaternion,
-) -> List[xml.Element]:
+) -> list[xml.Element]:
     elements = []
 
     link = xml.Element("link", {"name": body.name})
@@ -170,7 +170,7 @@ def _make_links(
     return elements
 
 
-def _quaternion_to_euler(quaternion: Quaternion) -> Tuple[float, float, float]:
+def _quaternion_to_euler(quaternion: Quaternion) -> tuple[float, float, float]:
     with warnings.catch_warnings():
         warnings.simplefilter(
             "ignore", UserWarning

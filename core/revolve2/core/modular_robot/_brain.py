@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from typing import List
 
 from revolve2.actor_controller import ActorController
 
@@ -10,7 +9,7 @@ class Brain(ABC):
     """Interface for the brain of a modular robot."""
 
     @abstractmethod
-    def make_controller(self, body: Body, dof_ids: List[int]) -> ActorController:
+    def make_controller(self, body: Body, dof_ids: list[int]) -> ActorController:
         """
         Create a controller for the provided body.
 

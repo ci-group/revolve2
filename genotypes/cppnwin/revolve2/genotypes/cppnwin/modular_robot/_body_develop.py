@@ -1,7 +1,7 @@
 import math
 from dataclasses import dataclass
 from queue import Queue
-from typing import Any, List, Optional, Set, Tuple
+from typing import Any
 
 import multineat
 from revolve2.core.modular_robot import ActiveHinge, Body, Brick, Core, Module
@@ -9,9 +9,9 @@ from revolve2.core.modular_robot import ActiveHinge, Body, Brick, Core, Module
 
 @dataclass
 class __Module:
-    position: Tuple[int, int, int]
-    forward: Tuple[int, int, int]
-    up: Tuple[int, int, int]
+    position: tuple[int, int, int]
+    forward: tuple[int, int, int]
+    up: tuple[int, int, int]
     chain_length: int
     module_reference: Module
 
@@ -34,7 +34,7 @@ def develop(
     genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
-    grid: Set[Tuple[int, int, int]] = set()
+    grid: set[tuple[int, int, int]] = set()
 
     body = Body()
 
@@ -45,7 +45,7 @@ def develop(
     while not to_explore.empty():
         module = to_explore.get()
 
-        children: List[Tuple[int, int]] = []  # child index, rotation
+        children: list[tuple[int, int]] = []  # child index, rotation
 
         if isinstance(module.module_reference, Core):
             children.append((Core.FRONT, 0))
@@ -61,7 +61,7 @@ def develop(
         else:  # Should actually never arrive here but just checking module type to be sure
             raise RuntimeError()
 
-        for (index, rotation) in children:
+        for index, rotation in children:
             if part_count < max_parts:
                 child = __add_child(body_net, module, index, rotation, grid)
                 if child is not None:
@@ -74,9 +74,9 @@ def develop(
 
 def __evaluate_cppn(
     body_net: multineat.NeuralNetwork,
-    position: Tuple[int, int, int],
+    position: tuple[int, int, int],
     chain_length: int,
-) -> Tuple[Any, int]:
+) -> tuple[Any, int]:
     """
     Get module type and orientation from a multineat CPPN network.
 
@@ -108,8 +108,8 @@ def __add_child(
     module: __Module,
     child_index: int,
     rotation: int,
-    grid: Set[Tuple[int, int, int]],
-) -> Optional[__Module]:
+    grid: set[tuple[int, int, int]],
+) -> __Module | None:
     forward = __rotate(module.forward, module.up, rotation)
     position = __add(module.position, forward)
     chain_length = module.chain_length + 1
@@ -138,15 +138,15 @@ def __add_child(
     )
 
 
-def __add(a: Tuple[int, int, int], b: Tuple[int, int, int]) -> Tuple[int, int, int]:
+def __add(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
     return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
 
 
-def __timesscalar(a: Tuple[int, int, int], scalar: int) -> Tuple[int, int, int]:
+def __timesscalar(a: tuple[int, int, int], scalar: int) -> tuple[int, int, int]:
     return (a[0] * scalar, a[1] * scalar, a[2] * scalar)
 
 
-def __cross(a: Tuple[int, int, int], b: Tuple[int, int, int]) -> Tuple[int, int, int]:
+def __cross(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
     return (
         a[1] * b[2] - a[2] * b[1],
         a[2] * b[0] - a[0] * b[2],
@@ -154,13 +154,13 @@ def __cross(a: Tuple[int, int, int], b: Tuple[int, int, int]) -> Tuple[int, int,
     )
 
 
-def __dot(a: Tuple[int, int, int], b: Tuple[int, int, int]) -> int:
+def __dot(a: tuple[int, int, int], b: tuple[int, int, int]) -> int:
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 
 
 def __rotate(
-    a: Tuple[int, int, int], b: Tuple[int, int, int], angle: int
-) -> Tuple[int, int, int]:
+    a: tuple[int, int, int], b: tuple[int, int, int], angle: int
+) -> tuple[int, int, int]:
     """
     Rotates vector a a given angle around b.
 

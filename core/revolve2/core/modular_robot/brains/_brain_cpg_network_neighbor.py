@@ -1,6 +1,5 @@
 import math
 from abc import ABC, abstractmethod
-from typing import List, Tuple
 
 from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
@@ -18,7 +17,7 @@ class BrainCpgNetworkNeighbor(Brain, ABC):
     That means, NOT grid coordinates, but tree distance.
     """
 
-    def make_controller(self, body: Body, dof_ids: List[int]) -> ActorController:
+    def make_controller(self, body: Body, dof_ids: list[int]) -> ActorController:
         """
         Create a controller for the provided body.
 
@@ -69,10 +68,10 @@ class BrainCpgNetworkNeighbor(Brain, ABC):
     @abstractmethod
     def _make_weights(
         self,
-        active_hinges: List[ActiveHinge],
-        connections: List[Tuple[ActiveHinge, ActiveHinge]],
+        active_hinges: list[ActiveHinge],
+        connections: list[tuple[ActiveHinge, ActiveHinge]],
         body: Body,
-    ) -> Tuple[List[float], List[float]]:
+    ) -> tuple[list[float], list[float]]:
         """
         Define the weights between neurons.
 

@@ -1,4 +1,4 @@
-from typing import Callable, List, Tuple, TypeVar
+from typing import Callable, TypeVar
 
 import numpy as np
 import numpy.typing as npt
@@ -8,14 +8,14 @@ Fitness = TypeVar("Fitness")
 
 
 def steady_state(
-    old_genotypes: List[Genotype],
-    old_fitnesses: List[Fitness],
-    new_genotypes: List[Genotype],
-    new_fitnesses: List[Fitness],
+    old_genotypes: list[Genotype],
+    old_fitnesses: list[Fitness],
+    new_genotypes: list[Genotype],
+    new_fitnesses: list[Fitness],
     selection_fun: Callable[
-        [int, List[Genotype], List[Fitness]], npt.NDArray[np.float_]
+        [int, list[Genotype], list[Fitness]], npt.NDArray[np.float_]
     ],
-) -> Tuple[List[int], List[int]]:
+) -> tuple[list[int], list[int]]:
     """
     Select `len(old_genotypes)` individuals using the provided selection function from combined set of old and new individuals.
 

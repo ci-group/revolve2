@@ -1,7 +1,6 @@
 """Standard terrains."""
 
 import math
-from typing import Tuple
 
 import numpy as np
 import numpy.typing as npt
@@ -30,7 +29,7 @@ def flat(size: Vector3 = Vector3([20.0, 20.0, 0.0])) -> Terrain:
 
 
 def crater(
-    size: Tuple[float, float],
+    size: tuple[float, float],
     ruggedness: float,
     curviness: float,
     granularity_multiplier: float = 1.0,
@@ -87,8 +86,8 @@ def crater(
 
 
 def rugged_heightmap(
-    size: Tuple[float, float],
-    num_edges: Tuple[int, int],
+    size: tuple[float, float],
+    num_edges: tuple[int, int],
     density: float = 1.0,
 ) -> npt.NDArray[np.float_]:
     """
@@ -124,7 +123,7 @@ def rugged_heightmap(
 
 
 def bowl_heightmap(
-    num_edges: Tuple[int, int],
+    num_edges: tuple[int, int],
 ) -> npt.NDArray[np.float_]:
     r"""
     Create a terrain heightmap in the shape of a bowl.

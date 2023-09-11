@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from typing import List
 
 from pyrr import Matrix33, Vector3
 from pyrr.objects.quaternion import Quaternion
@@ -17,8 +16,8 @@ class RigidBody:
     orientation: Quaternion
     static_friction: float
     dynamic_friction: float
-    collisions: List[Collision] = field(default_factory=list, init=False)
-    visuals: List[Visual] = field(default_factory=list, init=False)
+    collisions: list[Collision] = field(default_factory=list, init=False)
+    visuals: list[Visual] = field(default_factory=list, init=False)
 
     def mass(self) -> float:
         """Get the center of mass.

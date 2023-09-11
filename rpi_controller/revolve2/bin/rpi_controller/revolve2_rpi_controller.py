@@ -12,7 +12,7 @@ import json
 import sys
 import time
 from dataclasses import dataclass
-from typing import Any, List, Optional, Union, cast
+from typing import Any, cast
 
 import jsonschema
 import pigpio
@@ -65,13 +65,13 @@ class Program:
 
     _debug: bool
     _dry: bool  # if true, gpio output is skipped.
-    _log_file: Optional[str]
+    _log_file: str | None
 
     _controller: ActorController
     _control_period: float
-    _pins: List[_Pin]
+    _pins: list[_Pin]
 
-    _gpio: Union[pigpio.pi, ServoKit]
+    _gpio: pigpio.pi | ServoKit
 
     _stop: bool
 
@@ -82,7 +82,7 @@ class Program:
         timestamp: int
         serialized_controller: StaticData
 
-    _log: List[_LogEntry]
+    _log: list[_LogEntry]
 
     def __init__(self) -> None:
         """Initialize this object."""
@@ -247,7 +247,7 @@ class Program:
             else:
                 raise NotImplementedError()
 
-    def _set_targets(self, targets: List[float], careful: bool = False) -> None:
+    def _set_targets(self, targets: list[float], careful: bool = False) -> None:
         if self._debug:
             print("Setting pins to:")
             print("pin | target (clamped -1 <= t <= 1)")

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Tuple, TypeAlias, cast
+from typing import TypeAlias, cast
 
 from pyrr import Quaternion, Vector3
 
@@ -16,8 +16,8 @@ class Actor:
     Consists of a set of rigid bodies and joints connecting them which can possibly move dynamically.
     """
 
-    bodies: List[RigidBody]
-    joints: List[Joint]
+    bodies: list[RigidBody]
+    joints: list[Joint]
 
     def calc_aabb(self) -> BoundingBox:
         """
@@ -127,7 +127,7 @@ class Actor:
         )
 
 
-_Coordinates: TypeAlias = Tuple[
+_Coordinates: TypeAlias = tuple[
     Vector3, Vector3, Vector3, Vector3, Vector3, Vector3, Vector3, Vector3
 ]
 

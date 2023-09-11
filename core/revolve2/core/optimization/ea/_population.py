@@ -1,14 +1,4 @@
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    ClassVar,
-    Dict,
-    ForwardRef,
-    Generic,
-    List,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Any, ClassVar, ForwardRef, Generic, Type, TypeVar
 
 import sqlalchemy.ext.orderinglist
 import sqlalchemy.orm as orm
@@ -40,7 +30,7 @@ class Population(HasId, orm.MappedAsDataclass, Generic[TIndividual]):
     # Class members interesting to the user
     # -------------------------------------
     if TYPE_CHECKING:
-        individuals: orm.Mapped[List[TIndividual]]
+        individuals: orm.Mapped[list[TIndividual]]
 
     # ----------------------
     # Implementation details
@@ -48,12 +38,12 @@ class Population(HasId, orm.MappedAsDataclass, Generic[TIndividual]):
     else:
 
         @orm.declared_attr
-        def individuals(cls) -> orm.Mapped[List[TIndividual]]:  # noqa
+        def individuals(cls) -> orm.Mapped[list[TIndividual]]:  # noqa
             return cls.__individuals_impl()
 
     __type_tindividual: ClassVar[Type[TIndividual]]  # type: ignore[misc]
 
-    def __init_subclass__(cls: Type[Self], /, **kwargs: Dict[str, Any]) -> None:
+    def __init_subclass__(cls: Type[Self], /, **kwargs: dict[str, Any]) -> None:
         """
         Initialize a version of this class when it is subclassed.
 

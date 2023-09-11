@@ -18,8 +18,8 @@ packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+multineat = "^0.11"
 revolve2-core = { path = "../../core", develop = true }
-multineat = { git = "https://github.com/ci-group/MultiNEAT.git", tag = "v0.10" }
 
 [tool.poetry.extras]
 dev = []

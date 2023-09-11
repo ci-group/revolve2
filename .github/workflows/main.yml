@@ -116,21 +116,23 @@ jobs:
           virtualenv .venv
           . .venv/bin/activate
       - name: install serialization
-        run: pip install ./serialization[dev]
+        run: pip install ./serialization
       - name: install actor_controller
-        run: pip install ./actor_controller[dev]
+        run: pip install ./actor_controller
+      - name: install simulation
+        run: pip install ./simulation
+      - name: install modular_robot
+        run: pip install ./modular_robot
       - name: install rpi_controller
-        run: pip install ./rpi_controller[dev]
-      - name: install core
-        run: pip install ./core[dev]
-      - name: install standard_resources
-        run: pip install ./standard_resources[dev]
-      - name: install runner mujoco
-        run: pip install ./runners/mujoco[dev]
-      - name: install genotype CPPNWIN
-        run: |
-          sudo apt install libcereal-dev
-          pip install ./genotypes/cppnwin[dev]
+        run: pip install ./rpi_controller
+      - name: install rpi_controller_remote
+        run: pip install ./rpi_controller_remote
+      - name: install experimentation
+        run: pip install ./experimentation
+      - name: install simulators/mujoco
+        run: pip install ./simulators/mujoco
+      - name: install ci_group
+        run: pip install ./ci_group
       - name: install requirements for sphinx
         run: pip install -r ./docs/requirements.txt
       - name: sphinx

@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 from typing import List
 
 import numpy as np
 import numpy.typing as npt
 from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
+from revolve2.actor_controllers.cpg import CpgNetworkStructure
 from revolve2.core.modular_robot import Body, Brain
 
 
@@ -41,6 +44,37 @@ class BrainCpgNetworkStatic(Brain):
         self._num_output_neurons = num_output_neurons
         self._weight_matrix = weight_matrix
         self._dof_ranges = dof_ranges
+
+    @classmethod
+    def create_simple(
+        cls,
+        params: npt.NDArray[np.float_],
+        cpg_network_structure: CpgNetworkStructure,
+        initial_state_uniform: float,
+        dof_range_uniform: float,
+    ) -> BrainCpgNetworkStatic:
+        """
+        Create and initialize an instance of this brain using a simplified interface.
+
+        :param params: Parameters for the weight matrix to be created.
+        :param cpg_network_structure: The cpg network structure.
+        :param initial_state_uniform: Initial state to use for all neurons.
+        :param dof_range_uniform: Dof range to use for all neurons.
+        :returns: The created brain.
+        """
+        initial_state = cpg_network_structure.make_uniform_state(initial_state_uniform)
+        weight_matrix = (
+            cpg_network_structure.make_connection_weights_matrix_from_params(
+                list(params)
+            )
+        )
+        dof_ranges = cpg_network_structure.make_uniform_dof_ranges(dof_range_uniform)
+        return BrainCpgNetworkStatic(
+            initial_state,
+            cpg_network_structure.num_cpgs,
+            weight_matrix,
+            dof_ranges,
+        )
 
     def make_controller(self, body: Body, dof_ids: List[int]) -> ActorController:
         """

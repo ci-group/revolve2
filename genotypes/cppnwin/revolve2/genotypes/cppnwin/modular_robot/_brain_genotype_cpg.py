@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 import multineat
 import numpy as np
-import sqlalchemy.orm as orm
-from sqlalchemy import event
-from sqlalchemy.engine import Connection
 from typing_extensions import Self
 
+from .._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
 from .._multineat_rng_from_random import multineat_rng_from_random
 from .._random_multineat_genotype import random_multineat_genotype
 from ._brain_cpg_network_neighbor_v1 import BrainCpgNetworkNeighborV1
@@ -57,16 +57,13 @@ def _make_multineat_params() -> multineat.Parameters:
 _MULTINEAT_PARAMS = _make_multineat_params()
 
 
-class BrainGenotypeCpg(orm.MappedAsDataclass):
+@dataclass
+class BrainGenotypeCpg:
     """An SQLAlchemy model for a CPPNWIN cpg brain genotype."""
 
     _NUM_INITIAL_MUTATIONS = 5
 
-    brain: multineat.Genome
-
-    _serialized_brain: orm.Mapped[str] = orm.mapped_column(
-        "serialized_brain", init=False, nullable=False
-    )
+    brain: MultineatGenotypePickleWrapper
 
     @classmethod
     def random_brain(
@@ -83,14 +80,16 @@ class BrainGenotypeCpg(orm.MappedAsDataclass):
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        brain = random_multineat_genotype(
-            innov_db=innov_db,
-            rng=multineat_rng,
-            multineat_params=_MULTINEAT_PARAMS,
-            output_activation_func=multineat.ActivationFunction.SIGNED_SINE,
-            num_inputs=7,  # bias(always 1), x1, y1, z1, x2, y2, z2
-            num_outputs=1,  # weight
-            num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
+        brain = MultineatGenotypePickleWrapper(
+            random_multineat_genotype(
+                innov_db=innov_db,
+                rng=multineat_rng,
+                multineat_params=_MULTINEAT_PARAMS,
+                output_activation_func=multineat.ActivationFunction.SIGNED_SINE,
+                num_inputs=7,  # bias(always 1), x1, y1, z1, x2, y2, z2
+                num_outputs=1,  # weight
+                num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
+            )
         )
 
         return BrainGenotypeCpg(brain)
@@ -112,12 +111,14 @@ class BrainGenotypeCpg(orm.MappedAsDataclass):
         multineat_rng = multineat_rng_from_random(rng)
 
         return BrainGenotypeCpg(
-            self.brain.MutateWithConstraints(
-                False,
-                multineat.SearchMode.BLENDED,
-                innov_db,
-                _MULTINEAT_PARAMS,
-                multineat_rng,
+            MultineatGenotypePickleWrapper(
+                self.brain.genotype.MutateWithConstraints(
+                    False,
+                    multineat.SearchMode.BLENDED,
+                    innov_db,
+                    _MULTINEAT_PARAMS,
+                    multineat_rng,
+                )
             )
         )
 
@@ -139,12 +140,14 @@ class BrainGenotypeCpg(orm.MappedAsDataclass):
         multineat_rng = multineat_rng_from_random(rng)
 
         return BrainGenotypeCpg(
-            parent1.brain.MateWithConstraints(
-                parent2.brain,
-                False,
-                False,
-                multineat_rng,
-                _MULTINEAT_PARAMS,
+            MultineatGenotypePickleWrapper(
+                parent1.brain.genotype.MateWithConstraints(
+                    parent2.brain.genotype,
+                    False,
+                    False,
+                    multineat_rng,
+                    _MULTINEAT_PARAMS,
+                )
             )
         )
 
@@ -154,21 +157,4 @@ class BrainGenotypeCpg(orm.MappedAsDataclass):
 
         :returns: The created robot.
         """
-        return BrainCpgNetworkNeighborV1(self.brain)
-
-
-@event.listens_for(BrainGenotypeCpg, "before_update", propagate=True)
-@event.listens_for(BrainGenotypeCpg, "before_insert", propagate=True)
-def _serialize_brain(
-    mapper: orm.Mapper[BrainGenotypeCpg],
-    connection: Connection,
-    target: BrainGenotypeCpg,
-) -> None:
-    target._serialized_brain = target.brain.Serialize()
-
-
-@event.listens_for(BrainGenotypeCpg, "load", propagate=True)
-def _deserialize_brain(target: BrainGenotypeCpg, context: orm.QueryContext) -> None:
-    brain = multineat.Genome()
-    brain.Deserialize(target._serialized_brain)
-    target.brain = brain
+        return BrainCpgNetworkNeighborV1(self.brain.genotype)

@@ -74,8 +74,8 @@ class Population(HasId, orm.MappedAsDataclass, Generic[TIndividual]):
     def __individuals_impl(cls) -> orm.Mapped[TIndividual]:
         return orm.relationship(
             cls.__type_tindividual,
-            order_by=cls.__type_tindividual._population_index,
+            order_by=cls.__type_tindividual.population_index,
             collection_class=sqlalchemy.ext.orderinglist.ordering_list(
-                "_population_index"
+                "population_index"
             ),
         )

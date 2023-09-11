@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 import numpy as np
 from revolve2.core.modular_robot import ActiveHinge, Body
 
@@ -21,10 +19,10 @@ class BrainCpgNetworkNeighborRandom(BrainCpgNetworkNeighbor):
 
     def _make_weights(
         self,
-        active_hinges: List[ActiveHinge],
-        connections: List[Tuple[ActiveHinge, ActiveHinge]],
+        active_hinges: list[ActiveHinge],
+        connections: list[tuple[ActiveHinge, ActiveHinge]],
         body: Body,
-    ) -> Tuple[List[float], List[float]]:
+    ) -> tuple[list[float], list[float]]:
         return (
             (self._rng.random(size=len(active_hinges)) * 2.0 - 1).tolist(),
             (self._rng.random(size=len(connections)) * 2.0 - 1).tolist(),

@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from typing import List
 
 from revolve2.core.physics.running import geometry
 
@@ -8,4 +7,4 @@ from revolve2.core.physics.running import geometry
 class Terrain:
     """Terrain describing part of a physics `Environment`."""
 
-    static_geometry: List[geometry.Geometry]
+    static_geometry: list[geometry.Geometry]

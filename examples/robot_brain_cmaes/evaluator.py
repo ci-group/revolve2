@@ -2,7 +2,6 @@
 
 import asyncio
 import math
-from typing import List
 
 import numpy as np
 import numpy.typing as npt
@@ -52,7 +51,7 @@ class Evaluator:
 
     def evaluate(
         self,
-        solutions: List[npt.NDArray[np.float_]],
+        solutions: list[npt.NDArray[np.float_]],
     ) -> npt.NDArray[np.float_]:
         """
         Evaluate multiple robots.

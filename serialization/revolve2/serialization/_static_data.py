@@ -1,12 +1,19 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Union
+from typing import Any
 
 from typing_extensions import TypeGuard
 
-StaticData = Union[
-    List["StaticData"], Dict[str, "StaticData"], None, bool, int, float, str, bytes
-]
+StaticData = (
+    list["StaticData"]
+    | dict[str, "StaticData"]
+    | None
+    | bool
+    | int
+    | float
+    | str
+    | bytes
+)
 
 
 def is_static_data(to_check: Any) -> TypeGuard[StaticData]:

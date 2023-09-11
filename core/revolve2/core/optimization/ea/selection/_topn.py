@@ -1,4 +1,4 @@
-from typing import List, TypeVar
+from typing import TypeVar
 
 from ._argsort import argsort
 from ._supports_lt import SupportsLt
@@ -7,7 +7,7 @@ Genotype = TypeVar("Genotype")
 Fitness = TypeVar("Fitness", bound=SupportsLt)
 
 
-def topn(n: int, genotypes: List[Genotype], fitnesses: List[Fitness]) -> List[int]:
+def topn(n: int, genotypes: list[Genotype], fitnesses: list[Fitness]) -> list[int]:
     """
     Get indices of the top n genotypes sorted by their fitness.
 

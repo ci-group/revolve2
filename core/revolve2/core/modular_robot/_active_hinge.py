@@ -1,5 +1,3 @@
-from typing import Optional, Union
-
 from ._module import Module
 from ._right_angles import RightAngles
 
@@ -27,7 +25,7 @@ class ActiveHinge(Module):
     # 1 / 0.1652 * 60 / 360 * 2pi
     VELOCITY = 6.338968228
 
-    def __init__(self, rotation: Union[float, RightAngles]):
+    def __init__(self, rotation: float | RightAngles):
         """
         Initialize this object.
 
@@ -40,7 +38,7 @@ class ActiveHinge(Module):
         super().__init__(1, rotation_converted)
 
     @property
-    def attachment(self) -> Optional[Module]:
+    def attachment(self) -> Module | None:
         """
         Get the module attached to this hinge.
 

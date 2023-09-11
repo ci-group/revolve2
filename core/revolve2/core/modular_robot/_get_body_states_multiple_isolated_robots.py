@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 from revolve2.core.physics.running import BatchResults
 
 from ._body import Body
@@ -7,8 +5,8 @@ from ._body_state import BodyState
 
 
 def get_body_states_multiple_isolated_robots(
-    bodies: List[Body], batch_results: BatchResults
-) -> List[Tuple[BodyState, BodyState]]:
+    bodies: list[Body], batch_results: BatchResults
+) -> list[tuple[BodyState, BodyState]]:
     """
     Get the first and last body state of a robot from a simulation simulating only a single robot.
 

@@ -1,13 +1,4 @@
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    ClassVar,
-    Dict,
-    ForwardRef,
-    Generic,
-    Type,
-    TypeVar,
-)
+from typing import TYPE_CHECKING, Any, ClassVar, ForwardRef, Generic, Type, TypeVar
 
 import sqlalchemy
 import sqlalchemy.orm as orm
@@ -80,7 +71,7 @@ class Individual(HasId, orm.MappedAsDataclass, Generic[TGenotype]):
     __population_table: ClassVar[str]
 
     def __init_subclass__(
-        cls: Type[Self], population_table: str, **kwargs: Dict[str, Any]
+        cls: Type[Self], population_table: str, **kwargs: dict[str, Any]
     ) -> None:
         """
         Initialize a version of this class when it is subclassed.

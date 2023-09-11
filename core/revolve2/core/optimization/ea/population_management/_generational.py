@@ -1,16 +1,16 @@
-from typing import Callable, List, Tuple, TypeVar
+from typing import Callable, TypeVar
 
 Genotype = TypeVar("Genotype")
 Fitness = TypeVar("Fitness")
 
 
 def generational(
-    old_genotypes: List[Genotype],
-    old_fitnesses: List[Fitness],
-    new_genotypes: List[Genotype],
-    new_fitnesses: List[Fitness],
-    selection_fun: Callable[[int, List[Genotype], List[Fitness]], List[int]],
-) -> Tuple[List[int], List[int]]:
+    old_genotypes: list[Genotype],
+    old_fitnesses: list[Fitness],
+    new_genotypes: list[Genotype],
+    new_fitnesses: list[Fitness],
+    selection_fun: Callable[[int, list[Genotype], list[Fitness]], list[int]],
+) -> tuple[list[int], list[int]]:
     """
     Select `len(old_genotypes)` individuals using the provided selection function from only the offspring(`new_genotypes`).
 

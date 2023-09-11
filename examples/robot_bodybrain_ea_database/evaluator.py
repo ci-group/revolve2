@@ -1,7 +1,6 @@
 """Evaluator class."""
 
 import asyncio
-from typing import List
 
 from revolve2.core.modular_robot import (
     ModularRobot,
@@ -38,8 +37,8 @@ class Evaluator:
 
     def evaluate(
         self,
-        robots: List[ModularRobot],
-    ) -> List[float]:
+        robots: list[ModularRobot],
+    ) -> list[float]:
         """
         Evaluate multiple robots.
 

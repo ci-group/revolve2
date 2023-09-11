@@ -1,4 +1,4 @@
-from typing import Callable, List, TypeVar
+from typing import Callable, TypeVar
 
 import numpy as np
 import numpy.typing as npt
@@ -9,9 +9,9 @@ Fitness = TypeVar("Fitness")
 
 def multiple_unique(
     selection_size: int,
-    population: List[Individual],
-    fitnesses: List[Fitness],
-    selection_function: Callable[[List[Individual], List[Fitness]], int],
+    population: list[Individual],
+    fitnesses: list[Fitness],
+    selection_function: Callable[[list[Individual], list[Fitness]], int],
 ) -> npt.NDArray[np.float_]:
     """
     Select multiple distinct individuals from a population using the provided selection function.

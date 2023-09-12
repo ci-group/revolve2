@@ -88,7 +88,7 @@ class BodyGenotype:
                 multineat_params=_MULTINEAT_PARAMS,
                 output_activation_func=multineat.ActivationFunction.TANH,
                 num_inputs=5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
-                num_outputs=5,  # empty, brick, activehinge, rot0, rot90
+                num_outputs=6,  # empty, brick, activehinge, rot0, rot90, attachment_position (only new hardware)
                 num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
             )
         )

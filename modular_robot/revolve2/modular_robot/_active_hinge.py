@@ -25,17 +25,18 @@ class ActiveHinge(Module):
     # 1 / 0.1652 * 60 / 360 * 2pi
     VELOCITY = 6.338968228
 
-    def __init__(self, rotation: float | RightAngles):
+    def __init__(self, rotation: float | RightAngles, attachment_position: int = 5):
         """
         Initialize this object.
 
         :param rotation: Orientation of this model relative to its parent.
+        :param attachment_position: The attachment position on new hardware core.
         """
         if isinstance(rotation, RightAngles):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(1, rotation_converted)
+        super().__init__(1, rotation_converted, attachment_position)
 
     @property
     def attachment(self) -> Module | None:

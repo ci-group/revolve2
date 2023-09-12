@@ -18,12 +18,18 @@ class Body:
     """Body of a modular robot."""
 
     core: Core
+    _new_hardware: bool
     _is_finalized: bool
 
-    def __init__(self) -> None:
-        """Initialize this object."""
+    def __init__(self, new_hardware: bool = False) -> None:
+        """
+        Initialize this object.
+
+        :param new_hardware: Whether new hardware is used.
+        """
         self.core = Core(0.0)
         self._is_finalized = False
+        self._new_hardware = new_hardware
 
     def finalize(self) -> None:
         """
@@ -36,6 +42,15 @@ class Body:
         assigner = _Finalizer(self)
         assigner.finalize()
         self._is_finalized = True
+
+    @property
+    def new_hardware(self) -> bool:
+        """
+        Check if the robot uses the new hardware.
+
+        :returns: Wether the robot uses the new hardware.
+        """
+        return self._new_hardware
 
     @property
     def is_finalized(self) -> bool:
@@ -313,7 +328,9 @@ class _ActorBuilder:
         )
         self.robot.bodies.append(origin_body)
 
-        self._make_module(body.core, origin_body, "origin", Vector3(), Quaternion())
+        self._make_module(
+            body.core, origin_body, "origin", Vector3(), Quaternion(), body.new_hardware
+        )
 
         return (self.robot, self.dof_ids)
 
@@ -324,6 +341,7 @@ class _ActorBuilder:
         name_prefix: str,
         attachment_offset: Vector3,
         orientation: Quaternion,
+        new_hardware: bool,
     ) -> None:
         if isinstance(module, Core):
             self._make_core(
@@ -332,6 +350,7 @@ class _ActorBuilder:
                 name_prefix,
                 attachment_offset,
                 orientation,
+                new_hardware,
             )
         elif isinstance(module, Brick):
             self._make_brick(
@@ -340,6 +359,7 @@ class _ActorBuilder:
                 name_prefix,
                 attachment_offset,
                 orientation,
+                new_hardware,
             )
         elif isinstance(module, ActiveHinge):
             self._make_active_hinge(
@@ -348,6 +368,7 @@ class _ActorBuilder:
                 name_prefix,
                 attachment_offset,
                 orientation,
+                new_hardware,
             )
         else:
             raise NotImplementedError("Module type not implemented")
@@ -359,10 +380,20 @@ class _ActorBuilder:
         name_prefix: str,
         attachment_point: Vector3,
         orientation: Quaternion,
+        new_hardware: bool,
     ) -> None:
         BOUNDING_BOX = Vector3([0.089, 0.089, 0.0603])  # meter
         MASS = 0.250  # kg
         CHILD_OFFSET = 0.089 / 2.0  # meter
+
+        if new_hardware:
+            BOUNDING_BOX = Vector3([0.15, 0.15, 0.15])  # meter
+            CHILD_OFFSET = 0.15 / 2.0  # meter
+            # MASS = 0.250 # kg
+        HO, VO = (
+            0.029,
+            0.032,
+        )  # Horizontal-Offset, Vertical-Offset in meter (for new hardware)
 
         # attachment position is always at center of core
         position = attachment_point
@@ -386,6 +417,34 @@ class _ActorBuilder:
             )
         )
 
+        def __get_attachment_offset(attachment_position: int, angle: float) -> Vector3:
+            """
+            Calculate offset.
+
+            :param attachment_position: index position of attachment on core.
+            :param angle: angle of core side for determining offset axis / direction.
+            :returns: The offset Vector.
+            """
+            h_cond, v_cond = attachment_position % 3, attachment_position / 3
+
+            h_offset, v_offset = 0.0, 0.0
+            if h_cond == 1:
+                h_offset = -HO
+            elif h_cond == 0:
+                h_offset = HO
+            h_offset = -h_offset if angle >= math.pi else h_offset
+            if v_cond <= 1:
+                v_offset = VO
+            elif v_cond > 2:
+                v_offset = -VO
+
+            offset = (
+                Vector3([0.0, h_offset, v_offset])
+                if angle % math.pi == 0
+                else Vector3([-h_offset, 0.0, v_offset])
+            )
+            return offset
+
         for name_suffix, child_index, angle in [
             ("front", Core.FRONT, 0.0),
             ("back", Core.BACK, math.pi),
@@ -400,12 +459,19 @@ class _ActorBuilder:
                     * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
 
+                attachment_offset = __get_attachment_offset(
+                    child.attachment_position, angle
+                )
+
                 self._make_module(
                     child,
                     body,
                     f"{name_prefix}_{name_suffix}",
-                    position + rotation * Vector3([CHILD_OFFSET, 0.0, 0.0]),
+                    position
+                    + rotation * Vector3([CHILD_OFFSET, 0.0, 0.0])
+                    + attachment_offset,
                     rotation,
+                    new_hardware,
                 )
 
     def _make_brick(
@@ -415,10 +481,16 @@ class _ActorBuilder:
         name_prefix: str,
         attachment_point: Vector3,
         orientation: Quaternion,
+        new_hardware: bool,
     ) -> None:
         BOUNDING_BOX = Vector3([0.06288625, 0.06288625, 0.0603])  # meter
         MASS = 0.030  # kg
         CHILD_OFFSET = 0.06288625 / 2.0  # meter
+
+        if new_hardware:
+            BOUNDING_BOX = Vector3([0.075, 0.075, 0.075])  # meter
+            # MASS = 0.030  # kg
+            CHILD_OFFSET = 0.075 / 2.0  # meter
 
         position = attachment_point + orientation * Vector3(
             [BOUNDING_BOX[0] / 2.0, 0.0, 0.0]
@@ -462,6 +534,7 @@ class _ActorBuilder:
                     f"{name_prefix}_{name_suffix}",
                     position + rotation * Vector3([CHILD_OFFSET, 0.0, 0.0]),
                     rotation,
+                    new_hardware,
                 )
 
     def _make_active_hinge(
@@ -471,6 +544,7 @@ class _ActorBuilder:
         name_prefix: str,
         attachment_point: Vector3,
         orientation: Quaternion,
+        new_hardware: bool,
     ) -> None:
         FRAME_BOUNDING_BOX = Vector3([0.018, 0.053, 0.0165891])  # meter
         FRAME_OFFSET = 0.04525
@@ -585,6 +659,7 @@ class _ActorBuilder:
                 f"{name_prefix}_attachment",
                 rotation * Vector3([ATTACHMENT_OFFSET, 0.0, 0.0]),
                 rotation,
+                new_hardware,
             )
 
 

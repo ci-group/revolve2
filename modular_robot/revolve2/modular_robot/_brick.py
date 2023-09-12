@@ -9,17 +9,18 @@ class Brick(Module):
     RIGHT = 1
     LEFT = 2
 
-    def __init__(self, rotation: float | RightAngles):
+    def __init__(self, rotation: float | RightAngles, attachment_position: int = 5):
         """
         Initialize this object.
 
         :param rotation: Orientation of this model relative to its parent.
+        :param attachment_position: The attachment position on new hardware core.
         """
         if isinstance(rotation, RightAngles):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(3, rotation_converted)
+        super().__init__(3, rotation_converted, attachment_position)
 
     @property
     def front(self) -> Module | None:

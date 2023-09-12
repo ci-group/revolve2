@@ -15,6 +15,7 @@ def all() -> list[Body]:
         blokky(),
         garrix(),
         gecko(),
+        gecko_v2(),
         insect(),
         linkin(),
         longleg(),
@@ -43,51 +44,36 @@ def get(name: str) -> Body:
     :returns: The robot with that name.
     :raises ValueError: When a robot with that name does not exist.
     """
-    if name == "spider":
-        return spider()
-    elif name == "gecko":
-        return gecko()
-    elif name == "babya":
-        return babya()
-    elif name == "ant":
-        return ant()
-    elif name == "salamander":
-        return salamander()
-    elif name == "blokky":
-        return blokky()
-    elif name == "park":
-        return park()
-    elif name == "babyb":
-        return babyb()
-    elif name == "garrix":
-        return garrix()
-    elif name == "insect":
-        return insect()
-    elif name == "linkin":
-        return linkin()
-    elif name == "longleg":
-        return longleg()
-    elif name == "penguin":
-        return penguin()
-    elif name == "pentapod":
-        return pentapod()
-    elif name == "queen":
-        return queen()
-    elif name == "squarish":
-        return squarish()
-    elif name == "snake":
-        return snake()
-    elif name == "stingray":
-        return stingray()
-    elif name == "tinlicker":
-        return tinlicker()
-    elif name == "turtle":
-        return turtle()
-    elif name == "ww":
-        return ww()
-    elif name == "zappa":
-        return zappa()
-    else:
+    case = {
+        "spider": spider(),
+        "gecko": gecko(),
+        "gecko_v2": gecko_v2(),
+        "babya": babya(),
+        "ant": ant(),
+        "salamander": salamander(),
+        "blokky": blokky(),
+        "park": park(),
+        "babyb": babyb(),
+        "garrix": garrix(),
+        "insect": insect(),
+        "linkin": linkin(),
+        "longleg": longleg(),
+        "penguin": penguin(),
+        "pentapod": pentapod(),
+        "queen": queen(),
+        "squarish": squarish(),
+        "snake": snake(),
+        "stingray": stingray(),
+        "tinlicker": tinlicker(),
+        "turtle": turtle(),
+        "ww": ww(),
+        "zappa": zappa(),
+    }
+
+    try:
+        return case[name]
+
+    except:
         raise ValueError(f"Robot does not exist: {name}")
 
 
@@ -147,6 +133,36 @@ def gecko() -> Body:
     body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
 
     body.finalize()
+    return body
+
+
+def gecko_v2() -> Body:
+    """
+    Sample robot with new HW config.
+
+    all previously designed robots can be translated to the new hardware using Body(new_hardware=True)
+    the position for core-connected modules is optional, by default pos 5 (middle of core)
+
+    :returns: the robot
+    """
+    body = Body(new_hardware=True)
+    body.core.right = ActiveHinge(0.0, attachment_position=8)
+    body.core.right.attachment = Brick(0.0)
+
+    body.core.left = ActiveHinge(0.0, attachment_position=8)
+    body.core.left.attachment = Brick(0.0)
+
+    body.core.back = ActiveHinge(np.pi / 2.0, attachment_position=8)
+    body.core.back.attachment = Brick(-np.pi / 2.0)
+    body.core.back.attachment.front = ActiveHinge(np.pi / 2.0)
+    body.core.back.attachment.front.attachment = Brick(-np.pi / 2.0)
+    body.core.back.attachment.front.attachment.left = ActiveHinge(0.0)
+    body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
+    body.core.back.attachment.front.attachment.left.attachment = Brick(0.0)
+    body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
+
+    body.finalize()
+
     return body
 
 

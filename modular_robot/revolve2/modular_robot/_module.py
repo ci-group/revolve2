@@ -13,16 +13,19 @@ class Module:
     _id: int | None
     _parent: Module | None
     _parent_child_index: int | None
+    _attachment_position: int
 
-    def __init__(self, num_children: int, rotation: float):
+    def __init__(self, num_children: int, rotation: float, attachment_position: int):
         """
         Initialize this object.
 
         :param num_children: The number of children this module can have.
         :param rotation: Orientation of this model relative to its parent.
+        :param attachment_position: attachment position on new core.
         """
         self._children = [None] * num_children
         self._rotation = rotation
+        self._attachment_position = attachment_position
 
         self._id = None
         self._parent = None
@@ -36,6 +39,15 @@ class Module:
         :returns: The list of children.
         """
         return self._children
+
+    @property
+    def attachment_position(self) -> int:
+        """
+        Get the attachment position of a module.
+
+        :returns: The attachment position.
+        """
+        return self._attachment_position
 
     @property
     def rotation(self) -> float:

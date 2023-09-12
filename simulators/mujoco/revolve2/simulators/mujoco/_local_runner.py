@@ -20,7 +20,7 @@ try:
 
     assert (
         old_len + 1 == new_len
-    ), "dm_control not adding logging handler as expected. Maybe they fixed their annoying behaviour? https://github.com/deepmind/dm_control/issues/314https://github.com/deepmind/dm_control/issues/314"
+    ), "dm_control not adding logging handler as expected. Maybe they fixed their annoying behaviour? https://github.com/deepmind/dm_control/issues/314"
 
     logging.root.removeHandler(logging.root.handlers[-1])
 except Exception as e:

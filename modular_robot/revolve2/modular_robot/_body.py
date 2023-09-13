@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import numpy as np
 from pyrr import Quaternion, Vector3
-from revolve2.simulation.actor import Actor, Collision, Joint, RigidBody, Visual
+from revolve2.simulation.actor import Actor, Collision, Joint, RigidBody
 from revolve2.simulation.running._results import ActorState
 
 from ._active_hinge import ActiveHinge
@@ -376,15 +376,6 @@ class _ActorBuilder:
                 BOUNDING_BOX,
             )
         )
-        body.visuals.append(
-            Visual(
-                f"{name_prefix}_core_visual",
-                position,
-                orientation,
-                "model://rg_robot/meshes/CoreComponent.dae",
-                (1.0, 1.0, 0.0),
-            )
-        )
 
         for name_suffix, child_index, angle in [
             ("front", Core.FRONT, 0.0),
@@ -431,15 +422,6 @@ class _ActorBuilder:
                 orientation,
                 MASS,
                 BOUNDING_BOX,
-            )
-        )
-        body.visuals.append(
-            Visual(
-                f"{name_prefix}_brick_visual",
-                position,
-                orientation,
-                "model://rg_robot/meshes/FixedBrick.dae",
-                (1.0, 0.0, 0.0),
             )
         )
 
@@ -514,15 +496,6 @@ class _ActorBuilder:
                 FRAME_BOUNDING_BOX,
             )
         )
-        body.visuals.append(
-            Visual(
-                f"{name_prefix}_activehingeframe_visual",
-                frame_position,
-                orientation,
-                "model://rg_robot/meshes/ActiveHinge_Frame.dae",
-                (0.0, 1.0, 0.0),
-            )
-        )
 
         next_body = RigidBody(
             f"{name_prefix}_activehinge",
@@ -563,15 +536,6 @@ class _ActorBuilder:
                 Quaternion(),
                 SERVO2_MASS,
                 SERVO2_BOUNDING_BOX,
-            )
-        )
-        next_body.visuals.append(
-            Visual(
-                f"{name_prefix}_activehingemotor_visual",
-                Vector3(),
-                Quaternion(),
-                "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
-                (0.0, 1.0, 0.0),
             )
         )
 

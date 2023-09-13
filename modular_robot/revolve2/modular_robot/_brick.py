@@ -1,5 +1,6 @@
 from ._module import Module
 from ._right_angles import RightAngles
+from revolve2.simulation.actor import Color
 
 
 class Brick(Module):
@@ -9,7 +10,9 @@ class Brick(Module):
     RIGHT = 1
     LEFT = 2
 
-    def __init__(self, rotation: float | RightAngles):
+    def __init__(
+        self, rotation: float | RightAngles, color: Color = Color(255, 50, 50)
+    ):
         """
         Initialize this object.
 
@@ -19,7 +22,7 @@ class Brick(Module):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(3, rotation_converted)
+        super().__init__(3, rotation_converted, color)
 
     @property
     def front(self) -> Module | None:

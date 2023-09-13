@@ -1,5 +1,6 @@
 from ._module import Module
 from ._right_angles import RightAngles
+from revolve2.simulation.actor import Color
 
 
 class ActiveHinge(Module):
@@ -25,7 +26,9 @@ class ActiveHinge(Module):
     # 1 / 0.1652 * 60 / 360 * 2pi
     VELOCITY = 6.338968228
 
-    def __init__(self, rotation: float | RightAngles):
+    def __init__(
+        self, rotation: float | RightAngles, color: Color = Color(50, 50, 255)
+    ):
         """
         Initialize this object.
 
@@ -35,7 +38,7 @@ class ActiveHinge(Module):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(1, rotation_converted)
+        super().__init__(1, rotation_converted, color)
 
     @property
     def attachment(self) -> Module | None:

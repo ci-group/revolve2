@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from ._not_finalized_error import NotFinalizedError
+from revolve2.simulation.actor import Color
 
 
 class Module:
@@ -14,7 +15,9 @@ class Module:
     _parent: Module | None
     _parent_child_index: int | None
 
-    def __init__(self, num_children: int, rotation: float):
+    _color: Color
+
+    def __init__(self, num_children: int, rotation: float, color: Color):
         """
         Initialize this object.
 
@@ -27,6 +30,8 @@ class Module:
         self._id = None
         self._parent = None
         self._parent_child_index = None
+
+        self._color = color
 
     @property
     def children(self) -> list[Module | None]:
@@ -106,3 +111,7 @@ class Module:
             open_nodes = new_open_nodes
 
         return out_neighbours
+
+    @property
+    def color(self) -> Color:
+        return self.color

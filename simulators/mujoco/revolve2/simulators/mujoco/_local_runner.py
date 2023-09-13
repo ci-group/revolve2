@@ -351,8 +351,9 @@ class LocalRunner(Runner):
 
             for body in posed_actor.actor.bodies:
                 for collision in body.collisions:
-                    x = robot.find("geom", collision.name)
-                    x.rgba = collision.color.to_normalized_rgba_list()
+                    robot.find(
+                        "geom", collision.name
+                    ).rgba = collision.color.to_normalized_rgba_list()
 
             for joint in posed_actor.actor.joints:
                 # Add rotor inertia to joints. This value is arbitrarily chosen and appears stable enough.

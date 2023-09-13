@@ -11,7 +11,7 @@ class Brick(Module):
     LEFT = 2
 
     def __init__(
-        self, rotation: float | RightAngles, color: Color = Color(255, 50, 50)
+        self, rotation: float | RightAngles, color: Color = Color(50, 50, 255, 255)
     ):
         """
         Initialize this object.

@@ -224,25 +224,38 @@ class LocalRunner(Runner):
         if record_settings is not None:
             os.makedirs(record_settings.video_directory, exist_ok=False)
 
-        with concurrent.futures.ProcessPoolExecutor(
-            max_workers=self._num_simulators
-        ) as executor:
-            futures = [
-                executor.submit(
-                    self._run_environment,
-                    env_index,
-                    env_descr,
-                    self._headless,
-                    record_settings,
-                    self._start_paused,
-                    control_step,
-                    sample_step,
-                    batch.simulation_time,
-                    batch.simulation_timestep,
-                )
-                for env_index, env_descr in enumerate(batch.environments)
-            ]
-            results = BatchResults([future.result() for future in futures])
+        for env_index, env_descr in enumerate(batch.environments):
+            self._run_environment(
+                env_index,
+                env_descr,
+                self._headless,
+                record_settings,
+                self._start_paused,
+                control_step,
+                sample_step,
+                batch.simulation_time,
+                batch.simulation_timestep,
+            )
+
+        # with concurrent.futures.ProcessPoolExecutor(
+        #     max_workers=self._num_simulators
+        # ) as executor:
+        #     futures = [
+        #         executor.submit(
+        #             self._run_environment,
+        #             env_index,
+        #             env_descr,
+        #             self._headless,
+        #             record_settings,
+        #             self._start_paused,
+        #             control_step,
+        #             sample_step,
+        #             batch.simulation_time,
+        #             batch.simulation_timestep,
+        #         )
+        #         for env_index, env_descr in enumerate(batch.environments)
+        #     ]
+        #     results = BatchResults([future.result() for future in futures])
 
         logging.info("Finished batch.")
 
@@ -348,6 +361,11 @@ class LocalRunner(Runner):
                         # On Windows, an open file can’t be deleted, and hence it has to be closed first before removing
                         botfile.close()
                         os.remove(botfile.name)
+
+            for body in posed_actor.actor.bodies:
+                for collision in body.collisions:
+                    x = robot.find("geom", collision.name)
+                    x.rgba = collision.color.to_normalized_rgba_list()
 
             for joint in posed_actor.actor.joints:
                 # Add rotor inertia to joints. This value is arbitrarily chosen and appears stable enough.

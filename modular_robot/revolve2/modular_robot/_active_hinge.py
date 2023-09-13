@@ -27,7 +27,7 @@ class ActiveHinge(Module):
     VELOCITY = 6.338968228
 
     def __init__(
-        self, rotation: float | RightAngles, color: Color = Color(50, 50, 255)
+        self, rotation: float | RightAngles, color: Color = Color(255, 255, 255, 255)
     ):
         """
         Initialize this object.

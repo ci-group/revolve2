@@ -7,4 +7,4 @@ from ._joint import Joint
 from ._rigid_body import RigidBody
 from ._color import Color
 
-__all__ = ["Actor", "BoundingBox", "Collision", "Joint", "RigidBody", "Color"]
+__all__ = ["Actor", "BoundingBox", "Collision", "Color", "Joint", "RigidBody"]

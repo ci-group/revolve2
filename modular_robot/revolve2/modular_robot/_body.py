@@ -374,6 +374,7 @@ class _ActorBuilder:
                 orientation,
                 MASS,
                 BOUNDING_BOX,
+                color=module.color,
             )
         )
 
@@ -422,6 +423,7 @@ class _ActorBuilder:
                 orientation,
                 MASS,
                 BOUNDING_BOX,
+                color=module.color,
             )
         )
 
@@ -494,6 +496,7 @@ class _ActorBuilder:
                 orientation,
                 FRAME_MASS,
                 FRAME_BOUNDING_BOX,
+                color=module.color,
             )
         )
 
@@ -527,6 +530,7 @@ class _ActorBuilder:
                 Quaternion(),
                 SERVO1_MASS,
                 SERVO1_BOUNDING_BOX,
+                color=module.color,
             )
         )
         next_body.collisions.append(
@@ -536,6 +540,7 @@ class _ActorBuilder:
                 Quaternion(),
                 SERVO2_MASS,
                 SERVO2_BOUNDING_BOX,
+                color=module.color,
             )
         )
 

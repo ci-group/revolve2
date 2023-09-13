@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CPPNWIN genotype &mdash; revolve2 v0.3.10-beta1 documentation</title>
+  <title>Mujoco physics runner &mdash; revolve2 v0.3.10-beta1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../../_static/favicon.png"/>
@@ -18,8 +18,8 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Raspberry Pi controller" href="../rpi_controller.html" />
-    <link rel="prev" title="Mujoco physics runner" href="../runners/mujoco.html" /> 
+    <link rel="next" title="CPPNWIN genotype" href="../genotypes/cppnwin.html" />
+    <link rel="prev" title="Installation" href="../index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,7 +43,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Installation</a><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started/index.html">Getting Started</a>
+<li class="toctree-l1"><a class="reference internal" href="../../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Installation Old</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../runners/mujoco.html">Mujoco physics runner</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">CPPNWIN genotype</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../rpi_controller.html">Raspberry Pi actor controller</a></li>
@@ -134,7 +136,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Installation</a></li>
-      <li class="breadcrumb-item active">CPPNWIN genotype</li>
+      <li class="breadcrumb-item active">Mujoco physics runner</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -143,46 +145,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="cppnwin-genotype">
-<h1>CPPNWIN genotype<a class="headerlink" href="#cppnwin-genotype" title="Permalink to this heading"></a></h1>
-<p>This package provides a modular robot genotype based on CPPNWIN.</p>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
-<p>This package depends on a patched version of the open source MultiNEAT library, available at <a class="reference external" href="https://github.com/ci-group/MultiNEAT">https://github.com/ci-group/MultiNEAT</a>.
-MultiNEAT is automatically installed by the CPPNWIN package, but you need to manually install one of its dependencies: the <a class="reference external" href="https://uscilab.github.io/cereal/">cereal</a> C++ library.</p>
-<section id="ubuntu">
-<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this heading"></a></h3>
-<blockquote>
-<div><p>sudo apt install libcereal-dev</p>
-</div></blockquote>
-</section>
-<section id="macos-using-homebrew">
-<h3>macOS using Homebrew<a class="headerlink" href="#macos-using-homebrew" title="Permalink to this heading"></a></h3>
-<blockquote>
-<div><p>brew install cereal</p>
-</div></blockquote>
-</section>
-<section id="other-systems">
-<h3>Other systems<a class="headerlink" href="#other-systems" title="Permalink to this heading"></a></h3>
-<p>If cereal is not available as a package on your system you can install it from source.
-It is a header-only library, so there is no need to build cereal.</p>
-</section>
-</section>
+  <section id="mujoco-physics-runner">
+<h1>Mujoco physics runner<a class="headerlink" href="#mujoco-physics-runner" title="Permalink to this heading"></a></h1>
+<p>This package provides a physics runner that simulates using Mujoco.</p>
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
 <p>Install the package:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">genotypes</span><span class="o">/</span><span class="n">cppnwin</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">runners</span><span class="o">/</span><span class="n">mujoco</span>
 </pre></div>
 </div>
-<section id="macos-using-homebrew-on-m-series-processors">
-<h3>macOS using Homebrew on M-series processors<a class="headerlink" href="#macos-using-homebrew-on-m-series-processors" title="Permalink to this heading"></a></h3>
-<p>It could be that Homebrew installed cereal in <code class="docutils literal notranslate"><span class="pre">/opt</span></code> instead of the usual location.
-See <a class="reference external" href="https://apple.stackexchange.com/questions/414622/installing-a-c-c-library-with-homebrew-on-m1-macs">https://apple.stackexchange.com/questions/414622/installing-a-c-c-library-with-homebrew-on-m1-macs</a>.
-If this is the case, you can tell CPPNWIN where to look for cereal manually:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">CPATH</span><span class="o">=/</span><span class="n">opt</span><span class="o">/</span><span class="n">homebrew</span><span class="o">/</span><span class="n">include</span>
-</pre></div>
-</div>
-</section>
 </section>
 </section>
 

@@ -4,32 +4,32 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Raspberry Pi controller &mdash; revolve2 v0.3.10-beta1 documentation</title>
+  <title>Installation &mdash; revolve2 v0.3.10-beta1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
-  
+
         <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/sphinx_highlight.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="User Guide" href="../user_guide/index.html" />
-    <link rel="prev" title="CPPNWIN genotype" href="genotypes/cppnwin.html" /> 
+    <link rel="next" title="Mujoco physics runner" href="runners/mujoco.html" />
+    <link rel="prev" title="Revolve2 documentation" href="../index.html" />
 </head>
 
-<body class="wy-body-for-nav"> 
+<body class="wy-body-for-nav">
   <div class="wy-grid-for-nav">
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
 
-          
-          
+
+
           <a href="../index.html" class="icon icon-home">
             revolve2
               <img src="../_static/logo.png" class="logo" alt="Logo"/>
@@ -43,10 +43,12 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Installation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="runners/mujoco.html">Mujoco physics runner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Raspberry Pi actor controller</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation_old/index.html">Installation Old</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation_old/runners/mujoco.html">Mujoco physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation_old/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation_old/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
@@ -133,32 +135,57 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-          <li class="breadcrumb-item"><a href="index.html">Installation</a></li>
-      <li class="breadcrumb-item active">Raspberry Pi controller</li>
+      <li class="breadcrumb-item active">Installation</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="raspberry-pi-controller">
-<h1>Raspberry Pi controller<a class="headerlink" href="#raspberry-pi-controller" title="Permalink to this heading"></a></h1>
-<p>This package provides a CLI tool for mapping a Revolve2 <code class="docutils literal notranslate"><span class="pre">ActorController</span></code> to physical servos on a Raspberry Pi.</p>
-<section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
-<p>A Raspberry Pi with Python 3.10 or higher installed.</p>
-</section>
-<section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading"></a></h2>
-<p>Install the package on your Raspberry Pi:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">rpi_controller</span>
-</pre></div>
-</div>
-</section>
-</section>
+           <span itemprop="articleBody">
 
+<section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading"></a></h1>
+<p>Revolve2 is a library that allows you to use evolutionary computing for modular robot evolution and simulation of those robots.
+Additionally these modular robots can be built physically and subsequently be controlled by the brain of your simulated robots.
+In this tutorial we will go over all steps for you to start researching ASAP.</p>
+<section id="step1">
+<h2>Step 1<a class="headerlink" href="#step1" title="Permalink to this heading"></a></h2>
+<p>The first step is to install revolve2. For this follow the detailed tutorial from the link below.
+Keep in mind that installation can vary depending on the release you choose.For releases < <strong>0.4.0</strong>
+use the Installation Guide Old.</p>
+    <ul>
+        <li><a href="../installation/index.html">Installation Guide</a> </li>
+        <li><a href="../installation_old/index.html">Installation Guide Old</a> </li>
+    </ul>
+</section>
+    <section id="step2">
+        <h2>Step 2<a class="headerlink" href="#step2" title="Permalink to this heading"></a></h2>
+        <p>Depending on your topic of research some different functionality in revolve2 might be interesting to you.
+One good starting point to get a better understanding of the inner workings of revolve2, are the examples found in the repository.</br>
+        To understand the mechanics behind the simulations better look at:</p>
+        <ul>
+            <li>To understand the mechanics behind the simulations better look at: <code class="docutils literal notranslate"><span class="pre">simulate_single_robot</span></code></li>
+            <li>If you need a refresh on evolutionary algorithms try to understand the following examples:<ul>
+                <li><code class="docutils literal notranslate"><span class="pre">simple_ea_xor</span></code> and <code class="docutils literal notranslate"><span class="pre">simple_ea_xor_database</span></code>
+            </li></ul></li>
+            <li>To get into the evolution of modular robots brains/ bodies or both there are multiple examples to look at:<ul>
+                <li><code class="docutils literal notranslate"><span class="pre">robot_bodybrain_ea</span></code> for evolving the brain and body of a robot using an evolutionary algorithm</li>
+                <li><code class="docutils literal notranslate"><span class="pre">robot_bodybrain_ea_database</span></code> for doing the same as above, however with a database to collect simulation data.</li>
+                <li><code class="docutils literal notranslate"><span class="pre">robot_brain_cmaes</span></code> is a good starting point when you want to evolve only a brain using covariance matrix adaptation evolution strategy (CMA-ES)</li>
+                <li><code class="docutils literal notranslate"><span class="pre">robot_brain_cmaes_database</span></code> for the same with a database again.</li>
+            </ul></li>
+            <li>Evaluating your experiments is crucial. Examples on how you could do that can be found in:<ul>
+                <li><code class="docutils literal notranslate"><span class="pre">evaluate_multiple_isolated_robots</span></code> and <code class="docutils literal notranslate"><span class="pre">evaluate_single_robot</span></code></li>
+            </ul></li>
+            <li>To see how you can structure a experiment look at: <code class="docutils literal notranslate"><span class="pre">experiment_setup</span></code></li>
+            <li>Finally if you want to use your freshly evolved <code>ActorController</code> on a physical robot look at the following examples:<ul>
+                <li><code class="docutils literal notranslate"><span class="pre">rpi_controller</span></code> to see an example of a mapped ``ActorController``.</li>
+                <li><code class="docutils literal notranslate"><span class="pre">rpi_controller_remote</span></code> to see how you can connect to your physical robot.</li>
+            </ul></li>
+        </ul>
+    </section>
+</section>
 
            </div>
           </div>
@@ -173,7 +200,7 @@
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+
 
 </footer>
         </div>
@@ -184,7 +211,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
 
 </body>
 </html>

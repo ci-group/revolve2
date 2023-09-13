@@ -43,10 +43,12 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="runners/mujoco.html">Mujoco physics runner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rpi_controller.html">Raspberry Pi actor controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation_old/index.html">Installation Old</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation_old/runners/mujoco.html">Mujoco physics runner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation_old/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation_old/rpi_controller.html">Raspberry Pi actor controller</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
@@ -141,12 +143,11 @@
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-             
-  <section id="installation">
+
+<section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <p>Revolve2 consists of multiple smaller Python packages.
-The <code class="docutils literal notranslate"><span class="pre">core</span></code> package and it’s automatically installed dependencies contain everything required for optimization as well as other features that are trivial to install.
-Additionally there are optional supplementary packages that contain varying functionality that is not always required and may be more difficult to install.</p>
+These packages are not all required, depending on the usecase. In the following section you will find out what packages you need for your reserch.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
 <ul>
@@ -161,7 +162,7 @@ Additionally there are optional supplementary packages that contain varying func
 </section>
 <section id="create-an-environment">
 <h2>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this heading"></a></h2>
-<p>Create a directory for your project, then create a virtual environment:</p>
+<p>Keeping your workspace tidy is important, virtual environments help with that.<br/> Create a directory for your project, then create a virtual environment:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="mf">.10</span> <span class="o">-</span><span class="n">m</span> <span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span>
 </pre></div>
 </div>
@@ -176,30 +177,29 @@ Additionally there are optional supplementary packages that contain varying func
 <p>Download your preferred version from <a class="reference external" href="https://github.com/ci-group/revolve2/releases">https://github.com/ci-group/revolve2/releases</a>.
 If you need to edit Revolve2 itself to add new features, it is recommended to instead create a fork and clone using git.</p>
 </section>
-<section id="install-core">
-<h2>Install core<a class="headerlink" href="#install-core" title="Permalink to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">Core</span></code> installs all code and revolve2 packages required for optimization.
-It has only PyPI dependencies and is a pure python package:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">core</span>
+<section id="install-packages">
+<h2>Install packages <a class="headerlink" href="#install-packages" title="Permalink to this heading"></a></h2>
+<p>revolve2 contains multiple packages that provide specific functionality.
+Packages with a <strong>!</strong> next to them are always required for a working revolve2.</br>
+One shortcut to manually installing the packages is using: </p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sh</span> <span class="o">dev_requirements.sh</span>
+</pre></div></div>
+<p>This script installs all packages in editable mode automatically.
+If you choose manual installation, install the packages in order of the table to avoid potential conflicts or missing dependencies.</br> Each package can be installed using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">package</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>If you need to edit Revolve2 itself to add new features, it is recommended that you use <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
-</section>
-<section id="install-supplementary-packages-optional">
-<h2>Install supplementary packages (Optional)<a class="headerlink" href="#install-supplementary-packages-optional" title="Permalink to this heading"></a></h2>
-<p>Revolve2 contains additional packages that provide extra functionality. These are fully optional.</p>
+
 <div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="runners/mujoco.html">Mujoco physics runner</a></li>
-<li class="toctree-l1"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rpi_controller.html">Raspberry Pi actor controller</a></li>
-</ul>
+    <table class="docutils align-default"><thead><tr><th>Package</th><th></th><th>Description</th></tr></thead><tbody><tr><td>ci_group</td><td>!</td><td>This package provides revolve2 with some auxiliary functions and standard resources that can be easily reused.</td></tr><tr><td>simulators/mujoco</td><td>!</td><td>This package provides revolve2 with the ability to simulate robots in a mujoco environment.</td></tr><tr><td>experimentation</td><td>!</td><td>This package provides revolve2 with essential functionality for experiments, such as optimization techniques, genotype operations and database usage.</td></tr><tr><td>rpi_controller</td><td></td><td>This package allows to map a revolve2 ``ActorController`` to physical servos on a Raspberry Pi.</td></tr><tr><td>rpi_controller_remote</td><td></td><td>This package allows to remotely connect to, and run a physical robot using SSH.</td></tr><tr><td>modular_robot</td><td>!</td><td>This package provides revolve2 with all functionality around the robots and their modules.</td></tr><tr><td>simulation</td><td>!</td><td>This package provides revolve2 with some functionality for the simulations, such as Actor properties and Abstracted Classes.</td></tr><tr><td>actor_controller</td><td>!</td><td>This package provides revolve2 with premade controllers for the modular robots, and the possibility to add new controllers.</td></tr><tr><td>serialization</td><td>!</td><td>This package does what the name says.</td></tr></tbody></table>
 </div>
+
 </section>
 <section id="editable-mode">
 <h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Permalink to this heading"></a></h2>
 <p>If you want to edit revolve2’s code while having it installed, consider using pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">package</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">&lt;</span><span class="n">package</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <p>Refer to pip’s documentation for what this does exactly.</p>

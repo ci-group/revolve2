@@ -114,4 +114,4 @@ class Module:
 
     @property
     def color(self) -> Color:
-        return self.color
+        return self._color

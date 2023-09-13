@@ -4,7 +4,7 @@ from pyrr import Quaternion, Vector3
 from ._color import Color
 
 
-@dataclass
+@dataclass(kw_only=True)
 class Collision:
     """A collision box."""
 

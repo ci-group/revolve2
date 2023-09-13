@@ -224,38 +224,25 @@ class LocalRunner(Runner):
         if record_settings is not None:
             os.makedirs(record_settings.video_directory, exist_ok=False)
 
-        for env_index, env_descr in enumerate(batch.environments):
-            self._run_environment(
-                env_index,
-                env_descr,
-                self._headless,
-                record_settings,
-                self._start_paused,
-                control_step,
-                sample_step,
-                batch.simulation_time,
-                batch.simulation_timestep,
-            )
-
-        # with concurrent.futures.ProcessPoolExecutor(
-        #     max_workers=self._num_simulators
-        # ) as executor:
-        #     futures = [
-        #         executor.submit(
-        #             self._run_environment,
-        #             env_index,
-        #             env_descr,
-        #             self._headless,
-        #             record_settings,
-        #             self._start_paused,
-        #             control_step,
-        #             sample_step,
-        #             batch.simulation_time,
-        #             batch.simulation_timestep,
-        #         )
-        #         for env_index, env_descr in enumerate(batch.environments)
-        #     ]
-        #     results = BatchResults([future.result() for future in futures])
+        with concurrent.futures.ProcessPoolExecutor(
+            max_workers=self._num_simulators
+        ) as executor:
+            futures = [
+                executor.submit(
+                    self._run_environment,
+                    env_index,
+                    env_descr,
+                    self._headless,
+                    record_settings,
+                    self._start_paused,
+                    control_step,
+                    sample_step,
+                    batch.simulation_time,
+                    batch.simulation_timestep,
+                )
+                for env_index, env_descr in enumerate(batch.environments)
+            ]
+            results = BatchResults([future.result() for future in futures])
 
         logging.info("Finished batch.")
 

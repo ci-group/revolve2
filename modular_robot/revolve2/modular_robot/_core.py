@@ -1,6 +1,7 @@
+from revolve2.simulation.actor import Color
+
 from ._module import Module
 from ._right_angles import RightAngles
-from revolve2.simulation.actor import Color
 
 
 class Core(Module):
@@ -18,6 +19,7 @@ class Core(Module):
         Initialize this object.
 
         :param rotation: Orientation of this model relative to its parent.
+        :param color: The color of the module.
         """
         if isinstance(rotation, RightAngles):
             rotation_converted = rotation.value

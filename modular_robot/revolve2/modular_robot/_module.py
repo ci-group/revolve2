@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from ._not_finalized_error import NotFinalizedError
 from revolve2.simulation.actor import Color
+
+from ._not_finalized_error import NotFinalizedError
 
 
 class Module:
@@ -23,6 +24,7 @@ class Module:
 
         :param num_children: The number of children this module can have.
         :param rotation: Orientation of this model relative to its parent.
+        :param color: The color of the module.
         """
         self._children = [None] * num_children
         self._rotation = rotation
@@ -114,4 +116,9 @@ class Module:
 
     @property
     def color(self) -> Color:
+        """
+        Get the color of this module.
+
+        :returns: The color.
+        """
         return self._color

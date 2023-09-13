@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from pyrr import Quaternion, Vector3
+
 from ._color import Color
 
 

@@ -2,8 +2,10 @@ from dataclasses import dataclass
 
 from pyrr import Quaternion, Vector3
 
+from ._color import Color
 
-@dataclass
+
+@dataclass(kw_only=True)
 class Collision:
     """A collision box."""
 
@@ -30,3 +32,6 @@ class Collision:
     Not half of the box.
     """
     bounding_box: Vector3
+
+    """Color when rendering this collision."""
+    color: Color

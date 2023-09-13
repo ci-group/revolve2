@@ -1,3 +1,5 @@
+from revolve2.simulation.actor import Color
+
 from ._module import Module
 from ._right_angles import RightAngles
 
@@ -10,17 +12,20 @@ class Core(Module):
     BACK = 2
     LEFT = 3
 
-    def __init__(self, rotation: float | RightAngles):
+    def __init__(
+        self, rotation: float | RightAngles, color: Color = Color(255, 50, 50, 255)
+    ):
         """
         Initialize this object.
 
         :param rotation: Orientation of this model relative to its parent.
+        :param color: The color of the module.
         """
         if isinstance(rotation, RightAngles):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(4, rotation_converted)
+        super().__init__(4, rotation_converted, color)
 
     @property
     def front(self) -> Module | None:

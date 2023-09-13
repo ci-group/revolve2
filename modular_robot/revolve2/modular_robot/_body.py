@@ -61,6 +61,18 @@ class Body:
         """
         return self._is_finalized
 
+    def enable_new_hardware(self) -> None:
+        """
+        Enables new hardware expression
+        """
+        self._new_hardware = True
+
+    def disable_new_hardware(self):
+        """
+        Disables new hardware expression
+        """
+        self._new_hardware = False
+
     def to_actor(self) -> tuple[Actor, list[int]]:
         """
         Create an actor from this body.

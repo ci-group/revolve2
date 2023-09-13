@@ -15,6 +15,7 @@ from ._get_body_states_multiple_isolated_robots import (
 )
 from ._get_body_states_single_robot import get_body_states_single_robot
 from ._modular_robot import ModularRobot
+from ._modular_robotv2 import ModularRobotV2
 from ._module import Module
 from ._morphological_measures import MorphologicalMeasures
 from ._not_finalized_error import NotFinalizedError
@@ -28,6 +29,7 @@ __all__ = [
     "Brick",
     "Core",
     "ModularRobot",
+    "ModularRobotV2",
     "Module",
     "MorphologicalMeasures",
     "NotFinalizedError",

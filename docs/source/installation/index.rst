@@ -2,8 +2,7 @@
 Installation
 ============
 Revolve2 consists of multiple smaller Python packages.
-The ``core`` package and it's automatically installed dependencies contain everything required for optimization as well as other features that are trivial to install.
-Additionally there are optional supplementary packages that contain varying functionality that is not always required and may be more difficult to install.
+These packages are not all required, depending on the usecase. In the following section you will find out what packages you need for your reserch.
 
 -------------
 Prerequisites
@@ -17,6 +16,7 @@ Prerequisites
 ---------------------
 Create an environment
 ---------------------
+Keeping your workspace tidy is important, virtual environments help with that.
 Create a directory for your project, then create a virtual environment::
 
     python3.10 -m virtualenv .venv
@@ -33,33 +33,64 @@ Download the source
 Download your preferred version from `<https://github.com/ci-group/revolve2/releases>`_.
 If you need to edit Revolve2 itself to add new features, it is recommended to instead create a fork and clone using git.
 
-------------
-Install core
-------------
-``Core`` installs all code and revolve2 packages required for optimization.
-It has only PyPI dependencies and is a pure python package::
-
-    pip install <revolve2_path>/core
-
-If you need to edit Revolve2 itself to add new features, it is recommended that you use :ref:`installation/index:Editable Mode`.
-
 --------------------------------------------
-Install supplementary packages (Optional)
+Install packages
 --------------------------------------------
-Revolve2 contains additional packages that provide extra functionality. These are fully optional.
+Revolve2 contains multiple packages that provide specific functionality.
+Packages with a **!** next to them are always required for a working revolve2.
 
-.. toctree::
-   :maxdepth: 1
+One shortcut to manually installing the packages is using: ::
 
-   Mujoco physics runner <runners/mujoco>
-   CPPNWIN genotype <genotypes/cppnwin>
-   Raspberry Pi actor controller <rpi_controller>
+    sh dev_requirements.sh
+
+This script installs all packages in editable mode automatically.
+If you choose manual installation, install the packages in order of the table to avoid potential conflicts or missing dependencies.
+Each package can be installed using: ::
+
+    pip install <package_name>
+
+If you need to edit revolve2 itself to add new features, it is recommended that you use :ref:`installation/index:Editable Mode`
+
+.. list-table:: revolve2 packages
+   :widths: 25 50 5
+   :header-rows: 1
+
+   * - Package Name
+     - Functionality
+     -
+   * - ci_group
+     - This package provides revolve2 with some auxiliary functions and standard resources that can be easily reused.
+     - **!**
+   * - simulators/mujoco
+     - This package provides revolve2 with the ability to simulate robots in a mujoco environment.
+     - **!**
+   * - experimentation
+     - This package provides revolve2 with essential functionality for experiments, such as optimization techniques, genotype operations and database usage.
+     - **!**
+   * - rpi_controller_remote
+     - This package allows to map a revolve2 ``ActorController`` to physical servos on a Raspberry Pi.
+     -
+   * - rpi_controller_remote_remote
+     - This package allows to remotely connect to, and run a physical robot using SSH.
+     -
+   * - modular_robot
+     - This package provides revolve2 with all functionality around the robots and their modules.
+     - **!**
+   * - simulation
+     - This package provides revolve2 with some functionality for the simulations, such as Actor properties and Abstracted Classes.
+     - **!**
+   * - actor_controller
+     - This package provides revolve2 with premade controllers for the modular robots, and the possibility to add new controllers.
+     - **!**
+   * - serialization
+     - This package does what the name says.
+     - **!**
 
 -------------
 Editable Mode
 -------------
 If you want to edit revolve2's code while having it installed, consider using pip's ``editable mode``::
 
-    pip install <package> -e
+    pip install -e <package>
 
 Refer to pip's documentation for what this does exactly.

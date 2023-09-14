@@ -1,1 +1,0 @@
-.. include:: ../installation/index

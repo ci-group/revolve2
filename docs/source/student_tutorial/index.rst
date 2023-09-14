@@ -9,14 +9,8 @@ In this tutorial we will go over all steps for you to start researching ASAP.
 -------------
 Step 1: Installation
 -------------
-The first step is to install revolve2. For this follow the detailed tutorial from the link below.
-Keep in mind that installation can vary depending on the release you choose.For releases < **0.4.0**
-use the Installation Guide Old.
-.. toctree::
-   :maxdepth: 1
-
-   Installation Guide <_include>
-   Installation Guide Old <_include_old>
+The first step is to install revolve2. For this follow the detailed tutorial from :ref:`Installation Guide<installation/index>`.
+Keep in mind that installation can vary depending on the release you choose.
 
 ---------------------
 Step 2: Play with examples

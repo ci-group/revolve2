@@ -20,7 +20,7 @@ try:
 
     assert (
         old_len + 1 == new_len
-    ), "dm_control not adding logging handler as expected. Maybe they fixed their annoying behaviour? https://github.com/deepmind/dm_control/issues/314https://github.com/deepmind/dm_control/issues/314"
+    ), "dm_control not adding logging handler as expected. Maybe they fixed their annoying behaviour? https://github.com/deepmind/dm_control/issues/314"
 
     logging.root.removeHandler(logging.root.handlers[-1])
 except Exception as e:
@@ -99,6 +99,9 @@ class LocalRunner(Runner):
             for posed_actor in env_descr.actors
             for dof_state in posed_actor.dof_states
         ]
+        # Explicitly set the initial angle of every joint to 0.0.
+        cls._set_dof_state(data, model, [0.0 for _ in initial_targets])
+        # Set each degree of freedom target.
         cls._set_dof_targets(data, initial_targets)
 
         for posed_actor in env_descr.actors:
@@ -346,6 +349,12 @@ class LocalRunner(Runner):
                         botfile.close()
                         os.remove(botfile.name)
 
+            for body in posed_actor.actor.bodies:
+                for collision in body.collisions:
+                    robot.find(
+                        "geom", collision.name
+                    ).rgba = collision.color.to_normalized_rgba_list()
+
             for joint in posed_actor.actor.joints:
                 # Add rotor inertia to joints. This value is arbitrarily chosen and appears stable enough.
                 # Fine-tuning the armature value might be needed later.
@@ -432,4 +441,24 @@ class LocalRunner(Runner):
             raise RuntimeError("Need to set a target for every dof")
         for i, target in enumerate(targets):
             data.ctrl[2 * i] = target
-            data.ctrl[2 * i + 1] = 0
+            data.ctrl[2 * i + 1] = 0.0
+
+    @staticmethod
+    def _set_dof_state(
+        data: mujoco.MjData, model: mujoco.MjModel, angles: list[float]
+    ) -> None:
+        if len(angles) != model.njnt - 1:  # The extra joint is the 'free' joint.
+            raise RuntimeError("Need to set an angle for every joint")
+
+        for i, angle in enumerate(angles):
+            qindex = model.jnt_qposadr[
+                i + 1
+            ]  # Joint's address in qpos array. Skip free joint.
+
+            # Set the rotation angle for the joint.
+            data.qpos[qindex] = angle
+
+            # Set the joint velocity to zero.
+            data.qvel[
+                qindex : qindex + model.jnt_dofadr[i + 1]
+            ] = 0.0  # Again, skip free joint.

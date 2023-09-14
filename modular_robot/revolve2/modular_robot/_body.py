@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 import numpy as np
 from pyrr import Quaternion, Vector3
-from revolve2.simulation.actor import Actor, Collision, Joint, RigidBody, Visual
+from revolve2.simulation.actor import Actor, Collision, Joint, RigidBody
 from revolve2.simulation.running._results import ActorState
 
 from ._active_hinge import ActiveHinge
@@ -369,20 +369,12 @@ class _ActorBuilder:
 
         body.collisions.append(
             Collision(
-                f"{name_prefix}_core_collision",
-                position,
-                orientation,
-                MASS,
-                BOUNDING_BOX,
-            )
-        )
-        body.visuals.append(
-            Visual(
-                f"{name_prefix}_core_visual",
-                position,
-                orientation,
-                "model://rg_robot/meshes/CoreComponent.dae",
-                (1.0, 1.0, 0.0),
+                name=f"{name_prefix}_core_collision",
+                position=position,
+                orientation=orientation,
+                mass=MASS,
+                bounding_box=BOUNDING_BOX,
+                color=module.color,
             )
         )
 
@@ -426,20 +418,12 @@ class _ActorBuilder:
 
         body.collisions.append(
             Collision(
-                f"{name_prefix}_brick_collision",
-                position,
-                orientation,
-                MASS,
-                BOUNDING_BOX,
-            )
-        )
-        body.visuals.append(
-            Visual(
-                f"{name_prefix}_brick_visual",
-                position,
-                orientation,
-                "model://rg_robot/meshes/FixedBrick.dae",
-                (1.0, 0.0, 0.0),
+                name=f"{name_prefix}_brick_collision",
+                position=position,
+                orientation=orientation,
+                mass=MASS,
+                bounding_box=BOUNDING_BOX,
+                color=module.color,
             )
         )
 
@@ -507,20 +491,12 @@ class _ActorBuilder:
 
         body.collisions.append(
             Collision(
-                f"{name_prefix}_activehingeframe_collision",
-                frame_position_real,
-                orientation,
-                FRAME_MASS,
-                FRAME_BOUNDING_BOX,
-            )
-        )
-        body.visuals.append(
-            Visual(
-                f"{name_prefix}_activehingeframe_visual",
-                frame_position,
-                orientation,
-                "model://rg_robot/meshes/ActiveHinge_Frame.dae",
-                (0.0, 1.0, 0.0),
+                name=f"{name_prefix}_activehingeframe_collision",
+                position=frame_position_real,
+                orientation=orientation,
+                mass=FRAME_MASS,
+                bounding_box=FRAME_BOUNDING_BOX,
+                color=module.color,
             )
         )
 
@@ -549,29 +525,22 @@ class _ActorBuilder:
 
         next_body.collisions.append(
             Collision(
-                f"{name_prefix}_activehingemotor_collision1",
-                Vector3(),
-                Quaternion(),
-                SERVO1_MASS,
-                SERVO1_BOUNDING_BOX,
+                name=f"{name_prefix}_activehingemotor_collision1",
+                position=Vector3(),
+                orientation=Quaternion(),
+                mass=SERVO1_MASS,
+                bounding_box=SERVO1_BOUNDING_BOX,
+                color=module.color,
             )
         )
         next_body.collisions.append(
             Collision(
-                f"{name_prefix}_activehingemotor_collision2",
-                SERVO_BBOX2_POSITION,
-                Quaternion(),
-                SERVO2_MASS,
-                SERVO2_BOUNDING_BOX,
-            )
-        )
-        next_body.visuals.append(
-            Visual(
-                f"{name_prefix}_activehingemotor_visual",
-                Vector3(),
-                Quaternion(),
-                "model://rg_robot/meshes/ActiveCardanHinge_Servo_Holder.dae",
-                (0.0, 1.0, 0.0),
+                name=f"{name_prefix}_activehingemotor_collision2",
+                position=SERVO_BBOX2_POSITION,
+                orientation=Quaternion(),
+                mass=SERVO2_MASS,
+                bounding_box=SERVO2_BOUNDING_BOX,
+                color=module.color,
             )
         )
 

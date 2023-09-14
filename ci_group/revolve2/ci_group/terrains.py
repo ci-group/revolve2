@@ -8,9 +8,11 @@ from noise import pnoise2
 from pyrr import Quaternion, Vector3
 from revolve2.simulation import Terrain
 from revolve2.simulation.running import geometry
+from revolve2.ci_group.custom_vectors.object import Vector2
 
 
-def flat(size: Vector3 = Vector3([20.0, 20.0, 0.0])) -> Terrain:
+
+def flat(size: Vector2 = Vector2([20.0, 20.0])) -> Terrain:
     """
     Create a flat plane terrain.
 

@@ -15,7 +15,6 @@ def all() -> list[Body]:
         blokky(),
         garrix(),
         gecko(),
-        gecko_v2(),
         insect(),
         linkin(),
         longleg(),
@@ -47,7 +46,6 @@ def get(name: str) -> Body:
     case = {
         "spider": spider(),
         "gecko": gecko(),
-        "gecko_v2": gecko_v2(),
         "babya": babya(),
         "ant": ant(),
         "salamander": salamander(),
@@ -134,37 +132,6 @@ def gecko() -> Body:
 
     body.finalize()
     return body
-
-
-def gecko_v2() -> Body:
-    """
-    Sample robot with new HW config.
-
-    all previously designed robots can be translated to the new hardware using Body(new_hardware=True)
-    the position for core-connected modules is optional, by default pos 5 (middle of core)
-
-    :returns: the robot
-    """
-    body = Body(new_hardware=True)
-    body.core.right = ActiveHinge(0.0, attachment_position=8)
-    body.core.right.attachment = Brick(0.0)
-
-    body.core.left = ActiveHinge(0.0, attachment_position=8)
-    body.core.left.attachment = Brick(0.0)
-
-    body.core.back = ActiveHinge(np.pi / 2.0, attachment_position=8)
-    body.core.back.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment.front.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.left.attachment = Brick(0.0)
-    body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
-
-    body.finalize()
-
-    return body
-
 
 def babya() -> Body:
     """

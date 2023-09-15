@@ -33,19 +33,9 @@ Download the source
 Download your preferred version from `<https://github.com/ci-group/revolve2/releases>`_.
 If you need to edit Revolve2 itself to add new features, it is recommended to instead create a fork and clone using git.
 
---------------------------------------------
+----------------
 Install packages
---------------------------------------------
-Revolve2 contains multiple packages that provide specific functionality. These packages contain functionality for simulations, modular robot description, hardware control and optimization / EA.
-If you need to edit components of revolve2, or you want to add new features, it is recommended that you use :ref:`installation/index:Editable Mode`.
-Manual installation with editable mode requires you to install the packages in order to avoid potential conflicts or missing dependencies.
-For the correct order refer to the tables *requires* column.
-
-Installing them without edible mode wont require the right order since it will automatically install dependencies.
-Each package can be installed using: ::
-
-    pip install <package_name>
-
+----------------
 **For Students of the CI group:**
 Packages with a **!** next to them are most likely required.
 You can also use a shortcut to install all required packages: ::
@@ -54,9 +44,17 @@ You can also use a shortcut to install all required packages: ::
 
 This script installs all required packages in editable mode.
 
+Revolve2 contains multiple packages that provide specific functionality. These packages contain functionality for simulations, modular robot description, hardware control and optimization / EA.
+If you need to edit components of Revolve2, or you want to add new features, it is recommended that you use :ref:`installation/index:Editable Mode`.
+Manual installation with editable mode requires you to install the packages in order of dependency, so that all packages are installed in editable mode.
+For the correct order refer to the tables *requires* column or look at the `dev_requirements.sh` script.
 
+Installing them without edible mode does not require the right order since it will automatically install dependencies.
+Each package can be installed using: ::
 
-.. list-table:: revolve2 packages
+    pip install <package_name>
+
+.. list-table:: Revolve2 packages
    :widths: 25 50 25 5
    :header-rows: 1
 
@@ -69,7 +67,7 @@ This script installs all required packages in editable mode.
      - :code:`serialization`
      - **!**
    * - ci_group
-     - This package provides revolve2 with CI group specific revolve configuration and helper tools.
+     - This package provides Revolve2 with CI group specific revolve configuration and helper tools.
      - :code:`simulation` & :code:`modular_robot`
      - **!**
    * - experimentation
@@ -77,11 +75,11 @@ This script installs all required packages in editable mode.
      - :code:`modular_robot`
      - **!**
    * - modular_robot
-     - This package provides revolve2 with all functionality around the robots and their modules.
+     - This package provides Revolve2 with all functionality around the robots and their modules.
      - :code:`simulation` & :code:`actor_controller`
      - **!**
    * - rpi_controller
-     - This package allows to run a revolve2 ``ActorController`` on a physical robot, with the same behavior as in the simulations.
+     - This package allows to run a Revolve2 ``ActorController`` on a physical robot, with the same behavior as in the simulations.
      - :code:`actor_controller`
      -
    * - rpi_controller_remote
@@ -106,8 +104,8 @@ This script installs all required packages in editable mode.
 -------------
 Editable Mode
 -------------
-When developing element in python packages it is crucial to test changes iteratively. To avoid constant :code:`pip uninstall` and :code:`pip install` spam, you can simply use pip`s built in "developer" mode.
-If you want to edit revolve2's code while having it installed, use pip's ``editable mode``::
+When developing element in python packages it is crucial to test changes iteratively. To avoid having to constantly :code:`pip uninstall` and :code:`pip install`, you can simply use pip`s built in "developer" mode.
+If you want to edit Revolve2's code while having it installed, use pip's ``editable mode``::
 
     pip install -e <package>
 

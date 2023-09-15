@@ -7,9 +7,8 @@ import numpy.typing as npt
 from noise import pnoise2
 from pyrr import Quaternion, Vector3
 from revolve2.simulation import Terrain
+from revolve2.simulation.custom_vector.object import Vector2
 from revolve2.simulation.running import geometry
-from revolve2.ci_group.custom_vectors.object import Vector2
-
 
 
 def flat(size: Vector2 = Vector2([20.0, 20.0])) -> Terrain:

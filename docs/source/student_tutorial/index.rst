@@ -40,7 +40,7 @@ Some examples have two versions: with and without database. Try the examples wit
 * Evaluating your robots is crucial for your experiments. In :code:`simulate_single_robot` we just simulated a single robot but did nothing with results. Examples on how you can evaluate fitness or results in general, can be found in:
 
     * :code:`evaluate_single_robot` shows how to evaluate a single robots fitness (defined by displacement from the origin).
-    * :code:`evaluate_multiple_isolated_robots` shows how to evaluate the fitness of multiple robots, in parrallel.
+    * :code:`evaluate_multiple_isolated_robots` shows how to evaluate the fitness of multiple robots, in parallel.
 
 * To see how you can structure an experiment, look at: :code:`experiment_setup`
 

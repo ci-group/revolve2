@@ -390,7 +390,7 @@ class _ActorBuilder:
         orientation: Quaternion,
         new_hardware: bool,
     ) -> None:
-        BOUNDING_BOX = Vector3([0.089, 0.089, 0.0603])  # meter
+        BOUNDING_BOX = Vector3([0.089, 0.089, 0.054])  # meter
         MASS = 0.250  # kg
         CHILD_OFFSET = 0.089 / 2.0  # meter
 
@@ -491,7 +491,7 @@ class _ActorBuilder:
         orientation: Quaternion,
         new_hardware: bool,
     ) -> None:
-        BOUNDING_BOX = Vector3([0.06288625, 0.06288625, 0.0603])  # meter
+        BOUNDING_BOX = Vector3([0.0662, 0.0662, 0.0608])  # meter
         MASS = 0.030  # kg
         CHILD_OFFSET = 0.06288625 / 2.0  # meter
 

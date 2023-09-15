@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; revolve2 v0.3.10-beta1 documentation</title>
+  <title>Installation &mdash; revolve2 v0.4.1-beta2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -18,8 +18,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Mujoco physics runner" href="runners/mujoco.html" />
-    <link rel="prev" title="Revolve2 documentation" href="../index.html" /> 
+    <link rel="next" title="User Guide" href="../user_guide/index.html" />
+    <link rel="prev" title="Getting Started" href="../student_tutorial/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,12 +43,8 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="runners/mujoco.html">Mujoco physics runner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rpi_controller.html">Raspberry Pi actor controller</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../student_tutorial/index.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
@@ -100,7 +96,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.simulation.html">simulation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.simulation.actor.html">actor</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.simulation.actor.sdf.html">sdf</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.simulation.actor.urdf.html">urdf</a></li>
 </ul>
 </li>
@@ -145,8 +140,7 @@
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
 <p>Revolve2 consists of multiple smaller Python packages.
-The <code class="docutils literal notranslate"><span class="pre">core</span></code> package and it’s automatically installed dependencies contain everything required for optimization as well as other features that are trivial to install.
-Additionally there are optional supplementary packages that contain varying functionality that is not always required and may be more difficult to install.</p>
+Not all packages are required; pick what you need based on your use case. In the following section you will find out what packages you need for your research.</p>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
 <ul>
@@ -161,7 +155,8 @@ Additionally there are optional supplementary packages that contain varying func
 </section>
 <section id="create-an-environment">
 <h2>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this heading"></a></h2>
-<p>Create a directory for your project, then create a virtual environment:</p>
+<p>Keeping your workspace tidy is important, <a class="reference external" href="https://docs.python.org/3/library/venv.html">virtual environments</a> help with that.
+Create a directory for your project, then create a virtual environment:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="mf">.10</span> <span class="o">-</span><span class="n">m</span> <span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span>
 </pre></div>
 </div>
@@ -176,33 +171,96 @@ Additionally there are optional supplementary packages that contain varying func
 <p>Download your preferred version from <a class="reference external" href="https://github.com/ci-group/revolve2/releases">https://github.com/ci-group/revolve2/releases</a>.
 If you need to edit Revolve2 itself to add new features, it is recommended to instead create a fork and clone using git.</p>
 </section>
-<section id="install-core">
-<h2>Install core<a class="headerlink" href="#install-core" title="Permalink to this heading"></a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">Core</span></code> installs all code and revolve2 packages required for optimization.
-It has only PyPI dependencies and is a pure python package:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">revolve2_path</span><span class="o">&gt;/</span><span class="n">core</span>
+<section id="install-packages">
+<h2>Install packages<a class="headerlink" href="#install-packages" title="Permalink to this heading"></a></h2>
+<p><strong>For Students of the CI group:</strong>
+Packages with a <strong>!</strong> next to them are most likely required.
+You can also use a shortcut to install all required packages:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sh</span> <span class="n">student_install</span><span class="o">.</span><span class="n">sh</span>
 </pre></div>
 </div>
-<p>If you need to edit Revolve2 itself to add new features, it is recommended that you use <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.</p>
-</section>
-<section id="install-supplementary-packages-optional">
-<h2>Install supplementary packages (Optional)<a class="headerlink" href="#install-supplementary-packages-optional" title="Permalink to this heading"></a></h2>
-<p>Revolve2 contains additional packages that provide extra functionality. These are fully optional.</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="runners/mujoco.html">Mujoco physics runner</a></li>
-<li class="toctree-l1"><a class="reference internal" href="genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rpi_controller.html">Raspberry Pi actor controller</a></li>
-</ul>
+<p>This script installs all required packages in editable mode.</p>
+<p>Revolve2 contains multiple packages that provide specific functionality. These packages contain functionality for simulations, modular robot description, hardware control and optimization / EA.
+If you need to edit components of Revolve2, or you want to add new features, it is recommended that you use <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.
+Manual installation with editable mode requires you to install the packages in order of dependency, so that all packages are installed in editable mode.
+For the correct order refer to the tables <em>requires</em> column or look at the <cite>dev_requirements.sh</cite> script.</p>
+<p>Installing them without edible mode does not require the right order since it will automatically install dependencies.
+Each package can be installed using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">package_name</span><span class="o">&gt;</span>
+</pre></div>
 </div>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Revolve2 packages</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 48%" />
+<col style="width: 24%" />
+<col style="width: 5%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Package Name</p></th>
+<th class="head"><p>Functionality</p></th>
+<th class="head"><p>requires</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>actor_controller</p></td>
+<td><p>This package provides a controller interface as well as already implemented controllers for the modular robots.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">serialization</span></code></p></td>
+<td><p><strong>!</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>ci_group</p></td>
+<td><p>This package provides Revolve2 with CI group specific revolve configuration and helper tools.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simulation</span></code> &amp; <code class="code docutils literal notranslate"><span class="pre">modular_robot</span></code></p></td>
+<td><p><strong>!</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>experimentation</p></td>
+<td><p>This package provides functionality for experiments, such as optimization techniques, genotype operations and database usage.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">modular_robot</span></code></p></td>
+<td><p><strong>!</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>modular_robot</p></td>
+<td><p>This package provides Revolve2 with all functionality around the robots and their modules.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simulation</span></code> &amp; <code class="code docutils literal notranslate"><span class="pre">actor_controller</span></code></p></td>
+<td><p><strong>!</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>rpi_controller</p></td>
+<td><p>This package allows to run a Revolve2 <code class="docutils literal notranslate"><span class="pre">ActorController</span></code> on a physical robot, with the same behavior as in the simulations.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">actor_controller</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>rpi_controller_remote</p></td>
+<td><p>This package allows to remotely connect to, and run a physical robot using SSH.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">serialization</span></code></p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>serialization (Deprecated)</p></td>
+<td><p>This package does what the name says. (Will be removed soon)</p></td>
+<td></td>
+<td><p><strong>!</strong></p></td>
+</tr>
+<tr class="row-odd"><td><p>simulation</p></td>
+<td><p>This package provides an abstraction layer for physics simulators. Other packages provide a simulator-specific implementation, such as for MuJoCo.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">actor_controller</span></code></p></td>
+<td><p><strong>!</strong></p></td>
+</tr>
+<tr class="row-even"><td><p>simulators/mujoco</p></td>
+<td><p>This package provides simulation using the MuJoCo simulator.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simulation</span></code> &amp; <code class="code docutils literal notranslate"><span class="pre">modular_robot</span></code></p></td>
+<td><p><strong>!</strong></p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="editable-mode">
 <h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Permalink to this heading"></a></h2>
-<p>If you want to edit revolve2’s code while having it installed, consider using pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">package</span><span class="o">&gt;</span> <span class="o">-</span><span class="n">e</span>
+<p>When developing element in python packages it is crucial to test changes iteratively. To avoid having to constantly <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span></code> and <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>, you can simply use pip`s built in “developer” mode.
+If you want to edit Revolve2’s code while having it installed, use pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">&lt;</span><span class="n">package</span><span class="o">&gt;</span>
 </pre></div>
 </div>
-<p>Refer to pip’s documentation for what this does exactly.</p>
+<p>Refer to pip’s <a class="reference external" href="https://setuptools.pypa.io/en/latest/userguide/development_mode.html">documentation</a> if you want to dig deeper into the editable mode.</p>
 </section>
 </section>
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.modular_robot package &mdash; revolve2 v0.3.10-beta1 documentation</title>
+  <title>revolve2.modular_robot package &mdash; revolve2 v0.4.1-beta2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -43,12 +43,8 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../student_tutorial/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
@@ -100,7 +96,6 @@
 <li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="revolve2.simulation.html">simulation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="revolve2.simulation.actor.html">actor</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.actor.sdf.html">sdf</a></li>
 <li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.actor.urdf.html">urdf</a></li>
 </ul>
 </li>
@@ -148,7 +143,7 @@
 <p>Classes and functions to describe and work with modular robots as used in the CI Group at VU Amsterdam.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.modular_robot.ActiveHinge">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActiveHinge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.modular_robot.RightAngles" title="revolve2.modular_robot._right_angles.RightAngles"><span class="pre">RightAngles</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.modular_robot.ActiveHinge" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActiveHinge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.modular_robot.RightAngles" title="revolve2.modular_robot._right_angles.RightAngles"><span class="pre">RightAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.simulation.actor.html#revolve2.simulation.actor.Color" title="revolve2.simulation.actor._color.Color"><span class="pre">Color</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Color(red=255,</span> <span class="pre">green=255,</span> <span class="pre">blue=255,</span> <span class="pre">alpha=255)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.modular_robot.ActiveHinge" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#revolve2.modular_robot.Module" title="revolve2.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
 <p>An active hinge module for a modular robot.</p>
 <p>This is a rotary joint.</p>
@@ -355,7 +350,7 @@ All module angles must be multiples of 90 degrees.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.modular_robot.Brick">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Brick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.modular_robot.RightAngles" title="revolve2.modular_robot._right_angles.RightAngles"><span class="pre">RightAngles</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.modular_robot.Brick" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Brick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.modular_robot.RightAngles" title="revolve2.modular_robot._right_angles.RightAngles"><span class="pre">RightAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.simulation.actor.html#revolve2.simulation.actor.Color" title="revolve2.simulation.actor._color.Color"><span class="pre">Color</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Color(red=50,</span> <span class="pre">green=50,</span> <span class="pre">blue=255,</span> <span class="pre">alpha=255)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.modular_robot.Brick" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#revolve2.modular_robot.Module" title="revolve2.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
 <p>A brick module for a modular robot.</p>
 <dl class="py attribute">
@@ -410,7 +405,7 @@ All module angles must be multiples of 90 degrees.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.modular_robot.Core">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.modular_robot.RightAngles" title="revolve2.modular_robot._right_angles.RightAngles"><span class="pre">RightAngles</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.modular_robot.Core" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.modular_robot.RightAngles" title="revolve2.modular_robot._right_angles.RightAngles"><span class="pre">RightAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.simulation.actor.html#revolve2.simulation.actor.Color" title="revolve2.simulation.actor._color.Color"><span class="pre">Color</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Color(red=255,</span> <span class="pre">green=50,</span> <span class="pre">blue=50,</span> <span class="pre">alpha=255)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.modular_robot.Core" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#revolve2.modular_robot.Module" title="revolve2.modular_robot._module.Module"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></p>
 <p>The core module of a modular robot.</p>
 <dl class="py attribute">
@@ -509,7 +504,7 @@ All module angles must be multiples of 90 degrees.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.modular_robot.Module">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_children</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.modular_robot.Module" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_children</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="revolve2.simulation.actor.html#revolve2.simulation.actor.Color" title="revolve2.simulation.actor._color.Color"><span class="pre">Color</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.modular_robot.Module" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Base class for a module for modular robots.</p>
 <dl class="py property">
@@ -519,6 +514,17 @@ All module angles must be multiples of 90 degrees.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The list of children.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="revolve2.modular_robot.Module.color">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="revolve2.simulation.actor.html#revolve2.simulation.actor.Color" title="revolve2.simulation.actor._color.Color"><span class="pre">Color</span></a></em><a class="headerlink" href="#revolve2.modular_robot.Module.color" title="Permalink to this definition"></a></dt>
+<dd><p>Get the color of this module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The color.</p>
 </dd>
 </dl>
 </dd></dl>

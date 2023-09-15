@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>revolve2.simulation.actor package &mdash; revolve2 v0.3.10-beta1 documentation</title>
+  <title>revolve2.simulation.actor package &mdash; revolve2 v0.4.1-beta2 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
@@ -18,7 +18,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="revolve2.simulation.actor.sdf package" href="revolve2.simulation.actor.sdf.html" />
+    <link rel="next" title="revolve2.simulation.actor.urdf package" href="revolve2.simulation.actor.urdf.html" />
     <link rel="prev" title="revolve2.simulation package" href="revolve2.simulation.html" /> 
 </head>
 
@@ -43,12 +43,8 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../installation/runners/mujoco.html">Mujoco physics runner</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/genotypes/cppnwin.html">CPPNWIN genotype</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../installation/rpi_controller.html">Raspberry Pi actor controller</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../student_tutorial/index.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
@@ -100,7 +96,6 @@
 <li class="toctree-l2"><a class="reference internal" href="revolve2.serialization.html">serialization</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="revolve2.simulation.html">simulation</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">actor</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.actor.sdf.html">sdf</a></li>
 <li class="toctree-l4"><a class="reference internal" href="revolve2.simulation.actor.urdf.html">urdf</a></li>
 </ul>
 </li>
@@ -200,12 +195,18 @@ with the global axes.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="revolve2.simulation.actor.Collision">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Collision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Vector3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.actor.Collision" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Collision</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#revolve2.simulation.actor.Color" title="revolve2.simulation.actor._color.Color"><span class="pre">Color</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.actor.Collision" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A collision box.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="revolve2.simulation.actor.Collision.bounding_box">
 <span class="sig-name descname"><span class="pre">bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Vector3</span></em><a class="headerlink" href="#revolve2.simulation.actor.Collision.bounding_box" title="Permalink to this definition"></a></dt>
+<dd><p>Color when rendering this collision.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.actor.Collision.color">
+<span class="sig-name descname"><span class="pre">color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#revolve2.simulation.actor.Color" title="revolve2.simulation.actor._color.Color"><span class="pre">Color</span></a></em><a class="headerlink" href="#revolve2.simulation.actor.Collision.color" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -233,6 +234,45 @@ Not half of the box.</p>
 <dt class="sig sig-object py" id="revolve2.simulation.actor.Collision.position">
 <span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Vector3</span></em><a class="headerlink" href="#revolve2.simulation.actor.Collision.position" title="Permalink to this definition"></a></dt>
 <dd><p>Orientation of the collision.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="revolve2.simulation.actor.Color">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">red</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">green</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blue</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.actor.Color" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a color in RGBA format.</p>
+<p>All values should from 0 to 255.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.actor.Color.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#revolve2.simulation.actor.Color.alpha" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.actor.Color.blue">
+<span class="sig-name descname"><span class="pre">blue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#revolve2.simulation.actor.Color.blue" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.actor.Color.green">
+<span class="sig-name descname"><span class="pre">green</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#revolve2.simulation.actor.Color.green" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="revolve2.simulation.actor.Color.red">
+<span class="sig-name descname"><span class="pre">red</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#revolve2.simulation.actor.Color.red" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="revolve2.simulation.actor.Color.to_normalized_rgba_list">
+<span class="sig-name descname"><span class="pre">to_normalized_rgba_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#revolve2.simulation.actor.Color.to_normalized_rgba_list" title="Permalink to this definition"></a></dt>
+<dd><p>Convert to rgba list where each value is between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -366,50 +406,12 @@ Not half of the box.</p>
 <span class="sig-name descname"><span class="pre">static_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#revolve2.simulation.actor.RigidBody.static_friction" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.simulation.actor.RigidBody.visuals">
-<span class="sig-name descname"><span class="pre">visuals</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#revolve2.simulation.actor.Visual" title="revolve2.simulation.actor._visual.Visual"><span class="pre">Visual</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.actor.RigidBody.visuals" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="revolve2.simulation.actor.Visual">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Visual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#revolve2.simulation.actor.Visual" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Visual-only part of an actor.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.simulation.actor.Visual.color">
-<span class="sig-name descname"><span class="pre">color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#revolve2.simulation.actor.Visual.color" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.simulation.actor.Visual.model">
-<span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.simulation.actor.Visual.model" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.simulation.actor.Visual.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#revolve2.simulation.actor.Visual.name" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.simulation.actor.Visual.orientation">
-<span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Quaternion</span></em><a class="headerlink" href="#revolve2.simulation.actor.Visual.orientation" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="revolve2.simulation.actor.Visual.position">
-<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Vector3</span></em><a class="headerlink" href="#revolve2.simulation.actor.Visual.position" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
 </dd></dl>
 
 <section id="subpackages">
 <h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="revolve2.simulation.actor.sdf.html">sdf</a></li>
 <li class="toctree-l1"><a class="reference internal" href="revolve2.simulation.actor.urdf.html">urdf</a></li>
 </ul>
 </div>

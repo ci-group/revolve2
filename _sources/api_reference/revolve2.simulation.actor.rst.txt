@@ -12,5 +12,4 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   sdf <revolve2.simulation.actor.sdf>
    urdf <revolve2.simulation.actor.urdf>

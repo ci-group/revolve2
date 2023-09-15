@@ -10,7 +10,7 @@ In this tutorial we will go over all steps for you to start researching ASAP.
 --------------------
 Step 1: Installation
 --------------------
-The first step is to install Revolve2. For this follow the detailed tutorial from Installation :doc:`Guide </installation/index>`.
+The first step is to install Revolve2. For this follow the detailed tutorial from :doc:`Installation Guide </installation/index>`.
 Keep in mind that installation can vary depending on the release you choose. This documentation matches the latest release of Revolve2.
 
 ------------------------------

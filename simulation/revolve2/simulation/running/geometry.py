@@ -5,6 +5,7 @@ from dataclasses import dataclass
 import numpy as np
 import numpy.typing as npt
 from pyrr import Quaternion, Vector3
+from revolve2.simulation.custom_vector.object import Vector2
 
 
 @dataclass
@@ -19,7 +20,7 @@ class Geometry:
 class Plane(Geometry):
     """A flat plane geometry."""
 
-    size: Vector3  # z is ignored because a plane has 0 thickness
+    size: Vector2
     color: Vector3 = Vector3([0.2, 0.2, 0.2])
 
 

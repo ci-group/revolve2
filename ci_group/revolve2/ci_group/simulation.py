@@ -6,6 +6,7 @@ from revolve2.modular_robot import (
 )
 from revolve2.simulation import Terrain
 from revolve2.simulation.running import Batch
+from typing import Type
 
 STANDARD_SIMULATION_TIME = 30
 STANDARD_SAMPLING_FREQUENCY = 0.0001
@@ -14,7 +15,7 @@ STANDARD_CONTROL_FREQUENCY = 60
 
 
 def create_batch_single_robot_standard(
-    robot: ModularRobot,
+    robot: Type[ModularRobot],
     terrain: Terrain,
     simulation_time: int | None = STANDARD_SIMULATION_TIME,
     sampling_frequency: float = STANDARD_SAMPLING_FREQUENCY,
@@ -43,7 +44,7 @@ def create_batch_single_robot_standard(
 
 
 def create_batch_multiple_isolated_robots_standard(
-    robots: list[ModularRobot],
+    robots: list[Type[ModularRobot]],
     terrains: list[Terrain],
     simulation_time: int | None = STANDARD_SIMULATION_TIME,
     sampling_frequency: float = STANDARD_SAMPLING_FREQUENCY,

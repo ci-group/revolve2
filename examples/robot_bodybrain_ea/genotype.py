@@ -10,7 +10,8 @@ from revolve2.experimentation.genotypes.cppnwin.modular_robot import (
     BodyGenotype,
     BrainGenotypeCpg,
 )
-from revolve2.modular_robot import ModularRobot
+from revolve2.modular_robot.v1 import ModularRobotV1
+
 
 
 @dataclass
@@ -78,7 +79,7 @@ class Genotype(BodyGenotype, BrainGenotypeCpg):
 
         return Genotype(body=body.body, brain=brain.brain)
 
-    def develop(self) -> ModularRobot:
+    def develop(self) -> ModularRobotV1:
         """
         Develop the genotype into a modular robot.
 
@@ -86,4 +87,4 @@ class Genotype(BodyGenotype, BrainGenotypeCpg):
         """
         body = self.develop_body()
         brain = self.develop_brain()
-        return ModularRobot(body=body, brain=brain)
+        return ModularRobotV1(body=body, brain=brain)

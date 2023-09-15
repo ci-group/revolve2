@@ -15,10 +15,8 @@ from revolve2.ci_group import terrains as standard_terrains
 from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group.rng import make_rng
 from revolve2.ci_group.simulation import create_batch_multiple_isolated_robots_standard
-from revolve2.modular_robot import (
-    ModularRobot,
-    get_body_states_multiple_isolated_robots,
-)
+from revolve2.modular_robot.v1 import ModularRobotV1
+from revolve2.modular_robot import get_body_states_multiple_isolated_robots
 from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
 from revolve2.simulators.mujoco import LocalRunner
 
@@ -40,7 +38,7 @@ def main() -> None:
         modular_robots.spider(),
     ]
     brains = [BrainCpgNetworkNeighborRandom(rng) for _ in bodies]
-    robots = [ModularRobot(body, brain) for body, brain in zip(bodies, brains)]
+    robots = [ModularRobotV1(body, brain) for body, brain in zip(bodies, brains)]
 
     # Create a flat terrain and copy references to it into an array the size of the number of robots.
     terrain = standard_terrains.flat()

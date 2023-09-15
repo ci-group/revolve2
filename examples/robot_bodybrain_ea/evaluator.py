@@ -4,7 +4,7 @@ import asyncio
 
 from revolve2.ci_group import fitness_functions, terrains
 from revolve2.ci_group.simulation import create_batch_multiple_isolated_robots_standard
-from revolve2.modular_robot import (
+from revolve2.modular_robot._common import (
     ModularRobot,
     get_body_states_multiple_isolated_robots,
 )

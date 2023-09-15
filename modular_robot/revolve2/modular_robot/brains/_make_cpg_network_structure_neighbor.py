@@ -1,5 +1,5 @@
 from revolve2.actor_controllers.cpg import CpgNetworkStructure, CpgPair
-from revolve2.modular_robot import ActiveHinge, Body
+from revolve2.modular_robot._common import ActiveHinge, Body
 from revolve2.simulation.actor import Actor
 
 

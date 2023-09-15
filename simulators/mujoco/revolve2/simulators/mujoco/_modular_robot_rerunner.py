@@ -1,6 +1,7 @@
 """Rerun(watch) a modular robot in Mujoco."""
 from pyrr import Quaternion, Vector3
 from revolve2.modular_robot import ModularRobot
+from typing import Type
 from revolve2.simulation import EnvironmentActorController, Terrain
 from revolve2.simulation.running import Batch, Environment, PosedActor, RecordSettings
 from revolve2.simulators.mujoco import LocalRunner
@@ -11,7 +12,7 @@ class ModularRobotRerunner:
 
     async def rerun(
         self,
-        robots: ModularRobot | list[ModularRobot],
+        robots: Type[ModularRobot] | list[Type[ModularRobot]],
         control_frequency: float,
         terrain: Terrain,
         simulation_time: int = 1000000,

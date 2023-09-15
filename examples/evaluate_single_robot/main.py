@@ -13,8 +13,9 @@ from revolve2.ci_group import fitness_functions, modular_robots, terrains
 from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group.rng import make_rng
 from revolve2.ci_group.simulation import create_batch_single_robot_standard
-from revolve2.modular_robot import ModularRobot, get_body_states_single_robot
+from revolve2.modular_robot import get_body_states_single_robot
 from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
+from revolve2.modular_robot.v1 import ModularRobotV1
 from revolve2.simulators.mujoco import LocalRunner
 
 
@@ -30,7 +31,7 @@ def main() -> None:
     # Create the robot.
     body = modular_robots.gecko()
     brain = BrainCpgNetworkNeighborRandom(rng)
-    robot = ModularRobot(body, brain)
+    robot = ModularRobotV1(body, brain)
 
     # Create the simulation batch.
     batch = create_batch_single_robot_standard(robot=robot, terrain=terrains.flat())

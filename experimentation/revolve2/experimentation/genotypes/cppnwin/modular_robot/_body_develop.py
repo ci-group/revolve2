@@ -169,7 +169,7 @@ def __rotate(
     a: tuple[int, int, int], b: tuple[int, int, int], angle: int
 ) -> tuple[int, int, int]:
     """
-    Rotates vector a a given angle around b.
+    Rotates custom_vector a a given angle around b.
 
     Angle from [0,1,2,3].
     90 degrees each.

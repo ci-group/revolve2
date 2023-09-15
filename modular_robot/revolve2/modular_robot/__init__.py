@@ -1,36 +1,15 @@
 """Classes and functions to describe and work with modular robots as used in the CI Group at VU Amsterdam."""
 
-from ._active_hinge import ActiveHinge
-from ._body import Body
-from ._body_state import BodyState
-from ._brain import Brain
-from ._brick import Brick
-from ._core import Core
-from ._create_batch_multiple_isolated_robots import (
-    create_batch_multiple_isolated_robots,
-)
-from ._create_batch_single_robot import create_batch_single_robot
-from ._get_body_states_multiple_isolated_robots import (
-    get_body_states_multiple_isolated_robots,
-)
-from ._get_body_states_single_robot import get_body_states_single_robot
-from ._modular_robot import ModularRobot
-from ._modular_robotv2 import ModularRobotV2
-from ._module import Module
-from ._morphological_measures import MorphologicalMeasures
-from ._not_finalized_error import NotFinalizedError
-from ._right_angles import RightAngles
+from ._common import ActiveHinge, Body, BodyState, Brain, Brick, Core, create_batch_single_robot, create_batch_multiple_isolated_robots, get_body_states_multiple_isolated_robots, get_body_states_single_robot, Module, MorphologicalMeasures, NotFinalizedError, RightAngles, ModularRobot
 
 __all__ = [
     "ActiveHinge",
-    "Body",
     "BodyState",
     "Brain",
     "Brick",
     "Core",
-    "ModularRobot",
-    "ModularRobotV2",
     "Module",
+    "ModularRobot",
     "MorphologicalMeasures",
     "NotFinalizedError",
     "RightAngles",

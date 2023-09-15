@@ -5,17 +5,17 @@ import numpy.typing as npt
 from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
 from revolve2.actor_controllers.cpg import CpgNetworkStructure
-from revolve2.modular_robot import Body, Brain
+from revolve2.modular_robot._common import Body, Brain
 
 
 class BrainCpgNetworkStatic(Brain):
     """
     A CPG brain with cpgs and connections defined by the user.
 
-    A state vector is integrated over time using a weight matrix which multiplication with the state vector sum defines the derivative of the state vector.
+    A state custom_vector is integrated over time using a weight matrix which multiplication with the state custom_vector sum defines the derivative of the state custom_vector.
     I.e X' = WX
 
-    The first `num_output_neurons` in the state vector are the outputs for the controller created by this brain.
+    The first `num_output_neurons` in the state custom_vector are the outputs for the controller created by this brain.
     """
 
     _initial_state: npt.NDArray[np.float_]

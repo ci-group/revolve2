@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from revolve2.simulation.actor import Color
+
 from ._not_finalized_error import NotFinalizedError
 
 
@@ -14,13 +16,15 @@ class Module:
     _parent: Module | None
     _parent_child_index: int | None
     _attachment_position: int
+    _color: Color
 
-    def __init__(self, num_children: int, rotation: float, attachment_position: int):
+    def __init__(self, num_children: int, rotation: float, color: Color, attachment_position: int):
         """
         Initialize this object.
 
         :param num_children: The number of children this module can have.
         :param rotation: Orientation of this model relative to its parent.
+        :param color: The color of the module.
         :param attachment_position: attachment position on new core.
         """
         self._children = [None] * num_children
@@ -30,6 +34,8 @@ class Module:
         self._id = None
         self._parent = None
         self._parent_child_index = None
+
+        self._color = color
 
     @property
     def children(self) -> list[Module | None]:
@@ -118,3 +124,12 @@ class Module:
             open_nodes = new_open_nodes
 
         return out_neighbours
+
+    @property
+    def color(self) -> Color:
+        """
+        Get the color of this module.
+
+        :returns: The color.
+        """
+        return self._color

@@ -1,3 +1,5 @@
+from revolve2.simulation.actor import Color
+
 from ._module import Module
 from ._right_angles import RightAngles
 
@@ -9,18 +11,27 @@ class Brick(Module):
     RIGHT = 1
     LEFT = 2
 
-    def __init__(self, rotation: float | RightAngles, attachment_position: int = 5):
+
+
+    def __init__(
+        self, rotation: float | RightAngles, color: Color = Color(50, 50, 255, 255), attachment_position: int = 5
+    ):
         """
         Initialize this object.
 
         :param rotation: Orientation of this model relative to its parent.
+
+        :param color: The color of the module.
         :param attachment_position: The attachment position on new hardware core.
+
         """
         if isinstance(rotation, RightAngles):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(3, rotation_converted, attachment_position)
+
+        super().__init__(3, rotation_converted, color, attachment_position)
+
 
     @property
     def front(self) -> Module | None:

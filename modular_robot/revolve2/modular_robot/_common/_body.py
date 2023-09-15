@@ -4,6 +4,7 @@ from typing import Type
 import numpy as np
 from pyrr import Quaternion, Vector3
 from revolve2.simulation.actor import Actor
+
 from revolve2.simulation.running._results import ActorState
 
 from ._active_hinge import ActiveHinge

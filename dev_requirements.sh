@@ -14,8 +14,8 @@ pip install -e ./modular_robot[dev] && \
 pip install -e ./simulation[dev] && \
 pip install -e ./actor_controller[dev] && \
 pip install -e ./serialization[dev] && \
-pip install -r ./codetools/requirements.txt
-pip install -r ./docs/requirements.txt
-pip install -r ./examples/robot_bodybrain_ea_database/requirements.txt
-pip install -r ./examples/robot_brain_cmaes_database/requirements.txt
+pip install -r ./codetools/requirements.txt && \
+pip install -r ./docs/requirements.txt && \
+pip install -r ./examples/robot_bodybrain_ea_database/requirements.txt && \
+pip install -r ./examples/robot_brain_cmaes_database/requirements.txt && \
 pip install -r ./examples/simple_ea_xor_database/requirements.txt

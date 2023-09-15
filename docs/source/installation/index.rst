@@ -2,7 +2,7 @@
 Installation
 ============
 Revolve2 consists of multiple smaller Python packages.
-These packages are not all required, depending on the usecase. In the following section you will find out what packages you need for your reserch.
+Not all packages are required; pick what you need based on your use case. In the following section you will find out what packages you need for your research.
 
 -------------
 Prerequisites
@@ -16,7 +16,7 @@ Prerequisites
 ---------------------
 Create an environment
 ---------------------
-Keeping your workspace tidy is important, virtual environments help with that.
+Keeping your workspace tidy is important, `virtual environments <https://docs.python.org/3/library/venv.html>`_ help with that.
 Create a directory for your project, then create a virtual environment::
 
     python3.10 -m virtualenv .venv
@@ -36,61 +36,79 @@ If you need to edit Revolve2 itself to add new features, it is recommended to in
 --------------------------------------------
 Install packages
 --------------------------------------------
-Revolve2 contains multiple packages that provide specific functionality.
-Packages with a **!** next to them are always required for a working revolve2.
+Revolve2 contains multiple packages that provide specific functionality. These packages contain functionality for simulations, modular robot description, hardware control and optimization / EA.
+If you need to edit components of revolve2, or you want to add new features, it is recommended that you use :ref:`installation/index:Editable Mode`.
+Manual installation with editable mode requires you to install the packages in order to avoid potential conflicts or missing dependencies.
+For the correct order refer to the tables *requires* column.
 
-One shortcut to manually installing the packages is using: ::
-
-    sh dev_requirements.sh
-
-This script installs all packages in editable mode automatically.
-If you choose manual installation, install the packages in order of the table to avoid potential conflicts or missing dependencies.
+Installing them without edible mode wont require the right order since it will automatically install dependencies.
 Each package can be installed using: ::
 
     pip install <package_name>
 
-If you need to edit revolve2 itself to add new features, it is recommended that you use :ref:`installation/index:Editable Mode`
+**For Students of the CI group:**
+Packages with a **!** next to them are most likely required.
+You can also use a shortcut to install all required packages: ::
+
+    sh student_install.sh
+
+This script installs all required packages in editable mode.
+
+
 
 .. list-table:: revolve2 packages
-   :widths: 25 50 5
+   :widths: 25 50 25 5
    :header-rows: 1
 
    * - Package Name
      - Functionality
+     - requires
      -
-   * - ci_group
-     - This package provides revolve2 with some auxiliary functions and standard resources that can be easily reused.
+   * - actor_controller
+     - This package provides a controller interface as well as already implemented controllers for the modular robots.
+     - :code:`serialization`
      - **!**
-   * - simulators/mujoco
-     - This package provides revolve2 with the ability to simulate robots in a mujoco environment.
+   * - ci_group
+     - This package provides revolve2 with CI group specific revolve configuration and helper tools.
+     - :code:`simulation` & :code:`modular_robot`
      - **!**
    * - experimentation
-     - This package provides revolve2 with essential functionality for experiments, such as optimization techniques, genotype operations and database usage.
+     - This package provides functionality for experiments, such as optimization techniques, genotype operations and database usage.
+     - :code:`modular_robot`
      - **!**
-   * - rpi_controller_remote
-     - This package allows to map a revolve2 ``ActorController`` to physical servos on a Raspberry Pi.
-     -
-   * - rpi_controller_remote_remote
-     - This package allows to remotely connect to, and run a physical robot using SSH.
-     -
    * - modular_robot
      - This package provides revolve2 with all functionality around the robots and their modules.
+     - :code:`simulation` & :code:`actor_controller`
+     - **!**
+   * - rpi_controller
+     - This package allows to run a revolve2 ``ActorController`` on a physical robot, with the same behavior as in the simulations.
+     - :code:`actor_controller`
+     -
+   * - rpi_controller_remote
+     - This package allows to remotely connect to, and run a physical robot using SSH.
+     - :code:`serialization`
+     -
+   * - serialization (Deprecated)
+     - This package does what the name says. (Will be removed soon)
+     -
      - **!**
    * - simulation
-     - This package provides revolve2 with some functionality for the simulations, such as Actor properties and Abstracted Classes.
+     - This package provides an abstraction layer for physics simulators. Other packages provide a simulator-specific implementation, such as for MuJoCo.
+     - :code:`actor_controller`
      - **!**
-   * - actor_controller
-     - This package provides revolve2 with premade controllers for the modular robots, and the possibility to add new controllers.
+   * - simulators/mujoco
+     - This package provides simulation using the MuJoCo simulator.
+     - :code:`simulation` & :code:`modular_robot`
      - **!**
-   * - serialization
-     - This package does what the name says.
-     - **!**
+
+
 
 -------------
 Editable Mode
 -------------
-If you want to edit revolve2's code while having it installed, consider using pip's ``editable mode``::
+When developing element in python packages it is crucial to test changes iteratively. To avoid constant :code:`pip uninstall` and :code:`pip install` spam, you can simply use pip`s built in "developer" mode.
+If you want to edit revolve2's code while having it installed, use pip's ``editable mode``::
 
     pip install -e <package>
 
-Refer to pip's documentation for what this does exactly.
+Refer to pip's `documentation <https://setuptools.pypa.io/en/latest/userguide/development_mode.html>`_ if you want to dig deeper into the editable mode.

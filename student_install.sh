@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # See https://github.com/pypa/pip/issues/10216
-# for why it is at the time of writing not possible to create a dev_requirements.txt
+# for why it is at the time of writing not possible to create a student_requirements.txt
 
 cd "$(dirname "$0")"
 

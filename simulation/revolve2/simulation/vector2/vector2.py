@@ -6,35 +6,25 @@ from typing import Any
 
 import numpy as np
 from pyrr.objects.base import BaseMatrix33, BaseVector, NpProxy
-
-from .. import vector2
-
-
-class BaseVector2(BaseVector):  # type:ignore
-    """Base Class for Vector2."""
-
-    pass
+from revolve2.simulation.vector2 import vector2aux as vector2
 
 
-class Vector2(BaseVector2):
+class Vector2(BaseVector):  # type:ignore
     """Represents a 2-dimensional Vector. The Vector2 class is based on the pyrr implementation of vectors."""
 
     _module = vector2
     _shape = (2,)
 
-    #: The X value of this Vector.
-    x = NpProxy(0)
-    #: The Y value of this Vector.
-    y = NpProxy(1)
-    #: The X,Y values of this Vector as a numpy.ndarray.
-    xy = NpProxy([0, 1])
+    x = NpProxy(0)  #: The X value of this Vector.
+    y = NpProxy(1)  #: The Y value of this Vector.
+    xy = NpProxy([0, 1])  #: The X,Y values of this Vector as a numpy.ndarray.
 
     ########################
     # Creation
     @classmethod
     def from_vector3(cls, vector: Any, dtype: Any = None) -> tuple[Vector2, float]:
         """
-        Create a Vector2 from a Vector3.
+        Create a Vector2 from a Vector3 by dropping the z-dimension.
 
         :param vector: The Vector3.
         :param dtype: The data-type.
@@ -73,7 +63,7 @@ class Vector2(BaseVector2):
     ########################
     # Operators
     __NMB = [Number, np.number]
-    __VCT = [BaseVector2, np.ndarray, list]
+    __VCT = ["Vector2", np.ndarray, list]
 
     def __add__(self, other: Any) -> Vector2:  # type:ignore
         """

@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import numpy as np
 import numpy.typing as npt
 from pyrr import Quaternion, Vector3
-from revolve2.simulation.custom_vector.object import Vector2
+from revolve2.simulation.vector2 import Vector2
 
 
 @dataclass

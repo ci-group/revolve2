@@ -12,8 +12,9 @@ from revolve2.ci_group import terrains
 from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group.rng import make_rng
 from revolve2.ci_group.simulation import create_batch_single_robot_standard
-from revolve2.modular_robot import ActiveHinge, Body, Brick, ModularRobot, RightAngles
+from revolve2.modular_robot import ModularRobot, RightAngles
 from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
+from revolve2.modular_robot.v1 import ActiveHinge, Body, Brick
 from revolve2.simulators.mujoco import LocalRunner
 
 

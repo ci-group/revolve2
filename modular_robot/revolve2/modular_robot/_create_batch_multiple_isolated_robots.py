@@ -1,7 +1,6 @@
+from revolve2.modular_robot._modular_robot import ModularRobot
 from revolve2.simulation import Terrain, create_environment_single_actor
 from revolve2.simulation.running import Batch
-
-from ._modular_robot import ModularRobot
 
 
 def create_batch_multiple_isolated_robots(

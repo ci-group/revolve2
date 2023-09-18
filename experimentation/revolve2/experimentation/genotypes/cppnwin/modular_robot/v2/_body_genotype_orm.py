@@ -3,14 +3,19 @@ from __future__ import annotations
 import multineat
 import numpy as np
 import sqlalchemy.orm as orm
+from revolve2.experimentation.genotypes.cppnwin._multineat_rng_from_random import (
+    multineat_rng_from_random,
+)
+from revolve2.experimentation.genotypes.cppnwin._random_multineat_genotype import (
+    random_multineat_genotype,
+)
+from revolve2.experimentation.genotypes.cppnwin.modular_robot.v2._body_develop import (
+    develop,
+)
 from revolve2.modular_robot import Body
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
 from typing_extensions import Self
-
-from .._multineat_rng_from_random import multineat_rng_from_random
-from .._random_multineat_genotype import random_multineat_genotype
-from ._body_develop import develop
 
 
 def _make_multineat_params() -> multineat.Parameters:
@@ -90,7 +95,7 @@ class BodyGenotypeOrm(orm.MappedAsDataclass, kw_only=True):
             multineat_params=_MULTINEAT_PARAMS,
             output_activation_func=multineat.ActivationFunction.TANH,
             num_inputs=5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
-            num_outputs=5,  # empty, brick, activehinge, rot0, rot90
+            num_outputs=6,  # empty, brick, activehinge, rot0, rot90, attachment_position
             num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
         )
 

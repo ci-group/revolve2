@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8355870.svg)](https://doi.org/10.5281/zenodo.8355870)
 <img  align="right" width="150" height="150"  src="/docs/source/logo.png">
 
 # Revolve2

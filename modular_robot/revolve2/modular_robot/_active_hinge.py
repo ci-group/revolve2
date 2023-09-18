@@ -1,7 +1,5 @@
-from revolve2.simulation.actor import Color
-
-from ._module import Module
-from ._right_angles import RightAngles
+from revolve2.modular_robot._module import Module
+from revolve2.modular_robot._properties import Properties
 
 
 class ActiveHinge(Module):
@@ -13,34 +11,30 @@ class ActiveHinge(Module):
 
     ATTACHMENT = 0
 
-    # angle range of servo
-    # 60 degrees to each side
-    RANGE = 1.047197551
-    # max effort of servo
-    # motor specs: 9.4 kgfcm at 4.8V or 11 kgfcm at 6.0V
-    # about 9.6667 kgfcm at 5.0V, our operating voltage
-    # 9.6667 * 9.807 / 100
-    EFFORT = 0.948013269
-    # max velocity of servo
-    # motor specs: 0.17 s/60deg at 4.8V or 0.14 s/60deg at 6.0V
-    # about 0.1652 s/60deg at 5.0V, our operating voltage
-    # 1 / 0.1652 * 60 / 360 * 2pi
-    VELOCITY = 6.338968228
+    RANGE: float  # angle range of servo
+    EFFORT: float  # max effort of servo
+    VELOCITY: float  # max velocity of servo
 
     def __init__(
-        self, rotation: float | RightAngles, color: Color = Color(255, 255, 255, 255)
+        self,
+        range: float,
+        effort: float,
+        velocity: float,
+        properties: Properties,
     ):
         """
         Initialize this object.
 
-        :param rotation: Orientation of this model relative to its parent.
-        :param color: The color of the module.
+        :param effort: The Effort of the hinge.
+        :param range: The Range of the hinge.
+        :param velocity: The velocity of the hinge.
+        :param properties: The properties of the module.
         """
-        if isinstance(rotation, RightAngles):
-            rotation_converted = rotation.value
-        else:
-            rotation_converted = rotation
-        super().__init__(1, rotation_converted, color)
+        self.RANGE = range
+        self.EFFORT = effort
+        self.VELOCITY = velocity
+        properties.num_children = 1
+        super().__init__(properties)
 
     @property
     def attachment(self) -> Module | None:

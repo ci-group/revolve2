@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from revolve2.modular_robot._not_finalized_error import NotFinalizedError
+from revolve2.modular_robot._properties import Properties
 from revolve2.simulation.actor import Color
-
-from ._not_finalized_error import NotFinalizedError
 
 
 class Module:
@@ -16,24 +16,20 @@ class Module:
     _parent: Module | None
     _parent_child_index: int | None
 
-    _color: Color
+    _properties: Properties
 
-    def __init__(self, num_children: int, rotation: float, color: Color):
+    def __init__(self, properties: Properties):
         """
         Initialize this object.
 
-        :param num_children: The number of children this module can have.
-        :param rotation: Orientation of this model relative to its parent.
-        :param color: The color of the module.
+        :param properties: The modules Properties.
         """
-        self._children = [None] * num_children
-        self._rotation = rotation
-
         self._id = None
         self._parent = None
         self._parent_child_index = None
 
-        self._color = color
+        self._properties = properties
+        self._children = [None] * properties.num_children
 
     @property
     def children(self) -> list[Module | None]:
@@ -51,7 +47,7 @@ class Module:
 
         :returns: The orientation.
         """
-        return self._rotation
+        return self._properties.rotation
 
     @property
     def id(self) -> int:
@@ -121,4 +117,13 @@ class Module:
 
         :returns: The color.
         """
-        return self._color
+        return self._properties.color
+
+    @property
+    def properties(self) -> Properties:
+        """
+        Get the modules additional properties.
+
+        :returns: The properties.
+        """
+        return self._properties

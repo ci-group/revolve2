@@ -1,6 +1,6 @@
 """Standard modular robots."""
 import numpy as np
-from revolve2.modular_robot import ActiveHinge, Body, Brick
+from revolve2.modular_robot.v1 import ActiveHinge, Body, Brick
 
 
 def all() -> list[Body]:

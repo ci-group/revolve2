@@ -1,6 +1,7 @@
 """Standard modular robots."""
 import numpy as np
-from revolve2.modular_robot.v2 import ActiveHinge, Body, Brick
+from revolve2.modular_robot import ActiveHinge, Body, Brick
+from revolve2.modular_robot.v2._property_set import V2PropertySet
 
 
 def all() -> list[Body]:
@@ -42,7 +43,7 @@ def gecko_v2() -> Body:
 
     :returns: the robot
     """
-    body = Body()
+    body = Body(V2PropertySet())
     body.core.right = ActiveHinge(0.0, attachment_position=8)
     body.core.right.attachment = Brick(0.0)
 

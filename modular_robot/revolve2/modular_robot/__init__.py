@@ -19,7 +19,7 @@ from revolve2.modular_robot._get_body_states_single_robot import (
 from revolve2.modular_robot._modular_robot import ModularRobot
 from revolve2.modular_robot._module import Module
 from revolve2.modular_robot._not_finalized_error import NotFinalizedError
-from revolve2.modular_robot._properties import Properties
+from revolve2.modular_robot._properties import Properties, PropertySet
 from revolve2.modular_robot._right_angles import RightAngles
 from revolve2.modular_robot.brains._morphological_measures import MorphologicalMeasures
 
@@ -35,6 +35,7 @@ __all__ = [
     "MorphologicalMeasures",
     "NotFinalizedError",
     "Properties",
+    "PropertySet",
     "RightAngles",
     "create_batch_multiple_isolated_robots",
     "create_batch_single_robot",

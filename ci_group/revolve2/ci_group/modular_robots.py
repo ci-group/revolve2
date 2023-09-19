@@ -1,6 +1,9 @@
 """Standard modular robots."""
 import numpy as np
-from revolve2.modular_robot.v1 import ActiveHinge, Body, Brick
+from revolve2.modular_robot import ActiveHinge, Body, Brick
+from revolve2.modular_robot.v1._property_set import V1PropertySet
+
+properties = V1PropertySet()
 
 
 def all() -> list[Body]:
@@ -97,7 +100,7 @@ def spider() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.left.attachment = Brick(-np.pi / 2.0)
@@ -129,7 +132,7 @@ def gecko() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = Brick(0.0)
@@ -156,7 +159,7 @@ def babya() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = Brick(0.0)
@@ -186,7 +189,7 @@ def ant() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = Brick(0.0)
@@ -218,7 +221,7 @@ def salamander() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.left.attachment = ActiveHinge(-np.pi / 2.0)
@@ -271,7 +274,7 @@ def blokky() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.back = Brick(0.0)
@@ -298,7 +301,7 @@ def park() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.back = ActiveHinge(np.pi / 2.0)
     body.core.back.attachment = ActiveHinge(-np.pi / 2.0)
@@ -329,7 +332,7 @@ def babyb() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.left.attachment = Brick(-np.pi / 2.0)
@@ -365,7 +368,7 @@ def garrix() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.front = ActiveHinge(np.pi / 2.0)
 
@@ -396,7 +399,7 @@ def insect() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.right = ActiveHinge(np.pi / 2.0)
     body.core.right.attachment = ActiveHinge(-np.pi / 2.0)
@@ -426,7 +429,7 @@ def linkin() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.back = ActiveHinge(0.0)
 
@@ -458,7 +461,7 @@ def longleg() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.left.attachment = ActiveHinge(0.0)
@@ -487,7 +490,7 @@ def penguin() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.right = Brick(0.0)
     body.core.right.left = ActiveHinge(np.pi / 2.0)
@@ -532,7 +535,7 @@ def pentapod() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.right = ActiveHinge(np.pi / 2.0)
     body.core.right.attachment = ActiveHinge(0.0)
@@ -561,7 +564,7 @@ def queen() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.back = ActiveHinge(np.pi / 2.0)
     body.core.right = ActiveHinge(np.pi / 2.0)
@@ -590,7 +593,7 @@ def squarish() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.back = ActiveHinge(0.0)
     body.core.back.attachment = Brick(0.0)
@@ -617,7 +620,7 @@ def snake() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = Brick(0.0)
@@ -663,7 +666,7 @@ def stingray() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.back = ActiveHinge(np.pi / 2.0)
     body.core.right = ActiveHinge(np.pi / 2.0)
@@ -694,7 +697,7 @@ def tinlicker() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.right = ActiveHinge(np.pi / 2.0)
     body.core.right.attachment = ActiveHinge(0.0)
@@ -723,7 +726,7 @@ def turtle() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.left = Brick(0.0)
     body.core.left.right = ActiveHinge(0.0)
@@ -758,7 +761,7 @@ def ww() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.back = ActiveHinge(0.0)
     body.core.right = ActiveHinge(np.pi / 2.0)
@@ -787,7 +790,7 @@ def zappa() -> Body:
 
     :returns: the robot.
     """
-    body = Body()
+    body = Body(properties)
 
     body.core.back = ActiveHinge(0.0)
     body.core.right = ActiveHinge(np.pi / 2.0)

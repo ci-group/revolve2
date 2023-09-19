@@ -6,9 +6,12 @@ import multineat
 import numpy as np
 from base import Base
 from revolve2.experimentation.database import HasId
-from revolve2.experimentation.genotypes.cppnwin.modular_robot import BrainGenotypeCpgOrm
-from revolve2.experimentation.genotypes.cppnwin.modular_robot.v1 import BodyGenotypeOrm
+from revolve2.experimentation.genotypes.cppnwin.modular_robot import (
+    BodyGenotypeOrm,
+    BrainGenotypeCpgOrm,
+)
 from revolve2.modular_robot import ModularRobot
+from revolve2.modular_robot.v1 import V1PropertySet
 
 
 class Genotype(Base, HasId, BodyGenotypeOrm, BrainGenotypeCpgOrm):
@@ -83,6 +86,6 @@ class Genotype(Base, HasId, BodyGenotypeOrm, BrainGenotypeCpgOrm):
 
         :returns: The created robot.
         """
-        body = self.develop_body()
+        body = self.develop_body(V1PropertySet())
         brain = self.develop_brain()
         return ModularRobot(body=body, brain=brain)

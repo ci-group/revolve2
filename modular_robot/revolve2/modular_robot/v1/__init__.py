@@ -1,7 +1,4 @@
 """Explicit modules of V1 Robot."""
-from ._active_hinge import ActiveHinge
-from ._body import Body
-from ._brick import Brick
-from ._core import Core
+from ._property_set import V1PropertySet
 
-__all__ = ["ActiveHinge", "Body", "Brick", "Core"]
+__all__ = ["V1PropertySet"]

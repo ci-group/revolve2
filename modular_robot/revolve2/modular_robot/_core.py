@@ -1,5 +1,5 @@
 from revolve2.modular_robot._module import Module
-from revolve2.modular_robot._properties import Properties
+from revolve2.modular_robot._right_angles import RightAngles
 
 
 class Core(Module):
@@ -10,14 +10,13 @@ class Core(Module):
     BACK = 2
     LEFT = 3
 
-    def __init__(self, properties: Properties):
+    def __init__(self, rotation: float | RightAngles):
         """
         Initialize this object.
 
-        :param properties: The modules Properties.
+        :param rotation: The modules rotation.
         """
-        properties.num_children = 4
-        super().__init__(properties)
+        super().__init__(4, rotation, 5)
 
     @property
     def front(self) -> Module | None:

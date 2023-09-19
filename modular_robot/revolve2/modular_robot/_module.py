@@ -1,8 +1,7 @@
 from __future__ import annotations
 
 from revolve2.modular_robot._not_finalized_error import NotFinalizedError
-from revolve2.modular_robot._properties import Properties
-from revolve2.simulation.actor import Color
+from revolve2.modular_robot._right_angles import RightAngles
 
 
 class Module:
@@ -15,21 +14,30 @@ class Module:
     _id: int | None
     _parent: Module | None
     _parent_child_index: int | None
+    _attachment_position: int
 
-    _properties: Properties
-
-    def __init__(self, properties: Properties):
+    def __init__(
+        self,
+        num_children: int,
+        rotation: float | RightAngles,
+        attachment_position: int,
+    ):
         """
         Initialize this object.
 
-        :param properties: The modules Properties.
+        :param num_children: The number of Children.
+        :param rotation: The Modules rotation.
+        :param attachment_position: The Modules attachment_position.
         """
         self._id = None
         self._parent = None
         self._parent_child_index = None
 
-        self._properties = properties
-        self._children = [None] * properties.num_children
+        self._rotation = (
+            rotation.value if isinstance(rotation, RightAngles) else rotation
+        )
+        self._children = [None] * num_children
+        self._attachment_position = attachment_position
 
     @property
     def children(self) -> list[Module | None]:
@@ -47,7 +55,16 @@ class Module:
 
         :returns: The orientation.
         """
-        return self._properties.rotation
+        return self._rotation
+
+    @property
+    def attachment_position(self) -> int:
+        """
+        Get the attachment position of this module if V2.
+
+        :returns: This module's attachment position.
+        """
+        return self._attachment_position
 
     @property
     def id(self) -> int:
@@ -109,21 +126,3 @@ class Module:
             open_nodes = new_open_nodes
 
         return out_neighbours
-
-    @property
-    def color(self) -> Color:
-        """
-        Get the color of this module.
-
-        :returns: The color.
-        """
-        return self._properties.color
-
-    @property
-    def properties(self) -> Properties:
-        """
-        Get the modules additional properties.
-
-        :returns: The properties.
-        """
-        return self._properties

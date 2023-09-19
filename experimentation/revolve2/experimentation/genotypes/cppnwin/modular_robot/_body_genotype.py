@@ -13,10 +13,10 @@ from revolve2.experimentation.genotypes.cppnwin._multineat_rng_from_random impor
 from revolve2.experimentation.genotypes.cppnwin._random_multineat_genotype import (
     random_multineat_genotype,
 )
-from revolve2.experimentation.genotypes.cppnwin.modular_robot.v2._body_develop import (
+from revolve2.experimentation.genotypes.cppnwin.modular_robot._body_develop import (
     develop,
 )
-from revolve2.modular_robot import Body
+from revolve2.modular_robot import Body, PropertySet
 from typing_extensions import Self
 
 
@@ -159,10 +159,11 @@ class BodyGenotype:
             )
         )
 
-    def develop_body(self) -> Body:
+    def develop_body(self, property_set: PropertySet) -> Body:
         """
         Develop the genotype into a modular robot.
 
+        :param property_set: The property set of the body.
         :returns: The created robot.
         """
-        return develop(self.body.genotype)
+        return develop(self.body.genotype, property_set)

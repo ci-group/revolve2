@@ -4,8 +4,7 @@ from queue import Queue
 from typing import Any
 
 import multineat
-from revolve2.modular_robot import Module
-from revolve2.modular_robot.v1 import ActiveHinge, Body, Brick, Core
+from revolve2.modular_robot import ActiveHinge, Body, Brick, Core, Module, PropertySet
 
 
 @dataclass
@@ -19,6 +18,7 @@ class __Module:
 
 def develop(
     genotype: multineat.Genome,
+    property_set: PropertySet,
 ) -> Body:
     """
     Develop a CPPNWIN genotype into a modular robot body.
@@ -26,6 +26,7 @@ def develop(
     It is important that the genotype was created using a compatible function.
 
     :param genotype: The genotype to create the body from.
+    :param property_set: The property set of the body.
     :returns: The create body.
     :raises RuntimeError: In case a module is encountered that is not supported.
     """
@@ -37,7 +38,7 @@ def develop(
     to_explore: Queue[__Module] = Queue()
     grid: set[tuple[int, int, int]] = set()
 
-    body = Body()
+    body = Body(property_set)
 
     to_explore.put(__Module((0, 0, 0), (0, -1, 0), (0, 0, 1), 0, body.core))
     grid.add((0, 0, 0))
@@ -77,7 +78,7 @@ def __evaluate_cppn(
     body_net: multineat.NeuralNetwork,
     position: tuple[int, int, int],
     chain_length: int,
-) -> tuple[Any, int]:
+) -> tuple[Any, int, int]:
     """
     Get module type and orientation from a multineat CPPN network.
 
@@ -101,7 +102,10 @@ def __evaluate_cppn(
     rotation_probs = [outputs[3], outputs[4]]
     rotation = rotation_probs.index(min(rotation_probs))
 
-    return (module_type, rotation)
+    # get attachment position
+    attachment_position = max(1, int(abs(outputs[5]) * 10 - 1e-3))
+
+    return (module_type, rotation, attachment_position)
 
 
 def __add_child(
@@ -122,12 +126,14 @@ def __add_child(
     else:
         grid.add(position)
 
-    child_type, orientation = __evaluate_cppn(body_net, position, chain_length)
+    child_type, orientation, attachment_position = __evaluate_cppn(
+        body_net, position, chain_length
+    )
     if child_type is None:
         return None
     up = __rotate(module.up, forward, orientation)
 
-    child = child_type(orientation * (math.pi / 2.0))
+    child = child_type(orientation * (math.pi / 2.0), attachment_position)
     module.module_reference.children[child_index] = child
 
     return __Module(

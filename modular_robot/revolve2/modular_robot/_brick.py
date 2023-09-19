@@ -1,5 +1,5 @@
 from revolve2.modular_robot._module import Module
-from revolve2.modular_robot._properties import Properties
+from revolve2.modular_robot._right_angles import RightAngles
 
 
 class Brick(Module):
@@ -9,14 +9,14 @@ class Brick(Module):
     RIGHT = 1
     LEFT = 2
 
-    def __init__(self, properties: Properties):
+    def __init__(self, rotation: float | RightAngles, attachment_position: int = 5):
         """
         Initialize this object.
 
-        :param properties: The modules properties.
+        :param rotation: The modules rotation.
+        :param attachment_position: The Modules attachment position
         """
-        properties.num_children = 3
-        super().__init__(properties)
+        super().__init__(3, rotation, attachment_position)
 
     @property
     def front(self) -> Module | None:

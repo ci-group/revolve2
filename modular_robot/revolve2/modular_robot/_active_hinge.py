@@ -1,5 +1,5 @@
 from revolve2.modular_robot._module import Module
-from revolve2.modular_robot._properties import Properties
+from revolve2.modular_robot._right_angles import RightAngles
 
 
 class ActiveHinge(Module):
@@ -11,30 +11,14 @@ class ActiveHinge(Module):
 
     ATTACHMENT = 0
 
-    RANGE: float  # angle range of servo
-    EFFORT: float  # max effort of servo
-    VELOCITY: float  # max velocity of servo
-
-    def __init__(
-        self,
-        range: float,
-        effort: float,
-        velocity: float,
-        properties: Properties,
-    ):
+    def __init__(self, rotation: float | RightAngles, attachment_position: int = 5):
         """
         Initialize this object.
 
-        :param effort: The Effort of the hinge.
-        :param range: The Range of the hinge.
-        :param velocity: The velocity of the hinge.
-        :param properties: The properties of the module.
+        :param rotation: The Modules rotation.
+        :param attachment_position: The Modules attachment position.
         """
-        self.RANGE = range
-        self.EFFORT = effort
-        self.VELOCITY = velocity
-        properties.num_children = 1
-        super().__init__(properties)
+        super().__init__(1, rotation, attachment_position)
 
     @property
     def attachment(self) -> Module | None:

@@ -9,9 +9,10 @@ from revolve2.experimentation.genotypes.cppnwin._multineat_rng_from_random impor
 from revolve2.experimentation.genotypes.cppnwin._random_multineat_genotype import (
     random_multineat_genotype,
 )
-from revolve2.experimentation.genotypes.cppnwin.modular_robot._body_develop import (
+from revolve2.experimentation.genotypes.cppnwin.modular_robot.v1._body_develop import (
     develop,
 )
+from abc import ABC, abstractmethod
 from revolve2.modular_robot import Body, PropertySet
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
@@ -60,14 +61,12 @@ def _make_multineat_params() -> multineat.Parameters:
     return multineat_params
 
 
-_MULTINEAT_PARAMS = _make_multineat_params()
 
-
-class BodyGenotypeOrm(orm.MappedAsDataclass, kw_only=True):
+class BodyGenotypeOrm(ABC, orm.MappedAsDataclass, kw_only=True):
     """SQLAlchemy model for a CPPNWIN body genotype."""
 
     _NUM_INITIAL_MUTATIONS = 5
-
+    _MULTINEAT_PARAMS = _make_multineat_params()
     body: multineat.Genome
 
     _serialized_body: orm.Mapped[str] = orm.mapped_column(

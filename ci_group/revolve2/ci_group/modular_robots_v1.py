@@ -3,7 +3,7 @@ import numpy as np
 from revolve2.modular_robot import ActiveHinge, Body, Brick
 from revolve2.modular_robot.v1._property_set import V1PropertySet
 
-properties = V1PropertySet()
+_PROPERTIES = V1PropertySet()
 
 
 def all() -> list[Body]:
@@ -46,51 +46,34 @@ def get(name: str) -> Body:
     :returns: The robot with that name.
     :raises ValueError: When a robot with that name does not exist.
     """
-    if name == "spider":
-        return spider()
-    elif name == "gecko":
-        return gecko()
-    elif name == "babya":
-        return babya()
-    elif name == "ant":
-        return ant()
-    elif name == "salamander":
-        return salamander()
-    elif name == "blokky":
-        return blokky()
-    elif name == "park":
-        return park()
-    elif name == "babyb":
-        return babyb()
-    elif name == "garrix":
-        return garrix()
-    elif name == "insect":
-        return insect()
-    elif name == "linkin":
-        return linkin()
-    elif name == "longleg":
-        return longleg()
-    elif name == "penguin":
-        return penguin()
-    elif name == "pentapod":
-        return pentapod()
-    elif name == "queen":
-        return queen()
-    elif name == "squarish":
-        return squarish()
-    elif name == "snake":
-        return snake()
-    elif name == "stingray":
-        return stingray()
-    elif name == "tinlicker":
-        return tinlicker()
-    elif name == "turtle":
-        return turtle()
-    elif name == "ww":
-        return ww()
-    elif name == "zappa":
-        return zappa()
-    else:
+    case = {
+        "gecko": gecko,
+        "spider": spider,
+        "babya": babya,
+        "ant": ant,
+        "salamander": salamander,
+        "blokky": blokky,
+        "park": park,
+        "babyb": babyb,
+        "garrix": garrix,
+        "insect": insect,
+        "linkin": linkin,
+        "longleg": longleg,
+        "penguin": penguin,
+        "pentapod": pentapod,
+        "queen": queen,
+        "squarish": squarish,
+        "snake": snake,
+        "stingray": stingray,
+        "tinlicker": tinlicker,
+        "turtle": turtle,
+        "ww": ww,
+        "zappa": zappa,
+    }
+
+    try:
+        return case[name]()
+    except:
         raise ValueError(f"Robot does not exist: {name}")
 
 
@@ -100,7 +83,7 @@ def spider() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.left.attachment = Brick(-np.pi / 2.0)
@@ -132,7 +115,7 @@ def gecko() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = Brick(0.0)
@@ -159,7 +142,7 @@ def babya() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = Brick(0.0)
@@ -189,7 +172,7 @@ def ant() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = Brick(0.0)
@@ -221,7 +204,7 @@ def salamander() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.left.attachment = ActiveHinge(-np.pi / 2.0)
@@ -274,7 +257,7 @@ def blokky() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.back = Brick(0.0)
@@ -301,7 +284,7 @@ def park() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.back = ActiveHinge(np.pi / 2.0)
     body.core.back.attachment = ActiveHinge(-np.pi / 2.0)
@@ -332,7 +315,7 @@ def babyb() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.left.attachment = Brick(-np.pi / 2.0)
@@ -368,7 +351,7 @@ def garrix() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.front = ActiveHinge(np.pi / 2.0)
 
@@ -399,7 +382,7 @@ def insect() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.right = ActiveHinge(np.pi / 2.0)
     body.core.right.attachment = ActiveHinge(-np.pi / 2.0)
@@ -429,7 +412,7 @@ def linkin() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.back = ActiveHinge(0.0)
 
@@ -461,7 +444,7 @@ def longleg() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(np.pi / 2.0)
     body.core.left.attachment = ActiveHinge(0.0)
@@ -490,7 +473,7 @@ def penguin() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.right = Brick(0.0)
     body.core.right.left = ActiveHinge(np.pi / 2.0)
@@ -535,7 +518,7 @@ def pentapod() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.right = ActiveHinge(np.pi / 2.0)
     body.core.right.attachment = ActiveHinge(0.0)
@@ -564,7 +547,7 @@ def queen() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.back = ActiveHinge(np.pi / 2.0)
     body.core.right = ActiveHinge(np.pi / 2.0)
@@ -593,7 +576,7 @@ def squarish() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.back = ActiveHinge(0.0)
     body.core.back.attachment = Brick(0.0)
@@ -620,7 +603,7 @@ def snake() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = ActiveHinge(0.0)
     body.core.left.attachment = Brick(0.0)
@@ -666,7 +649,7 @@ def stingray() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.back = ActiveHinge(np.pi / 2.0)
     body.core.right = ActiveHinge(np.pi / 2.0)
@@ -697,7 +680,7 @@ def tinlicker() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.right = ActiveHinge(np.pi / 2.0)
     body.core.right.attachment = ActiveHinge(0.0)
@@ -726,7 +709,7 @@ def turtle() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.left = Brick(0.0)
     body.core.left.right = ActiveHinge(0.0)
@@ -761,7 +744,7 @@ def ww() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.back = ActiveHinge(0.0)
     body.core.right = ActiveHinge(np.pi / 2.0)
@@ -790,7 +773,7 @@ def zappa() -> Body:
 
     :returns: the robot.
     """
-    body = Body(properties)
+    body = Body(_PROPERTIES)
 
     body.core.back = ActiveHinge(0.0)
     body.core.right = ActiveHinge(np.pi / 2.0)

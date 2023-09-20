@@ -48,21 +48,6 @@ def create_unit_length_y(dtype: Any = None) -> np.ndarray:  # type:ignore
     return np.array([0.0, 1.0], dtype=dtype)
 
 
-@parameters_as_numpy_arrays("vector")  # type:ignore
-def create_from_vector3(
-    vector: Any, dtype: Any = None
-) -> tuple[np.ndarray, float]:  # type:ignore
-    """
-    Create a Vector2 from a Vector3.
-
-    :param vector: The Vector3.
-    :param dtype: The data-type.
-    :return: The Vector2.
-    """
-    dtype = dtype or vector.dtype
-    return (np.array([vector[0], vector[1]], dtype=dtype), vector[2])
-
-
 @parameters_as_numpy_arrays("mat")  # type:ignore
 def create_from_matrix33_translation(
     mat: Any, dtype: Any = None

@@ -21,18 +21,6 @@ class Vector2(BaseVector):  # type:ignore
 
     ########################
     # Creation
-    @classmethod
-    def from_vector3(cls, vector: Any, dtype: Any = None) -> tuple[Vector2, float]:
-        """
-        Create a Vector2 from a Vector3 by dropping the z-dimension.
-
-        :param vector: The Vector3.
-        :param dtype: The data-type.
-        :return: The vector2.
-        """
-        vec, w = vector2.create_from_vector3(vector, dtype)
-        return (cls(vec), w)
-
     def __new__(cls, value: Any = None, w: float = 0.0, dtype: Any = None) -> Any:
         """
         Make a new Vector2.

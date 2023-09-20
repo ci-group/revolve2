@@ -3,6 +3,7 @@ import numpy as np
 from revolve2.modular_robot import ActiveHinge, Body, Brick
 from revolve2.modular_robot.v2._property_set import V2PropertySet
 
+_PROPERTIES=V2PropertySet()
 
 def all() -> list[Body]:
     """
@@ -24,11 +25,11 @@ def get(name: str) -> Body:
     :raises ValueError: When a robot with that name does not exist.
     """
     case = {
-        "gecko_v2": gecko_v2(),
+        "gecko": gecko_v2,
     }
 
     try:
-        return case[name]
+        return case[name]()
 
     except:
         raise ValueError(f"Robot does not exist: {name}")
@@ -43,7 +44,7 @@ def gecko_v2() -> Body:
 
     :returns: the robot
     """
-    body = Body(V2PropertySet())
+    body = Body(_PROPERTIES)
     body.core.right = ActiveHinge(0.0, attachment_position=8)
     body.core.right.attachment = Brick(0.0)
 

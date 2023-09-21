@@ -7,14 +7,13 @@ from sqlalchemy import event
 from sqlalchemy.engine import Connection
 from typing_extensions import Self
 
-from ._multineat_params import get_multineat_params
 from .._multineat_rng_from_random import multineat_rng_from_random
 from .._random_multineat_genotype import random_multineat_genotype
 from ._brain_cpg_network_neighbor_v1 import BrainCpgNetworkNeighborV1
-
-
+from ._multineat_params import get_multineat_params
 
 _MULTINEAT_PARAMS = get_multineat_params()
+
 
 class BrainGenotypeCpgOrm(orm.MappedAsDataclass, kw_only=True):
     """An SQLAlchemy model for a CPPNWIN cpg brain genotype."""

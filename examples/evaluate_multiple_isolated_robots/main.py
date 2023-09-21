@@ -34,10 +34,10 @@ def main() -> None:
 
     # Create the robots.
     bodies = [
-        modular_robots.gecko(),
-        modular_robots.ant(),
-        modular_robots.snake(),
-        modular_robots.spider(),
+        modular_robots_v1.gecko(),
+        modular_robots_v1.ant(),
+        modular_robots_v1.snake(),
+        modular_robots_v1.spider(),
     ]
     brains = [BrainCpgNetworkNeighborRandom(rng) for _ in bodies]
     robots = [ModularRobot(body, brain) for body, brain in zip(bodies, brains)]

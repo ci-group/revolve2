@@ -78,7 +78,7 @@ def __evaluate_cppn(
     body_net: multineat.NeuralNetwork,
     position: tuple[int, int, int],
     chain_length: int,
-) -> tuple[Any, int]:
+) -> tuple[Any, int, int]:
     """
     Get module type and orientation from a multineat CPPN network.
 
@@ -102,8 +102,10 @@ def __evaluate_cppn(
     rotation_probs = [outputs[3], outputs[4]]
     rotation = rotation_probs.index(min(rotation_probs))
 
+    # get attachment position
+    attachment_position = max(1, int(abs(outputs[5]) * 10 - 1e-3))
 
-    return (module_type, rotation)
+    return (module_type, rotation, attachment_position)
 
 
 def __add_child(
@@ -124,14 +126,14 @@ def __add_child(
     else:
         grid.add(position)
 
-    child_type, orientation = __evaluate_cppn(
+    child_type, orientation, attachment_position = __evaluate_cppn(
         body_net, position, chain_length
     )
     if child_type is None:
         return None
     up = __rotate(module.up, forward, orientation)
 
-    child = child_type(orientation * (math.pi / 2.0))
+    child = child_type(orientation * (math.pi / 2.0), attachment_position)
     module.module_reference.children[child_index] = child
 
     return __Module(

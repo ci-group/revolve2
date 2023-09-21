@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from abc import abstractmethod, ABC
 import multineat
 import numpy as np
-from revolve2.experimentation.genotypes.cppnwin._multineat_genotype_pickle_wrapper import (
-    MultineatGenotypePickleWrapper,
-)
-from revolve2.experimentation.genotypes.cppnwin._multineat_rng_from_random import (
-    multineat_rng_from_random,
-)
+import sqlalchemy.orm as orm
 from revolve2.modular_robot import Body, PropertySet
+from sqlalchemy import event
+from sqlalchemy.engine import Connection
 from typing_extensions import Self
+
+from .._multineat_rng_from_random import multineat_rng_from_random
+from .._random_multineat_genotype import random_multineat_genotype
+from abc import ABC, abstractmethod
 
 
 def _make_multineat_params() -> multineat.Parameters:
@@ -57,14 +56,18 @@ def _make_multineat_params() -> multineat.Parameters:
 
 
 
-@dataclass
-class BodyGenotype(ABC):
-    """CPPNWIN body genotype."""
+
+class BodyGenotypeOrm(ABC, orm.MappedAsDataclass, kw_only=True):
+    """SQLAlchemy model for a CPPNWIN body genotype."""
 
     _NUM_INITIAL_MUTATIONS = 5
     _MULTINEAT_PARAMS = _make_multineat_params()
 
-    body: MultineatGenotypePickleWrapper
+    body: multineat.Genome
+
+    _serialized_body: orm.Mapped[str] = orm.mapped_column(
+        "serialized_body", init=False, nullable=False
+    )
 
     @abstractmethod
     @classmethod
@@ -72,7 +75,7 @@ class BodyGenotype(ABC):
         cls,
         innov_db: multineat.InnovationDatabase,
         rng: np.random.Generator,
-    ) -> BodyGenotype:
+    ) -> BodyGenotypeOrm:
         """
         Create a random genotype.
 
@@ -86,7 +89,7 @@ class BodyGenotype(ABC):
         self,
         innov_db: multineat.InnovationDatabase,
         rng: np.random.Generator,
-    ) -> BodyGenotype:
+    ) -> BodyGenotypeOrm:
         """
         Mutate this genotype.
 
@@ -98,15 +101,13 @@ class BodyGenotype(ABC):
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        return BodyGenotype(
-            MultineatGenotypePickleWrapper(
-                self.body.genotype.MutateWithConstraints(
-                    False,
-                    multineat.SearchMode.BLENDED,
-                    innov_db,
-                    self._MULTINEAT_PARAMS,
-                    multineat_rng,
-                )
+        return BodyGenotypeOrm(
+            body=self.body.MutateWithConstraints(
+                False,
+                multineat.SearchMode.BLENDED,
+                innov_db,
+                self._MULTINEAT_PARAMS,
+                multineat_rng,
             )
         )
 
@@ -116,7 +117,7 @@ class BodyGenotype(ABC):
         parent1: Self,
         parent2: Self,
         rng: np.random.Generator,
-    ) -> BodyGenotype:
+    ) -> BodyGenotypeOrm:
         """
         Perform crossover between two genotypes.
 
@@ -127,15 +128,13 @@ class BodyGenotype(ABC):
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        return BodyGenotype(
-            MultineatGenotypePickleWrapper(
-                parent1.body.genotype.MateWithConstraints(
-                    parent2.body.genotype,
-                    False,
-                    False,
-                    multineat_rng,
-                    cls._MULTINEAT_PARAMS,
-                )
+        return BodyGenotypeOrm(
+            body=parent1.body.MateWithConstraints(
+                parent2.body,
+                False,
+                False,
+                multineat_rng,
+                cls._MULTINEAT_PARAMS,
             )
         )
 
@@ -144,7 +143,21 @@ class BodyGenotype(ABC):
         """
         Develop the genotype into a modular robot.
 
-        :param property_set: The property set of the body.
         :returns: The created robot.
         """
         pass
+
+
+@event.listens_for(BodyGenotypeOrm, "before_update", propagate=True)
+@event.listens_for(BodyGenotypeOrm, "before_insert", propagate=True)
+def _update_serialized_body(
+    mapper: orm.Mapper[BodyGenotypeOrm], connection: Connection, target: BodyGenotypeOrm
+) -> None:
+    target._serialized_body = target.body.Serialize()
+
+
+@event.listens_for(BodyGenotypeOrm, "load", propagate=True)
+def _deserialize_body(target: BodyGenotypeOrm, context: orm.QueryContext) -> None:
+    body = multineat.Genome()
+    body.Deserialize(target._serialized_body)
+    target.body = body

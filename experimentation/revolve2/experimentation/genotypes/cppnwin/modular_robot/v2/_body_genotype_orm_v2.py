@@ -1,12 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import multineat
 import numpy as np
-from revolve2.experimentation.genotypes.cppnwin._multineat_genotype_pickle_wrapper import (
-    MultineatGenotypePickleWrapper,
-)
+import sqlalchemy.orm as orm
 from revolve2.experimentation.genotypes.cppnwin._multineat_rng_from_random import (
     multineat_rng_from_random,
 )
@@ -14,6 +10,8 @@ from revolve2.experimentation.genotypes.cppnwin._random_multineat_genotype impor
     random_multineat_genotype,
 )
 from revolve2.modular_robot import Body, PropertySet
+from sqlalchemy import event
+from sqlalchemy.engine import Connection
 from typing_extensions import Self
 
 from ._body_develop import develop
@@ -61,23 +59,24 @@ def _make_multineat_params() -> multineat.Parameters:
     return multineat_params
 
 
-_MULTINEAT_PARAMS = _make_multineat_params()
-
-
-@dataclass
-class BodyGenotype:
-    """CPPNWIN body genotype."""
+class BodyGenotypeOrmV2(orm.MappedAsDataclass, kw_only=True):
+    """SQLAlchemy model for a CPPNWIN body genotype."""
 
     _NUM_INITIAL_MUTATIONS = 5
+    _MULTINEAT_PARAMS = _make_multineat_params()
 
-    body: MultineatGenotypePickleWrapper
+    body: multineat.Genome
+
+    _serialized_body: orm.Mapped[str] = orm.mapped_column(
+        "serialized_body", init=False, nullable=False
+    )
 
     @classmethod
     def random_body(
         cls,
         innov_db: multineat.InnovationDatabase,
         rng: np.random.Generator,
-    ) -> BodyGenotype:
+    ) -> BodyGenotypeOrmV2:
         """
         Create a random genotype.
 
@@ -87,25 +86,23 @@ class BodyGenotype:
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        body = MultineatGenotypePickleWrapper(
-            random_multineat_genotype(
-                innov_db=innov_db,
-                rng=multineat_rng,
-                multineat_params=_MULTINEAT_PARAMS,
-                output_activation_func=multineat.ActivationFunction.TANH,
-                num_inputs=5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
-                num_outputs=6,  # empty, brick, activehinge, rot0, rot90, attachment_position
-                num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
-            )
+        body = random_multineat_genotype(
+            innov_db=innov_db,
+            rng=multineat_rng,
+            multineat_params=cls._MULTINEAT_PARAMS,
+            output_activation_func=multineat.ActivationFunction.TANH,
+            num_inputs=5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
+            num_outputs=6,  # empty, brick, activehinge, rot0, rot90, attachment_position
+            num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
         )
 
-        return BodyGenotype(body)
+        return BodyGenotypeOrmV2(body=body)
 
     def mutate_body(
         self,
         innov_db: multineat.InnovationDatabase,
         rng: np.random.Generator,
-    ) -> BodyGenotype:
+    ) -> BodyGenotypeOrmV2:
         """
         Mutate this genotype.
 
@@ -117,15 +114,13 @@ class BodyGenotype:
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        return BodyGenotype(
-            MultineatGenotypePickleWrapper(
-                self.body.genotype.MutateWithConstraints(
-                    False,
-                    multineat.SearchMode.BLENDED,
-                    innov_db,
-                    _MULTINEAT_PARAMS,
-                    multineat_rng,
-                )
+        return BodyGenotypeOrmV2(
+            body=self.body.MutateWithConstraints(
+                False,
+                multineat.SearchMode.BLENDED,
+                innov_db,
+                self._MULTINEAT_PARAMS,
+                multineat_rng,
             )
         )
 
@@ -135,7 +130,7 @@ class BodyGenotype:
         parent1: Self,
         parent2: Self,
         rng: np.random.Generator,
-    ) -> BodyGenotype:
+    ) -> BodyGenotypeOrmV2:
         """
         Perform crossover between two genotypes.
 
@@ -146,15 +141,13 @@ class BodyGenotype:
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        return BodyGenotype(
-            MultineatGenotypePickleWrapper(
-                parent1.body.genotype.MateWithConstraints(
-                    parent2.body.genotype,
-                    False,
-                    False,
-                    multineat_rng,
-                    _MULTINEAT_PARAMS,
-                )
+        return BodyGenotypeOrmV2(
+            body=parent1.body.MateWithConstraints(
+                parent2.body,
+                False,
+                False,
+                multineat_rng,
+                cls._MULTINEAT_PARAMS,
             )
         )
 
@@ -162,7 +155,24 @@ class BodyGenotype:
         """
         Develop the genotype into a modular robot.
 
-        :param property_set: The property set of the body.
+        :param property_set: The propertyset of the body.
         :returns: The created robot.
         """
-        return develop(self.body.genotype, property_set)
+        return develop(self.body, property_set)
+
+
+@event.listens_for(BodyGenotypeOrmV2, "before_update", propagate=True)
+@event.listens_for(BodyGenotypeOrmV2, "before_insert", propagate=True)
+def _update_serialized_body(
+    mapper: orm.Mapper[BodyGenotypeOrmV2],
+    connection: Connection,
+    target: BodyGenotypeOrmV2,
+) -> None:
+    target._serialized_body = target.body.Serialize()
+
+
+@event.listens_for(BodyGenotypeOrmV2, "load", propagate=True)
+def _deserialize_body(target: BodyGenotypeOrmV2, context: orm.QueryContext) -> None:
+    body = multineat.Genome()
+    body.Deserialize(target._serialized_body)
+    target.body = body

@@ -431,7 +431,7 @@ class _ActorBuilder:
 
                 attachment_offset = (
                     __get_attachment_offset(child.attachment_position, angle)
-                    if child.attachment_position
+                    if child.attachment_position > 0
                     else Vector3([0.0, 0.0, 0.0])
                 )
 

@@ -13,9 +13,10 @@ from revolve2.experimentation.genotypes.cppnwin._multineat_rng_from_random impor
 from revolve2.experimentation.genotypes.cppnwin._random_multineat_genotype import (
     random_multineat_genotype,
 )
-from ._body_develop import develop
 from revolve2.modular_robot import Body, PropertySet
 from typing_extensions import Self
+
+from ._body_develop import develop
 
 
 def _make_multineat_params() -> multineat.Parameters:

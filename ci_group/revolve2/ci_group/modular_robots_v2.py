@@ -3,7 +3,8 @@ import numpy as np
 from revolve2.modular_robot import ActiveHinge, Body, Brick
 from revolve2.modular_robot.v2._property_set import V2PropertySet
 
-_PROPERTIES=V2PropertySet()
+_PROPERTIES = V2PropertySet()
+
 
 def all() -> list[Body]:
     """

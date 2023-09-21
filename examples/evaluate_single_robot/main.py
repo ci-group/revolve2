@@ -28,7 +28,7 @@ def main() -> None:
     rng = make_rng(RNG_SEED)
 
     # Create the robot.
-    body = modular_robots.gecko()
+    body = modular_robots_v1.gecko()
     brain = BrainCpgNetworkNeighborRandom(rng)
     robot = ModularRobot(body, brain)
 

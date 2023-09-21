@@ -9,6 +9,8 @@ Prerequisites
 -------------
 * Python 3.10 or higher.
 * Pip. If you do not have pip for python 3.10, take a look at the get-pip script: `<https://pip.pypa.io/en/stable/installation/>`_.
+* *For Mac users:* Installing Mujoco sometimes does not work properly. Try `pip install mujoco` to see weather you encounter any issues. If it does not install properly it might be necessary to run the command: `export SYSTEM_VERSION_COMPAT=0` before doing the installation of the modules. `See here. <https://github.com/conda-forge/python-feedstock/issues/445#issuecomment-773835866>`_
+* Keep in mind Conda-environments are not officially supported and can cause issues with installation. (Especially in combination with Mac systems)
 * Virtualenv::
 
     python3.10 -m pip install virtualenv

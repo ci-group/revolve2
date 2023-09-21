@@ -10,7 +10,7 @@ You learn:
 
 import asyncio
 
-from revolve2.ci_group import fitness_functions, modular_robots
+from revolve2.ci_group import fitness_functions, modular_robots_v1
 from revolve2.ci_group import terrains as standard_terrains
 from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group.rng import make_rng

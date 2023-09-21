@@ -90,38 +90,8 @@ class Vector2(BaseVector):  # type:ignore
         """
         if type(other) in self.__NMB:
             return Vector2(super(Vector2, self).__mul__(other))
-        elif type(other) in self.__VCT:
-            return Vector2(super(Vector2, self).__mul__(other))
         else:
             self._unsupported_type("multiply", other)
-
-    def __truediv__(self, other: Any) -> Vector2:  # type:ignore
-        """
-        Apply the true division of the existing Vector2.
-
-        :param other: The other Vector2.
-        :return: The resulting Vector2.
-        """
-        if type(other) in self.__NMB:
-            return Vector2(super(Vector2, self).__truediv__(other))
-        elif type(other) in self.__VCT:
-            return Vector2(super(Vector2, self).__truediv__(other))
-        else:
-            self._unsupported_type("divide", other)
-
-    def __div__(self, other: Any) -> Vector2:  # type:ignore
-        """
-        Divide the existing Vector2.
-
-        :param other: The other Vector2.
-        :return: the resulting Vector2.
-        """
-        if type(other) in self.__NMB:
-            return Vector2(super(Vector2, self).__div__(other))
-        elif type(other) in self.__VCT:
-            return Vector2(super(Vector2, self).__div__(other))
-        else:
-            self._unsupported_type("divide", other)
 
     def __xor__(self, other: Any) -> Any:
         """
@@ -177,8 +147,3 @@ class Vector2(BaseVector):  # type:ignore
     def inverse(self) -> Vector2:
         """:return: the inversed Vector2."""
         return Vector2(-self)
-
-    @property
-    def vector2(self) -> Vector2:
-        """:return: itself."""
-        return self

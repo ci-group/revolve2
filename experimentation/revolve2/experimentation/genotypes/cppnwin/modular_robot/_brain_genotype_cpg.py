@@ -12,7 +12,6 @@ from .._random_multineat_genotype import random_multineat_genotype
 from ._brain_cpg_network_neighbor_v1 import BrainCpgNetworkNeighborV1
 from ._multineat_params import get_multineat_params
 
-
 _MULTINEAT_PARAMS = get_multineat_params()
 
 

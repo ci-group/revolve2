@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-simulators-mujoco"
-version = "0.4.0b2"
+version = "0.4.2b2"
 description = "Revolve2 mujoco simulator."
 authors = ["Aart Stuurman <aartstuurman@hotmail.com>"]
 repository = "https://github.com/ci-group/revolve2"

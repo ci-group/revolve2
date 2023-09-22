@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from revolve2.modular_robot._not_finalized_error import NotFinalizedError
-from revolve2.modular_robot._right_angles import RightAngles
+from ._not_finalized_error import NotFinalizedError
+from ._right_angles import RightAngles
 
 
 class Module:

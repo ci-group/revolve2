@@ -1,12 +1,9 @@
 """Standard modular robots."""
 import numpy as np
-from revolve2.modular_robot import ActiveHinge, Body, Brick
-from revolve2.modular_robot.v1._property_set import V1PropertySet
-
-_PROPERTIES = V1PropertySet()
+from revolve2.modular_robot.v1 import ActiveHingeV1, BodyV1, BrickV1
 
 
-def all() -> list[Body]:
+def all() -> list[BodyV1]:
     """
     Get a list of all standard module robots.
 
@@ -38,7 +35,7 @@ def all() -> list[Body]:
     ]
 
 
-def get(name: str) -> Body:
+def get(name: str) -> BodyV1:
     """
     Get a robot by name.
 
@@ -77,173 +74,175 @@ def get(name: str) -> Body:
         raise ValueError(f"Robot does not exist: {name}")
 
 
-def spider_v1() -> Body:
+def spider_v1() -> BodyV1:
     """
     Get the spider modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(np.pi / 2.0)
-    body.core.left.attachment = Brick(-np.pi / 2.0)
-    body.core.left.attachment.front = ActiveHinge(0.0)
-    body.core.left.attachment.front.attachment = Brick(0.0)
+    body.core.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.attachment = BrickV1(-np.pi / 2.0)
+    body.core.left.attachment.front = ActiveHingeV1(0.0)
+    body.core.left.attachment.front.attachment = BrickV1(0.0)
 
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = Brick(-np.pi / 2.0)
-    body.core.right.attachment.front = ActiveHinge(0.0)
-    body.core.right.attachment.front.attachment = Brick(0.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = BrickV1(-np.pi / 2.0)
+    body.core.right.attachment.front = ActiveHingeV1(0.0)
+    body.core.right.attachment.front.attachment = BrickV1(0.0)
 
-    body.core.front = ActiveHinge(np.pi / 2.0)
-    body.core.front.attachment = Brick(-np.pi / 2.0)
-    body.core.front.attachment.front = ActiveHinge(0.0)
-    body.core.front.attachment.front.attachment = Brick(0.0)
+    body.core.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.front.attachment = BrickV1(-np.pi / 2.0)
+    body.core.front.attachment.front = ActiveHingeV1(0.0)
+    body.core.front.attachment.front.attachment = BrickV1(0.0)
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment = Brick(0.0)
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.front = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.attachment = BrickV1(0.0)
 
     body.finalize()
     return body
 
 
-def gecko_v1() -> Body:
+def gecko_v1() -> BodyV1:
     """
     Get the gecko modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(0.0)
-    body.core.left.attachment = Brick(0.0)
+    body.core.left = ActiveHingeV1(0.0)
+    body.core.left.attachment = BrickV1(0.0)
 
-    body.core.right = ActiveHinge(0.0)
-    body.core.right.attachment = Brick(0.0)
+    body.core.right = ActiveHingeV1(0.0)
+    body.core.right.attachment = BrickV1(0.0)
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment.front.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.left.attachment = Brick(0.0)
-    body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment.front.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.front.attachment.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.attachment.left.attachment = BrickV1(0.0)
+    body.core.back.attachment.front.attachment.right = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.attachment.right.attachment = BrickV1(0.0)
 
     body.finalize()
     return body
 
 
-def babya_v1() -> Body:
+def babya_v1() -> BodyV1:
     """
     Get the babya modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(0.0)
-    body.core.left.attachment = Brick(0.0)
+    body.core.left = ActiveHingeV1(0.0)
+    body.core.left.attachment = BrickV1(0.0)
 
-    body.core.right = ActiveHinge(0.0)
-    body.core.right.attachment = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment.attachment = Brick(-np.pi / 2.0)
-    body.core.right.attachment.attachment.front = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.front.attachment = Brick(0.0)
+    body.core.right = ActiveHingeV1(0.0)
+    body.core.right.attachment = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment.attachment = BrickV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment.front = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.front.attachment = BrickV1(0.0)
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment.front.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.left.attachment = Brick(0.0)
-    body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment.front.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.front.attachment.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.attachment.left.attachment = BrickV1(0.0)
+    body.core.back.attachment.front.attachment.right = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.attachment.right.attachment = BrickV1(0.0)
 
     body.finalize()
     return body
 
 
-def ant_v1() -> Body:
+def ant_v1() -> BodyV1:
     """
     Get the ant modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(0.0)
-    body.core.left.attachment = Brick(0.0)
+    body.core.left = ActiveHingeV1(0.0)
+    body.core.left.attachment = BrickV1(0.0)
 
-    body.core.right = ActiveHinge(0.0)
-    body.core.right.attachment = Brick(0.0)
+    body.core.right = ActiveHingeV1(0.0)
+    body.core.right.attachment = BrickV1(0.0)
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.left.attachment = Brick(0.0)
-    body.core.back.attachment.right = ActiveHinge(0.0)
-    body.core.back.attachment.right.attachment = Brick(0.0)
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.left.attachment = BrickV1(0.0)
+    body.core.back.attachment.right = ActiveHingeV1(0.0)
+    body.core.back.attachment.right.attachment = BrickV1(0.0)
 
-    body.core.back.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment.front.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.left.attachment = Brick(0.0)
-    body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
+    body.core.back.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment.front.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.front.attachment.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.attachment.left.attachment = BrickV1(0.0)
+    body.core.back.attachment.front.attachment.right = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.attachment.right.attachment = BrickV1(0.0)
 
     body.finalize()
     return body
 
 
-def salamander_v1() -> Body:
+def salamander_v1() -> BodyV1:
     """
     Get the salamander modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(np.pi / 2.0)
-    body.core.left.attachment = ActiveHinge(-np.pi / 2.0)
+    body.core.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.attachment = ActiveHingeV1(-np.pi / 2.0)
 
-    body.core.right = ActiveHinge(0.0)
+    body.core.right = ActiveHingeV1(0.0)
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.front = Brick(0.0)
-    body.core.back.attachment.front.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.front = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment.front.front.attachment = Brick(-np.pi / 2.0)
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.front = BrickV1(0.0)
+    body.core.back.attachment.front.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment.front.front.attachment = BrickV1(-np.pi / 2.0)
 
-    body.core.back.attachment.front.front.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.front.attachment.left.attachment = Brick(0.0)
-    body.core.back.attachment.front.front.attachment.left.attachment.left = Brick(0.0)
+    body.core.back.attachment.front.front.attachment.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.front.attachment.left.attachment = BrickV1(0.0)
+    body.core.back.attachment.front.front.attachment.left.attachment.left = BrickV1(0.0)
     body.core.back.attachment.front.front.attachment.left.attachment.front = (
-        ActiveHinge(np.pi / 2.0)
+        ActiveHingeV1(np.pi / 2.0)
     )
-    body.core.back.attachment.front.front.attachment.left.attachment.front.attachment = ActiveHinge(
+    body.core.back.attachment.front.front.attachment.left.attachment.front.attachment = ActiveHingeV1(
         -np.pi / 2.0
     )
 
-    body.core.back.attachment.front.front.attachment.front = Brick(0.0)
-    body.core.back.attachment.front.front.attachment.front.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.front.attachment.front.front = Brick(0.0)
-    body.core.back.attachment.front.front.attachment.front.front.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.front.attachment.front.front.front = Brick(0.0)
-    body.core.back.attachment.front.front.attachment.front.front.front.front = (
-        ActiveHinge(np.pi / 2.0)
-    )
-    body.core.back.attachment.front.front.attachment.front.front.front.front.attachment = Brick(
-        -np.pi / 2.0
-    )
-    body.core.back.attachment.front.front.attachment.front.front.front.front.attachment.left = Brick(
+    body.core.back.attachment.front.front.attachment.front = BrickV1(0.0)
+    body.core.back.attachment.front.front.attachment.front.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.front.front.attachment.front.front = BrickV1(0.0)
+    body.core.back.attachment.front.front.attachment.front.front.left = ActiveHingeV1(
         0.0
     )
-    body.core.back.attachment.front.front.attachment.front.front.front.front.attachment.front = ActiveHinge(
+    body.core.back.attachment.front.front.attachment.front.front.front = BrickV1(0.0)
+    body.core.back.attachment.front.front.attachment.front.front.front.front = (
+        ActiveHingeV1(np.pi / 2.0)
+    )
+    body.core.back.attachment.front.front.attachment.front.front.front.front.attachment = BrickV1(
+        -np.pi / 2.0
+    )
+    body.core.back.attachment.front.front.attachment.front.front.front.front.attachment.left = BrickV1(
+        0.0
+    )
+    body.core.back.attachment.front.front.attachment.front.front.front.front.attachment.front = ActiveHingeV1(
         np.pi / 2.0
     )
 
@@ -251,124 +250,126 @@ def salamander_v1() -> Body:
     return body
 
 
-def blokky_v1() -> Body:
+def blokky_v1() -> BodyV1:
     """
     Get the blokky modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(np.pi / 2.0)
-    body.core.back = Brick(0.0)
-    body.core.back.right = ActiveHinge(np.pi / 2.0)
-    body.core.back.front = ActiveHinge(np.pi / 2.0)
-    body.core.back.front.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.back.front.attachment.attachment = Brick(0.0)
-    body.core.back.front.attachment.attachment.front = Brick(0.0)
-    body.core.back.front.attachment.attachment.front.right = Brick(0.0)
-    body.core.back.front.attachment.attachment.front.right.left = Brick(0.0)
-    body.core.back.front.attachment.attachment.front.right.front = Brick(0.0)
-    body.core.back.front.attachment.attachment.right = Brick(0.0)
-    body.core.back.front.attachment.attachment.right.front = Brick(0.0)
-    body.core.back.front.attachment.attachment.right.front.right = Brick(0.0)
-    body.core.back.front.attachment.attachment.right.front.front = ActiveHinge(0.0)
+    body.core.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.back = BrickV1(0.0)
+    body.core.back.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.front.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.back.front.attachment.attachment = BrickV1(0.0)
+    body.core.back.front.attachment.attachment.front = BrickV1(0.0)
+    body.core.back.front.attachment.attachment.front.right = BrickV1(0.0)
+    body.core.back.front.attachment.attachment.front.right.left = BrickV1(0.0)
+    body.core.back.front.attachment.attachment.front.right.front = BrickV1(0.0)
+    body.core.back.front.attachment.attachment.right = BrickV1(0.0)
+    body.core.back.front.attachment.attachment.right.front = BrickV1(0.0)
+    body.core.back.front.attachment.attachment.right.front.right = BrickV1(0.0)
+    body.core.back.front.attachment.attachment.right.front.front = ActiveHingeV1(0.0)
 
     body.finalize()
     return body
 
 
-def park_v1() -> Body:
+def park_v1() -> BodyV1:
     """
     Get the park modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.back.attachment.attachment = Brick(0.0)
-    body.core.back.attachment.attachment.right = Brick(0.0)
-    body.core.back.attachment.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.attachment.front = Brick(0.0)
-    body.core.back.attachment.attachment.front.right = ActiveHinge(-np.pi / 2.0)
-    body.core.back.attachment.attachment.front.front = ActiveHinge(-np.pi / 2.0)
-    body.core.back.attachment.attachment.front.left = ActiveHinge(0.0)
-    body.core.back.attachment.attachment.front.left.attachment = Brick(0.0)
-    body.core.back.attachment.attachment.front.left.attachment.right = ActiveHinge(
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.back.attachment.attachment = BrickV1(0.0)
+    body.core.back.attachment.attachment.right = BrickV1(0.0)
+    body.core.back.attachment.attachment.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.attachment.front = BrickV1(0.0)
+    body.core.back.attachment.attachment.front.right = ActiveHingeV1(-np.pi / 2.0)
+    body.core.back.attachment.attachment.front.front = ActiveHingeV1(-np.pi / 2.0)
+    body.core.back.attachment.attachment.front.left = ActiveHingeV1(0.0)
+    body.core.back.attachment.attachment.front.left.attachment = BrickV1(0.0)
+    body.core.back.attachment.attachment.front.left.attachment.right = ActiveHingeV1(
         -np.pi / 2.0
     )
-    body.core.back.attachment.attachment.front.left.attachment.front = Brick(0.0)
-    body.core.back.attachment.attachment.front.left.attachment.front = ActiveHinge(0.0)
-    body.core.back.attachment.attachment.front.left.attachment.front.attachment = Brick(
+    body.core.back.attachment.attachment.front.left.attachment.front = BrickV1(0.0)
+    body.core.back.attachment.attachment.front.left.attachment.front = ActiveHingeV1(
         0.0
+    )
+    body.core.back.attachment.attachment.front.left.attachment.front.attachment = (
+        BrickV1(0.0)
     )
 
     body.finalize()
     return body
 
 
-def babyb_v1() -> Body:
+def babyb_v1() -> BodyV1:
     """
     Get the babyb modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(np.pi / 2.0)
-    body.core.left.attachment = Brick(-np.pi / 2.0)
-    body.core.left.attachment.front = ActiveHinge(0.0)
-    body.core.left.attachment.front.attachment = Brick(0.0)
-    body.core.left.attachment.front.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.left.attachment.front.attachment.front.attachment = Brick(0.0)
+    body.core.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.attachment = BrickV1(-np.pi / 2.0)
+    body.core.left.attachment.front = ActiveHingeV1(0.0)
+    body.core.left.attachment.front.attachment = BrickV1(0.0)
+    body.core.left.attachment.front.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.attachment.front.attachment.front.attachment = BrickV1(0.0)
 
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = Brick(-np.pi / 2.0)
-    body.core.right.attachment.front = ActiveHinge(0.0)
-    body.core.right.attachment.front.attachment = Brick(0.0)
-    body.core.right.attachment.front.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment.front.attachment.front.attachment = Brick(0.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = BrickV1(-np.pi / 2.0)
+    body.core.right.attachment.front = ActiveHingeV1(0.0)
+    body.core.right.attachment.front.attachment = BrickV1(0.0)
+    body.core.right.attachment.front.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment.front.attachment.front.attachment = BrickV1(0.0)
 
-    body.core.front = ActiveHinge(np.pi / 2.0)
-    body.core.front.attachment = Brick(-np.pi / 2.0)
-    body.core.front.attachment.front = ActiveHinge(0.0)
-    body.core.front.attachment.front.attachment = Brick(0.0)
-    body.core.front.attachment.front.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.front.attachment.front.attachment.front.attachment = Brick(0.0)
+    body.core.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.front.attachment = BrickV1(-np.pi / 2.0)
+    body.core.front.attachment.front = ActiveHingeV1(0.0)
+    body.core.front.attachment.front.attachment = BrickV1(0.0)
+    body.core.front.attachment.front.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.front.attachment.front.attachment.front.attachment = BrickV1(0.0)
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment = Brick(-np.pi / 2.0)
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment = BrickV1(-np.pi / 2.0)
 
     body.finalize()
     return body
 
 
-def garrix_v1() -> Body:
+def garrix_v1() -> BodyV1:
     """
     Get the garrix modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.front = ActiveHinge(np.pi / 2.0)
+    body.core.front = ActiveHingeV1(np.pi / 2.0)
 
-    body.core.left = ActiveHinge(np.pi / 2.0)
-    body.core.left.attachment = ActiveHinge(0.0)
-    body.core.left.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.left.attachment.attachment.attachment = Brick(0.0)
-    body.core.left.attachment.attachment.attachment.front = Brick(0.0)
-    body.core.left.attachment.attachment.attachment.left = ActiveHinge(0.0)
+    body.core.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.attachment = ActiveHingeV1(0.0)
+    body.core.left.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.left.attachment.attachment.attachment = BrickV1(0.0)
+    body.core.left.attachment.attachment.attachment.front = BrickV1(0.0)
+    body.core.left.attachment.attachment.attachment.left = ActiveHingeV1(0.0)
 
-    part2 = Brick(0.0)
-    part2.right = ActiveHinge(np.pi / 2.0)
-    part2.front = ActiveHinge(np.pi / 2.0)
-    part2.left = ActiveHinge(0.0)
-    part2.left.attachment = ActiveHinge(np.pi / 2.0)
-    part2.left.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    part2.left.attachment.attachment.attachment = Brick(0.0)
+    part2 = BrickV1(0.0)
+    part2.right = ActiveHingeV1(np.pi / 2.0)
+    part2.front = ActiveHingeV1(np.pi / 2.0)
+    part2.left = ActiveHingeV1(0.0)
+    part2.left.attachment = ActiveHingeV1(np.pi / 2.0)
+    part2.left.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    part2.left.attachment.attachment.attachment = BrickV1(0.0)
 
     body.core.left.attachment.attachment.attachment.left.attachment = part2
 
@@ -376,29 +377,29 @@ def garrix_v1() -> Body:
     return body
 
 
-def insect_v1() -> Body:
+def insect_v1() -> BodyV1:
     """
     Get the insect modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.attachment.attachment = Brick(0.0)
-    body.core.right.attachment.attachment.right = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment.attachment.left = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment.attachment.left.attachment = Brick(-np.pi / 2.0)
-    body.core.right.attachment.attachment.left.attachment.front = ActiveHinge(
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment = BrickV1(0.0)
+    body.core.right.attachment.attachment.right = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment.attachment.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment.attachment.left.attachment = BrickV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment.left.attachment.front = ActiveHingeV1(
         np.pi / 2.0
     )
-    body.core.right.attachment.attachment.left.attachment.right = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.left.attachment.right = ActiveHingeV1(0.0)
     body.core.right.attachment.attachment.left.attachment.right.attachment = (
-        ActiveHinge(0.0)
+        ActiveHingeV1(0.0)
     )
-    body.core.right.attachment.attachment.left.attachment.right.attachment.attachment = ActiveHinge(
+    body.core.right.attachment.attachment.left.attachment.right.attachment.attachment = ActiveHingeV1(
         np.pi / 2.0
     )
 
@@ -406,236 +407,238 @@ def insect_v1() -> Body:
     return body
 
 
-def linkin_v1() -> Body:
+def linkin_v1() -> BodyV1:
     """
     Get the linkin modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.back = ActiveHinge(0.0)
+    body.core.back = ActiveHingeV1(0.0)
 
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.attachment.attachment.attachment.attachment = Brick(0.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment.attachment.attachment = BrickV1(0.0)
 
     part2 = body.core.right.attachment.attachment.attachment.attachment
-    part2.front = Brick(0.0)
+    part2.front = BrickV1(0.0)
 
-    part2.left = ActiveHinge(0.0)
-    part2.left.attachment = ActiveHinge(0.0)
+    part2.left = ActiveHingeV1(0.0)
+    part2.left.attachment = ActiveHingeV1(0.0)
 
-    part2.right = ActiveHinge(np.pi / 2.0)
-    part2.right.attachment = ActiveHinge(-np.pi / 2.0)
-    part2.right.attachment.attachment = ActiveHinge(0.0)
-    part2.right.attachment.attachment.attachment = ActiveHinge(np.pi / 2.0)
-    part2.right.attachment.attachment.attachment.attachment = ActiveHinge(0.0)
+    part2.right = ActiveHingeV1(np.pi / 2.0)
+    part2.right.attachment = ActiveHingeV1(-np.pi / 2.0)
+    part2.right.attachment.attachment = ActiveHingeV1(0.0)
+    part2.right.attachment.attachment.attachment = ActiveHingeV1(np.pi / 2.0)
+    part2.right.attachment.attachment.attachment.attachment = ActiveHingeV1(0.0)
 
     body.finalize()
     return body
 
 
-def longleg_v1() -> Body:
+def longleg_v1() -> BodyV1:
     """
     Get the longleg modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(np.pi / 2.0)
-    body.core.left.attachment = ActiveHinge(0.0)
-    body.core.left.attachment.attachment = ActiveHinge(0.0)
-    body.core.left.attachment.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.left.attachment.attachment.attachment.attachment = ActiveHinge(0.0)
-    body.core.left.attachment.attachment.attachment.attachment.attachment = Brick(0.0)
+    body.core.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.attachment = ActiveHingeV1(0.0)
+    body.core.left.attachment.attachment = ActiveHingeV1(0.0)
+    body.core.left.attachment.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.left.attachment.attachment.attachment.attachment = ActiveHingeV1(0.0)
+    body.core.left.attachment.attachment.attachment.attachment.attachment = BrickV1(0.0)
 
     part2 = body.core.left.attachment.attachment.attachment.attachment.attachment
-    part2.right = ActiveHinge(0.0)
-    part2.front = ActiveHinge(0.0)
-    part2.left = ActiveHinge(np.pi / 2.0)
-    part2.left.attachment = ActiveHinge(-np.pi / 2.0)
-    part2.left.attachment.attachment = Brick(0.0)
-    part2.left.attachment.attachment.right = ActiveHinge(np.pi / 2.0)
-    part2.left.attachment.attachment.left = ActiveHinge(np.pi / 2.0)
-    part2.left.attachment.attachment.left.attachment = ActiveHinge(0.0)
+    part2.right = ActiveHingeV1(0.0)
+    part2.front = ActiveHingeV1(0.0)
+    part2.left = ActiveHingeV1(np.pi / 2.0)
+    part2.left.attachment = ActiveHingeV1(-np.pi / 2.0)
+    part2.left.attachment.attachment = BrickV1(0.0)
+    part2.left.attachment.attachment.right = ActiveHingeV1(np.pi / 2.0)
+    part2.left.attachment.attachment.left = ActiveHingeV1(np.pi / 2.0)
+    part2.left.attachment.attachment.left.attachment = ActiveHingeV1(0.0)
 
     body.finalize()
     return body
 
 
-def penguin_v1() -> Body:
+def penguin_v1() -> BodyV1:
     """
     Get the penguin modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.right = Brick(0.0)
-    body.core.right.left = ActiveHinge(np.pi / 2.0)
-    body.core.right.left.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.left.attachment.attachment = Brick(0.0)
-    body.core.right.left.attachment.attachment.right = ActiveHinge(0.0)
-    body.core.right.left.attachment.attachment.left = ActiveHinge(np.pi / 2.0)
-    body.core.right.left.attachment.attachment.left.attachment = ActiveHinge(
+    body.core.right = BrickV1(0.0)
+    body.core.right.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.left.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.left.attachment.attachment = BrickV1(0.0)
+    body.core.right.left.attachment.attachment.right = ActiveHingeV1(0.0)
+    body.core.right.left.attachment.attachment.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.left.attachment.attachment.left.attachment = ActiveHingeV1(
         -np.pi / 2.0
     )
-    body.core.right.left.attachment.attachment.left.attachment.attachment = ActiveHinge(
-        np.pi / 2.0
+    body.core.right.left.attachment.attachment.left.attachment.attachment = (
+        ActiveHingeV1(np.pi / 2.0)
     )
     body.core.right.left.attachment.attachment.left.attachment.attachment.attachment = (
-        Brick(-np.pi / 2.0)
+        BrickV1(-np.pi / 2.0)
     )
 
     part2 = (
         body.core.right.left.attachment.attachment.left.attachment.attachment.attachment
     )
 
-    part2.front = ActiveHinge(np.pi / 2.0)
-    part2.front.attachment = Brick(-np.pi / 2.0)
+    part2.front = ActiveHingeV1(np.pi / 2.0)
+    part2.front.attachment = BrickV1(-np.pi / 2.0)
 
-    part2.right = ActiveHinge(0.0)
-    part2.right.attachment = ActiveHinge(0.0)
-    part2.right.attachment.attachment = ActiveHinge(np.pi / 2.0)
-    part2.right.attachment.attachment.attachment = Brick(-np.pi / 2.0)
+    part2.right = ActiveHingeV1(0.0)
+    part2.right.attachment = ActiveHingeV1(0.0)
+    part2.right.attachment.attachment = ActiveHingeV1(np.pi / 2.0)
+    part2.right.attachment.attachment.attachment = BrickV1(-np.pi / 2.0)
 
-    part2.right.attachment.attachment.attachment.left = ActiveHinge(np.pi / 2.0)
+    part2.right.attachment.attachment.attachment.left = ActiveHingeV1(np.pi / 2.0)
 
-    part2.right.attachment.attachment.attachment.right = Brick(0.0)
-    part2.right.attachment.attachment.attachment.right.front = ActiveHinge(np.pi / 2.0)
+    part2.right.attachment.attachment.attachment.right = BrickV1(0.0)
+    part2.right.attachment.attachment.attachment.right.front = ActiveHingeV1(
+        np.pi / 2.0
+    )
 
     body.finalize()
     return body
 
 
-def pentapod_v1() -> Body:
+def pentapod_v1() -> BodyV1:
     """
     Get the pentapod modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.attachment.attachment.attachment.attachment = Brick(0.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment.attachment.attachment = BrickV1(0.0)
     part2 = body.core.right.attachment.attachment.attachment.attachment
 
-    part2.left = ActiveHinge(0.0)
-    part2.front = ActiveHinge(np.pi / 2.0)
-    part2.front.attachment = Brick(-np.pi / 2.0)
-    part2.front.attachment.left = Brick(0.0)
-    part2.front.attachment.right = ActiveHinge(0.0)
-    part2.front.attachment.front = ActiveHinge(np.pi / 2.0)
-    part2.front.attachment.front.attachment = Brick(-np.pi / 2.0)
-    part2.front.attachment.front.attachment.left = ActiveHinge(0.0)
-    part2.front.attachment.front.attachment.right = ActiveHinge(0.0)
+    part2.left = ActiveHingeV1(0.0)
+    part2.front = ActiveHingeV1(np.pi / 2.0)
+    part2.front.attachment = BrickV1(-np.pi / 2.0)
+    part2.front.attachment.left = BrickV1(0.0)
+    part2.front.attachment.right = ActiveHingeV1(0.0)
+    part2.front.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    part2.front.attachment.front.attachment = BrickV1(-np.pi / 2.0)
+    part2.front.attachment.front.attachment.left = ActiveHingeV1(0.0)
+    part2.front.attachment.front.attachment.right = ActiveHingeV1(0.0)
 
     body.finalize()
     return body
 
 
-def queen_v1() -> Body:
+def queen_v1() -> BodyV1:
     """
     Get the queen modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.attachment.attachment.attachment = Brick(0.0)
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment.attachment = BrickV1(0.0)
     part2 = body.core.right.attachment.attachment.attachment
 
-    part2.left = ActiveHinge(0.0)
-    part2.right = Brick(0.0)
-    part2.right.front = Brick(0.0)
-    part2.right.front.left = ActiveHinge(0.0)
-    part2.right.front.right = ActiveHinge(0.0)
+    part2.left = ActiveHingeV1(0.0)
+    part2.right = BrickV1(0.0)
+    part2.right.front = BrickV1(0.0)
+    part2.right.front.left = ActiveHingeV1(0.0)
+    part2.right.front.right = ActiveHingeV1(0.0)
 
-    part2.right.right = Brick(0.0)
-    part2.right.right.front = ActiveHinge(np.pi / 2.0)
-    part2.right.right.front.attachment = ActiveHinge(0.0)
+    part2.right.right = BrickV1(0.0)
+    part2.right.right.front = ActiveHingeV1(np.pi / 2.0)
+    part2.right.right.front.attachment = ActiveHingeV1(0.0)
 
     body.finalize()
     return body
 
 
-def squarish_v1() -> Body:
+def squarish_v1() -> BodyV1:
     """
     Get the squarish modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.back = ActiveHinge(0.0)
-    body.core.back.attachment = Brick(0.0)
-    body.core.back.attachment.front = ActiveHinge(0.0)
-    body.core.back.attachment.left = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment.left.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.left.attachment.left = Brick(0.0)
+    body.core.back = ActiveHingeV1(0.0)
+    body.core.back.attachment = BrickV1(0.0)
+    body.core.back.attachment.front = ActiveHingeV1(0.0)
+    body.core.back.attachment.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.back.attachment.left.attachment = BrickV1(-np.pi / 2.0)
+    body.core.back.attachment.left.attachment.left = BrickV1(0.0)
     part2 = body.core.back.attachment.left.attachment.left
 
-    part2.left = ActiveHinge(np.pi / 2.0)
-    part2.front = ActiveHinge(0.0)
-    part2.right = ActiveHinge(np.pi / 2.0)
-    part2.right.attachment = Brick(-np.pi / 2.0)
-    part2.right.attachment.left = Brick(0.0)
-    part2.right.attachment.left.left = Brick(0.0)
+    part2.left = ActiveHingeV1(np.pi / 2.0)
+    part2.front = ActiveHingeV1(0.0)
+    part2.right = ActiveHingeV1(np.pi / 2.0)
+    part2.right.attachment = BrickV1(-np.pi / 2.0)
+    part2.right.attachment.left = BrickV1(0.0)
+    part2.right.attachment.left.left = BrickV1(0.0)
 
     body.finalize()
     return body
 
 
-def snake_v1() -> Body:
+def snake_v1() -> BodyV1:
     """
     Get the snake modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = ActiveHinge(0.0)
-    body.core.left.attachment = Brick(0.0)
-    body.core.left.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.left.attachment.front.attachment = Brick(-np.pi / 2.0)
-    body.core.left.attachment.front.attachment.front = ActiveHinge(0.0)
-    body.core.left.attachment.front.attachment.front.attachment = Brick(0.0)
-    body.core.left.attachment.front.attachment.front.attachment.front = ActiveHinge(
+    body.core.left = ActiveHingeV1(0.0)
+    body.core.left.attachment = BrickV1(0.0)
+    body.core.left.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.attachment.front.attachment = BrickV1(-np.pi / 2.0)
+    body.core.left.attachment.front.attachment.front = ActiveHingeV1(0.0)
+    body.core.left.attachment.front.attachment.front.attachment = BrickV1(0.0)
+    body.core.left.attachment.front.attachment.front.attachment.front = ActiveHingeV1(
         np.pi / 2.0
     )
     body.core.left.attachment.front.attachment.front.attachment.front.attachment = (
-        Brick(-np.pi / 2.0)
+        BrickV1(-np.pi / 2.0)
     )
-    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHingeV1(
         0.0
     )
-    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment = Brick(
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment = BrickV1(
         0.0
     )
-    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHingeV1(
         np.pi / 2.0
     )
-    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment = Brick(
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment = BrickV1(
         -np.pi / 2.0
     )
-    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHingeV1(
         0.0
     )
-    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment = Brick(
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment = BrickV1(
         0.0
     )
-    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHinge(
+    body.core.left.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front.attachment.front = ActiveHingeV1(
         np.pi / 2.0
     )
 
@@ -643,154 +646,160 @@ def snake_v1() -> Body:
     return body
 
 
-def stingray_v1() -> Body:
+def stingray_v1() -> BodyV1:
     """
     Get the stingray modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.back = ActiveHinge(np.pi / 2.0)
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.attachment.attachment = Brick(0.0)
-    body.core.right.attachment.attachment.right = Brick(0.0)
-    body.core.right.attachment.attachment.left = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.front = Brick(0.0)
-    body.core.right.attachment.attachment.front.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment.attachment.front.front = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment.attachment.front.left = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.front.left.attachment = Brick(0.0)
-    body.core.right.attachment.attachment.front.left.attachment.right = ActiveHinge(
+    body.core.back = ActiveHingeV1(np.pi / 2.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment = BrickV1(0.0)
+    body.core.right.attachment.attachment.right = BrickV1(0.0)
+    body.core.right.attachment.attachment.left = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.front = BrickV1(0.0)
+    body.core.right.attachment.attachment.front.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment.attachment.front.front = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment.attachment.front.left = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.front.left.attachment = BrickV1(0.0)
+    body.core.right.attachment.attachment.front.left.attachment.right = ActiveHingeV1(
         np.pi / 2.0
     )
-    body.core.right.attachment.attachment.front.left.attachment.front = ActiveHinge(0.0)
+    body.core.right.attachment.attachment.front.left.attachment.front = ActiveHingeV1(
+        0.0
+    )
     body.core.right.attachment.attachment.front.left.attachment.front.attachment = (
-        Brick(0.0)
+        BrickV1(0.0)
     )
 
     body.finalize()
     return body
 
 
-def tinlicker_v1() -> Body:
+def tinlicker_v1() -> BodyV1:
     """
     Get the tinlicker modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.attachment.attachment.attachment.attachment = Brick(0.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment.attachment.attachment = BrickV1(0.0)
     part2 = body.core.right.attachment.attachment.attachment.attachment
 
-    part2.left = Brick(0.0)
-    part2.left.front = ActiveHinge(np.pi / 2.0)
-    part2.left.right = Brick(0.0)
-    part2.left.right.left = Brick(0.0)
-    part2.left.right.front = ActiveHinge(0.0)
-    part2.left.right.front.attachment = Brick(0.0)
-    part2.left.right.front.attachment.front = ActiveHinge(np.pi / 2.0)
-    part2.left.right.front.attachment.right = Brick(0.0)
-    part2.left.right.front.attachment.right.right = ActiveHinge(np.pi / 2.0)
+    part2.left = BrickV1(0.0)
+    part2.left.front = ActiveHingeV1(np.pi / 2.0)
+    part2.left.right = BrickV1(0.0)
+    part2.left.right.left = BrickV1(0.0)
+    part2.left.right.front = ActiveHingeV1(0.0)
+    part2.left.right.front.attachment = BrickV1(0.0)
+    part2.left.right.front.attachment.front = ActiveHingeV1(np.pi / 2.0)
+    part2.left.right.front.attachment.right = BrickV1(0.0)
+    part2.left.right.front.attachment.right.right = ActiveHingeV1(np.pi / 2.0)
 
     body.finalize()
     return body
 
 
-def turtle_v1() -> Body:
+def turtle_v1() -> BodyV1:
     """
     Get the turtle modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.left = Brick(0.0)
-    body.core.left.right = ActiveHinge(0.0)
-    body.core.left.left = ActiveHinge(np.pi / 2.0)
-    body.core.left.left.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.left.left.attachment.attachment = Brick(0.0)
+    body.core.left = BrickV1(0.0)
+    body.core.left.right = ActiveHingeV1(0.0)
+    body.core.left.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.left.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.left.left.attachment.attachment = BrickV1(0.0)
 
-    body.core.left.left.attachment.attachment.front = Brick(0.0)
-    body.core.left.left.attachment.attachment.left = ActiveHinge(np.pi / 2.0)
-    body.core.left.left.attachment.attachment.right = ActiveHinge(0.0)
-    body.core.left.left.attachment.attachment.right.attachment = Brick(0.0)
+    body.core.left.left.attachment.attachment.front = BrickV1(0.0)
+    body.core.left.left.attachment.attachment.left = ActiveHingeV1(np.pi / 2.0)
+    body.core.left.left.attachment.attachment.right = ActiveHingeV1(0.0)
+    body.core.left.left.attachment.attachment.right.attachment = BrickV1(0.0)
     part2 = body.core.left.left.attachment.attachment.right.attachment
 
-    part2.left = ActiveHinge(np.pi / 2.0)
-    part2.left.attachment = ActiveHinge(-np.pi / 2.0)
-    part2.front = Brick(0.0)
-    part2.right = ActiveHinge(0.0)
-    part2.right.attachment = Brick(0.0)
-    part2.right.attachment.right = ActiveHinge(0.0)
-    part2.right.attachment.left = ActiveHinge(np.pi / 2.0)
-    part2.right.attachment.left.attachment = ActiveHinge(-np.pi / 2.0)
-    part2.right.attachment.left.attachment.attachment = ActiveHinge(0.0)
-    part2.right.attachment.left.attachment.attachment.attachment = ActiveHinge(0.0)
+    part2.left = ActiveHingeV1(np.pi / 2.0)
+    part2.left.attachment = ActiveHingeV1(-np.pi / 2.0)
+    part2.front = BrickV1(0.0)
+    part2.right = ActiveHingeV1(0.0)
+    part2.right.attachment = BrickV1(0.0)
+    part2.right.attachment.right = ActiveHingeV1(0.0)
+    part2.right.attachment.left = ActiveHingeV1(np.pi / 2.0)
+    part2.right.attachment.left.attachment = ActiveHingeV1(-np.pi / 2.0)
+    part2.right.attachment.left.attachment.attachment = ActiveHingeV1(0.0)
+    part2.right.attachment.left.attachment.attachment.attachment = ActiveHingeV1(0.0)
 
     body.finalize()
     return body
 
 
-def ww_v1() -> Body:
+def ww_v1() -> BodyV1:
     """
     Get the ww modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.back = ActiveHinge(0.0)
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.attachment.attachment.attachment = Brick(0.0)
-    body.core.right.attachment.attachment.attachment.left = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.attachment.left.attachment = Brick(0.0)
+    body.core.back = ActiveHingeV1(0.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment.attachment = BrickV1(0.0)
+    body.core.right.attachment.attachment.attachment.left = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.attachment.left.attachment = BrickV1(0.0)
     part2 = body.core.right.attachment.attachment.attachment.left.attachment
 
-    part2.left = ActiveHinge(0.0)
-    part2.front = Brick(0.0)
-    part2.front.right = ActiveHinge(np.pi / 2.0)
-    part2.front.right.attachment = Brick(-np.pi / 2.0)
-    part2.front.right.attachment.left = ActiveHinge(np.pi / 2.0)
-    part2.front.right.attachment.left.attachment = ActiveHinge(0.0)
-    part2.front.right.attachment.left.attachment.attachment = ActiveHinge(-np.pi / 2.0)
+    part2.left = ActiveHingeV1(0.0)
+    part2.front = BrickV1(0.0)
+    part2.front.right = ActiveHingeV1(np.pi / 2.0)
+    part2.front.right.attachment = BrickV1(-np.pi / 2.0)
+    part2.front.right.attachment.left = ActiveHingeV1(np.pi / 2.0)
+    part2.front.right.attachment.left.attachment = ActiveHingeV1(0.0)
+    part2.front.right.attachment.left.attachment.attachment = ActiveHingeV1(
+        -np.pi / 2.0
+    )
 
     body.finalize()
     return body
 
 
-def zappa_v1() -> Body:
+def zappa_v1() -> BodyV1:
     """
     Get the zappa modular robot.
 
     :returns: the robot.
     """
-    body = Body(_PROPERTIES)
+    body = BodyV1()
 
-    body.core.back = ActiveHinge(0.0)
-    body.core.right = ActiveHinge(np.pi / 2.0)
-    body.core.right.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.attachment = ActiveHinge(-np.pi / 2.0)
-    body.core.right.attachment.attachment.attachment.attachment = ActiveHinge(0.0)
-    body.core.right.attachment.attachment.attachment.attachment.attachment = Brick(0.0)
+    body.core.back = ActiveHingeV1(0.0)
+    body.core.right = ActiveHingeV1(np.pi / 2.0)
+    body.core.right.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.attachment = ActiveHingeV1(-np.pi / 2.0)
+    body.core.right.attachment.attachment.attachment.attachment = ActiveHingeV1(0.0)
+    body.core.right.attachment.attachment.attachment.attachment.attachment = BrickV1(
+        0.0
+    )
     part2 = body.core.right.attachment.attachment.attachment.attachment.attachment
 
-    part2.front = ActiveHinge(0.0)
-    part2.front.attachment = ActiveHinge(0.0)
-    part2.left = ActiveHinge(np.pi / 2.0)
-    part2.left.attachment = Brick(-np.pi / 2.0)
-    part2.left.attachment.left = ActiveHinge(0.0)
-    part2.left.attachment.left.attachment = Brick(0.0)
-    part2.left.attachment.front = ActiveHinge(0.0)
+    part2.front = ActiveHingeV1(0.0)
+    part2.front.attachment = ActiveHingeV1(0.0)
+    part2.left = ActiveHingeV1(np.pi / 2.0)
+    part2.left.attachment = BrickV1(-np.pi / 2.0)
+    part2.left.attachment.left = ActiveHingeV1(0.0)
+    part2.left.attachment.left.attachment = BrickV1(0.0)
+    part2.left.attachment.front = ActiveHingeV1(0.0)
 
     body.finalize()
     return body

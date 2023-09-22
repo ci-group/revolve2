@@ -1,7 +1,8 @@
 from revolve2.actor_controller import ActorController
+from revolve2.simulation.actor import Actor
+
 from ._body import Body
 from ._brain import Brain
-from revolve2.simulation.actor import Actor
 
 
 class ModularRobot:

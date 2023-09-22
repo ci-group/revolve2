@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
+
+from pyrr import Quaternion, Vector3
+from revolve2.simulation.actor import Actor, RigidBody
+
 from ._not_finalized_error import NotFinalizedError
 from ._right_angles import RightAngles
 
 
-class Module:
+class Module(ABC):
     """Base class for a module for modular robots."""
 
     _children: list[Module | None]
@@ -14,20 +19,13 @@ class Module:
     _id: int | None
     _parent: Module | None
     _parent_child_index: int | None
-    _attachment_position: int
 
-    def __init__(
-        self,
-        num_children: int,
-        rotation: float | RightAngles,
-        attachment_position: int,
-    ):
+    def __init__(self, num_children: int, rotation: float | RightAngles):
         """
         Initialize this object.
 
         :param num_children: The number of Children.
         :param rotation: The Modules rotation.
-        :param attachment_position: The Modules attachment_position.
         """
         self._id = None
         self._parent = None
@@ -37,7 +35,6 @@ class Module:
             rotation.value if isinstance(rotation, RightAngles) else rotation
         )
         self._children = [None] * num_children
-        self._attachment_position = attachment_position
 
     @property
     def children(self) -> list[Module | None]:
@@ -56,15 +53,6 @@ class Module:
         :returns: The orientation.
         """
         return self._rotation
-
-    @property
-    def attachment_position(self) -> int:
-        """
-        Get the attachment position of this module if V2.
-
-        :returns: This module's attachment position.
-        """
-        return self._attachment_position
 
     @property
     def id(self) -> int:
@@ -126,3 +114,24 @@ class Module:
             open_nodes = new_open_nodes
 
         return out_neighbours
+
+    @abstractmethod
+    def build(
+        self,
+        body: RigidBody,
+        name_prefix: str,
+        attachment_point: Vector3,
+        orientation: Quaternion,
+        robot: Actor,
+        dof_ids: list[int],
+    ) -> None:
+        """
+        Build a module onto the Robot.
+
+        :param body: The rigid body.
+        :param name_prefix: The name prefix.
+        :param attachment_point: The attachment point.
+        :param orientation: The modules Orientation.
+        :param robot: The actor.
+        :param dof_ids: dof ids.
+        """

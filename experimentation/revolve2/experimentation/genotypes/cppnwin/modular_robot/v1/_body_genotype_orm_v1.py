@@ -3,15 +3,14 @@ from __future__ import annotations
 import multineat
 import numpy as np
 import sqlalchemy.orm as orm
-from ..._multineat_rng_from_random import multineat_rng_from_random
-from ..._random_multineat_genotype import random_multineat_genotype
-
-from .._multineat_params import get_multineat_params
-from revolve2.modular_robot import Body, PropertySet
+from revolve2.modular_robot import Body
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
 from typing_extensions import Self
 
+from ..._multineat_rng_from_random import multineat_rng_from_random
+from ..._random_multineat_genotype import random_multineat_genotype
+from .._multineat_params import get_multineat_params
 from ._body_develop import develop
 
 
@@ -107,14 +106,13 @@ class BodyGenotypeOrmV1(orm.MappedAsDataclass, kw_only=True):
             )
         )
 
-    def develop_body(self, property_set: PropertySet) -> Body:
+    def develop_body(self) -> Body:
         """
         Develop the genotype into a modular robot.
 
-        :param property_set: The propertyset of the body.
         :returns: The created robot.
         """
-        return develop(self.body, property_set)
+        return develop(self.body)
 
 
 @event.listens_for(BodyGenotypeOrmV1, "before_update", propagate=True)

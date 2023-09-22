@@ -9,7 +9,6 @@ import numpy as np
 from revolve2.experimentation.genotypes.cppnwin.modular_robot import BrainGenotypeCpg
 from revolve2.experimentation.genotypes.cppnwin.modular_robot.v1 import BodyGenotypeV1
 from revolve2.modular_robot import ModularRobot
-from revolve2.modular_robot.v1 import V1PropertySet
 
 
 @dataclass
@@ -83,6 +82,6 @@ class Genotype(BodyGenotypeV1, BrainGenotypeCpg):
 
         :returns: The created robot.
         """
-        body = self.develop_body(V1PropertySet())
+        body = self.develop_body()
         brain = self.develop_brain()
         return ModularRobot(body=body, brain=brain)

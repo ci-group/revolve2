@@ -1,24 +1,20 @@
-from revolve2.modular_robot._module import Module
-from revolve2.modular_robot._right_angles import RightAngles
+from ._module import Module
+from ._right_angles import RightAngles
 
 
 class ActiveHinge(Module):
-    """
-    An active hinge module for a modular robot.
-
-    This is a rotary joint.
-    """
+    """A Active Hinge."""
 
     ATTACHMENT = 0
 
-    def __init__(self, rotation: float | RightAngles, attachment_position: int = 5):
+    def __init__(self, num_children: int, rotation: float | RightAngles):
         """
         Initialize this object.
 
+        :param num_children: The number of children.
         :param rotation: The Modules rotation.
-        :param attachment_position: The Modules attachment position.
         """
-        super().__init__(1, rotation, attachment_position)
+        super().__init__(num_children, rotation)
 
     @property
     def attachment(self) -> Module | None:

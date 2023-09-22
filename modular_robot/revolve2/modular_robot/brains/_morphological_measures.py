@@ -1,4 +1,5 @@
 import numpy as np
+
 from .._active_hinge import ActiveHinge
 from .._body import Body
 from .._brick import Brick

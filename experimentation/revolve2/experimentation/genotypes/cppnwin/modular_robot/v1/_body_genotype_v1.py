@@ -4,14 +4,13 @@ from dataclasses import dataclass
 
 import multineat
 import numpy as np
+from revolve2.modular_robot import Body
+from typing_extensions import Self
+
 from ..._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
 from ..._multineat_rng_from_random import multineat_rng_from_random
 from ..._random_multineat_genotype import random_multineat_genotype
 from .._multineat_params import get_multineat_params
-
-from revolve2.modular_robot import Body, PropertySet
-from typing_extensions import Self
-
 from ._body_develop import develop
 
 
@@ -109,11 +108,10 @@ class BodyGenotypeV1:
             )
         )
 
-    def develop_body(self, property_set: PropertySet) -> Body:
+    def develop_body(self) -> Body:
         """
         Develop the genotype into a modular robot.
 
-        :param property_set: The property set of the body.
         :returns: The created robot.
         """
-        return develop(self.body.genotype, property_set)
+        return develop(self.body.genotype)

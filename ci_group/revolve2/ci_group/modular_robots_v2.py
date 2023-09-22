@@ -1,12 +1,9 @@
 """Standard modular robots."""
 import numpy as np
-from revolve2.modular_robot import ActiveHinge, Body, Brick
-from revolve2.modular_robot.v2._property_set import V2PropertySet
-
-_PROPERTIES = V2PropertySet()
+from revolve2.modular_robot.v2 import ActiveHingeV2, BodyV2, BrickV2
 
 
-def all() -> list[Body]:
+def all() -> list[BodyV2]:
     """
     Get a list of all standard module robots.
 
@@ -17,7 +14,7 @@ def all() -> list[Body]:
     ]
 
 
-def get(name: str) -> Body:
+def get(name: str) -> BodyV2:
     """
     Get a robot by name.
 
@@ -36,7 +33,7 @@ def get(name: str) -> Body:
         raise ValueError(f"Robot does not exist: {name}")
 
 
-def gecko_v2() -> Body:
+def gecko_v2() -> BodyV2:
     """
     Sample robot with new HW config.
 
@@ -45,21 +42,22 @@ def gecko_v2() -> Body:
 
     :returns: the robot
     """
-    body = Body(_PROPERTIES)
-    body.core.right = ActiveHinge(0.0, attachment_position=8)
-    body.core.right.attachment = Brick(0.0)
+    attachment_positions = [0, 8, 8, 8]
+    body = BodyV2(attachment_positions)
+    body.core.right = ActiveHingeV2(0.0)
+    body.core.right.attachment = BrickV2(0.0)
 
-    body.core.left = ActiveHinge(0.0, attachment_position=8)
-    body.core.left.attachment = Brick(0.0)
+    body.core.left = ActiveHingeV2(0.0)
+    body.core.left.attachment = BrickV2(0.0)
 
-    body.core.back = ActiveHinge(np.pi / 2.0, attachment_position=8)
-    body.core.back.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front = ActiveHinge(np.pi / 2.0)
-    body.core.back.attachment.front.attachment = Brick(-np.pi / 2.0)
-    body.core.back.attachment.front.attachment.left = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
-    body.core.back.attachment.front.attachment.left.attachment = Brick(0.0)
-    body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
+    body.core.back = ActiveHingeV2(np.pi / 2.0)
+    body.core.back.attachment = BrickV2(-np.pi / 2.0)
+    body.core.back.attachment.front = ActiveHingeV2(np.pi / 2.0)
+    body.core.back.attachment.front.attachment = BrickV2(-np.pi / 2.0)
+    body.core.back.attachment.front.attachment.left = ActiveHingeV2(0.0)
+    body.core.back.attachment.front.attachment.right = ActiveHingeV2(0.0)
+    body.core.back.attachment.front.attachment.left.attachment = BrickV2(0.0)
+    body.core.back.attachment.front.attachment.right.attachment = BrickV2(0.0)
 
     body.finalize()
 

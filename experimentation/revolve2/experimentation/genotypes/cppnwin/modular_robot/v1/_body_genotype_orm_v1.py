@@ -3,15 +3,10 @@ from __future__ import annotations
 import multineat
 import numpy as np
 import sqlalchemy.orm as orm
-from revolve2.experimentation.genotypes.cppnwin._multineat_rng_from_random import (
-    multineat_rng_from_random,
-)
-from revolve2.experimentation.genotypes.cppnwin._random_multineat_genotype import (
-    random_multineat_genotype,
-)
-from revolve2.experimentation.genotypes.cppnwin.modular_robot._multineat_params import (
-    get_multineat_params,
-)
+from ..._multineat_rng_from_random import multineat_rng_from_random
+from ..._random_multineat_genotype import random_multineat_genotype
+
+from .._multineat_params import get_multineat_params
 from revolve2.modular_robot import Body, PropertySet
 from sqlalchemy import event
 from sqlalchemy.engine import Connection

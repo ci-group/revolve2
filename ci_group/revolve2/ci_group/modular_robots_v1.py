@@ -13,28 +13,28 @@ def all() -> list[Body]:
     :returns: The list of robots.
     """
     return [
-        babya(),
-        babyb(),
-        blokky(),
-        garrix(),
-        gecko(),
-        insect(),
-        linkin(),
-        longleg(),
-        penguin(),
-        pentapod(),
-        queen(),
-        salamander(),
-        squarish(),
-        snake(),
-        spider(),
-        stingray(),
-        tinlicker(),
-        turtle(),
-        ww(),
-        zappa(),
-        ant(),
-        park(),
+        babya_v1(),
+        babyb_v1(),
+        blokky_v1(),
+        garrix_v1(),
+        gecko_v1(),
+        insect_v1(),
+        linkin_v1(),
+        longleg_v1(),
+        penguin_v1(),
+        pentapod_v1(),
+        queen_v1(),
+        salamander_v1(),
+        squarish_v1(),
+        snake_v1(),
+        spider_v1(),
+        stingray_v1(),
+        tinlicker_v1(),
+        turtle_v1(),
+        ww_v1(),
+        zappa_v1(),
+        ant_v1(),
+        park_v1(),
     ]
 
 
@@ -47,28 +47,28 @@ def get(name: str) -> Body:
     :raises ValueError: When a robot with that name does not exist.
     """
     case = {
-        "gecko": gecko,
-        "spider": spider,
-        "babya": babya,
-        "ant": ant,
-        "salamander": salamander,
-        "blokky": blokky,
-        "park": park,
-        "babyb": babyb,
-        "garrix": garrix,
-        "insect": insect,
-        "linkin": linkin,
-        "longleg": longleg,
-        "penguin": penguin,
-        "pentapod": pentapod,
-        "queen": queen,
-        "squarish": squarish,
-        "snake": snake,
-        "stingray": stingray,
-        "tinlicker": tinlicker,
-        "turtle": turtle,
-        "ww": ww,
-        "zappa": zappa,
+        "gecko": gecko_v1,
+        "spider": spider_v1,
+        "babya": babya_v1,
+        "ant": ant_v1,
+        "salamander": salamander_v1,
+        "blokky": blokky_v1,
+        "park": park_v1,
+        "babyb": babyb_v1,
+        "garrix": garrix_v1,
+        "insect": insect_v1,
+        "linkin": linkin_v1,
+        "longleg": longleg_v1,
+        "penguin": penguin_v1,
+        "pentapod": pentapod_v1,
+        "queen": queen_v1,
+        "squarish": squarish_v1,
+        "snake": snake_v1,
+        "stingray": stingray_v1,
+        "tinlicker": tinlicker_v1,
+        "turtle": turtle_v1,
+        "ww": ww_v1,
+        "zappa": zappa_v1,
     }
 
     try:
@@ -77,7 +77,7 @@ def get(name: str) -> Body:
         raise ValueError(f"Robot does not exist: {name}")
 
 
-def spider() -> Body:
+def spider_v1() -> Body:
     """
     Get the spider modular robot.
 
@@ -109,7 +109,7 @@ def spider() -> Body:
     return body
 
 
-def gecko() -> Body:
+def gecko_v1() -> Body:
     """
     Get the gecko modular robot.
 
@@ -136,7 +136,7 @@ def gecko() -> Body:
     return body
 
 
-def babya() -> Body:
+def babya_v1() -> Body:
     """
     Get the babya modular robot.
 
@@ -166,7 +166,7 @@ def babya() -> Body:
     return body
 
 
-def ant() -> Body:
+def ant_v1() -> Body:
     """
     Get the ant modular robot.
 
@@ -198,7 +198,7 @@ def ant() -> Body:
     return body
 
 
-def salamander() -> Body:
+def salamander_v1() -> Body:
     """
     Get the salamander modular robot.
 
@@ -251,7 +251,7 @@ def salamander() -> Body:
     return body
 
 
-def blokky() -> Body:
+def blokky_v1() -> Body:
     """
     Get the blokky modular robot.
 
@@ -278,7 +278,7 @@ def blokky() -> Body:
     return body
 
 
-def park() -> Body:
+def park_v1() -> Body:
     """
     Get the park modular robot.
 
@@ -309,7 +309,7 @@ def park() -> Body:
     return body
 
 
-def babyb() -> Body:
+def babyb_v1() -> Body:
     """
     Get the babyb modular robot.
 
@@ -345,7 +345,7 @@ def babyb() -> Body:
     return body
 
 
-def garrix() -> Body:
+def garrix_v1() -> Body:
     """
     Get the garrix modular robot.
 
@@ -376,7 +376,7 @@ def garrix() -> Body:
     return body
 
 
-def insect() -> Body:
+def insect_v1() -> Body:
     """
     Get the insect modular robot.
 
@@ -406,7 +406,7 @@ def insect() -> Body:
     return body
 
 
-def linkin() -> Body:
+def linkin_v1() -> Body:
     """
     Get the linkin modular robot.
 
@@ -438,7 +438,7 @@ def linkin() -> Body:
     return body
 
 
-def longleg() -> Body:
+def longleg_v1() -> Body:
     """
     Get the longleg modular robot.
 
@@ -467,7 +467,7 @@ def longleg() -> Body:
     return body
 
 
-def penguin() -> Body:
+def penguin_v1() -> Body:
     """
     Get the penguin modular robot.
 
@@ -512,7 +512,7 @@ def penguin() -> Body:
     return body
 
 
-def pentapod() -> Body:
+def pentapod_v1() -> Body:
     """
     Get the pentapod modular robot.
 
@@ -541,7 +541,7 @@ def pentapod() -> Body:
     return body
 
 
-def queen() -> Body:
+def queen_v1() -> Body:
     """
     Get the queen modular robot.
 
@@ -570,7 +570,7 @@ def queen() -> Body:
     return body
 
 
-def squarish() -> Body:
+def squarish_v1() -> Body:
     """
     Get the squarish modular robot.
 
@@ -597,7 +597,7 @@ def squarish() -> Body:
     return body
 
 
-def snake() -> Body:
+def snake_v1() -> Body:
     """
     Get the snake modular robot.
 
@@ -643,7 +643,7 @@ def snake() -> Body:
     return body
 
 
-def stingray() -> Body:
+def stingray_v1() -> Body:
     """
     Get the stingray modular robot.
 
@@ -674,7 +674,7 @@ def stingray() -> Body:
     return body
 
 
-def tinlicker() -> Body:
+def tinlicker_v1() -> Body:
     """
     Get the tinlicker modular robot.
 
@@ -703,7 +703,7 @@ def tinlicker() -> Body:
     return body
 
 
-def turtle() -> Body:
+def turtle_v1() -> Body:
     """
     Get the turtle modular robot.
 
@@ -738,7 +738,7 @@ def turtle() -> Body:
     return body
 
 
-def ww() -> Body:
+def ww_v1() -> Body:
     """
     Get the ww modular robot.
 
@@ -767,7 +767,7 @@ def ww() -> Body:
     return body
 
 
-def zappa() -> Body:
+def zappa_v1() -> Body:
     """
     Get the zappa modular robot.
 

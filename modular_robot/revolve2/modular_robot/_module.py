@@ -126,7 +126,7 @@ class Module(ABC):
         dof_ids: list[int],
     ) -> None:
         """
-        Build a module onto the Robot.
+        Build the current module onto the Robot. Each module is built separately based on its specifications.
 
         :param body: The rigid body.
         :param name_prefix: The name prefix.

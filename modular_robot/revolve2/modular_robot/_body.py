@@ -54,7 +54,21 @@ class Body(ABC):
         """
         if not self.is_finalized:
             raise NotFinalizedError()
-        return _ActorBuilder().build(self)
+
+        robot = Actor([], [])
+        dof_ids: list[int] = []
+
+        origin_body = RigidBody(
+            "origin",
+            Vector3(),
+            Quaternion(),
+            1.0,  # STATIC_FRICTION
+            1.0,  # DYNAMIC_FRICTION
+        )
+        robot.bodies.append(origin_body)
+        self.core.build(origin_body, "origin", Vector3(), Quaternion(), robot, dof_ids)
+
+        return (robot, dof_ids)
 
     def grid_position(self, module: Module) -> Vector3:
         """
@@ -182,32 +196,6 @@ class _Finalizer:
                 child._parent = module
                 child._parent_child_index = i
                 self._finalize_recur(child)
-
-
-class _ActorBuilder:
-    _STATIC_FRICTION = 1.0
-    _DYNAMIC_FRICTION = 1.0
-
-    robot: Actor
-    dof_ids: list[int]
-
-    def build(self, body: Body) -> tuple[Actor, list[int]]:
-        self.robot = Actor([], [])
-        self.dof_ids = []
-
-        origin_body = RigidBody(
-            "origin",
-            Vector3(),
-            Quaternion(),
-            self._STATIC_FRICTION,
-            self._DYNAMIC_FRICTION,
-        )
-        self.robot.bodies.append(origin_body)
-        body.core.build(
-            origin_body, "origin", Vector3(), Quaternion(), self.robot, self.dof_ids
-        )
-
-        return (self.robot, self.dof_ids)
 
 
 class _ActiveHingeFinder:

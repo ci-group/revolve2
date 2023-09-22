@@ -4,18 +4,11 @@ from dataclasses import dataclass
 
 import multineat
 import numpy as np
-from revolve2.experimentation.genotypes.cppnwin._multineat_genotype_pickle_wrapper import (
-    MultineatGenotypePickleWrapper,
-)
-from revolve2.experimentation.genotypes.cppnwin._multineat_rng_from_random import (
-    multineat_rng_from_random,
-)
-from revolve2.experimentation.genotypes.cppnwin._random_multineat_genotype import (
-    random_multineat_genotype,
-)
-from revolve2.experimentation.genotypes.cppnwin.modular_robot._multineat_params import (
-    get_multineat_params,
-)
+from ..._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
+from ..._multineat_rng_from_random import multineat_rng_from_random
+from ..._random_multineat_genotype import random_multineat_genotype
+from .._multineat_params import get_multineat_params
+
 from revolve2.modular_robot import Body, PropertySet
 from typing_extensions import Self
 

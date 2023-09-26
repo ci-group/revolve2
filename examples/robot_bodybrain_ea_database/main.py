@@ -1,13 +1,3 @@
-"""
-This is the 'robot_bodybrain_ea' example, but with added saving of results to a database.
-
-Definitely first look at the 'robot_bodybrain_ea' and 'simple_ea_xor_database' examples.
-Many explanation comments are omitted here.
-
-You learn:
-- Nothing new in particular, but this can be a good starting point for your own experiments.
-"""
-
 import logging
 
 import config

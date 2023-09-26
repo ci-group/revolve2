@@ -1,13 +1,3 @@
-"""
-Simulate modular robot that do not interact, and then calculate their xy displacement.
-
-To understand better, first see the 'evaluate_single_robot' example.
-
-You learn:
-- How to simulate multiple isolated robots.
-- How to process their simulation results.
-"""
-
 import asyncio
 
 from revolve2.ci_group import fitness_functions, modular_robots

@@ -1,12 +1,3 @@
-"""
-Optimize a neural network to calculate XOR, using an evolutionary algorithm.
-
-To better understand, first look at the 'experiment_setup' example.
-
-You learn:
-- How to create a simple evolutionary loop.
-"""
-
 import logging
 
 import config

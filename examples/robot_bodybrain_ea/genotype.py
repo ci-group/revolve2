@@ -6,15 +6,13 @@ from dataclasses import dataclass
 
 import multineat
 import numpy as np
-from revolve2.experimentation.genotypes.cppnwin.modular_robot import (
-    BodyGenotype,
-    BrainGenotypeCpg,
-)
+from revolve2.experimentation.genotypes.cppnwin.modular_robot import BrainGenotypeCpg
+from revolve2.experimentation.genotypes.cppnwin.modular_robot.v1 import BodyGenotypeV1
 from revolve2.modular_robot import ModularRobot
 
 
 @dataclass
-class Genotype(BodyGenotype, BrainGenotypeCpg):
+class Genotype(BodyGenotypeV1, BrainGenotypeCpg):
     """A genotype for a body and brain using CPPN."""
 
     @classmethod

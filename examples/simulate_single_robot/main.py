@@ -12,12 +12,13 @@ from revolve2.ci_group import terrains
 from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group.rng import make_rng
 from revolve2.ci_group.simulation import create_batch_single_robot_standard
-from revolve2.modular_robot import ActiveHinge, Body, Brick, ModularRobot, RightAngles
+from revolve2.modular_robot import ModularRobot, RightAngles
 from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
+from revolve2.modular_robot.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.simulators.mujoco import LocalRunner
 
 
-def make_body() -> Body:
+def make_body() -> BodyV1:
     """
     Create a body for the robot.
 
@@ -27,17 +28,17 @@ def make_body() -> Body:
     setup_logging()
 
     # A modular robot body follows a 'tree' structure.
-    # The 'Body' class automatically creates a center 'core'.
+    # The 'BodyV1' class automatically creates a center 'core'.
     # From here, other modular can be attached.
     # Modules can be attach in a rotated fashion.
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
-    body = Body()
-    body.core.left = ActiveHinge(RightAngles.DEG_180)
-    body.core.left.attachment = ActiveHinge(RightAngles.DEG_180)
-    body.core.left.attachment.attachment = Brick(RightAngles.DEG_0)
-    body.core.right = ActiveHinge(RightAngles.DEG_180)
-    body.core.right.attachment = ActiveHinge(RightAngles.DEG_180)
-    body.core.right.attachment.attachment = Brick(RightAngles.DEG_0)
+    body = BodyV1()
+    body.core.left = ActiveHingeV1(RightAngles.DEG_180)
+    body.core.left.attachment = ActiveHingeV1(RightAngles.DEG_180)
+    body.core.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
+    body.core.right = ActiveHingeV1(RightAngles.DEG_180)
+    body.core.right.attachment = ActiveHingeV1(RightAngles.DEG_180)
+    body.core.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
     # A body needs to be finalized after building.
     # This sets some variables on each module that makes it easier to work with the body later.
     # Don't worry if you forget to the finalize; the framework will raise an error when you attempt to perform an action that required finalization beforehand.

@@ -4,31 +4,30 @@ from dataclasses import dataclass
 
 import multineat
 import numpy as np
+from revolve2.modular_robot import Body
 from typing_extensions import Self
 
-from .._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
-from .._multineat_rng_from_random import multineat_rng_from_random
-from .._random_multineat_genotype import random_multineat_genotype
-from ._brain_cpg_network_neighbor_v1 import BrainCpgNetworkNeighborV1
-from ._multineat_params import get_multineat_params
-
-_MULTINEAT_PARAMS = get_multineat_params()
+from ..._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
+from ..._multineat_rng_from_random import multineat_rng_from_random
+from ..._random_multineat_genotype import random_multineat_genotype
+from .._multineat_params import get_multineat_params
+from ._body_develop import develop
 
 
 @dataclass
-class BrainGenotypeCpg:
-    """An SQLAlchemy model for a CPPNWIN cpg brain genotype."""
+class BodyGenotypeV1:
+    """CPPNWIN body genotype."""
 
     _NUM_INITIAL_MUTATIONS = 5
-
-    brain: MultineatGenotypePickleWrapper
+    _MULTINEAT_PARAMS = get_multineat_params()
+    body: MultineatGenotypePickleWrapper
 
     @classmethod
-    def random_brain(
+    def random_body(
         cls,
         innov_db: multineat.InnovationDatabase,
         rng: np.random.Generator,
-    ) -> BrainGenotypeCpg:
+    ) -> BodyGenotypeV1:
         """
         Create a random genotype.
 
@@ -38,25 +37,25 @@ class BrainGenotypeCpg:
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        brain = MultineatGenotypePickleWrapper(
+        body = MultineatGenotypePickleWrapper(
             random_multineat_genotype(
                 innov_db=innov_db,
                 rng=multineat_rng,
-                multineat_params=_MULTINEAT_PARAMS,
-                output_activation_func=multineat.ActivationFunction.SIGNED_SINE,
-                num_inputs=7,  # bias(always 1), x1, y1, z1, x2, y2, z2
-                num_outputs=1,  # weight
+                multineat_params=cls._MULTINEAT_PARAMS,
+                output_activation_func=multineat.ActivationFunction.TANH,
+                num_inputs=5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
+                num_outputs=5,  # empty, brick, activehinge, rot0, rot90
                 num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
             )
         )
 
-        return BrainGenotypeCpg(brain)
+        return BodyGenotypeV1(body)
 
-    def mutate_brain(
+    def mutate_body(
         self,
         innov_db: multineat.InnovationDatabase,
         rng: np.random.Generator,
-    ) -> BrainGenotypeCpg:
+    ) -> BodyGenotypeV1:
         """
         Mutate this genotype.
 
@@ -68,25 +67,25 @@ class BrainGenotypeCpg:
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        return BrainGenotypeCpg(
+        return BodyGenotypeV1(
             MultineatGenotypePickleWrapper(
-                self.brain.genotype.MutateWithConstraints(
+                self.body.genotype.MutateWithConstraints(
                     False,
                     multineat.SearchMode.BLENDED,
                     innov_db,
-                    _MULTINEAT_PARAMS,
+                    self._MULTINEAT_PARAMS,
                     multineat_rng,
                 )
             )
         )
 
     @classmethod
-    def crossover_brain(
+    def crossover_body(
         cls,
         parent1: Self,
         parent2: Self,
         rng: np.random.Generator,
-    ) -> BrainGenotypeCpg:
+    ) -> BodyGenotypeV1:
         """
         Perform crossover between two genotypes.
 
@@ -97,22 +96,22 @@ class BrainGenotypeCpg:
         """
         multineat_rng = multineat_rng_from_random(rng)
 
-        return BrainGenotypeCpg(
+        return BodyGenotypeV1(
             MultineatGenotypePickleWrapper(
-                parent1.brain.genotype.MateWithConstraints(
-                    parent2.brain.genotype,
+                parent1.body.genotype.MateWithConstraints(
+                    parent2.body.genotype,
                     False,
                     False,
                     multineat_rng,
-                    _MULTINEAT_PARAMS,
+                    cls._MULTINEAT_PARAMS,
                 )
             )
         )
 
-    def develop_brain(self) -> BrainCpgNetworkNeighborV1:
+    def develop_body(self) -> Body:
         """
         Develop the genotype into a modular robot.
 
         :returns: The created robot.
         """
-        return BrainCpgNetworkNeighborV1(self.brain.genotype)
+        return develop(self.body.genotype)

@@ -5,7 +5,8 @@ import numpy.typing as npt
 from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
 from revolve2.actor_controllers.cpg import CpgNetworkStructure
-from revolve2.modular_robot import Body, Brain
+
+from .. import Body, Brain
 
 
 class BrainCpgNetworkStatic(Brain):

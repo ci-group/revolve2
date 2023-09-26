@@ -6,10 +6,8 @@ from pyrr import Quaternion, Vector3
 from revolve2.simulation.actor import Actor, RigidBody
 from revolve2.simulation.running._results import ActorState
 
-from ._active_hinge import ActiveHinge
 from ._body_state import BodyState
-from ._brick import Brick
-from ._core import Core
+from ._common import ActiveHinge, Brick, Core
 from ._module import Module
 from ._not_finalized_error import NotFinalizedError
 

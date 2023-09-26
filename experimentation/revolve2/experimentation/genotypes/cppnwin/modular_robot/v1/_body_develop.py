@@ -4,7 +4,8 @@ from queue import Queue
 from typing import Any
 
 import multineat
-from revolve2.modular_robot import ActiveHinge, Brick, Core, Module
+from revolve2.modular_robot import Module
+from revolve2.modular_robot._common import ActiveHinge, Brick, Core
 from revolve2.modular_robot.v1 import BodyV1
 
 

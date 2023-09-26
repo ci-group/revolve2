@@ -3,8 +3,9 @@ from abc import ABC, abstractmethod
 
 from revolve2.actor_controller import ActorController
 from revolve2.actor_controllers.cpg import CpgActorController as ControllerCpg
-from revolve2.modular_robot import ActiveHinge, Body, Brain
 
+from .. import Body, Brain
+from .._common import ActiveHinge
 from ._make_cpg_network_structure_neighbor import (
     active_hinges_to_cpg_network_structure_neighbor,
 )

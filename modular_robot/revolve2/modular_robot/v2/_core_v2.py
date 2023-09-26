@@ -3,7 +3,7 @@ import math
 from pyrr import Quaternion, Vector3
 from revolve2.simulation.actor import Actor, Collision, Color, RigidBody
 
-from .._core import Core
+from .._common import Core
 from .._right_angles import RightAngles
 
 

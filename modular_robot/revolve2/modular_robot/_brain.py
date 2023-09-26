@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from revolve2.actor_controller import ActorController
-from revolve2.modular_robot._body import Body
+from ._body import Body
 
 
 class Brain(ABC):

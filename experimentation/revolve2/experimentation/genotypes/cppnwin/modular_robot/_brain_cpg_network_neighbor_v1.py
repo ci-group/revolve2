@@ -1,7 +1,8 @@
 from typing import cast
 
 import multineat
-from revolve2.modular_robot import ActiveHinge, Body
+from revolve2.modular_robot import Body
+from revolve2.modular_robot._common import ActiveHinge
 from revolve2.modular_robot.brains import (
     BrainCpgNetworkNeighbor as ModularRobotBrainCpgNetworkNeighbor,
 )

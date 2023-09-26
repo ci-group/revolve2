@@ -1,7 +1,7 @@
 from pyrr import Quaternion, Vector3
 from revolve2.simulation.actor import Actor, Collision, Color, Joint, RigidBody
 
-from .._active_hinge import ActiveHinge
+from .._common import ActiveHinge
 from .._right_angles import RightAngles
 
 

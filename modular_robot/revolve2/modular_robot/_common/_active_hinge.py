@@ -1,5 +1,5 @@
-from ._module import Module
-from ._right_angles import RightAngles
+from revolve2.modular_robot._module import Module
+from revolve2.modular_robot._right_angles import RightAngles
 
 
 class ActiveHinge(Module):

@@ -11,7 +11,10 @@ class CoreV2(Core):
     """The core module of a modular robot."""
 
     BOUNDING_BOX = Vector3([0.15, 0.15, 0.15])
-    MASS = 0.250
+
+    BATTERY_MASS = 0.39712  # in kg
+    FRAME_MASS = 1.0644  # in kg
+    MASS = BATTERY_MASS + FRAME_MASS  # adjust if multiple batteries are installed
     CHILD_OFFSET = 0.15 / 2.0
     color = Color(255, 50, 50, 255)
     num_children = 4

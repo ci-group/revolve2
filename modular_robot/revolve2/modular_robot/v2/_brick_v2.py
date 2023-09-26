@@ -11,7 +11,7 @@ class BrickV2(Brick):
     """A brick module for a modular robot."""
 
     BOUNDING_BOX = Vector3([0.06288625, 0.06288625, 0.0603])
-    MASS = 0.030
+    MASS = 0.06043
     CHILD_OFFSET = 0.06288625 / 2.0
     color = Color(50, 50, 255, 255)
     num_children = 3

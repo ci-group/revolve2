@@ -1,3 +1,4 @@
+"""Evolve Body+Brain using EA example."""
 import logging
 import pickle
 

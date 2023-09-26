@@ -1,3 +1,4 @@
+"""Evaluating a single robot with replacement example."""
 import asyncio
 
 from revolve2.ci_group import fitness_functions, modular_robots, terrains

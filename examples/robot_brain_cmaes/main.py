@@ -1,3 +1,4 @@
+"""CMAES based evolution example."""
 import logging
 
 import cma

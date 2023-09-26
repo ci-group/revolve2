@@ -1,3 +1,4 @@
+"""Evolve Body+Brain using EA example with database."""
 import logging
 
 import config

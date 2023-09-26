@@ -1,3 +1,4 @@
+"""Evaluate multiple robots using displacement example."""
 import asyncio
 
 from revolve2.ci_group import fitness_functions, modular_robots

@@ -1,3 +1,4 @@
+"""Simple EA XOR example."""
 import logging
 
 import config

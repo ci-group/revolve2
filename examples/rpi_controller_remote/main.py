@@ -1,3 +1,4 @@
+"""RPI Controller Remote Example."""
 import logging
 
 from revolve2.rpi_controller_remote import connect

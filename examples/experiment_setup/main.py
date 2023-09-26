@@ -1,3 +1,4 @@
+"""Example for a simple experiment setup."""
 import logging
 
 import config

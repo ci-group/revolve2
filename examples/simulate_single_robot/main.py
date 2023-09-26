@@ -1,3 +1,4 @@
+"""Simulate single robot example."""
 import asyncio
 
 from revolve2.ci_group import terrains

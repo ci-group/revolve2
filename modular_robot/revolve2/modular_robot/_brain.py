@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
 from revolve2.actor_controller import ActorController
+
 from ._body import Body
 
 

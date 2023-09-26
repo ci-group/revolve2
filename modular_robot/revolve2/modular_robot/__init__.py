@@ -1,6 +1,5 @@
 """Classes and functions to describe and work with modular robots as used in the CI Group at VU Amsterdam."""
 
-from ._morphological_measures import MorphologicalMeasures
 from ._active_hinge import ActiveHinge
 from ._body import Body
 from ._body_state import BodyState
@@ -17,6 +16,7 @@ from ._get_body_states_multiple_isolated_robots import (
 from ._get_body_states_single_robot import get_body_states_single_robot
 from ._modular_robot import ModularRobot
 from ._module import Module
+from ._morphological_measures import MorphologicalMeasures
 from ._not_finalized_error import NotFinalizedError
 from ._right_angles import RightAngles
 

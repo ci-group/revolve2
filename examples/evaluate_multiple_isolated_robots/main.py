@@ -10,7 +10,7 @@ You learn:
 
 import asyncio
 
-from revolve2.ci_group import fitness_functions, modular_robots
+from revolve2.ci_group import fitness_functions, modular_robots_v1
 from revolve2.ci_group import terrains as standard_terrains
 from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group.rng import make_rng
@@ -34,10 +34,10 @@ def main() -> None:
 
     # Create the robots.
     bodies = [
-        modular_robots.gecko(),
-        modular_robots.ant(),
-        modular_robots.snake(),
-        modular_robots.spider(),
+        modular_robots_v1.gecko_v1(),
+        modular_robots_v1.ant_v1(),
+        modular_robots_v1.snake_v1(),
+        modular_robots_v1.spider_v1(),
     ]
     brains = [BrainCpgNetworkNeighborRandom(rng) for _ in bodies]
     robots = [ModularRobot(body, brain) for body, brain in zip(bodies, brains)]

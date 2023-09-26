@@ -1,11 +1,15 @@
 from __future__ import annotations
 
-from revolve2.simulation.actor import Color
+from abc import ABC, abstractmethod
+
+from pyrr import Quaternion, Vector3
+from revolve2.simulation.actor import Actor, RigidBody
 
 from ._not_finalized_error import NotFinalizedError
+from ._right_angles import RightAngles
 
 
-class Module:
+class Module(ABC):
     """Base class for a module for modular robots."""
 
     _children: list[Module | None]
@@ -16,24 +20,21 @@ class Module:
     _parent: Module | None
     _parent_child_index: int | None
 
-    _color: Color
-
-    def __init__(self, num_children: int, rotation: float, color: Color):
+    def __init__(self, num_children: int, rotation: float | RightAngles):
         """
         Initialize this object.
 
-        :param num_children: The number of children this module can have.
-        :param rotation: Orientation of this model relative to its parent.
-        :param color: The color of the module.
+        :param num_children: The number of Children.
+        :param rotation: The Modules rotation.
         """
-        self._children = [None] * num_children
-        self._rotation = rotation
-
         self._id = None
         self._parent = None
         self._parent_child_index = None
 
-        self._color = color
+        self._rotation = (
+            rotation.value if isinstance(rotation, RightAngles) else rotation
+        )
+        self._children = [None] * num_children
 
     @property
     def children(self) -> list[Module | None]:
@@ -114,11 +115,23 @@ class Module:
 
         return out_neighbours
 
-    @property
-    def color(self) -> Color:
+    @abstractmethod
+    def build(
+        self,
+        body: RigidBody,
+        name_prefix: str,
+        attachment_point: Vector3,
+        orientation: Quaternion,
+        robot: Actor,
+        dof_ids: list[int],
+    ) -> None:
         """
-        Get the color of this module.
+        Build the current module onto the Robot. Each module is built separately based on its specifications.
 
-        :returns: The color.
+        :param body: The rigid body.
+        :param name_prefix: The name prefix.
+        :param attachment_point: The attachment point.
+        :param orientation: The modules Orientation.
+        :param robot: The actor.
+        :param dof_ids: dof ids.
         """
-        return self._color

@@ -9,7 +9,7 @@ You learn:
 
 import asyncio
 
-from revolve2.ci_group import fitness_functions, modular_robots, terrains
+from revolve2.ci_group import fitness_functions, modular_robots_v1, terrains
 from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group.rng import make_rng
 from revolve2.ci_group.simulation import create_batch_single_robot_standard
@@ -28,7 +28,7 @@ def main() -> None:
     rng = make_rng(RNG_SEED)
 
     # Create the robot.
-    body = modular_robots.gecko()
+    body = modular_robots_v1.gecko_v1()
     brain = BrainCpgNetworkNeighborRandom(rng)
     robot = ModularRobot(body, brain)
 

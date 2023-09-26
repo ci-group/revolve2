@@ -1,13 +1,14 @@
-from ._module import Module
-from ._right_angles import RightAngles
+from revolve2.modular_robot._module import Module
+from revolve2.modular_robot._right_angles import RightAngles
 
 
-class Brick(Module):
-    """A Brick."""
+class Core(Module):
+    """A Core."""
 
     FRONT = 0
     RIGHT = 1
-    LEFT = 2
+    BACK = 2
+    LEFT = 3
 
     def __init__(self, num_children: int, rotation: float | RightAngles):
         """
@@ -21,7 +22,7 @@ class Brick(Module):
     @property
     def front(self) -> Module | None:
         """
-        Get the module attached to the front of the brick.
+        Get the module attached to the front of the core.
 
         :returns: The attached module.
         """
@@ -30,7 +31,7 @@ class Brick(Module):
     @front.setter
     def front(self, module: Module) -> None:
         """
-        Set the module attached to the front of the brick.
+        Set the module attached to the front of the core.
 
         :param module: The module to attach.
         """
@@ -39,7 +40,7 @@ class Brick(Module):
     @property
     def right(self) -> Module | None:
         """
-        Get the module attached to the right of the brick.
+        Get the module attached to the right of the core.
 
         :returns: The attached module.
         """
@@ -48,16 +49,34 @@ class Brick(Module):
     @right.setter
     def right(self, module: Module) -> None:
         """
-        Set the module attached to the right of the brick.
+        Set the module attached to the right of the core.
 
         :param module: The module to attach.
         """
         self.children[self.RIGHT] = module
 
     @property
+    def back(self) -> Module | None:
+        """
+        Get the module attached to the back of the core.
+
+        :returns: The attached module.
+        """
+        return self.children[self.BACK]
+
+    @back.setter
+    def back(self, module: Module) -> None:
+        """
+        Set the module attached to the back of the core.
+
+        :param module: The module to attach.
+        """
+        self.children[self.BACK] = module
+
+    @property
     def left(self) -> Module | None:
         """
-        Get the module attached to the left of the brick.
+        Get the module attached to the left of the core.
 
         :returns: The attached module.
         """
@@ -66,7 +85,7 @@ class Brick(Module):
     @left.setter
     def left(self, module: Module) -> None:
         """
-        Set the module attached to the left of the brick.
+        Set the module attached to the left of the core.
 
         :param module: The module to attach.
         """

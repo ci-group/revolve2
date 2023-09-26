@@ -1,31 +1,23 @@
-from revolve2.simulation.actor import Color
-
 from ._module import Module
 from ._right_angles import RightAngles
 
 
 class Core(Module):
-    """The core module of a modular robot."""
+    """A Core."""
 
     FRONT = 0
     RIGHT = 1
     BACK = 2
     LEFT = 3
 
-    def __init__(
-        self, rotation: float | RightAngles, color: Color = Color(255, 50, 50, 255)
-    ):
+    def __init__(self, num_children: int, rotation: float | RightAngles):
         """
         Initialize this object.
 
-        :param rotation: Orientation of this model relative to its parent.
-        :param color: The color of the module.
+        :param num_children: The number of children.
+        :param rotation: The Modules rotation.
         """
-        if isinstance(rotation, RightAngles):
-            rotation_converted = rotation.value
-        else:
-            rotation_converted = rotation
-        super().__init__(4, rotation_converted, color)
+        super().__init__(num_children, rotation)
 
     @property
     def front(self) -> Module | None:

@@ -4,7 +4,8 @@ from queue import Queue
 from typing import Any
 
 import multineat
-from revolve2.modular_robot import ActiveHinge, Body, Brick, Core, Module
+from revolve2.modular_robot import ActiveHinge, Brick, Core, Module
+from revolve2.modular_robot.v1 import BodyV1
 
 
 @dataclass
@@ -18,14 +19,14 @@ class __Module:
 
 def develop(
     genotype: multineat.Genome,
-) -> Body:
+) -> BodyV1:
     """
     Develop a CPPNWIN genotype into a modular robot body.
 
     It is important that the genotype was created using a compatible function.
 
     :param genotype: The genotype to create the body from.
-    :returns: The create body.
+    :returns: The created body.
     :raises RuntimeError: In case a module is encountered that is not supported.
     """
     max_parts = 10
@@ -36,7 +37,7 @@ def develop(
     to_explore: Queue[__Module] = Queue()
     grid: set[tuple[int, int, int]] = set()
 
-    body = Body()
+    body = BodyV1()
 
     to_explore.put(__Module((0, 0, 0), (0, -1, 0), (0, 0, 1), 0, body.core))
     grid.add((0, 0, 0))

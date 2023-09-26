@@ -1,10 +1,10 @@
 import numpy as np
-from revolve2.modular_robot._active_hinge import ActiveHinge
-from revolve2.modular_robot._body import Body
-from revolve2.modular_robot._brick import Brick
-from revolve2.modular_robot._core import Core
-from revolve2.modular_robot._module import Module
-from revolve2.modular_robot._not_finalized_error import NotFinalizedError
+from ._active_hinge import ActiveHinge
+from ._body import Body
+from ._brick import Brick
+from ._core import Core
+from ._module import Module
+from ._not_finalized_error import NotFinalizedError
 
 
 class MorphologicalMeasures:

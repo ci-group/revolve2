@@ -1,7 +1,6 @@
 """Classes and functions to describe and work with modular robots as used in the CI Group at VU Amsterdam."""
 
-from revolve2.modular_robot._morphological_measures import MorphologicalMeasures
-
+from ._morphological_measures import MorphologicalMeasures
 from ._active_hinge import ActiveHinge
 from ._body import Body
 from ._body_state import BodyState

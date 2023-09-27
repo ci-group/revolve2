@@ -2,7 +2,6 @@ from .._module import Module
 from .._right_angles import RightAngles
 
 
-
 class ActiveHinge(Module):
     """A Active Hinge."""
 

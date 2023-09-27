@@ -1,6 +1,6 @@
 """Interface and implementation of geometries."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import numpy.typing as npt
@@ -21,7 +21,7 @@ class Plane(Geometry):
     """A flat plane geometry."""
 
     size: Vector2
-    color: Vector3 = Vector3([0.2, 0.2, 0.2])
+    color: Vector3 = field(default_factory=lambda: Vector3([0.2, 0.2, 0.2]))
 
 
 @dataclass
@@ -38,4 +38,4 @@ class Heightmap(Geometry):
     size: Vector3
     base_thickness: float
     heights: npt.NDArray[np.float_]  # MxN matrix. outer list is x, inner list is y
-    color: Vector3 = Vector3([0.2, 0.2, 0.2])
+    color: Vector3 = field(default_factory=lambda: Vector3([0.2, 0.2, 0.2]))

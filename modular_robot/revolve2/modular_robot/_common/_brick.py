@@ -1,7 +1,6 @@
 from revolve2.modular_robot._module import Module
 from revolve2.modular_robot._right_angles import RightAngles
 
-
 class Brick(Module):
     """A Brick."""
 

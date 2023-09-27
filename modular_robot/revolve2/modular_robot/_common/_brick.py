@@ -2,6 +2,7 @@ from .._module import Module
 from .._right_angles import RightAngles
 
 
+
 class Brick(Module):
     """A Brick."""
 

@@ -24,7 +24,6 @@ class Plane(Geometry):
     color: Vector3 = field(default_factory=lambda: Vector3([0.2, 0.2, 0.2]))
 
 
-
 @dataclass
 class Heightmap(Geometry):
     """

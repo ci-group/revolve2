@@ -1,4 +1,4 @@
-"""Evolve Body+Brain using EA example with database."""
+"""Main script for the example."""
 import logging
 
 import config

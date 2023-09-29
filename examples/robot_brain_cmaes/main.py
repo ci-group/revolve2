@@ -1,4 +1,4 @@
-"""CMAES based evolution example."""
+"""Main script for the example."""
 import logging
 
 import cma

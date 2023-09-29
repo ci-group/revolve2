@@ -1,12 +1,4 @@
-"""
-Simulate a single modular robot, and then calculate its xy displacement.
-
-To understand simulation, first see the 'simulate_single_robot' example.
-
-You learn:
-- How to process simulation results.
-"""
-
+"""Main script for the example."""
 import asyncio
 
 from revolve2.ci_group import fitness_functions, modular_robots, terrains

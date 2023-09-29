@@ -1,15 +1,4 @@
-"""
-Set up a trivial experiment with muliple repetitions.
-
-You learn:
-- Setting up an experiment.
-- Basic use of logging.
-- Experiment repetitions.
-- About the random number generator and reproducible experiments.
-- In particular, you will NOT learn how to save your experiment results.
-  Either use your own preferred method, or look at the SQLAlchemy database abstraction commonly used in Revolve2.
-"""
-
+"""Main script for the example."""
 import logging
 
 import config

@@ -1,22 +1,4 @@
-"""
-Run the example.
-
-A modular robot body and brain will be optimized using a simple evolutionary algorithm.
-The genotypes for both body and brain are CPPNWIN.
-"""
-
-"""
-Set up an experiment that optimizes the body and brain of a robot using a simple evolutionary algorithm.
-
-The genotypes for both body and brain are CPPNWIN.
-
-Before starting this tutorial, it is useful to look at the 'experiment_setup', 'evaluate_multiple_isolated_robots', and 'simple_ea_xor' examples.
-It is also nice to understand the concept of a cpg brain and CPPN, although not really needed.
-
-You learn:
-- How to optimize the body and brain of a robot using an EA.
-"""
-
+"""Main script for the example."""
 import logging
 import pickle
 

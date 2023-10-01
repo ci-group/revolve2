@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Main script for the example."""
 
 from revolve2.ci_group import fitness_functions, modular_robots, terrains

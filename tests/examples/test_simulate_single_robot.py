@@ -4,12 +4,12 @@ import subprocess
 
 from tests.conftest import EXAMPLES_DIR
 
-EXPERIMENT_DIR = os.path.join(EXAMPLES_DIR, "simulate_single_robot")
+EXP_DIR = os.path.join(EXAMPLES_DIR, "simulate_single_robot")
 
 
 EXP_CMD_BASE = [
     "python3",
-    os.path.join(EXPERIMENT_DIR, "main.py"),
+    os.path.join(EXP_DIR, "main.py"),
     "-t",
     "2",
 ]

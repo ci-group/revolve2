@@ -2,9 +2,9 @@
 """Main script for the example."""
 
 import logging
+from types import ModuleType
 
 import cma
-import config
 from evaluator import Evaluator
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import seed_from_time
@@ -15,6 +15,7 @@ from revolve2.modular_robot.brain.cpg import (
 
 def main() -> None:
     """Run the experiment."""
+    config = get_config()
     setup_logging(file_name="log.txt")
 
     # Find all active hinges in the body
@@ -69,6 +70,13 @@ def main() -> None:
 
         # Increase the generation index counter.
         generation_index += 1
+
+
+def get_config() -> ModuleType:
+    """Return config object for experiment (can be mocked for unit testing)."""
+    import config
+
+    return config
 
 
 if __name__ == "__main__":

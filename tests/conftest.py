@@ -37,6 +37,34 @@ def get_uuid(length: int = 10):
     return str(secrets.token_hex(length))[:length]
 
 
+@pytest.fixture
+def custom_cwd(request):
+    """Fixture to set a custom current working directory (and update sys.path) for a single test."""
+    # Get the desired custom cwd from the test function
+    desired_cwd_obj = request.node.get_closest_marker("cwd")
+
+    if desired_cwd_obj:
+        desired_cwd = desired_cwd_obj.args[0]
+        # Save the current working directory
+        original_cwd = os.getcwd()
+
+        # Change the current working directory to the desired custom cwd
+        os.chdir(desired_cwd)
+
+        print(f"cwd changed to '{os.getcwd()}', starting test...")
+        sys.path.insert(0, desired_cwd)
+        yield  # Execute the test
+
+        # Restore the original working directory when the test is done
+        os.chdir(original_cwd)
+        print(f"restored cwd to '{os.getcwd()}'")
+        sys.path.remove(desired_cwd)
+        assert os.getcwd() == original_cwd
+    else:
+        yield  # No custom cwd specified, just execute the test
+
+
+# TODO: delete this?
 class add_path:
     """
     Temporarily adds a given path to `sys.path`

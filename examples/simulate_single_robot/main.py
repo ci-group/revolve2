@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Main script for the example."""
 
+import argparse
+
 from revolve2.ci_group import terrains
 from revolve2.ci_group.modular_robots import gecko
 from revolve2.ci_group.simulation import make_standard_batch_parameters
@@ -36,6 +38,15 @@ def make_body() -> Body:
 
 def main() -> None:
     """Run the simulation."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--simulation-time",
+        "-t",
+        type=int,
+        default=1000000,
+        help="Number of seconds to run simulation.",
+    )
+    args = parser.parse_args()
     # Set up logging.
     setup_logging()
 
@@ -61,7 +72,7 @@ def main() -> None:
 
     # `batch_parameters` are important parameters for simulation.
     # Here, we use the parameters that are standard in CI Group.
-    batch_parameters = make_standard_batch_parameters()
+    batch_parameters = make_standard_batch_parameters(simulation_time=args.simulation_time)
 
     # Simulate the scene.
     # A simulator can run multiple sets of scenes sequentially; it can be reused.

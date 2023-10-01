@@ -12,7 +12,7 @@ function main() {
     [[ "$OSTYPE" == "darwin"* ]] && export IS_MAC=true || export IS_MAC=false
     edit=()
     DEV=""
-    while getopts "ed" arg; do
+    while getopts "edh" arg; do
         case $arg in
             e)
                 edit=(-e)
@@ -30,21 +30,35 @@ function main() {
     done
 
     echo -e "\nstarting installations..."
+
     pip install "${edit[@]}" ./serialization$DEV
     pip install "${edit[@]}" ./actor_controller$DEV
+    pip install "${edit[@]}" ./simulation$DEV
+    pip install "${edit[@]}" ./modular_robot$DEV
     pip install "${edit[@]}" ./rpi_controller$DEV
-    pip install "${edit[@]}" ./core$DEV
-    pip install "${edit[@]}" ./standard_resources$DEV
-    pip install "${edit[@]}" ./runners/mujoco$DEV
+    pip install "${edit[@]}" ./rpi_controller_remote$DEV
+
+    pip install "${edit[@]}" ./experimentation$DEV
+    pip install "${edit[@]}" ./simulators/mujoco$DEV
+    pip install "${edit[@]}" ./ci_group$DEV
+
+
+    # install examples requirements
+    pip install -r examples/robot_bodybrain_ea_database/requirements.txt
+    pip install -r examples/robot_brain_cmaes_database/requirements.txt
+    pip install -r examples/simple_ea_xor_database/requirements.txt
+
+    # install unit test requirements
+    pip install -r tests/requirements.txt
 
     if ! $IS_MAC; then
         sudo apt install -y libcereal-dev
     else
         brew install cereal
     fi
+    #pip install "${edit[@]}" ./genotypes/cppnwin$DEV
 
-    pip install "${edit[@]}" ./genotypes/cppnwin$DEV
-    echo "install.sh complete!"
+    echo -e "\ninstall.sh complete!"
 }
 
 function usage() {

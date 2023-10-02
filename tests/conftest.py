@@ -1,4 +1,3 @@
-import glob
 import os
 import sys
 import secrets
@@ -38,10 +37,14 @@ def get_uuid(length: int = 10):
 
 
 @pytest.fixture
-def custom_cwd(request):
-    """Fixture to set a custom current working directory (and update sys.path) for a single test."""
+def custom_path(request, change_cwd: bool = False):
+    """
+    Fixture to update sys.path temporarily for the lifetime of a single test.
+    Can also update the current working directory for the same lifetime as well (but disabled by default as it doesn't seem necessary).
+    """
     # Get the desired custom cwd from the test function
-    desired_cwd_obj = request.node.get_closest_marker("cwd")
+    orig_paths = sys.path.copy()
+    desired_cwd_obj = request.node.get_closest_marker("path")
 
     if desired_cwd_obj:
         desired_cwd = desired_cwd_obj.args[0]
@@ -49,37 +52,18 @@ def custom_cwd(request):
         original_cwd = os.getcwd()
 
         # Change the current working directory to the desired custom cwd
-        os.chdir(desired_cwd)
-
-        print(f"cwd changed to '{os.getcwd()}', starting test...")
+        if change_cwd:
+            os.chdir(desired_cwd)
+            print(f"cwd changed to '{os.getcwd()}', starting test...")
         sys.path.insert(0, desired_cwd)
         yield  # Execute the test
 
-        # Restore the original working directory when the test is done
-        os.chdir(original_cwd)
-        print(f"restored cwd to '{os.getcwd()}'")
-        sys.path.remove(desired_cwd)
+        if change_cwd:
+            # Restore the original working directory when the test is done
+            os.chdir(original_cwd)
+            print(f"restored cwd to '{os.getcwd()}'")
+        #sys.path.remove(desired_cwd)
+        sys.path = orig_paths.copy()
         assert os.getcwd() == original_cwd
     else:
         yield  # No custom cwd specified, just execute the test
-
-
-# TODO: delete this?
-class add_path:
-    """
-    Temporarily adds a given path to `sys.path`
-    https://stackoverflow.com/a/39855753
-    """
-
-    def __init__(self, path: str):
-        self.path = path
-
-    def __enter__(self):
-        sys.path.insert(0, self.path)
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        try:
-            sys.path.remove(self.path)
-        except ValueError as err:
-            print(f"WARNING: failed to remove path from sys.path: '{self.path}'")
-            # raise err

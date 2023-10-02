@@ -2,13 +2,15 @@ import os
 import pytest
 from tests.conftest import EXAMPLES_DIR
 
-EXP_DIR = os.path.join(EXAMPLES_DIR, "robot_brain_cmaes")
+EXP_DIR = os.path.join(EXAMPLES_DIR, "robot_bodybrain_ea")
 
 
 def mock_config():
-    import examples.robot_brain_cmaes.config as config
+    import examples.robot_bodybrain_ea.config as config
 
     overrides = {
+        "POPULATION_SIZE": 6,
+        "OFFSPRING_SIZE": 2,
         "NUM_GENERATIONS": 2,
     }
     for key, value in overrides.items():
@@ -22,11 +24,10 @@ def mock_config():
 @pytest.mark.path(EXP_DIR)
 def test_experiment_can_complete(custom_path, mocker):
     """Test that main.py can complete (without crashing)."""
-
     # override default config (to reduce number of generations)
     mocker.patch(
-        "examples.robot_brain_cmaes.main.get_config", return_value=mock_config()
+        "examples.robot_bodybrain_ea.main.get_config", return_value=mock_config()
     )
-    import examples.robot_brain_cmaes.main as main_script
+    import examples.robot_bodybrain_ea.main as main_script
 
     main_script.main()

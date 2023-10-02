@@ -72,7 +72,9 @@ def main() -> None:
 
     # `batch_parameters` are important parameters for simulation.
     # Here, we use the parameters that are standard in CI Group.
-    batch_parameters = make_standard_batch_parameters(simulation_time=args.simulation_time)
+    batch_parameters = make_standard_batch_parameters(
+        simulation_time=args.simulation_time
+    )
 
     # Simulate the scene.
     # A simulator can run multiple sets of scenes sequentially; it can be reused.

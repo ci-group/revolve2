@@ -1,3 +1,4 @@
+"""Tests some of the examples that can just be easily ran as a subprocess."""
 import os
 
 from tests.conftest import EXAMPLES_DIR, assert_command_succeeds

@@ -2,9 +2,10 @@
 
 from dataclasses import dataclass
 
-from base import Base
-from genotype import Genotype
 from revolve2.experimentation.optimization.ea import Individual as GenericIndividual
+
+from .base import Base
+from .genotype import Genotype
 
 
 @dataclass

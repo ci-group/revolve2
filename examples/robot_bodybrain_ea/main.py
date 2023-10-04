@@ -198,7 +198,7 @@ def get_config() -> ModuleType:
 
     :returns: Config object for experiment.
     """
-    import config
+    from . import config
 
     return config
 

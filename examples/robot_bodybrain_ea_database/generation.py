@@ -2,10 +2,11 @@
 
 import sqlalchemy
 import sqlalchemy.orm as orm
-from base import Base
-from experiment import Experiment
-from population import Population
 from revolve2.experimentation.database import HasId
+
+from .base import Base
+from .experiment import Experiment
+from .population import Population
 
 
 class Generation(Base, HasId):

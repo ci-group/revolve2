@@ -1,15 +1,16 @@
 """Plot fitness over generations for all experiments, averaged."""
 
-import config
 import matplotlib.pyplot as plt
 import pandas
-from experiment import Experiment
-from generation import Generation
-from individual import Individual
-from population import Population
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from revolve2.experimentation.logging import setup_logging
 from sqlalchemy import select
+
+from . import config
+from .experiment import Experiment
+from .generation import Generation
+from .individual import Individual
+from .population import Population
 
 
 def main() -> None:

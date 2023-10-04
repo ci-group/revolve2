@@ -1,6 +1,6 @@
 import os
+import subprocess
 import sys
-import secrets
 
 import pytest
 
@@ -32,8 +32,12 @@ def run_around_tests():
     # for example here you could delete artifacts created by the test (e.g. sqlite files)
 
 
-def get_uuid(length: int = 10):
-    return str(secrets.token_hex(length))[:length]
+def assert_command_succeeds(cmd: list):
+    """Helper function for asserting a given command succeeds."""
+    print("running command:\n", " ".join(cmd))
+    res = subprocess.run(cmd, stdout=subprocess.PIPE)
+    print(res.stdout)
+    assert res.returncode == 0, f"expected returncode 0, got {res.returncode}"
 
 
 @pytest.fixture

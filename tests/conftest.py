@@ -62,7 +62,7 @@ def custom_path(request, change_cwd: bool = False):
             # Restore the original working directory when the test is done
             os.chdir(original_cwd)
             print(f"restored cwd to '{os.getcwd()}'")
-        #sys.path.remove(desired_cwd)
+        # sys.path.remove(desired_cwd)
         sys.path = orig_paths.copy()
         assert os.getcwd() == original_cwd
     else:

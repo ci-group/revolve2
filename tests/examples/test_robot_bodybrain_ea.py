@@ -21,8 +21,7 @@ def mock_config():
     return config
 
 
-@pytest.mark.path(EXP_DIR)
-def test_experiment_can_complete(custom_path, mocker):
+def test_experiment_can_complete(mocker):
     """Test that main.py can complete (without crashing)."""
     # override default config (to reduce number of generations)
     mocker.patch(

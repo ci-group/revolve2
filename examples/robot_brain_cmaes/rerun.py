@@ -1,12 +1,13 @@
 """Rerun a robot with given body and parameters."""
 
-import config
 import numpy as np
 from evaluator import Evaluator
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot.brain.cpg import (
     active_hinges_to_cpg_network_structure_neighbor,
 )
+
+from .main import get_config
 
 # These are set of parameters that we optimized using CMA-ES.
 # You can copy your own parameters from the optimization output log.
@@ -32,6 +33,7 @@ PARAMS = np.array(
 def main() -> None:
     """Perform the rerun."""
     setup_logging()
+    config = get_config()
 
     # Find all active hinges in the body
     active_hinges = config.BODY.find_active_hinges()

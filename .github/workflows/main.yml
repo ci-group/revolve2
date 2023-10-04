@@ -100,4 +100,4 @@ jobs:
       #- name: install pytest dependencies
       #  run: pip install -r tests/requirements.txt
       - name: run pytest
-        run: pytest -v -s
+        run: pytest -v

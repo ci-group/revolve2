@@ -5,12 +5,13 @@ import logging
 from types import ModuleType
 
 import cma
-from evaluator import Evaluator
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import seed_from_time
 from revolve2.modular_robot.brain.cpg import (
     active_hinges_to_cpg_network_structure_neighbor,
 )
+
+from .evaluator import Evaluator
 
 
 def main() -> None:
@@ -78,7 +79,7 @@ def get_config() -> ModuleType:
 
     :returns: Config object for experiment.
     """
-    import config
+    from . import config
 
     return config
 

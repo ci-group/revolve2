@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 
-from genotype import Genotype
+from .genotype import Genotype
 
 
 @dataclass

@@ -1,8 +1,8 @@
 from typing import cast
 
 import multineat
-from revolve2.modular_robot import ActiveHinge, Body
-from revolve2.modular_robot.brains import (
+from revolve2.modular_robot.body import ActiveHinge, Body
+from revolve2.modular_robot.brain.cpg import (
     BrainCpgNetworkNeighbor as ModularRobotBrainCpgNetworkNeighbor,
 )
 
@@ -18,13 +18,15 @@ class BrainCpgNetworkNeighborV1(ModularRobotBrainCpgNetworkNeighbor):
 
     _genotype: multineat.Genome
 
-    def __init__(self, genotype: multineat.Genome):
+    def __init__(self, genotype: multineat.Genome, body: Body):
         """
         Initialize this object.
 
         :param genotype: A multineat genome used for determining weights.
+        :param body: The body of the robot.
         """
         self._genotype = genotype
+        super().__init__(body)
 
     def _make_weights(
         self,

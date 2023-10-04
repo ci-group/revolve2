@@ -86,5 +86,5 @@ class Genotype(Base, HasId, BodyGenotypeOrm, BrainGenotypeCpgOrm):
         :returns: The created robot.
         """
         body = self.develop_body()
-        brain = self.develop_brain()
+        brain = self.develop_brain(body=body)
         return ModularRobot(body=body, brain=brain)

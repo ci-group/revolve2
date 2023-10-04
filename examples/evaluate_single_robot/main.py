@@ -1,13 +1,13 @@
 """Main script for the example."""
-import asyncio
 
 from revolve2.ci_group import fitness_functions, modular_robots, terrains
 from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import make_rng
-from revolve2.ci_group.simulation import create_batch_single_robot_standard
-from revolve2.modular_robot import ModularRobot, get_body_states_single_robot
-from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
-from revolve2.simulators.mujoco import LocalRunner
+from revolve2.ci_group.rng import make_rng_time_seed
+from revolve2.ci_group.simulation import make_standard_batch_parameters
+from revolve2.modular_robot import ModularRobot
+from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
+from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
+from revolve2.simulators.mujoco import LocalSimulator
 
 
 def main() -> None:
@@ -15,36 +15,41 @@ def main() -> None:
     # Set up standard logging.
     setup_logging()
 
-    # Set up a random number generater.
-    RNG_SEED = 5
-    rng = make_rng(RNG_SEED)
+    # Set up a random number generator.
+    rng = make_rng_time_seed()
 
     # Create the robot.
     body = modular_robots.gecko()
-    brain = BrainCpgNetworkNeighborRandom(rng)
+    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
     robot = ModularRobot(body, brain)
 
-    # Create the simulation batch.
-    batch = create_batch_single_robot_standard(robot=robot, terrain=terrains.flat())
+    # Create the scene.
+    scene = ModularRobotScene(terrain=terrains.flat())
+    scene.add_robot(robot)
 
-    # Create the runner.
-    # We set the headless parameters, which will run the simulation as fast as possible.
-    runner = LocalRunner(headless=True)
-    # Running the batch returns simulation results.
-    results = asyncio.run(runner.run_batch(batch))
+    # Create the simulator.
+    # We set enable the headless flag, which will prevent visualization of the simulation, speeding it up.
+    simulator = LocalSimulator(headless=False)
+    batch_parameters = make_standard_batch_parameters()
 
-    # Get the results of the first environment, which is the only one since we set up a single simulation environment.
-    environment_results = results.environment_results[0]
-
-    # We have to map the simulation results back to robot body space.
-    # This function calculates the state of the robot body at the start and end of the simulation.
-    body_state_begin, body_state_end = get_body_states_single_robot(
-        body, environment_results
+    # Obtain the state of the simulation, measured at a predefined interval as defined in the batch parameters.
+    scene_states = simulate_scenes(
+        simulator=simulator,
+        batch_parameters=batch_parameters,
+        scenes=scene,
     )
 
-    # Calculate the xy displacement from the body states.
+    # Get the state at the begin and end of the simulation.
+    scene_state_begin = scene_states[0]
+    scene_state_end = scene_states[-1]
+
+    # Retrieve the state of the modular robot.
+    robot_state_begin = scene_state_begin.get_modular_robot_simulation_state(robot)
+    robot_state_end = scene_state_end.get_modular_robot_simulation_state(robot)
+
+    # Calculate the xy displacement.
     xy_displacement = fitness_functions.xy_displacement(
-        body_state_begin, body_state_end
+        robot_state_begin, robot_state_end
     )
 
     print(xy_displacement)

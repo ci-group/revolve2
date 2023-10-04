@@ -1,13 +1,14 @@
 """Main script for the example."""
-import asyncio
 
 from revolve2.ci_group import terrains
 from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group.rng import make_rng
-from revolve2.ci_group.simulation import create_batch_single_robot_standard
-from revolve2.modular_robot import ActiveHinge, Body, Brick, ModularRobot, RightAngles
-from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
-from revolve2.simulators.mujoco import LocalRunner
+from revolve2.ci_group.simulation import make_standard_batch_parameters
+from revolve2.modular_robot import ModularRobot
+from revolve2.modular_robot.body import ActiveHinge, Body, Brick, RightAngles
+from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
+from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
+from revolve2.simulators.mujoco import LocalSimulator
 
 
 def make_body() -> Body:
@@ -16,31 +17,27 @@ def make_body() -> Body:
 
     :returns: The created body.
     """
-    # Set up standard logging.
-    setup_logging()
-
     # A modular robot body follows a 'tree' structure.
     # The 'Body' class automatically creates a center 'core'.
     # From here, other modular can be attached.
     # Modules can be attach in a rotated fashion.
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
     body = Body()
-    body.core.left = ActiveHinge(RightAngles.DEG_180)
-    body.core.left.attachment = ActiveHinge(RightAngles.DEG_180)
+    body.core.left = ActiveHinge(RightAngles.DEG_0)
+    body.core.left.attachment = ActiveHinge(RightAngles.DEG_0)
     body.core.left.attachment.attachment = Brick(RightAngles.DEG_0)
-    body.core.right = ActiveHinge(RightAngles.DEG_180)
-    body.core.right.attachment = ActiveHinge(RightAngles.DEG_180)
+    body.core.right = ActiveHinge(RightAngles.DEG_0)
+    body.core.right.attachment = ActiveHinge(RightAngles.DEG_0)
     body.core.right.attachment.attachment = Brick(RightAngles.DEG_0)
-    # A body needs to be finalized after building.
-    # This sets some variables on each module that makes it easier to work with the body later.
-    # Don't worry if you forget to the finalize; the framework will raise an error when you attempt to perform an action that required finalization beforehand.
-    body.finalize()
     return body
 
 
 def main() -> None:
     """Run the simulation."""
-    # Set up a random number generater, used later.
+    # Set up standard logging.
+    setup_logging()
+
+    # Set up a random number generator, used later.
     RNG_SEED = 5
     rng = make_rng(RNG_SEED)
 
@@ -48,24 +45,31 @@ def main() -> None:
     body = make_body()
     # Create a brain for the robot.
     # We choose a 'CPG' brain with random parameters (the exact working will not be explained here).
-    brain = BrainCpgNetworkNeighborRandom(rng)
+    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
     # Combine the body and brain into a modular robot.
     robot = ModularRobot(body, brain)
 
-    # Create a batch containing the robot in a flat terrain.
-    # A batch describes a set of simulations to perform.
-    # In this case there is a single simulation containing a single robot.
-    # We use the 'standard' parameters for robot simulation.
-    # You probably don't have to worry about this, but if you are interested, take a look inside the function.
-    batch = create_batch_single_robot_standard(robot=robot, terrain=terrains.flat())
+    # Create a modular robot scene.
+    # This is a combination of one or more modular robots positioned in a given terrain.
+    scene = ModularRobotScene(terrain=terrains.flat())
+    scene.add_robot(robot)
 
-    # Create a runner that will perform the simulation.
+    # Create a simulator that will perform the simulation.
     # This tutorial chooses to use Mujoco, but your version of revolve might contain other simulators as well.
-    runner = LocalRunner()
-    # Here we use the runner to run a batch.
-    # Once a runner finishes a batch, it can be reused to run a new batch.
-    # (We only run one batch in this tutorial, so we only use the runner once.)
-    asyncio.run(runner.run_batch(batch))
+    simulator = LocalSimulator()
+
+    # `batch_parameters` are important parameters for simulation.
+    # Here, we use the parameters that are standard in CI Group.
+    batch_parameters = make_standard_batch_parameters()
+
+    # Simulate the scene.
+    # A simulator can run multiple sets of scenes sequentially; it can be reused.
+    # However, in this tutorial we only use it once.
+    simulate_scenes(
+        simulator=simulator,
+        batch_parameters=batch_parameters,
+        scenes=scene,
+    )
 
 
 if __name__ == "__main__":

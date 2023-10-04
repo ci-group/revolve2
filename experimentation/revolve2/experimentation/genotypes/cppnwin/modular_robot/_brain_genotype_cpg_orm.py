@@ -3,6 +3,7 @@ from __future__ import annotations
 import multineat
 import numpy as np
 import sqlalchemy.orm as orm
+from revolve2.modular_robot.body import Body
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
 from typing_extensions import Self
@@ -148,13 +149,14 @@ class BrainGenotypeCpgOrm(orm.MappedAsDataclass, kw_only=True):
             )
         )
 
-    def develop_brain(self) -> BrainCpgNetworkNeighborV1:
+    def develop_brain(self, body: Body) -> BrainCpgNetworkNeighborV1:
         """
         Develop the genotype into a modular robot.
 
+        :param body: The body to develop the brain for.
         :returns: The created robot.
         """
-        return BrainCpgNetworkNeighborV1(self.brain)
+        return BrainCpgNetworkNeighborV1(genotype=self.brain, body=body)
 
 
 @event.listens_for(BrainGenotypeCpgOrm, "before_update", propagate=True)

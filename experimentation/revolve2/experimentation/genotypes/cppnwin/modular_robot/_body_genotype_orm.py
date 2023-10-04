@@ -3,7 +3,7 @@ from __future__ import annotations
 import multineat
 import numpy as np
 import sqlalchemy.orm as orm
-from revolve2.modular_robot import Body
+from revolve2.modular_robot.body import Body
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
 from typing_extensions import Self

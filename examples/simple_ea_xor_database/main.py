@@ -1,4 +1,5 @@
 """Main script for the example."""
+
 import logging
 
 import config
@@ -98,7 +99,7 @@ def run_experiment(dbengine: Engine) -> None:
     logging.info("----------------")
     logging.info("Start experiment")
 
-    # Set up the random number generater.
+    # Set up the random number generator.
     # We are manually generating the seed, because we are going to save it in our database.
     rng_seed = seed_from_time()
     rng = make_rng(rng_seed)

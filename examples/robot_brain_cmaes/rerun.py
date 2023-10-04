@@ -4,8 +4,8 @@ import config
 import numpy as np
 from evaluator import Evaluator
 from revolve2.ci_group.logging import setup_logging
-from revolve2.modular_robot.brains import (
-    body_to_actor_and_cpg_network_structure_neighbour,
+from revolve2.modular_robot.brain.cpg import (
+    active_hinges_to_cpg_network_structure_neighbor,
 )
 
 # These are set of parameters that we optimized using CMA-ES.
@@ -33,16 +33,26 @@ def main() -> None:
     """Perform the rerun."""
     setup_logging()
 
-    _, cpg_network_structure = body_to_actor_and_cpg_network_structure_neighbour(
-        config.BODY
-    )
+    # Find all active hinges in the body
+    active_hinges = config.BODY.find_active_hinges()
 
+    # Create a structure for the CPG network from these hinges.
+    # This also returns a mapping between active hinges and the index of there corresponding cpg in the network.
+    (
+        cpg_network_structure,
+        output_mapping,
+    ) = active_hinges_to_cpg_network_structure_neighbor(active_hinges)
+
+    # Create the evaluator.
     evaluator = Evaluator(
         headless=False,
         num_simulators=1,
         cpg_network_structure=cpg_network_structure,
         body=config.BODY,
+        output_mapping=output_mapping,
     )
+
+    # Show the robot.
     evaluator.evaluate([PARAMS])
 
 

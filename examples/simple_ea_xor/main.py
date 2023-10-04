@@ -1,4 +1,5 @@
 """Main script for the example."""
+
 import logging
 
 import config
@@ -84,7 +85,7 @@ def main() -> None:
     # Set up standard logging.
     setup_logging()
 
-    # Set up the random number generater.
+    # Set up the random number generator.
     rng = make_rng_time_seed()
 
     # Create an initial population.

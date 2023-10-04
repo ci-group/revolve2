@@ -4,7 +4,7 @@ from queue import Queue
 from typing import Any
 
 import multineat
-from revolve2.modular_robot import ActiveHinge, Body, Brick, Core, Module
+from revolve2.modular_robot.body import ActiveHinge, Body, Brick, Core, Module
 
 
 @dataclass
@@ -68,7 +68,6 @@ def develop(
                     to_explore.put(child)
                     part_count += 1
 
-    body.finalize()
     return body
 
 
@@ -127,7 +126,7 @@ def __add_child(
     up = __rotate(module.up, forward, orientation)
 
     child = child_type(orientation * (math.pi / 2.0))
-    module.module_reference.children[child_index] = child
+    module.module_reference.set_child(child, child_index)
 
     return __Module(
         position,

@@ -49,7 +49,7 @@ This script installs all required packages in editable mode.
 Revolve2 contains multiple packages that provide specific functionality. These packages contain functionality for simulations, modular robot description, hardware control and optimization / EA.
 If you need to edit components of Revolve2, or you want to add new features, it is recommended that you use :ref:`installation/index:Editable Mode`.
 Manual installation with editable mode requires you to install the packages in order of dependency, so that all packages are installed in editable mode.
-For the correct order refer to the tables *requires* column or look at the `dev_requirements.sh` script.
+For the correct order refer to the tables *requires* column or look at the `dev_install.sh` script.
 
 Installing them without edible mode does not require the right order since it will automatically install dependencies.
 Each package can be installed using: ::

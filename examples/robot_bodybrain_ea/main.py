@@ -1,4 +1,5 @@
 """Main script for the example."""
+
 import logging
 import pickle
 
@@ -102,7 +103,7 @@ def main() -> None:
     # Set up standard logging.
     setup_logging(file_name="log.txt")
 
-    # Set up the random number generater.
+    # Set up the random number generator.
     rng = make_rng_time_seed()
 
     # Intialize the evaluator that will be used to evaluate robots.
@@ -164,7 +165,7 @@ def main() -> None:
             [genotype.develop() for genotype in offspring_genotypes]
         )
 
-        # <ake an intermediate offspring population.
+        # Make an intermediate offspring population.
         offspring_population = [
             Individual(genotype, fitness)
             for genotype, fitness in zip(offspring_genotypes, offspring_fitnesses)

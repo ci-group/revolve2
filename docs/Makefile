@@ -17,13 +17,10 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 apidoc:
-	@$(SPHINXAPIDOC) ../actor_controller/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../ci_group/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../experimentation/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../modular_robot/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../rpi_controller/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../rpi_controller_remote/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../serialization/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../modular_robot_simulation/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../simulation/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../simulators/mujoco/revolve2 $(APIDOCARGS)
 

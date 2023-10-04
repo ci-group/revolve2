@@ -2,11 +2,10 @@ from typing import TYPE_CHECKING, Any, ClassVar, ForwardRef, Generic, Type, Type
 
 import sqlalchemy
 import sqlalchemy.orm as orm
-from revolve2.experimentation._util.init_subclass_get_generic_args import (
-    init_subclass_get_generic_args,
-)
 from revolve2.experimentation.database import HasId
 from typing_extensions import Self
+
+from ..._util.init_subclass_get_generic_args import init_subclass_get_generic_args
 
 TPopulation = TypeVar("TPopulation")
 

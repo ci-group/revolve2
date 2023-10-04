@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 import multineat
 import numpy as np
+from revolve2.modular_robot.body import Body
 from typing_extensions import Self
 
 from .._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
@@ -151,10 +152,11 @@ class BrainGenotypeCpg:
             )
         )
 
-    def develop_brain(self) -> BrainCpgNetworkNeighborV1:
+    def develop_brain(self, body: Body) -> BrainCpgNetworkNeighborV1:
         """
         Develop the genotype into a modular robot.
 
+        :param body: The body to develop the brain for.
         :returns: The created robot.
         """
-        return BrainCpgNetworkNeighborV1(self.brain.genotype)
+        return BrainCpgNetworkNeighborV1(genotype=self.brain.genotype, body=body)

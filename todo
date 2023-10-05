@@ -1,4 +1,7 @@
-documentation
+installation
+user guide
+tutorials
+dev guide
 remove everything named 'runner'
 rename runnign and environment in docs
 check if cppn can be update

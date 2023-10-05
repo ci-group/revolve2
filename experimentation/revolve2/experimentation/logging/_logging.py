@@ -5,7 +5,7 @@ import logging
 
 def setup_logging(level: int = logging.INFO, file_name: str | None = None) -> None:
     """
-    Set up standard logging.
+    Set up logging.
 
     :param level: The log level to use.
     :param file_name: If not None, also writes to this file.

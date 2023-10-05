@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "revolve2-experimentation"
 version = "0.4.2b2"
-description = "Revolve2: Experimentation tools."
+description = "Revolve2: Tools for experimentation."
 authors = ["Aart Stuurman <aartstuurman@hotmail.com>"]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [
@@ -18,10 +18,8 @@ packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-revolve2-modular-robot = { path = "../modular_robot", develop = true }
 numpy = "^1.21.2"
 sqlalchemy = "^2.0.0"
-multineat = "^0.11"
 
 [tool.poetry.extras]
 dev = []

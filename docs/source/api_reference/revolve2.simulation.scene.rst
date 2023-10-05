@@ -14,3 +14,4 @@ Subpackages
 
    conversion <revolve2.simulation.scene.conversion>
    geometry <revolve2.simulation.scene.geometry>
+   vector2 <revolve2.simulation.scene.vector2>

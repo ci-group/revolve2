@@ -6,6 +6,14 @@ revolve2.ci\_group package
    :undoc-members:
    :show-inheritance:
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 1
+
+   genotypes <revolve2.ci_group.genotypes>
+
 Submodules
 ----------
 
@@ -13,9 +21,7 @@ Submodules
    :maxdepth: 1
 
    fitness_functions <revolve2.ci_group.fitness_functions>
-   logging <revolve2.experimentation.logging>
    modular_robots <revolve2.ci_group.modular_robots>
    morphological_measures <revolve2.ci_group.morphological_measures>
-   rng <revolve2.experimentation.rng>
    simulation <revolve2.ci_group.simulation>
    terrains <revolve2.ci_group.terrains>

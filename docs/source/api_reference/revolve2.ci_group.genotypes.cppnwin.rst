@@ -1,7 +1,7 @@
-revolve2.experimentation.genotypes.cppnwin package
-==================================================
+revolve2.ci\_group.genotypes.cppnwin package
+============================================
 
-.. automodule:: revolve2.experimentation.genotypes.cppnwin
+.. automodule:: revolve2.ci_group.genotypes.cppnwin
    :members:
    :undoc-members:
    :show-inheritance:

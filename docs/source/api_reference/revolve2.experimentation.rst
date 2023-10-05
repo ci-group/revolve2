@@ -13,5 +13,13 @@ Subpackages
    :maxdepth: 1
 
    database <revolve2.experimentation.database>
-   genotypes <revolve2.experimentation.genotypes>
    optimization <revolve2.experimentation.optimization>
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   logging <revolve2.experimentation.logging>
+   rng <revolve2.experimentation.rng>

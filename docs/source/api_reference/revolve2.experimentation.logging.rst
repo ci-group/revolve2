@@ -1,5 +1,5 @@
-revolve2.ci\_group.logging module
-=================================
+revolve2.experimentation.logging module
+=======================================
 
 .. automodule:: revolve2.experimentation.logging
    :members:

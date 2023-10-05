@@ -1,5 +1,5 @@
-revolve2.ci\_group.rng module
-=============================
+revolve2.experimentation.rng module
+===================================
 
 .. automodule:: revolve2.experimentation.rng
    :members:

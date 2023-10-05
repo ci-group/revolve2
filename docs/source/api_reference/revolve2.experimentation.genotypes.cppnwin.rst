@@ -12,4 +12,4 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   modular_robot <revolve2.experimentation.genotypes.cppnwin.modular_robot>
+   modular_robot <revolve2.ci_group.genotypes.cppnwin.modular_robot>

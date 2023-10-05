@@ -5,11 +5,11 @@ from __future__ import annotations
 import multineat
 import numpy as np
 from base import Base
-from revolve2.experimentation.database import HasId
-from revolve2.experimentation.genotypes.cppnwin.modular_robot import (
+from revolve2.ci_group.genotypes.cppnwin.modular_robot import (
     BodyGenotypeOrm,
     BrainGenotypeCpgOrm,
 )
+from revolve2.experimentation.database import HasId
 from revolve2.modular_robot import ModularRobot
 
 

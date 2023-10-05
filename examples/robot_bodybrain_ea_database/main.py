@@ -13,10 +13,10 @@ from generation import Generation
 from genotype import Genotype
 from individual import Individual
 from population import Population
-from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import make_rng, seed_from_time
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
+from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
+from revolve2.experimentation.rng import make_rng, seed_from_time
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 

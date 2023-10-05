@@ -1,7 +1,7 @@
 revolve2.ci\_group.rng module
 =============================
 
-.. automodule:: revolve2.ci_group.rng
+.. automodule:: revolve2.experimentation.rng
    :members:
    :undoc-members:
    :show-inheritance:

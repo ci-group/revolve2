@@ -5,7 +5,7 @@ import pickle
 
 from evaluator import Evaluator
 from individual import Individual
-from revolve2.ci_group.logging import setup_logging
+from revolve2.experimentation.logging import setup_logging
 
 # This is a pickled genotype we optimized.
 # You can copy your own parameters from the optimization output log.

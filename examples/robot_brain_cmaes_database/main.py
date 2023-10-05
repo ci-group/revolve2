@@ -11,9 +11,9 @@ from generation import Generation
 from genotype import Genotype
 from individual import Individual
 from population import Population
-from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import seed_from_time
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
+from revolve2.experimentation.logging import setup_logging
+from revolve2.experimentation.rng import seed_from_time
 from revolve2.modular_robot.brain.cpg import (
     active_hinges_to_cpg_network_structure_neighbor,
 )

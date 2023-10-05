@@ -22,7 +22,7 @@ def flat(size: Vector2 = Vector2([20.0, 20.0])) -> Terrain:
     return Terrain(
         static_geometry=[
             GeometryPlane(
-                pose=Pose(position=Vector3(), orientation=Quaternion()),
+                pose=Pose(),
                 mass=0.0,
                 size=size,
             )
@@ -77,7 +77,7 @@ def crater(
     return Terrain(
         static_geometry=[
             GeometryHeightmap(
-                pose=Pose(position=Vector3(), orientation=Quaternion()),
+                pose=Pose(),
                 mass=0.0,
                 size=Vector3([size[0], size[1], max_height]),
                 base_thickness=0.1 + ruggedness,

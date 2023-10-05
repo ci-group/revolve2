@@ -71,10 +71,7 @@ class ModularRobotScene:
         converter = BodyToMultiBodySystemConverter()
         for robot, pose, translate_z_aabb in self._robots:
             # Convert all bodies to multi body systems and add them to the simulation scene
-            (
-                multi_body_system,
-                joints_mapping,
-            ) = converter.convert_robot_body(
+            (multi_body_system, joints_mapping,) = converter.convert_robot_body(
                 body=robot.body, pose=pose, translate_z_aabb=translate_z_aabb
             )
             scene.add_multi_body_system(multi_body_system)

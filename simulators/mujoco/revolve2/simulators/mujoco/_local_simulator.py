@@ -9,7 +9,7 @@ from ._simulate_scene import simulate_scene
 
 
 class LocalSimulator(Simulator):
-    """Runner for simulating using Mujoco."""
+    """Simulator using MuJoCo."""
 
     _headless: bool
     _start_paused: bool

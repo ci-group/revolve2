@@ -2,7 +2,7 @@
 Getting Started
 ===============
 
-Revolve2 is research software designed for the optimization of modular robot designs, both in terms of their physical structures (bodies) and their behaviour (brains). It primarily employs evolutionary algorithms for optimization, although other techniques can be used as well. Furthermore, Revolve2 offers capabilities to test these robots in simulated environments as well as in real-world scenarios.
+Revolve2 is research software designed for the optimization of modular robot designs, both in terms of their physical structures (bodies) and their behaviour (brains). It primarily employs evolutionary algorithms for optimization, although other techniques can be used as well. Furthermore, Revolve2 offers capabilities to test these robots in simulation as well as in the real-world.
 
 The software comes with several packages. Depending on your research needs, you may choose to work with a specific subset of these packages.
 This tutorial will guide you through the key steps to initiate your studies and research using Revolve2 efficiently.

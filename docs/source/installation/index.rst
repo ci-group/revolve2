@@ -14,7 +14,7 @@ Prerequisites
     python3.10 -m pip install virtualenv
 
 ---------------------
-Create an environment
+Create a virtual environment
 ---------------------
 Keeping your workspace tidy is important, and `virtual environments <https://docs.python.org/3/library/venv.html>`_ help with that.
 Create a directory for your project, then create a virtual environment::

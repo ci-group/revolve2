@@ -1,3 +1,5 @@
+This page is for revolve developers only. Currently it is not very thorough. We hope to fix that some time soon.
+
 =================
 Development Guide
 =================

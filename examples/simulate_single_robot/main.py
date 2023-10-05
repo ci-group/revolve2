@@ -4,7 +4,7 @@ from revolve2.ci_group import terrains
 from revolve2.ci_group.modular_robots import gecko
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
-from revolve2.experimentation.rng import make_rng
+from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import ActiveHinge, Body, Brick, RightAngles
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
@@ -39,8 +39,7 @@ def main() -> None:
     setup_logging()
 
     # Set up a random number generator, used later.
-    RNG_SEED = 5
-    rng = make_rng(RNG_SEED)
+    rng = make_rng_time_seed()
 
     # Create a body for the robot.
     body = gecko()  # make_body()

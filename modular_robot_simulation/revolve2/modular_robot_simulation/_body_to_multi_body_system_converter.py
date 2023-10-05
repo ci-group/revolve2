@@ -179,11 +179,11 @@ class BodyToMultiBodySystemConverter:
             child = module.children[child_index]
             if child is not None:
                 child_slot_pose = Pose(
-                    position=slot_pose.position
+                    position=brick_center_pose.position
                     + slot_pose.orientation
                     * Quaternion.from_eulers([0.0, 0.0, angle])
                     * Vector3([CHILD_OFFSET, 0.0, 0.0]),
-                    orientation=slot_pose.orientation
+                    orientation=brick_center_pose.orientation
                     * Quaternion.from_eulers([0.0, 0.0, angle])
                     * Quaternion.from_eulers([child.rotation, 0, 0]),
                 )

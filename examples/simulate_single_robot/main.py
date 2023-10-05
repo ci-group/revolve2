@@ -1,6 +1,7 @@
 """Main script for the example."""
 
 from revolve2.ci_group import terrains
+from revolve2.ci_group.modular_robots import gecko
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng
@@ -42,7 +43,7 @@ def main() -> None:
     rng = make_rng(RNG_SEED)
 
     # Create a body for the robot.
-    body = make_body()
+    body = gecko()  # make_body()
     # Create a brain for the robot.
     # We choose a 'CPG' brain with random parameters (the exact working will not be explained here).
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)

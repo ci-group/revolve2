@@ -14,7 +14,7 @@ from revolve2.simulators.mujoco import LocalSimulator
 
 def main() -> None:
     """Run the simulation."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging()
 
     # Set up the random number generator.

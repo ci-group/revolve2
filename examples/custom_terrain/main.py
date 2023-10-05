@@ -70,7 +70,7 @@ def make_custom_terrain() -> Terrain:
 
 def main() -> None:
     """Run the simulation."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging()
 
     # Set up the random number generator.

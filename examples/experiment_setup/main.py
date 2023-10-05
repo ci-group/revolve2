@@ -51,7 +51,7 @@ def run_experiment(num_samples: int, probability: float) -> None:
 
 def main() -> None:
     """Run the simulation."""
-    # Set up standard logging.
+    # Set up logging.
     # This decides the level of severity of logged messages we want to display.
     # By default this is 'INFO' or more severe, and 'DEBUG' is excluded.
     # Furthermore, a standard message layout is set up.

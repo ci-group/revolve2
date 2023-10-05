@@ -82,7 +82,7 @@ def select_survivors(
 
 def main() -> None:
     """Run the program."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging()
 
     # Set up the random number generator.

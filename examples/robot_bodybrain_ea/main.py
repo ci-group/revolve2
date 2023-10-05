@@ -100,7 +100,7 @@ def find_best_robot(
 
 def main() -> None:
     """Run the program."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging(file_name="log.txt")
 
     # Set up the random number generator.

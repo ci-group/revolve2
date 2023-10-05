@@ -222,7 +222,7 @@ def run_experiment(dbengine: Engine) -> None:
 
 def main() -> None:
     """Run the program."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging(file_name="log.txt")
 
     # Open the database, only if it does not already exists.

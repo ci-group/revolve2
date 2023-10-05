@@ -34,7 +34,7 @@ def make_body() -> Body:
 
 def main() -> None:
     """Run the simulation."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging()
 
     # Set up a random number generator, used later.

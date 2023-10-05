@@ -140,7 +140,7 @@ class CustomBrain(Brain):
 
 def main() -> None:
     """Run the simulation."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging()
 
     # Create a body for the robot.

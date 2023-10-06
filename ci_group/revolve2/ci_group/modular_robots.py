@@ -1,6 +1,6 @@
 """Standard modular robots."""
 import numpy as np
-from revolve2.modular_robot import ActiveHinge, Body, Brick
+from revolve2.modular_robot.body import ActiveHinge, Body, Brick
 
 
 def all() -> list[Body]:
@@ -119,7 +119,6 @@ def spider() -> Body:
     body.core.back.attachment.front = ActiveHinge(0.0)
     body.core.back.attachment.front.attachment = Brick(0.0)
 
-    body.finalize()
     return body
 
 
@@ -146,7 +145,6 @@ def gecko() -> Body:
     body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
     body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
 
-    body.finalize()
     return body
 
 
@@ -176,7 +174,6 @@ def babya() -> Body:
     body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
     body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
 
-    body.finalize()
     return body
 
 
@@ -208,7 +205,6 @@ def ant() -> Body:
     body.core.back.attachment.front.attachment.right = ActiveHinge(0.0)
     body.core.back.attachment.front.attachment.right.attachment = Brick(0.0)
 
-    body.finalize()
     return body
 
 
@@ -261,7 +257,6 @@ def salamander() -> Body:
         np.pi / 2.0
     )
 
-    body.finalize()
     return body
 
 
@@ -288,7 +283,6 @@ def blokky() -> Body:
     body.core.back.front.attachment.attachment.right.front.right = Brick(0.0)
     body.core.back.front.attachment.attachment.right.front.front = ActiveHinge(0.0)
 
-    body.finalize()
     return body
 
 
@@ -319,7 +313,6 @@ def park() -> Body:
         0.0
     )
 
-    body.finalize()
     return body
 
 
@@ -355,7 +348,6 @@ def babyb() -> Body:
     body.core.back = ActiveHinge(np.pi / 2.0)
     body.core.back.attachment = Brick(-np.pi / 2.0)
 
-    body.finalize()
     return body
 
 
@@ -386,7 +378,6 @@ def garrix() -> Body:
 
     body.core.left.attachment.attachment.attachment.left.attachment = part2
 
-    body.finalize()
     return body
 
 
@@ -416,7 +407,6 @@ def insect() -> Body:
         np.pi / 2.0
     )
 
-    body.finalize()
     return body
 
 
@@ -448,7 +438,6 @@ def linkin() -> Body:
     part2.right.attachment.attachment.attachment = ActiveHinge(np.pi / 2.0)
     part2.right.attachment.attachment.attachment.attachment = ActiveHinge(0.0)
 
-    body.finalize()
     return body
 
 
@@ -477,7 +466,6 @@ def longleg() -> Body:
     part2.left.attachment.attachment.left = ActiveHinge(np.pi / 2.0)
     part2.left.attachment.attachment.left.attachment = ActiveHinge(0.0)
 
-    body.finalize()
     return body
 
 
@@ -522,7 +510,6 @@ def penguin() -> Body:
     part2.right.attachment.attachment.attachment.right = Brick(0.0)
     part2.right.attachment.attachment.attachment.right.front = ActiveHinge(np.pi / 2.0)
 
-    body.finalize()
     return body
 
 
@@ -551,7 +538,6 @@ def pentapod() -> Body:
     part2.front.attachment.front.attachment.left = ActiveHinge(0.0)
     part2.front.attachment.front.attachment.right = ActiveHinge(0.0)
 
-    body.finalize()
     return body
 
 
@@ -580,7 +566,6 @@ def queen() -> Body:
     part2.right.right.front = ActiveHinge(np.pi / 2.0)
     part2.right.right.front.attachment = ActiveHinge(0.0)
 
-    body.finalize()
     return body
 
 
@@ -607,7 +592,6 @@ def squarish() -> Body:
     part2.right.attachment.left = Brick(0.0)
     part2.right.attachment.left.left = Brick(0.0)
 
-    body.finalize()
     return body
 
 
@@ -653,7 +637,6 @@ def snake() -> Body:
         np.pi / 2.0
     )
 
-    body.finalize()
     return body
 
 
@@ -684,7 +667,6 @@ def stingray() -> Body:
         Brick(0.0)
     )
 
-    body.finalize()
     return body
 
 
@@ -713,7 +695,6 @@ def tinlicker() -> Body:
     part2.left.right.front.attachment.right = Brick(0.0)
     part2.left.right.front.attachment.right.right = ActiveHinge(np.pi / 2.0)
 
-    body.finalize()
     return body
 
 
@@ -748,7 +729,6 @@ def turtle() -> Body:
     part2.right.attachment.left.attachment.attachment = ActiveHinge(0.0)
     part2.right.attachment.left.attachment.attachment.attachment = ActiveHinge(0.0)
 
-    body.finalize()
     return body
 
 
@@ -777,7 +757,6 @@ def ww() -> Body:
     part2.front.right.attachment.left.attachment = ActiveHinge(0.0)
     part2.front.right.attachment.left.attachment.attachment = ActiveHinge(-np.pi / 2.0)
 
-    body.finalize()
     return body
 
 
@@ -806,5 +785,4 @@ def zappa() -> Body:
     part2.left.attachment.left.attachment = Brick(0.0)
     part2.left.attachment.front = ActiveHinge(0.0)
 
-    body.finalize()
     return body

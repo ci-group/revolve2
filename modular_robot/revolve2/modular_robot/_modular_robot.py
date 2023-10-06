@@ -1,12 +1,17 @@
-from revolve2.actor_controller import ActorController
-from revolve2.simulation.actor import Actor
-
-from ._body import Body
-from ._brain import Brain
+from .body import Body
+from .brain import Brain
 
 
 class ModularRobot:
     """A module robot consisting of a body and brain."""
+
+    _id: int | None
+    """
+    Uniquely identifies the object within an arbitrary namespace.
+    
+    Whatever this means it not defined by this class.
+    It is simply a variable that can be used to identify the object by a user using their own protocol.
+    """
 
     body: Body
     brain: Brain
@@ -18,15 +23,29 @@ class ModularRobot:
         :param body: The body of the modular robot.
         :param brain: The brain of the modular robot.
         """
+        self._id = None
         self.body = body
         self.brain = brain
 
-    def make_actor_and_controller(self) -> tuple[Actor, ActorController]:
+    @property
+    def id(self) -> int | None:
         """
-        Transform this modular robot into a physics actor and corresponding controller.
+        Get the id of this modular robot.
 
-        :returns: (the actor, the controller)
+        :returns: The id, or None if it has not been set.
         """
-        actor, dof_ids = self.body.to_actor()
-        controller = self.brain.make_controller(self.body, dof_ids)
-        return (actor, controller)
+        return self._id
+
+    @id.setter
+    def id(self, id: int) -> None:
+        """
+        Set the id of this modular robot.
+
+        Do not use this if you do not know what you are doing.
+
+        :param id: The new id of the modular robot.
+        :raises RuntimeError: If the robot already has an id assigned.
+        """
+        if self._id is not None:
+            raise RuntimeError("Id has already been assigned.")
+        self._id = id

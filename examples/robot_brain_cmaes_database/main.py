@@ -1,4 +1,5 @@
 """Main script for the example."""
+
 import logging
 
 import cma
@@ -10,11 +11,11 @@ from generation import Generation
 from genotype import Genotype
 from individual import Individual
 from population import Population
-from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import seed_from_time
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
-from revolve2.modular_robot.brains import (
-    body_to_actor_and_cpg_network_structure_neighbour,
+from revolve2.experimentation.logging import setup_logging
+from revolve2.experimentation.rng import seed_from_time
+from revolve2.modular_robot.brain.cpg import (
+    active_hinges_to_cpg_network_structure_neighbor,
 )
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
@@ -39,10 +40,15 @@ def run_experiment(dbengine: Engine) -> None:
         session.add(experiment)
         session.commit()
 
-    # Get the actor and cpg network structure for the body of choice.
-    _, cpg_network_structure = body_to_actor_and_cpg_network_structure_neighbour(
-        config.BODY
-    )
+    # Find all active hinges in the body
+    active_hinges = config.BODY.find_active_hinges()
+
+    # Create a structure for the CPG network from these hinges.
+    # This also returns a mapping between active hinges and the index of there corresponding cpg in the network.
+    (
+        cpg_network_structure,
+        output_mapping,
+    ) = active_hinges_to_cpg_network_structure_neighbor(active_hinges)
 
     # Intialize the evaluator that will be used to evaluate robots.
     evaluator = Evaluator(
@@ -50,6 +56,7 @@ def run_experiment(dbengine: Engine) -> None:
         num_simulators=config.NUM_SIMULATORS,
         cpg_network_structure=cpg_network_structure,
         body=config.BODY,
+        output_mapping=output_mapping,
     )
 
     # Initial parameter values for the brain.
@@ -98,7 +105,7 @@ def run_experiment(dbengine: Engine) -> None:
 
 def main() -> None:
     """Run the program."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging(file_name="log.txt")
 
     # Open the database, only if it does not already exists.

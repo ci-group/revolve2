@@ -1,4 +1,5 @@
 """Main script for the example."""
+
 import logging
 
 import config
@@ -7,9 +8,9 @@ import numpy.typing as npt
 from evaluate import evaluate
 from genotype import Genotype
 from individual import Individual
-from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import make_rng_time_seed
+from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
+from revolve2.experimentation.rng import make_rng_time_seed
 
 
 def select_parents(
@@ -81,10 +82,10 @@ def select_survivors(
 
 def main() -> None:
     """Run the program."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging()
 
-    # Set up the random number generater.
+    # Set up the random number generator.
     rng = make_rng_time_seed()
 
     # Create an initial population.

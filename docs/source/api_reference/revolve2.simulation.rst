@@ -12,5 +12,5 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   actor <revolve2.simulation.actor>
-   running <revolve2.simulation.running>
+   scene <revolve2.simulation.scene>
+   simulator <revolve2.simulation.simulator>

@@ -1,6 +1,12 @@
 #!/bin/sh
 
 cd "$(dirname "$0")"
+echo "examples/custom_brain:" && \
+mypy custom_brain && \
+echo "examples/custom_terrain:" && \
+mypy custom_terrain && \
+echo "examples/evaluate_multiple_interacting_robots:" && \
+mypy evaluate_multiple_interacting_robots && \
 echo "examples/evaluate_multiple_isolated_robots:" && \
 mypy evaluate_multiple_isolated_robots && \
 echo "examples/evaluate_single_robot:" && \
@@ -15,8 +21,6 @@ echo "examples/robot_brain_cmaes:" && \
 mypy robot_brain_cmaes && \
 echo "examples/robot_brain_cmaes_database:" && \
 mypy robot_brain_cmaes_database && \
-echo "examples/rpi_controller_remote:" && \
-mypy rpi_controller_remote && \
 echo "examples/simple_ea_xor:" && \
 mypy simple_ea_xor && \
 echo "examples/simple_ea_xor_database:" && \

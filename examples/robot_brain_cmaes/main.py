@@ -1,13 +1,14 @@
 """Main script for the example."""
+
 import logging
 
 import cma
 import config
 from evaluator import Evaluator
-from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import seed_from_time
-from revolve2.modular_robot.brains import (
-    body_to_actor_and_cpg_network_structure_neighbour,
+from revolve2.experimentation.logging import setup_logging
+from revolve2.experimentation.rng import seed_from_time
+from revolve2.modular_robot.brain.cpg import (
+    active_hinges_to_cpg_network_structure_neighbor,
 )
 
 
@@ -15,11 +16,15 @@ def main() -> None:
     """Run the experiment."""
     setup_logging(file_name="log.txt")
 
-    # Get the actor and cpg network structure for the body of choice.
-    # The cpg network structure describes the connections between neurons in the cpg brain.
-    _, cpg_network_structure = body_to_actor_and_cpg_network_structure_neighbour(
-        config.BODY
-    )
+    # Find all active hinges in the body
+    active_hinges = config.BODY.find_active_hinges()
+
+    # Create a structure for the CPG network from these hinges.
+    # This also returns a mapping between active hinges and the index of there corresponding cpg in the network.
+    (
+        cpg_network_structure,
+        output_mapping,
+    ) = active_hinges_to_cpg_network_structure_neighbor(active_hinges)
 
     # Intialize the evaluator that will be used to evaluate robots.
     evaluator = Evaluator(
@@ -27,6 +32,7 @@ def main() -> None:
         num_simulators=config.NUM_SIMULATORS,
         cpg_network_structure=cpg_network_structure,
         body=config.BODY,
+        output_mapping=output_mapping,
     )
 
     # Initial parameter values for the brain.

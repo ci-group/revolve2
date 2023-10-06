@@ -12,4 +12,5 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   brains <revolve2.modular_robot.brains>
+   body <revolve2.modular_robot.body>
+   brain <revolve2.modular_robot.brain>

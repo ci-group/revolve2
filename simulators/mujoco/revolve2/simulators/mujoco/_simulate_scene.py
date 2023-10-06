@@ -6,6 +6,7 @@ import mujoco
 import mujoco_viewer
 import numpy as np
 import numpy.typing as npt
+
 from revolve2.simulation.scene import Scene, SimulationState
 from revolve2.simulation.simulator import RecordSettings
 

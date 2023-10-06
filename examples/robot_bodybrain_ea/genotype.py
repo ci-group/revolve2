@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 import multineat
 import numpy as np
+
 from revolve2.ci_group.genotypes.cppnwin.modular_robot import (
     BodyGenotype,
     BrainGenotypeCpg,

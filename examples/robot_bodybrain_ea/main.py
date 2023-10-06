@@ -1,4 +1,5 @@
 """Main script for the example."""
+
 import logging
 import pickle
 
@@ -9,9 +10,9 @@ import numpy.typing as npt
 from evaluator import Evaluator
 from genotype import Genotype
 from individual import Individual
-from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import make_rng_time_seed
+from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
+from revolve2.experimentation.rng import make_rng_time_seed
 
 
 def select_parents(
@@ -99,10 +100,10 @@ def find_best_robot(
 
 def main() -> None:
     """Run the program."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging(file_name="log.txt")
 
-    # Set up the random number generater.
+    # Set up the random number generator.
     rng = make_rng_time_seed()
 
     # Intialize the evaluator that will be used to evaluate robots.
@@ -164,7 +165,7 @@ def main() -> None:
             [genotype.develop() for genotype in offspring_genotypes]
         )
 
-        # <ake an intermediate offspring population.
+        # Make an intermediate offspring population.
         offspring_population = [
             Individual(genotype, fitness)
             for genotype, fitness in zip(offspring_genotypes, offspring_fitnesses)

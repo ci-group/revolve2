@@ -1,4 +1,5 @@
 """Main script for the example."""
+
 import logging
 
 import config
@@ -12,10 +13,10 @@ from generation import Generation
 from genotype import Genotype
 from individual import Individual
 from population import Population
-from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import make_rng, seed_from_time
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
+from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
+from revolve2.experimentation.rng import make_rng, seed_from_time
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 
@@ -115,7 +116,7 @@ def run_experiment(dbengine: Engine) -> None:
     logging.info("----------------")
     logging.info("Start experiment")
 
-    # Set up the random number generater.
+    # Set up the random number generator.
     rng_seed = seed_from_time()
     rng = make_rng(rng_seed)
 
@@ -221,7 +222,7 @@ def run_experiment(dbengine: Engine) -> None:
 
 def main() -> None:
     """Run the program."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging(file_name="log.txt")
 
     # Open the database, only if it does not already exists.

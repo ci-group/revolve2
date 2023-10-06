@@ -1,27 +1,22 @@
 """Main script for the example."""
-import asyncio
 
-from revolve2.ci_group import fitness_functions, modular_robots
-from revolve2.ci_group import terrains as standard_terrains
-from revolve2.ci_group.logging import setup_logging
-from revolve2.ci_group.rng import make_rng
-from revolve2.ci_group.simulation import create_batch_multiple_isolated_robots_standard
-from revolve2.modular_robot import (
-    ModularRobot,
-    get_body_states_multiple_isolated_robots,
-)
-from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
-from revolve2.simulators.mujoco import LocalRunner
+from revolve2.ci_group import fitness_functions, modular_robots, terrains
+from revolve2.ci_group.simulation import make_standard_batch_parameters
+from revolve2.experimentation.logging import setup_logging
+from revolve2.experimentation.rng import make_rng_time_seed
+from revolve2.modular_robot import ModularRobot
+from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
+from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
+from revolve2.simulators.mujoco import LocalSimulator
 
 
 def main() -> None:
     """Run the simulation."""
-    # Set up standard logging.
+    # Set up logging.
     setup_logging()
 
-    # Set up a random number generater.
-    RNG_SEED = 5
-    rng = make_rng(RNG_SEED)
+    # Set up the random number generator.
+    rng = make_rng_time_seed()
 
     # Create the robots.
     bodies = [
@@ -30,33 +25,39 @@ def main() -> None:
         modular_robots.snake(),
         modular_robots.spider(),
     ]
-    brains = [BrainCpgNetworkNeighborRandom(rng) for _ in bodies]
+    brains = [BrainCpgNetworkNeighborRandom(body, rng) for body in bodies]
     robots = [ModularRobot(body, brain) for body, brain in zip(bodies, brains)]
 
-    # Create a flat terrain and copy references to it into an array the size of the number of robots.
-    terrain = standard_terrains.flat()
-    terrains = [terrain for _ in range(len(robots))]
+    # Create a flat terrain
+    terrain = terrains.flat()
 
-    # Create the simulation batch.
-    batch = create_batch_multiple_isolated_robots_standard(robots, terrains)
+    # Create the scenes.
+    scenes = []
+    for robot in robots:
+        scene = ModularRobotScene(terrain=terrain)
+        scene.add_robot(robot)
+        scenes.append(scene)
 
-    # Create the runner.
-    # We set the headless parameters, which will run the simulation as fast as possible.
-    # While a runner runs one batch at a time, multiple simulations in that batch might be ran in parallel.
-    # In case of the Mujoco runner, see the 'num_simulators' argument.
-    # Increasing this number causes it to run more simulations at the same time.
-    runner = LocalRunner(headless=True, num_simulators=4)
+    # Create the simulator.
+    # A simulator can run multiple scene in parallel.
+    # For the MuJoCo simulator, we can control this using the 'num_simulators' argument.
+    # Increasing this number causes more simulations to run at the same time.
+    simulator = LocalSimulator(headless=True, num_simulators=4)
 
-    # Run the batch and get the results
-    results = asyncio.run(runner.run_batch(batch))
+    # Simulate all scenes.
+    scene_states = simulate_scenes(
+        simulator=simulator,
+        batch_parameters=make_standard_batch_parameters(),
+        scenes=scenes,
+    )
 
-    # Get the body states
-    body_states = get_body_states_multiple_isolated_robots(bodies, results)
-
-    # Calculate the xy displacement from the body states.
+    # Calculate the xy displacements.
     xy_displacements = [
-        fitness_functions.xy_displacement(body_state_begin, body_state_end)
-        for body_state_begin, body_state_end in body_states
+        fitness_functions.xy_displacement(
+            states[0].get_modular_robot_simulation_state(robot),
+            states[-1].get_modular_robot_simulation_state(robot),
+        )
+        for robot, states in zip(robots, scene_states)
     ]
 
     print(xy_displacements)

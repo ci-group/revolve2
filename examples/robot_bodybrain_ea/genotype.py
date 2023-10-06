@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 import multineat
 import numpy as np
-from revolve2.experimentation.genotypes.cppnwin.modular_robot import (
+from revolve2.ci_group.genotypes.cppnwin.modular_robot import (
     BodyGenotype,
     BrainGenotypeCpg,
 )
@@ -85,5 +85,5 @@ class Genotype(BodyGenotype, BrainGenotypeCpg):
         :returns: The created robot.
         """
         body = self.develop_body()
-        brain = self.develop_brain()
+        brain = self.develop_brain(body=body)
         return ModularRobot(body=body, brain=brain)

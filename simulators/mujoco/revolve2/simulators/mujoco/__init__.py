@@ -1,6 +1,5 @@
-"""Physics runner using the Mujoco simulator."""
+"""Physics simulator using the MuJoCo."""
 
-from ._local_runner import LocalRunner
-from ._modular_robot_rerunner import ModularRobotRerunner
+from ._local_simulator import LocalSimulator
 
-__all__ = ["LocalRunner", "ModularRobotRerunner"]
+__all__ = ["LocalSimulator"]

@@ -91,13 +91,9 @@ jobs:
           bash .github/workflows/install_display.sh
           echo "DISPLAY=:0" >> $GITHUB_ENV
 
-      - name: install repo
-        run: bash .github/workflows/installs.sh
-      #- name: install examples requirements
-      #  run: |
-      #    pip install -r examples/robot_bodybrain_ea/requirements.txt
-      #    pip install -r examples/robot_brain_cmaes/requirements.txt
-      #- name: install pytest dependencies
-      #  run: pip install -r tests/requirements.txt
+      - name: install_revolve2
+        run: ./dev_install.sh
+      - name: install pytest dependencies
+        run: pip install -r tests/requirements.txt
       - name: run pytest
         run: pytest -v

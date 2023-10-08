@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 """Main script for the example."""
+import argparse
 
 from revolve2.ci_group import fitness_functions, modular_robots, terrains
-from revolve2.ci_group.simulation import make_standard_batch_parameters
+from revolve2.ci_group.simulation import (
+    STANDARD_SIMULATION_TIME,
+    make_standard_batch_parameters,
+)
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
@@ -15,6 +19,16 @@ def main() -> None:
     """Run the simulation."""
     # Set up logging.
     setup_logging()
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--simulation-time",
+        "-t",
+        type=int,
+        default=STANDARD_SIMULATION_TIME,
+        help="Number of seconds to run simulation.",
+    )
+    args = parser.parse_args()
 
     # Set up a random number generator.
     rng = make_rng_time_seed()
@@ -31,7 +45,9 @@ def main() -> None:
     # Create the simulator.
     # We set enable the headless flag, which will prevent visualization of the simulation, speeding it up.
     simulator = LocalSimulator(headless=False)
-    batch_parameters = make_standard_batch_parameters()
+    batch_parameters = make_standard_batch_parameters(
+        simulation_time=args.simulation_time
+    )
 
     # Obtain the state of the simulation, measured at a predefined interval as defined in the batch parameters.
     scene_states = simulate_scenes(

@@ -5,7 +5,10 @@ import argparse
 
 from revolve2.ci_group import terrains
 from revolve2.ci_group.modular_robots import gecko
-from revolve2.ci_group.simulation import make_standard_batch_parameters
+from revolve2.ci_group.simulation import (
+    STANDARD_SIMULATION_TIME,
+    make_standard_batch_parameters,
+)
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
@@ -38,17 +41,18 @@ def make_body() -> Body:
 
 def main() -> None:
     """Run the simulation."""
+    # Set up logging.
+    setup_logging()
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--simulation-time",
         "-t",
         type=int,
-        default=1000000,
+        default=STANDARD_SIMULATION_TIME,
         help="Number of seconds to run simulation.",
     )
     args = parser.parse_args()
-    # Set up logging.
-    setup_logging()
 
     # Set up a random number generator, used later.
     rng = make_rng_time_seed()

@@ -12,7 +12,7 @@ def test_evaluate_multiple_isolated_robots():
 def test_evaluate_single_robot():
     """Test evaluate_single_robot example can complete."""
     exp_dir = os.path.join(EXAMPLES_DIR, "evaluate_single_robot")
-    assert_command_succeeds(["python3", os.path.join(exp_dir, "main.py")])
+    assert_command_succeeds(["python3", os.path.join(exp_dir, "main.py"), "-t", "1"])
 
 
 def test_experiment_setup():
@@ -35,6 +35,6 @@ def test_simulate_single_robot():
             "python3",
             os.path.join(exp_dir, "main.py"),
             "-t",
-            "2",
+            "1",
         ]
     )

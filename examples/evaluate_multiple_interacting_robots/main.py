@@ -1,6 +1,7 @@
 """Main script for the example."""
 
 from pyrr import Vector3
+
 from revolve2.ci_group import fitness_functions, modular_robots, terrains
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging

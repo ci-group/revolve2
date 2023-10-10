@@ -26,7 +26,7 @@ packages = [{ include = "revolve2" }]
 python = "^3.10"
 revolve2-modular-robot-simulation = { path = "../modular_robot_simulation", develop = true }
 noise = "^1.2.2"
-multineat = "^0.11"
+multineat = "^0.12"
 sqlalchemy = "^2.0.0"
 
 [tool.poetry.extras]

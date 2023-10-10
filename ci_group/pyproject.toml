@@ -15,7 +15,6 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
     "Operating System :: OS Independent",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
@@ -23,7 +22,7 @@ classifiers = [
 packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.10,<3.12"
 revolve2-modular-robot-simulation = { path = "../modular_robot_simulation", develop = true }
 noise = "^1.2.2"
 multineat = "^0.12"

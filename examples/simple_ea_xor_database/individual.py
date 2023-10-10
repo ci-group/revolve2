@@ -6,6 +6,7 @@ import sqlalchemy
 import sqlalchemy.orm as orm
 from base import Base
 from genotype import Genotype
+
 from revolve2.experimentation.database import HasId
 
 

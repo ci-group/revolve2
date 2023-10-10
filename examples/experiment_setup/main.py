@@ -3,6 +3,7 @@ import logging
 
 import config
 import numpy as np
+
 import revolve2.experimentation.rng
 from revolve2.experimentation.logging import setup_logging
 

@@ -2,6 +2,7 @@ import logging
 import math
 
 from pyrr import Quaternion, Vector3
+
 from revolve2.modular_robot.body import ActiveHinge, Body, Brick
 from revolve2.modular_robot.body import Color as ModularRobotColor
 from revolve2.modular_robot.body import Core, Module

@@ -22,7 +22,7 @@ classifiers = [
 packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.10,<3.12"
 revolve2-modular-robot = { path = "../modular_robot", develop = true }
 revolve2-simulation = { path = "../simulation", develop = true }
 

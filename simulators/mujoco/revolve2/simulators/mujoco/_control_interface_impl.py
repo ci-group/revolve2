@@ -1,4 +1,5 @@
 import mujoco
+
 from revolve2.simulation.scene import ControlInterface, JointHinge
 
 from ._joint_hinge_ctrl_indices import JointHingeCtrlIndices

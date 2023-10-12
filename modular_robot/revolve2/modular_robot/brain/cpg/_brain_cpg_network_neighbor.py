@@ -4,7 +4,7 @@ from abc import abstractmethod
 import numpy as np
 import numpy.typing as npt
 
-from ...body import ActiveHinge, Body
+from ...body.base import ActiveHinge, Body
 from .._brain import Brain
 from .._brain_instance import BrainInstance
 from ._brain_cpg_instance import BrainCpgInstance

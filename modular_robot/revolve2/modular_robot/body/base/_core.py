@@ -1,6 +1,8 @@
-from ._color import Color
-from ._module import Module
-from ._right_angles import RightAngles
+from pyrr import Vector3
+
+from .._color import Color
+from .._module import Module
+from .._right_angles import RightAngles
 
 
 class Core(Module):
@@ -12,26 +14,37 @@ class Core(Module):
     LEFT = 3
 
     _last_unique_id: int
+    _bounding_box: Vector3
+    _mass: float
+    _child_offset: float
     """
     This is the last assigned id to a module.
-    
     See `_get_new_module_id` on what this is used for.
     """
 
     def __init__(
-        self, rotation: float | RightAngles, color: Color = Color(255, 50, 50, 255)
+        self,
+        num_children: int,
+        rotation: float | RightAngles,
+        color: Color,
+        mass: float,
+        bounding_box: Vector3,
+        child_offset: float,
     ):
         """
         Initialize this object.
 
-        :param rotation: Orientation of this model relative to its parent.
-        :param color: The color of the module.
+        :param num_children: The number of children.
+        :param rotation: The Modules rotation.
+        :param color: The Modules color.
+        :param mass: The Modules mass (in kg).
+        :param bounding_box: The bounding box. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
+        :param child_offset: The child offset (in m).
         """
-        if isinstance(rotation, RightAngles):
-            rotation_converted = rotation.value
-        else:
-            rotation_converted = rotation
-        super().__init__(4, rotation_converted, color)
+        self._mass = mass
+        self._child_offset = child_offset
+        self._bounding_box = bounding_box
+        super().__init__(num_children, rotation, color)
         self._id = 0
         self._parent = None
         self._parent_child_index = None
@@ -120,3 +133,31 @@ class Core(Module):
         """
         self._last_unique_id += 1
         return self._last_unique_id
+
+    @property
+    def mass(self) -> float:
+        """
+        Get the mass of the Core (in kg).
+
+        :return: The value.
+        """
+        return self._mass
+
+    @property
+    def bounding_box(self) -> Vector3:
+        """
+        Get the bounding box.
+
+        Sizes are total length, not half length from origin.
+        :return: Vector3 with sizes of bbox in x,y,z dimension (m).
+        """
+        return self._bounding_box
+
+    @property
+    def child_offset(self) -> float:
+        """
+        Get the child offset (in m).
+
+        :return: The value.
+        """
+        return self._child_offset

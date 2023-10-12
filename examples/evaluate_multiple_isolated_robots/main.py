@@ -1,6 +1,6 @@
 """Main script for the example."""
 
-from revolve2.ci_group import fitness_functions, modular_robots, terrains
+from revolve2.ci_group import fitness_functions, modular_robots_v1, terrains
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
@@ -20,10 +20,10 @@ def main() -> None:
 
     # Create the robots.
     bodies = [
-        modular_robots.gecko(),
-        modular_robots.ant(),
-        modular_robots.snake(),
-        modular_robots.spider(),
+        modular_robots_v1.gecko_v1(),
+        modular_robots_v1.ant_v1(),
+        modular_robots_v1.snake_v1(),
+        modular_robots_v1.spider_v1(),
     ]
     brains = [BrainCpgNetworkNeighborRandom(body, rng) for body in bodies]
     robots = [ModularRobot(body, brain) for body, brain in zip(bodies, brains)]

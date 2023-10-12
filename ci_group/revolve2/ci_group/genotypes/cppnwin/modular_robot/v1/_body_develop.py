@@ -5,7 +5,8 @@ from typing import Any
 
 import multineat
 
-from revolve2.modular_robot.body import ActiveHinge, Body, Brick, Core, Module
+from revolve2.modular_robot.body import Module
+from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1, CoreV1
 
 
 @dataclass
@@ -19,14 +20,14 @@ class __Module:
 
 def develop(
     genotype: multineat.Genome,
-) -> Body:
+) -> BodyV1:
     """
     Develop a CPPNWIN genotype into a modular robot body.
 
     It is important that the genotype was created using a compatible function.
 
     :param genotype: The genotype to create the body from.
-    :returns: The create body.
+    :returns: The created body.
     :raises RuntimeError: In case a module is encountered that is not supported.
     """
     max_parts = 10
@@ -37,7 +38,7 @@ def develop(
     to_explore: Queue[__Module] = Queue()
     grid: set[tuple[int, int, int]] = set()
 
-    body = Body()
+    body = BodyV1()
 
     to_explore.put(__Module((0, 0, 0), (0, -1, 0), (0, 0, 1), 0, body.core))
     grid.add((0, 0, 0))
@@ -48,17 +49,17 @@ def develop(
 
         children: list[tuple[int, int]] = []  # child index, rotation
 
-        if isinstance(module.module_reference, Core):
-            children.append((Core.FRONT, 0))
-            children.append((Core.LEFT, 1))
-            children.append((Core.BACK, 2))
-            children.append((Core.RIGHT, 3))
-        elif isinstance(module.module_reference, Brick):
-            children.append((Brick.FRONT, 0))
-            children.append((Brick.LEFT, 1))
-            children.append((Brick.RIGHT, 3))
-        elif isinstance(module.module_reference, ActiveHinge):
-            children.append((ActiveHinge.ATTACHMENT, 0))
+        if isinstance(module.module_reference, CoreV1):
+            children.append((CoreV1.FRONT, 0))
+            children.append((CoreV1.LEFT, 1))
+            children.append((CoreV1.BACK, 2))
+            children.append((CoreV1.RIGHT, 3))
+        elif isinstance(module.module_reference, BrickV1):
+            children.append((BrickV1.FRONT, 0))
+            children.append((BrickV1.LEFT, 1))
+            children.append((BrickV1.RIGHT, 3))
+        elif isinstance(module.module_reference, ActiveHingeV1):
+            children.append((ActiveHingeV1.ATTACHMENT, 0))
         else:  # Should actually never arrive here but just checking module type to be sure
             raise RuntimeError()
 
@@ -93,7 +94,7 @@ def __evaluate_cppn(
 
     # get module type from output probabilities
     type_probs = [outputs[0], outputs[1], outputs[2]]
-    types = [None, Brick, ActiveHinge]
+    types = [None, BrickV1, ActiveHingeV1]
     module_type = types[type_probs.index(min(type_probs))]
 
     # get rotation from output probabilities

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from revolve2.modular_robot.body import ActiveHinge
+from revolve2.modular_robot.body.base import ActiveHinge
 
 
 class ModularRobotActiveHingeKey:

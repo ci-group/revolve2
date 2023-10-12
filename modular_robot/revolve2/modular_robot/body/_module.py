@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from ._color import Color
+from ._right_angles import RightAngles
 
 
 class Module:
@@ -33,7 +34,7 @@ class Module:
 
     _color: Color
 
-    def __init__(self, num_children: int, rotation: float, color: Color):
+    def __init__(self, num_children: int, rotation: float | RightAngles, color: Color):
         """
         Initialize this object.
 
@@ -42,7 +43,8 @@ class Module:
         :param color: The color of the module.
         """
         self._children = [None] * num_children
-        self._rotation = rotation
+
+        self._rotation = rotation if isinstance(rotation, float) else rotation.value
 
         self._id = None
         self._parent = None

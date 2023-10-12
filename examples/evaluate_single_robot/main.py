@@ -1,6 +1,6 @@
 """Main script for the example."""
 
-from revolve2.ci_group import fitness_functions, modular_robots, terrains
+from revolve2.ci_group import fitness_functions, modular_robots_v1, terrains
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
@@ -19,7 +19,8 @@ def main() -> None:
     rng = make_rng_time_seed()
 
     # Create the robot.
-    body = modular_robots.gecko()
+    body = modular_robots_v1.gecko_v1()
+
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
     robot = ModularRobot(body, brain)
 

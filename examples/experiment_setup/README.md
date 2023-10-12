@@ -9,3 +9,4 @@ You learn:
 - In particular, you will NOT learn how to save your experiment results.
   Either use your own preferred method, or look at the SQLAlchemy database abstraction commonly used in Revolve2.
 
+You can change the configuration of the experiment in `config.py`.

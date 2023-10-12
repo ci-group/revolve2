@@ -1,18 +1,18 @@
 """Main script for the example."""
 
 from revolve2.ci_group import terrains
-from revolve2.ci_group.modular_robots import gecko
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
-from revolve2.modular_robot.body import ActiveHinge, Body, Brick, RightAngles
+from revolve2.modular_robot.body import RightAngles
+from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco import LocalSimulator
 
 
-def make_body() -> Body:
+def make_body() -> BodyV1:
     """
     Create a body for the robot.
 
@@ -23,13 +23,13 @@ def make_body() -> Body:
     # From here, other modular can be attached.
     # Modules can be attach in a rotated fashion.
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
-    body = Body()
-    body.core.left = ActiveHinge(RightAngles.DEG_0)
-    body.core.left.attachment = ActiveHinge(RightAngles.DEG_0)
-    body.core.left.attachment.attachment = Brick(RightAngles.DEG_0)
-    body.core.right = ActiveHinge(RightAngles.DEG_0)
-    body.core.right.attachment = ActiveHinge(RightAngles.DEG_0)
-    body.core.right.attachment.attachment = Brick(RightAngles.DEG_0)
+    body = BodyV1()
+    body.core.left = ActiveHingeV1(RightAngles.DEG_0)
+    body.core.left.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
+    body.core.right = ActiveHingeV1(RightAngles.DEG_0)
+    body.core.right.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
     return body
 
 
@@ -42,7 +42,7 @@ def main() -> None:
     rng = make_rng_time_seed()
 
     # Create a body for the robot.
-    body = gecko()  # make_body()
+    body = make_body()
     # Create a brain for the robot.
     # We choose a 'CPG' brain with random parameters (the exact working will not be explained here).
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)

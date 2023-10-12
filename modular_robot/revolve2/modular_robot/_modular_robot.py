@@ -1,4 +1,4 @@
-from .body import Body
+from .body.base import Body
 from .brain import Brain
 
 

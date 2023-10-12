@@ -5,7 +5,7 @@ import numpy.typing as npt
 
 from ..._modular_robot_control_interface import ModularRobotControlInterface
 from ..._modular_robot_sensor_state import ModularRobotSensorState
-from ...body import ActiveHinge
+from ...body.base import ActiveHinge
 from .._brain_instance import BrainInstance
 
 

@@ -8,29 +8,32 @@ from revolve2.modular_robot import (
     ModularRobotControlInterface,
     ModularRobotSensorState,
 )
-from revolve2.modular_robot.body import ActiveHinge, Body, Brick, RightAngles
+from revolve2.modular_robot.body import RightAngles
+from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain import Brain, BrainInstance
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco import LocalSimulator
 
 
-def make_body() -> tuple[Body, ActiveHinge, ActiveHinge, ActiveHinge, ActiveHinge]:
+def make_body() -> tuple[
+    BodyV1, ActiveHingeV1, ActiveHingeV1, ActiveHingeV1, ActiveHingeV1
+]:
     """
     Create a body for the robot.
 
     :returns: The created body and references to each hinge: first_left_active_hinge, second_left_active_hinge, first_right_active_hinge, second_right_active_hinge.
     """
-    body = Body()
-    first_left_active_hinge = ActiveHinge(RightAngles.DEG_0)
-    second_left_active_hinge = ActiveHinge(RightAngles.DEG_0)
-    first_right_active_hinge = ActiveHinge(RightAngles.DEG_0)
-    second_right_active_hinge = ActiveHinge(RightAngles.DEG_0)
+    body = BodyV1()
+    first_left_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
+    second_left_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
+    first_right_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
+    second_right_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
     body.core.left = first_left_active_hinge
     first_left_active_hinge.attachment = second_left_active_hinge
-    second_left_active_hinge.attachment = Brick(RightAngles.DEG_0)
+    second_left_active_hinge.attachment = BrickV1(RightAngles.DEG_0)
     body.core.right = first_right_active_hinge
     first_right_active_hinge.attachment = second_right_active_hinge
-    second_right_active_hinge.attachment = Brick(RightAngles.DEG_0)
+    second_right_active_hinge.attachment = BrickV1(RightAngles.DEG_0)
     return (
         body,
         first_left_active_hinge,
@@ -47,25 +50,25 @@ class CustomBrainInstance(BrainInstance):
     Created by the `CustomBrain` class.
     """
 
-    first_left_active_hinge: ActiveHinge
-    second_left_active_hinge: ActiveHinge
-    first_right_active_hinge: ActiveHinge
-    second_right_active_hinge: ActiveHinge
+    first_left_active_hinge: ActiveHingeV1
+    second_left_active_hinge: ActiveHingeV1
+    first_right_active_hinge: ActiveHingeV1
+    second_right_active_hinge: ActiveHingeV1
 
     def __init__(
         self,
-        first_left_active_hinge: ActiveHinge,
-        second_left_active_hinge: ActiveHinge,
-        first_right_active_hinge: ActiveHinge,
-        second_right_active_hinge: ActiveHinge,
+        first_left_active_hinge: ActiveHingeV1,
+        second_left_active_hinge: ActiveHingeV1,
+        first_right_active_hinge: ActiveHingeV1,
+        second_right_active_hinge: ActiveHingeV1,
     ) -> None:
         """
-        Initialize this object.
+        Initialize the Object.
 
-        :param first_left_active_hinge: One of the hinges, as according to the parameter name.
-        :param second_left_active_hinge: One of the hinges, as according to the parameter name.
-        :param first_right_active_hinge: One of the hinges, as according to the parameter name.
-        :param second_right_active_hinge: One of the hinges, as according to the parameter name.
+        :param first_left_active_hinge: First left active Hinge.
+        :param second_left_active_hinge: Second left active Hinge.
+        :param first_right_active_hinge: First right active Hinge.
+        :param second_right_active_hinge: Second right active Hinge.
         """
         self.first_left_active_hinge = first_left_active_hinge
         self.second_left_active_hinge = second_left_active_hinge
@@ -99,25 +102,25 @@ class CustomBrain(Brain):
     A brain has a function `make_instance`, which creates the actual object that controls a robot.
     """
 
-    first_left_active_hinge: ActiveHinge
-    second_left_active_hinge: ActiveHinge
-    first_right_active_hinge: ActiveHinge
-    second_right_active_hinge: ActiveHinge
+    first_left_active_hinge: ActiveHingeV1
+    second_left_active_hinge: ActiveHingeV1
+    first_right_active_hinge: ActiveHingeV1
+    second_right_active_hinge: ActiveHingeV1
 
     def __init__(
         self,
-        first_left_active_hinge: ActiveHinge,
-        second_left_active_hinge: ActiveHinge,
-        first_right_active_hinge: ActiveHinge,
-        second_right_active_hinge: ActiveHinge,
+        first_left_active_hinge: ActiveHingeV1,
+        second_left_active_hinge: ActiveHingeV1,
+        first_right_active_hinge: ActiveHingeV1,
+        second_right_active_hinge: ActiveHingeV1,
     ) -> None:
         """
-        Initialize this object.
+        Initialize the Object.
 
-        :param first_left_active_hinge: One of the hinges, as according to the parameter name.
-        :param second_left_active_hinge: One of the hinges, as according to the parameter name.
-        :param first_right_active_hinge: One of the hinges, as according to the parameter name.
-        :param second_right_active_hinge: One of the hinges, as according to the parameter name.
+        :param first_left_active_hinge: First left active Hinge.
+        :param second_left_active_hinge: Second left active Hinge.
+        :param first_right_active_hinge: First right active Hinge.
+        :param second_right_active_hinge: Second right active Hinge.
         """
         self.first_left_active_hinge = first_left_active_hinge
         self.second_left_active_hinge = second_left_active_hinge

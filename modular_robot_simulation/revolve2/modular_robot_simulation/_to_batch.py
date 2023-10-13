@@ -1,15 +1,16 @@
+from revolve2.modular_robot import ModularRobot
 from revolve2.simulation.scene import MultiBodySystem
 from revolve2.simulation.simulator import Batch, BatchParameters, RecordSettings
 
-from ._modular_robot_key import ModularRobotKey
 from ._modular_robot_scene import ModularRobotScene
+from ._uuid_key import UUIDKey
 
 
 def to_batch(
     scenes: ModularRobotScene | list[ModularRobotScene],
     batch_parameters: BatchParameters,
     record_settings: RecordSettings | None = None,
-) -> tuple[Batch, list[dict[ModularRobotKey, MultiBodySystem]]]:
+) -> tuple[Batch, list[dict[UUIDKey[ModularRobot], MultiBodySystem]]]:
     """
     Convert one or more modular robot scenes to a batch of simulation scenes.
 

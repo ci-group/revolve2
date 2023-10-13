@@ -3,6 +3,7 @@
 from ._aabb import AABB
 from ._color import Color
 from ._control_interface import ControlInterface
+from ._has_uuid import HasUUID
 from ._joint import Joint
 from ._joint_fixed import JointFixed
 from ._joint_hinge import JointHinge
@@ -17,6 +18,7 @@ __all__ = [
     "AABB",
     "Color",
     "ControlInterface",
+    "HasUUID",
     "Joint",
     "JointFixed",
     "JointHinge",

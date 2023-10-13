@@ -8,24 +8,24 @@ from revolve2.simulation.scene import (
     SimulationState,
 )
 
-from ._modular_robot_active_hinge_key import ModularRobotActiveHingeKey
+from ._uuid_key import UUIDKey
 
 
 class _ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
     _simulation_control: ControlInterface
-    _joint_mapping: dict[ModularRobotActiveHingeKey, JointHinge]
+    _joint_mapping: dict[UUIDKey[ActiveHinge], JointHinge]
 
     def __init__(
         self,
         simulation_control: ControlInterface,
-        joint_mapping: dict[ModularRobotActiveHingeKey, JointHinge],
+        joint_mapping: dict[UUIDKey[ActiveHinge], JointHinge],
     ) -> None:
         self._simulation_control = simulation_control
         self._joint_mapping = joint_mapping
 
     def set_active_hinge_target(self, active_hinge: ActiveHinge, target: float) -> None:
         self._simulation_control.set_joint_hinge_position_target(
-            self._joint_mapping[ModularRobotActiveHingeKey(active_hinge)], target
+            self._joint_mapping[UUIDKey(active_hinge)], target
         )
 
 
@@ -35,7 +35,7 @@ class ModularRobotSimulationHandler(SimulationHandler):
     _brains: list[
         tuple[
             BrainInstance,
-            dict[ModularRobotActiveHingeKey, JointHinge],
+            dict[UUIDKey[ActiveHinge], JointHinge],
         ]
     ]
 
@@ -46,7 +46,7 @@ class ModularRobotSimulationHandler(SimulationHandler):
     def add_robot(
         self,
         brain_instance: BrainInstance,
-        joint_mapping: dict[ModularRobotActiveHingeKey, JointHinge],
+        joint_mapping: dict[UUIDKey[ActiveHinge], JointHinge],
     ) -> None:
         """
         Add a brain that will control a robot during simulation.

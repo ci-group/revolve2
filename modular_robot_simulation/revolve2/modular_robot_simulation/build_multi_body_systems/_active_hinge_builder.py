@@ -4,7 +4,7 @@ from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.simulation.scene import AABB, JointHinge, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox
 
-from .._modular_robot_active_hinge_key import ModularRobotActiveHingeKey
+from .._uuid_key import UUIDKey
 from ._builder import Builder
 from ._convert_color import convert_color
 from ._unbuilt_child import UnbuiltChild
@@ -30,7 +30,7 @@ class ActiveHingeBuilder(Builder):
     def build(
         self,
         multi_body_system: MultiBodySystem,
-        joint_mapping: dict[ModularRobotActiveHingeKey, JointHinge],
+        joint_mapping: dict[UUIDKey[ActiveHinge], JointHinge],
     ) -> list[UnbuiltChild]:
         """
         Build a module onto the Robot.
@@ -113,7 +113,7 @@ class ActiveHingeBuilder(Builder):
             velocity=self._module.velocity,
         )
         multi_body_system.add_joint(joint)
-        joint_mapping[ModularRobotActiveHingeKey(self._module)] = joint
+        joint_mapping[UUIDKey(self._module)] = joint
 
         next_rigid_body.geometries.append(
             GeometryBox(

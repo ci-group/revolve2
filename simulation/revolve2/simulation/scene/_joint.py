@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
+from ._has_uuid import HasUUID
 from ._pose import Pose
 from ._rigid_body import RigidBody
 
@@ -11,8 +12,12 @@ if TYPE_CHECKING:
 
 
 @dataclass(kw_only=True)
-class Joint:
+class Joint(HasUUID):
     """Base class for all joints."""
+
+    def __post_init__(self) -> None:
+        """Initialize the parent UUID class."""
+        super().__init__()
 
     @dataclass
     class _ParentInfo:

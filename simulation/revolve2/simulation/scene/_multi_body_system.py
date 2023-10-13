@@ -7,6 +7,7 @@ import pyrr.aabb
 from pyrr import Vector3
 
 from ._aabb import AABB
+from ._has_uuid import HasUUID
 from ._joint import Joint
 from ._pose import Pose
 from ._rigid_body import RigidBody
@@ -17,13 +18,17 @@ if TYPE_CHECKING:
 
 
 @dataclass(kw_only=True)
-class MultiBodySystem:
+class MultiBodySystem(HasUUID):
     """
     A (possibly cyclic) graph of interconnected rigid bodies, joints, and other objects, such as cameras.
 
     The first rigid body added is considered the root of the system.
     That is, if the system is static, that rigid body will be static.
     """
+
+    def __post_init__(self) -> None:
+        """Initialize the parent UUID class."""
+        super().__init__()
 
     @dataclass
     class _ParentInfo:

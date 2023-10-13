@@ -21,22 +21,21 @@ except Exception as e:
     print("Failed to fix absl logging bug", e)
     pass
 
-from revolve2.simulation.scene import Scene
+from revolve2.simulation.scene import JointHinge, MultiBodySystem, Scene
 from revolve2.simulation.scene.conversion import multi_body_system_to_urdf
 from revolve2.simulation.scene.geometry import GeometryHeightmap
 
 from ._body_id import BodyId
 from ._joint_hinge_ctrl_indices import JointHingeCtrlIndices
-from ._joint_hinge_key import JointHingeKey
-from ._multi_body_system_key import MultiBodySystemKey
+from ._uuid_key import UUIDKey
 
 
 def scene_to_model(
     scene: Scene, simulation_timestep: float
 ) -> tuple[
     mujoco.MjModel,
-    dict[JointHingeKey, JointHingeCtrlIndices],
-    dict[MultiBodySystemKey, BodyId],
+    dict[UUIDKey[JointHinge], JointHingeCtrlIndices],
+    dict[UUIDKey[MultiBodySystem], BodyId],
 ]:
     """
     Convert a scene to a MuJoCo model.
@@ -241,18 +240,20 @@ def scene_to_model(
         heightmap_offset += len(heightmap.heights) * len(heightmap.heights[0])
 
     # Create map from hinge joints to their corresponding indices in the ctrl array
-    hinge_joint_ctrl_mapping: dict[JointHingeKey, JointHingeCtrlIndices] = {}
+    hinge_joint_ctrl_mapping: dict[UUIDKey[JointHinge], JointHingeCtrlIndices] = {}
     for mbs_i, joints_and_names in enumerate(all_joints_and_names):
         for joint, name in joints_and_names:
-            hinge_joint_ctrl_mapping[JointHingeKey(joint)] = JointHingeCtrlIndices(
+            hinge_joint_ctrl_mapping[UUIDKey(joint)] = JointHingeCtrlIndices(
                 position=model.actuator(f"mbs{mbs_i}/actuator_position_{name}").id,
                 velocity=model.actuator(f"mbs{mbs_i}/actuator_velocity_{name}").id,
             )
 
-    multi_body_system_to_mujoco_body_id_mapping: dict[MultiBodySystemKey, BodyId] = {}
+    multi_body_system_to_mujoco_body_id_mapping: dict[
+        UUIDKey[MultiBodySystem], BodyId
+    ] = {}
     for mbs_i, multi_body_system in enumerate(scene.multi_body_systems):
         multi_body_system_to_mujoco_body_id_mapping[
-            MultiBodySystemKey(multi_body_system)
+            UUIDKey(multi_body_system)
         ] = BodyId(model.body(f"mbs{mbs_i}/").id)
 
     return model, hinge_joint_ctrl_mapping, multi_body_system_to_mujoco_body_id_mapping

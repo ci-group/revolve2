@@ -3,19 +3,19 @@ import mujoco
 from revolve2.simulation.scene import ControlInterface, JointHinge
 
 from ._joint_hinge_ctrl_indices import JointHingeCtrlIndices
-from ._joint_hinge_key import JointHingeKey
+from ._uuid_key import UUIDKey
 
 
 class ControlInterfaceImpl(ControlInterface):
     """Implementation of the control interface for MuJoCo."""
 
     _data: mujoco.MjData
-    _hinge_joint_ctrl_mapping: dict[JointHingeKey, JointHingeCtrlIndices]
+    _hinge_joint_ctrl_mapping: dict[UUIDKey[JointHinge], JointHingeCtrlIndices]
 
     def __init__(
         self,
         data: mujoco.MjData,
-        hinge_joint_ctrl_mapping: dict[JointHingeKey, JointHingeCtrlIndices],
+        hinge_joint_ctrl_mapping: dict[UUIDKey[JointHinge], JointHingeCtrlIndices],
     ) -> None:
         """
         Initialize this object.
@@ -35,7 +35,7 @@ class ControlInterfaceImpl(ControlInterface):
         :param joint_hinge: The hinge to set the position target for.
         :param position: The position target.
         """
-        data_index = self._hinge_joint_ctrl_mapping.get(JointHingeKey(joint_hinge))
+        data_index = self._hinge_joint_ctrl_mapping.get(UUIDKey(joint_hinge))
         assert data_index is not None, "Hinge joint does not exist in this scene."
         # Set position target
         self._data.ctrl[data_index.position] = position

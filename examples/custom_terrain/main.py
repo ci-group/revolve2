@@ -17,7 +17,7 @@ from revolve2.modular_robot_simulation import (
 )
 from revolve2.simulation.scene import AABB, Color, Pose
 from revolve2.simulation.scene.geometry import GeometryBox, GeometryPlane
-from revolve2.simulators.mujoco import LocalSimulator
+from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 
 def make_custom_terrain() -> Terrain:

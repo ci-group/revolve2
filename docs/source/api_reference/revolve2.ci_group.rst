@@ -21,7 +21,8 @@ Submodules
    :maxdepth: 1
 
    fitness_functions <revolve2.ci_group.fitness_functions>
-   modular_robots <revolve2.ci_group.modular_robots>
+   modular_robots_v1 <revolve2.ci_group.modular_robots_v1>
+   modular_robots_v2 <revolve2.ci_group.modular_robots_v2>
    morphological_measures <revolve2.ci_group.morphological_measures>
    simulation <revolve2.ci_group.simulation>
    terrains <revolve2.ci_group.terrains>

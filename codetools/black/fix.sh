@@ -6,4 +6,4 @@ packages=$(tr '\n' ' ' < ../packages.txt)
 
 cd ../..
 
-black --diff --check $packages
+black $packages

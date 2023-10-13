@@ -6,7 +6,7 @@
 cd "$(dirname "$0")"
 
 pip install -e ./ci_group[dev] && \
-pip install -e ./simulators/mujoco[dev] && \
+pip install -e ./simulators/mujoco_simulator[dev] && \
 pip install -e ./experimentation[dev] && \
 pip install -e ./modular_robot_simulation[dev] && \
 pip install -e ./modular_robot[dev] && \

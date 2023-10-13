@@ -9,4 +9,4 @@ Subpackages
 .. toctree::
    :maxdepth: 1
 
-   mujoco <revolve2.simulators.mujoco>
+   mujoco_simulator <revolve2.simulators.mujoco_simulator>

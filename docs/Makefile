@@ -22,7 +22,7 @@ apidoc:
 	@$(SPHINXAPIDOC) ../modular_robot/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../modular_robot_simulation/revolve2 $(APIDOCARGS)
 	@$(SPHINXAPIDOC) ../simulation/revolve2 $(APIDOCARGS)
-	@$(SPHINXAPIDOC) ../simulators/mujoco/revolve2 $(APIDOCARGS)
+	@$(SPHINXAPIDOC) ../simulators/mujoco_simulator/revolve2 $(APIDOCARGS)
 
 apidoc_overwrite:
 	APIDOCARGS="$(APIDOCARGS) -f" $(MAKE) apidoc

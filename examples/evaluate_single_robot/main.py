@@ -7,7 +7,7 @@ from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
-from revolve2.simulators.mujoco import LocalSimulator
+from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 
 def main() -> None:

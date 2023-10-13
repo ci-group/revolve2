@@ -88,7 +88,7 @@ Each package can be installed using: ::
      - Physics simulation abstraction layer.
      - \-
      - **!**
-   * - simulators/mujoco
+   * - simulators/mujoco_simulator
      - MuJoCo simulator.
      - :code:`simulation`
      - **!**

@@ -9,7 +9,7 @@ from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
-from revolve2.simulators.mujoco import LocalSimulator
+from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 
 def make_body() -> BodyV1:

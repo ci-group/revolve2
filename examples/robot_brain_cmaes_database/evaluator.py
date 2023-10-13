@@ -15,7 +15,7 @@ from revolve2.modular_robot_simulation import (
     Terrain,
     simulate_scenes,
 )
-from revolve2.simulators.mujoco import LocalSimulator
+from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 
 class Evaluator:

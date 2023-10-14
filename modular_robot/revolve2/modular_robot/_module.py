@@ -19,7 +19,7 @@ class Module:
 
     _color: Color
 
-    def __init__(self, rotation: float, color: Color):
+    def __init__(self, nr_children: int, rotation: float, color: Color):
         """
         Initialize this object.
 
@@ -27,7 +27,7 @@ class Module:
         :param rotation: Orientation of this model relative to its parent.
         :param color: The color of the module.
         """
-        self._children = [None] * 4
+        self._children = [None] * nr_children
         self._rotation = rotation
 
         self._id = None

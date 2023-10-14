@@ -39,7 +39,7 @@ class ActiveHinge(Module):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(rotation_converted, color)
+        super().__init__(1, rotation_converted, color)
 
     @property
     def attachment(self) -> Module | None:

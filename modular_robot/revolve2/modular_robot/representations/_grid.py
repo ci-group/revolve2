@@ -1,6 +1,5 @@
-from typing import Optional
-
 from revolve2.modular_robot import Directions
+from typing import Optional
 
 
 class Grid:
@@ -23,7 +22,7 @@ class Grid:
     orientation = Directions.FRONT
 
     # Direction of last movement
-    previous_move = -1
+    previous_move: Optional[Directions] = None
 
     # Coordinates and orientation of movements
     movement_stack = [[0, 0, Directions.FRONT]]
@@ -39,42 +38,21 @@ class Grid:
 
     def set_orientation(self, orientation):
         """Set new orientation on grid"""
-        if orientation in [Directions.FRONT, Directions.RIGHT, Directions.BACK, Directions.LEFT]:
+        if Directions.has(orientation):
             Grid.orientation = orientation
         else:
             return False
 
     def calculate_orientation(self):
         """Set orientation by previous move and orientation"""
-        if (
-            Grid.previous_move == -1
-            or (Grid.previous_move == Directions.FRONT and Grid.orientation == Directions.FRONT)
-            or (Grid.previous_move == Directions.RIGHT and Grid.orientation == Directions.LEFT)
-            or (Grid.previous_move == Directions.LEFT and Grid.orientation == Directions.RIGHT)
-            or (Grid.previous_move == Directions.BACK and Grid.orientation == Directions.BACK)
-        ):
-            self.set_orientation(Directions.FRONT)
-        elif (
-            (Grid.previous_move == Directions.RIGHT and Grid.orientation == Directions.FRONT)
-            or (Grid.previous_move == Directions.BACK and Grid.orientation == Directions.LEFT)
-            or (Grid.previous_move == Directions.FRONT and Grid.orientation == Directions.RIGHT)
-            or (Grid.previous_move == Directions.LEFT and Grid.orientation == Directions.BACK)
-        ):
-            self.set_orientation(Directions.RIGHT)
-        elif (
-            (Grid.previous_move == Directions.BACK and Grid.orientation == Directions.FRONT)
-            or (Grid.previous_move == Directions.LEFT and Grid.orientation == Directions.LEFT)
-            or (Grid.previous_move == Directions.RIGHT and Grid.orientation == Directions.RIGHT)
-            or (Grid.previous_move == Directions.FRONT and Grid.orientation == Directions.BACK)
-        ):
-            self.set_orientation(Directions.BACK)
-        elif (
-            (Grid.previous_move == Directions.LEFT and Grid.orientation == Directions.FRONT)
-            or (Grid.previous_move == Directions.FRONT and Grid.orientation == Directions.LEFT)
-            or (Grid.previous_move == Directions.BACK and Grid.orientation == Directions.RIGHT)
-            or (Grid.previous_move == Directions.RIGHT and Grid.orientation == Directions.BACK)
-        ):
-            self.set_orientation(Directions.LEFT)
+        if Grid.previous_move is not None:
+            self.set_orientation(
+                Directions.from_angle(
+                    Grid.previous_move.to_angle() + Grid.orientation.to_angle()
+                )
+            )
+        else:
+            raise ValueError("Cannot calculate orientation: invalid state")
 
     def move_by_slot(self, slot):
         """Move in direction by slot id"""
@@ -187,5 +165,5 @@ class Grid:
         Grid.x_pos = 0
         Grid.y_pos = 0
         Grid.orientation = Directions.FRONT
-        Grid.previous_move = -1
+        Grid.previous_move = None
         Grid.movement_stack = [[0, 0, Directions.FRONT]]

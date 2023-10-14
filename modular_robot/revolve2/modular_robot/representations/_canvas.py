@@ -1,7 +1,8 @@
 import cairo
 import math
 
-from revolve2.modular_robot import Directions
+from revolve2.modular_robot import Directions, RightAngles
+from typing import Optional
 
 
 class Canvas:
@@ -13,7 +14,7 @@ class Canvas:
     orientation = Directions.FRONT
 
     # Direction of last movement
-    previous_move = -1
+    previous_move: Optional[Directions] = None
 
     # Coordinates and orientation of movements
     movement_stack = []
@@ -50,88 +51,21 @@ class Canvas:
         if Directions.has(orientation):
             Canvas.orientation = orientation
         else:
-            raise ValueError(f"{orientation} is not one of {list(Directions)}")
+            raise TypeError(f"{orientation} is not one of {list(Directions)}")
 
     def calculate_orientation(self):
         """Calculate new orientation based on current orientation and last movement direction"""
 
-        if (
-            Canvas.previous_move == -1
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and Canvas.orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and Canvas.orientation == Directions.LEFT
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and Canvas.orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and Canvas.orientation == Directions.BACK
-            )
-        ):
+        if Canvas.previous_move is None:
             self.set_orientation(Directions.FRONT)
-        elif (
-            (
-                Canvas.previous_move == Directions.RIGHT
-                and Canvas.orientation == Directions.FRONT
+        else:
+            self.set_orientation(
+                Directions.from_angle(
+                    Canvas.previous_move.to_angle() + Canvas.orientation.to_angle()
+                )
             )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and Canvas.orientation == Directions.LEFT
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and Canvas.orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and Canvas.orientation == Directions.BACK
-            )
-        ):
-            self.set_orientation(Directions.RIGHT)
-        elif (
-            (
-                Canvas.previous_move == Directions.BACK
-                and Canvas.orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and Canvas.orientation == Directions.LEFT
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and Canvas.orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and Canvas.orientation == Directions.BACK
-            )
-        ):
-            self.set_orientation(Directions.BACK)
-        elif (
-            (
-                Canvas.previous_move == Directions.LEFT
-                and Canvas.orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and Canvas.orientation == Directions.LEFT
-            )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and Canvas.orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and Canvas.orientation == Directions.BACK
-            )
-        ):
-            self.set_orientation(Directions.LEFT)
+
+        return
 
     def move_by_slot(self, slot):
         """Move in direction by slot id"""
@@ -276,83 +210,18 @@ class Canvas:
 
     def calculate_sensor_rectangle_position(self):
         """Calculate squeezed sensor rectangle position based on current orientation and last movement direction"""
-        if (
-            Canvas.previous_move == -1
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and Canvas.orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and Canvas.orientation == Directions.LEFT
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and Canvas.orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and Canvas.orientation == Directions.BACK
-            )
-        ):
+        if Canvas.previous_move is None:
             return Canvas.x_pos, Canvas.y_pos + 0.9, 1, 0.1
-        elif (
-            (
-                Canvas.previous_move == Directions.RIGHT
-                and Canvas.orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and Canvas.orientation == Directions.LEFT
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and Canvas.orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and Canvas.orientation == Directions.BACK
-            )
-        ):
-            return Canvas.x_pos, Canvas.y_pos, 0.1, 1
-        elif (
-            (
-                Canvas.previous_move == Directions.BACK
-                and Canvas.orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and Canvas.orientation == Directions.LEFT
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and Canvas.orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and Canvas.orientation == Directions.BACK
-            )
-        ):
-            return Canvas.x_pos, Canvas.y_pos, 1, 0.1
-        elif (
-            (
-                Canvas.previous_move == Directions.LEFT
-                and Canvas.orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and Canvas.orientation == Directions.LEFT
-            )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and Canvas.orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and Canvas.orientation == Directions.BACK
-            )
-        ):
-            return Canvas.x_pos + 0.9, Canvas.y_pos, 0.1, 1
+        else:
+            match Canvas.previous_move.to_angle() + Canvas.orientation.to_angle():
+                case RightAngles.RAD_0:
+                    return Canvas.x_pos, Canvas.y_pos + 0.9, 1, 0.1
+                case RightAngles.RAD_HALFPI:
+                    return Canvas.x_pos, Canvas.y_pos, 0.1, 1
+                case RightAngles.RAD_PI:
+                    return Canvas.x_pos, Canvas.y_pos, 1, 0.1
+                case RightAngles.RAD_ONEANDAHALFPI:
+                    return Canvas.x_pos + 0.9, Canvas.y_pos, 0.1, 1
 
         raise ValueError("Cannot calculate sensor position: Invalid")
 
@@ -385,88 +254,18 @@ class Canvas:
         parent = Canvas.movement_stack[-2]
         parent_orientation = parent[2]
 
-        if (
-            (
-                Canvas.previous_move == Directions.FRONT
-                and parent_orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and parent_orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and parent_orientation == Directions.BACK
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and parent_orientation == Directions.LEFT
-            )
-        ):
-            # Connector is on top of parent
-            return parent[0] + 0.5, parent[1]
-        elif (
-            (
-                Canvas.previous_move == Directions.RIGHT
-                and parent_orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and parent_orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and parent_orientation == Directions.BACK
-            )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and parent_orientation == Directions.LEFT
-            )
-        ):
-            # Connector is on Directions.RIGHT side of parent
-            return parent[0] + 1, parent[1] + 0.5
-        elif (
-            (
-                Canvas.previous_move == Directions.LEFT
-                and parent_orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.BACK
-                and parent_orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and parent_orientation == Directions.BACK
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and parent_orientation == Directions.LEFT
-            )
-        ):
-            # Connector is on Directions.LEFT side of parent
-            return parent[0], parent[1] + 0.5
-        elif (
-            (
-                Canvas.previous_move == Directions.BACK
-                and parent_orientation == Directions.FRONT
-            )
-            or (
-                Canvas.previous_move == Directions.RIGHT
-                and parent_orientation == Directions.RIGHT
-            )
-            or (
-                Canvas.previous_move == Directions.FRONT
-                and parent_orientation == Directions.BACK
-            )
-            or (
-                Canvas.previous_move == Directions.LEFT
-                and parent_orientation == Directions.LEFT
-            )
-        ):
-            # Connector is on bottom of parent
-            return parent[0] + 0.5, parent[1] + 1
+        if Canvas.previous_move is not None:
+            match Canvas.previous_move.to_angle() + parent_orientation.to_angle():
+                case RightAngles.RAD_0:
+                    return parent[0] + 0.5, parent[1]
+                case RightAngles.RAD_HALFPI:
+                    return parent[0] + 1, parent[1] + 0.5
+                case RightAngles.RAD_PI:
+                    return parent[0] + 0.5, parent[1] + 1
+                case RightAngles.RAD_ONEANDAHALFPI:
+                    return parent[0], parent[1] + 0.5
 
-        raise ValueError("Cannot calculate sensor position: Invalid")
+        raise ValueError("Invalid position to calculate parent from")
 
     def draw_connector_to_parent(self):
         """Draw a circle between child and parent"""
@@ -487,7 +286,7 @@ class Canvas:
         Canvas.x_pos = 0
         Canvas.y_pos = 0
         Canvas.orientation = Directions.FRONT
-        Canvas.previous_move = -1
+        Canvas.previous_move = None
         Canvas.movement_stack = []
         Canvas.sensors = []
         Canvas.rotating_orientation = 0

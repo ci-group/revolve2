@@ -18,8 +18,7 @@ from ._modular_robot import ModularRobot
 from ._module import Module
 from ._morphological_measures import MorphologicalMeasures
 from ._not_finalized_error import NotFinalizedError
-from ._right_angles import RightAngles
-from ._directions import Directions
+from ._directions import Directions, RightAngles
 
 __all__ = [
     "ActiveHinge",

@@ -12,6 +12,7 @@ from ._brick import Brick
 from ._core import Core
 from ._module import Module
 from ._not_finalized_error import NotFinalizedError
+from ._directions import Directions
 
 
 class Body:
@@ -103,27 +104,27 @@ class Body:
             position += Vector3([1, 0, 0])
             rotation: Quaternion
             if isinstance(parent, Core):
-                if child_index == Core.FRONT:
+                if child_index == Directions.FRONT:
                     rotation = Quaternion.from_eulers((0.0, 0.0, 0.0))
-                elif child_index == Core.LEFT:
+                elif child_index == Directions.LEFT:
                     rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 1))
-                elif child_index == Core.BACK:
+                elif child_index == Directions.BACK:
                     rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 2))
-                elif child_index == Core.RIGHT:
+                elif child_index == Directions.RIGHT:
                     rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 3))
                 else:
                     raise NotImplementedError()
             elif isinstance(parent, Brick):
-                if child_index == Brick.FRONT:
+                if child_index == Directions.FRONT:
                     rotation = Quaternion.from_eulers((0.0, 0.0, 0.0))
-                elif child_index == Brick.LEFT:
+                elif child_index == Directions.LEFT:
                     rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 1))
-                elif child_index == Brick.RIGHT:
+                elif child_index == Directions.RIGHT:
                     rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 3))
                 else:
                     raise NotImplementedError()
             elif isinstance(parent, ActiveHinge):
-                if child_index == ActiveHinge.ATTACHMENT:
+                if child_index == Directions.FRONT:
                     rotation = Quaternion()
                 else:
                     raise NotImplementedError()
@@ -239,10 +240,10 @@ class _GridMaker:
 
         if isinstance(module, Core):
             for child_index, angle in [
-                (Core.FRONT, 0.0),
-                (Core.BACK, math.pi),
-                (Core.LEFT, math.pi / 2.0),
-                (Core.RIGHT, math.pi / 2.0 * 3),
+                (Directions.FRONT, 0.0),
+                (Directions.BACK, math.pi),
+                (Directions.LEFT, math.pi / 2.0),
+                (Directions.RIGHT, math.pi / 2.0 * 3),
             ]:
                 child = module.children[child_index]
 
@@ -260,9 +261,9 @@ class _GridMaker:
                     )
         elif isinstance(module, Brick):
             for child_index, angle in [
-                (Brick.FRONT, 0.0),
-                (Brick.LEFT, math.pi / 2.0),
-                (Brick.RIGHT, math.pi / 2.0 * 3),
+                (Directions.FRONT, 0.0),
+                (Directions.LEFT, math.pi / 2.0),
+                (Directions.RIGHT, math.pi / 2.0 * 3),
             ]:
                 child = module.children[child_index]
 
@@ -279,7 +280,7 @@ class _GridMaker:
                         child, position + rotation * Vector3([1.0, 0.0, 0.0]), rotation
                     )
         elif isinstance(module, ActiveHinge):
-            child = module.children[ActiveHinge.ATTACHMENT]
+            child = module.children[Directions.FRONT]
 
             if child is not None:
                 assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
@@ -379,10 +380,10 @@ class _ActorBuilder:
         )
 
         for name_suffix, child_index, angle in [
-            ("front", Core.FRONT, 0.0),
-            ("back", Core.BACK, math.pi),
-            ("left", Core.LEFT, math.pi / 2.0),
-            ("right", Core.RIGHT, math.pi / 2.0 * 3),
+            ("front", Directions.FRONT, 0.0),
+            ("back", Directions.BACK, math.pi),
+            ("left", Directions.LEFT, math.pi / 2.0),
+            ("right", Directions.RIGHT, math.pi / 2.0 * 3),
         ]:
             child = module.children[child_index]
             if child is not None:
@@ -428,9 +429,9 @@ class _ActorBuilder:
         )
 
         for name_suffix, child_index, angle in [
-            ("front", Brick.FRONT, 0.0),
-            ("left", Brick.LEFT, math.pi / 2.0),
-            ("right", Brick.RIGHT, math.pi / 2.0 * 3),
+            ("front", Directions.FRONT, 0.0),
+            ("left", Directions.LEFT, math.pi / 2.0),
+            ("right", Directions.RIGHT, math.pi / 2.0 * 3),
         ]:
             child = module.children[child_index]
             if child is not None:
@@ -544,7 +545,7 @@ class _ActorBuilder:
             )
         )
 
-        child = module.children[ActiveHinge.ATTACHMENT]
+        child = module.children[Directions.FRONT]
         if child is not None:
             rotation = Quaternion.from_eulers([child.rotation, 0.0, 0.0])
 

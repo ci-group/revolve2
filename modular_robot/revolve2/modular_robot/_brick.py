@@ -2,14 +2,11 @@ from revolve2.simulation.actor import Color
 
 from ._module import Module
 from ._right_angles import RightAngles
+from ._directions import Directions
 
 
 class Brick(Module):
     """A brick module for a modular robot."""
-
-    FRONT = 0
-    RIGHT = 1
-    LEFT = 2
 
     def __init__(
         self, rotation: float | RightAngles, color: Color = Color(50, 50, 255, 255)
@@ -24,7 +21,7 @@ class Brick(Module):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(3, rotation_converted, color)
+        super().__init__(rotation_converted, color)
 
     @property
     def front(self) -> Module | None:
@@ -33,7 +30,7 @@ class Brick(Module):
 
         :returns: The attached module.
         """
-        return self.children[self.FRONT]
+        return self.children[Directions.FRONT]
 
     @front.setter
     def front(self, module: Module) -> None:
@@ -42,7 +39,7 @@ class Brick(Module):
 
         :param module: The module to attach.
         """
-        self.children[self.FRONT] = module
+        self.children[Directions.FRONT] = module
 
     @property
     def right(self) -> Module | None:
@@ -51,7 +48,7 @@ class Brick(Module):
 
         :returns: The attached module.
         """
-        return self.children[self.RIGHT]
+        return self.children[Directions.RIGHT]
 
     @right.setter
     def right(self, module: Module) -> None:
@@ -60,7 +57,7 @@ class Brick(Module):
 
         :param module: The module to attach.
         """
-        self.children[self.RIGHT] = module
+        self.children[Directions.RIGHT] = module
 
     @property
     def left(self) -> Module | None:
@@ -69,7 +66,7 @@ class Brick(Module):
 
         :returns: The attached module.
         """
-        return self.children[self.LEFT]
+        return self.children[Directions.LEFT]
 
     @left.setter
     def left(self, module: Module) -> None:
@@ -78,4 +75,4 @@ class Brick(Module):
 
         :param module: The module to attach.
         """
-        self.children[self.LEFT] = module
+        self.children[Directions.LEFT] = module

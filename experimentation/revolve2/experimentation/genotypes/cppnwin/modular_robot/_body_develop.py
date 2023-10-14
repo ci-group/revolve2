@@ -4,7 +4,7 @@ from queue import Queue
 from typing import Any
 
 import multineat
-from revolve2.modular_robot import ActiveHinge, Body, Brick, Core, Module
+from revolve2.modular_robot import ActiveHinge, Body, Brick, Core, Module, Directions
 
 
 @dataclass
@@ -48,16 +48,16 @@ def develop(
         children: list[tuple[int, int]] = []  # child index, rotation
 
         if isinstance(module.module_reference, Core):
-            children.append((Core.FRONT, 0))
-            children.append((Core.LEFT, 1))
-            children.append((Core.BACK, 2))
-            children.append((Core.RIGHT, 3))
+            children.append((Directions.FRONT, 0))
+            children.append((Directions.LEFT, 1))
+            children.append((Directions.BACK, 2))
+            children.append((Directions.RIGHT, 3))
         elif isinstance(module.module_reference, Brick):
-            children.append((Brick.FRONT, 0))
-            children.append((Brick.LEFT, 1))
-            children.append((Brick.RIGHT, 3))
+            children.append((Directions.FRONT, 0))
+            children.append((Directions.LEFT, 1))
+            children.append((Directions.RIGHT, 3))
         elif isinstance(module.module_reference, ActiveHinge):
-            children.append((ActiveHinge.ATTACHMENT, 0))
+            children.append((Directions.FRONT, 0))
         else:  # Should actually never arrive here but just checking module type to be sure
             raise RuntimeError()
 

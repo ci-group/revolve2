@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Optional
 
 from revolve2.simulation.actor import Color
 
@@ -8,17 +9,22 @@ from ._not_finalized_error import NotFinalizedError
 class Module:
     """Base class for a module for modular robots."""
 
-    _children: list[Module | None]
+    _children: list[Optional[Module]]
     _rotation: float
 
+    # the rotation regarding the ground: for differentiating horizontal or vertical joints
+    # Deprecated, but Karine's code uses it.
+    # We disallow vertical, so we set it to zero, and forget about it
+    _absolute_rotation: int = 0
+
     # The following members are initialized by the ModularRobot finalize function:
-    _id: int | None
-    _parent: Module | None
-    _parent_child_index: int | None
+    _id: Optional[int]
+    _parent: Optional[Module]
+    _parent_child_index: Optional[int]
 
     _color: Color
 
-    def __init__(self, num_children: int, rotation: float, color: Color):
+    def __init__(self, rotation: float, color: Color):
         """
         Initialize this object.
 
@@ -26,7 +32,7 @@ class Module:
         :param rotation: Orientation of this model relative to its parent.
         :param color: The color of the module.
         """
-        self._children = [None] * num_children
+        self._children = [None] * 4
         self._rotation = rotation
 
         self._id = None
@@ -36,13 +42,16 @@ class Module:
         self._color = color
 
     @property
-    def children(self) -> list[Module | None]:
+    def children(self) -> list[Optional[Module]]:
         """
         Get the children of this module.
 
         :returns: The list of children.
         """
         return self._children
+
+    def has_children(self) -> bool:
+        return any(child is not None for child in self.children)
 
     @property
     def rotation(self) -> float:
@@ -95,7 +104,7 @@ class Module:
 
         out_neighbours: list[Module] = []
 
-        open_nodes: list[tuple[Module, Module | None]] = [
+        open_nodes: list[tuple[Module, Optional[Module]]] = [
             (self, None)
         ]  # (module, came_from)
 

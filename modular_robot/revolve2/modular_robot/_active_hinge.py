@@ -2,6 +2,7 @@ from revolve2.simulation.actor import Color
 
 from ._module import Module
 from ._right_angles import RightAngles
+from ._directions import Directions
 
 
 class ActiveHinge(Module):
@@ -10,8 +11,6 @@ class ActiveHinge(Module):
 
     This is a rotary joint.
     """
-
-    ATTACHMENT = 0
 
     # angle range of servo
     # 60 degrees to each side
@@ -40,7 +39,7 @@ class ActiveHinge(Module):
             rotation_converted = rotation.value
         else:
             rotation_converted = rotation
-        super().__init__(1, rotation_converted, color)
+        super().__init__(rotation_converted, color)
 
     @property
     def attachment(self) -> Module | None:
@@ -49,7 +48,7 @@ class ActiveHinge(Module):
 
         :returns: The attached module.
         """
-        return self.children[self.ATTACHMENT]
+        return self.children[Directions.FRONT]
 
     @attachment.setter
     def attachment(self, module: Module) -> None:
@@ -58,4 +57,4 @@ class ActiveHinge(Module):
 
         :param module: The module to attach.
         """
-        self.children[self.ATTACHMENT] = module
+        self.children[Directions.FRONT] = module

@@ -19,6 +19,7 @@ from ._module import Module
 from ._morphological_measures import MorphologicalMeasures
 from ._not_finalized_error import NotFinalizedError
 from ._right_angles import RightAngles
+from ._directions import Directions
 
 __all__ = [
     "ActiveHinge",
@@ -36,4 +37,5 @@ __all__ = [
     "create_batch_single_robot",
     "get_body_states_multiple_isolated_robots",
     "get_body_states_single_robot",
+    "Directions",
 ]

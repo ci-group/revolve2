@@ -67,64 +67,22 @@ class Canvas:
 
         return
 
-    def move_by_slot(self, slot):
+    def move_by_slot(self, slot: Directions | int):
         """Move in direction by slot id"""
-        if slot == Directions.BACK:
-            self.move_down()
-        elif slot == Directions.FRONT:
-            self.move_up()
-        elif slot == Directions.RIGHT:
-            self.move_right()
-        elif slot == Directions.LEFT:
-            self.move_left()
+        if not isinstance(slot, Directions):
+            slot = Directions(slot)
 
-    def move_right(self):
-        """Set position one to the Directions.RIGHT in correct orientation"""
-        if Canvas.orientation == Directions.FRONT:
-            Canvas.x_pos += 1
-        elif Canvas.orientation == Directions.RIGHT:
-            Canvas.y_pos += 1
-        elif Canvas.orientation == Directions.BACK:
-            Canvas.x_pos -= 1
-        elif Canvas.orientation == Directions.LEFT:
-            Canvas.y_pos -= 1
-        Canvas.previous_move = Directions.RIGHT
+        match Canvas.orientation.to_angle() + slot.to_angle():
+            case RightAngles.RAD_0:
+                Canvas.y_pos -= 1
+            case RightAngles.RAD_HALFPI:
+                Canvas.x_pos += 1
+            case RightAngles.RAD_PI:
+                Canvas.y_pos += 1
+            case RightAngles.RAD_ONEANDAHALFPI:
+                Canvas.x_pos -= 1
 
-    def move_left(self):
-        """Set position one to the Directions.LEFT"""
-        if Canvas.orientation == Directions.FRONT:
-            Canvas.x_pos -= 1
-        elif Canvas.orientation == Directions.RIGHT:
-            Canvas.y_pos -= 1
-        elif Canvas.orientation == Directions.BACK:
-            Canvas.x_pos += 1
-        elif Canvas.orientation == Directions.LEFT:
-            Canvas.y_pos += 1
-        Canvas.previous_move = Directions.LEFT
-
-    def move_up(self):
-        """Set position one upwards"""
-        if Canvas.orientation == Directions.FRONT:
-            Canvas.y_pos -= 1
-        elif Canvas.orientation == Directions.RIGHT:
-            Canvas.x_pos += 1
-        elif Canvas.orientation == Directions.BACK:
-            Canvas.y_pos += 1
-        elif Canvas.orientation == Directions.LEFT:
-            Canvas.x_pos -= 1
-        Canvas.previous_move = Directions.FRONT
-
-    def move_down(self):
-        """Set position one downwards"""
-        if Canvas.orientation == Directions.FRONT:
-            Canvas.y_pos += 1
-        elif Canvas.orientation == Directions.RIGHT:
-            Canvas.x_pos -= 1
-        elif Canvas.orientation == Directions.BACK:
-            Canvas.y_pos -= 1
-        elif Canvas.orientation == Directions.LEFT:
-            Canvas.x_pos += 1
-        Canvas.previous_move = Directions.BACK
+        Canvas.previous_move = slot
 
     def move_back(self):
         """Move Directions.BACK to previous state on canvas"""
@@ -279,7 +237,7 @@ class Canvas:
 
     def save_png(self, file_name):
         """Store image representation of canvas"""
-        self.surface.write_to_png("%s" % file_name)
+        self.surface.write_to_png(str(file_name))
 
     def reset_canvas(self):
         """Reset canvas variables to default values"""

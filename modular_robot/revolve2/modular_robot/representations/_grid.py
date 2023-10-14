@@ -1,4 +1,4 @@
-from revolve2.modular_robot import Directions
+from revolve2.modular_robot import Directions, RightAngles
 from typing import Optional
 
 
@@ -54,64 +54,22 @@ class Grid:
         else:
             raise ValueError("Cannot calculate orientation: invalid state")
 
-    def move_by_slot(self, slot):
+    def move_by_slot(self, slot: Directions | int):
         """Move in direction by slot id"""
-        if slot == Directions.BACK:
-            self.move_down()
-        elif slot == Directions.FRONT:
-            self.move_up()
-        elif slot == Directions.RIGHT:
-            self.move_right()
-        elif slot == Directions.LEFT:
-            self.move_left()
+        if not isinstance(slot, Directions):
+            slot = Directions(slot)
 
-    def move_right(self):
-        """Set position one to the right in correct orientation"""
-        if Grid.orientation == Directions.FRONT:
-            Grid.x_pos += 1
-        elif Grid.orientation == Directions.RIGHT:
-            Grid.y_pos += 1
-        elif Grid.orientation == Directions.BACK:
-            Grid.x_pos -= 1
-        elif Grid.orientation == Directions.LEFT:
-            Grid.y_pos -= 1
-        Grid.previous_move = Directions.RIGHT
+        match Grid.orientation.to_angle() + slot.to_angle():
+            case RightAngles.RAD_0:
+                Grid.y_pos -= 1
+            case RightAngles.RAD_HALFPI:
+                Grid.x_pos += 1
+            case RightAngles.RAD_PI:
+                Grid.y_pos += 1
+            case RightAngles.RAD_ONEANDAHALFPI:
+                Grid.x_pos -= 1
 
-    def move_left(self):
-        """Set position one to the left"""
-        if Grid.orientation == Directions.FRONT:
-            Grid.x_pos -= 1
-        elif Grid.orientation == Directions.RIGHT:
-            Grid.y_pos -= 1
-        elif Grid.orientation == Directions.BACK:
-            Grid.x_pos += 1
-        elif Grid.orientation == Directions.LEFT:
-            Grid.y_pos += 1
-        Grid.previous_move = Directions.LEFT
-
-    def move_up(self):
-        """Set position one upwards"""
-        if Grid.orientation == Directions.FRONT:
-            Grid.y_pos -= 1
-        elif Grid.orientation == Directions.RIGHT:
-            Grid.x_pos += 1
-        elif Grid.orientation == Directions.BACK:
-            Grid.y_pos += 1
-        elif Grid.orientation == Directions.LEFT:
-            Grid.x_pos -= 1
-        Grid.previous_move = Directions.FRONT
-
-    def move_down(self):
-        """Set position one downwards"""
-        if Grid.orientation == Directions.FRONT:
-            Grid.y_pos += 1
-        elif Grid.orientation == Directions.RIGHT:
-            Grid.x_pos -= 1
-        elif Grid.orientation == Directions.BACK:
-            Grid.y_pos -= 1
-        elif Grid.orientation == Directions.LEFT:
-            Grid.x_pos += 1
-        Grid.previous_move = Directions.BACK
+        Grid.previous_move = slot
 
     def move_back(self):
         if len(Grid.movement_stack) > 1:

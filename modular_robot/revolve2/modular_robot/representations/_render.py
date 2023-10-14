@@ -21,12 +21,12 @@ class Render:
             canvas.draw_controller(module.id)
         elif isinstance(module, ActiveHinge):
             canvas.move_by_slot(slot)
-            Canvas.rotating_orientation = module._absolute_rotation
+            Canvas.rotating_orientation = 0
             canvas.draw_hinge(module.id)
             canvas.draw_connector_to_parent()
         elif isinstance(module, Brick):
             canvas.move_by_slot(slot)
-            Canvas.rotating_orientation = module._absolute_rotation
+            Canvas.rotating_orientation = 0
             canvas.draw_module(module.id)
             canvas.draw_connector_to_parent()
 

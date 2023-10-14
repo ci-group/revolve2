@@ -12,11 +12,6 @@ class Module:
     _children: list[Optional[Module]]
     _rotation: float
 
-    # the rotation regarding the ground: for differentiating horizontal or vertical joints
-    # Deprecated, but Karine's code uses it.
-    # We disallow vertical, so we set it to zero, and forget about it
-    _absolute_rotation: int = 0
-
     # The following members are initialized by the ModularRobot finalize function:
     _id: Optional[int]
     _parent: Optional[Module]

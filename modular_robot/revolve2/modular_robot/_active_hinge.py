@@ -48,7 +48,7 @@ class ActiveHinge(Module):
 
         :returns: The attached module.
         """
-        return self.children[Directions.FRONT]
+        return self.get_child(Directions.FRONT)
 
     @attachment.setter
     def attachment(self, module: Module) -> None:
@@ -57,4 +57,4 @@ class ActiveHinge(Module):
 
         :param module: The module to attach.
         """
-        self.children[Directions.FRONT] = module
+        self.set_child(module, Directions.FRONT)

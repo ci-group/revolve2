@@ -30,7 +30,7 @@ class Brick(Module):
 
         :returns: The attached module.
         """
-        return self.children[Directions.FRONT]
+        return self.get_child(Directions.FRONT)
 
     @front.setter
     def front(self, module: Module) -> None:
@@ -39,7 +39,7 @@ class Brick(Module):
 
         :param module: The module to attach.
         """
-        self.children[Directions.FRONT] = module
+        self.set_child(module, Directions.FRONT)
 
     @property
     def right(self) -> Module | None:
@@ -48,7 +48,7 @@ class Brick(Module):
 
         :returns: The attached module.
         """
-        return self.children[Directions.RIGHT]
+        return self.get_child(Directions.RIGHT)
 
     @right.setter
     def right(self, module: Module) -> None:
@@ -57,7 +57,7 @@ class Brick(Module):
 
         :param module: The module to attach.
         """
-        self.children[Directions.RIGHT] = module
+        self.set_child(module, Directions.RIGHT)
 
     @property
     def left(self) -> Module | None:
@@ -66,7 +66,7 @@ class Brick(Module):
 
         :returns: The attached module.
         """
-        return self.children[Directions.LEFT]
+        return self.get_child(Directions.LEFT)
 
     @left.setter
     def left(self, module: Module) -> None:
@@ -75,4 +75,4 @@ class Brick(Module):
 
         :param module: The module to attach.
         """
-        self.children[Directions.LEFT] = module
+        self.set_child(module, Directions.LEFT)

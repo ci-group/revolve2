@@ -127,7 +127,7 @@ def __add_child(
     up = __rotate(module.up, forward, orientation)
 
     child = child_type(orientation * (math.pi / 2.0))
-    module.module_reference.children[child_index] = child
+    module.module_reference.set_child(child, child_index)
 
     return __Module(
         position,

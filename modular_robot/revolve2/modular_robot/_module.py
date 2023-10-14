@@ -4,6 +4,7 @@ from typing import Optional
 from revolve2.simulation.actor import Color
 
 from ._not_finalized_error import NotFinalizedError
+from ._directions import Directions
 
 
 class Module:
@@ -27,6 +28,12 @@ class Module:
         :param rotation: Orientation of this model relative to its parent.
         :param color: The color of the module.
         """
+        if not all(
+            Directions.has(x, strict=False, max_val=nr_children)
+            for x in range(nr_children)
+        ):
+            raise ValueError("Cannot create mudule with {nr_children=}")
+
         self._children = [None] * nr_children
         self._rotation = rotation
 
@@ -44,6 +51,12 @@ class Module:
         :returns: The list of children.
         """
         return self._children
+
+    def get_child(self, which: Directions) -> Optional[Module]:
+        return self.children[which]
+
+    def set_child(self, item: Module, which: Directions) -> None:
+        self.children[which] = item
 
     def has_children(self) -> bool:
         return any(child is not None for child in self.children)

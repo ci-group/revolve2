@@ -96,7 +96,7 @@ class Body:
         parent = module._parent
         child_index = module._parent_child_index
         while parent is not None and child_index is not None:
-            child = parent.children[child_index]
+            child = parent.get_child(child_index)
             assert child is not None
             assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
 
@@ -245,7 +245,7 @@ class _GridMaker:
                 (Directions.LEFT, math.pi / 2.0),
                 (Directions.RIGHT, math.pi / 2.0 * 3),
             ]:
-                child = module.children[child_index]
+                child = module.get_child(child_index)
 
                 if child is not None:
                     assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
@@ -265,7 +265,7 @@ class _GridMaker:
                 (Directions.LEFT, math.pi / 2.0),
                 (Directions.RIGHT, math.pi / 2.0 * 3),
             ]:
-                child = module.children[child_index]
+                child = module.get_child(child_index)
 
                 if child is not None:
                     assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
@@ -280,7 +280,7 @@ class _GridMaker:
                         child, position + rotation * Vector3([1.0, 0.0, 0.0]), rotation
                     )
         elif isinstance(module, ActiveHinge):
-            child = module.children[Directions.FRONT]
+            child = module.get_child(Directions.FRONT)
 
             if child is not None:
                 assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
@@ -385,7 +385,7 @@ class _ActorBuilder:
             ("left", Directions.LEFT, math.pi / 2.0),
             ("right", Directions.RIGHT, math.pi / 2.0 * 3),
         ]:
-            child = module.children[child_index]
+            child = module.get_child(child_index)
             if child is not None:
                 rotation = (
                     orientation
@@ -433,7 +433,7 @@ class _ActorBuilder:
             ("left", Directions.LEFT, math.pi / 2.0),
             ("right", Directions.RIGHT, math.pi / 2.0 * 3),
         ]:
-            child = module.children[child_index]
+            child = module.get_child(child_index)
             if child is not None:
                 rotation = (
                     orientation
@@ -545,7 +545,7 @@ class _ActorBuilder:
             )
         )
 
-        child = module.children[Directions.FRONT]
+        child = module.get_child(Directions.FRONT)
         if child is not None:
             rotation = Quaternion.from_eulers([child.rotation, 0.0, 0.0])
 

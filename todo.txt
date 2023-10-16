@@ -1,2 +1,0 @@
-remove parent info from mbs and co?
-can we remove parent from modules? so we lose complete dependency on stuff being set by parents

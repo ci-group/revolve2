@@ -101,12 +101,6 @@ class Module:
         """
         return self._parent_child_index
 
-    def _set_parent(self, parent: Module, parent_child_index: int) -> None:
-        if self._parent is not None or self._parent_child_index is not None:
-            raise RuntimeError("Id and parent are already assigned.")
-        self._parent = parent
-        self._parent_child_index = parent_child_index
-
     def set_child(self, module: Module, child_index: int) -> None:
         """
         Attach a module to a slot.
@@ -117,7 +111,12 @@ class Module:
         """
         if self.children[child_index] is not None:
             raise RuntimeError("Slot already has module.")
-        module._set_parent(self, child_index)
+        assert self.children[child_index] is None, "Slot already has a module."
+        assert (
+            module._parent is None
+        ), "Child module already connected to a different slot."
+        module._parent = self
+        module._parent_child_index = child_index
         self.children[child_index] = module
 
     def neighbours(self, within_range: int) -> list[Module]:
@@ -138,7 +137,7 @@ class Module:
             for open_node, came_from in open_nodes:
                 neighbours = [
                     mod
-                    for mod in open_node.children + [open_node._parent]
+                    for mod in open_node.children + [open_node.parent]
                     if mod is not None
                     and (came_from is None or mod.uuid is not came_from.uuid)
                 ]

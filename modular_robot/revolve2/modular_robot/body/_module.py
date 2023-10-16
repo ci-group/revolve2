@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-from .._has_uuid import HasUUID
+import uuid
+
 from ._color import Color
 from ._right_angles import RightAngles
 
 
-class Module(HasUUID):
+class Module:
     """Base class for a module for modular robots."""
+
+    _uuid: uuid.UUID
 
     _children: list[Module | None]
     _rotation: float
@@ -35,7 +38,7 @@ class Module(HasUUID):
         :param rotation: Orientation of this model relative to its parent.
         :param color: The color of the module.
         """
-        super().__init__()
+        self._uuid = uuid.uuid1()
 
         self._children = [None] * num_children
 
@@ -45,6 +48,15 @@ class Module(HasUUID):
         self._parent_child_index = None
 
         self._color = color
+
+    @property
+    def uuid(self) -> uuid.UUID:
+        """
+        Get the uuid.
+
+        :returns: The uuid.
+        """
+        return self._uuid
 
     @property
     def children(self) -> list[Module | None]:

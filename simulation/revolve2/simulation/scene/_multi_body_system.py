@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
@@ -7,7 +8,6 @@ import pyrr.aabb
 from pyrr import Vector3
 
 from ._aabb import AABB
-from ._has_uuid import HasUUID
 from ._joint import Joint
 from ._pose import Pose
 from ._rigid_body import RigidBody
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 @dataclass(kw_only=True)
-class MultiBodySystem(HasUUID):
+class MultiBodySystem:
     """
     A (possibly cyclic) graph of interconnected rigid bodies, joints, and other objects, such as cameras.
 
@@ -26,9 +26,16 @@ class MultiBodySystem(HasUUID):
     That is, if the system is static, that rigid body will be static.
     """
 
-    def __post_init__(self) -> None:
-        """Initialize the parent UUID class."""
-        super().__init__()
+    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
+
+    @property
+    def uuid(self) -> uuid.UUID:
+        """
+        Get the uuid.
+
+        :returns: The uuid.
+        """
+        return self._uuid
 
     @dataclass
     class _ParentInfo:

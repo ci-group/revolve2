@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from ._has_uuid import HasUUID
 from ._pose import Pose
 from ._rigid_body import RigidBody
 
@@ -12,12 +12,10 @@ if TYPE_CHECKING:
 
 
 @dataclass(kw_only=True)
-class Joint(HasUUID):
+class Joint:
     """Base class for all joints."""
 
-    def __post_init__(self) -> None:
-        """Initialize the parent UUID class."""
-        super().__init__()
+    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
 
     @dataclass
     class _ParentInfo:
@@ -47,6 +45,15 @@ class Joint(HasUUID):
         if self._parent_info is None:
             raise RuntimeError("Object does not have parent info set.")
         return self._parent_info.unique_id
+
+    @property
+    def uuid(self) -> uuid.UUID:
+        """
+        Get the uuid.
+
+        :returns: The uuid.
+        """
+        return self._uuid
 
     @property
     def parent(self) -> MultiBodySystem:

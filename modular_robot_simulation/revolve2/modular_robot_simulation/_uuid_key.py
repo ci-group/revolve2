@@ -1,8 +1,23 @@
 from __future__ import annotations
 
-from typing import Generic, TypeVar
+from typing import Generic, Protocol, TypeVar
+from uuid import UUID
 
-from revolve2.modular_robot import HasUUID
+
+class HasUUID(Protocol):
+    """A class where each instance has a UUID."""
+
+    @property
+    def uuid(self) -> UUID:
+        """
+        Get the uuid.
+
+        :returns: The uuid.
+
+        # noqa: DAR202
+        """
+        pass
+
 
 _T = TypeVar("_T", bound=HasUUID)
 

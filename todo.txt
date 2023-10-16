@@ -1,0 +1,4 @@
+HasUUID class can maybe be protocol instead
+Is dataclass needed for joint and mbs, because it requires post init now
+can we remove parent from modules? so we lose complete dependency on stuff being set by parents
+similar for mbs and co

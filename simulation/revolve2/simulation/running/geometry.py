@@ -1,10 +1,17 @@
 """Interface and implementation of geometries."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import numpy as np
 import numpy.typing as npt
 from pyrr import Quaternion, Vector3
+
+
+# TODO: The code from the master branch does not copy,
+# keeping the same vector across different constructed items.
+# This might be dependend upon by some code
+def default_colour_vector():
+    return Vector3([0.2, 0.2, 0.2]).copy()
 
 
 @dataclass
@@ -20,7 +27,7 @@ class Plane(Geometry):
     """A flat plane geometry."""
 
     size: Vector3  # z is ignored because a plane has 0 thickness
-    color: Vector3 = Vector3([0.2, 0.2, 0.2])
+    color: Vector3 = field(default_factory=default_colour_vector)
 
 
 @dataclass
@@ -37,4 +44,4 @@ class Heightmap(Geometry):
     size: Vector3
     base_thickness: float
     heights: npt.NDArray[np.float_]  # MxN matrix. outer list is x, inner list is y
-    color: Vector3 = Vector3([0.2, 0.2, 0.2])
+    color: Vector3 = field(default_factory=default_colour_vector)

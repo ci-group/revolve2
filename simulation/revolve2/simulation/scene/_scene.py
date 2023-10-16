@@ -22,9 +22,6 @@ class Scene:
 
         :param multi_body_system: The multi-body system to add.
         """
-        multi_body_system._parent_info = MultiBodySystem._ParentInfo(
-            self, len(self._multi_body_systems)
-        )
         self._multi_body_systems.append(multi_body_system)
 
     @property

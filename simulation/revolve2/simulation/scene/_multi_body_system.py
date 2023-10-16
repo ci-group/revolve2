@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import uuid
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
 
 import pyrr.aabb
 from pyrr import Vector3
@@ -12,9 +11,6 @@ from ._joint import Joint
 from ._pose import Pose
 from ._rigid_body import RigidBody
 from .geometry import GeometryBox
-
-if TYPE_CHECKING:
-    from ._scene import Scene
 
 
 @dataclass(kw_only=True)
@@ -36,51 +32,6 @@ class MultiBodySystem:
         :returns: The uuid.
         """
         return self._uuid
-
-    @dataclass
-    class _ParentInfo:
-        parent: Scene
-        list_index: int
-        """Index in the scene's multi-body system list. Uniquely identifies this multi-body system in the scene."""
-
-        def __init__(self, parent: Scene, list_index: int) -> None:
-            self.parent = parent
-            self.list_index = list_index
-
-    _parent_info: _ParentInfo | None = field(default=None, init=False)
-
-    @property
-    def has_parent_info(self) -> bool:
-        """
-        Check whether parent information has been set.
-
-        :returns: Whether parent information has been set.
-        """
-        return self._parent_info is not None
-
-    @property
-    def id(self) -> int:
-        """
-        Get the unique id of this object within its parent scene.
-
-        :returns: The id
-        :raises RuntimeError: If object does not have parent info.
-        """
-        if self._parent_info is None:
-            raise RuntimeError("Object does not have parent info set.")
-        return self._parent_info.list_index
-
-    @property
-    def parent(self) -> Scene:
-        """
-        Get the parent scene of this object.
-
-        :returns: The parent.
-        :raises RuntimeError: If object does not have parent info.
-        """
-        if self._parent_info is None:
-            raise RuntimeError("Object does not have parent info set.")
-        return self._parent_info.parent
 
     pose: Pose
     """Pose of the system."""

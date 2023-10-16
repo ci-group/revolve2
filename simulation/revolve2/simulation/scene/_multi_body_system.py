@@ -99,9 +99,6 @@ class MultiBodySystem:
         :param joint: The joint to add.
         """
         assert (
-            not joint._parent_info is not None
-        ), "A joint can only be added to a single multi-body system."
-        assert (
             joint.rigid_body1._parent_info is not None
             and joint.rigid_body1._parent_info.list_index < len(self._rigid_bodies)
         ), "First rigid body is not part of this multi-body system."
@@ -122,9 +119,6 @@ class MultiBodySystem:
         assert (
             self._half_adjacency_matrix[half_matrix_index] is None
         ), "A joint already exists between these two rigid bodies."
-
-        # Set parent info
-        joint._parent_info = Joint._ParentInfo(half_matrix_index)
 
         # Assign the joint in the adjacency matrix
         self._half_adjacency_matrix[half_matrix_index] = joint

@@ -13,42 +13,34 @@ class Grid:
         self.core_position = None
         self.visited_coordinates = []
 
-    # Current position of last drawn element
-    x_pos = 0
-    y_pos = 0
-
-    # Orientation of robot
-
-    orientation = Directions.FRONT
-
-    # Direction of last movement
-    previous_move: Optional[Directions] = None
-
-    # Coordinates and orientation of movements
-    movement_stack = [[0, 0, Directions.FRONT]]
+        self.x_pos = 0
+        self.y_pos = 0
+        self.orientation = Directions.FRONT
+        self.previous_move: Optional[Directions] = None
+        self.movement_stack = [[0, 0, Directions.FRONT]]
 
     def get_position(self):
         """Return current position on x and y axis"""
-        return [Grid.x_pos, Grid.y_pos]
+        return [self.x_pos, self.y_pos]
 
     def set_position(self, x, y):
         """Set position of x and y axis"""
-        Grid.x_pos = x
-        Grid.y_pos = y
+        self.x_pos = x
+        self.y_pos = y
 
-    def set_orientation(self, orientation):
+    def set_orientation(self, orientation: Directions):
         """Set new orientation on grid"""
         if Directions.has(orientation):
-            Grid.orientation = orientation
+            self.orientation = orientation
         else:
             return False
 
     def calculate_orientation(self):
         """Set orientation by previous move and orientation"""
-        if Grid.previous_move is not None:
+        if self.previous_move is not None:
             self.set_orientation(
                 Directions.from_angle(
-                    Grid.previous_move.to_angle() + Grid.orientation.to_angle()
+                    self.previous_move.to_angle() + self.orientation.to_angle()
                 )
             )
         else:
@@ -59,32 +51,32 @@ class Grid:
         if not isinstance(slot, Directions):
             slot = Directions(slot)
 
-        match Grid.orientation.to_angle() + slot.to_angle():
+        match self.orientation.to_angle() + slot.to_angle():
             case RightAngles.RAD_0:
-                Grid.y_pos -= 1
+                self.y_pos -= 1
             case RightAngles.RAD_HALFPI:
-                Grid.x_pos += 1
+                self.x_pos += 1
             case RightAngles.RAD_PI:
-                Grid.y_pos += 1
+                self.y_pos += 1
             case RightAngles.RAD_ONEANDAHALFPI:
-                Grid.x_pos -= 1
+                self.x_pos -= 1
 
-        Grid.previous_move = slot
+        self.previous_move = slot
 
     def move_back(self):
-        if len(Grid.movement_stack) > 1:
-            Grid.movement_stack.pop()
-        last_movement = Grid.movement_stack[-1]
-        Grid.x_pos = last_movement[0]
-        Grid.y_pos = last_movement[1]
-        Grid.orientation = last_movement[2]
+        if len(self.movement_stack) > 1:
+            self.movement_stack.pop()
+        last_movement = self.movement_stack[-1]
+        self.x_pos = last_movement[0]
+        self.y_pos = last_movement[1]
+        self.orientation = last_movement[2]
 
     def add_to_visited(self, include_sensors=True, is_sensor=False):
         """Add current position to visited coordinates list"""
         self.calculate_orientation()
         if (include_sensors and is_sensor) or not is_sensor:
-            self.visited_coordinates.append([Grid.x_pos, Grid.y_pos])
-        Grid.movement_stack.append([Grid.x_pos, Grid.y_pos, Grid.orientation])
+            self.visited_coordinates.append([self.x_pos, self.y_pos])
+        self.movement_stack.append([self.x_pos, self.y_pos, self.orientation])
 
     def calculate_grid_dimensions(self):
         min_x = 0
@@ -120,8 +112,8 @@ class Grid:
         raise ValueError("Cannot calculate core position, position not set")
 
     def reset_grid(self):
-        Grid.x_pos = 0
-        Grid.y_pos = 0
-        Grid.orientation = Directions.FRONT
-        Grid.previous_move = None
-        Grid.movement_stack = [[0, 0, Directions.FRONT]]
+        self.x_pos = 0
+        self.y_pos = 0
+        self.orientation = Directions.FRONT
+        self.previous_move = None
+        self.movement_stack = [[0, 0, Directions.FRONT]]

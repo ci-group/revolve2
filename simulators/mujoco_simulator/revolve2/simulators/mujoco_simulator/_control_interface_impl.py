@@ -1,9 +1,9 @@
 import mujoco
 
 from revolve2.simulation.scene import ControlInterface, JointHinge
+from revolve2.simulation.scene._uuid_key import UUIDKey
 
 from ._joint_hinge_ctrl_indices import JointHingeCtrlIndices
-from ._uuid_key import UUIDKey
 
 
 class ControlInterfaceImpl(ControlInterface):

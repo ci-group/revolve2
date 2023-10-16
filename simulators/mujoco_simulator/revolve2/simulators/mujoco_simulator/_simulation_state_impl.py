@@ -4,9 +4,9 @@ import numpy.typing as npt
 from pyrr import Quaternion, Vector3
 
 from revolve2.simulation.scene import MultiBodySystem, Pose, RigidBody, SimulationState
+from revolve2.simulation.scene._uuid_key import UUIDKey
 
 from ._body_id import BodyId
-from ._uuid_key import UUIDKey
 
 
 class SimulationStateImpl(SimulationState):

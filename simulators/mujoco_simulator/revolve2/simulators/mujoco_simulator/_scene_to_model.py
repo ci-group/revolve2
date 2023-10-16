@@ -22,12 +22,12 @@ except Exception as e:
     pass
 
 from revolve2.simulation.scene import JointHinge, MultiBodySystem, Scene
+from revolve2.simulation.scene._uuid_key import UUIDKey
 from revolve2.simulation.scene.conversion import multi_body_system_to_urdf
 from revolve2.simulation.scene.geometry import GeometryHeightmap
 
 from ._body_id import BodyId
 from ._joint_hinge_ctrl_indices import JointHingeCtrlIndices
-from ._uuid_key import UUIDKey
 
 
 def scene_to_model(

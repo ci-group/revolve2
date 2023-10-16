@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass, field
 
 from pyrr import Matrix33, Quaternion, Vector3
@@ -12,33 +13,16 @@ from .geometry import Geometry, GeometryBox
 class RigidBody:
     """A collection of geometries and physics parameters."""
 
-    @dataclass
-    class _ParentInfo:
-        list_index: int
-        """Index in the multi-body system's joint list. Uniquely identifies this rigid body in the multi-body system."""
-
-    _parent_info: _ParentInfo | None = field(default=None, init=False)
+    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
 
     @property
-    def has_parent_info(self) -> bool:
+    def uuid(self) -> uuid.UUID:
         """
-        Check whether parent information has been set.
+        Get the uuid.
 
-        :returns: Whether parent information has been set.
+        :returns: The uuid.
         """
-        return self._parent_info is not None
-
-    @property
-    def id(self) -> int:
-        """
-        Get the unique id of this object within its parent scene.
-
-        :returns: The id
-        :raises RuntimeError: If object does not have parent info.
-        """
-        if self._parent_info is None:
-            raise RuntimeError("Object does not have parent info set.")
-        return self._parent_info.list_index
+        return self._uuid
 
     initial_pose: Pose
     """

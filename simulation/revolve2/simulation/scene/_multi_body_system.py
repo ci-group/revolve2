@@ -84,7 +84,7 @@ class MultiBodySystem:
         ), "A rigid body can only be added to a single multi-body system."
 
         # Set parent info
-        rigid_body._parent_info = RigidBody._ParentInfo(self, len(self._rigid_bodies))
+        rigid_body._parent_info = RigidBody._ParentInfo(len(self._rigid_bodies))
 
         # Extend adjacency matrix
         self._half_adjacency_matrix.extend([None] * len(self._rigid_bodies))
@@ -124,7 +124,7 @@ class MultiBodySystem:
         ), "A joint already exists between these two rigid bodies."
 
         # Set parent info
-        joint._parent_info = Joint._ParentInfo(self, half_matrix_index)
+        joint._parent_info = Joint._ParentInfo(half_matrix_index)
 
         # Assign the joint in the adjacency matrix
         self._half_adjacency_matrix[half_matrix_index] = joint

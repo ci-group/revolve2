@@ -27,7 +27,53 @@ def flat(size: Vector3 = Vector3([20.0, 20.0, 0.0])) -> Terrain:
         ]
     )
 
+def slope(
+    size: tuple[float, float],
+    height: float,
+    granularity_multiplier: float = 1.0,
+) -> Terrain:
+    r"""
+    Create a crater-like terrain with rugged floor using a heightmap.
 
+    It will look like::
+
+        |            |
+         \_        .'
+           '.,^_..'
+
+    A combination of the rugged and bowl heightmaps.
+
+    :param size: Size of the crater.
+    :param ruggedness: How coarse the ground is.
+    :param curviness: Height of the edges of the crater.
+    :param granularity_multiplier: Multiplier for how many edges are used in the heightmap.
+    :returns: The created terrain.
+    """
+    NUM_EDGES = 100  # arbitrary constant to get a nice number of edges
+
+    num_edges = (
+        int(NUM_EDGES * size[0] * granularity_multiplier),
+        int(NUM_EDGES * size[1] * granularity_multiplier),
+    )
+
+
+    heightmap = slope_heightmap(num_edges=num_edges, height=height)
+    if height <= 0 :
+        max_height =  1
+    else:
+        max_height = height
+
+    return Terrain(
+        static_geometry=[
+            geometry.Heightmap(
+                position=Vector3(),
+                orientation=Quaternion(),
+                size=Vector3([size[0], size[1], max_height]),
+                base_thickness=0.2,
+                heights=heightmap,
+            )
+        ]
+    )
 def crater(
     size: tuple[float, float],
     ruggedness: float,
@@ -121,6 +167,32 @@ def rugged_heightmap(
         dtype=float,
     )
 
+def slope_heightmap(
+    num_edges: tuple[int, int],
+    height: int
+) -> npt.NDArray[np.float_]:
+    r"""
+    Create a terrain heightmap in the shape of a slope.
+
+    It will look like::
+         /
+        /
+       /
+      /
+
+    The height of the end of the slope is determined by height variable. It starts at 0
+
+    :param num_edges: How many edges to use for the heightmap.
+    :returns: The created heightmap as a 2 dimensional array.
+    """
+    return np.fromfunction(
+        np.vectorize(
+            lambda y, x: y * (height / num_edges[1]),
+            otypes=[float],
+        ),
+        num_edges,
+        dtype=float,
+    )
 
 def bowl_heightmap(
     num_edges: tuple[int, int],

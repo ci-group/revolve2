@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from enum import Enum, IntEnum, unique
-from typing import List
+from types import NotImplementedType
+from typing import List, Literal
 from math import inf, pi, isclose
 import numbers
 
@@ -24,11 +25,23 @@ class RightAngles(Enum):
         return x % (pi * 2.0)
 
     @classmethod
-    def from_float(cls, value: float, strict: bool = False) -> RightAngles:
+    def from_float(cls, value: float, strict: bool = False) -> CanonicalRightAngles:
         closest = min(cls, key=lambda x: abs(x.value - value))
         if strict and not isclose(closest.value, value):
             raise ValueError(f"{value} is not close to a right angle")
-        return closest
+        return closest.as_canonical()
+
+    def as_canonical(self) -> CanonicalRightAngles:
+        match self:
+            case RightAngles.DEG_0:
+                return self.__class__.RAD_0
+            case RightAngles.DEG_90:
+                return self.__class__.RAD_HALFPI
+            case RightAngles.DEG_180:
+                return self.__class__.RAD_PI
+            case RightAngles.DEG_270:
+                return self.__class__.RAD_ONEANDAHALFPI
+        return self
 
     def __eq__(self, __o: object) -> bool:
         if isinstance(__o, RightAngles):
@@ -37,29 +50,37 @@ class RightAngles(Enum):
             return isclose(self.value, __o)
         return NotImplemented
 
-    def __add__(self, __o: object) -> RightAngles:
+    def __add__(self, __o: object) -> CanonicalRightAngles | NotImplementedType:
         if isinstance(__o, RightAngles):
             return self.from_float(self.circular(self.value + __o.value), strict=True)
         elif isinstance(__o, numbers.Real):
             return self.from_float(self.circular(self.value + __o), strict=True)
         return NotImplemented
 
-    def __sub__(self, __o: object) -> RightAngles:
+    def __sub__(self, __o: object) -> CanonicalRightAngles | NotImplementedType:
         if isinstance(__o, RightAngles):
             return self.from_float(self.circular(self.value - __o.value), strict=True)
         elif isinstance(__o, numbers.Real):
             return self.from_float(self.circular(self.value - __o), strict=True)
         return NotImplemented
 
-    def __floordiv__(self, __o: object) -> RightAngles:
+    def __floordiv__(self, __o: object) -> CanonicalRightAngles | NotImplementedType:
         if isinstance(__o, numbers.Real):
             return self.from_float(self.circular(self.value // __o), strict=True)
         return NotImplemented
 
-    def __mul__(self, __o: object) -> RightAngles:
+    def __mul__(self, __o: object) -> CanonicalRightAngles | NotImplementedType:
         if isinstance(__o, numbers.Real):
             return self.from_float(self.circular(self.value * __o), strict=True)
         return NotImplemented
+
+
+CanonicalRightAngles = Literal[
+    RightAngles.RAD_0,
+    RightAngles.RAD_HALFPI,
+    RightAngles.RAD_PI,
+    RightAngles.RAD_ONEANDAHALFPI,
+]
 
 
 @unique
@@ -87,17 +108,17 @@ class Directions(IntEnum):
 
     @classmethod
     def from_angle(cls, angle: RightAngles) -> Directions:
-        match angle:
-            case RightAngles.RAD_0 | RightAngles.DEG_0:
+        match angle.as_canonical():
+            case RightAngles.RAD_0:
                 return cls.FRONT
-            case RightAngles.RAD_HALFPI | RightAngles.DEG_90:
+            case RightAngles.RAD_HALFPI:
                 return cls.RIGHT
-            case RightAngles.RAD_PI | RightAngles.DEG_180:
+            case RightAngles.RAD_PI:
                 return cls.BACK
-            case RightAngles.RAD_ONEANDAHALFPI | RightAngles.DEG_270:
+            case RightAngles.RAD_ONEANDAHALFPI:
                 return cls.LEFT
 
-    def to_angle(self) -> RightAngles:
+    def to_angle(self) -> CanonicalRightAngles:
         match self:
             case self.FRONT:
                 return RightAngles.RAD_0

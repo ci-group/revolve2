@@ -18,7 +18,7 @@ from ._modular_robot import ModularRobot
 from ._module import Module
 from ._morphological_measures import MorphologicalMeasures
 from ._not_finalized_error import NotFinalizedError
-from ._directions import Directions, RightAngles
+from ._directions import Directions, RightAngles, CanonicalRightAngles
 
 __all__ = [
     "ActiveHinge",
@@ -37,4 +37,5 @@ __all__ = [
     "get_body_states_multiple_isolated_robots",
     "get_body_states_single_robot",
     "Directions",
+    "CanonicalRightAngles",
 ]

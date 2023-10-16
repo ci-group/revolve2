@@ -3,10 +3,16 @@ import math
 from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.body.base import ActiveHinge, Brick
-from revolve2.simulation.scene import AABB, JointHinge, MultiBodySystem, Pose, RigidBody
+from revolve2.simulation.scene import (
+    AABB,
+    JointHinge,
+    MultiBodySystem,
+    Pose,
+    RigidBody,
+    UUIDKey,
+)
 from revolve2.simulation.scene.geometry import GeometryBox
 
-from .._uuid_key import UUIDKey
 from ._builder import Builder
 from ._convert_color import convert_color
 from ._unbuilt_child import UnbuiltChild

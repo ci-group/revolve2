@@ -6,9 +6,8 @@ from revolve2.simulation.scene import (
     JointHinge,
     SimulationHandler,
     SimulationState,
+    UUIDKey,
 )
-
-from ._uuid_key import UUIDKey
 
 
 class _ModularRobotControlInterfaceImpl(ModularRobotControlInterface):

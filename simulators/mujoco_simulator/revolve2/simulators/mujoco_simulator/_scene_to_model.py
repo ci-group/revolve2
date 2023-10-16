@@ -21,8 +21,7 @@ except Exception as e:
     print("Failed to fix absl logging bug", e)
     pass
 
-from revolve2.simulation.scene import JointHinge, MultiBodySystem, Scene
-from revolve2.simulation.scene._uuid_key import UUIDKey
+from revolve2.simulation.scene import JointHinge, MultiBodySystem, Scene, UUIDKey
 from revolve2.simulation.scene.conversion import multi_body_system_to_urdf
 from revolve2.simulation.scene.geometry import GeometryHeightmap
 

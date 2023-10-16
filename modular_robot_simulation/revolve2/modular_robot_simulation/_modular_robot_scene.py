@@ -1,12 +1,11 @@
 from dataclasses import dataclass, field
 
 from revolve2.modular_robot import ModularRobot
-from revolve2.simulation.scene import MultiBodySystem, Pose, Scene
+from revolve2.simulation.scene import MultiBodySystem, Pose, Scene, UUIDKey
 
 from ._convert_terrain import convert_terrain
 from ._modular_robot_simulation_handler import ModularRobotSimulationHandler
 from ._terrain import Terrain
-from ._uuid_key import UUIDKey
 from .build_multi_body_systems import BodyToMultiBodySystemConverter
 
 

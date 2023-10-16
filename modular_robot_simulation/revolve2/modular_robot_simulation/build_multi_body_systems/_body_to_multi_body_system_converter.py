@@ -4,9 +4,14 @@ from collections import deque
 from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.body.base import ActiveHinge, Body
-from revolve2.simulation.scene import JointHinge, MultiBodySystem, Pose, RigidBody
+from revolve2.simulation.scene import (
+    JointHinge,
+    MultiBodySystem,
+    Pose,
+    RigidBody,
+    UUIDKey,
+)
 
-from .._uuid_key import UUIDKey
 from ._get_builder import get_builder
 from ._unbuilt_child import UnbuiltChild
 

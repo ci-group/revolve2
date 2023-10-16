@@ -1,9 +1,8 @@
 from revolve2.modular_robot import ModularRobot
-from revolve2.simulation.scene import MultiBodySystem
+from revolve2.simulation.scene import MultiBodySystem, UUIDKey
 from revolve2.simulation.simulator import Batch, BatchParameters, RecordSettings
 
 from ._modular_robot_scene import ModularRobotScene
-from ._uuid_key import UUIDKey
 
 
 def to_batch(

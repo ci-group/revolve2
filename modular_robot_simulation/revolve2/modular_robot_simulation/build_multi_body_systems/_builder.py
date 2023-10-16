@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 
 from revolve2.modular_robot.body.base import ActiveHinge
-from revolve2.simulation.scene import JointHinge, MultiBodySystem
+from revolve2.simulation.scene import JointHinge, MultiBodySystem, UUIDKey
 
-from .._uuid_key import UUIDKey
 from ._unbuilt_child import UnbuiltChild
 
 

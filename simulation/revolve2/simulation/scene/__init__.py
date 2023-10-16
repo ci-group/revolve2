@@ -12,6 +12,7 @@ from ._rigid_body import RigidBody
 from ._scene import Scene
 from ._simulation_handler import SimulationHandler
 from ._simulation_state import SimulationState
+from ._uuid_key import UUIDKey
 
 __all__ = [
     "AABB",
@@ -26,4 +27,5 @@ __all__ = [
     "Scene",
     "SimulationHandler",
     "SimulationState",
+    "UUIDKey",
 ]

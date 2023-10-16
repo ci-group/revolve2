@@ -1,8 +1,7 @@
 from revolve2.modular_robot import ModularRobot
-from revolve2.simulation.scene import MultiBodySystem, SimulationState
+from revolve2.simulation.scene import MultiBodySystem, SimulationState, UUIDKey
 
 from ._modular_robot_simulation_state import ModularRobotSimulationState
-from ._uuid_key import UUIDKey
 
 
 class SceneSimulationState:

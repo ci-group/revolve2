@@ -14,39 +14,51 @@ class RightAngles(Enum):
     RAD_PI = pi
     RAD_ONEANDAHALFPI = pi / 2.0 * 3
 
+    DEG_0 = 0
+    DEG_90 = pi / 2.0
+    DEG_180 = pi
+    DEG_270 = pi / 2.0 * 3
+
+    @staticmethod
+    def circular(x: float) -> float:
+        return x % (pi * 2.0)
+
     @classmethod
-    def from_float(cls, value: float) -> RightAngles:
-        return min(cls, key=lambda x: abs(x.value - value))
+    def from_float(cls, value: float, strict: bool = False) -> RightAngles:
+        closest = min(cls, key=lambda x: abs(x.value - value))
+        if strict and not isclose(closest.value, value):
+            raise ValueError(f"{value} is not close to a right angle")
+        return closest
 
     def __eq__(self, __o: object) -> bool:
         if isinstance(__o, RightAngles):
             return isclose(self.value, __o.value)
         elif isinstance(__o, float):
-            return self == RightAngles.from_float(__o)
+            return isclose(self.value, __o)
         return NotImplemented
 
     def __add__(self, __o: object) -> RightAngles:
         if isinstance(__o, RightAngles):
-            return self.from_float((self.value + __o.value) % (pi * 2))
+            return self.from_float(self.circular(self.value + __o.value), strict=True)
         elif isinstance(__o, numbers.Real):
-            return self.from_float((self.value + __o) % (pi * 2))
+            return self.from_float(self.circular(self.value + __o), strict=True)
         return NotImplemented
 
     def __sub__(self, __o: object) -> RightAngles:
         if isinstance(__o, RightAngles):
-            return self.from_float((self.value - __o.value) % (pi * 2))
+            return self.from_float(self.circular(self.value - __o.value), strict=True)
         elif isinstance(__o, numbers.Real):
-            return self.from_float((self.value - __o) % (pi * 2))
+            return self.from_float(self.circular(self.value - __o), strict=True)
         return NotImplemented
 
     def __floordiv__(self, __o: object) -> RightAngles:
         if isinstance(__o, numbers.Real):
-            return self.from_float((self.value // __o) % (pi * 2))
+            return self.from_float(self.circular(self.value // __o), strict=True)
         return NotImplemented
 
     def __mul__(self, __o: object) -> RightAngles:
         if isinstance(__o, numbers.Real):
-            return self.from_float((self.value * __o) % (pi * 2))
+            return self.from_float(self.circular(self.value * __o), strict=True)
         return NotImplemented
 
 
@@ -74,15 +86,15 @@ class Directions(IntEnum):
         return o in cls.values() and o <= max_val and not strict
 
     @classmethod
-    def from_angle(cls, angle: RightAngles):
+    def from_angle(cls, angle: RightAngles) -> Directions:
         match angle:
-            case RightAngles.RAD_0:
+            case RightAngles.RAD_0 | RightAngles.DEG_0:
                 return cls.FRONT
-            case RightAngles.RAD_HALFPI:
+            case RightAngles.RAD_HALFPI | RightAngles.DEG_90:
                 return cls.RIGHT
-            case RightAngles.RAD_PI:
+            case RightAngles.RAD_PI | RightAngles.DEG_180:
                 return cls.BACK
-            case RightAngles.RAD_ONEANDAHALFPI:
+            case RightAngles.RAD_ONEANDAHALFPI | RightAngles.DEG_270:
                 return cls.LEFT
 
     def to_angle(self) -> RightAngles:

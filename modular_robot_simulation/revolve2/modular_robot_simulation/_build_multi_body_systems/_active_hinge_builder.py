@@ -11,6 +11,7 @@ from revolve2.simulation.scene import (
 )
 from revolve2.simulation.scene.geometry import GeometryBox
 
+from ._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
 from ._builder import Builder
 from ._convert_color import convert_color
 from ._unbuilt_child import UnbuiltChild
@@ -36,13 +37,13 @@ class ActiveHingeBuilder(Builder):
     def build(
         self,
         multi_body_system: MultiBodySystem,
-        joint_mapping: dict[UUIDKey[ActiveHinge], JointHinge],
+        body_to_multi_body_system_mapping: BodyToMultiBodySystemMapping,
     ) -> list[UnbuiltChild]:
         """
         Build a module onto the Robot.
 
         :param multi_body_system: The multi body system of the robot.
-        :param joint_mapping: The joint mapping of the robot.
+        :param body_to_multi_body_system_mapping: A mapping from body to multi-body system
         :return: The next children to be built.
         """
         SERVO_BBOX2_POSITION = Vector3(
@@ -119,7 +120,13 @@ class ActiveHingeBuilder(Builder):
             velocity=self._module.velocity,
         )
         multi_body_system.add_joint(joint)
-        joint_mapping[UUIDKey(self._module)] = joint
+        body_to_multi_body_system_mapping.active_hinge_to_joint_hinge[
+            UUIDKey(self._module)
+        ] = joint
+        if self._module.sensor is not None:
+            body_to_multi_body_system_mapping.active_hinge_sensor_to_joint_hinge[
+                UUIDKey(self._module.sensor)
+            ] = joint
 
         next_rigid_body.geometries.append(
             GeometryBox(

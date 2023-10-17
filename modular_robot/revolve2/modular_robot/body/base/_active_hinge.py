@@ -5,6 +5,7 @@ from pyrr import Vector3
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
+from ._active_hinge_sensor import ActiveHingeSensor
 
 
 class ActiveHinge(Module):
@@ -27,6 +28,8 @@ class ActiveHinge(Module):
     _joint_offset: float
     _static_friction: float
     _dynamic_friction: float
+
+    _sensor: ActiveHingeSensor | None
 
     def __init__(
         self,
@@ -84,6 +87,8 @@ class ActiveHinge(Module):
         self._servo1_bounding_box = servo1_bounding_box
         self._servo2_bounding_box = servo2_bounding_box
         super().__init__(num_children, rotation, color)
+
+        self._sensor = None
 
     @property
     def attachment(self) -> Module | None:
@@ -231,3 +236,18 @@ class ActiveHinge(Module):
         :return: The value.
         """
         return self._joint_offset
+
+    @property
+    def sensor(self) -> ActiveHingeSensor | None:
+        """
+        Get the sensor.
+
+        :return: The value.
+        """
+        return self._sensor
+
+    @sensor.setter
+    def sensor(self, sensor: ActiveHingeSensor) -> None:
+        if self._sensor is not None:
+            raise RuntimeError("Sensor has already been set.")
+        self._sensor = sensor

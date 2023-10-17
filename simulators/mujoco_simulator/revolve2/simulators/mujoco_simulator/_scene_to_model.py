@@ -21,28 +21,29 @@ except Exception as e:
     print("Failed to fix absl logging bug", e)
     pass
 
-from revolve2.simulation.scene import JointHinge, MultiBodySystem, Scene, UUIDKey
+from revolve2.simulation.scene import Scene, UUIDKey
 from revolve2.simulation.scene.conversion import multi_body_system_to_urdf
 from revolve2.simulation.scene.geometry import GeometryHeightmap
 
-from ._body_id import BodyId
-from ._joint_hinge_ctrl_indices import JointHingeCtrlIndices
+from ._abstraction_to_mujoco_mapping import (
+    AbstractionToMujocoMapping,
+    JointHingeMujoco,
+    MultiBodySystemMujoco,
+)
 
 
 def scene_to_model(
     scene: Scene, simulation_timestep: float
-) -> tuple[
-    mujoco.MjModel,
-    dict[UUIDKey[JointHinge], JointHingeCtrlIndices],
-    dict[UUIDKey[MultiBodySystem], BodyId],
-]:
+) -> tuple[mujoco.MjModel, AbstractionToMujocoMapping]:
     """
     Convert a scene to a MuJoCo model.
 
     :param scene: The scene to convert.
     :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
-    :returns: The created MuJoCo model, a mapping from hinge joints to their respective indices in the MuJoCo ctrl array, a mapping from multi-body systems to their respective MuJoCo body id.
+    :returns: The created MuJoCo model and mapping from the simulation abstraction to the model.
     """
+    mapping = AbstractionToMujocoMapping()
+
     env_mjcf = mjcf.RootElement(model="scene")
 
     env_mjcf.compiler.angle = "radian"
@@ -238,21 +239,22 @@ def scene_to_model(
                 ][y]
         heightmap_offset += len(heightmap.heights) * len(heightmap.heights[0])
 
-    # Create map from hinge joints to their corresponding indices in the ctrl array
-    hinge_joint_ctrl_mapping: dict[UUIDKey[JointHinge], JointHingeCtrlIndices] = {}
+    # Create map from hinge joints to their corresponding indices in the ctrl and position array
     for mbs_i, joints_and_names in enumerate(all_joints_and_names):
         for joint, name in joints_and_names:
-            hinge_joint_ctrl_mapping[UUIDKey(joint)] = JointHingeCtrlIndices(
-                position=model.actuator(f"mbs{mbs_i}/actuator_position_{name}").id,
-                velocity=model.actuator(f"mbs{mbs_i}/actuator_velocity_{name}").id,
+            mapping.hinge_joint[UUIDKey(joint)] = JointHingeMujoco(
+                id=model.joint(f"mbs{mbs_i}/{name}").id,
+                ctrl_index_position=model.actuator(
+                    f"mbs{mbs_i}/actuator_position_{name}"
+                ).id,
+                ctrl_index_velocity=model.actuator(
+                    f"mbs{mbs_i}/actuator_velocity_{name}"
+                ).id,
             )
 
-    multi_body_system_to_mujoco_body_id_mapping: dict[
-        UUIDKey[MultiBodySystem], BodyId
-    ] = {}
     for mbs_i, multi_body_system in enumerate(scene.multi_body_systems):
-        multi_body_system_to_mujoco_body_id_mapping[
-            UUIDKey(multi_body_system)
-        ] = BodyId(model.body(f"mbs{mbs_i}/").id)
+        mapping.multi_body_system[UUIDKey(multi_body_system)] = MultiBodySystemMujoco(
+            id=model.body(f"mbs{mbs_i}/").id
+        )
 
-    return model, hinge_joint_ctrl_mapping, multi_body_system_to_mujoco_body_id_mapping
+    return (model, mapping)

@@ -2,28 +2,28 @@ import mujoco
 
 from revolve2.simulation.scene import ControlInterface, JointHinge, UUIDKey
 
-from ._joint_hinge_ctrl_indices import JointHingeCtrlIndices
+from ._abstraction_to_mujoco_mapping import AbstractionToMujocoMapping
 
 
 class ControlInterfaceImpl(ControlInterface):
     """Implementation of the control interface for MuJoCo."""
 
     _data: mujoco.MjData
-    _hinge_joint_ctrl_mapping: dict[UUIDKey[JointHinge], JointHingeCtrlIndices]
+    _abstraction_to_mujoco_mapping: AbstractionToMujocoMapping
 
     def __init__(
         self,
         data: mujoco.MjData,
-        hinge_joint_ctrl_mapping: dict[UUIDKey[JointHinge], JointHingeCtrlIndices],
+        abstraction_to_mujoco_mapping: AbstractionToMujocoMapping,
     ) -> None:
         """
         Initialize this object.
 
         :param data: The MuJoCo data to alter during control.
-        :param hinge_joint_ctrl_mapping: A mapping from hinge joints to their respective indices in the MuJoCo ctrl array.
+        :param abstraction_to_mujoco_mapping: A mapping between simulation abstraction and mujoco.
         """
         self._data = data
-        self._hinge_joint_ctrl_mapping = hinge_joint_ctrl_mapping
+        self._abstraction_to_mujoco_mapping = abstraction_to_mujoco_mapping
 
     def set_joint_hinge_position_target(
         self, joint_hinge: JointHinge, position: float
@@ -34,9 +34,13 @@ class ControlInterfaceImpl(ControlInterface):
         :param joint_hinge: The hinge to set the position target for.
         :param position: The position target.
         """
-        data_index = self._hinge_joint_ctrl_mapping.get(UUIDKey(joint_hinge))
-        assert data_index is not None, "Hinge joint does not exist in this scene."
+        maybe_hinge_joint_mujoco = self._abstraction_to_mujoco_mapping.hinge_joint.get(
+            UUIDKey(joint_hinge)
+        )
+        assert (
+            maybe_hinge_joint_mujoco is not None
+        ), "Hinge joint does not exist in this scene."
         # Set position target
-        self._data.ctrl[data_index.position] = position
+        self._data.ctrl[maybe_hinge_joint_mujoco.ctrl_index_position] = position
         # Set velocity target
-        self._data.ctrl[data_index.velocity] = 0.0
+        self._data.ctrl[maybe_hinge_joint_mujoco.ctrl_index_velocity] = 0.0

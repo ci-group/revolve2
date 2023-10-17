@@ -2,18 +2,11 @@ import math
 
 from pyrr import Quaternion, Vector3
 
-from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.v1 import CoreV1
-from revolve2.simulation.scene import (
-    AABB,
-    JointHinge,
-    MultiBodySystem,
-    Pose,
-    RigidBody,
-    UUIDKey,
-)
+from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox
 
+from ._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
 from ._builder import Builder
 from ._convert_color import convert_color
 from ._unbuilt_child import UnbuiltChild
@@ -39,13 +32,13 @@ class CoreV1Builder(Builder):
     def build(
         self,
         multi_body_system: MultiBodySystem,
-        joint_mapping: dict[UUIDKey[ActiveHinge], JointHinge],
+        body_to_multi_body_system_mapping: BodyToMultiBodySystemMapping,
     ) -> list[UnbuiltChild]:
         """
         Build a module onto the Robot.
 
         :param multi_body_system: The multi body system of the robot.
-        :param joint_mapping: The joint mapping of the robot.
+        :param body_to_multi_body_system_mapping: A mapping from body to multi-body system
         :return: The next children to be built.
         """
         self._rigid_body.geometries.append(

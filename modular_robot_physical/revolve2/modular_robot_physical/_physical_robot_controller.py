@@ -2,6 +2,7 @@ from ._physical_robot_config import PhysicalRobotConfig
 import argparse
 from dataclasses import dataclass
 from .physical_robot_control_interfaces import PhysicalControlInterface, V1PhysicalControlInterface, Pca9685PhysicalControlInterface
+from .physical_robot_sensor_states import PhysicalSensorState
 import asyncio
 import sys
 import time
@@ -15,6 +16,7 @@ class _LogEntry:
 class PhysicalRobotController:
     _config: PhysicalRobotConfig
     _hardware_interface: PhysicalControlInterface
+    _sensor_interface: PhysicalSensorState
     _stop: bool
     _log: list[_LogEntry]
 
@@ -57,6 +59,8 @@ class PhysicalRobotController:
 
             self._control_period = 1 / self._config.control_frequency
             self._config = PhysicalRobotConfig.from_pickle(args.physical_robot_config)
+
+            self._sensor_interface = PhysicalSensorState()
             match args.hardware:
                 case "v1":
                     self._hardware_interface = V1PhysicalControlInterface(
@@ -72,16 +76,22 @@ class PhysicalRobotController:
                     )
                 case _:
                     raise NotImplementedError("There is no physical interface for this type of hardware.")
+            self._hardware_interface.init_gpio(
+                num_hinges=len(self._config.modular_robot.body.find_active_hinges())
+            )
 
             match args.all:
                 case "min":
-                    self._hardware_interface.set_servo_targets([-1.0 for _ in self._config.hinge_mapping])  # TODO: hinge mapping is wrong here (just placeholder)
+                    self._hardware_interface.set_servo_targets([-1.0 for _ in self._config.hinge_mapping])
+                    input("Press enter to stop.\n")
                 case "max":
                     self._hardware_interface.set_servo_targets([1.0 for _ in self._config.hinge_mapping])
+                    input("Press enter to stop.\n")
                 case "center":
                     self._hardware_interface.set_servo_targets([0.0 for _ in self._config.hinge_mapping])
+                    input("Press enter to stop.\n")
                 case _:
-                    #self._hardware_interface.set_servo_targets(self._config.hinge_mapping, careful=True)
+                    self._hardware_interface.careful = True
                     user = input(
                         "Press enter to start controller. Press enter again to stop.\nOR\nType Q to stop now.\n"
                     )
@@ -100,7 +110,7 @@ class PhysicalRobotController:
 
     async def _run_controller(self) -> None:
         last_update_time = time.time()
-        controller = self._config.modular_robot.brain
+        controller = self._config.modular_robot.brain.make_instance()
         self._record_log(last_update_time)
 
         while not self._stop:
@@ -111,10 +121,9 @@ class PhysicalRobotController:
 
             controller.control(
                 elapsed_time,
-                sensor_state=None,
+                sensor_state=self._sensor_interface,
                 control_interface=self._hardware_interface,
             )
-
 
             self._record_log(last_update_time)
         self._hardware_interface.stop_pwm()

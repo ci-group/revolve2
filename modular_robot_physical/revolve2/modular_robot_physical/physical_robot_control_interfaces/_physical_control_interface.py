@@ -1,16 +1,18 @@
 from __future__ import annotations
 from revolve2.modular_robot import ModularRobotControlInterface
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass
 from revolve2.modular_robot.body.base import ActiveHinge
 
 
-class PhysicalControlInterface(ABC, ModularRobotControlInterface):
+class PhysicalControlInterface(ModularRobotControlInterface):
     """A base interface for physical robot control."""
     _pins: list[_Pin]
     _dry: bool  # if true, gpio output is skipped.
     _debug: bool
     _hinge_mapping: dict[ActiveHinge, int]
+
+    careful: bool = False
 
     def __init__(self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int]) -> None:
         """
@@ -32,7 +34,7 @@ class PhysicalControlInterface(ABC, ModularRobotControlInterface):
         :param target: The target to set.
         """
         pin_id = self._hinge_mapping[active_hinge]
-        self.set_servo_target(pin_id=pin_id, target=target, careful=False)
+        self.set_servo_target(pin_id=pin_id, target=target, careful=self.careful)
 
     @abstractmethod
     def stop_pwm(self) -> None:
@@ -40,28 +42,30 @@ class PhysicalControlInterface(ABC, ModularRobotControlInterface):
         pass
 
     @abstractmethod
-    def init_gpio(self) -> None:
-        """Initialize the gpio."""
+    def init_gpio(self, num_hinges: int) -> None:
+        """
+        Initialize the gpio.
+
+        :param num_hinges: The amount of hinges for the modular robot.
+        """
         pass
 
     @abstractmethod
-    def set_servo_targets(self, targets: list[float], careful: bool = False) -> None:
+    def set_servo_targets(self, targets: list[float]) -> None:
         """
         Set the targets for servos.
 
         :param targets: The servos targets.
-        :param careful: If careful.
         """
         pass
 
     @abstractmethod
-    def set_servo_target(self, pin_id: int, target: float, careful: bool) -> None:
+    def set_servo_target(self, pin_id: int, target: float) -> None:
         """
         Set the target for a single Servo.
 
         :param pin_id: The servos pin id.
         :param target: The target angle.
-        :param careful: If careful.
         """
         pass
 

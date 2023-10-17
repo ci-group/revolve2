@@ -23,42 +23,44 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
         """
         super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping)
 
-    def init_gpio(self) -> None:
+    def init_gpio(self, num_hinges: int) -> None:
+        """
+        Initialize the gpio.
+
+        :param num_hinges: The amount of hinges for the modular robot.
+        """
         if not self._dry:
             self._gpio = ServoKit(channels=16)
 
         gpio_settings = [gpio for gpio in self._config["gpio"]]
         gpio_settings.sort(key=lambda gpio: cast(int, gpio["dof"]))
-        i = -1
-        for gpio in gpio_settings:
-            if gpio["dof"] != i + 1:
+
+        for i, gpio in enumerate(gpio_settings):
+            if gpio["dof"] != i:
                 raise ValueError(
                     "GPIO pin settings are not a incremental list of degrees of freedom indices."
                 )
-            i += 1
 
-        targets = self._controller.get_dof_targets()
-        if len(gpio_settings) != len(targets):
+        if len(gpio_settings) != num_hinges:
             raise ValueError(
                 "Number of degrees of freedom in brain does not match settings."
             )
 
-    def set_servo_targets(self, targets: list[float], careful: bool = False) -> None:
+    def set_servo_targets(self, targets: list[float]) -> None:
         if self._debug:
             print("Setting pins to:")
             print("pin | target (clamped -1 <= t <= 1)")
             print("---------------")
 
         for i, target in enumerate(targets):
-            self.set_servo_target(pin_id=i, target=target, careful=careful)
+            self.set_servo_target(pin_id=i, target=target)
 
-    def set_servo_target(self, pin_id: int, target: float, careful: bool) -> None:
+    def set_servo_target(self, pin_id: int, target: float) -> None:
         """
         Set the target for a single Servo.
 
         :param pin_id: The servos pin id.
         :param target: The target angle.
-        :param careful: If careful.
         """
         pin = self._pins[pin_id]
         if self._debug:
@@ -70,7 +72,7 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
             angle = self._CENTER + invert_mul * target * self._ANGLE60
             self._gpio.servo[pin.pin].angle = angle
 
-        if careful:
+        if self.careful:
             time.sleep(0.5)
 
     def stop_pwm(self) -> None:

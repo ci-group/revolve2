@@ -42,11 +42,7 @@ def simulate_scene(
     """
     logging.info(f"Simulating scene {scene_id}")
 
-    (
-        model,
-        hinge_joint_ctrl_mapping,
-        multi_body_system_to_mujoco_body_id_mapping,
-    ) = scene_to_model(scene, simulation_timestep)
+    model, mapping = scene_to_model(scene, simulation_timestep)
     data = mujoco.MjData(model)
 
     if not headless or record_settings is not None:
@@ -84,11 +80,11 @@ def simulate_scene(
     # Sample initial state.
     if sample_step is not None:
         simulation_states.append(
-            SimulationStateImpl(data, multi_body_system_to_mujoco_body_id_mapping)
+            SimulationStateImpl(data=data, abstraction_to_mujoco_mapping=mapping)
         )
 
     control_interface = ControlInterfaceImpl(
-        data=data, hinge_joint_ctrl_mapping=hinge_joint_ctrl_mapping
+        data=data, abstraction_to_mujoco_mapping=mapping
     )
     while (time := data.time) < (
         float("inf") if simulation_time is None else simulation_time
@@ -98,7 +94,7 @@ def simulate_scene(
             last_control_time = math.floor(time / control_step) * control_step
 
             simulation_state = SimulationStateImpl(
-                data, multi_body_system_to_mujoco_body_id_mapping
+                data=data, abstraction_to_mujoco_mapping=mapping
             )
             scene.handler.handle(simulation_state, control_interface, control_step)
 
@@ -108,7 +104,7 @@ def simulate_scene(
                 last_sample_time = int(time / sample_step) * sample_step
                 simulation_states.append(
                     SimulationStateImpl(
-                        data, multi_body_system_to_mujoco_body_id_mapping
+                        data=data, abstraction_to_mujoco_mapping=mapping
                     )
                 )
 
@@ -149,7 +145,7 @@ def simulate_scene(
     # Sample one final time.
     if sample_step is not None:
         simulation_states.append(
-            SimulationStateImpl(data, multi_body_system_to_mujoco_body_id_mapping)
+            SimulationStateImpl(data=data, abstraction_to_mujoco_mapping=mapping)
         )
 
     logging.info(f"Scene {scene_id} done.")

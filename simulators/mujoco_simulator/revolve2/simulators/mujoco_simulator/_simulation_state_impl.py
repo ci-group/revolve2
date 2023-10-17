@@ -4,6 +4,7 @@ import numpy.typing as npt
 from pyrr import Quaternion, Vector3
 
 from revolve2.simulation.scene import (
+    JointHinge,
     MultiBodySystem,
     Pose,
     RigidBody,
@@ -11,7 +12,7 @@ from revolve2.simulation.scene import (
     UUIDKey,
 )
 
-from ._body_id import BodyId
+from ._abstraction_to_mujoco_mapping import AbstractionToMujocoMapping
 
 
 class SimulationStateImpl(SimulationState):
@@ -19,14 +20,13 @@ class SimulationStateImpl(SimulationState):
 
     _xpos: npt.NDArray[np.float_]
     _xquat: npt.NDArray[np.float_]
-    _multi_body_system_to_mujoco_body_id_mapping: dict[UUIDKey[MultiBodySystem], BodyId]
+    _qpos: npt.NDArray[np.float_]
+    _abstraction_to_mujoco_mapping: AbstractionToMujocoMapping
 
     def __init__(
         self,
         data: mujoco.MjData,
-        multi_body_system_to_mujoco_body_id_mapping: dict[
-            UUIDKey[MultiBodySystem], BodyId
-        ],
+        abstraction_to_mujoco_mapping: AbstractionToMujocoMapping,
     ) -> None:
         """
         Initialize this object.
@@ -35,13 +35,12 @@ class SimulationStateImpl(SimulationState):
         As such the data can be modified after this constructor without causing problems.
 
         :param data: The data to copy from.
-        :param multi_body_system_to_mujoco_body_id_mapping: A mapping from multi-body systems to mujoco body id.
+        :param abstraction_to_mujoco_mapping: A mapping between simulation abstraction and mujoco.
         """
         self._xpos = data.xpos.copy()
         self._xquat = data.xquat.copy()
-        self._multi_body_system_to_mujoco_body_id_mapping = (
-            multi_body_system_to_mujoco_body_id_mapping
-        )
+        self._qpos = data.qpos.copy()
+        self._abstraction_to_mujoco_mapping = abstraction_to_mujoco_mapping
 
     def get_rigid_body_relative_pose(self, rigid_body: RigidBody) -> Pose:
         """
@@ -72,10 +71,20 @@ class SimulationStateImpl(SimulationState):
         :param multi_body_system: The multi-body system to get the pose for.
         :returns: The relative pose.
         """
-        body_id = self._multi_body_system_to_mujoco_body_id_mapping[
+        body_mujoco = self._abstraction_to_mujoco_mapping.multi_body_system[
             UUIDKey(multi_body_system)
         ]
         pose = Pose(
-            Vector3(self._xpos[body_id.id]), Quaternion(self._xquat[body_id.id])
+            Vector3(self._xpos[body_mujoco.id]), Quaternion(self._xquat[body_mujoco.id])
         )
         return pose
+
+    def get_hinge_joint_position(self, joint: JointHinge) -> float:
+        """
+        Get the rotational position of a hinge joint.
+
+        :param joint: The joint to get the rotational position for.
+        :returns: The rotational position.
+        """
+        joint_mujoco = self._abstraction_to_mujoco_mapping.hinge_joint[UUIDKey(joint)]
+        return float(self._qpos[joint_mujoco.id])

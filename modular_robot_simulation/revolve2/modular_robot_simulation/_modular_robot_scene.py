@@ -3,10 +3,10 @@ from dataclasses import dataclass, field
 from revolve2.modular_robot import ModularRobot
 from revolve2.simulation.scene import MultiBodySystem, Pose, Scene, UUIDKey
 
+from ._build_multi_body_systems import BodyToMultiBodySystemConverter
 from ._convert_terrain import convert_terrain
 from ._modular_robot_simulation_handler import ModularRobotSimulationHandler
 from ._terrain import Terrain
-from .build_multi_body_systems import BodyToMultiBodySystemConverter
 
 
 @dataclass
@@ -62,11 +62,16 @@ class ModularRobotScene:
         converter = BodyToMultiBodySystemConverter()
         for robot, pose, translate_z_aabb in self._robots:
             # Convert all bodies to multi body systems and add them to the simulation scene
-            (multi_body_system, joints_mapping,) = converter.convert_robot_body(
+            (
+                multi_body_system,
+                body_to_multi_body_system_mapping,
+            ) = converter.convert_robot_body(
                 body=robot.body, pose=pose, translate_z_aabb=translate_z_aabb
             )
             scene.add_multi_body_system(multi_body_system)
-            handler.add_robot(robot.brain.make_instance(), joints_mapping)
+            handler.add_robot(
+                robot.brain.make_instance(), body_to_multi_body_system_mapping
+            )
             modular_robot_to_multi_body_system_mapping[
                 UUIDKey(robot)
             ] = multi_body_system

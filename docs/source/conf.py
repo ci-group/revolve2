@@ -25,7 +25,7 @@ copyright = (
 author = "Computational Intelligence Group, Vrije Universiteit Amsterdam & Contributors"
 
 # The full version, including alpha/beta/rc tags
-release = "v0.4.2-beta2"
+release = "v0.5.0-beta3"
 
 
 # -- General configuration ---------------------------------------------------

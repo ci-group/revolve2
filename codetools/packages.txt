@@ -1,4 +1,5 @@
 ci_group/revolve2
+examples/brain_with_feedback
 examples/custom_brain
 examples/custom_terrain
 examples/evaluate_multiple_interacting_robots

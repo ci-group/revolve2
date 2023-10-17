@@ -30,7 +30,9 @@ class Module:
 
     _color: Color
 
-    def __init__(self, num_children: int, rotation: float | RightAngles, color: Color):
+    def __init__(
+        self, num_children: int, rotation: float | RightAngles, color: Color
+    ) -> None:
         """
         Initialize this object.
 

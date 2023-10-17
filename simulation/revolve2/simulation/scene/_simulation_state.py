@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from ._joint_hinge import JointHinge
 from ._multi_body_system import MultiBodySystem
 from ._pose import Pose
 from ._rigid_body import RigidBody
@@ -33,4 +34,13 @@ class SimulationState(ABC):
 
         :param multi_body_system: The multi-body system to get the pose for.
         :returns: The relative pose.
+        """
+
+    @abstractmethod
+    def get_hinge_joint_position(self, joint: JointHinge) -> float:
+        """
+        Get the rotational position of a hinge joint.
+
+        :param joint: The joint to get the rotational position for.
+        :returns: The rotational position.
         """

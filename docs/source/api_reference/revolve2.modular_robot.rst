@@ -14,3 +14,4 @@ Subpackages
 
    body <revolve2.modular_robot.body>
    brain <revolve2.modular_robot.brain>
+   sensor_state <revolve2.modular_robot.sensor_state>

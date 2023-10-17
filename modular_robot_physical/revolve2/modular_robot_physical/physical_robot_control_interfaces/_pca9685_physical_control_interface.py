@@ -13,38 +13,27 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
     _CENTER = 90.0
     _ANGLE60 = 60.0
 
-    def __init__(self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int]) -> None:
+    def __init__(self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int], inverse_pin: bool) -> None:
         """
         Initialize the PhysicalInterface.
 
         :param debug: If debugging messages are activated.
         :param dry: If dry.
         :param hinge_mapping: The modular robots hinges mapped to servos of the physical robot.
+        :param inverse_pin: If pins are inversed.
         """
         super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping)
 
-    def init_gpio(self, num_hinges: int) -> None:
-        """
-        Initialize the gpio.
-
-        :param num_hinges: The amount of hinges for the modular robot.
-        """
         if not self._dry:
             self._gpio = ServoKit(channels=16)
 
-        gpio_settings = [gpio for gpio in self._config["gpio"]]
-        gpio_settings.sort(key=lambda gpio: cast(int, gpio["dof"]))
+        self._pins = [
+            self._Pin(pin_id, inverse_pin)
+            for (_, pin_id) in hinge_mapping
+        ]
 
-        for i, gpio in enumerate(gpio_settings):
-            if gpio["dof"] != i:
-                raise ValueError(
-                    "GPIO pin settings are not a incremental list of degrees of freedom indices."
-                )
-
-        if len(gpio_settings) != num_hinges:
-            raise ValueError(
-                "Number of degrees of freedom in brain does not match settings."
-            )
+        for pin in self._pins:
+            self._gpio.servo[pin.pin].set_pulse_width_range(1)  # TODO: this is just a placeholder
 
     def set_servo_targets(self, targets: list[float]) -> None:
         if self._debug:

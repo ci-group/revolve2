@@ -13,44 +13,26 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
     _CENTER = 157.0
     _ANGLE60 = 64.0
 
-    def __init__(self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int]) -> None:
+    def __init__(self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int], inverse_pin: bool) -> None:
         """
         Initialize the PhysicalInterface.
 
         :param debug: If debugging messages are activated.
         :param dry: If dry.
         :param hinge_mapping: The modular robots hinges mapped to servos of the physical robot.
+        :param inverse_pin: If pins are inversed.
+        :raises RuntimeError: If GPIOs could not initialize.
         """
         super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping)
 
-    def init_gpio(self, num_hinges: int) -> None:
-        """
-        Initialize the gpio.
-
-        :param num_hinges: The amount of hinges for the modular robot.
-        """
         if not self._dry:
             self._gpio = pigpio.pi()
             if not self._gpio.connected:
                 raise RuntimeError("Failed to reach pigpio daemon.")
 
-        gpio_settings = [gpio for gpio in self._config["gpio"]]
-        gpio_settings.sort(key=lambda gpio: cast(int, gpio["dof"]))
-
-        for i, gpio in enumerate(gpio_settings):
-            if gpio["dof"] != i:
-                raise ValueError(
-                    "GPIO pin settings are not a incremental list of degrees of freedom indices."
-                )
-
-        if len(gpio_settings) != num_hinges:
-            raise ValueError(
-                "Number of degrees of freedom in brain does not match settings."
-            )
-
         self._pins = [
-            self._Pin(gpio_setting["gpio_pin"], gpio_setting["invert"])
-            for gpio_setting in gpio_settings
+            self._Pin(pin_id, inverse_pin)
+            for (_, pin_id) in hinge_mapping
         ]
 
         if self._debug:

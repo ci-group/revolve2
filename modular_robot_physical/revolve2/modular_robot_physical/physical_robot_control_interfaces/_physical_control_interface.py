@@ -42,15 +42,6 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         pass
 
     @abstractmethod
-    def init_gpio(self, num_hinges: int) -> None:
-        """
-        Initialize the gpio.
-
-        :param num_hinges: The amount of hinges for the modular robot.
-        """
-        pass
-
-    @abstractmethod
     def set_servo_targets(self, targets: list[float]) -> None:
         """
         Set the targets for servos.

@@ -12,6 +12,7 @@ class PhysicalRobotConfig:
     hinge_mapping: dict[ActiveHinge, int]  # which servo is triggered by which hinge.
     simulation_time: int  # in seconds.
     control_frequency: int
+    inverse_servos: bool
 
     @staticmethod
     def from_pickle(pickled_object: bytes) -> PhysicalRobotConfig:

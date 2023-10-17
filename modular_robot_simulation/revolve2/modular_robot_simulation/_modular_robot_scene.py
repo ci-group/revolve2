@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 
 from revolve2.modular_robot import ModularRobot
-from revolve2.simulation.scene import MultiBodySystem, Pose, Scene
+from revolve2.simulation.scene import MultiBodySystem, Pose, Scene, UUIDKey
 
 from ._convert_terrain import convert_terrain
-from ._modular_robot_key import ModularRobotKey
 from ._modular_robot_simulation_handler import ModularRobotSimulationHandler
 from ._terrain import Terrain
 from .build_multi_body_systems import BodyToMultiBodySystemConverter
@@ -32,15 +31,7 @@ class ModularRobotScene:
         :param robot: The robot to add.
         :param pose: The pose of the robot.
         :param translate_z_aabb: Whether the robot should be translated upwards so it's T-pose axis-aligned bounding box is exactly on the ground. I.e. if the robot should be placed exactly on the ground. The pose parameters is still added afterwards.
-        :raises ValueError: If the robot has already been added to this or another scene.
         """
-        # Verify that the robots has not been added to this or another scene.
-        if robot.id is not None:
-            raise ValueError("Robot has already been added to this or another scene.")
-
-        # Assign id to robot.
-        robot.id = len(self._robots)
-
         # Add the robot to the robots list.
         self._robots.append(
             (
@@ -52,7 +43,7 @@ class ModularRobotScene:
 
     def to_simulation_scene(
         self,
-    ) -> tuple[Scene, dict[ModularRobotKey, MultiBodySystem]]:
+    ) -> tuple[Scene, dict[UUIDKey[ModularRobot], MultiBodySystem]]:
         """
         Convert this to a simulation scene.
 
@@ -61,7 +52,7 @@ class ModularRobotScene:
         handler = ModularRobotSimulationHandler()
         scene = Scene(handler=handler)
         modular_robot_to_multi_body_system_mapping: dict[
-            ModularRobotKey, MultiBodySystem
+            UUIDKey[ModularRobot], MultiBodySystem
         ] = {}
 
         # Add terrain
@@ -77,7 +68,7 @@ class ModularRobotScene:
             scene.add_multi_body_system(multi_body_system)
             handler.add_robot(robot.brain.make_instance(), joints_mapping)
             modular_robot_to_multi_body_system_mapping[
-                ModularRobotKey(robot)
+                UUIDKey(robot)
             ] = multi_body_system
 
         return scene, modular_robot_to_multi_body_system_mapping

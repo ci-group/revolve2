@@ -1,7 +1,6 @@
 from revolve2.modular_robot import ModularRobot
-from revolve2.simulation.scene import MultiBodySystem, SimulationState
+from revolve2.simulation.scene import MultiBodySystem, SimulationState, UUIDKey
 
-from ._modular_robot_key import ModularRobotKey
 from ._modular_robot_simulation_state import ModularRobotSimulationState
 
 
@@ -9,13 +8,15 @@ class SceneSimulationState:
     """An interface for reading a certain state of a modular robot simulation."""
 
     _simulation_state: SimulationState
-    _modular_robot_to_multi_body_system_mapping: dict[ModularRobotKey, MultiBodySystem]
+    _modular_robot_to_multi_body_system_mapping: dict[
+        UUIDKey[ModularRobot], MultiBodySystem
+    ]
 
     def __init__(
         self,
         simulation_state: SimulationState,
         modular_robot_to_multi_body_system_mapping: dict[
-            ModularRobotKey, MultiBodySystem
+            UUIDKey[ModularRobot], MultiBodySystem
         ],
     ) -> None:
         """
@@ -40,7 +41,7 @@ class SceneSimulationState:
         :raises ValueError: If the robot is not in the scene.
         """
         maybe_multi_body_system = self._modular_robot_to_multi_body_system_mapping.get(
-            ModularRobotKey(modular_robot)
+            UUIDKey(modular_robot)
         )
         if maybe_multi_body_system is None:
             raise ValueError("Modular robot not in scene.")

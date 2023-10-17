@@ -102,22 +102,26 @@ class MultiBodySystem:
 
         :param joint: The joint to add.
         """
-        maybe_index1 = self._rigid_body_to_index.get(UUIDKey(joint.rigid_body1))
+        maybe_rigid_body_index1 = self._rigid_body_to_index.get(
+            UUIDKey(joint.rigid_body1)
+        )
         assert (
-            maybe_index1 is not None
+            maybe_rigid_body_index1 is not None
         ), "First rigid body is not part of this multi-body system."
-        maybe_index2 = self._rigid_body_to_index.get(UUIDKey(joint.rigid_body2))
+        maybe_rigid_body_index2 = self._rigid_body_to_index.get(
+            UUIDKey(joint.rigid_body2)
+        )
         assert (
-            maybe_index2 is not None
+            maybe_rigid_body_index2 is not None
         ), "Second rigid body is not part of this multi-body system."
         assert (
-            maybe_index1 != maybe_index2
+            maybe_rigid_body_index1 != maybe_rigid_body_index2
         ), "Cannot create a joint between a rigid body and itself."
 
         # Get the index in the adjacency matrix
         half_matrix_index = self._half_matrix_index(
-            maybe_index1,
-            maybe_index2,
+            maybe_rigid_body_index1,
+            maybe_rigid_body_index2,
         )
         assert (
             self._half_adjacency_matrix[half_matrix_index] is None

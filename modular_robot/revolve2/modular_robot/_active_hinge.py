@@ -11,6 +11,8 @@ class ActiveHinge(Module):
     This is a rotary joint.
     """
 
+    ATTACHMENT = Directions.FRONT
+
     # angle range of servo
     # 60 degrees to each side
     RANGE = 1.047197551

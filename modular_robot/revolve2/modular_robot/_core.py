@@ -7,6 +7,11 @@ from ._directions import Directions, RightAngles
 class Core(Module):
     """The core module of a modular robot."""
 
+    FRONT = Directions.FRONT
+    RIGHT = Directions.RIGHT
+    BACK = Directions.BACK
+    LEFT = Directions.LEFT
+
     def __init__(
         self, rotation: float | RightAngles, color: Color = Color(255, 50, 50, 255)
     ):

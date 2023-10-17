@@ -7,6 +7,10 @@ from ._directions import Directions, RightAngles
 class Brick(Module):
     """A brick module for a modular robot."""
 
+    FRONT = Directions.FRONT
+    RIGHT = Directions.RIGHT
+    LEFT = Directions.LEFT
+
     def __init__(
         self, rotation: float | RightAngles, color: Color = Color(50, 50, 255, 255)
     ):

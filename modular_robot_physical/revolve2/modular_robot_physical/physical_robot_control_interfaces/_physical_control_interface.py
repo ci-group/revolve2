@@ -1,12 +1,15 @@
 from __future__ import annotations
-from revolve2.modular_robot import ModularRobotControlInterface
+
 from abc import abstractmethod
 from dataclasses import dataclass
+
+from revolve2.modular_robot import ModularRobotControlInterface
 from revolve2.modular_robot.body.base import ActiveHinge
 
 
 class PhysicalControlInterface(ModularRobotControlInterface):
     """A base interface for physical robot control."""
+
     _pins: list[_Pin]
     _dry: bool  # if true, gpio output is skipped.
     _debug: bool
@@ -14,7 +17,9 @@ class PhysicalControlInterface(ModularRobotControlInterface):
 
     careful: bool = False
 
-    def __init__(self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int]) -> None:
+    def __init__(
+        self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int]
+    ) -> None:
         """
         Initialize the PhysicalInterface.
 
@@ -34,11 +39,11 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param target: The target to set.
         """
         pin_id = self._hinge_mapping[active_hinge]
-        self.set_servo_target(pin_id=pin_id, target=target, careful=self.careful)
+        self.set_servo_target(pin_id=pin_id, target=target)
 
     @abstractmethod
     def stop_pwm(self) -> None:
-        """Stops the robot."""
+        """Stop the robot."""
         pass
 
     @abstractmethod
@@ -63,5 +68,6 @@ class PhysicalControlInterface(ModularRobotControlInterface):
     @dataclass
     class _Pin:
         """A wrapper for pins."""
+
         pin: int
         invert: bool

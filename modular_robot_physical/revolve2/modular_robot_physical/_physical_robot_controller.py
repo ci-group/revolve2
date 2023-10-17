@@ -1,11 +1,17 @@
-from ._physical_robot_config import PhysicalRobotConfig
 import argparse
-from dataclasses import dataclass
-from .physical_robot_control_interfaces import PhysicalControlInterface, V1PhysicalControlInterface, Pca9685PhysicalControlInterface
-from .physical_robot_sensor_states import PhysicalSensorState
 import asyncio
+import os
 import sys
 import time
+from dataclasses import dataclass
+
+from ._physical_robot_config import PhysicalRobotConfig
+from .physical_robot_control_interfaces import (
+    Pca9685PhysicalControlInterface,
+    PhysicalControlInterface,
+    V1PhysicalControlInterface,
+)
+from .physical_robot_sensor_states import PhysicalSensorState
 
 
 @dataclass
@@ -14,6 +20,8 @@ class _LogEntry:
 
 
 class PhysicalRobotController:
+    """Controller for the physical Robot."""
+
     _config: PhysicalRobotConfig
     _hardware_interface: PhysicalControlInterface
     _sensor_interface: PhysicalSensorState
@@ -30,14 +38,19 @@ class PhysicalRobotController:
         self._stop = False
 
     def main(self) -> None:
+        """
+        Execute the controller for the physical robot.
+
+        :raises NotImplementedError: If for a certain robot type no physical control interface is defined.
+        """
         try:
             parser = argparse.ArgumentParser()
-            parser.add_argument("physical_robot_config", type=bytes)
+            parser.add_argument(
+                "physical_robot_config", type=os.fsencode
+            )  # os.fsencode is bytes  mybe think of other way
             parser.add_argument("--hardware", type=str)
             parser.add_argument(
-                "--debug",
-                help="Print debug information",
-                action="store_true"
+                "--debug", help="Print debug information", action="store_true"
             )
             parser.add_argument(
                 "--dry",
@@ -64,31 +77,36 @@ class PhysicalRobotController:
             match args.hardware:
                 case "v1":
                     self._hardware_interface = V1PhysicalControlInterface(
-                        dry=args["dry"],
-                        debug=args["debug"],
-                        hinge_mapping=self._config.hinge_mapping
+                        dry=args.dry,
+                        debug=args.debug,
+                        hinge_mapping=self._config.hinge_mapping,
                     )
                 case "pca9685":
                     self._hardware_interface = Pca9685PhysicalControlInterface(
-                        dry=args["dry"],
-                        debug=args["debug"],
-                        hinge_mapping=self._config.hinge_mapping
+                        dry=args.dry,
+                        debug=args.debug,
+                        hinge_mapping=self._config.hinge_mapping,
                     )
                 case _:
-                    raise NotImplementedError("There is no physical interface for this type of hardware.")
-            self._hardware_interface.init_gpio(
-                num_hinges=len(self._config.modular_robot.body.find_active_hinges())
-            )
+                    raise NotImplementedError(
+                        "There is no physical interface for this type of hardware."
+                    )
 
             match args.all:
                 case "min":
-                    self._hardware_interface.set_servo_targets([-1.0 for _ in self._config.hinge_mapping])
+                    self._hardware_interface.set_servo_targets(
+                        [-1.0 for _ in self._config.hinge_mapping]
+                    )
                     input("Press enter to stop.\n")
                 case "max":
-                    self._hardware_interface.set_servo_targets([1.0 for _ in self._config.hinge_mapping])
+                    self._hardware_interface.set_servo_targets(
+                        [1.0 for _ in self._config.hinge_mapping]
+                    )
                     input("Press enter to stop.\n")
                 case "center":
-                    self._hardware_interface.set_servo_targets([0.0 for _ in self._config.hinge_mapping])
+                    self._hardware_interface.set_servo_targets(
+                        [0.0 for _ in self._config.hinge_mapping]
+                    )
                     input("Press enter to stop.\n")
                 case _:
                     self._hardware_interface.careful = True
@@ -99,7 +117,9 @@ class PhysicalRobotController:
                         self._hardware_interface.stop_pwm()
                     else:
                         asyncio.get_event_loop().run_until_complete(
-                            asyncio.gather(self._run_interface(), self._run_controller())
+                            asyncio.gather(
+                                self._run_interface(), self._run_controller()
+                            )
                         )
         except KeyboardInterrupt:
             self._hardware_interface.stop_pwm()
@@ -130,4 +150,4 @@ class PhysicalRobotController:
 
     def _record_log(self, time: float) -> None:
         if self._log_file is not None:
-            pass # TODO: implement
+            pass  # TODO: implement

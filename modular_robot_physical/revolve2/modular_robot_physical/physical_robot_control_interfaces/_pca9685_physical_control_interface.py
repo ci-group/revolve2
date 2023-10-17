@@ -1,19 +1,28 @@
-from ._physical_control_interface import PhysicalControlInterface
-from adafruit_servokit import ServoKit
 import time
-from typing import cast
+
+from adafruit_servokit import ServoKit
+
 from revolve2.modular_robot.body.base import ActiveHinge
+
+from ._physical_control_interface import PhysicalControlInterface
 
 
 class Pca9685PhysicalControlInterface(PhysicalControlInterface):
     """An Interface for the PCA9685 Physical Robot."""
+
     _PWM_FREQUENCY = 50
     _gpio: ServoKit
 
     _CENTER = 90.0
     _ANGLE60 = 60.0
 
-    def __init__(self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int], inverse_pin: bool) -> None:
+    def __init__(
+        self,
+        debug: bool,
+        dry: bool,
+        hinge_mapping: dict[ActiveHinge, int],
+        inverse_pin: bool = False,
+    ) -> None:
         """
         Initialize the PhysicalInterface.
 
@@ -28,14 +37,20 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
             self._gpio = ServoKit(channels=16)
 
         self._pins = [
-            self._Pin(pin_id, inverse_pin)
-            for (_, pin_id) in hinge_mapping
+            self._Pin(pin_id, inverse_pin) for pin_id in hinge_mapping.values()
         ]
 
         for pin in self._pins:
-            self._gpio.servo[pin.pin].set_pulse_width_range(1)  # TODO: this is just a placeholder
+            self._gpio.servo[pin.pin].set_pulse_width_range(
+                1
+            )  # TODO: this is just a placeholder
 
     def set_servo_targets(self, targets: list[float]) -> None:
+        """
+        Set the targets for servos.
+
+        :param targets: The servos targets.
+        """
         if self._debug:
             print("Setting pins to:")
             print("pin | target (clamped -1 <= t <= 1)")
@@ -56,7 +71,7 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
             print(f"{pin.pin:03d} | {target}")
 
         if not self._dry:
-            invert_mul = 1 if pin.inverted else -1
+            invert_mul = 1 if pin.invert else -1
 
             angle = self._CENTER + invert_mul * target * self._ANGLE60
             self._gpio.servo[pin.pin].angle = angle
@@ -65,6 +80,7 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
             time.sleep(0.5)
 
     def stop_pwm(self) -> None:
+        """Stop the signals and the robot."""
         if self._debug:
             print(
                 "Turning off all pwm signals for pins that were used by this controller."

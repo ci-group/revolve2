@@ -1,19 +1,28 @@
-from ._physical_control_interface import PhysicalControlInterface
-import pigpio
-from typing import cast
 import time
+
+import pigpio
+
 from revolve2.modular_robot.body.base import ActiveHinge
+
+from ._physical_control_interface import PhysicalControlInterface
 
 
 class V1PhysicalControlInterface(PhysicalControlInterface):
     """An Interface for the V1 Physical Robot."""
+
     _PWM_FREQUENCY = 50
     _gpio: pigpio.pi
 
     _CENTER = 157.0
     _ANGLE60 = 64.0
 
-    def __init__(self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int], inverse_pin: bool) -> None:
+    def __init__(
+        self,
+        debug: bool,
+        dry: bool,
+        hinge_mapping: dict[ActiveHinge, int],
+        inverse_pin: bool = False,
+    ) -> None:
         """
         Initialize the PhysicalInterface.
 
@@ -31,8 +40,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
                 raise RuntimeError("Failed to reach pigpio daemon.")
 
         self._pins = [
-            self._Pin(pin_id, inverse_pin)
-            for (_, pin_id) in hinge_mapping
+            self._Pin(pin_id, inverse_pin) for pin_id in hinge_mapping.values()
         ]
 
         if self._debug:
@@ -86,9 +94,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
             invert_mul = 1.0 if pin.invert else -1.0
 
             angle = self._CENTER + (
-                    invert_mul
-                    * min(1.0, max(-1.0, target))
-                    * self._ANGLE60
+                invert_mul * min(1.0, max(-1.0, target)) * self._ANGLE60
             )
             self._gpio.set_PWM_dutycycle(pin.pin, angle)
 

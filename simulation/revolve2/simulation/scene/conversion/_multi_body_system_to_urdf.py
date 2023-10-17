@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import uuid
 import warnings
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
@@ -45,7 +46,7 @@ def multi_body_system_to_urdf(
 class _URDFConverter:
     base_name: str
     multi_body_system: MultiBodySystem
-    visited_rigid_bodies: set[int]  # their indices
+    visited_rigid_bodies: set[uuid.UUID]  # their indices
     joints_and_names: list[tuple[JointHinge, str]]
     geometries_and_names: list[tuple[Geometry, str]]
     planes: list[GeometryPlane]
@@ -96,9 +97,9 @@ class _URDFConverter:
         rigid_body_name: str,
         parent_rigid_body: RigidBody | None,
     ) -> list[xml.Element]:
-        if rigid_body.id in self.visited_rigid_bodies:
+        if rigid_body.uuid in self.visited_rigid_bodies:
             raise ValueError("Multi-body system is cyclic.")
-        self.visited_rigid_bodies.add(rigid_body.id)
+        self.visited_rigid_bodies.add(rigid_body.uuid)
 
         elements = []
 
@@ -181,8 +182,8 @@ class _URDFConverter:
         ):
             # Make sure we don't go back up the joint we came from.
             if parent_rigid_body is not None and (
-                joint.rigid_body1.id == parent_rigid_body.id
-                or joint.rigid_body2.id == parent_rigid_body.id
+                joint.rigid_body1.uuid == parent_rigid_body.uuid
+                or joint.rigid_body2.uuid == parent_rigid_body.uuid
             ):
                 continue
 
@@ -201,7 +202,7 @@ class _URDFConverter:
                 "parent",
                 {
                     "link": rigid_body_name
-                    if joint.rigid_body1.id == rigid_body.id
+                    if joint.rigid_body1.uuid == rigid_body.uuid
                     else child_name
                 },
             )
@@ -210,7 +211,7 @@ class _URDFConverter:
                 "child",
                 {
                     "link": rigid_body_name
-                    if joint.rigid_body1.id != rigid_body.id
+                    if joint.rigid_body1.uuid != rigid_body.uuid
                     else child_name
                 },
             )

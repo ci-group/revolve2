@@ -31,8 +31,8 @@ class Body(ABC):
         """
         position = Vector3()
 
-        parent = module._parent
-        child_index = module._parent_child_index
+        parent = module.parent
+        child_index = module.parent_child_index
         while parent is not None and child_index is not None:
             child = parent.children[child_index]
             assert child is not None
@@ -71,8 +71,8 @@ class Body(ABC):
             position = rotation * position
             position = Vector3.round(position)
 
-            child_index = parent._parent_child_index
-            parent = parent._parent
+            child_index = parent.parent_child_index
+            parent = parent.parent
         return position
 
     def find_active_hinges(self) -> list[ActiveHinge]:

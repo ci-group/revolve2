@@ -3,10 +3,15 @@ import numpy as np
 import numpy.typing as npt
 from pyrr import Quaternion, Vector3
 
-from revolve2.simulation.scene import MultiBodySystem, Pose, RigidBody, SimulationState
+from revolve2.simulation.scene import (
+    MultiBodySystem,
+    Pose,
+    RigidBody,
+    SimulationState,
+    UUIDKey,
+)
 
 from ._body_id import BodyId
-from ._multi_body_system_key import MultiBodySystemKey
 
 
 class SimulationStateImpl(SimulationState):
@@ -14,12 +19,14 @@ class SimulationStateImpl(SimulationState):
 
     _xpos: npt.NDArray[np.float_]
     _xquat: npt.NDArray[np.float_]
-    _multi_body_system_to_mujoco_body_id_mapping: dict[MultiBodySystemKey, BodyId]
+    _multi_body_system_to_mujoco_body_id_mapping: dict[UUIDKey[MultiBodySystem], BodyId]
 
     def __init__(
         self,
         data: mujoco.MjData,
-        multi_body_system_to_mujoco_body_id_mapping: dict[MultiBodySystemKey, BodyId],
+        multi_body_system_to_mujoco_body_id_mapping: dict[
+            UUIDKey[MultiBodySystem], BodyId
+        ],
     ) -> None:
         """
         Initialize this object.
@@ -66,7 +73,7 @@ class SimulationStateImpl(SimulationState):
         :returns: The relative pose.
         """
         body_id = self._multi_body_system_to_mujoco_body_id_mapping[
-            MultiBodySystemKey(multi_body_system)
+            UUIDKey(multi_body_system)
         ]
         pose = Pose(
             Vector3(self._xpos[body_id.id]), Quaternion(self._xquat[body_id.id])

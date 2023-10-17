@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 
-from revolve2.simulation.scene import JointHinge, MultiBodySystem
+from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.simulation.scene import JointHinge, MultiBodySystem, UUIDKey
 
-from .._modular_robot_active_hinge_key import ModularRobotActiveHingeKey
 from ._unbuilt_child import UnbuiltChild
 
 
@@ -13,7 +13,7 @@ class Builder(ABC):
     def build(
         self,
         multi_body_system: MultiBodySystem,
-        joint_mapping: dict[ModularRobotActiveHingeKey, JointHinge],
+        joint_mapping: dict[UUIDKey[ActiveHinge], JointHinge],
     ) -> list[UnbuiltChild]:
         """
         Build a module onto the Robot.

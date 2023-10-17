@@ -1,63 +1,28 @@
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
 
 from pyrr import Matrix33, Quaternion, Vector3
 
 from ._pose import Pose
 from .geometry import Geometry, GeometryBox
 
-# We do this because there is a cyclic dependency.
-if TYPE_CHECKING:
-    from ._multi_body_system import MultiBodySystem
-    from ._simulation_state import SimulationState
-
 
 @dataclass(kw_only=True)
 class RigidBody:
     """A collection of geometries and physics parameters."""
 
-    @dataclass
-    class _ParentInfo:
-        parent: MultiBodySystem
-        list_index: int
-        """Index in the multi-body system's joint list. Uniquely identifies this rigid body in the multi-body system."""
-
-    _parent_info: _ParentInfo | None = field(default=None, init=False)
+    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
 
     @property
-    def has_parent_info(self) -> bool:
+    def uuid(self) -> uuid.UUID:
         """
-        Check whether parent information has been set.
+        Get the uuid.
 
-        :returns: Whether parent information has been set.
+        :returns: The uuid.
         """
-        return self._parent_info is not None
-
-    @property
-    def id(self) -> int:
-        """
-        Get the unique id of this object within its parent scene.
-
-        :returns: The id
-        :raises RuntimeError: If object does not have parent info.
-        """
-        if self._parent_info is None:
-            raise RuntimeError("Object does not have parent info set.")
-        return self._parent_info.list_index
-
-    @property
-    def parent(self) -> MultiBodySystem:
-        """
-        Get the parent multi-body system of this object.
-
-        :returns: The parent.
-        :raises RuntimeError: If object does not have parent info.
-        """
-        if self._parent_info is None:
-            raise RuntimeError("Object does not have parent info set.")
-        return self._parent_info.parent
+        return self._uuid
 
     initial_pose: Pose
     """
@@ -191,24 +156,3 @@ class RigidBody:
         r22 = 2 * (q0 * q0 + q3 * q3) - 1
 
         return Matrix33([[r00, r01, r02], [r10, r11, r12], [r20, r21, r22]])
-
-    def get_relative_pose(
-        self,
-        simulation_state: SimulationState,
-    ) -> Pose:
-        """
-        Get the pose of this rigid body, relative to its parent multi-body system's reference frame.
-
-        :param simulation_state: The simulation state to get the pose from.
-        :returns: The relative pose.
-        """
-        return simulation_state.get_rigid_body_relative_pose(self)
-
-    def get_absolute_pose(self, simulation_state: SimulationState) -> Pose:
-        """
-        Get the pose of this rigid body, relative the global reference frame.
-
-        :param simulation_state: The simulation state to get the pose from.
-        :returns: The absolute pose.
-        """
-        return simulation_state.get_rigid_body_absolute_pose(self)

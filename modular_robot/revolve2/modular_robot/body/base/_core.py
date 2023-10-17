@@ -13,7 +13,6 @@ class Core(Module):
     BACK = 2
     LEFT = 3
 
-    _last_unique_id: int
     _bounding_box: Vector3
     _mass: float
     _child_offset: float
@@ -45,10 +44,8 @@ class Core(Module):
         self._child_offset = child_offset
         self._bounding_box = bounding_box
         super().__init__(num_children, rotation, color)
-        self._id = 0
         self._parent = None
         self._parent_child_index = None
-        self._last_unique_id = self._id
 
     @property
     def front(self) -> Module | None:
@@ -121,18 +118,6 @@ class Core(Module):
         :param module: The module to attach.
         """
         self.set_child(module, self.LEFT)
-
-    def _get_new_module_id(self) -> int:
-        """
-        Get a new module id, unique within the parent body.
-
-        This is the core, which has been tasked to manage unique ids.
-        As the core is always the root of the body, there is never more than one core.
-
-        :returns: The unique id.
-        """
-        self._last_unique_id += 1
-        return self._last_unique_id
 
     @property
     def mass(self) -> float:

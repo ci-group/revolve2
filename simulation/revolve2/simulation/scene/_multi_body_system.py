@@ -1,7 +1,7 @@
 from __future__ import annotations
 
+import uuid
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING
 
 import pyrr.aabb
 from pyrr import Vector3
@@ -10,10 +10,8 @@ from ._aabb import AABB
 from ._joint import Joint
 from ._pose import Pose
 from ._rigid_body import RigidBody
+from ._uuid_key import UUIDKey
 from .geometry import GeometryBox
-
-if TYPE_CHECKING:
-    from ._scene import Scene
 
 
 @dataclass(kw_only=True)
@@ -25,50 +23,16 @@ class MultiBodySystem:
     That is, if the system is static, that rigid body will be static.
     """
 
-    @dataclass
-    class _ParentInfo:
-        parent: Scene
-        list_index: int
-        """Index in the scene's multi-body system list. Uniquely identifies this multi-body system in the scene."""
-
-        def __init__(self, parent: Scene, list_index: int) -> None:
-            self.parent = parent
-            self.list_index = list_index
-
-    _parent_info: _ParentInfo | None = field(default=None, init=False)
+    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
 
     @property
-    def has_parent_info(self) -> bool:
+    def uuid(self) -> uuid.UUID:
         """
-        Check whether parent information has been set.
+        Get the uuid.
 
-        :returns: Whether parent information has been set.
+        :returns: The uuid.
         """
-        return self._parent_info is not None
-
-    @property
-    def id(self) -> int:
-        """
-        Get the unique id of this object within its parent scene.
-
-        :returns: The id
-        :raises RuntimeError: If object does not have parent info.
-        """
-        if self._parent_info is None:
-            raise RuntimeError("Object does not have parent info set.")
-        return self._parent_info.list_index
-
-    @property
-    def parent(self) -> Scene:
-        """
-        Get the parent scene of this object.
-
-        :returns: The parent.
-        :raises RuntimeError: If object does not have parent info.
-        """
-        if self._parent_info is None:
-            raise RuntimeError("Object does not have parent info set.")
-        return self._parent_info.parent
+        return self._uuid
 
     pose: Pose
     """Pose of the system."""
@@ -82,6 +46,11 @@ class MultiBodySystem:
 
     _rigid_bodies: list[RigidBody] = field(default_factory=list, init=False)
     """Rigid bodies in this system."""
+
+    _rigid_body_to_index: dict[UUIDKey[RigidBody], int] = field(
+        default_factory=dict, init=False
+    )
+    """Maps rigid bodies to their index in the rigid body list."""
 
     _half_adjacency_matrix: list[Joint | None] = field(default_factory=list, init=False)
     """
@@ -117,16 +86,14 @@ class MultiBodySystem:
         :param rigid_body: The rigid body to add.
         """
         assert (
-            not rigid_body._parent_info is not None
-        ), "A rigid body can only be added to a single multi-body system."
-
-        # Set parent info
-        rigid_body._parent_info = RigidBody._ParentInfo(self, len(self._rigid_bodies))
+            UUIDKey(rigid_body) not in self._rigid_body_to_index
+        ), "Rigid body already part of this multi-body system."
 
         # Extend adjacency matrix
         self._half_adjacency_matrix.extend([None] * len(self._rigid_bodies))
 
         # Add rigid body
+        self._rigid_body_to_index[UUIDKey(rigid_body)] = len(self._rigid_bodies)
         self._rigid_bodies.append(rigid_body)
 
     def add_joint(self, joint: Joint) -> None:
@@ -135,33 +102,30 @@ class MultiBodySystem:
 
         :param joint: The joint to add.
         """
+        maybe_rigid_body_index1 = self._rigid_body_to_index.get(
+            UUIDKey(joint.rigid_body1)
+        )
         assert (
-            not joint._parent_info is not None
-        ), "A joint can only be added to a single multi-body system."
-        assert (
-            joint.rigid_body1._parent_info is not None
-            and joint.rigid_body1._parent_info.list_index < len(self._rigid_bodies)
+            maybe_rigid_body_index1 is not None
         ), "First rigid body is not part of this multi-body system."
+        maybe_rigid_body_index2 = self._rigid_body_to_index.get(
+            UUIDKey(joint.rigid_body2)
+        )
         assert (
-            joint.rigid_body2._parent_info is not None
-            and joint.rigid_body2._parent_info.list_index < len(self._rigid_bodies)
+            maybe_rigid_body_index2 is not None
         ), "Second rigid body is not part of this multi-body system."
         assert (
-            joint.rigid_body1._parent_info.list_index
-            != joint.rigid_body2._parent_info.list_index
+            maybe_rigid_body_index1 != maybe_rigid_body_index2
         ), "Cannot create a joint between a rigid body and itself."
 
         # Get the index in the adjacency matrix
         half_matrix_index = self._half_matrix_index(
-            joint.rigid_body1._parent_info.list_index,
-            joint.rigid_body2._parent_info.list_index,
+            maybe_rigid_body_index1,
+            maybe_rigid_body_index2,
         )
         assert (
             self._half_adjacency_matrix[half_matrix_index] is None
         ), "A joint already exists between these two rigid bodies."
-
-        # Set parent info
-        joint._parent_info = Joint._ParentInfo(self, half_matrix_index)
 
         # Assign the joint in the adjacency matrix
         self._half_adjacency_matrix[half_matrix_index] = joint
@@ -196,17 +160,15 @@ class MultiBodySystem:
         :param rigid_body: A previously added rigid body.
         :returns: The attached joints.
         """
+        maybe_index = self._rigid_body_to_index.get(UUIDKey(rigid_body))
         assert (
-            rigid_body._parent_info is not None
-            and rigid_body._parent_info.list_index < len(self._rigid_bodies)
+            maybe_index is not None
         ), "Rigid body is not part of this multi-body system."
 
         half_matrix_indices = [
-            self._half_matrix_index(
-                rigid_body._parent_info.list_index, other_body_list_index
-            )
+            self._half_matrix_index(maybe_index, other_body_list_index)
             for other_body_list_index in range(len(self._rigid_bodies))
-            if other_body_list_index != rigid_body._parent_info.list_index
+            if other_body_list_index != maybe_index
         ]
         maybe_joints = [
             self._half_adjacency_matrix[half_matrix_index]

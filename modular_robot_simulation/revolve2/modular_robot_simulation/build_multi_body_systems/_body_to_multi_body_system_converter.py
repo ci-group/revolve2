@@ -3,10 +3,15 @@ from collections import deque
 
 from pyrr import Quaternion, Vector3
 
-from revolve2.modular_robot.body.base import Body
-from revolve2.simulation.scene import JointHinge, MultiBodySystem, Pose, RigidBody
+from revolve2.modular_robot.body.base import ActiveHinge, Body
+from revolve2.simulation.scene import (
+    JointHinge,
+    MultiBodySystem,
+    Pose,
+    RigidBody,
+    UUIDKey,
+)
 
-from .._modular_robot_active_hinge_key import ModularRobotActiveHingeKey
 from ._get_builder import get_builder
 from ._unbuilt_child import UnbuiltChild
 
@@ -19,7 +24,7 @@ class BodyToMultiBodySystemConverter:
 
     def convert_robot_body(
         self, body: Body, pose: Pose, translate_z_aabb: bool
-    ) -> tuple[MultiBodySystem, dict[ModularRobotActiveHingeKey, JointHinge]]:
+    ) -> tuple[MultiBodySystem, dict[UUIDKey[ActiveHinge], JointHinge]]:
         """
         Convert a modular robot body to a multi-body system.
 
@@ -29,7 +34,7 @@ class BodyToMultiBodySystemConverter:
         :returns: The create multi-body system, a mapping from modular robot active hinges to simulation hinge joints.
         """
         multi_body_system = MultiBodySystem(pose=pose, is_static=False)
-        joint_mapping: dict[ModularRobotActiveHingeKey, JointHinge] = {}
+        joint_mapping: dict[UUIDKey[ActiveHinge], JointHinge] = {}
 
         rigid_body = RigidBody(
             initial_pose=Pose(),

@@ -18,9 +18,6 @@ class BrainCpgInstance(BrainInstance):
     The outputs of the controller are defined by the `outputs`, a list of indices for the state array.
     """
 
-    TARGET_CLIPPING = 1.0
-    """When setting a target, the corresponding state value is clipped between -TARGET_CLIPPING and TARGET_CLIPPING."""
-
     _initial_state: npt.NDArray[np.float_]
     _weight_matrix: npt.NDArray[np.float_]  # nxn matrix matching number of neurons
     _output_mapping: list[tuple[int, ActiveHinge]]
@@ -79,10 +76,5 @@ class BrainCpgInstance(BrainInstance):
         # Set active hinge targets to match newly calculated state.
         for state_index, active_hinge in self._output_mapping:
             control_interface.set_active_hinge_target(
-                active_hinge,
-                np.clip(
-                    self._state[state_index],
-                    a_min=-self.TARGET_CLIPPING,
-                    a_max=self.TARGET_CLIPPING,
-                ),
+                active_hinge, self._state[state_index] * active_hinge.range
             )

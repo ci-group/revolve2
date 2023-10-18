@@ -40,7 +40,7 @@ def main() -> None:
         scenes=scene,
     )
 
-    # Get the state at the begin and end of the simulation.
+    # Get the state at the beginning and end of the simulation.
     scene_state_begin = scene_states[0]
     scene_state_end = scene_states[-1]
 

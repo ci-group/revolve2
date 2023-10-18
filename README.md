@@ -1,4 +1,4 @@
-<a href="https://zenodo.org/badge/latestdoi/17549/ci-group/revolve2"><img src="https://zenodo.org/badge/17549/ci-group/revolve2.svg" alt="DOI"></a>
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8355869.svg)](https://doi.org/10.5281/zenodo.8355869)
 <img  align="right" width="150" height="150"  src="/docs/source/logo.png">
 
 # Revolve2

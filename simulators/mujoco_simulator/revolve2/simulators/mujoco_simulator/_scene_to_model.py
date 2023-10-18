@@ -95,11 +95,7 @@ def scene_to_model(
                 multi_body_system_mjcf = mjcf.from_file(mjcf_file)
         # handle an exception when the xml saving fails, it's almost certain to occur on Windows
         # since NamedTemporaryFile can't be opened twice when the file is still open.
-        except Exception as e:
-            logging.info(repr(e))
-            logging.info(
-                "Setting 'delete' parameter to False so that the xml can be saved"
-            )
+        except Exception:
             with tempfile.NamedTemporaryFile(
                 mode="r+", delete=False, suffix="_revolve2_mujoco.mjcf"
             ) as mjcf_file:

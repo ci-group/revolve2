@@ -1,3 +1,5 @@
+import numpy as np
+
 from revolve2.modular_robot import ModularRobotControlInterface
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.simulation.scene import ControlInterface, UUIDKey
@@ -36,5 +38,5 @@ class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
             self._body_to_multi_body_system_mapping.active_hinge_to_joint_hinge[
                 UUIDKey(active_hinge)
             ],
-            target,
+            np.clip(target, a_min=-active_hinge.range, a_max=active_hinge.range),
         )

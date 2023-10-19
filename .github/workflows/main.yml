@@ -12,59 +12,59 @@ jobs:
       - id: set-packages
         run: echo ::set-output name=packages::$(jq -R -s -c 'split("\n")[:-1]' < ./codetools/packages.txt)
 
-  # dev_install:
-  #   runs-on: ubuntu-20.04
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10", "3.11"]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install_revolve2
-  #       run: ./dev_install.sh
+  dev_install:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install_revolve2
+        run: ./dev_install.sh
 
-  # student_install:
-  #   runs-on: ubuntu-20.04
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10", "3.11"]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install_revolve2
-  #       run: ./student_install.sh
+  student_install:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install_revolve2
+        run: ./student_install.sh
 
-  # check_format:
-  #   runs-on: ubuntu-20.04
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10", "3.11"]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install_tools
-  #       run: pip install -r ./codetools/requirements.txt
-  #     - name: black
-  #       run: ./codetools/black/check.sh
-  #     - name: isort
-  #       run: ./codetools/isort/check.sh
-  #     - name: pydocstyle
-  #       run: ./codetools/pydocstyle/check.sh
-  #     - name: darglint
-  #       run: ./codetools/darglint/check.sh
-  #     - name: pyflakes
-  #       run: ./codetools/pyflakes/check.sh
-  #     - name: sort-all
-  #       run: |
-  #         ./codetools/sort_all/fix.sh
-  #         [[ -z $(git status -s) ]]
-  #         git checkout -- .
+  check_format:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install_tools
+        run: pip install -r ./codetools/requirements.txt
+      - name: black
+        run: ./codetools/black/check.sh
+      - name: isort
+        run: ./codetools/isort/check.sh
+      - name: pydocstyle
+        run: ./codetools/pydocstyle/check.sh
+      - name: darglint
+        run: ./codetools/darglint/check.sh
+      - name: pyflakes
+        run: ./codetools/pyflakes/check.sh
+      - name: sort-all
+        run: |
+          ./codetools/sort_all/fix.sh
+          [[ -z $(git status -s) ]]
+          git checkout -- .
 
   mypy:
     needs: list-packages
@@ -91,24 +91,24 @@ jobs:
       - name: run_mypy
         run: ./codetools/mypy/check.sh ${{ matrix.package }}
 
-  # docs:
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10", "3.11"]
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install_revolve2
-  #       run: ./dev_install.sh
-  #     - name: sphinx
-  #       run: make -C docs html
-  #     - name: deploy
-  #       if: ${{ github.ref == 'refs/heads/master' }}
-  #       uses: JamesIves/github-pages-deploy-action@v4.2.2
-  #       with:
-  #         branch: gh-pages
-  #         folder: docs/build/html
-  #         clean-exclude: .nojekyll
+  docs:
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install_revolve2
+        run: ./dev_install.sh
+      - name: sphinx
+        run: make -C docs html
+      - name: deploy
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          folder: docs/build/html
+          clean-exclude: .nojekyll

@@ -4,10 +4,12 @@ Naturally, look at that example first.
 
 You learn:
 - How to save intermediate and final results to a database using the SQLAlchemy ORM.
+- How to read and plot the results.
 
 Beforehand you should have:
 - A basic understanding of relational databases.
 - An understanding of dataclasses is beneficial.
+- Basic knowledge of the Pandas library.
 
 Introduction:
 In the previous example, all results were written to the console.

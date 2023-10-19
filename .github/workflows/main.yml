@@ -78,11 +78,14 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
-      - name: install_revolve2
-        run: ./dev_install.sh
+      - name: Install example requirments
+        run: pip install -r ./${package}/requirements.txt
+        if: startsWith($package, 'examples/')
+      - name: Install package
+        run: pip install ./${package}
+        if: "!startsWith($package, 'examples/')"
       - name: run_mypy
-        run: echo $package
-        # run: ./codetools/mypy/check.sh
+        run: ./codetools/mypy/check.sh $package
 
   # docs:
   #   strategy:

@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: set-packages
-        run: echo ::set-output name=packages::simulation
+        run: echo ::set-output name=packages::$(jq -R -s -c 'split("\n")[:-1]' < ./codetools/packages.txt)
 
   # dev_install:
   #   runs-on: ubuntu-20.04
@@ -71,7 +71,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10", "3.11"]
-        package: ${{ needs.list-packages.outputs.packages }}
+        package: ${{ fromJson(needs.list-packages.outputs.packages) }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4

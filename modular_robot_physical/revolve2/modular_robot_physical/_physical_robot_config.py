@@ -18,13 +18,19 @@ class PhysicalRobotConfig:
     inverse_servos: bool
 
     @staticmethod
-    def from_pickle(pickled_object: bytes) -> PhysicalRobotConfig:
+    def from_pickle(pickled_object: bytes| str) -> PhysicalRobotConfig:
         """
         Get a PhysicalRobotConfig from pickle bytes.
 
         :param pickled_object: The bytes object.
         :return: The PhysicalRobotConfig.
         """
+        if isinstance(pickled_object, str):
+            with open(pickled_object, "rb") as file:
+                obj = pickle.loads(file)
+        else:
+            obj = pickle.loads(pickled_object)
+
         physical_robot_config = PhysicalRobotConfig.__new__(PhysicalRobotConfig)
-        physical_robot_config.__dict__.update(pickle.loads(pickled_object))
+        physical_robot_config.__dict__.update(obj)
         return physical_robot_config

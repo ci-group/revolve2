@@ -72,7 +72,7 @@ class PhysicalRobotController:
 
             if isinstance(args.physical_robot_config, str):
                 with open(args.physical_robot_config, "rb") as f:
-                    self._config = PhysicalRobotConfig.from_pickle(pickle.dumps(f))
+                    self._config = PhysicalRobotConfig.from_pickle(pickle.loads(f))
             elif isinstance(args.physical_robot_config, bytes):
                 self._config = PhysicalRobotConfig.from_pickle(args.physical_robot_config)
             else:

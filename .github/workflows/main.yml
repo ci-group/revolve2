@@ -79,13 +79,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install example requirments
-        run: pip install -r ./${package}/requirements.txt
-        if: startsWith(${package}, 'examples/')
+        run: pip install -r ./${{ matrix.package }}/requirements.txt
+        if: startsWith(matrix.package, 'examples/')
       - name: Install package
-        run: pip install ./${package}
-        if: "!startsWith(${package}, 'examples/')"
+        run: pip install ./${{ matrix.package }}
+        if: "!startsWith(matrix.package, 'examples/')"
       - name: run_mypy
-        run: ./codetools/mypy/check.sh $package
+        run: ./codetools/mypy/check.sh ${{ matrix.package }}
 
   # docs:
   #   strategy:

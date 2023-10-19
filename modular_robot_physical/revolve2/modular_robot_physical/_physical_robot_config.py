@@ -27,7 +27,7 @@ class PhysicalRobotConfig:
         """
         if isinstance(pickled_object, str):
             with open(pickled_object, "rb") as file:
-                obj = pickle.loads(file)
+                obj = pickle.load(file)
         else:
             obj = pickle.loads(pickled_object)
 

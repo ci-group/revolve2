@@ -9,7 +9,6 @@ from ._build_multi_body_systems import BodyToMultiBodySystemMapping
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
 
-
 class ModularRobotSimulationHandler(SimulationHandler):
     """Implements the simulation handler for a modular robot scene."""
 

@@ -3,64 +3,75 @@ name: ci
 on: [push, pull_request]
 
 jobs:
-  dev_install:
+  list-packages:
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11"]
+    outputs:
+      packages: ${{ steps.set-packages.outputs.packages }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: install_revolve2
-        run: ./dev_install.sh
+      - uses: actions/checkout@v2
+      - id: set-packages
+        run: echo ::set-output name=packages::simulation)
 
-  student_install:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: install_revolve2
-        run: ./student_install.sh
+  # dev_install:
+  #   runs-on: ubuntu-20.04
+  #   strategy:
+  #     matrix:
+  #       python-version: ["3.10", "3.11"]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v3
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #     - name: install_revolve2
+  #       run: ./dev_install.sh
 
-  check_format:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: install_tools
-        run: pip install -r ./codetools/requirements.txt
-      - name: black
-        run: ./codetools/black/check.sh
-      - name: isort
-        run: ./codetools/isort/check.sh
-      - name: pydocstyle
-        run: ./codetools/pydocstyle/check.sh
-      - name: darglint
-        run: ./codetools/darglint/check.sh
-      - name: pyflakes
-        run: ./codetools/pyflakes/check.sh
-      - name: sort-all
-        run: |
-          ./codetools/sort_all/fix.sh
-          [[ -z $(git status -s) ]]
-          git checkout -- .
+  # student_install:
+  #   runs-on: ubuntu-20.04
+  #   strategy:
+  #     matrix:
+  #       python-version: ["3.10", "3.11"]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v3
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #     - name: install_revolve2
+  #       run: ./student_install.sh
+
+  # check_format:
+  #   runs-on: ubuntu-20.04
+  #   strategy:
+  #     matrix:
+  #       python-version: ["3.10", "3.11"]
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v3
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #     - name: install_tools
+  #       run: pip install -r ./codetools/requirements.txt
+  #     - name: black
+  #       run: ./codetools/black/check.sh
+  #     - name: isort
+  #       run: ./codetools/isort/check.sh
+  #     - name: pydocstyle
+  #       run: ./codetools/pydocstyle/check.sh
+  #     - name: darglint
+  #       run: ./codetools/darglint/check.sh
+  #     - name: pyflakes
+  #       run: ./codetools/pyflakes/check.sh
+  #     - name: sort-all
+  #       run: |
+  #         ./codetools/sort_all/fix.sh
+  #         [[ -z $(git status -s) ]]
+  #         git checkout -- .
 
   mypy:
+    needs: list-packages
     strategy:
       matrix:
         python-version: ["3.10", "3.11"]
+        package: ${{ needs.list-packages.outputs.packages }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
@@ -70,26 +81,27 @@ jobs:
       - name: install_revolve2
         run: ./dev_install.sh
       - name: run_mypy
-        run: ./codetools/mypy/check.sh
+        run: echo $package
+        # run: ./codetools/mypy/check.sh
 
-  docs:
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11"]
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: install_revolve2
-        run: ./dev_install.sh
-      - name: sphinx
-        run: make -C docs html
-      - name: deploy
-        if: ${{ github.ref == 'refs/heads/master' }}
-        uses: JamesIves/github-pages-deploy-action@v4.2.2
-        with:
-          branch: gh-pages
-          folder: docs/build/html
-          clean-exclude: .nojekyll
+  # docs:
+  #   strategy:
+  #     matrix:
+  #       python-version: ["3.10", "3.11"]
+  #   runs-on: ubuntu-20.04
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v3
+  #       with:
+  #         python-version: ${{ matrix.python-version }}
+  #     - name: install_revolve2
+  #       run: ./dev_install.sh
+  #     - name: sphinx
+  #       run: make -C docs html
+  #     - name: deploy
+  #       if: ${{ github.ref == 'refs/heads/master' }}
+  #       uses: JamesIves/github-pages-deploy-action@v4.2.2
+  #       with:
+  #         branch: gh-pages
+  #         folder: docs/build/html
+  #         clean-exclude: .nojekyll

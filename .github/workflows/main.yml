@@ -82,7 +82,7 @@ jobs:
         run: pip install -r ./${{ matrix.package }}/requirements.txt
         if: startsWith(matrix.package, 'examples/')
       - name: Install package
-        run: pip install ./${{ matrix.package%/revolve }}
+        run: pip install ./$(echo "${{ matrix.package }}" | sed 's#/revolve##')
         if: "!startsWith(matrix.package, 'examples/')"
       - name: run_mypy
         run: ./codetools/mypy/check.sh ${{ matrix.package }}

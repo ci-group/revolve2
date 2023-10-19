@@ -28,3 +28,6 @@ If at any point you do not understand something related to SQLAlchemy,
 be aware that it is a third-party library with an extensive documentation available to you online.
 
 Look at all files in the example carefully, and try to understand what each class is responsible for.
+The main files in this tutorial are
+- `main.py`, for running the experiment, and
+- `plot.py`, for plotting experiment results.

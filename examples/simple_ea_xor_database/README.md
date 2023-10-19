@@ -4,7 +4,7 @@ Naturally, look at that example first.
 
 You learn:
 - How to save intermediate and final results to a database using the SQLAlchemy ORM.
-- How to read and plot the results.
+- How to read and plot the results. You could also use this knowledge to recover experiments that have crashed half-way.
 
 Beforehand you should have:
 - A basic understanding of relational databases.

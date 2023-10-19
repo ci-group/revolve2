@@ -63,6 +63,7 @@ It is recommended to explore the examples without the database first to better g
      - :code:`experiment setup`
    * - simple ea xor database
      - Similar to :code:`simple ea xor`, but now using a database to store experiment results.
+       Learn how to read the database for e.g. plotting or recovering crashed experiments.
      - :code:`simple ea xor`
    * - robot bodybrain ea
      - Optimize the bodies and brains of modular robots using an evolutionary algorithm.

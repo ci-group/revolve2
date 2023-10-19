@@ -27,10 +27,10 @@ class PhysicalRobotConfig:
         """
         if isinstance(pickled_object, str):
             with open(pickled_object, "rb") as file:
-                obj = pickle.load(file)
+                physical_robot_config = pickle.load(file)
         else:
             obj = pickle.loads(pickled_object)
+            physical_robot_config = PhysicalRobotConfig.__new__(PhysicalRobotConfig)
+            physical_robot_config.__dict__.update(obj)
 
-        physical_robot_config = PhysicalRobotConfig.__new__(PhysicalRobotConfig)
-        physical_robot_config.__dict__.update(obj)
         return physical_robot_config

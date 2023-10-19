@@ -70,7 +70,6 @@ class PhysicalRobotController:
             self._log_file = args.log
             self._log = []
 
-            self._control_period = 1 / self._config.control_frequency
             if isinstance(args.physical_robot_config, str):
                 with open(args.physical_robot_config, "rb") as f:
                     self._config = PhysicalRobotConfig.from_pickle(pickle.dumps(f))
@@ -78,6 +77,7 @@ class PhysicalRobotController:
                 self._config = PhysicalRobotConfig.from_pickle(args.physical_robot_config)
             else:
                 raise ValueError("PLease provide file path or bytes")
+            self._control_period = 1 / self._config.control_frequency
 
 
 

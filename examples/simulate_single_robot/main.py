@@ -10,6 +10,10 @@ from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco_simulator import LocalSimulator
+import pickle
+
+from revolve2.modular_robot_physical import PhysicalRobotConfig
+from revolve2.ci_group.modular_robots_v1 import ant_v1
 
 
 def make_body() -> BodyV1:
@@ -42,7 +46,7 @@ def main() -> None:
     rng = make_rng_time_seed()
 
     # Create a body for the robot.
-    body = make_body()
+    body = ant_v1()
     # Create a brain for the robot.
     # We choose a 'CPG' brain with random parameters (the exact working will not be explained here).
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
@@ -70,6 +74,21 @@ def main() -> None:
         batch_parameters=batch_parameters,
         scenes=scene,
     )
+
+    ah = robot.body.find_active_hinges()
+    mapping = {hinge: i for i, hinge in enumerate(ah)}
+
+
+    pc = PhysicalRobotConfig(
+        modular_robot=robot,
+        simulation_time=600,
+        hinge_mapping=mapping,  # which servo is triggered by which hinge.
+        control_frequency=1,
+        inverse_servos=False,
+    )
+
+    with open("conf.pickle", "wb") as f:
+        pickle.dump(pc, f)
 
 
 if __name__ == "__main__":

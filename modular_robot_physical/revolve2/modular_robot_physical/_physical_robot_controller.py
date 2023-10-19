@@ -1,7 +1,7 @@
 import argparse
 import asyncio
-import os
 import sys
+import pickle
 import time
 from dataclasses import dataclass
 
@@ -46,7 +46,7 @@ class PhysicalRobotController:
         try:
             parser = argparse.ArgumentParser()
             parser.add_argument(
-                "physical_robot_config", type=os.fsencode
+                "physical_robot_config" # TODO: add type once set
             )  # os.fsencode is bytes  mybe think of other way
             parser.add_argument("--hardware", type=str)
             parser.add_argument(
@@ -71,7 +71,15 @@ class PhysicalRobotController:
             self._log = []
 
             self._control_period = 1 / self._config.control_frequency
-            self._config = PhysicalRobotConfig.from_pickle(args.physical_robot_config)
+            if isinstance(args.physical_robot_config, str):
+                with open(args.physical_robot_config, "rb") as f:
+                    self._config = PhysicalRobotConfig.from_pickle(pickle.dumps(f))
+            elif isinstance(args.physical_robot_config, bytes):
+                self._config = PhysicalRobotConfig.from_pickle(args.physical_robot_config)
+            else:
+                raise ValueError("PLease provide file path or bytes")
+
+
 
             self._sensor_interface = PhysicalSensorState()
             match args.hardware:

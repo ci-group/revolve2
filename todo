@@ -1,2 +1,4 @@
 add docs to ci. make fail on error
+fix side menu depth (+/-?)
 warnings
+namespace packages -> mujoco_simulator is not under simulators

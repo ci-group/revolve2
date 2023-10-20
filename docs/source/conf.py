@@ -16,7 +16,11 @@ release = "v0.4.2-beta2"
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ["autoapi.extension", "sphinx.ext.autosectionlabel"]
+extensions = [
+    "autoapi.extension",
+    "sphinx.ext.autosectionlabel",
+    "sphinxcontrib.jquery",
+]
 
 templates_path = ["_templates"]
 exclude_patterns = []
@@ -42,7 +46,7 @@ autoapi_options = [
 ]
 autoapi_add_toctree_entry = True
 
-# -- autosectionlabel extensio -----------------------------------------------
+# -- Autosectionlabel extensio -----------------------------------------------
 
 autosectionlabel_prefix_document = True
 

@@ -17,10 +17,13 @@ def main() -> None:
     """Run the program."""
     setup_logging()
 
+    # The the database.
     dbengine = open_database_sqlite(
         config.DATABASE_FILE, open_method=OpenMethod.OPEN_IF_EXISTS
     )
 
+    # Read data from the database into a pandas dataframe.
+    # The loaded dataframe should have the columns `experiment_id`, `generation_index`, and `fitness`.
     df = pandas.read_sql(
         select(
             Experiment.id.label("experiment_id"),
@@ -33,11 +36,14 @@ def main() -> None:
         dbengine,
     )
 
+    # Calculate the max and mean fitness within in generation, for each experiment seperately.
     agg_per_experiment_per_generation = (
         df.groupby(["experiment_id", "generation_index"])
         .agg({"fitness": ["max", "mean"]})
         .reset_index()
     )
+
+    # Give specific names to the new max and mean columns
     agg_per_experiment_per_generation.columns = [
         "experiment_id",
         "generation_index",
@@ -45,11 +51,14 @@ def main() -> None:
         "mean_fitness",
     ]
 
+    # For the mean and max fitnesses, calculate the mean and standard deviation with respect to the seperate experiments.
     agg_per_generation = (
         agg_per_experiment_per_generation.groupby("generation_index")
         .agg({"max_fitness": ["mean", "std"], "mean_fitness": ["mean", "std"]})
         .reset_index()
     )
+
+    # Give these proper names as well.
     agg_per_generation.columns = [
         "generation_index",
         "max_fitness_mean",
@@ -58,9 +67,10 @@ def main() -> None:
         "mean_fitness_std",
     ]
 
+    # Next, create a plot.
     plt.figure()
 
-    # Plot max
+    # Plot mean and std of the max fitness
     plt.plot(
         agg_per_generation["generation_index"],
         agg_per_generation["max_fitness_mean"],
@@ -75,7 +85,7 @@ def main() -> None:
         alpha=0.2,
     )
 
-    # Plot mean
+    # Plot mean and std of the mean fitness
     plt.plot(
         agg_per_generation["generation_index"],
         agg_per_generation["mean_fitness_mean"],

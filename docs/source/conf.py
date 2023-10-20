@@ -23,11 +23,14 @@ exclude_patterns = []
 
 # -- Autoapi extension -------------------------------------------------------
 
-autoapi_dirs = [
-    "../../simulation/revolve2",
-    "../../modular_robot/revolve2",
-    "../../modular_robot_simulation/revolve2",
-]
+with open("../../packages.txt", "r") as f:
+    autoapi_dirs = [line.strip() for line in f.readlines()]
+    autoapi_dirs = [
+        f"../../{package}"
+        for package in autoapi_dirs
+        if not package.startswith("examples/")
+    ]
+
 autoapi_options = [
     "members",
     "undoc-members",

@@ -9,6 +9,7 @@ pip install -e ./ci_group[dev] && \
 pip install -e ./simulators/mujoco_simulator[dev] && \
 pip install -e ./experimentation[dev] && \
 pip install -e ./modular_robot_simulation[dev] && \
+pip install -r ./modular_robot_physical[dev] && \
 pip install -e ./modular_robot[dev] && \
 pip install -e ./simulation[dev] && \
 pip install -r ./codetools/requirements.txt && \
@@ -16,3 +17,4 @@ pip install -r ./docs/requirements.txt && \
 pip install -r ./examples/robot_bodybrain_ea_database/requirements.txt && \
 pip install -r ./examples/robot_brain_cmaes_database/requirements.txt && \
 pip install -r ./examples/simple_ea_xor_database/requirements.txt
+

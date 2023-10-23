@@ -29,3 +29,4 @@ revolve2-modular-robot = { path = "../modular_robot", develop = true }
 [tool.poetry.extras]
 v1 = ["pigpio"]
 v2 = []
+dev = ["pigpio"]

@@ -1,7 +1,6 @@
 import argparse
 import asyncio
 import sys
-import pickle
 import time
 from dataclasses import dataclass
 
@@ -46,7 +45,7 @@ class PhysicalRobotController:
         try:
             parser = argparse.ArgumentParser()
             parser.add_argument(
-                "physical_robot_config" # TODO: add type once set
+                "physical_robot_config"  # TODO: add type once set
             )  # os.fsencode is bytes  mybe think of other way
             parser.add_argument("--hardware", type=str)
             parser.add_argument(
@@ -70,11 +69,8 @@ class PhysicalRobotController:
             self._log_file = args.log
             self._log = []
 
-
             self._config = PhysicalRobotConfig.from_pickle(args.physical_robot_config)
             self._control_period = 1 / self._config.control_frequency
-
-
 
             self._sensor_interface = PhysicalSensorState()
             match args.hardware:
@@ -83,12 +79,14 @@ class PhysicalRobotController:
                         dry=args.dry,
                         debug=args.debug,
                         hinge_mapping=self._config.hinge_mapping,
+                        inverse_pin=self._config.inverse_servos,
                     )
                 case "pca9685":
                     self._hardware_interface = Pca9685PhysicalControlInterface(
                         dry=args.dry,
                         debug=args.debug,
                         hinge_mapping=self._config.hinge_mapping,
+                        inverse_pin=self._config.inverse_servos,
                     )
                 case _:
                     raise NotImplementedError(

@@ -21,7 +21,7 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
         debug: bool,
         dry: bool,
         hinge_mapping: dict[ActiveHinge, int],
-        inverse_pin: bool = False,
+        inverse_pin: dict[int, bool] | None,
     ) -> None:
         """
         Initialize the PhysicalInterface.
@@ -35,10 +35,13 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
 
         if not self._dry:
             self._gpio = ServoKit(channels=16)
-
-        self._pins = [
-            self._Pin(pin_id, inverse_pin) for pin_id in hinge_mapping.values()
-        ]
+        if inverse_pin is None:
+            self._pins = [self._Pin(pin_id, False) for pin_id in hinge_mapping.values()]
+        else:
+            self._pins = [
+                self._Pin(pin_id, inverse_pin[pin_id])
+                for pin_id in hinge_mapping.values()
+            ]
 
         for pin in self._pins:
             self._gpio.servo[pin.pin].set_pulse_width_range(

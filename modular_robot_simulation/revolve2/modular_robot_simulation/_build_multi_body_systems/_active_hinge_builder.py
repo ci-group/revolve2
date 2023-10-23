@@ -10,6 +10,7 @@ from revolve2.simulation.scene import (
     UUIDKey,
 )
 from revolve2.simulation.scene.geometry import GeometryBox
+
 from ._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
 from ._builder import Builder
 from ._convert_color import convert_color

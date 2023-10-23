@@ -19,11 +19,11 @@ release = "v0.4.2-beta2"
 extensions = [
     "autoapi.extension",
     "sphinx.ext.autosectionlabel",
-    "sphinxcontrib.jquery",
 ]
 
 templates_path = ["_templates"]
 exclude_patterns = []
+add_module_names = False
 
 # -- Autoapi extension -------------------------------------------------------
 
@@ -43,8 +43,10 @@ autoapi_options = [
     "show-inheritance-diagram",
     "imported-members",
     "show-module-summary",
+    "titles_only=True",
 ]
 autoapi_add_toctree_entry = True
+autoapi_template_dir = "_templates/autoapi"
 
 # -- Autosectionlabel extensio -----------------------------------------------
 
@@ -62,6 +64,5 @@ html_static_path = ["_static"]
 html_show_sourcelink = False
 html_theme_options = {
     "prev_next_buttons_location": None,
-    # "titles_only": True,
-    # "collapse_navigation": False,
+    "collapse_navigation": False,
 }

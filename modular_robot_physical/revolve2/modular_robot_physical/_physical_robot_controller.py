@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+import pickle
 import sys
 import time
 from dataclasses import dataclass
@@ -48,9 +49,7 @@ class PhysicalRobotController:
         """
         try:
             parser = argparse.ArgumentParser()
-            parser.add_argument(
-                "physical_robot_config"  # TODO: add type once set
-            )  # os.fsencode is bytes  mybe think of other way
+            parser.add_argument("physical_robot_config", type=str)
             parser.add_argument("--hardware", type=str, choices=["v1", "v2"])
             parser.add_argument(
                 "--debug", help="Print debug information", action="store_true"
@@ -73,7 +72,8 @@ class PhysicalRobotController:
             self._log_file = args.log
             self._log = []
 
-            self._config = PhysicalRobotConfig.from_pickle(args.physical_robot_config)
+            with open(args.physical_robot_config, "rb") as file:
+                self._config = pickle.load(file)
             self._control_period = 1 / self._config.control_frequency
 
             match args.hardware:

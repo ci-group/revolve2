@@ -6,7 +6,8 @@ If you intend to contribute you may find this guide helpful. Contributions are h
 ----------------------------
 Publishing your contribution
 ----------------------------
-If you added something to Revolve2 that you would like to share with other people, you can do so by creating a `pull request <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests>`_ on `GitHub <https://github.com/ci-group/revolve2/pulls>`_.
+If you added something to Revolve2 that you would like to share with other people, you can do so by creating a `pull request <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests>`_ (PR) on `GitHub <https://github.com/ci-group/revolve2/pulls>`_.
+The first time you make a contribution to a Revolve2 package your PR should add your name to the ``authors`` list in that package's ``pyproject.toml``.
 
 ----------------------
 Developer installation

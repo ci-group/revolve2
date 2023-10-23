@@ -102,5 +102,4 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
             )
             self._gpio.set_PWM_dutycycle(pin.pin, angle)
 
-        if self.careful:
-            time.sleep(0.5)
+        time.sleep(0.5*self.careful)

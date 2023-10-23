@@ -79,8 +79,8 @@ class Pca9685PhysicalControlInterface(PhysicalControlInterface):
             angle = self._CENTER + invert_mul * target * self._ANGLE60
             self._gpio.servo[pin.pin].angle = angle
 
-        if self.careful:
-            time.sleep(0.5)
+
+        time.sleep(0.5*self.careful)
 
     def stop_pwm(self) -> None:
         """Stop the signals and the robot."""

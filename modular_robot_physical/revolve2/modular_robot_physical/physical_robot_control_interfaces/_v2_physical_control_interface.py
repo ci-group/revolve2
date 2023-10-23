@@ -75,8 +75,7 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
 
         if not self._dry:
             self._gpio = Robohat(self._SERVOASSEMBLY_1_CONFIG, self._SERVOASSEMBLY_2_CONFIG, 7)
-        if self.careful:
-            self._gpio.set_servo_direct_mode(False, 0.0001)
+        self._gpio.set_servo_direct_mode(not self.careful, 0.0001)
 
         if inverse_pin is None:
             self._pins = [self._Pin(pin_id, False) for pin_id in hinge_mapping.values()]
@@ -104,5 +103,23 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
             print("Setting pins to:")
             print("pin | target (clamped -1 <= t <= 1)")
             print("---------------")
-
         self._gpio.set_servo_multiple_angles(targets)
+
+    def set_servo_target(self, pin_id: int, target: float) -> None:
+        """
+        Set the target for a single Servo.
+
+        :param pin_id: The servos pin id.
+        :param target: The target angle.
+        """
+        pin = self._pins[pin_id]
+        if self._debug:
+            print(f"{pin.pin:03d} | {target}")
+
+        if not self._dry:
+            invert_mul = 1.0 if pin.invert else -1.0
+
+            angle = self._CENTER + (
+                invert_mul * min(1.0, max(-1.0, target)) * self._ANGLE60
+            )
+            self._gpio.set_servo_single_angle(pin_id, angle)

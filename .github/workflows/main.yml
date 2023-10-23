@@ -8,7 +8,7 @@ jobs:
     outputs:
       packages: ${{ steps.set-packages.outputs.packages }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - id: set-packages
         run: echo packages=$(jq -R -s -c 'split("\n")[:-1]' < ./codetools/packages.txt) >> $GITHUB_OUTPUT
 

@@ -1,5 +1,5 @@
 """Execute the controller on a robot."""
-from revolve2.modular_robot_physical import PhysicalRobotController
+from ._physical_robot_controller import PhysicalRobotController
 
 
 def main() -> None:

@@ -1,7 +1,7 @@
-from robohatlib import Robohatgit
+from robohatlib import Robohat
+from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
-from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 
 from revolve2.modular_robot.body.base import ActiveHinge
 
@@ -11,38 +11,20 @@ from ._physical_control_interface import PhysicalControlInterface
 class V2PhysicalControlInterface(PhysicalControlInterface):
     """An Interface for the V2 Physical Robot."""
 
+    _SERVOBOARD_2_DATAS_LIST: list[ServoData]
+    _SERVOBOARD_1_DATAS_LIST: list[ServoData]
+
     _INITIAL_VOLT_TO_ANGLE_FORMULA_A = 68.50117096018737  # parameter A of the formula servo voltage to angle (y = Ax + B)
-    _INITIAL_VOLT_TO_ANGLE_FORMULA_B = -15.294412847106067  # parameter B of the formula servo voltage to angle (y = Ax + B)
-    _SERVOBOARD_1_DATAS_LIST = [
-        ServoData(
-            i,
-            500,
-            2500,
-            0,
-            180,
-            0,
-            _INITIAL_VOLT_TO_ANGLE_FORMULA_A,
-            _INITIAL_VOLT_TO_ANGLE_FORMULA_B
-        ) for i in range(16)
-    ]
+    _INITIAL_VOLT_TO_ANGLE_FORMULA_B = (
+        -15.294412847106067
+    )  # parameter B of the formula servo voltage to angle (y = Ax + B)
+
     _SERVOASSEMBLY_1_CONFIG = ServoAssemblyConfig(
         _name="servoassembly_1",
         _sw2_power_good_address=0,
         _cs_adc_angle_readout=PwmPlug.PWMPLUG_P3,
     )
 
-    _SERVOBOARD_2_DATAS_LIST = [
-        ServoData(
-            i,
-            500,
-            2500,
-            0,
-            180,
-            0,
-            _INITIAL_VOLT_TO_ANGLE_FORMULA_A,
-            _INITIAL_VOLT_TO_ANGLE_FORMULA_B
-        ) for i in range(16)
-    ]
     _SERVOASSEMBLY_2_CONFIG = ServoAssemblyConfig(
         _name="servoassembly_2",
         _sw1_pwm_address=1,
@@ -56,11 +38,11 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
     _ANGLE60 = 60.0
 
     def __init__(
-            self,
-            debug: bool,
-            dry: bool,
-            hinge_mapping: dict[ActiveHinge, int],
-            inverse_pin: dict[int, bool],
+        self,
+        debug: bool,
+        dry: bool,
+        hinge_mapping: dict[ActiveHinge, int],
+        inverse_pin: dict[int, bool],
     ) -> None:
         """
         Initialize the PhysicalInterface.
@@ -69,15 +51,47 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
         :param dry: If dry.
         :param hinge_mapping: The modular robots hinges mapped to servos of the physical robot.
         :param inverse_pin: If pins are inversed.
-        :raises RuntimeError: If GPIOs could not initialize.
         """
         super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping)
 
         if not self._dry:
-            self._gpio = Robohat(self._SERVOASSEMBLY_1_CONFIG, self._SERVOASSEMBLY_2_CONFIG, 7)
+            self._gpio = Robohat(
+                self._SERVOASSEMBLY_1_CONFIG, self._SERVOASSEMBLY_2_CONFIG, 7
+            )
         self._gpio.set_servo_direct_mode(not self.careful, 0.0001)
 
-        self._pins = [self._Pin(pin_id, inverse_pin.get(pin_id, False)) for pin_id in hinge_mapping.values()]
+        self._SERVOBOARD_1_DATAS_LIST = [
+            ServoData(
+                i,
+                500,
+                2500,
+                0,
+                180,
+                0,
+                self._INITIAL_VOLT_TO_ANGLE_FORMULA_A,
+                self._INITIAL_VOLT_TO_ANGLE_FORMULA_B,
+            )
+            for i in range(16)
+        ]
+
+        self._SERVOBOARD_2_DATAS_LIST = [
+            ServoData(
+                i,
+                500,
+                2500,
+                0,
+                180,
+                0,
+                self._INITIAL_VOLT_TO_ANGLE_FORMULA_A,
+                self._INITIAL_VOLT_TO_ANGLE_FORMULA_B,
+            )
+            for i in range(16)
+        ]
+
+        self._pins = [
+            self._Pin(pin_id, inverse_pin.get(pin_id, False))
+            for pin_id in hinge_mapping.values()
+        ]
 
     def stop_pwm(self) -> None:
         """Stop the signals and the robot."""

@@ -6,11 +6,15 @@ from dataclasses import dataclass
 
 from ._physical_robot_config import PhysicalRobotConfig
 from .physical_robot_control_interfaces import (
-    V2PhysicalControlInterface,
     PhysicalControlInterface,
     V1PhysicalControlInterface,
+    V2PhysicalControlInterface,
 )
-from .physical_robot_sensor_states import PhysicalSensorState, V1PhysicalSensorState, V2PhysicalSensorState
+from .physical_robot_sensor_states import (
+    PhysicalSensorState,
+    V1PhysicalSensorState,
+    V2PhysicalSensorState,
+)
 
 
 @dataclass
@@ -47,7 +51,7 @@ class PhysicalRobotController:
             parser.add_argument(
                 "physical_robot_config"  # TODO: add type once set
             )  # os.fsencode is bytes  mybe think of other way
-            parser.add_argument("--hardware", type=str, choices=["v1","v2"])
+            parser.add_argument("--hardware", type=str, choices=["v1", "v2"])
             parser.add_argument(
                 "--debug", help="Print debug information", action="store_true"
             )

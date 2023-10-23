@@ -39,7 +39,10 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
             if not self._gpio.connected:
                 raise RuntimeError("Failed to reach pigpio daemon.")
 
-        self._pins = [self._Pin(pin_id, inverse_pin.get(pin_id, False)) for pin_id in hinge_mapping.values()]
+        self._pins = [
+            self._Pin(pin_id, inverse_pin.get(pin_id, False))
+            for pin_id in hinge_mapping.values()
+        ]
 
         if self._debug:
             print(f"Using PWM frequency {self._PWM_FREQUENCY}Hz")
@@ -96,4 +99,4 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
             )
             self._gpio.set_PWM_dutycycle(pin.pin, angle)
 
-        time.sleep(0.5*self.careful)
+        time.sleep(0.5 * self.careful)

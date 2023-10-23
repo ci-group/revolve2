@@ -3,24 +3,15 @@ from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
     ModularRobotSensorState,
 )
-
-
-class _PlaceHolderSensorState(ActiveHingeSensorState):
-    @property
-    def position(self) -> float:
-        """
-        Return the position.
-
-        :return: It is a placeholder: 0.0.
-        """
-        return 0.0
+from abc import abstractmethod
 
 
 class PhysicalSensorState(ModularRobotSensorState):
     """A Class for using physical sensors."""
 
+    @abstractmethod
     def get_active_hinge_sensor_state(
-        self, sensor: ActiveHingeSensor
+            self, sensor: ActiveHingeSensor
     ) -> ActiveHingeSensorState:
         """
         Get sensor states for Hinges.
@@ -28,4 +19,4 @@ class PhysicalSensorState(ModularRobotSensorState):
         :param sensor: The sensor to query.
         :return: The Sensor State.
         """
-        return _PlaceHolderSensorState()
+        pass

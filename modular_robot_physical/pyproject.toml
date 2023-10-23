@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "revolve2-modular-robot-physical"
 version = "0.4.2b2"
-description = "Revolve2: Everything for controll of the physical Robots."
+description = "Revolve2: Everything for physical modular robot control. This package is intended to be installed on the modular robot's operating system."
 authors = ["Aart Stuurman <aartstuurman@hotmail.com>", "Oliver Weissl <oliver.weissl@outlook.com>"]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [
@@ -23,10 +23,9 @@ packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-numpy = "^1.21.2"
-pigpio = "^1.78"
-adafruit-circuitpython-servokit = "^1.3.16"
+pigpio = { version = "^1.78", optional = true }
 revolve2-modular-robot = { path = "../modular_robot", develop = true }
 
 [tool.poetry.extras]
-dev = []
+v1 = ["pigpio"]
+v2 = []

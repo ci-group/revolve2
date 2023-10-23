@@ -6,11 +6,11 @@ from dataclasses import dataclass
 
 from ._physical_robot_config import PhysicalRobotConfig
 from .physical_robot_control_interfaces import (
-    Pca9685PhysicalControlInterface,
+    V2PhysicalControlInterface,
     PhysicalControlInterface,
     V1PhysicalControlInterface,
 )
-from .physical_robot_sensor_states import PhysicalSensorState
+from .physical_robot_sensor_states import PhysicalSensorState, V1PhysicalSensorState, V2PhysicalSensorState
 
 
 @dataclass
@@ -47,7 +47,7 @@ class PhysicalRobotController:
             parser.add_argument(
                 "physical_robot_config"  # TODO: add type once set
             )  # os.fsencode is bytes  mybe think of other way
-            parser.add_argument("--hardware", type=str)
+            parser.add_argument("--hardware", type=str, choices=["v1","v2"])
             parser.add_argument(
                 "--debug", help="Print debug information", action="store_true"
             )
@@ -72,17 +72,18 @@ class PhysicalRobotController:
             self._config = PhysicalRobotConfig.from_pickle(args.physical_robot_config)
             self._control_period = 1 / self._config.control_frequency
 
-            self._sensor_interface = PhysicalSensorState()
             match args.hardware:
                 case "v1":
+                    self._sensor_interface = V1PhysicalSensorState()
                     self._hardware_interface = V1PhysicalControlInterface(
                         dry=args.dry,
                         debug=args.debug,
                         hinge_mapping=self._config.hinge_mapping,
                         inverse_pin=self._config.inverse_servos,
                     )
-                case "pca9685":
-                    self._hardware_interface = Pca9685PhysicalControlInterface(
+                case "v2":
+                    self._sensor_interface = V2PhysicalSensorState()
+                    self._hardware_interface = V2PhysicalControlInterface(
                         dry=args.dry,
                         debug=args.debug,
                         hinge_mapping=self._config.hinge_mapping,

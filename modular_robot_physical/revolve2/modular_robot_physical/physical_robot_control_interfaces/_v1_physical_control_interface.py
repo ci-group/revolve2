@@ -21,7 +21,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
         debug: bool,
         dry: bool,
         hinge_mapping: dict[ActiveHinge, int],
-        inverse_pin: dict[int, bool] | None,
+        inverse_pin: dict[int, bool],
     ) -> None:
         """
         Initialize the PhysicalInterface.
@@ -39,13 +39,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
             if not self._gpio.connected:
                 raise RuntimeError("Failed to reach pigpio daemon.")
 
-        if inverse_pin is None:
-            self._pins = [self._Pin(pin_id, False) for pin_id in hinge_mapping.values()]
-        else:
-            self._pins = [
-                self._Pin(pin_id, inverse_pin[pin_id])
-                for pin_id in hinge_mapping.values()
-            ]
+        self._pins = [self._Pin(pin_id, inverse_pin.get(pin_id, False)) for pin_id in hinge_mapping.values()]
 
         if self._debug:
             print(f"Using PWM frequency {self._PWM_FREQUENCY}Hz")

@@ -60,7 +60,7 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
             debug: bool,
             dry: bool,
             hinge_mapping: dict[ActiveHinge, int],
-            inverse_pin: dict[int, bool] | None,
+            inverse_pin: dict[int, bool],
     ) -> None:
         """
         Initialize the PhysicalInterface.
@@ -77,13 +77,7 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
             self._gpio = Robohat(self._SERVOASSEMBLY_1_CONFIG, self._SERVOASSEMBLY_2_CONFIG, 7)
         self._gpio.set_servo_direct_mode(not self.careful, 0.0001)
 
-        if inverse_pin is None:
-            self._pins = [self._Pin(pin_id, False) for pin_id in hinge_mapping.values()]
-        else:
-            self._pins = [
-                self._Pin(pin_id, inverse_pin[pin_id])
-                for pin_id in hinge_mapping.values()
-            ]
+        self._pins = [self._Pin(pin_id, inverse_pin.get(pin_id, False)) for pin_id in hinge_mapping.values()]
 
     def stop_pwm(self) -> None:
         """Stop the signals and the robot."""

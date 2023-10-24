@@ -27,7 +27,11 @@ class PhysicalControlInterface(ModularRobotControlInterface):
     careful: bool = False
 
     def __init__(
-        self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int], inverse_pin: dict[int, bool]
+        self,
+        debug: bool,
+        dry: bool,
+        hinge_mapping: dict[ActiveHinge, int],
+        inverse_pin: dict[int, bool],
     ) -> None:
         """
         Initialize the PhysicalInterface.
@@ -35,6 +39,7 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param debug: If debugging messages are activated.
         :param dry: If dry.
         :param hinge_mapping: The modular robots hinges mapped to servos of the physical robot.
+        :param inverse_pin: If certain pins have to be reversed.
         """
         self._inverse_pin = inverse_pin
         self._dry = dry

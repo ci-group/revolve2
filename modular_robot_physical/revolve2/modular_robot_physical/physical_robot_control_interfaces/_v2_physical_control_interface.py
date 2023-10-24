@@ -52,7 +52,9 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
         :param hinge_mapping: The modular robots hinges mapped to servos of the physical robot.
         :param inverse_pin: If pins are inversed.
         """
-        super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping, inverse_pin=inverse_pin)
+        super().__init__(
+            dry=dry, debug=debug, hinge_mapping=hinge_mapping, inverse_pin=inverse_pin
+        )
 
         if not self._dry:
             self._gpio = Robohat(

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 import time
 
 import pigpio
@@ -33,7 +34,9 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
         :param inverse_pin: If pins are inversed.
         :raises RuntimeError: If GPIOs could not initialize.
         """
-        super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping, inverse_pin=inverse_pin)
+        super().__init__(
+            dry=dry, debug=debug, hinge_mapping=hinge_mapping, inverse_pin=inverse_pin
+        )
 
         if not self._dry:
             self._gpio = pigpio.pi()

@@ -12,4 +12,4 @@ Revolve2's code resides at `<https://github.com/ci-group/revolve2>`_.
 
    Getting Started <getting_started/index>
    Installation <installation/index>
-   Development guide <development_guide/index>
+   Contributing guide <contributing_guide/index>

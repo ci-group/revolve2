@@ -30,3 +30,6 @@ revolve2-modular-robot = { path = "../modular_robot", develop = true }
 v1 = ["pigpio"]
 v2 = []
 dev = ["pigpio"]
+
+[tool.poetry.scripts]
+launch_robot = "revolve2.modular_robot_physical._physical_robot_controller:main"

@@ -28,7 +28,9 @@ class ActiveHinge(Module):
     _joint_offset: float
     _static_friction: float
     _dynamic_friction: float
-
+    _armature: float
+    _pid_gain_p: float
+    _pid_gain_d: float
     _sensor: ActiveHingeSensor | None
 
     def __init__(
@@ -50,6 +52,9 @@ class ActiveHinge(Module):
         range: float,
         effort: float,
         velocity: float,
+        armature: float,
+        pid_gain_p: float,
+        pid_gain_d: float,
     ):
         """
         Initialize this object.
@@ -71,6 +76,9 @@ class ActiveHinge(Module):
         :param range: The range of motion for servos (radiants).
         :param effort: The effort of servos (kgfcm/10).
         :param velocity: The velocity of servos (1/sec/60deg*1/3pi).
+        :param armature: Armature of the joint. This represents the inertia of the motor itself when nothing is attached.
+        :param pid_gain_p: Proportional gain of the pid position controller.
+        :param pid_gain_d: Derivative gain of the pid position controller.
         """
         self._static_friction = static_friction
         self._dynamic_friction = dynamic_friction
@@ -86,6 +94,9 @@ class ActiveHinge(Module):
         self._frame_bounding_box = frame_bounding_box
         self._servo1_bounding_box = servo1_bounding_box
         self._servo2_bounding_box = servo2_bounding_box
+        self._armature = armature
+        self._pid_gain_p = pid_gain_p
+        self._pid_gain_d = pid_gain_d
         super().__init__(num_children, rotation, color)
 
         self._sensor = None
@@ -236,6 +247,35 @@ class ActiveHinge(Module):
         :return: The value.
         """
         return self._joint_offset
+
+    @property
+    def armature(self) -> float:
+        """
+        Get thearmature of the joint.
+
+        This represents the inertia of the motor itself when nothing is attached.
+
+        :return: The value.
+        """
+        return self._armature
+
+    @property
+    def pid_gain_p(self) -> float:
+        """
+        Get the proportional gain of the pid position controller.
+
+        :return: The value.
+        """
+        return self._pid_gain_p
+
+    @property
+    def pid_gain_d(self) -> float:
+        """
+        Get the derivative gain of the pid position controller.
+
+        :return: The value.
+        """
+        return self._pid_gain_d
 
     @property
     def sensor(self) -> ActiveHingeSensor | None:

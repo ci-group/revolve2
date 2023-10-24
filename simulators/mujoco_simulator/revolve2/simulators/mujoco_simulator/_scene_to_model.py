@@ -142,10 +142,10 @@ def scene_to_model(
             # Fine-tuning the armature value might be needed later.
             multi_body_system_mjcf.find(
                 namespace="joint", identifier=name
-            ).armature = "0.002"
+            ).armature = joint.armature
             multi_body_system_mjcf.actuator.add(
                 "position",
-                kp=5.0,
+                kp=joint.pid_gain_p,
                 joint=multi_body_system_mjcf.find(
                     namespace="joint",
                     identifier=name,
@@ -154,7 +154,7 @@ def scene_to_model(
             )
             multi_body_system_mjcf.actuator.add(
                 "velocity",
-                kv=0.05,
+                kv=joint.pid_gain_d,
                 joint=multi_body_system_mjcf.find(namespace="joint", identifier=name),
                 name=f"actuator_velocity_{name}",
             )

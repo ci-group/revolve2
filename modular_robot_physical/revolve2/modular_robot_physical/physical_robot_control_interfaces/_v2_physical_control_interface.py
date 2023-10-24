@@ -5,7 +5,7 @@ from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
 
 from revolve2.modular_robot.body.base import ActiveHinge
 
-from ._physical_control_interface import PhysicalControlInterface
+from ._physical_control_interface import PhysicalControlInterface, _Pin
 
 
 class V2PhysicalControlInterface(PhysicalControlInterface):
@@ -52,7 +52,7 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
         :param hinge_mapping: The modular robots hinges mapped to servos of the physical robot.
         :param inverse_pin: If pins are inversed.
         """
-        super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping)
+        super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping, inverse_pin=inverse_pin)
 
         if not self._dry:
             self._gpio = Robohat(
@@ -89,7 +89,7 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
         ]
 
         self._pins = [
-            self._Pin(pin_id, inverse_pin.get(pin_id, False))
+            _Pin(pin_id, self._inverse_pin.get(pin_id, False))
             for pin_id in hinge_mapping.values()
         ]
 
@@ -113,14 +113,13 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
             print("---------------")
         self._gpio.set_servo_multiple_angles(targets)
 
-    def set_servo_target(self, pin_id: int, target: float) -> None:
+    def set_servo_target(self, pin: _Pin, target: float) -> None:
         """
         Set the target for a single Servo.
 
-        :param pin_id: The servos pin id.
+        :param pin: The servos pin.
         :param target: The target angle.
         """
-        pin = self._pins[pin_id]
         if self._debug:
             print(f"{pin.pin:03d} | {target}")
 
@@ -130,4 +129,4 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
             angle = self._CENTER + (
                 invert_mul * min(1.0, max(-1.0, target)) * self._ANGLE60
             )
-            self._gpio.set_servo_single_angle(pin_id, angle)
+            self._gpio.set_servo_single_angle(pin.pin, angle)

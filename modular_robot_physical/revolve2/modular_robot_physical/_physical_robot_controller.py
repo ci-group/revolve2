@@ -60,7 +60,7 @@ class PhysicalRobotController:
                 action="store_true",
             )
             parser.add_argument(
-                "--log", help="If set, outputs controller log to this file.", type=str
+                "--log", help="If set, outputs controller log to this file.", action="store_true"
             )
             parser.add_argument(
                 "--all",

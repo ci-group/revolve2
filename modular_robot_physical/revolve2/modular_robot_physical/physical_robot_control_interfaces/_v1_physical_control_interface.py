@@ -1,10 +1,11 @@
+from __future__ import annotations
 import time
 
 import pigpio
 
 from revolve2.modular_robot.body.base import ActiveHinge
 
-from ._physical_control_interface import PhysicalControlInterface
+from ._physical_control_interface import PhysicalControlInterface, _Pin
 
 
 class V1PhysicalControlInterface(PhysicalControlInterface):
@@ -32,7 +33,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
         :param inverse_pin: If pins are inversed.
         :raises RuntimeError: If GPIOs could not initialize.
         """
-        super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping)
+        super().__init__(dry=dry, debug=debug, hinge_mapping=hinge_mapping, inverse_pin=inverse_pin)
 
         if not self._dry:
             self._gpio = pigpio.pi()
@@ -40,7 +41,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
                 raise RuntimeError("Failed to reach pigpio daemon.")
 
         self._pins = [
-            self._Pin(pin_id, inverse_pin.get(pin_id, False))
+            _Pin(pin_id, self._inverse_pin.get(pin_id, False))
             for pin_id in hinge_mapping.values()
         ]
 
@@ -77,17 +78,16 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
             print("pin | target (clamped -1 <= t <= 1)")
             print("---------------")
 
-        for i, target in enumerate(targets):
-            self.set_servo_target(pin_id=i, target=target)
+        for pin, target in zip(self._pins, targets):
+            self.set_servo_target(pin=pin, target=target)
 
-    def set_servo_target(self, pin_id: int, target: float) -> None:
+    def set_servo_target(self, pin: _Pin, target: float) -> None:
         """
         Set the target for a single Servo.
 
-        :param pin_id: The servos pin id.
+        :param pin: The servos pin.
         :param target: The target angle.
         """
-        pin = self._pins[pin_id]
         if self._debug:
             print(f"{pin.pin:03d} | {target}")
 

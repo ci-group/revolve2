@@ -7,6 +7,14 @@ from revolve2.modular_robot import ModularRobotControlInterface
 from revolve2.modular_robot.body.base import ActiveHinge
 
 
+@dataclass
+class _Pin:
+    """A wrapper for pins."""
+
+    pin: int
+    invert: bool
+
+
 class PhysicalControlInterface(ModularRobotControlInterface):
     """A base interface for physical robot control."""
 
@@ -14,11 +22,12 @@ class PhysicalControlInterface(ModularRobotControlInterface):
     _dry: bool  # if true, gpio output is skipped.
     _debug: bool
     _hinge_mapping: dict[ActiveHinge, int]
+    _inverse_pin: dict[int, bool]
 
     careful: bool = False
 
     def __init__(
-        self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int]
+        self, debug: bool, dry: bool, hinge_mapping: dict[ActiveHinge, int], inverse_pin: dict[int, bool]
     ) -> None:
         """
         Initialize the PhysicalInterface.
@@ -27,6 +36,7 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param dry: If dry.
         :param hinge_mapping: The modular robots hinges mapped to servos of the physical robot.
         """
+        self._inverse_pin = inverse_pin
         self._dry = dry
         self._debug = debug
         self._hinge_mapping = hinge_mapping
@@ -38,8 +48,12 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param active_hinge: The active hinge to set the target for.
         :param target: The target to set.
         """
-        pin_id = self._hinge_mapping[active_hinge]
-        self.set_servo_target(pin_id=pin_id, target=target)
+        try:
+            pin_id = self._hinge_mapping[active_hinge]
+            pin = _Pin(pin=pin_id, invert=self._inverse_pin[pin_id])
+            self.set_servo_target(pin=pin, target=target)
+        except KeyError:
+            pass
 
     @abstractmethod
     def stop_pwm(self) -> None:
@@ -56,18 +70,11 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         pass
 
     @abstractmethod
-    def set_servo_target(self, pin_id: int, target: float) -> None:
+    def set_servo_target(self, pin: _Pin, target: float) -> None:
         """
         Set the target for a single Servo.
 
-        :param pin_id: The servos pin id.
+        :param pin: The servos pin.
         :param target: The target angle.
         """
         pass
-
-    @dataclass
-    class _Pin:
-        """A wrapper for pins."""
-
-        pin: int
-        invert: bool

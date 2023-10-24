@@ -100,6 +100,7 @@ class PhysicalRobotController:
                         "There is no physical interface for this type of hardware."
                     )
 
+            self._hardware_interface.careful = True
             match args.all:
                 case "min":
                     self._hardware_interface.set_servo_targets(
@@ -117,7 +118,7 @@ class PhysicalRobotController:
                     )
                     input("Press enter to stop.\n")
                 case _:
-                    self._hardware_interface.careful = True
+                    self._hardware_interface.careful = False
                     user = input(
                         "Press enter to start controller. Press enter again to stop.\nOR\nType Q to stop now.\n"
                     )

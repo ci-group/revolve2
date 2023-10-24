@@ -24,7 +24,7 @@ class PhysicalControlInterface(ModularRobotControlInterface):
     _hinge_mapping: dict[ActiveHinge, int]
     _inverse_pin: dict[int, bool]
 
-    careful: bool = False
+    _careful: bool = False
 
     def __init__(
         self,
@@ -80,3 +80,21 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param target: The target angle.
         """
         pass
+
+    @property
+    def careful(self) -> bool:
+        """
+        Check if servo movement should be made in careful mode.
+
+        :return: The boolean value.
+        """
+        return self._careful
+
+    @careful.setter
+    def careful(self, value: bool) -> None:
+        """
+        Set the careful condition check.
+
+        :param value: The value to set.
+        """
+        self._careful = value

@@ -53,12 +53,9 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param active_hinge: The active hinge to set the target for.
         :param target: The target to set.
         """
-        try:
-            pin_id = self._hinge_mapping[active_hinge]
-            pin = _Pin(pin=pin_id, invert=self._inverse_pin[pin_id])
-            self.set_servo_target(pin=pin, target=target)
-        except KeyError:
-            pass
+        pin_id = self._hinge_mapping[active_hinge]
+        pin = _Pin(pin=pin_id, invert=self._inverse_pin[pin_id])
+        self.set_servo_target(pin=pin, target=target)
 
     @abstractmethod
     def stop_pwm(self) -> None:

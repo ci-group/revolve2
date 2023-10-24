@@ -29,3 +29,16 @@ class JointHinge(Joint):
 
     velocity: float
     """Maximum velocity of the joint, in radian per second."""
+
+    armature: float
+    """
+    Armature of the joint.
+
+    This represents the inertia of the motor itself when nothing is attached.
+    """
+
+    pid_gain_p: float
+    """Proportional gain of the pid position controller."""
+
+    pid_gain_d: float
+    """Derivative gain of the pid position controller."""

@@ -1,4 +1,4 @@
-from robohatlib import Robohat
+from robohatlib.Robohat import Robohat
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
@@ -21,6 +21,7 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
 
     _SERVOASSEMBLY_1_CONFIG = ServoAssemblyConfig(
         _name="servoassembly_1",
+        _sw1_pwm_address=0,
         _sw2_power_good_address=0,
         _cs_adc_angle_readout=PwmPlug.PWMPLUG_P3,
     )

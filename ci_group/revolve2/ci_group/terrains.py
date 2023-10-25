@@ -29,23 +29,20 @@ def flat(size: Vector3 = Vector3([20.0, 20.0, 0.0])) -> Terrain:
 
 def slope(
     size: tuple[float, float],
-    height: float,
+    angle: float,
     granularity_multiplier: float = 1.0,
 ) -> Terrain:
-    r"""
-    Create a crater-like terrain with rugged floor using a heightmap.
+    """
+    Create a sloped terrain with even floor using a heightmap.
 
     It will look like::
 
-        |            |
-         \_        .'
-           '.,^_..'
+        /            
+       / 
+      /
 
-    A combination of the rugged and bowl heightmaps.
-
-    :param size: Size of the crater.
-    :param ruggedness: How coarse the ground is.
-    :param curviness: Height of the edges of the crater.
+    :param size: Size of the slope.
+    :param angle: Angle of the slope.
     :param granularity_multiplier: Multiplier for how many edges are used in the heightmap.
     :returns: The created terrain.
     """
@@ -57,7 +54,10 @@ def slope(
     )
 
 
-    heightmap = slope_heightmap(num_edges=num_edges, height=height)
+    heightmap = slope_heightmap(size=size,num_edges=num_edges, angle=angle)
+
+    height = size[0] * math.tan(angle * (math.pi / 180.0)) #calculate height of the slope given base line of triangle and angle
+
     if height <= 0 :
         max_height =  1
     else:
@@ -69,7 +69,7 @@ def slope(
                 position=Vector3(),
                 orientation=Quaternion(),
                 size=Vector3([size[0], size[1], max_height]),
-                base_thickness=0.2,
+                base_thickness=0.1,
                 heights=heightmap,
             )
         ]
@@ -80,7 +80,7 @@ def crater(
     curviness: float,
     granularity_multiplier: float = 1.0,
 ) -> Terrain:
-    r"""
+    """
     Create a crater-like terrain with rugged floor using a heightmap.
 
     It will look like::
@@ -168,10 +168,13 @@ def rugged_heightmap(
     )
 
 def slope_heightmap(
+    size: tuple[float, float],
     num_edges: tuple[int, int],
-    height: int
+    angle: float
 ) -> npt.NDArray[np.float_]:
-    r"""
+    if (angle >= 90) or (angle <= 0) :
+        raise ValueError('The given angle must be between 0 and 90 degrees')
+    """
     Create a terrain heightmap in the shape of a slope.
 
     It will look like::
@@ -185,6 +188,7 @@ def slope_heightmap(
     :param num_edges: How many edges to use for the heightmap.
     :returns: The created heightmap as a 2 dimensional array.
     """
+    height = size[0] * math.tan(angle * (math.pi / 180.0)) #calculate height of the slope given base line of triangle and angle
     return np.fromfunction(
         np.vectorize(
             lambda y, x: y * (height / num_edges[1]),
@@ -197,7 +201,7 @@ def slope_heightmap(
 def bowl_heightmap(
     num_edges: tuple[int, int],
 ) -> npt.NDArray[np.float_]:
-    r"""
+    """
     Create a terrain heightmap in the shape of a bowl.
 
     It will look like::

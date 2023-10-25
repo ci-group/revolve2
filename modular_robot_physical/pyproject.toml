@@ -27,13 +27,13 @@ packages = [{ include = "revolve2" }]
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
 pigpio = { version = "^1.78", optional = true }
-robohatlib = { git = "https://github.com/ci-group/robohat.git", branch = "main" }
+robohatlib = { git = "https://github.com/ci-group/robohat.git", branch = "main", optional = true }
 revolve2-modular-robot = { path = "../modular_robot", develop = true }
 
 [tool.poetry.extras]
 botv1 = ["pigpio"]
-botv2 = []
-dev = ["pigpio"]
+botv2 = ["robothatlib"]
+dev = ["pigpio", "robothatlib"]
 
 [tool.poetry.scripts]
 launch_robot = "revolve2.modular_robot_physical._physical_robot_controller:main"

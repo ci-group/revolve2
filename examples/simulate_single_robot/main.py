@@ -1,5 +1,7 @@
 """Main script for the example."""
 
+import pickle
+
 from revolve2.ci_group import terrains
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
@@ -8,6 +10,7 @@ from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
+from revolve2.modular_robot_physical import Config
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
@@ -48,6 +51,18 @@ def main() -> None:
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
     # Combine the body and brain into a modular robot.
     robot = ModularRobot(body, brain)
+
+    config = Config(
+        modular_robot=robot,
+        hinge_mapping={},
+        run_duration=10,
+        control_frequency=10,
+        initial_hinge_positions={
+            active_hinge: 0.0 for active_hinge in body.find_active_hinges()
+        },
+    )
+    with open("config.pickle", "wb") as f:
+        pickle.dump(config, f)
 
     # Create a modular robot scene.
     # This is a combination of one or more modular robots positioned in a given terrain.

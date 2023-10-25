@@ -6,11 +6,11 @@ import pigpio
 
 from revolve2.modular_robot.body.base import ActiveHinge
 
-from ._physical_control_interface import PhysicalControlInterface, _Pin
+from .._physical_control_interface import PhysicalControlInterface, Pin
 
 
 class V1PhysicalControlInterface(PhysicalControlInterface):
-    """An Interface for the V1 Physical Robot."""
+    """Implements PhysicalControlInterface for v1 hardware."""
 
     _PWM_FREQUENCY = 50
     _gpio: pigpio.pi
@@ -44,7 +44,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
                 raise RuntimeError("Failed to reach pigpio daemon.")
 
         self._pins = [
-            _Pin(pin_id, self._inverse_pin.get(pin_id, False))
+            Pin(pin_id, self._inverse_pin.get(pin_id, False))
             for pin_id in hinge_mapping.values()
         ]
 
@@ -70,21 +70,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
             if not self._dry:
                 self._gpio.set_PWM_dutycycle(pin.pin, 0)
 
-    def set_servo_targets(self, targets: list[float]) -> None:
-        """
-        Set the targets for servos.
-
-        :param targets: The servos targets.
-        """
-        if self._debug:
-            print("Setting pins to:")
-            print("pin | target (clamped -1 <= t <= 1)")
-            print("---------------")
-
-        for pin, target in zip(self._pins, targets):
-            self.set_servo_target(pin=pin, target=target)
-
-    def set_servo_target(self, pin: _Pin, target: float) -> None:
+    def _set_servo_target(self, pin: Pin, target: float) -> None:
         """
         Set the target for a single Servo.
 

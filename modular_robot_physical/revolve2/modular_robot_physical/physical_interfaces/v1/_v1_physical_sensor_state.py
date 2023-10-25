@@ -1,11 +1,11 @@
 from revolve2.modular_robot.body.base import ActiveHingeSensor
 from revolve2.modular_robot.sensor_state import ActiveHingeSensorState
 
-from ._physical_sensor_state import PhysicalSensorState
+from .._physical_sensor_state import PhysicalSensorState
 
 
 class V1PhysicalSensorState(PhysicalSensorState):
-    """A Class for using V1 physical sensors."""
+    """Implements PhysicalSensorState for v1 harware."""
 
     def get_active_hinge_sensor_state(
         self, sensor: ActiveHingeSensor

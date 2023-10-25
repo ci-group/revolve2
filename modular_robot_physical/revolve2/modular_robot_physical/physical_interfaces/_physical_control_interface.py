@@ -8,7 +8,7 @@ from revolve2.modular_robot.body.base import ActiveHinge
 
 
 @dataclass
-class _Pin:
+class Pin:
     """A wrapper for pins."""
 
     pin: int
@@ -18,7 +18,7 @@ class _Pin:
 class PhysicalControlInterface(ModularRobotControlInterface):
     """A base interface for physical robot control."""
 
-    _pins: list[_Pin]
+    _pins: list[Pin]
     _dry: bool  # if true, gpio output is skipped.
     _debug: bool
     _hinge_mapping: dict[ActiveHinge, int]
@@ -54,25 +54,11 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param target: The target to set.
         """
         pin_id = self._hinge_mapping[active_hinge]
-        pin = _Pin(pin=pin_id, invert=self._inverse_pin[pin_id])
-        self.set_servo_target(pin=pin, target=target)
+        pin = Pin(pin=pin_id, invert=self._inverse_pin[pin_id])
+        self._set_servo_target(pin=pin, target=target)
 
     @abstractmethod
-    def stop_pwm(self) -> None:
-        """Stop the robot."""
-        pass
-
-    @abstractmethod
-    def set_servo_targets(self, targets: list[float]) -> None:
-        """
-        Set the targets for servos.
-
-        :param targets: The servos targets.
-        """
-        pass
-
-    @abstractmethod
-    def set_servo_target(self, pin: _Pin, target: float) -> None:
+    def _set_servo_target(self, pin: Pin, target: float) -> None:
         """
         Set the target for a single Servo.
 

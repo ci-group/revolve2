@@ -1,15 +1,15 @@
-from robohatlib.Robohat import Robohat
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
+from robohatlib.Robohat import Robohat
 
 from revolve2.modular_robot.body.base import ActiveHinge
 
-from ._physical_control_interface import PhysicalControlInterface, _Pin
+from .._physical_control_interface import PhysicalControlInterface, Pin
 
 
 class V2PhysicalControlInterface(PhysicalControlInterface):
-    """An Interface for the V2 Physical Robot."""
+    """Implements PhysicalControlInterface for v2 hardware."""
 
     _SERVOBOARD_2_DATAS_LIST: list[ServoData]
     _SERVOBOARD_1_DATAS_LIST: list[ServoData]
@@ -92,11 +92,11 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
         ]
 
         self._pins = [
-            _Pin(pin_id, self._inverse_pin.get(pin_id, False))
+            Pin(pin_id, self._inverse_pin.get(pin_id, False))
             for pin_id in hinge_mapping.values()
         ]
 
-    def stop_pwm(self) -> None:
+    def shutdown(self) -> None:
         """Stop the signals and the robot."""
         if self._debug:
             print(
@@ -104,19 +104,7 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
             )
         self._gpio.do_system_shutdown()
 
-    def set_servo_targets(self, targets: list[float]) -> None:
-        """
-        Set the targets for servos.
-
-        :param targets: The servos targets.
-        """
-        if self._debug:
-            print("Setting pins to:")
-            print("pin | target (clamped -1 <= t <= 1)")
-            print("---------------")
-        self._gpio.set_servo_multiple_angles(targets)
-
-    def set_servo_target(self, pin: _Pin, target: float) -> None:
+    def _set_servo_target(self, pin: Pin, target: float) -> None:
         """
         Set the target for a single Servo.
 

@@ -1,11 +1,11 @@
 from revolve2.modular_robot.body.base import ActiveHingeSensor
 from revolve2.modular_robot.sensor_state import ActiveHingeSensorState
 
-from ._physical_sensor_state import PhysicalSensorState
+from .._physical_sensor_state import PhysicalSensorState
 
 
-class _PlaceholderSensorState(ActiveHingeSensorState):
-    """This is a placeholder SensorState until V2 SensorStates are implemented."""
+class _V2ActiveHingeSensorState(ActiveHingeSensorState):
+    """Implements ActiveHingeSensorState for v2 hardware."""
 
     @property
     def position(self) -> float:
@@ -13,12 +13,14 @@ class _PlaceholderSensorState(ActiveHingeSensorState):
         Return the placeholder position.
 
         :return: The position.
+        :raises NotImplementedError: Always.
         """
+        raise NotImplementedError()
         return 0.0
 
 
 class V2PhysicalSensorState(PhysicalSensorState):
-    """A Class for using V2 physical sensors."""
+    """Implementes PhysicalSensorState for v2 hardware."""
 
     def get_active_hinge_sensor_state(
         self, sensor: ActiveHingeSensor
@@ -29,4 +31,4 @@ class V2PhysicalSensorState(PhysicalSensorState):
         :param sensor: The sensor to query.
         :return: The Sensor State.
         """
-        return _PlaceholderSensorState()
+        return _V2ActiveHingeSensorState()

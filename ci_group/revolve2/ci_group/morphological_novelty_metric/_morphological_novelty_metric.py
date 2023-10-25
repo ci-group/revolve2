@@ -1,23 +1,30 @@
 import os
-from os.path import join, isfile
-from revolve2.modular_robot import ModularRobot
-from numpy.typing import NDArray
-from math import atan2, pi, sqrt
 from dataclasses import dataclass, field
+from math import atan2, pi, sqrt
+
 import numpy as np
+from numpy.typing import NDArray
+
+from revolve2.modular_robot import ModularRobot
+
 from ._coordinate_operations import CoordinateOperations
+
 
 @dataclass
 class MorphologicalNoveltyMetric:
     """Calculate the Morphological Novelty Score for a Population."""
-    _coordinates: list[NDArray[float]] = field(init=False)
+
+    _coordinates: list[NDArray[np.float64]] = field(init=False)
     _magnitudes: list[list[float]] = field(init=False)
     _orientations: list[list[tuple[float, float]]] = field(init=False)
-    _histograms: NDArray[float] = field(init=False)
+    _histograms: NDArray[np.float64] = field(init=False)
+    _novelty_scores: NDArray[np.float64] = field(init=False)
 
     _NUM_BINS: int = 20  # amount of bins for the histogram descriptor
 
-    def get_novelty_from_population(self, population: list[ModularRobot]) -> list:
+    def get_novelty_from_population(
+        self, population: list[ModularRobot]
+    ) -> list[float]:
         """
         Get the morphological novelty score for individuals in a population.
 
@@ -28,25 +35,25 @@ class MorphologicalNoveltyMetric:
         instances = len(population)
         bodies = [robot.body for robot in population]
 
-        self._coordinates = CoordinateOperations.coords_from_bodies(bodies)
-        self._histograms = np.empty(shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=float)
+        self._coordinates = CoordinateOperations().coords_from_bodies(bodies)
+        self._histograms = np.empty(
+            shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=float
+        )
         self._coordinates_to_magnitudes_orientation()
         self._gen_gradient_histogram()
 
-        directory_path = os.path.dirname(os.path.abspath(__file__))
-
-        if not any([file.startswith("calculate_novelty") for file in os.listdir(directory_path)]):
-            os.chdir(directory_path)
-            os.system("python -m _build_cmodule build_ext -i")
+        self._check_cmodule()
         try:
             # noinspection PyUnresolvedReferences
-            from .calculate_novelty import calculate_novelty
+            from .calculate_novelty import calculate_novelty  # type: ignore
         except ModuleNotFoundError:
-            raise ModuleNotFoundError("The calculate_novelty module was not built properly.")
+            raise ModuleNotFoundError(
+                "The calculate_novelty module was not built properly."
+            )
 
-        novelty_scores = calculate_novelty(self._histograms)
-        max_novelty = max(novelty_scores)
-        novelty_scores = [float(score / max_novelty) for score in novelty_scores]
+        self._novelty_scores = calculate_novelty(self._histograms)
+        max_novelty = self._novelty_scores.max()
+        novelty_scores = [float(score / max_novelty) for score in self._novelty_scores]
         return novelty_scores
 
     def _coordinates_to_magnitudes_orientation(self) -> None:
@@ -71,22 +78,39 @@ class MorphologicalNoveltyMetric:
         :param histogram_index: The target index.
         """
         bin_size = int(360 / self._NUM_BINS)
-        assert bin_size == 360 / self._NUM_BINS, "Error: num_bins has to be a divisor of 360"
+        assert (
+            bin_size == 360 / self._NUM_BINS
+        ), "Error: num_bins has to be a divisor of 360"
         instances = len(self._coordinates)
 
         for i in range(instances):
-            for orientation, magnitude in zip(self._orientations[i], self._magnitudes[i]):
+            for orientation, magnitude in zip(
+                self._orientations[i], self._magnitudes[i]
+            ):
                 x, z = (int(orientation[0] / bin_size), int(orientation[1] / bin_size))
                 self._histograms[i][x][z] += magnitude
             self._histograms[i] = self._wasserstein_softmax(self._histograms[i])
 
     @staticmethod
-    def _wasserstein_softmax(array: NDArray[float]) -> NDArray[float]:
+    def _check_cmodule() -> None:
+        """Check weather cmodule is built."""
+        directory_path = os.path.dirname(os.path.abspath(__file__))
+        if not any(
+            [
+                file.startswith("calculate_novelty")
+                for file in os.listdir(directory_path)
+            ]
+        ):
+            os.chdir(directory_path)
+            os.system("python -m _build_cmodule build_ext -i")
+
+    @staticmethod
+    def _wasserstein_softmax(array: NDArray[np.float64]) -> NDArray[np.float64]:
         """
         Calculate a softmax for an array, making it sum = 1.
 
         :param array: The array.
         :return: The normalized array.
         """
-        array += (1 / array.size)
+        array += 1 / array.size
         return np.true_divide(array, array.sum())

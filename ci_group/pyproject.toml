@@ -27,6 +27,7 @@ revolve2-modular-robot-simulation = { path = "../modular_robot_simulation", deve
 noise = "^1.2.2"
 multineat = "^0.12"
 sqlalchemy = "^2.0.0"
+Cython = "^3.0.4"
 
 [tool.poetry.extras]
 dev = []

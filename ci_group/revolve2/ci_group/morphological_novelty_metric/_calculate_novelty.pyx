@@ -1,8 +1,11 @@
 #cython: language_level=3
 cimport cython
+
 import numpy as np
-from numpy cimport ndarray, float64_t, uint32_t
-from libc.math cimport sqrt, fabs
+
+from libc.math cimport fabs, sqrt
+from numpy cimport float64_t, ndarray, uint32_t
+
 
 @cython.boundscheck(False)
 @cython.wraparound(False)

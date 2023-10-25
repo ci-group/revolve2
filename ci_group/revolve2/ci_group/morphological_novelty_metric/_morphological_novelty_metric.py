@@ -72,11 +72,7 @@ class MorphologicalNoveltyMetric:
                 j += 1
 
     def _gen_gradient_histogram(self) -> None:
-        """
-        Generate the gradient histograms for the respecive histogram index.
-
-        :param histogram_index: The target index.
-        """
+        """Generate the gradient histograms for the respective histogram index."""
         bin_size = int(360 / self._NUM_BINS)
         assert (
             bin_size == 360 / self._NUM_BINS

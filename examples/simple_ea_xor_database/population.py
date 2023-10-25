@@ -8,7 +8,7 @@ from individual import Individual
 from revolve2.experimentation.database import HasId
 
 
-class Population(Base, HasId):
+class Population(Base, HasId, kw_only=True):
     """
     A population of individuals.
 

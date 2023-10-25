@@ -9,7 +9,9 @@ from revolve2.experimentation.optimization.ea import Individual as GenericIndivi
 
 
 @dataclass
-class Individual(Base, GenericIndividual[Genotype], population_table="population"):
+class Individual(
+    Base, GenericIndividual[Genotype], population_table="population", kw_only=True
+):
     """An individual in a population."""
 
     __tablename__ = "individual"

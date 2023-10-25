@@ -154,8 +154,8 @@ def run_experiment(dbengine: Engine) -> None:
 
     # Create a population of individuals, combining genotype with fitness.
     population = Population(
-        [
-            Individual(genotype, fitness)
+        individuals=[
+            Individual(genotype=genotype, fitness=fitness)
             for genotype, fitness in zip(
                 initial_genotypes, initial_fitnesses, strict=True
             )
@@ -196,8 +196,8 @@ def run_experiment(dbengine: Engine) -> None:
 
         # Make an intermediate offspring population.
         offspring_population = Population(
-            [
-                Individual(genotype, fitness)
+            individuals=[
+                Individual(genotype=genotype, fitness=fitness)
                 for genotype, fitness in zip(offspring_genotypes, offspring_fitnesses)
             ]
         )

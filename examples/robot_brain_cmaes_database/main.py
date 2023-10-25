@@ -86,8 +86,8 @@ def run_experiment(dbengine: Engine) -> None:
 
         # From the samples and fitnesses, create a population that we can save.
         population = Population(
-            [
-                Individual(Genotype(parameters), fitness)
+            individuals=[
+                Individual(genotype=Genotype(parameters), fitness=fitness)
                 for parameters, fitness in zip(solutions, fitnesses)
             ]
         )

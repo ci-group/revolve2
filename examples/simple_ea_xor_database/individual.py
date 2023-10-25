@@ -11,7 +11,7 @@ from revolve2.experimentation.database import HasId
 
 
 @dataclass
-class Individual(Base, HasId):
+class Individual(Base, HasId, kw_only=True):
     """
     An individual in a population.
 

@@ -21,5 +21,5 @@ setup(
     name="morphological_novelty",
     author="Oliver Weissl",
     author_email="oliver.weissl@outlook.com",
-    ext_modules=cythonize(ext, annotate=True),
+    ext_modules=cythonize(ext),
 )

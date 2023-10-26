@@ -27,19 +27,16 @@ class Body(ABC):
 
         :param module: The module to calculate the position for.
         :returns: The calculated position.
-        :raises NotImplementedError: In case a module is encountered that is not supported.
         """
         position = Vector3()
 
         parent = module.parent
         child_index = module.parent_child_index
         while parent is not None and child_index is not None:
-            child = parent.children[child_index]
+            child = parent.children.get(child_index, None)
             assert child is not None
             assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
 
-            if child_index is None:
-                raise NotImplementedError()
             rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * child_index))
 
             position = Quaternion.from_eulers((child.rotation, 0.0, 0.0)) * position

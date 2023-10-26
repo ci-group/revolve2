@@ -28,8 +28,8 @@ To setup the RPI follow the steps below carefully.
     * When setting up the WIFI connection, select your Country.
 
 #. Once the SD-card is flashed, put it into the rpi, mounted on the robot and connect to it. If you dont know the IP-address do the following:
+    * :code:`ip a` to find your ip in the **same** network.
 
-* :code:`ip a` to find your ip in the **same** network.
     * :code:`sudo nmap -sP <your ip>` to find all clients on your network.
 
     * Find your rpi and connect via ssh.

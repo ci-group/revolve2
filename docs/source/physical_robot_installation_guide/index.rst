@@ -40,6 +40,7 @@ To setup the RPI follow the steps below carefully.
 
         * For :code:`pyenv` follow the steps below:
             #. Install pyenv: :code:`curl https://pyenv.run | bash` & :code:`git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv`
+
             #. Add :code:`pyenv` to bash:
                 .. code-block:: bash
 

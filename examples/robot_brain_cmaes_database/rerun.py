@@ -42,7 +42,7 @@ def main() -> None:
     print(f"Best parameters: {parameters}")
 
     # Prepare the body and brain structure
-    active_hinges = config.BODY.find_module_of_type(ActiveHinge)
+    active_hinges = config.BODY.find_modules_of_type(ActiveHinge)
     (
         cpg_network_structure,
         output_mapping,

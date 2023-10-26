@@ -36,7 +36,7 @@ def main() -> None:
     setup_logging()
 
     # Find all active hinges in the body
-    active_hinges = config.BODY.find_module_of_type(ActiveHinge)
+    active_hinges = config.BODY.find_modules_of_type(ActiveHinge)
 
     # Create a structure for the CPG network from these hinges.
     # This also returns a mapping between active hinges and the index of there corresponding cpg in the network.

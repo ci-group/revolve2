@@ -35,7 +35,7 @@ cdef (uint32_t, uint32_t) find_first_candidate(ndarray[float64_t, ndim=2] array,
     cdef (uint32_t, uint32_t) neg_return = (-1, -1)
     for ie in range(hist_shape):
         for je in range(hist_shape):
-            if array[ie][je] > <float64_t>0.0:
+            if array[ie, je] > <float64_t>0.0:
                 return ie, je
     return neg_return
 

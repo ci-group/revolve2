@@ -78,13 +78,14 @@ class Body(ABC):
             parent = parent.parent
         return position
 
-    def __find_recur(self, module: Module, module_type: Type[TModule]) -> list[TModule]:
+    @classmethod
+    def __find_recur(cls, module: Module, module_type: Type[TModule]) -> list[TModule]:
         modules = []
         if isinstance(module, module_type):
             modules.append(module)
         for child in module.children:
             if child is not None:
-                modules.extend(self.__find_recur(child, module_type))
+                modules.extend(cls.__find_recur(child, module_type))
         return modules
 
     def find_modules_of_type(self, module_type: Type[TModule]) -> list[TModule]:

@@ -55,14 +55,14 @@ class BrainRunner:
         """
         for active_hinge in self._config.hinge_mapping:
             self._physical_interface.control_interface.set_active_hinge_target(
-                active_hinge=active_hinge, target=target
+                active_hinge=active_hinge.value, target=target
             )
 
     def set_active_hinges_initial_positions(self) -> None:
         """Set all servos to their initial positions."""
         for active_hinge in self._config.hinge_mapping:
             self._physical_interface.control_interface.set_active_hinge_target(
-                active_hinge=active_hinge,
+                active_hinge=active_hinge.value,
                 target=self._config.initial_hinge_positions[active_hinge],
             )
 
@@ -73,7 +73,6 @@ class BrainRunner:
         start_time = time.time()
         last_update_time = start_time
         controller = self._config.modular_robot.brain.make_instance()
-        # TODO logging
 
         while (current_time := time.time()) - start_time < self._config.run_duration:
             time.sleep(control_period)
@@ -87,8 +86,6 @@ class BrainRunner:
                 sensor_state=sensor_state,
                 control_interface=self._physical_interface.control_interface,
             )
-
-        # TODO logging
 
     def shutdown(self) -> None:
         """Gracefully shut down the hardware."""

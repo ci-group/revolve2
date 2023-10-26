@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body.base import ActiveHinge
 
+from ._uuid_key import UUIDKey
+
 
 @dataclass
 class Config:
@@ -12,9 +14,9 @@ class Config:
 
     modular_robot: ModularRobot
     """The Modular Robot Object."""
-    hinge_mapping: dict[ActiveHinge, int]
+    hinge_mapping: dict[UUIDKey[ActiveHinge], int]
     """Hinge mapping: map each active hinge object to a specific Servo with its ID (int)."""
-    initial_hinge_positions: dict[ActiveHinge, float]
+    initial_hinge_positions: dict[UUIDKey[ActiveHinge], float]
     """Initial positions of the active hinges."""
     run_duration: int
     """Duration to run the brain for in seconds."""

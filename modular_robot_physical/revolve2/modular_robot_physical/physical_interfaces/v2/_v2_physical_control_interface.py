@@ -1,3 +1,5 @@
+import math
+
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
@@ -5,6 +7,7 @@ from robohatlib.Robohat import Robohat
 
 from revolve2.modular_robot.body.base import ActiveHinge
 
+from ..._uuid_key import UUIDKey
 from .._physical_control_interface import PhysicalControlInterface, Pin
 
 
@@ -35,14 +38,11 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
 
     _gpio: Robohat
 
-    _CENTER = 0.0
-    _ANGLE60 = 60.0
-
     def __init__(
         self,
         debug: bool,
         dry: bool,
-        hinge_mapping: dict[ActiveHinge, int],
+        hinge_mapping: dict[UUIDKey[ActiveHinge], int],
         inverse_pin: dict[int, bool],
     ) -> None:
         """
@@ -61,7 +61,9 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
             self._gpio = Robohat(
                 self._SERVOASSEMBLY_1_CONFIG, self._SERVOASSEMBLY_2_CONFIG, 7
             )
-        self._gpio.set_servo_direct_mode(not self.careful, 0.0001)
+        self._gpio.set_servo_direct_mode(
+            False, 0.0001
+        )  # False means careful mode, so hinges are smoothly moved to their target.
 
         self._SERVOBOARD_1_DATAS_LIST = [
             ServoData(
@@ -116,8 +118,5 @@ class V2PhysicalControlInterface(PhysicalControlInterface):
 
         if not self._dry:
             invert_mul = 1.0 if pin.invert else -1.0
-
-            angle = self._CENTER + (
-                invert_mul * min(1.0, max(-1.0, target)) * self._ANGLE60
-            )
+            angle = invert_mul * target / (2 * math.pi) * 360
             self._gpio.set_servo_single_angle(pin.pin, angle)

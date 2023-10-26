@@ -1,5 +1,6 @@
 from revolve2.modular_robot.body.base import ActiveHinge
 
+from ..._uuid_key import UUIDKey
 from .._physical_control_interface import PhysicalControlInterface
 from .._physical_interface import PhysicalInterface
 from .._physical_sensor_state import PhysicalSensorState
@@ -16,7 +17,7 @@ class V2PhysicalInterface(PhysicalInterface):
         self,
         debug: bool,
         dry: bool,
-        hinge_mapping: dict[ActiveHinge, int],
+        hinge_mapping: dict[UUIDKey[ActiveHinge], int],
         inverse_pin: dict[int, bool],
     ) -> None:
         """
@@ -49,9 +50,5 @@ class V2PhysicalInterface(PhysicalInterface):
         return V2PhysicalSensorState()
 
     def shutdown(self) -> None:
-        """
-        Shutdown the interface.
-
-        :raises NotImplementedError: Always.
-        """
-        raise NotImplementedError()
+        """Shutdown the interface."""
+        self._control_interface.shutdown()

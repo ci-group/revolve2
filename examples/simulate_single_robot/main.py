@@ -10,7 +10,7 @@ from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
-from revolve2.modular_robot_physical import Config
+from revolve2.modular_robot_physical import Config, UUIDKey
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
@@ -52,13 +52,14 @@ def main() -> None:
     # Combine the body and brain into a modular robot.
     robot = ModularRobot(body, brain)
 
+    # TODO this was only for debugging, remove if i forgot to remove it before making a pr
     config = Config(
         modular_robot=robot,
         hinge_mapping={},
         run_duration=10,
         control_frequency=10,
         initial_hinge_positions={
-            active_hinge: 0.0 for active_hinge in body.find_active_hinges()
+            UUIDKey(active_hinge): 0.0 for active_hinge in body.find_active_hinges()
         },
     )
     with open("config.pickle", "wb") as f:

@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-import time
+import math
 
 import pigpio
 
 from revolve2.modular_robot.body.base import ActiveHinge
 
+from ..._uuid_key import UUIDKey
 from .._physical_control_interface import PhysicalControlInterface, Pin
 
 
@@ -22,7 +23,7 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
         self,
         debug: bool,
         dry: bool,
-        hinge_mapping: dict[ActiveHinge, int],
+        hinge_mapping: dict[UUIDKey[ActiveHinge], int],
         inverse_pin: dict[int, bool],
     ) -> None:
         """
@@ -83,9 +84,8 @@ class V1PhysicalControlInterface(PhysicalControlInterface):
         if not self._dry:
             invert_mul = 1.0 if pin.invert else -1.0
 
-            angle = self._CENTER + (
-                invert_mul * min(1.0, max(-1.0, target)) * self._ANGLE60
+            angle = (
+                self._CENTER
+                + invert_mul * target / (1.0 / 3.0 * math.pi) * self._ANGLE60
             )
             self._gpio.set_PWM_dutycycle(pin.pin, angle)
-
-        time.sleep(0.5 * self.careful)

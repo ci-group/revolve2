@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from revolve2.modular_robot import ModularRobotControlInterface
 from revolve2.modular_robot.body.base import ActiveHinge
 
+from .._uuid_key import UUIDKey
+
 
 @dataclass
 class Pin:
@@ -21,16 +23,14 @@ class PhysicalControlInterface(ModularRobotControlInterface):
     _pins: list[Pin]
     _dry: bool  # if true, gpio output is skipped.
     _debug: bool
-    _hinge_mapping: dict[ActiveHinge, int]
+    _hinge_mapping: dict[UUIDKey[ActiveHinge], int]
     _inverse_pin: dict[int, bool]
-
-    _careful: bool = False
 
     def __init__(
         self,
         debug: bool,
         dry: bool,
-        hinge_mapping: dict[ActiveHinge, int],
+        hinge_mapping: dict[UUIDKey[ActiveHinge], int],
         inverse_pin: dict[int, bool],
     ) -> None:
         """
@@ -50,12 +50,15 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         """
         Set the position target for an active hinge.
 
+        Target is clamped within the active hinges range.
+
         :param active_hinge: The active hinge to set the target for.
         :param target: The target to set.
         """
-        pin_id = self._hinge_mapping[active_hinge]
+        pin_id = self._hinge_mapping[UUIDKey(active_hinge)]
         pin = Pin(pin=pin_id, invert=self._inverse_pin[pin_id])
-        self._set_servo_target(pin=pin, target=target)
+        clamped = min(max(target, -active_hinge.range), active_hinge.range)
+        self._set_servo_target(pin=pin, target=clamped)
 
     @abstractmethod
     def _set_servo_target(self, pin: Pin, target: float) -> None:
@@ -65,22 +68,3 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param pin: The servos pin.
         :param target: The target angle.
         """
-        pass
-
-    @property
-    def careful(self) -> bool:
-        """
-        Check if servo movement should be made in careful mode.
-
-        :return: The boolean value.
-        """
-        return self._careful
-
-    @careful.setter
-    def careful(self, value: bool) -> None:
-        """
-        Set the careful condition check.
-
-        :param value: The value to set.
-        """
-        self._careful = value

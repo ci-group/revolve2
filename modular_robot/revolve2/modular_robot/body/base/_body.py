@@ -1,7 +1,6 @@
 import math
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
-from typing import Generic, Type, TypeVar
+from typing import Type, TypeVar
 
 import numpy as np
 from pyrr import Quaternion, Vector3
@@ -11,7 +10,7 @@ from ._active_hinge import ActiveHinge
 from ._brick import Brick
 from ._core import Core
 
-M = TypeVar("M", bound=Module)
+TModule = TypeVar("TModule", bound=Module)
 
 
 class Body(ABC):
@@ -79,24 +78,23 @@ class Body(ABC):
             parent = parent.parent
         return position
 
-    def find_modules_of_type(self, module_type: Type[M]) -> list[M]:
+    def __find_recur(self, module: Module, module_type: Type[TModule]) -> list[TModule]:
+        modules = []
+        if isinstance(module, module_type):
+            modules.append(module)
+        for child in module.children:
+            if child is not None:
+                modules.extend(self.__find_recur(child, module_type))
+        return modules
+
+    def find_modules_of_type(self, module_type: Type[TModule]) -> list[TModule]:
         """
         Find all Modules of a certain type in the robot.
 
         :param module_type: The type.
         :return: The list of Modules.
         """
-
-        def __find_recur(module: Module) -> None:
-            if isinstance(module, module_type):
-                _modules.append(module)
-            for child in module.children:
-                if child is not None:
-                    __find_recur(child)
-
-        _modules: list[M] = field(default_factory=lambda: [])
-        __find_recur(self.core)
-        return _modules
+        return self.__find_recur(self.core, module_type)
 
     @abstractmethod
     def to_grid(self) -> tuple[list[list[list[Module | None]]], tuple[int, int, int]]:
@@ -111,23 +109,3 @@ class Body(ABC):
         :returns: The created grid with cells set to either a Module or None and a tuple representing the position of the core.
         :raises NotImplementedError: In case a module is encountered that is not supported.
         """
-
-
-@dataclass
-class _ModuleFinder(Generic[M]):
-    _type: Type[M]
-    _modules: list[M] = field(default_factory=lambda: [])
-
-    def __init__(self, module_type: Type[M]):
-        self._type = module_type
-
-    def find(self, body: Body) -> list[M]:
-        self._find_recur(body.core)
-        return self._modules
-
-    def _find_recur(self, module: Module) -> None:
-        if isinstance(module, self._type):
-            self._modules.append(module)
-        for child in module.children:
-            if child is not None:
-                self._find_recur(child)

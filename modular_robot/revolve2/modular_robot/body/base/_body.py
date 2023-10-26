@@ -1,5 +1,7 @@
 import math
 from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from typing import Generic, Type, TypeVar
 
 import numpy as np
 from pyrr import Quaternion, Vector3
@@ -8,6 +10,8 @@ from .._module import Module
 from ._active_hinge import ActiveHinge
 from ._brick import Brick
 from ._core import Core
+
+M = TypeVar("M", bound=Module)
 
 
 class Body(ABC):
@@ -75,21 +79,24 @@ class Body(ABC):
             parent = parent.parent
         return position
 
-    def find_active_hinges(self) -> list[ActiveHinge]:
+    def find_module_of_type(self, module_type: Type[M]) -> list[M]:
         """
-        Find all active hinges in the body.
+        Find all Modules of a certain type in the robot.
 
-        :returns: A list of all active hinges in the body
+        :param module_type: The type.
+        :return: The list of Modules.
         """
-        return _ActiveHingeFinder().find(self)
 
-    def find_bricks(self) -> list[Brick]:
-        """
-        Find all bricks in the body.
+        def __find_recur(module: Module) -> None:
+            if isinstance(module, module_type):
+                _modules.append(module)
+            for child in module.children:
+                if child is not None:
+                    __find_recur(child)
 
-        :returns: A list of all bricks in the body
-        """
-        return _BrickFinder().find(self)
+        _modules: list[M] = field(default_factory=lambda: [])
+        __find_recur(self.core)
+        return _modules
 
     @abstractmethod
     def to_grid(self) -> tuple[list[list[list[Module | None]]], tuple[int, int, int]]:
@@ -106,37 +113,21 @@ class Body(ABC):
         """
 
 
-class _ActiveHingeFinder:
-    _active_hinges: list[ActiveHinge]
+@dataclass
+class _ModuleFinder(Generic[M]):
+    _type: Type[M]
+    _modules: list[M] = field(default_factory=lambda: [])
 
-    def __init__(self) -> None:
-        self._active_hinges = []
+    def __init__(self, module_type: Type[M]):
+        self._type = module_type
 
-    def find(self, body: Body) -> list[ActiveHinge]:
+    def find(self, body: Body) -> list[M]:
         self._find_recur(body.core)
-        return self._active_hinges
+        return self._modules
 
     def _find_recur(self, module: Module) -> None:
-        if isinstance(module, ActiveHinge):
-            self._active_hinges.append(module)
-        for child in module.children:
-            if child is not None:
-                self._find_recur(child)
-
-
-class _BrickFinder:
-    _bricks: list[Brick]
-
-    def __init__(self) -> None:
-        self._bricks = []
-
-    def find(self, body: Body) -> list[Brick]:
-        self._find_recur(body.core)
-        return self._bricks
-
-    def _find_recur(self, module: Module) -> None:
-        if isinstance(module, Brick):
-            self._bricks.append(module)
+        if isinstance(module, self._type):
+            self._modules.append(module)
         for child in module.children:
             if child is not None:
                 self._find_recur(child)

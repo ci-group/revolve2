@@ -30,7 +30,7 @@ class BrainCpgNetworkNeighbor(Brain):
 
         :param body: The body to create the cpg network and brain for.
         """
-        active_hinges = body.find_active_hinges()
+        active_hinges = body.find_module_of_type(ActiveHinge)
         (
             cpg_network_structure,
             self._output_mapping,

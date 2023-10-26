@@ -102,12 +102,12 @@ def main() -> None:
     body = modular_robots_v1.gecko_v1()
 
     # Add sensors to each active hinge that measure the current angle of the hinge.
-    active_hinges = body.find_active_hinges()
+    active_hinges = body.find_module_of_type(ActiveHinge)
     for active_hinge in active_hinges:
         active_hinge.sensor = ActiveHingeSensor()
 
     # Create a brain for the robot.
-    active_hinges = body.find_active_hinges()
+    active_hinges = body.find_module_of_type(ActiveHinge)
     brain = ANNBrain(
         active_hinges=active_hinges,
     )

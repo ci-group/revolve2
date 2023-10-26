@@ -56,7 +56,7 @@ class PhysicalControlInterface(ModularRobotControlInterface):
         :param target: The target to set.
         """
         pin_id = self._hinge_mapping[UUIDKey(active_hinge)]
-        pin = Pin(pin=pin_id, invert=self._inverse_pin[pin_id])
+        pin = Pin(pin=pin_id, invert=self._inverse_pin.get(pin_id, False))
         clamped = min(max(target, -active_hinge.range), active_hinge.range)
         self._set_servo_target(pin=pin, target=clamped)
 

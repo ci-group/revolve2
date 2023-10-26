@@ -79,14 +79,13 @@ class Body(ABC):
             parent = parent.parent
         return position
 
-    def find_module_of_type(self, module_type: Type[M]) -> list[M]:
+    def find_modules_of_type(self, module_type: Type[M]) -> list[M]:
         """
         Find all Modules of a certain type in the robot.
 
         :param module_type: The type.
         :return: The list of Modules.
         """
-
         def __find_recur(module: Module) -> None:
             if isinstance(module, module_type):
                 _modules.append(module)

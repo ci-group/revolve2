@@ -10,7 +10,7 @@ class Brick(Module):
 
     FRONT = 0
     RIGHT = 1
-    LEFT = 2
+    LEFT = 3
 
     _mass: float
     _bounding_box: Vector3

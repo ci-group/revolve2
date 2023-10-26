@@ -11,7 +11,8 @@ class Module:
 
     _uuid: uuid.UUID
 
-    _children: list[Module | None]
+    _num_children: int
+    _children: dict[int, Module]
     _rotation: float
 
     _parent: Module | None
@@ -42,7 +43,8 @@ class Module:
         """
         self._uuid = uuid.uuid1()
 
-        self._children = [None] * num_children
+        self._num_children = num_children
+        self._children = {}
 
         self._rotation = rotation if isinstance(rotation, float) else rotation.value
 
@@ -61,7 +63,7 @@ class Module:
         return self._uuid
 
     @property
-    def children(self) -> list[Module | None]:
+    def children(self) -> dict[int, Module]:
         """
         Get the children of this module.
 
@@ -111,12 +113,14 @@ class Module:
         :param child_index: The slot to attach it to.
         :raises RuntimeError: If that slot is already taken by another module.
         """
-        if self.children[child_index] is not None:
+        if self.children.get(child_index, False):
             raise RuntimeError("Slot already has module.")
-        assert self.children[child_index] is None, "Slot already has a module."
         assert (
             module._parent is None
         ), "Child module already connected to a different slot."
+        assert self._num_children >= len(
+            self._children
+        ), f"There are {self._num_children} children allowed, found {len(self._children)}"
         module._parent = self
         module._parent_child_index = child_index
         self.children[child_index] = module
@@ -139,7 +143,7 @@ class Module:
             for open_node, came_from in open_nodes:
                 neighbours = [
                     mod
-                    for mod in open_node.children + [open_node.parent]
+                    for mod in list(open_node.children.values()) + [open_node.parent]
                     if mod is not None
                     and (came_from is None or mod.uuid is not came_from.uuid)
                 ]

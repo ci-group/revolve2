@@ -119,11 +119,7 @@ class MorphologicalMeasures:
     def __calculate_is_2d_recur(cls, module: Module) -> bool:
         return all(
             [np.isclose(module.rotation, 0.0)]
-            + [
-                cls.__calculate_is_2d_recur(child)
-                for child in module.children
-                if child is not None
-            ]
+            + [cls.__calculate_is_2d_recur(child) for child in module.children.values()]
         )
 
     def __calculate_core_is_filled(self) -> bool:

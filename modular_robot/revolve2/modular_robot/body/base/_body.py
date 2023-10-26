@@ -38,36 +38,12 @@ class Body(ABC):
             assert child is not None
             assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
 
+            if child_index is None:
+                raise NotImplementedError()
+            rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * child_index))
+
             position = Quaternion.from_eulers((child.rotation, 0.0, 0.0)) * position
             position += Vector3([1, 0, 0])
-            rotation: Quaternion
-            if isinstance(parent, Core):
-                if child_index == parent.FRONT:
-                    rotation = Quaternion.from_eulers((0.0, 0.0, 0.0))
-                elif child_index == parent.LEFT:
-                    rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 1))
-                elif child_index == parent.BACK:
-                    rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 2))
-                elif child_index == parent.RIGHT:
-                    rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 3))
-                else:
-                    raise NotImplementedError()
-            elif isinstance(parent, Brick):
-                if child_index == parent.FRONT:
-                    rotation = Quaternion.from_eulers((0.0, 0.0, 0.0))
-                elif child_index == parent.LEFT:
-                    rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 1))
-                elif child_index == parent.RIGHT:
-                    rotation = Quaternion.from_eulers((0.0, 0.0, math.pi / 2.0 * 3))
-                else:
-                    raise NotImplementedError()
-            elif isinstance(parent, ActiveHinge):
-                if child_index == parent.ATTACHMENT:
-                    rotation = Quaternion()
-                else:
-                    raise NotImplementedError()
-            else:
-                raise NotImplementedError()
             position = rotation * position
             position = Vector3.round(position)
 
@@ -119,9 +95,8 @@ class _ActiveHingeFinder:
     def _find_recur(self, module: Module) -> None:
         if isinstance(module, ActiveHinge):
             self._active_hinges.append(module)
-        for child in module.children:
-            if child is not None:
-                self._find_recur(child)
+        for child in module.children.values():
+            self._find_recur(child)
 
 
 class _BrickFinder:
@@ -137,6 +112,5 @@ class _BrickFinder:
     def _find_recur(self, module: Module) -> None:
         if isinstance(module, Brick):
             self._bricks.append(module)
-        for child in module.children:
-            if child is not None:
-                self._find_recur(child)
+        for child in module.children.values():
+            self._find_recur(child)

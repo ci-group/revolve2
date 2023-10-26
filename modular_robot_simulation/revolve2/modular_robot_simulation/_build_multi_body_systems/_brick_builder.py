@@ -58,28 +58,23 @@ class BrickBuilder(Builder):
         )
 
         tasks = []
-        for child_index, angle in [
-            (self._module.FRONT, 0.0),
-            (self._module.LEFT, math.pi / 2.0),
-            (self._module.RIGHT, math.pi / 2.0 * 3),
-        ]:
-            child = self._module.children[child_index]
-            if child is not None:
-                child_slot_pose = Pose(
-                    position=brick_center_pose.position
-                    + brick_center_pose.orientation
-                    * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Vector3([self._module.child_offset, 0.0, 0.0]),
-                    orientation=brick_center_pose.orientation
-                    * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Quaternion.from_eulers([child.rotation, 0, 0]),
-                )
+        for child_index, child in self._module.children.items():
+            angle = math.pi / 2.0 * child_index
+            child_slot_pose = Pose(
+                position=brick_center_pose.position
+                + brick_center_pose.orientation
+                * Quaternion.from_eulers([0.0, 0.0, angle])
+                * Vector3([self._module.child_offset, 0.0, 0.0]),
+                orientation=brick_center_pose.orientation
+                * Quaternion.from_eulers([0.0, 0.0, angle])
+                * Quaternion.from_eulers([child.rotation, 0, 0]),
+            )
 
-                tasks.append(
-                    UnbuiltChild(
-                        module=child,
-                        rigid_body=self._rigid_body,
-                        pose=child_slot_pose,
-                    )
+            tasks.append(
+                UnbuiltChild(
+                    module=child,
+                    rigid_body=self._rigid_body,
+                    pose=child_slot_pose,
                 )
+            )
         return tasks

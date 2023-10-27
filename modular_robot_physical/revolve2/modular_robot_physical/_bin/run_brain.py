@@ -1,13 +1,17 @@
 """Run a brain on a physical robot."""
-from .._harware_type import HardwareType
+import pickle
+from pathlib import Path
+
+import typed_argparse as tap
+
 from .._brain_runner import BrainRunner
 from .._config import Config
-import typed_argparse as tap
-from pathlib import Path
-import pickle
+from .._harware_type import HardwareType
 
 
 class Args(tap.TypedArgs):
+    """Arguments for the program."""
+
     config: Path = tap.arg(
         help="A file containing a pickled revolve.modular_robot_physical.Config object."
     )
@@ -23,6 +27,12 @@ class Args(tap.TypedArgs):
 
 
 def runner(args: Args) -> None:
+    """
+    Run the program from the point were arguments were parsed.
+
+    :param args: The parsed program arguments.
+    """
+
     print("Exit the program at any time by pressing Ctrl-C.")
     try:
         with args.config.open("rb") as config_file:

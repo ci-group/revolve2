@@ -35,4 +35,4 @@ botv1 = ["pigpio"]
 dev = ["pigpio"]
 
 [tool.poetry.scripts]
-run_brain = { callable = "revolve2.modular_robot_physical.bin.run_brain:main" }
+run_brain = { callable = "revolve2.modular_robot_physical._bin.run_brain:main" }

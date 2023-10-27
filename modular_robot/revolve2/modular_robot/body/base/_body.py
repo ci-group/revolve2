@@ -1,13 +1,14 @@
 import math
 from abc import ABC, abstractmethod
+from typing import Type, TypeVar
 
 import numpy as np
 from pyrr import Quaternion, Vector3
 
 from .._module import Module
-from ._active_hinge import ActiveHinge
-from ._brick import Brick
 from ._core import Core
+
+TModule = TypeVar("TModule", bound=Module)
 
 
 class Body(ABC):
@@ -18,7 +19,8 @@ class Body(ABC):
     def __init__(self) -> None:
         """Initialize this object."""
 
-    def grid_position(self, module: Module) -> Vector3:
+    @staticmethod
+    def grid_position(module: Module) -> Vector3:
         """
         Calculate the position of this module in a 3d grid with the core as center.
 
@@ -48,21 +50,23 @@ class Body(ABC):
             parent = parent.parent
         return position
 
-    def find_active_hinges(self) -> list[ActiveHinge]:
-        """
-        Find all active hinges in the body.
+    @classmethod
+    def __find_recur(cls, module: Module, module_type: Type[TModule]) -> list[TModule]:
+        modules = []
+        if isinstance(module, module_type):
+            modules.append(module)
+        for child in module.children.values():
+            modules.extend(cls.__find_recur(child, module_type))
+        return modules
 
-        :returns: A list of all active hinges in the body
+    def find_modules_of_type(self, module_type: Type[TModule]) -> list[TModule]:
         """
-        return _ActiveHingeFinder().find(self)
+        Find all Modules of a certain type in the robot.
 
-    def find_bricks(self) -> list[Brick]:
+        :param module_type: The type.
+        :return: The list of Modules.
         """
-        Find all bricks in the body.
-
-        :returns: A list of all bricks in the body
-        """
-        return _BrickFinder().find(self)
+        return self.__find_recur(self.core, module_type)
 
     @abstractmethod
     def to_grid(self) -> tuple[list[list[list[Module | None]]], tuple[int, int, int]]:
@@ -78,36 +82,3 @@ class Body(ABC):
         :raises NotImplementedError: In case a module is encountered that is not supported.
         """
 
-
-class _ActiveHingeFinder:
-    _active_hinges: list[ActiveHinge]
-
-    def __init__(self) -> None:
-        self._active_hinges = []
-
-    def find(self, body: Body) -> list[ActiveHinge]:
-        self._find_recur(body.core)
-        return self._active_hinges
-
-    def _find_recur(self, module: Module) -> None:
-        if isinstance(module, ActiveHinge):
-            self._active_hinges.append(module)
-        for child in module.children.values():
-            self._find_recur(child)
-
-
-class _BrickFinder:
-    _bricks: list[Brick]
-
-    def __init__(self) -> None:
-        self._bricks = []
-
-    def find(self, body: Body) -> list[Brick]:
-        self._find_recur(body.core)
-        return self._bricks
-
-    def _find_recur(self, module: Module) -> None:
-        if isinstance(module, Brick):
-            self._bricks.append(module)
-        for child in module.children.values():
-            self._find_recur(child)

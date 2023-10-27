@@ -97,8 +97,8 @@ class MorphologicalMeasures:
 
         self.is_2d = self.__calculate_is_2d(body)
         self.core = body.core
-        self.bricks = body.find_bricks()
-        self.active_hinges = body.find_active_hinges()
+        self.bricks = body.find_modules_of_type(Brick)
+        self.active_hinges = body.find_modules_of_type(ActiveHinge)
         self.core_is_filled = self.__calculate_core_is_filled()
         self.filled_bricks = self.__calculate_filled_bricks()
         self.filled_active_hinges = self.__calculate_filled_active_hinges()

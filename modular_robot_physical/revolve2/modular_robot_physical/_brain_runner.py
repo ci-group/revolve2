@@ -40,17 +40,6 @@ class BrainRunner:
                 )
 
                 self._initial_setup_delay = 0.2
-            case HardwareType.v2:
-                from .physical_interfaces.v2 import V2PhysicalInterface
-
-                self._physical_interface = V2PhysicalInterface(
-                    debug=debug,
-                    dry=dry,
-                    hinge_mapping=self._config.hinge_mapping,
-                    inverse_pin=self._config.inverse_servos,
-                )
-
-                self._initial_setup_delay = None
             case _:
                 raise NotImplementedError()
 

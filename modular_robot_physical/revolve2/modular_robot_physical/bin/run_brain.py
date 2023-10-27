@@ -1,5 +1,7 @@
 """Run a brain on a physical robot."""
-from revolve2.modular_robot_physical import HardwareType, BrainRunner, Config
+from .._harware_type import HardwareType
+from .._brain_runner import BrainRunner
+from .._config import Config
 import typed_argparse as tap
 from pathlib import Path
 import pickle

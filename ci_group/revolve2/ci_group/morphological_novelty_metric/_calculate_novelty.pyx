@@ -3,7 +3,7 @@ cimport cython
 
 import numpy as np
 
-from libc.math cimport fabs, sqrt
+from libc.math cimport sqrt
 from numpy cimport float64_t, ndarray, uint32_t
 
 
@@ -25,7 +25,7 @@ cdef float64_t move_supply(
         flow = capacity[to_index]
         supply[from_index] = supply[from_index]-flow
         capacity[to_index] = <float64_t>0.0
-    distance = sqrt(fabs(from_index[0]-to_index[0])**2 + fabs(from_index[1]-to_index[1])**2)
+    distance = sqrt((from_index[0]-to_index[0])**2 + (from_index[1]-to_index[1])**2)
     return flow*distance
 
 @cython.boundscheck(False)

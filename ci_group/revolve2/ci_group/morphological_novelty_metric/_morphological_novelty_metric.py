@@ -59,17 +59,21 @@ class MorphologicalNoveltyMetric:
     def _coordinates_to_magnitudes_orientation(self) -> None:
         """Calculate the magnitude and orientation for the coordinates supplied."""
         instances = len(self._coordinates)
-        self._magnitudes = [[0.0] * instances for _ in range(instances)]
-        self._orientations = [[(0.0, 0.0)] * instances for _ in range(instances)]
+        self._magnitudes = [None] * instances
+        self._orientations = [None] * instances
         for i in range(instances):
+            magnitudes  = [0.0] * len(self._coordinates[i])
+            orientations = [(0.0, 0.0)] * len(self._coordinates[i])
             j = 0
             for coord in self._coordinates[i]:
                 if len(coord) == 3:
                     ax = atan2(sqrt(coord[1] ** 2 + coord[2] ** 2), coord[0]) * 180 / pi
                     az = atan2(coord[2], sqrt(coord[1] ** 2 + coord[0] ** 2)) * 180 / pi
-                    self._orientations[i][j] = (ax, az)
-                    self._magnitudes[i][j] = sqrt(coord.dot(coord))
+                    orientations[j] = (ax, az)
+                    magnitudes[j] = sqrt(coord.dot(coord))
                 j += 1
+            self._magnitudes[i] = magnitudes
+            self._orientations[i] = orientations
 
     def _gen_gradient_histogram(self) -> None:
         """Generate the gradient histograms for the respective histogram index."""

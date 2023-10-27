@@ -101,12 +101,12 @@ class CoordinateOperations:
                 covariance_matrix = np.cov(coordinates.T)
                 eigen_values, _ = np.linalg.eig(covariance_matrix)
                 srt = np.argsort(eigen_values)[::-1]
-                for i in range(len(srt)):
+                for j in range(len(srt)):
                     while True:
-                        if srt[i] == i:
+                        if srt[j] == j:
                             break
-                        candidate = srt[i]
-                        coordinates[:, [i, candidate]] = coordinates[:, [candidate, i]]
-                        srt[[i, candidate]] = srt[[candidate, i]]
+                        candidate = srt[j]
+                        coordinates[:, [j, candidate]] = coordinates[:, [candidate, j]]
+                        srt[[j, candidate]] = srt[[candidate, j]]
                 self._coords[i] = coordinates
             i += 1

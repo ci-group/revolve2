@@ -32,7 +32,6 @@ def runner(args: Args) -> None:
 
     :param args: The parsed program arguments.
     """
-
     print("Exit the program at any time by pressing Ctrl-C.")
     try:
         with args.config.open("rb") as config_file:

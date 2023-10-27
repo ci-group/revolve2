@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import uuid
 import warnings
 import xml.dom.minidom as minidom

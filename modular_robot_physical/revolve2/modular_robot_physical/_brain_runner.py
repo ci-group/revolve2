@@ -90,6 +90,6 @@ class BrainRunner:
         """
         Gracefully shut down the hardware, moving to a low power state.
 
-        This does not shutdown the CPU, just the servos and such.
+        This does not shut down the CPU, just the servos and such.
         """
         self._physical_interface.shutdown()

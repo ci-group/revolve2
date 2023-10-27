@@ -9,6 +9,7 @@ pip install -e ./ci_group[dev] && \
 pip install -e ./simulators/mujoco_simulator[dev] && \
 pip install -e ./experimentation[dev] && \
 pip install -e ./modular_robot_simulation[dev] && \
+pip install -e ./modular_robot_physical[dev] && \
 pip install -e ./modular_robot[dev] && \
 pip install -e ./simulation[dev] && \
 pip install -r ./codetools/requirements.txt && \

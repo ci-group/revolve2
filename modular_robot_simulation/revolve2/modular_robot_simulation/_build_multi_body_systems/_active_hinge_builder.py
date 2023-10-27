@@ -118,6 +118,9 @@ class ActiveHingeBuilder(Builder):
             range=self._module.range,
             effort=self._module.effort,
             velocity=self._module.velocity,
+            armature=self._module.armature,
+            pid_gain_p=self._module.pid_gain_p,
+            pid_gain_d=self._module.pid_gain_d,
         )
         multi_body_system.add_joint(joint)
         body_to_multi_body_system_mapping.active_hinge_to_joint_hinge[

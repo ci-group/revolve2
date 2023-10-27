@@ -8,6 +8,7 @@ from evaluator import Evaluator
 
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import seed_from_time
+from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.brain.cpg import (
     active_hinges_to_cpg_network_structure_neighbor,
 )
@@ -18,7 +19,7 @@ def main() -> None:
     setup_logging(file_name="log.txt")
 
     # Find all active hinges in the body
-    active_hinges = config.BODY.find_active_hinges()
+    active_hinges = config.BODY.find_modules_of_type(ActiveHinge)
 
     # Create a structure for the CPG network from these hinges.
     # This also returns a mapping between active hinges and the index of there corresponding cpg in the network.

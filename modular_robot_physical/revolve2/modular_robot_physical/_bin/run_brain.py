@@ -31,6 +31,7 @@ def runner(args: Args) -> None:
     Run the program from the point were arguments were parsed.
 
     :param args: The parsed program arguments.
+    :raises RuntimeError: If shutdown was not clean.
     """
     print("Exit the program at any time by pressing Ctrl-C.")
     try:

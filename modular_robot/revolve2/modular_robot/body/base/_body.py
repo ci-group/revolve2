@@ -35,7 +35,7 @@ class Body(ABC):
         parent = module.parent
         child_index = module.parent_child_index
         while parent is not None and child_index is not None:
-            child = parent.children.get(child_index, None)
+            child = parent.children.get(child_index)
             assert child is not None
             assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
 

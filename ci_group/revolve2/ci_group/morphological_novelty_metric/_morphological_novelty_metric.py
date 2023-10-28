@@ -18,9 +18,11 @@ class MorphologicalNoveltyMetric:
     _magnitudes: list[list[float]] = field(init=False)
     _orientations: list[list[tuple[float, float]]] = field(init=False)
     _histograms: NDArray[np.float64] = field(init=False)
+    _int_histograms: NDArray[np.int64] = field(init=False)
     _novelty_scores: NDArray[np.float64] = field(init=False)
 
     _NUM_BINS: int = 20  # amount of bins for the histogram descriptor
+    _INT_CASTER: int = 10_000  # to counteract floating-point issues
 
     def get_novelty_from_population(
         self, population: list[ModularRobot]
@@ -37,10 +39,14 @@ class MorphologicalNoveltyMetric:
 
         self._coordinates = CoordinateOperations().coords_from_bodies(bodies)
         self._histograms = np.empty(
-            shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=float
+            shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=np.float64
+        )
+        self._int_histograms = np.empty(
+            shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=np.int64
         )
         self._coordinates_to_magnitudes_orientation()
         self._gen_gradient_histogram()
+        self._wasserstein_softmax()
 
         self._check_cmodule()
         try:
@@ -51,7 +57,7 @@ class MorphologicalNoveltyMetric:
                 "The calculate_novelty module was not built properly."
             )
 
-        self._novelty_scores = calculate_novelty(self._histograms)
+        self._novelty_scores = calculate_novelty(self._int_histograms)
         max_novelty = self._novelty_scores.max()
         novelty_scores = [float(score / max_novelty) for score in self._novelty_scores]
         return novelty_scores
@@ -84,8 +90,7 @@ class MorphologicalNoveltyMetric:
                 self._orientations[i], self._magnitudes[i]
             ):
                 x, z = (int(orientation[0] / bin_size), int(orientation[1] / bin_size))
-                self._histograms[i][x][z] += magnitude
-            self._histograms[i] = self._wasserstein_softmax(self._histograms[i])
+                self._histograms[i][x][z] += magnitude * self._INT_CASTER
 
     @staticmethod
     def _check_cmodule() -> None:
@@ -100,13 +105,18 @@ class MorphologicalNoveltyMetric:
             os.chdir(directory_path)
             os.system("python -m _build_cmodule build_ext -i")
 
-    @staticmethod
-    def _wasserstein_softmax(array: NDArray[np.float64]) -> NDArray[np.float64]:
-        """
-        Calculate a softmax for an array, making it sum = 1.
 
-        :param array: The array.
-        :return: The normalized array.
-        """
-        array += 1 / array.size
-        return np.true_divide(array, array.sum())
+    def _wasserstein_softmax(self) -> None:
+        """Calculate a softmax for an array, making it sum = _INT_CASTER"""
+        instances = self._histograms.shape[0]
+        for i in range(instances):
+            array = self._histograms[i].copy()
+            array += 1 / array.size
+            array = np.array(np.true_divide(array, array.sum()) * self._INT_CASTER, dtype=np.int64)
+
+            error = self._INT_CASTER - np.sum(array)
+            mask = np.zeros(shape=array.shape)
+            mask[:error] = 1
+            np.random.shuffle(mask)
+
+            self._int_histograms[i] = array + mask

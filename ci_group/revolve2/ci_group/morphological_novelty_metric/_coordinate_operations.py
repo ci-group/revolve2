@@ -71,19 +71,18 @@ class CoordinateOperations:
                     ::-1
                 ]  # sorting axis by amplitude of variance
                 for i in range(len(srt)):
-                    while True:
-                        if srt[i] == i:
-                            break
-                        candidate = srt[i]
-                        rotation = Rotation.from_rotvec(
-                            np.radians(180) * eigen_vectors[candidate]
-                        )
-                        coordinates = rotation.apply(coordinates)
+                    if srt[i] == i:
+                        continue
+                    candidate = srt[i]
+                    rotation = Rotation.from_rotvec(
+                        np.radians(180) * eigen_vectors[candidate]
+                    )
+                    coordinates = rotation.apply(coordinates)
 
-                        eigen_vectors[i], eigen_vectors[candidate] = np.copy(
-                            eigen_vectors[candidate]
-                        ), np.copy(eigen_vectors[i])
-                        srt[[i, candidate]] = srt[[candidate, i]]
+                    eigen_vectors[i], eigen_vectors[candidate] = np.copy(
+                        eigen_vectors[candidate]
+                    ), np.copy(eigen_vectors[i])
+                    srt[[i, candidate]] = srt[[candidate, i]]
 
                 coordinates = np.linalg.inv(eigen_vectors).dot(coordinates.T)
                 self._coords[i] = coordinates.T
@@ -102,11 +101,10 @@ class CoordinateOperations:
                 eigen_values, _ = np.linalg.eig(covariance_matrix)
                 srt = np.argsort(eigen_values)[::-1]
                 for i in range(len(srt)):
-                    while True:
-                        if srt[i] == i:
-                            break
-                        candidate = srt[i]
-                        coordinates[:, [i, candidate]] = coordinates[:, [candidate, i]]
-                        srt[[i, candidate]] = srt[[candidate, i]]
+                    if srt[i] == i:
+                        continue
+                    candidate = srt[i]
+                    coordinates[:, [i, candidate]] = coordinates[:, [candidate, i]]
+                    srt[[i, candidate]] = srt[[candidate, i]]
                 self._coords[i] = coordinates
             i += 1

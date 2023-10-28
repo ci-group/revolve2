@@ -3,8 +3,8 @@ cimport cython
 
 import numpy as np
 
-from libc.math cimport sqrt, fabs
-from numpy cimport float64_t, ndarray, uint32_t, int64_t
+from libc.math cimport fabs, sqrt
+from numpy cimport float64_t, int64_t, ndarray, uint32_t
 
 
 @cython.boundscheck(False)

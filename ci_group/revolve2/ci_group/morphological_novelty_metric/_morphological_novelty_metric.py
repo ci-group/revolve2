@@ -105,14 +105,15 @@ class MorphologicalNoveltyMetric:
             os.chdir(directory_path)
             os.system("python -m _build_cmodule build_ext -i")
 
-
     def _wasserstein_softmax(self) -> None:
-        """Calculate a softmax for an array, making it sum = _INT_CASTER"""
+        """Calculate a softmax for an array, making it sum = _INT_CASTER."""
         instances = self._histograms.shape[0]
         for i in range(instances):
             array = self._histograms[i].copy()
             array += 1 / array.size
-            array = np.array(np.true_divide(array, array.sum()) * self._INT_CASTER, dtype=np.int64)
+            array = np.array(
+                np.true_divide(array, array.sum()) * self._INT_CASTER, dtype=np.int64
+            )
 
             error = self._INT_CASTER - np.sum(array)
             mask = np.zeros(shape=array.shape)

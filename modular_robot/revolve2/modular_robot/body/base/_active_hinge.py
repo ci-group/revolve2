@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 from pyrr import Vector3
 
 from .._color import Color

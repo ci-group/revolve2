@@ -5,7 +5,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry]
 name = "revolve2-modular-robot-physical"
 version = "0.4.2b2"
-description = "Revolve2: Everything for physical modular robot control. This package is intended to be installed on the modular robot's operating system."
+description = "Revolve2: Everything for physical modular robot control. This package is intended to be installed on the modular robot hardware."
 authors = [
     "Aart Stuurman <aartstuurman@hotmail.com>",
     "Oliver Weissl <oliver.weissl@outlook.com>",
@@ -28,13 +28,11 @@ packages = [{ include = "revolve2" }]
 python = "^3.10,<3.12"
 typed-argparse = "^0.3.1"
 pigpio = { version = "^1.78", optional = true }
-robohatlib = { git = "https://github.com/ci-group/robohat.git", branch = "main", optional = true }
 revolve2-modular-robot = { path = "../modular_robot", develop = true }
 
 [tool.poetry.extras]
 botv1 = ["pigpio"]
-botv2 = ["robohatlib"]
-dev = ["pigpio", "robohatlib"]
+dev = ["pigpio"]
 
 [tool.poetry.scripts]
-run_brain = { callable = "bin.run_brain:main" }
+run_brain = { callable = "revolve2.modular_robot_physical._bin.run_brain:main" }

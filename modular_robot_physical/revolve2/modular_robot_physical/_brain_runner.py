@@ -11,6 +11,9 @@ class BrainRunner:
     _config: Config
     _physical_interface: PhysicalInterface
 
+    _initial_setup_delay: float | None
+    """Delay between setting each active hinge to it's initial postion."""
+
     def __init__(
         self, hardware_type: HardwareType, config: Config, debug: bool, dry: bool
     ) -> None:
@@ -35,15 +38,8 @@ class BrainRunner:
                     hinge_mapping=self._config.hinge_mapping,
                     inverse_pin=self._config.inverse_servos,
                 )
-            case HardwareType.v2:
-                from .physical_interfaces.v2 import V2PhysicalInterface
 
-                self._physical_interface = V2PhysicalInterface(
-                    debug=debug,
-                    dry=dry,
-                    hinge_mapping=self._config.hinge_mapping,
-                    inverse_pin=self._config.inverse_servos,
-                )
+                self._initial_setup_delay = 0.2
             case _:
                 raise NotImplementedError()
 
@@ -65,6 +61,9 @@ class BrainRunner:
                 active_hinge=active_hinge.value,
                 target=self._config.initial_hinge_positions[active_hinge],
             )
+
+            if self._initial_setup_delay is not None:
+                time.sleep(self._initial_setup_delay)
 
     def run_brain(self) -> None:
         """Run the brain from the config."""
@@ -88,5 +87,9 @@ class BrainRunner:
             )
 
     def shutdown(self) -> None:
-        """Gracefully shut down the hardware."""
+        """
+        Gracefully shut down the hardware, moving to a low power state.
+
+        This does not shut down the CPU, just the servos and such.
+        """
         self._physical_interface.shutdown()

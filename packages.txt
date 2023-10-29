@@ -18,3 +18,4 @@ modular_robot/revolve2
 modular_robot_simulation/revolve2
 simulation/revolve2
 simulators/mujoco_simulator/revolve2
+modular_robot_physical/revolve2

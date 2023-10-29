@@ -14,11 +14,11 @@ from ._coordinate_operations import CoordinateOperations
 class MorphologicalNoveltyMetric:
     """Calculate the Morphological Novelty Score for a Population."""
 
-    _coordinates: list[NDArray[np.float64]] = field(init=False)
-    _magnitudes: list[list[float]] = field(init=False)
-    _orientations: list[list[tuple[float, float]]] = field(init=False)
-    _histograms: NDArray[np.float64] = field(init=False)
-    _int_histograms: NDArray[np.int64] = field(init=False)
+    _coordinates: list[NDArray[np.float128]] = field(init=False)
+    _magnitudes: list[list[float]] = field(default_factory=lambda: [[0.0]])
+    _orientations: list[list[tuple[float, float]]] = field(default_factory=lambda: [[(0.0, 0.0)]])
+    _histograms: NDArray[np.float128] = field(default_factory=lambda: np.empty(1, dtype=np.float128))
+    _int_histograms: NDArray[np.int64] = field(default_factory=lambda: np.empty(1, dtype=np.int64))
     _novelty_scores: NDArray[np.float64] = field(init=False)
 
     _NUM_BINS: int = 20  # amount of bins for the histogram descriptor
@@ -38,12 +38,14 @@ class MorphologicalNoveltyMetric:
         bodies = [robot.body for robot in population]
 
         self._coordinates = CoordinateOperations().coords_from_bodies(bodies)
+
         self._histograms = np.empty(
             shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=np.float64
         )
         self._int_histograms = np.empty(
             shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=np.int64
         )
+
         self._coordinates_to_magnitudes_orientation()
         self._gen_gradient_histogram()
         self._wasserstein_softmax()
@@ -57,7 +59,7 @@ class MorphologicalNoveltyMetric:
                 "The calculate_novelty module was not built properly."
             )
 
-        self._novelty_scores = calculate_novelty(self._int_histograms)
+        self._novelty_scores = calculate_novelty(self._int_histograms, self._int_histograms.shape[0], self._NUM_BINS)
         max_novelty = self._novelty_scores.max()
         novelty_scores = [float(score / max_novelty) for score in self._novelty_scores]
         return novelty_scores
@@ -65,17 +67,20 @@ class MorphologicalNoveltyMetric:
     def _coordinates_to_magnitudes_orientation(self) -> None:
         """Calculate the magnitude and orientation for the coordinates supplied."""
         instances = len(self._coordinates)
-        self._magnitudes = [[0.0] * instances for _ in range(instances)]
-        self._orientations = [[(0.0, 0.0)] * instances for _ in range(instances)]
+        self._magnitudes *= instances
+        self._orientations *= instances
         for i in range(instances):
-            j = 0
-            for coord in self._coordinates[i]:
-                if len(coord) == 3:
-                    ax = atan2(sqrt(coord[1] ** 2 + coord[2] ** 2), coord[0]) * 180 / pi
-                    az = atan2(coord[2], sqrt(coord[1] ** 2 + coord[0] ** 2)) * 180 / pi
-                    self._orientations[i][j] = (ax, az)
-                    self._magnitudes[i][j] = sqrt(coord.dot(coord))
-                j += 1
+            coordinates_amount = len(self._coordinates[i])
+            magnitudes = [0.0] * coordinates_amount
+            orientations = [(0.0, 0.0)] * coordinates_amount
+            for j in range(coordinates_amount):
+                coord = self._coordinates[i][j]
+                ax = atan2(sqrt(coord[1] ** 2 + coord[2] ** 2), coord[0]) * 180 / pi
+                az = atan2(coord[2], sqrt(coord[1] ** 2 + coord[0] ** 2)) * 180 / pi
+                orientations[j] = (ax, az)
+                magnitudes[j] = sqrt(coord.dot(coord))
+            self._orientations[i] = orientations
+            self._magnitudes[i] = magnitudes
 
     def _gen_gradient_histogram(self) -> None:
         """Generate the gradient histograms for the respective histogram index."""
@@ -90,7 +95,7 @@ class MorphologicalNoveltyMetric:
                 self._orientations[i], self._magnitudes[i]
             ):
                 x, z = (int(orientation[0] / bin_size), int(orientation[1] / bin_size))
-                self._histograms[i][x][z] += magnitude * self._INT_CASTER
+                self._histograms[i][x][z] += magnitude
 
     @staticmethod
     def _check_cmodule() -> None:
@@ -109,15 +114,12 @@ class MorphologicalNoveltyMetric:
         """Calculate a softmax for an array, making it sum = _INT_CASTER."""
         instances = self._histograms.shape[0]
         for i in range(instances):
-            array = self._histograms[i].copy()
-            array += 1 / array.size
-            array = np.array(
-                np.true_divide(array, array.sum()) * self._INT_CASTER, dtype=np.int64
-            )
-
+            array = self._histograms[i].copy() * self._INT_CASTER
+            array += self._INT_CASTER / array.size
+            array = np.asarray(array / np.sum(array) * self._INT_CASTER, dtype=np.int64)
             error = self._INT_CASTER - np.sum(array)
-            mask = np.zeros(shape=array.shape)
-            mask[:error] = 1
-            np.random.shuffle(mask)
-
+            mask = np.zeros(shape=array.shape, dtype=np.int64)
+            if error > 0:
+                mask[:error] = 1
+                np.random.shuffle(mask)
             self._int_histograms[i] = array + mask

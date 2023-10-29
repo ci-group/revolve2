@@ -14,11 +14,11 @@ from revolve2.modular_robot.body.base import Body
 class CoordinateOperations:
     """Transform points in a distribution."""
 
-    _coords: list[NDArray[np.float64]] = field(init=False)
+    _coords: list[NDArray[np.float128]] = field(default_factory=lambda: [np.empty(shape=0, dtype=np.float128)])
 
     def coords_from_bodies(
         self, bodies: list[Body], cob_heuristics: bool = True
-    ) -> list[NDArray[np.float64]]:
+    ) -> list[NDArray[np.float128]]:
         """
         Extract coordinates of modules from a body.
 
@@ -39,11 +39,11 @@ class CoordinateOperations:
 
         :param bodies: The body.
         """
-        self._coords = [np.empty(shape=0)] * len(bodies)
+        self._coords *= len(bodies)
         i = 0
         for body in bodies:
             body_array, core_position = body.to_grid()
-            body_np_array: NDArray[Any] = np.asarray(body_array)
+            body_np_array: NDArray[np.int64] = np.asarray(body_array)
 
             x, y, z = body_np_array.shape
 
@@ -79,9 +79,7 @@ class CoordinateOperations:
                     )
                     coordinates = rotation.apply(coordinates)
 
-                    eigen_vectors[i], eigen_vectors[candidate] = np.copy(
-                        eigen_vectors[candidate]
-                    ), np.copy(eigen_vectors[i])
+                    eigen_vectors[[i, candidate]] = eigen_vectors[[candidate, i]]
                     srt[[i, candidate]] = srt[[candidate, i]]
 
                 coordinates = np.linalg.inv(eigen_vectors).dot(coordinates.T)

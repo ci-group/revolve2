@@ -16,9 +16,15 @@ class MorphologicalNoveltyMetric:
 
     _coordinates: list[NDArray[np.float128]] = field(init=False)
     _magnitudes: list[list[float]] = field(default_factory=lambda: [[0.0]])
-    _orientations: list[list[tuple[float, float]]] = field(default_factory=lambda: [[(0.0, 0.0)]])
-    _histograms: NDArray[np.float128] = field(default_factory=lambda: np.empty(1, dtype=np.float128))
-    _int_histograms: NDArray[np.int64] = field(default_factory=lambda: np.empty(1, dtype=np.int64))
+    _orientations: list[list[tuple[float, float]]] = field(
+        default_factory=lambda: [[(0.0, 0.0)]]
+    )
+    _histograms: NDArray[np.float128] = field(
+        default_factory=lambda: np.empty(1, dtype=np.float128)
+    )
+    _int_histograms: NDArray[np.int64] = field(
+        default_factory=lambda: np.empty(1, dtype=np.int64)
+    )
     _novelty_scores: NDArray[np.float64] = field(init=False)
 
     _NUM_BINS: int = 20  # amount of bins for the histogram descriptor
@@ -59,7 +65,9 @@ class MorphologicalNoveltyMetric:
                 "The calculate_novelty module was not built properly."
             )
 
-        self._novelty_scores = calculate_novelty(self._int_histograms, self._int_histograms.shape[0], self._NUM_BINS)
+        self._novelty_scores = calculate_novelty(
+            self._int_histograms, self._int_histograms.shape[0], self._NUM_BINS
+        )
         max_novelty = self._novelty_scores.max()
         novelty_scores = [float(score / max_novelty) for score in self._novelty_scores]
         return novelty_scores

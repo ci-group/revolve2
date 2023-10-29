@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from itertools import product
-from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
@@ -14,7 +13,9 @@ from revolve2.modular_robot.body.base import Body
 class CoordinateOperations:
     """Transform points in a distribution."""
 
-    _coords: list[NDArray[np.float128]] = field(default_factory=lambda: [np.empty(shape=0, dtype=np.float128)])
+    _coords: list[NDArray[np.float128]] = field(
+        default_factory=lambda: [np.empty(shape=0, dtype=np.float128)]
+    )
 
     def coords_from_bodies(
         self, bodies: list[Body], cob_heuristics: bool = True

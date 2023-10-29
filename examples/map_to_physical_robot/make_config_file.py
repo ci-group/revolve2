@@ -4,6 +4,7 @@ import pickle
 from revolve2.ci_group.modular_robots_v1 import gecko_v1
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
+from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_physical import Config, UUIDKey
 
@@ -38,7 +39,8 @@ def main() -> None:
         run_duration=10,
         control_frequency=10,
         initial_hinge_positions={
-            UUIDKey(active_hinge): 0.0 for active_hinge in body.find_active_hinges()
+            UUIDKey(active_hinge): 0.0
+            for active_hinge in body.find_modules_of_type(ActiveHinge)
         },
         inverse_servos={},
     )

@@ -4,7 +4,7 @@ cimport cython
 import numpy as np
 
 from libc.math cimport sqrt
-from numpy cimport float64_t, int64_t, ndarray
+from numpy cimport ndarray
 
 
 @cython.boundscheck(False)
@@ -66,9 +66,9 @@ cdef double wasserstein_distance(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef ndarray[float64_t, ndim=1] calculate_novelty(ndarray[int64_t, ndim=3] histograms, int64_t amount_instances, int64_t histogram_size):
+cpdef ndarray[double, ndim=1] calculate_novelty(ndarray[long, ndim=3] histograms, int amount_instances, int histogram_size):
     cdef int i, j
-    cdef ndarray[float64_t, ndim=1] novelty_scores = np.zeros(amount_instances, dtype=np.float64)
+    cdef ndarray[double, ndim=1] novelty_scores = np.zeros(amount_instances, dtype=np.float64)
     cdef long[:,:] supply, capacity
 
     for i in range(amount_instances-1):

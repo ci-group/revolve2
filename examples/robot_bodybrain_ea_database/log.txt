@@ -1,0 +1,422 @@
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+----------------
+Start experiment
+Rng seed: 1698334220643891
+Saving experiment configuration.
+Generating initial population.
+Evaluating initial population.
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+----------------
+Start experiment
+Rng seed: 1698334797102386
+Saving experiment configuration.
+Generating initial population.
+Evaluating initial population.
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+----------------
+Start experiment
+Rng seed: 1698334882950929
+Saving experiment configuration.
+Generating initial population.
+Evaluating initial population.
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+----------------
+Start experiment
+Rng seed: 1698334938958737
+Saving experiment configuration.
+Generating initial population.
+Evaluating initial population.
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+----------------
+Start experiment
+Rng seed: 1698335006651143
+Saving experiment configuration.
+Generating initial population.
+Evaluating initial population.
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+----------------
+Start experiment
+Rng seed: 1698335034451702
+Saving experiment configuration.
+Generating initial population.
+Evaluating initial population.
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+----------------
+Start experiment
+Rng seed: 1698335060405387
+Saving experiment configuration.
+Generating initial population.
+Evaluating initial population.
+Starting simulation batch with MuJoCo.
+Simulating scene 0
+Simulating scene 2
+Simulating scene 1
+Simulating scene 4
+Simulating scene 3
+Simulating scene 5
+Simulating scene 6
+Simulating scene 7
+Scene 4 done.
+Simulating scene 8
+Scene 7 done.
+Simulating scene 9
+Scene 2 done.
+Simulating scene 10
+Scene 1 done.
+Simulating scene 11
+Scene 0 done.
+Simulating scene 12
+Scene 8 done.
+Simulating scene 13
+Scene 3 done.
+Scene 6 done.
+Simulating scene 14
+Simulating scene 15
+Scene 10 done.
+Simulating scene 16
+Scene 5 done.
+Simulating scene 17
+Scene 15 done.
+Simulating scene 18
+Scene 12 done.
+Simulating scene 19
+Scene 11 done.
+Simulating scene 20
+Scene 9 done.
+Simulating scene 21
+Scene 13 done.
+Simulating scene 22
+Scene 18 done.
+Simulating scene 23
+Scene 14 done.
+Simulating scene 24
+Scene 17 done.
+Simulating scene 25
+Scene 25 done.
+Simulating scene 26
+Scene 23 done.
+Simulating scene 27
+Scene 20 done.
+Simulating scene 28
+Scene 21 done.
+Simulating scene 29
+Scene 22 done.
+Simulating scene 30
+Scene 16 done.
+Simulating scene 31
+Scene 27 done.
+Simulating scene 32
+Scene 30 done.
+Simulating scene 33
+Scene 26 done.
+Simulating scene 34
+Scene 31 done.
+Simulating scene 35
+Scene 19 done.
+Simulating scene 36
+Scene 28 done.
+Simulating scene 37
+Scene 34 done.
+Simulating scene 38
+Scene 32 done.
+Simulating scene 39
+Scene 29 done.
+Simulating scene 40
+Scene 33 done.
+Simulating scene 41
+Scene 24 done.
+Simulating scene 42
+Scene 39 done.
+Simulating scene 43
+Scene 35 done.
+Simulating scene 44
+Scene 37 done.
+Simulating scene 45
+Scene 36 done.
+Simulating scene 46
+Scene 38 done.
+Simulating scene 47
+Scene 40 done.
+Simulating scene 48
+Scene 43 done.
+Simulating scene 49
+Scene 45 done.
+Scene 41 done.
+Simulating scene 50
+Simulating scene 51
+Scene 42 done.
+Simulating scene 52
+Scene 44 done.
+Simulating scene 53
+Scene 47 done.
+Simulating scene 54
+Scene 46 done.
+Simulating scene 55
+Scene 51 done.
+Simulating scene 56
+Scene 50 done.
+Simulating scene 57
+Scene 53 done.
+Simulating scene 58
+Scene 48 done.
+Simulating scene 59
+Scene 49 done.
+Simulating scene 60
+Scene 59 done.
+Simulating scene 61
+Scene 54 done.
+Simulating scene 62
+Scene 55 done.
+Simulating scene 63
+Scene 52 done.
+Simulating scene 64
+Scene 56 done.
+Simulating scene 65
+Scene 57 done.
+Simulating scene 66
+Scene 61 done.
+Simulating scene 67
+Scene 63 done.
+Simulating scene 68
+Scene 58 done.
+Simulating scene 69
+Scene 60 done.
+Simulating scene 70
+Scene 62 done.
+Simulating scene 71
+Scene 64 done.
+Simulating scene 72
+Scene 65 done.
+Simulating scene 73
+Scene 71 done.
+Simulating scene 74
+Scene 67 done.
+Simulating scene 75
+Scene 66 done.
+Simulating scene 76
+Scene 69 done.
+Simulating scene 77
+Scene 68 done.
+Simulating scene 78
+Scene 70 done.
+Simulating scene 79
+Scene 75 done.
+Simulating scene 80
+Scene 72 done.
+Simulating scene 81
+Scene 74 done.
+Simulating scene 82
+Scene 78 done.
+Simulating scene 83
+Scene 79 done.
+Simulating scene 84
+Scene 77 done.
+Simulating scene 85
+Scene 80 done.
+Simulating scene 86
+Scene 76 done.
+Simulating scene 87
+Scene 84 done.
+Simulating scene 88
+Scene 85 done.
+Simulating scene 89
+Scene 82 done.
+Simulating scene 90
+Scene 83 done.
+Simulating scene 91
+Scene 86 done.
+Simulating scene 92
+Scene 73 done.
+Simulating scene 93
+Scene 90 done.
+Simulating scene 94
+Scene 87 done.
+Simulating scene 95
+Scene 89 done.
+Simulating scene 96
+Scene 91 done.
+Simulating scene 97
+Scene 81 done.
+Simulating scene 98
+Scene 93 done.
+Simulating scene 99
+Scene 94 done.
+Scene 92 done.
+Scene 88 done.
+Scene 96 done.
+Scene 95 done.
+Scene 99 done.
+Scene 98 done.
+Scene 97 done.
+Finished batch.
+Saving generation.
+Start optimization process.
+Generation 1 / 100.
+Starting simulation batch with MuJoCo.
+Simulating scene 0
+Simulating scene 1
+Simulating scene 2
+Simulating scene 3
+Simulating scene 4
+Simulating scene 5
+Simulating scene 7
+Simulating scene 6
+Scene 2 done.
+Simulating scene 8
+Scene 0 done.
+Simulating scene 9
+Scene 1 done.
+Simulating scene 10
+Scene 9 done.
+Simulating scene 11
+Scene 3 done.
+Simulating scene 12
+Scene 5 done.
+Simulating scene 13
+Scene 6 done.
+Simulating scene 14
+Scene 8 done.
+Simulating scene 15
+Scene 10 done.
+Simulating scene 16
+Scene 11 done.
+Simulating scene 17
+Scene 16 done.
+Simulating scene 18
+Scene 7 done.
+Simulating scene 19
+Scene 4 done.
+Simulating scene 20
+Simulating scene 21
+Simulating scene 22
+Simulating scene 23
+Simulating scene 24
+Simulating scene 25
+Simulating scene 26
+Simulating scene 27
+Simulating scene 28
+=======================================
+=======================================
+=======================================
+New log starts here.
+=======================================
+=======================================
+=======================================
+----------------
+Start experiment
+Rng seed: 1698335458403770
+Saving experiment configuration.
+Generating initial population.
+Evaluating initial population.
+Starting simulation batch with MuJoCo.
+Simulating scene 0
+Simulating scene 2
+Simulating scene 3
+Simulating scene 1
+Simulating scene 4
+Simulating scene 5
+Simulating scene 6
+Simulating scene 7
+Scene 2 done.
+Simulating scene 8
+Scene 4 done.
+Simulating scene 9
+Scene 5 done.
+Simulating scene 10
+Scene 0 done.
+Simulating scene 11
+Scene 3 done.
+Simulating scene 12
+Scene 8 done.
+Simulating scene 13
+Scene 7 done.
+Simulating scene 14
+Scene 1 done.
+Simulating scene 15
+Scene 11 done.
+Simulating scene 16
+Simulating scene 17
+Simulating scene 19
+Simulating scene 20
+Simulating scene 21
+Simulating scene 22
+Simulating scene 18
+Simulating scene 23
+Simulating scene 24

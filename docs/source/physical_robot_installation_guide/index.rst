@@ -1,15 +1,17 @@
-===============================
-Setting up a new Physical Robot
-===============================
-This tutorial is aimed towards developers, who aim to set up a new robot.
-If you simply want to know how to run a physical robot, check the examples.
+===================================
+Setting up a new modular robot core
+===================================
+This tutorial is for maintainers from the CI Group who want to set up a new modular robot core.
+If you simply want to know how to use a pre-installed physical robot, check the examples. This is most likely the case if you are a student.
+
+For anyone outside of the CI Group, please look at the v2 modular robot.
 
 -----------
 Preparation
 -----------
 Firstly make sure to have all materials necessary to build the physical robot.
 For **CI-Group:**
-Models to print the proprietory Modules can be found on the following git repo: `<https://github.com/ci-group/revolve-models>`_.
+Models to print the various Modules can be found on the following git repo: `<https://github.com/ci-group/revolve-models>`_.
 
 --------------------
 Install the Hardware
@@ -44,10 +46,13 @@ This step is the same for all types of hardware.
 To setup the RPI follow the steps below carefully.
 
 #. Flash the SD-card with the RPi OS (previously Raspbian). Some Important notes:
-    * Make sure to select a appropriate Keyboard Layout (preferably English(US)).
-    * When setting up the WIFI connection, select your Country. (CI-Group WIFI: *Thymionet*)
+    * Reminder for CI Group people: if you select a keyboard layout, pick `English(US)`. It can always be changed using the `raspi-config` tool on the RPi.
 
-#. Get CLI-access to the RPi
+    * When setting up the WIFI connection, select your Country. (CI-Group WIFI: *ThymioNet*)
+
+#. Boot the RPi and get CLI-access. Here are some general Tips:
+    * You can connect a keyboard and screen.
+    * Better is to SSH. This work only if you and the RPi are on the same network. For CI Group, connect it to *ThymioNet* Wi-Fi.
     * If you want to SSH and dont know the IP of the RPi use: :code:`sudo nmap -sP <your ip>` to find all clients on your network.
 
 ---------------------------
@@ -68,8 +73,7 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
         #. Log in and out of the rpi.
         #. Get the right python version (this takes a long time): :code:`pyenv install 3.11`
         #. create a global virtualenv: :code:`pyenv virtualenv 3.11 global_env` & :code:`pyenv global global_env`
-    * Clone the Revolve2 branch or repository for your installation.
-    * Then install using :code:`pip install <dir>/revolve2/modular_robot_physical`.
+    * Then install using :code:`pip install git+https://github.com/ci-group/revolve2.git`.
         * If you use a CI-Group specific hardware such as V1/ V2 do the install as follows: :code:`pip install <dir>/revolve2/modular_robot_physical[<botv1 or botv2>]`
 
 ^^^^^^^^^^^^^^^^^^^

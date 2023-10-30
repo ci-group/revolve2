@@ -200,9 +200,12 @@ class MorphologicalMeasures:
             return 0.0
 
         num_symmetrical = 0
+
         for x in range(self.bounding_box_depth):
             for z in range(self.bounding_box_height):
                 for y in range(1, (self.bounding_box_width - 1) // 2 + 1):
+                    print(np.asarray(self.body_as_grid)[x,z])
+                    print(x,z,y)
                     if self.body_as_grid[x][self.core_grid_position[1] + y][
                         z
                     ] is not None and type(

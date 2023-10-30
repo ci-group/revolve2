@@ -26,6 +26,8 @@ Instructions about the assembly of robots can be found in the *how-to-build-a-mo
 Hardware setup for a V1 Robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **V1 is only available to CI Group.**
+
+
 For the V1 Robot some specific Hardware is required:
 
 * It is required to use a V1 HAT, available in the CI Group lab.

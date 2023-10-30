@@ -10,17 +10,15 @@ Version 1 (V1) and version 2 (V2) of the hardware exists. For anyone outside of 
 ----------------------------------
 Preparation + Install the Hardware
 ----------------------------------
+Instructions about the assembly of robots can be found in the *how-to-build-a-modular-robot-guide*.
+
 Firstly make sure to have all the materials necessary to build the physical robot.
 
 For any type of hardware, there are some required items:
 
-* A compartment (core case) for the controller. Models to print the core case can be found on the following git repo: `<https://github.com/ci-group/revolve-models>`_.
+* A housing that will contain the rest of the core hardware. Models to print the core housing can be found on the following git repo: `<https://github.com/ci-group/revolve-models>`_.
 * A Raspberry Pi (RPi). For V2, this must be a RPi 4.
 * A HAT (hardware attached on top), as described in the following hardware specific sections.
-
-Install the RPi in the core case.
-Instructions about the assembly of robots can be found in the *how-to-build-a-modular-robot-guide*.
-
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Hardware setup for a V1 Robot
@@ -33,10 +31,12 @@ For the V1 Robot some specific Hardware is required:
 * It is required to use a V1 HAT, available in the CI Group lab.
 * A V1 specific battery, available in the CI Group lab.
 
+Attach the HAT onto the RPi and put them into the housing.
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Hardware setup for a V2 Robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-For instructions about the HAT and the V2 robot architecture itself refer to `<https://github.com/ci-group/robohat>`_.
+For instructions on  how to set up the hardware of a V2 core, refer to `<https://github.com/ci-group/robohat>`_.
 
 ------------------
 Setting up the RPi

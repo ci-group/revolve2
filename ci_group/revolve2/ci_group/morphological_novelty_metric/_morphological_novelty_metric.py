@@ -31,7 +31,9 @@ class MorphologicalNoveltyMetric:
     _INT_CASTER: int = 10_000  # to counteract floating-point issues
 
     def get_novelty_from_population(
-        self, population: list[ModularRobot], cob_heuristic: bool = False,
+        self,
+        population: list[ModularRobot],
+        cob_heuristic: bool = False,
     ) -> list[float]:
         """
         Get the morphological novelty score for individuals in a population.
@@ -44,7 +46,9 @@ class MorphologicalNoveltyMetric:
         instances = len(population)
         bodies = [robot.body for robot in population]
 
-        self._coordinates = CoordinateOperations().coords_from_bodies(bodies, cob_heuristics=cob_heuristic)
+        self._coordinates = CoordinateOperations().coords_from_bodies(
+            bodies, cob_heuristics=cob_heuristic
+        )
 
         self._histograms = np.empty(
             shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=np.float64

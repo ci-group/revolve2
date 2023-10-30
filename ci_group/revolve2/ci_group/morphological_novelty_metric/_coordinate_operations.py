@@ -71,17 +71,17 @@ class CoordinateOperations:
                 srt = np.argsort(eigen_values)[
                     ::-1
                 ]  # sorting axis by amplitude of variance
-                for i in range(len(srt)):
-                    if srt[i] == i:
+                for j in range(len(srt)):
+                    if srt[j] == j:
                         continue
-                    candidate = srt[i]
+                    candidate = srt[j]
                     rotation = Rotation.from_rotvec(
                         np.radians(180) * eigen_vectors[candidate]
                     )
                     coordinates = rotation.apply(coordinates)
 
-                    eigen_vectors[[i, candidate]] = eigen_vectors[[candidate, i]]
-                    srt[[i, candidate]] = srt[[candidate, i]]
+                    eigen_vectors[[j, candidate]] = eigen_vectors[[candidate, j]]
+                    srt[[j, candidate]] = srt[[candidate, j]]
 
                 coordinates = np.linalg.inv(eigen_vectors).dot(coordinates.T)
                 self._coords[i] = coordinates.T
@@ -99,11 +99,11 @@ class CoordinateOperations:
                 covariance_matrix = np.cov(coordinates.T)
                 eigen_values, _ = np.linalg.eig(covariance_matrix)
                 srt = np.argsort(eigen_values)[::-1]
-                for i in range(len(srt)):
-                    if srt[i] == i:
+                for j in range(len(srt)):
+                    if srt[j] == j:
                         continue
-                    candidate = srt[i]
-                    coordinates[:, [i, candidate]] = coordinates[:, [candidate, i]]
-                    srt[[i, candidate]] = srt[[candidate, i]]
+                    candidate = srt[j]
+                    coordinates[:, [j, candidate]] = coordinates[:, [candidate, j]]
+                    srt[[j, candidate]] = srt[[candidate, j]]
                 self._coords[i] = coordinates
             i += 1

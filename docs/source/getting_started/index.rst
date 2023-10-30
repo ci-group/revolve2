@@ -78,5 +78,5 @@ It is recommended to explore the examples without the database first to better g
      - Similar to :code:`robot brain cmaes`, but now using a database to store experiment results.
      - :code:`robot brain cmaes`, :code:`simple ea xor database`
    * - map to physical robot
-     - Learn how to use your evolved robots in the physical world, with and without :code:`RemoteController`
+     - Learn how to use your evolved robots in the physical world.
      - :code:`simulate single robot`

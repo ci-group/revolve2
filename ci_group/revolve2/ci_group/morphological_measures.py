@@ -27,7 +27,7 @@ class MorphologicalMeasures(Generic[TModule]):
     https://doi.org/10.1007/978-3-319-77538-8_47
     """
 
-    """As created by the body class."""
+    """Represents the modules of a body in a 3D tensor."""
     grid: NDArray[TModule]
     """Position of the core in 'body_as_grid'."""
     core_grid_position: tuple[int, int, int]

@@ -254,7 +254,7 @@ def park_v1() -> BodyV1:
     body.core.back.attachment.attachment.front.left.attachment.right = ActiveHingeV1(
         -np.pi / 2.0
     )
-    body.core.back.attachment.attachment.front.left.attachment.front = BrickV1(0.0)
+    body.core.back.attachment.attachment.front.left.attachment.left = BrickV1(0.0)
     body.core.back.attachment.attachment.front.left.attachment.front = ActiveHingeV1(
         0.0
     )

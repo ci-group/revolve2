@@ -18,7 +18,7 @@ class CoordinateOperations:
     )
 
     def coords_from_bodies(
-        self, bodies: list[Body], cob_heuristics: bool = True
+        self, bodies: list[Body], cob_heuristics: bool
     ) -> list[NDArray[np.float128]]:
         """
         Extract coordinates of modules from a body.

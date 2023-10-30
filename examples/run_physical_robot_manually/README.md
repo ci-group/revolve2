@@ -8,7 +8,7 @@ Requirements:
 - Decide whether you are targeting v1 or v2 hardware. If you do not know, it should probably be v1.
 - A previously set up modular robot core of the correct hardware type. If these are not provided by colleagues or supervisors, look at the documentation on how to create one yourself.
 - The rest of the modular robot body. TODO in the next version we will add a guide to the documentation on how to create a modular robot body. For now, ask the CI Group lab.
-- Additionally understanding the simulation itself is helpful.
+- Additionally, understanding the simulation itself is helpful.
 
 Steps to take:
 - Create a config pickle file as shown in `make_config_file.py`.

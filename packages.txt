@@ -13,7 +13,7 @@ examples/robot_brain_cmaes_database
 examples/simple_ea_xor
 examples/simple_ea_xor_database
 examples/simulate_single_robot
-examples/map_to_physical_robot
+examples/run_physical_robot_manually
 experimentation/revolve2
 modular_robot/revolve2
 modular_robot_simulation/revolve2

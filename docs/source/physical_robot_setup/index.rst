@@ -10,8 +10,7 @@ Version 1 (V1) and version 2 (V2) of the hardware exists. For anyone outside of 
 ----------------------------------
 Preparation + Install the Hardware
 ----------------------------------
-Instructions about the assembly of robots can be found in the *how-to-build-a-modular-robot-guide*.
-
+Instructions about the assembly of robots can be found in the *how-to-build-a-modular-robot-guide* (TODO will add this guide soon) .
 Firstly make sure to have all the materials necessary to build the physical robot.
 
 For any type of hardware, there are some required items:
@@ -61,10 +60,10 @@ Install Revolve2 on the RPi
 ---------------------------
 Setting up Revolve2 on the robot requires different steps, depending on the hardware version. Some general steps for all versions:
 
-#. Check if pyenv is installed by default on your RPi. If not follow the next points:
 #. Set up a global pyenv. This is to prevent changes to the system's Python installation.:
 
-    #. Install pyenv: :code:`curl https://pyenv.run | bash` & :code:`git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv`
+    #. Install pyenv: :code:`curl https://pyenv.run | bash`
+    #. The :code:`pyenv-virtualenv` extension is needed. If it is not installed by default run: :code:`git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv`.
     #. Add :code:`pyenv` to bash:
 
         .. code-block:: bash
@@ -77,18 +76,11 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
             ' >> ~/.bashrc
 
     #. Log in and out of the RPi.
-    #. Install required packages using :code:`sudo apt install -y`. The packages are:
+    #. Install required packages using:
 
         .. code-block:: bash
 
-            libssl-dev
-            libbz2-dev
-            libncurses5-dev
-            libncursesw5-dev
-            libreadline-dev
-            libsqlite3-dev
-            libffi-dev
-            liblzma-dev
+            sudo apt install -y libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
 
     #. Get the right Python version (this takes a long time): :code:`pyenv install 3.11`
     #. create a global virtualenv: :code:`pyenv virtualenv 3.11 global_env` & :code:`pyenv global global_env`

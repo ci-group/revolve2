@@ -65,11 +65,11 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
 
 #. Set up a global pyenv. This is to prevent changes to the system's Python installation.:
 
-     #. Install required packages using:
+    #. Install required packages using:
 
-        .. code-block:: bash
+    .. code-block:: bash
 
-            sudo apt install -y git libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
+        sudo apt install -y git libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
 
     #. Install pyenv: :code:`curl https://pyenv.run | bash`
     #. Add :code:`pyenv` to bash:
@@ -89,8 +89,8 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
 
 #. Then install Revolve2 using:
 
-    * V1: :code:`pip install "git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
-    * V2: :code:`pip install "git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
+    * V1: :code:`pip install "revolve2-modular_robot_physical[botv1] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
+    * V2: :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
 
 #. Test if Revolve2 is properly installed: :code:`run_brain --help`
 

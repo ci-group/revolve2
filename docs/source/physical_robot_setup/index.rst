@@ -67,9 +67,9 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
 
     #. Install required packages using:
 
-    .. code-block:: bash
+        .. code-block:: bash
 
-        sudo apt install -y git libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
+            sudo apt install -y git libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
 
     #. Install pyenv: :code:`curl https://pyenv.run | bash`
     #. Add :code:`pyenv` to bash:

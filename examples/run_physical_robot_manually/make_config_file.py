@@ -1,21 +1,71 @@
 """An example on how to make a config file for running a physical modular robot."""
 import pickle
 
-from revolve2.ci_group.modular_robots_v1 import ant_v1
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
+from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_physical import Config, UUIDKey
+
+
+def make_body() -> tuple[
+    BodyV1, tuple[ActiveHinge, ActiveHinge, ActiveHinge, ActiveHinge]
+]:
+    """
+    Create a body for the robot.
+
+    :returns: The created body and a tuple of all ActiveHinge objects for mapping later on.
+    """
+    # A modular robot body follows a 'tree' structure.
+    # The 'Body' class automatically creates a center 'core'.
+    # From here, other modular can be attached.
+    # Modules can be attached in a rotated fashion.
+    # This can be any angle, although the original design takes into account only multiples of 90 degrees.
+    body = BodyV1()
+    body.core.left = ActiveHingeV1(RightAngles.DEG_0)
+    body.core.left.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
+    body.core.right = ActiveHingeV1(RightAngles.DEG_0)
+    body.core.right.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
+
+    """Here we collect all ActiveHinges, to map them later onto the physical robot."""
+    active_hinges = (
+        body.core.left,
+        body.core.left.attachment,
+        body.core.right,
+        body.core.right.attachment,
+    )
+    return body, active_hinges
 
 
 def main() -> None:
     """Create a Config for the physical robot."""
     rng = make_rng_time_seed()
     # Create a modular robot, similar to what was done in the simulate_single_robot example. Of course, you can replace this with your own robot, such as one you have optimized using an evolutionary algorithm.
-    body = ant_v1()
+    body, hinges = make_body()
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
     robot = ModularRobot(body, brain)
+
+    """
+    Some important notes to understand:
+    - Hinge mappings are specific to each robot, so they have to be created new for each type of body. 
+    - The pin`s id`s can be found on th physical robots HAT.
+    - The order of the pin`s is crucial for a correct translation into the physical robot.
+    - Each ActiveHinge needs one corresponding pin to be able to move. 
+    - If the mapping is faulty check the simulators behavior versus the physical behavior and adjust the mapping iteratively.
+    
+    For a concrete implementation look at the following example of mapping the robots`s hinges:
+    """
+    hinge_1, hinge_2, hinge_3, hinge_4 = hinges
+    hinge_mapping = {
+        UUIDKey(hinge_1): 6,
+        UUIDKey(hinge_2): 12,
+        UUIDKey(hinge_3): 13,
+        UUIDKey(hinge_4): 16,
+    }
 
     """
     A configuration consists of the follow parameters:
@@ -26,26 +76,13 @@ def main() -> None:
     - initial_hinge_positions: Initial positions for the active hinges. In Revolve2 the simulator defaults to 0.0.
     - inverse_servos: Sometimes servos on the physical robot are mounted backwards by accident. Here you inverse specific servos in software. Example: {13: True} would inverse the servo connected to GPIO pin 13.
     """
-    active_hinges = body.find_modules_of_type(ActiveHinge)
-
-    """These are examples for gpio pins as indicated on the robots HAT. For your own robot, adjust these ids. Make sure that you have the same amount of pins as hinges."""
-    gpio_pins = [6, 12, 13, 16, 19, 20, 26, 21]
-
-    assert len(active_hinges) == len(
-        gpio_pins
-    ), f"ERROR: there are {len(active_hinges)} but {len(gpio_pins)} pins."
 
     config = Config(
         modular_robot=robot,
-        hinge_mapping={
-            UUIDKey(active_hinge): gpio_pin
-            for active_hinge, gpio_pin in zip(active_hinges, gpio_pins)
-        },
+        hinge_mapping=hinge_mapping,
         run_duration=10,
         control_frequency=10,
-        initial_hinge_positions={
-            UUIDKey(active_hinge): 0.0 for active_hinge in active_hinges
-        },
+        initial_hinge_positions={UUIDKey(active_hinge): 0.0 for active_hinge in hinges},
         inverse_servos={},
     )
 

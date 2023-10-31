@@ -1,7 +1,7 @@
 """An example on how to make a config file for running a physical modular robot."""
 import pickle
 
-from revolve2.ci_group.modular_robots_v1 import gecko_v1
+from revolve2.ci_group.modular_robots_v1 import ant_v1
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body.base import ActiveHinge
@@ -13,7 +13,7 @@ def main() -> None:
     """Create a Config for the physical robot."""
     rng = make_rng_time_seed()
     # Create a modular robot, similar to what was done in the simulate_single_robot example. Of course, you can replace this with your own robot, such as one you have optimized using an evolutionary algorithm.
-    body = gecko_v1()
+    body = ant_v1()
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
     robot = ModularRobot(body, brain)
 
@@ -26,14 +26,25 @@ def main() -> None:
     - initial_hinge_positions: Initial positions for the active hinges. In Revolve2 the simulator defaults to 0.0.
     - inverse_servos: Sometimes servos on the physical robot are mounted backwards by accident. Here you inverse specific servos in software. Example: {13: True} would inverse the servo connected to GPIO pin 13.
     """
+    active_hinges = body.find_modules_of_type(ActiveHinge)
+
+    """These are examples for gpio pins as indicated on the robots HAT. For your own robot, adjust these ids. Make sure that you have the same amount of pins as hinges."""
+    gpio_pins = [6, 12, 13, 16, 19, 20, 26, 21]
+
+    assert len(active_hinges) == len(
+        gpio_pins
+    ), f"ERROR: there are {len(active_hinges)} but {len(gpio_pins)} pins."
+
     config = Config(
         modular_robot=robot,
-        hinge_mapping={},
+        hinge_mapping={
+            UUIDKey(active_hinge): gpio_pin
+            for active_hinge, gpio_pin in zip(active_hinges, gpio_pins)
+        },
         run_duration=10,
         control_frequency=10,
         initial_hinge_positions={
-            UUIDKey(active_hinge): 0.0
-            for active_hinge in body.find_modules_of_type(ActiveHinge)
+            UUIDKey(active_hinge): 0.0 for active_hinge in active_hinges
         },
         inverse_servos={},
     )

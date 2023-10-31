@@ -53,6 +53,9 @@ To set up the RPi follow the steps below carefully.
 
     * You can connect a keyboard and screen.
     * Better is to SSH. This works only if you and the RPi are on the same network. For CI Group, connect it to *ThymioNet* Wi-Fi.
+
+        * Hint: SSH is not enabled by default. The simplest way to enable it is using the :code:`raspi-config`.
+
     * If you want to SSH and don't know the IP of the RPi, you can use: :code:`sudo nmap -sP <your ip>` to find all clients on your network.
 
 ---------------------------
@@ -62,8 +65,13 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
 
 #. Set up a global pyenv. This is to prevent changes to the system's Python installation.:
 
+     #. Install required packages using:
+
+        .. code-block:: bash
+
+            sudo apt install -y git libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
+
     #. Install pyenv: :code:`curl https://pyenv.run | bash`
-    #. The :code:`pyenv-virtualenv` extension is needed. If it is not installed by default run: :code:`git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv`.
     #. Add :code:`pyenv` to bash:
 
         .. code-block:: bash
@@ -76,26 +84,22 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
             ' >> ~/.bashrc
 
     #. Log in and out of the RPi.
-    #. Install required packages using:
-
-        .. code-block:: bash
-
-            sudo apt install -y libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
-
     #. Get the right Python version (this takes a long time): :code:`pyenv install 3.11`
     #. create a global virtualenv: :code:`pyenv virtualenv 3.11 global_env` & :code:`pyenv global global_env`
 
 #. Then install Revolve2 using:
 
-    * V1: :code:`pip install "git+https://github.com/ci-group/revolve2.git@development#egg=revolve2-modular_robot_physical[botv1]&subdirectory=modular_robot_physical"`.
-    * V2: :code:`pip install "git+https://github.com/ci-group/revolve2.git@development#egg=revolve2-modular_robot_physical[botv2]&subdirectory=modular_robot_physical"`.
+    * V1: :code:`pip install "git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
+    * V2: :code:`pip install "git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
+
+#. Test if Revolve2 is properly installed: :code:`run_brain --help`
 
 ^^^^^^^^^^^^^^^^^^^
 V1 Additional Steps
 ^^^^^^^^^^^^^^^^^^^
 If you use V1 hardware setup requires additional steps:
 
-* Install :code:`pigpiod` with :code:`pip install pigpiod`. This library allows the control of the servos attached to the RPi's HAT.
+* V1 used :code:`pigpiod`, which is installed automatically with the :code:`modular_robot_physical[botv1]` package. This library allows the control of the servos attached to the RPi's HAT.
 * Enabling :code:`pigpiod` daemon so it enables at startup (used for the servos).
 
     #. Setting up a :code:`systemd` service: The modern way to manage startup services on many Linux distributions is via :code:`systemd`. You can set up a service for :code:`pigpiod`.
@@ -121,7 +125,7 @@ If you use V1 hardware setup requires additional steps:
             WantedBy=multi-user.target
 
     #. Here, the :code:`Nice=-10` line sets a high priority for the daemon (lower values are higher priority, with -20 being the highest priority). The :code:`-l` option in the :code:`ExecStart` line tells :code:`pigpiod` to only listen on the localhost interface. The :code:`-n localhost` option ensures that pigpiod only runs if it can connect to localhost (preventing certain failure cases).
-    #. Enable and start the service: :code:`sudo systemctl daemon-reload & :code:`sudo systemctl enable pigpiod` & :code:`sudo systemctl start pigpiod`.
+    #. Enable and start the service: :code:`sudo systemctl daemon-reload` & :code:`sudo systemctl enable pigpiod` & :code:`sudo systemctl start pigpiod`.
     #. Check if it is running properly using: :code:`sudo systemctl status pigpiod`
 
     * That's it! Now :code:`pigpiod` will run at startup with a high priority. If you need to adjust the priority later, you can edit the :code:`Nice` value in the service file and restart the service.

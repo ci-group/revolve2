@@ -1,7 +1,7 @@
 ===================================
 Setting up a new modular robot core
 ===================================
-This tutorial is for maintainers from the CI Group who want to set up a new modular robot core.
+This tutorial is for researchers who want to set up a new modular robot core.
 The following tutorial does not touch the matter of building a complete robot, it just covers the setup for the **core**.
 If you simply want to know how to use a pre-installed physical robot, check the examples. This is most likely the case if you are a student.
 

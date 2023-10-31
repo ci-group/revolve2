@@ -1,0 +1,32 @@
+:py:mod:`logging`
+=================================
+
+.. py:module:: experimentation.logging
+
+.. autoapi-nested-parse::
+
+   Functions to work with logging in a standardized way.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.logging.setup_logging
+
+
+
+.. py:function:: setup_logging(level: int = logging.INFO, file_name: str | None = None) -> None
+
+   Set up logging.
+
+   :param level: The log level to use.
+   :param file_name: If not None, also writes to this file.
+
+

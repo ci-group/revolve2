@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_local_simulator`
+===========================================
+
+.. py:module:: mujoco_simulator._local_simulator
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._local_simulator.LocalSimulator
+
+
+
+
+.. py:class:: LocalSimulator(headless: bool = False, start_paused: bool = False, num_simulators: int = 1)
+
+
+   Bases: :py:obj:`revolve2.simulation.simulator.Simulator`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator._local_simulator.LocalSimulator
+      :parts: 1
+
+   Simulator using MuJoCo.
+
+   .. py:method:: simulate_batch(batch: revolve2.simulation.simulator.Batch) -> list[list[revolve2.simulation.scene.SimulationState]]
+
+      Simulate the provided batch by simulating each contained scene.
+
+      :param batch: The batch to run.
+      :returns: List of simulation states in ascending order of time.
+
+
+

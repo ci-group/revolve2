@@ -1,0 +1,33 @@
+:py:mod:`fitness_functions`
+====================================
+
+.. py:module:: ci_group.fitness_functions
+
+.. autoapi-nested-parse::
+
+   Standard fitness functions for modular robots.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ci_group.fitness_functions.xy_displacement
+
+
+
+.. py:function:: xy_displacement(begin_state: revolve2.modular_robot_simulation.ModularRobotSimulationState, end_state: revolve2.modular_robot_simulation.ModularRobotSimulationState) -> float
+
+   Calculate the distance traveled on the xy-plane by a single modular robot.
+
+   :param begin_state: Begin state of the robot.
+   :param end_state: End state of the robot.
+   :returns: The calculated fitness.
+
+

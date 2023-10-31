@@ -1,0 +1,38 @@
+:orphan:
+
+:py:mod:`_record_settings`
+===============================================
+
+.. py:module:: simulation.simulator._record_settings
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.simulator._record_settings.RecordSettings
+
+
+
+
+.. py:class:: RecordSettings
+
+
+   Settings for recording a simulation.
+
+   .. py:attribute:: video_directory
+      :type: str
+
+      
+
+   .. py:attribute:: fps
+      :type: int
+      :value: 24
+
+      
+
+

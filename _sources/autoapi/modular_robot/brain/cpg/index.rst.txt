@@ -1,0 +1,231 @@
+:py:mod:`cpg`
+=================================
+
+.. py:module:: modular_robot.brain.cpg
+
+.. autoapi-nested-parse::
+
+   Cpg brains for modular robots.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.brain.cpg.BrainCpgInstance
+   modular_robot.brain.cpg.BrainCpgNetworkNeighbor
+   modular_robot.brain.cpg.BrainCpgNetworkNeighborRandom
+   modular_robot.brain.cpg.BrainCpgNetworkStatic
+   modular_robot.brain.cpg.CpgNetworkStructure
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.brain.cpg.active_hinges_to_cpg_network_structure_neighbor
+
+
+
+.. py:class:: BrainCpgInstance(initial_state: numpy.typing.NDArray[numpy.float_], weight_matrix: numpy.typing.NDArray[numpy.float_], output_mapping: list[tuple[int, modular_robot.body.base.ActiveHinge]])
+
+
+   Bases: :py:obj:`modular_robot.brain._brain_instance.BrainInstance`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.cpg.BrainCpgInstance
+      :parts: 1
+
+   Cpg network brain.
+
+   A state array that is integrated over time following the differential equation `X'=WX`.
+   W is a weight matrix that is multiplied by the state array.
+   The outputs of the controller are defined by the `outputs`, a list of indices for the state array.
+
+   .. py:method:: control(dt: float, sensor_state: modular_robot.sensor_state._modular_robot_sensor_state.ModularRobotSensorState, control_interface: modular_robot._modular_robot_control_interface.ModularRobotControlInterface) -> None
+
+      Control the modular robot.
+
+      Sets the active hinge targets to the values in the state array as defined by the mapping provided in the constructor.
+
+      :param dt: Elapsed seconds since last call to this function.
+      :param sensor_state: Interface for reading the current sensor state.
+      :param control_interface: Interface for controlling the robot.
+
+
+
+.. py:class:: BrainCpgNetworkNeighbor(body: modular_robot.body.base.Body)
+
+
+   Bases: :py:obj:`modular_robot.brain._brain.Brain`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.cpg.BrainCpgNetworkNeighbor
+      :parts: 1
+
+   A CPG brain with active hinges that are connected if they are within 2 jumps in the modular robot tree structure.
+
+   That means, NOT grid coordinates, but tree distance.
+
+   .. py:method:: make_instance() -> modular_robot.brain._brain_instance.BrainInstance
+
+      Create an instance of this brain.
+
+      :returns: The created instance.
+
+
+
+.. py:class:: BrainCpgNetworkNeighborRandom(body: modular_robot.body.base.Body, rng: numpy.random.Generator)
+
+
+   Bases: :py:obj:`modular_robot.brain.cpg._brain_cpg_network_neighbor.BrainCpgNetworkNeighbor`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.cpg.BrainCpgNetworkNeighborRandom
+      :parts: 1
+
+   A cpg brain with random weights between neurons.
+
+   The weights are randomly generated when this object is created,
+   so they will be the same for every controller instance.
+
+
+.. py:class:: BrainCpgNetworkStatic(initial_state: numpy.typing.NDArray[numpy.float_], weight_matrix: numpy.typing.NDArray[numpy.float_], output_mapping: list[tuple[int, modular_robot.body.base.ActiveHinge]])
+
+
+   Bases: :py:obj:`modular_robot.brain._brain.Brain`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.cpg.BrainCpgNetworkStatic
+      :parts: 1
+
+   A CPG brain with cpgs and connections defined by the user.
+
+   A state vector is integrated over time using a weight matrix which multiplication with the state vector sum defines the derivative of the state vector.
+   I.e X' = WX
+
+   The first `num_output_neurons` in the state vector are the outputs for the controller created by this brain.
+
+   .. py:method:: uniform_from_params(params: numpy.typing.NDArray[numpy.float_], cpg_network_structure: modular_robot.brain.cpg._cpg_network_structure.CpgNetworkStructure, initial_state_uniform: float, output_mapping: list[tuple[int, modular_robot.body.base.ActiveHinge]]) -> BrainCpgNetworkStatic
+      :classmethod:
+
+      Create and initialize an instance of this brain from the provided parameters, assuming uniform initial state.
+
+      :param params: Parameters for the weight matrix to be created.
+      :param cpg_network_structure: The cpg network structure.
+      :param initial_state_uniform: Initial state to use for all neurons.
+      :param output_mapping: Marks neurons as controller outputs and map them to the correct active hinge.
+      :returns: The created brain.
+
+
+   .. py:method:: make_instance() -> modular_robot.brain._brain_instance.BrainInstance
+
+      Create an instance of this brain.
+
+      :returns: The created instance.
+
+
+
+.. py:class:: CpgNetworkStructure(cpgs: list[Cpg], connections: set[CpgPair])
+
+
+   Describes the structure of a cpg network.
+
+   Can generate parameters for a cpg network, such as the initial state.
+
+   .. py:property:: num_connections
+      :type: int
+
+      Get the number of connections in the structure.
+
+      :returns: The number of connections.
+
+
+   .. py:property:: num_states
+      :type: int
+
+      Get the number of states in a cpg network of this structure.
+
+      This would be twice the number of cpgs.
+
+      :returns: The number of states.
+
+
+   .. py:property:: num_cpgs
+      :type: int
+
+      Get the number of cpgs in the structure.
+
+      :returns: The number of cpgs.
+
+
+   .. py:property:: output_indices
+      :type: list[int]
+
+      Get the index in the state array for each cpg, matching the order the cpgs were provided in.
+
+      :returns: The indices.
+
+
+   .. py:attribute:: cpgs
+      :type: list[Cpg]
+
+      
+
+   .. py:attribute:: connections
+      :type: set[CpgPair]
+
+      
+
+   .. py:method:: make_cpgs(num_cpgs: int) -> list[Cpg]
+      :staticmethod:
+
+      Create a list of cpgs.
+
+      :param num_cpgs: The number of cpgs to create.
+      :returns: The created list of cpgs.
+
+
+   .. py:method:: make_connection_weights_matrix(internal_connection_weights: dict[Cpg, float], external_connection_weights: dict[CpgPair, float]) -> numpy.typing.NDArray[numpy.float_]
+
+      Create a weight matrix from internal and external weights.
+
+      :param internal_connection_weights: The internal weights.
+      :param external_connection_weights: The external weights.
+      :returns: The created matrix.
+
+
+   .. py:method:: make_connection_weights_matrix_from_params(params: list[float]) -> numpy.typing.NDArray[numpy.float_]
+
+      Create a connection weights matrix from a list if connections.
+
+      :param params: The connections to create the matrix from.
+      :returns: The created matrix.
+
+
+   .. py:method:: make_uniform_state(value: float) -> numpy.typing.NDArray[numpy.float_]
+
+      Make a state array by repeating the same value.
+
+      Will match the required number of states in this structure.
+
+      :param value: The value to use for all states
+      :returns: The array of states.
+
+
+
+.. py:function:: active_hinges_to_cpg_network_structure_neighbor(active_hinges: list[modular_robot.body.base.ActiveHinge]) -> tuple[modular_robot.brain.cpg._cpg_network_structure.CpgNetworkStructure, list[tuple[int, modular_robot.body.base.ActiveHinge]]]
+
+   Create the structure of a cpg network based on a list of active hinges.
+
+   The order of the active hinges matches the order of the cpgs.
+   I.e. every active hinges has a corresponding cpg,
+   and these are stored in the order the hinges are provided in.
+
+   :param active_hinges: The active hinges to base the structure on.
+   :returns: The created structure and a mapping between state indices and active hinges.
+
+

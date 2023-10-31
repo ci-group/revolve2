@@ -1,0 +1,134 @@
+:py:mod:`vector2`
+==================================
+
+.. py:module:: simulation.scene.vector2
+
+.. autoapi-nested-parse::
+
+   A custom Vector2 Class for revolve2.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   vector2/index.rst
+   vector2aux/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.vector2.Vector2
+   simulation.scene.vector2.unit
+
+
+
+
+.. py:class:: Vector2(shape, dtype=float, buffer=None, offset=0, strides=None, order=None)
+
+
+   Bases: :py:obj:`pyrr.objects.base.BaseVector`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.vector2.Vector2
+      :parts: 1
+
+   Represents a 2-dimensional Vector. The Vector2 class is based on the pyrr implementation of vectors.
+
+   .. py:property:: inverse
+      :type: Vector2
+
+      :return: the inversed Vector2.
+
+
+   .. py:attribute:: x
+
+      
+
+   .. py:attribute:: y
+
+      
+
+   .. py:attribute:: xy
+
+      
+
+   .. py:method:: __add__(other: Any) -> Vector2
+
+      Add to the existing Vector2.
+
+      :param other: The other Vector2.
+      :return: The added Vector2.
+
+
+   .. py:method:: __sub__(other: Any) -> Vector2
+
+      Subtract from the existing Vector2.
+
+      :param other: The other Vector2.
+      :return: The subtracted Vector2.
+
+
+   .. py:method:: __mul__(other: Any) -> Vector2
+
+      Multiply the existing Vector2.
+
+      :param other: The other Vector2.
+      :return: the multiplied Vector2.
+
+
+   .. py:method:: __xor__(other: Any) -> Any
+
+      Calculate the cross-product.
+
+      :param other: The other Vector2.
+      :return: The cross-product.
+
+
+   .. py:method:: __or__(other: Any) -> Any
+
+      Calculate the dot-product.
+
+      :param other: The other Vector2.
+      :return: The dot-product.
+
+
+   .. py:method:: __ne__(other: Any) -> bool
+
+      Not equal to the existing Vector2.
+
+      :param other: The other Vector2.
+      :return: whether they are unequal.
+
+
+   .. py:method:: __eq__(other: Any) -> bool
+
+      Equal to the existing Vector2.
+
+      :param other: The other Vector2.
+      :return: whether they are equal.
+
+
+
+.. py:class:: unit
+
+
+   Unit class for the Vector2.
+
+   .. py:attribute:: x
+
+      
+
+   .. py:attribute:: y
+
+      
+
+

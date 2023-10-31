@@ -1,0 +1,37 @@
+:orphan:
+
+:py:mod:`_body_to_multi_body_system_mapping`
+===============================================================================================
+
+.. py:module:: modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping
+
+
+
+
+.. py:class:: BodyToMultiBodySystemMapping
+
+
+   Mappings from bodies to multi-body system objects.
+
+   .. py:attribute:: active_hinge_to_joint_hinge
+      :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], revolve2.simulation.scene.JointHinge]
+
+      
+
+   .. py:attribute:: active_hinge_sensor_to_joint_hinge
+      :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.body.base.ActiveHingeSensor], revolve2.simulation.scene.JointHinge]
+
+      
+
+

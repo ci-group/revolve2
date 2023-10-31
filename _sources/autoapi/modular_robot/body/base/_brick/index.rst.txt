@@ -1,0 +1,96 @@
+:orphan:
+
+:py:mod:`_brick`
+========================================
+
+.. py:module:: modular_robot.body.base._brick
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.base._brick.Brick
+
+
+
+
+.. py:class:: Brick(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+
+
+   Bases: :py:obj:`modular_robot.body._module.Module`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.base._brick.Brick
+      :parts: 1
+
+   A Brick.
+
+   .. py:property:: front
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the front of the brick.
+
+      :returns: The attached module.
+
+
+   .. py:property:: right
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the right of the brick.
+
+      :returns: The attached module.
+
+
+   .. py:property:: left
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the left of the brick.
+
+      :returns: The attached module.
+
+
+   .. py:property:: mass
+      :type: float
+
+      Get the mass of the brick (in kg).
+
+      :return: The value.
+
+
+   .. py:property:: bounding_box
+      :type: pyrr.Vector3
+
+      Get the bounding box size.
+
+      Sizes are total length, not half length from origin.
+      :return: Vector3 with sizes of bbox in x,y,z dimension (in m).
+
+
+   .. py:property:: child_offset
+      :type: float
+
+      Get the child offset (in m).
+
+      :return: The value.
+
+
+   .. py:attribute:: FRONT
+      :value: 0
+
+      
+
+   .. py:attribute:: RIGHT
+      :value: 1
+
+      
+
+   .. py:attribute:: LEFT
+      :value: 2
+
+      
+
+

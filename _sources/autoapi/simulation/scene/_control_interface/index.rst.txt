@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`_control_interface`
+=============================================
+
+.. py:module:: simulation.scene._control_interface
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._control_interface.ControlInterface
+
+
+
+
+.. py:class:: ControlInterface
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene._control_interface.ControlInterface
+      :parts: 1
+
+   Interface for controlling a scene during simulation.
+
+   .. py:method:: set_joint_hinge_position_target(joint_hinge: simulation.scene._joint_hinge.JointHinge, position: float) -> None
+      :abstractmethod:
+
+      Set the position target of a hinge joint.
+
+      :param joint_hinge: The hinge to set the position target for.
+      :param position: The position target.
+
+
+

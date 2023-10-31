@@ -1,0 +1,42 @@
+:orphan:
+
+:py:mod:`_builder`
+=====================================================================
+
+.. py:module:: modular_robot_simulation._build_multi_body_systems._builder
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._build_multi_body_systems._builder.Builder
+
+
+
+
+.. py:class:: Builder
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._build_multi_body_systems._builder.Builder
+      :parts: 1
+
+   An abstract builder class.
+
+   .. py:method:: build(multi_body_system: revolve2.simulation.scene.MultiBodySystem, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping) -> list[modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild]
+      :abstractmethod:
+
+      Build a module onto the Robot.
+
+      :param multi_body_system: The multi body system of the robot.
+      :param body_to_multi_body_system_mapping: A mapping from body to multi-body system
+      :return: The next children to be built.
+
+
+

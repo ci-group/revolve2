@@ -1,0 +1,56 @@
+:orphan:
+
+:py:mod:`_brain_cpg_network_static`
+===========================================================
+
+.. py:module:: modular_robot.brain.cpg._brain_cpg_network_static
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic
+
+
+
+
+.. py:class:: BrainCpgNetworkStatic(initial_state: numpy.typing.NDArray[numpy.float_], weight_matrix: numpy.typing.NDArray[numpy.float_], output_mapping: list[tuple[int, modular_robot.body.base.ActiveHinge]])
+
+
+   Bases: :py:obj:`modular_robot.brain._brain.Brain`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic
+      :parts: 1
+
+   A CPG brain with cpgs and connections defined by the user.
+
+   A state vector is integrated over time using a weight matrix which multiplication with the state vector sum defines the derivative of the state vector.
+   I.e X' = WX
+
+   The first `num_output_neurons` in the state vector are the outputs for the controller created by this brain.
+
+   .. py:method:: uniform_from_params(params: numpy.typing.NDArray[numpy.float_], cpg_network_structure: modular_robot.brain.cpg._cpg_network_structure.CpgNetworkStructure, initial_state_uniform: float, output_mapping: list[tuple[int, modular_robot.body.base.ActiveHinge]]) -> BrainCpgNetworkStatic
+      :classmethod:
+
+      Create and initialize an instance of this brain from the provided parameters, assuming uniform initial state.
+
+      :param params: Parameters for the weight matrix to be created.
+      :param cpg_network_structure: The cpg network structure.
+      :param initial_state_uniform: Initial state to use for all neurons.
+      :param output_mapping: Marks neurons as controller outputs and map them to the correct active hinge.
+      :returns: The created brain.
+
+
+   .. py:method:: make_instance() -> modular_robot.brain._brain_instance.BrainInstance
+
+      Create an instance of this brain.
+
+      :returns: The created instance.
+
+
+

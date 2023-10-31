@@ -1,0 +1,49 @@
+:orphan:
+
+:py:mod:`_modular_robot_simulation_handler`
+====================================================================
+
+.. py:module:: modular_robot_simulation._modular_robot_simulation_handler
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._modular_robot_simulation_handler.ModularRobotSimulationHandler
+
+
+
+
+.. py:class:: ModularRobotSimulationHandler
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.SimulationHandler`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._modular_robot_simulation_handler.ModularRobotSimulationHandler
+      :parts: 1
+
+   Implements the simulation handler for a modular robot scene.
+
+   .. py:method:: add_robot(brain_instance: revolve2.modular_robot.brain.BrainInstance, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems.BodyToMultiBodySystemMapping) -> None
+
+      Add a brain that will control a robot during simulation.
+
+      :param brain_instance: The brain.
+      :param body_to_multi_body_system_mapping: A mapping from body to multi-body system
+
+
+   .. py:method:: handle(simulation_state: revolve2.simulation.scene.SimulationState, simulation_control: revolve2.simulation.scene.ControlInterface, dt: float) -> None
+
+      Handle a simulation frame.
+
+      :param simulation_state: The current state of the simulation.
+      :param simulation_control: Interface for setting control targets.
+      :param dt: The time since the last call to this function.
+
+
+

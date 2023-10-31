@@ -1,0 +1,49 @@
+:orphan:
+
+:py:mod:`_geometry`
+=============================================
+
+.. py:module:: simulation.scene.geometry._geometry
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry._geometry.Geometry
+
+
+
+
+.. py:class:: Geometry
+
+
+   Geometry describing part of a rigid body shape.
+
+   Currently always a box.
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the geometry.
+
+
+   .. py:attribute:: mass
+      :type: float
+
+      Mass of the geometry.
+
+      This the absolute mass, irrespective of the size of the bounding box.
+
+
+   .. py:attribute:: color
+      :type: simulation.scene._color.Color
+
+      Color when rendering this geometry.
+
+
+

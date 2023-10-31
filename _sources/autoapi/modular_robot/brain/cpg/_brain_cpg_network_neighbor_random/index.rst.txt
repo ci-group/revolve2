@@ -1,0 +1,35 @@
+:orphan:
+
+:py:mod:`_brain_cpg_network_neighbor_random`
+====================================================================
+
+.. py:module:: modular_robot.brain.cpg._brain_cpg_network_neighbor_random
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.brain.cpg._brain_cpg_network_neighbor_random.BrainCpgNetworkNeighborRandom
+
+
+
+
+.. py:class:: BrainCpgNetworkNeighborRandom(body: modular_robot.body.base.Body, rng: numpy.random.Generator)
+
+
+   Bases: :py:obj:`modular_robot.brain.cpg._brain_cpg_network_neighbor.BrainCpgNetworkNeighbor`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.cpg._brain_cpg_network_neighbor_random.BrainCpgNetworkNeighborRandom
+      :parts: 1
+
+   A cpg brain with random weights between neurons.
+
+   The weights are randomly generated when this object is created,
+   so they will be the same for every controller instance.
+
+

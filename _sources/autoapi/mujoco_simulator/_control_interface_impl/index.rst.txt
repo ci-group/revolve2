@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_control_interface_impl`
+==================================================
+
+.. py:module:: mujoco_simulator._control_interface_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._control_interface_impl.ControlInterfaceImpl
+
+
+
+
+.. py:class:: ControlInterfaceImpl(data: mujoco.MjData, abstraction_to_mujoco_mapping: mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping)
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.ControlInterface`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator._control_interface_impl.ControlInterfaceImpl
+      :parts: 1
+
+   Implementation of the control interface for MuJoCo.
+
+   .. py:method:: set_joint_hinge_position_target(joint_hinge: revolve2.simulation.scene.JointHinge, position: float) -> None
+
+      Set the position target of a hinge joint.
+
+      :param joint_hinge: The hinge to set the position target for.
+      :param position: The position target.
+
+
+

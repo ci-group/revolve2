@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_modular_robot_sensor_state_impl`
+===================================================================
+
+.. py:module:: modular_robot_simulation._modular_robot_sensor_state_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._modular_robot_sensor_state_impl.ModularRobotSensorStateImpl
+
+
+
+
+.. py:class:: ModularRobotSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems.BodyToMultiBodySystemMapping)
+
+
+   Bases: :py:obj:`revolve2.modular_robot.sensor_state.ModularRobotSensorState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._modular_robot_sensor_state_impl.ModularRobotSensorStateImpl
+      :parts: 1
+
+   Implementation for ModularRobotSensorState.
+
+   .. py:method:: get_active_hinge_sensor_state(sensor: revolve2.modular_robot.body.base.ActiveHingeSensor) -> revolve2.modular_robot.sensor_state.ActiveHingeSensorState
+
+      Get the state of the provided active hinge sensor.
+
+      :param sensor: The sensor.
+      :returns: The state.
+
+
+

@@ -1,0 +1,87 @@
+:orphan:
+
+:py:mod:`_rigid_body`
+======================================
+
+.. py:module:: simulation.scene._rigid_body
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._rigid_body.RigidBody
+
+
+
+
+.. py:class:: RigidBody
+
+
+   A collection of geometries and physics parameters.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:attribute:: initial_pose
+      :type: simulation.scene._pose.Pose
+
+      Initial pose of the rigid body.
+
+      Relative to its parent multi-body system.
+
+
+   .. py:attribute:: static_friction
+      :type: float
+
+      Static friction of the body.
+
+
+   .. py:attribute:: dynamic_friction
+      :type: float
+
+      Dynamic friction of the body.
+
+
+   .. py:attribute:: geometries
+      :type: list[simulation.scene.geometry.Geometry]
+
+      Geometries describing the shape of the body.
+
+
+   .. py:method:: mass() -> float
+
+      Get mass of the rigid body.
+
+      :returns: The mass.
+
+
+   .. py:method:: center_of_mass() -> pyrr.Vector3
+
+      Calculate the center of mass in the local reference frame of this rigid body.
+
+      If no geometry has mass, the average position of all geometries is returned, unweighted.
+
+      :returns: The center of mass.
+
+
+   .. py:method:: inertia_tensor() -> pyrr.Matrix33
+
+      Calculate the inertia tensor in the local reference frame of this rigid body.
+
+      Only box geometries are currently supported.
+
+      :returns: The inertia tensor.
+      :raises ValueError: If one of the geometries is not a box.
+
+
+

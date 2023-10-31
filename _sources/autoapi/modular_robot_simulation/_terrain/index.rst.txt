@@ -1,0 +1,33 @@
+:orphan:
+
+:py:mod:`_terrain`
+===========================================
+
+.. py:module:: modular_robot_simulation._terrain
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._terrain.Terrain
+
+
+
+
+.. py:class:: Terrain
+
+
+   Terrain consising of only static geometry.
+
+   .. py:attribute:: static_geometry
+      :type: list[revolve2.simulation.scene.geometry.Geometry]
+
+      The static geometry that defines the terrain.
+
+
+

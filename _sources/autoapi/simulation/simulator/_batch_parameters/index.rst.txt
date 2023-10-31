@@ -1,0 +1,58 @@
+:orphan:
+
+:py:mod:`_batch_parameters`
+================================================
+
+.. py:module:: simulation.simulator._batch_parameters
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.simulator._batch_parameters.BatchParameters
+
+
+
+
+.. py:class:: BatchParameters
+
+
+   Parameters for a simulation batch.
+
+   .. py:attribute:: simulation_time
+      :type: int | None
+
+      Seconds. The duration for which each robot should be simulated.
+      If set to 'None', the simulation will run indefinitely.
+
+
+   .. py:attribute:: sampling_frequency
+      :type: float | None
+
+      Hz. Frequency for state sampling during the simulation.
+      The simulator will attempt to follow this as closely as possible,
+      but is dependent on the actual step frequency of the simulator.
+      If set to 'None', no sampling will be performed.
+
+
+   .. py:attribute:: simulation_timestep
+      :type: float
+
+      Simulation time step in seconds. This is an important parameter that affects the trade-off between speed and accuracy,
+      as well as the stability of the robot model.
+      Smaller values of this parameter generally result in better accuracy and stability.
+      However, the specific value of this parameter may vary depending on the scenes being simulated and other batch parameters.
+
+
+   .. py:attribute:: control_frequency
+      :type: float
+
+      Similar to `sampling_frequency` but for how often the control function is called.
+
+
+

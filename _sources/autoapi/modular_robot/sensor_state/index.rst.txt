@@ -1,0 +1,65 @@
+:py:mod:`sensor_state`
+====================================
+
+.. py:module:: modular_robot.sensor_state
+
+.. autoapi-nested-parse::
+
+   Sensor states from modular robots.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.sensor_state.ActiveHingeSensorState
+   modular_robot.sensor_state.ModularRobotSensorState
+
+
+
+
+.. py:class:: ActiveHingeSensorState
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.sensor_state.ActiveHingeSensorState
+      :parts: 1
+
+   The state of an active hinge sensor.
+
+   .. py:property:: position
+      :type: float
+      :abstractmethod:
+
+      Get the measured position of the active hinge.
+
+      :returns: The measured position.
+
+
+
+.. py:class:: ModularRobotSensorState
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.sensor_state.ModularRobotSensorState
+      :parts: 1
+
+   The state of modular robot's sensors.
+
+   .. py:method:: get_active_hinge_sensor_state(sensor: modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor) -> modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState
+      :abstractmethod:
+
+      Get the state of the provided active hinge sensor.
+
+      :param sensor: The sensor.
+      :returns: The state.
+
+
+

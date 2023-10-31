@@ -1,0 +1,428 @@
+:py:mod:`base`
+=================================
+
+.. py:module:: modular_robot.body.base
+
+.. autoapi-nested-parse::
+
+   Base Modules for Robots.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.base.ActiveHinge
+   modular_robot.body.base.ActiveHingeSensor
+   modular_robot.body.base.Body
+   modular_robot.body.base.Brick
+   modular_robot.body.base.Core
+
+
+
+
+.. py:class:: ActiveHinge(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, servo1_bounding_box: pyrr.Vector3, servo2_bounding_box: pyrr.Vector3, frame_bounding_box: pyrr.Vector3, frame_offset: float, servo_offset: float, frame_mass: float, servo1_mass: float, servo2_mass: float, joint_offset: float, static_friction: float, dynamic_friction: float, range: float, effort: float, velocity: float, armature: float, pid_gain_p: float, pid_gain_d: float)
+
+
+   Bases: :py:obj:`modular_robot.body._module.Module`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.base.ActiveHinge
+      :parts: 1
+
+   An Active Hinge.
+
+   .. py:property:: attachment
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to this hinge.
+
+      :returns: The attached module.
+
+
+   .. py:property:: static_friction
+      :type: float
+
+      Get the static friction.
+
+      :return: The value.
+
+
+   .. py:property:: dynamic_friction
+      :type: float
+
+      Get the dynamic friction.
+
+      :return: The value.
+
+
+   .. py:property:: range
+      :type: float
+
+      Get the range of the servo.
+
+      :return: The value.
+
+
+   .. py:property:: effort
+      :type: float
+
+      Get the effort of the servo.
+
+      :return: The value.
+
+
+   .. py:property:: velocity
+      :type: float
+
+      Get the velocity of the servo.
+
+      :return: The value.
+
+
+   .. py:property:: servo1_bounding_box
+      :type: pyrr.Vector3
+
+      Get the bounding box of the first servo part.
+
+      Sizes are total length, not half length from origin.
+      :return: Vector3 with sizes of bbox in x,y,z dimension (m).
+
+
+   .. py:property:: servo2_bounding_box
+      :type: pyrr.Vector3
+
+      Get the bounding box of the second servo part.
+
+      Sizes are total length, not half length from origin.
+      :return: Vector3 with sizes of bbox in x,y,z dimension (m).
+
+
+   .. py:property:: frame_bounding_box
+      :type: pyrr.Vector3
+
+      Get the bounding box of the frame.
+
+      Sizes are total length, not half length from origin.
+      :return: Vector3 with sizes of bbox in x,y,z dimension (m).
+
+
+   .. py:property:: frame_offset
+      :type: float
+
+      Get the offset of the frame (in m).
+
+      :return: The value.
+
+
+   .. py:property:: servo_offset
+      :type: float
+
+      Get the servo offset (in m).
+
+      :return: The value.
+
+
+   .. py:property:: frame_mass
+      :type: float
+
+      Get the frame mass (in kg).
+
+      :return: The value.
+
+
+   .. py:property:: servo1_mass
+      :type: float
+
+      Get the mass of the first servo part (in kg).
+
+      :return: The value.
+
+
+   .. py:property:: servo2_mass
+      :type: float
+
+      Get the mass of the second servo part (in kg).
+
+      :return: The value.
+
+
+   .. py:property:: joint_offset
+      :type: float
+
+      Get the joint offset (in m).
+
+      :return: The value.
+
+
+   .. py:property:: armature
+      :type: float
+
+      Get thearmature of the joint.
+
+      This represents the inertia of the motor itself when nothing is attached.
+
+      :return: The value.
+
+
+   .. py:property:: pid_gain_p
+      :type: float
+
+      Get the proportional gain of the pid position controller.
+
+      :return: The value.
+
+
+   .. py:property:: pid_gain_d
+      :type: float
+
+      Get the derivative gain of the pid position controller.
+
+      :return: The value.
+
+
+   .. py:property:: sensor
+      :type: modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor | None
+
+      Get the sensor.
+
+      :return: The value.
+
+
+   .. py:attribute:: ATTACHMENT
+      :value: 0
+
+      
+
+
+.. py:class:: ActiveHingeSensor
+
+
+   A sensor for an active hinge that measures its angle.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+
+.. py:class:: Body
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.base.Body
+      :parts: 1
+
+   Body of a modular robot.
+
+   .. py:attribute:: core
+      :type: modular_robot.body.base._core.Core
+
+      
+
+   .. py:method:: grid_position(module: modular_robot.body._module.Module) -> pyrr.Vector3
+
+      Calculate the position of this module in a 3d grid with the core as center.
+
+      The distance between all modules is assumed to be one grid cell.
+      All module angles must be multiples of 90 degrees.
+
+      :param module: The module to calculate the position for.
+      :returns: The calculated position.
+      :raises NotImplementedError: In case a module is encountered that is not supported.
+
+
+   .. py:method:: find_modules_of_type(module_type: Type[TModule]) -> list[TModule]
+
+      Find all Modules of a certain type in the robot.
+
+      :param module_type: The type.
+      :return: The list of Modules.
+
+
+   .. py:method:: to_grid() -> tuple[list[list[list[modular_robot.body._module.Module | None]]], tuple[int, int, int]]
+      :abstractmethod:
+
+      Convert the tree structure to a grid.
+
+      The distance between all modules is assumed to be one grid cell.
+      All module angles must be multiples of 90 degrees.
+
+      The grid is indexed depth, width, height, or x, y, z, from the perspective of the core.
+
+      :returns: The created grid with cells set to either a Module or None and a tuple representing the position of the core.
+      :raises NotImplementedError: In case a module is encountered that is not supported.
+
+
+
+.. py:class:: Brick(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+
+
+   Bases: :py:obj:`modular_robot.body._module.Module`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.base.Brick
+      :parts: 1
+
+   A Brick.
+
+   .. py:property:: front
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the front of the brick.
+
+      :returns: The attached module.
+
+
+   .. py:property:: right
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the right of the brick.
+
+      :returns: The attached module.
+
+
+   .. py:property:: left
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the left of the brick.
+
+      :returns: The attached module.
+
+
+   .. py:property:: mass
+      :type: float
+
+      Get the mass of the brick (in kg).
+
+      :return: The value.
+
+
+   .. py:property:: bounding_box
+      :type: pyrr.Vector3
+
+      Get the bounding box size.
+
+      Sizes are total length, not half length from origin.
+      :return: Vector3 with sizes of bbox in x,y,z dimension (in m).
+
+
+   .. py:property:: child_offset
+      :type: float
+
+      Get the child offset (in m).
+
+      :return: The value.
+
+
+   .. py:attribute:: FRONT
+      :value: 0
+
+      
+
+   .. py:attribute:: RIGHT
+      :value: 1
+
+      
+
+   .. py:attribute:: LEFT
+      :value: 2
+
+      
+
+
+.. py:class:: Core(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+
+
+   Bases: :py:obj:`modular_robot.body._module.Module`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.base.Core
+      :parts: 1
+
+   The core module of a modular robot.
+
+   .. py:property:: front
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the front of the core.
+
+      :returns: The attached module.
+
+
+   .. py:property:: right
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the right of the core.
+
+      :returns: The attached module.
+
+
+   .. py:property:: back
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the back of the core.
+
+      :returns: The attached module.
+
+
+   .. py:property:: left
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the left of the core.
+
+      :returns: The attached module.
+
+
+   .. py:property:: mass
+      :type: float
+
+      Get the mass of the Core (in kg).
+
+      :return: The value.
+
+
+   .. py:property:: bounding_box
+      :type: pyrr.Vector3
+
+      Get the bounding box.
+
+      Sizes are total length, not half length from origin.
+      :return: Vector3 with sizes of bbox in x,y,z dimension (m).
+
+
+   .. py:property:: child_offset
+      :type: float
+
+      Get the child offset (in m).
+
+      :return: The value.
+
+
+   .. py:attribute:: FRONT
+      :value: 0
+
+      
+
+   .. py:attribute:: RIGHT
+      :value: 1
+
+      
+
+   .. py:attribute:: BACK
+      :value: 2
+
+      
+
+   .. py:attribute:: LEFT
+      :value: 3
+
+      
+
+

@@ -1,0 +1,34 @@
+:orphan:
+
+:py:mod:`_joint_fixed`
+=======================================
+
+.. py:module:: simulation.scene._joint_fixed
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._joint_fixed.JointFixed
+
+
+
+
+.. py:class:: JointFixed
+
+
+   Bases: :py:obj:`simulation.scene._joint.Joint`
+
+   .. autoapi-inheritance-diagram:: simulation.scene._joint_fixed.JointFixed
+      :parts: 1
+
+   A joint fixing the rigid bodies together rigidly.
+
+   This makes them effectively a single rigid body.
+
+

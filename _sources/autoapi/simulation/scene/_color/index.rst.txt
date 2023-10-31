@@ -1,0 +1,56 @@
+:orphan:
+
+:py:mod:`_color`
+=================================
+
+.. py:module:: simulation.scene._color
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._color.Color
+
+
+
+
+.. py:class:: Color
+
+
+   Represents a color in RGBA format.
+
+   All values should from 0 to 255.
+
+   .. py:attribute:: red
+      :type: int
+
+      
+
+   .. py:attribute:: green
+      :type: int
+
+      
+
+   .. py:attribute:: blue
+      :type: int
+
+      
+
+   .. py:attribute:: alpha
+      :type: int
+
+      
+
+   .. py:method:: to_normalized_rgba_list() -> list[float]
+
+      Convert to rgba list where each value is between 0 and 1.
+
+      :returns: The list.
+
+
+

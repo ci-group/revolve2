@@ -1,0 +1,4 @@
+<map id="inheritance08ef858f37" name="inheritance08ef858f37">
+<area shape="rect" id="node1" title="Abstract base class for generic types." alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" href="#modular_robot_physical._uuid_key.UUIDKey" target="_top" title="Wraps a value and implements __eq__ and __hash__ based purely on id(value)." alt="" coords="125,5,205,31"/>
+</map>

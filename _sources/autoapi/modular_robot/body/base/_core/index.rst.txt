@@ -1,0 +1,109 @@
+:orphan:
+
+:py:mod:`_core`
+=======================================
+
+.. py:module:: modular_robot.body.base._core
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.base._core.Core
+
+
+
+
+.. py:class:: Core(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+
+
+   Bases: :py:obj:`modular_robot.body._module.Module`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.base._core.Core
+      :parts: 1
+
+   The core module of a modular robot.
+
+   .. py:property:: front
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the front of the core.
+
+      :returns: The attached module.
+
+
+   .. py:property:: right
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the right of the core.
+
+      :returns: The attached module.
+
+
+   .. py:property:: back
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the back of the core.
+
+      :returns: The attached module.
+
+
+   .. py:property:: left
+      :type: modular_robot.body._module.Module | None
+
+      Get the module attached to the left of the core.
+
+      :returns: The attached module.
+
+
+   .. py:property:: mass
+      :type: float
+
+      Get the mass of the Core (in kg).
+
+      :return: The value.
+
+
+   .. py:property:: bounding_box
+      :type: pyrr.Vector3
+
+      Get the bounding box.
+
+      Sizes are total length, not half length from origin.
+      :return: Vector3 with sizes of bbox in x,y,z dimension (m).
+
+
+   .. py:property:: child_offset
+      :type: float
+
+      Get the child offset (in m).
+
+      :return: The value.
+
+
+   .. py:attribute:: FRONT
+      :value: 0
+
+      
+
+   .. py:attribute:: RIGHT
+      :value: 1
+
+      
+
+   .. py:attribute:: BACK
+      :value: 2
+
+      
+
+   .. py:attribute:: LEFT
+      :value: 3
+
+      
+
+

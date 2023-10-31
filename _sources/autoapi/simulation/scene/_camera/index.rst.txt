@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`_camera`
+==================================
+
+.. py:module:: simulation.scene._camera
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._camera.Camera
+
+
+
+
+.. py:class:: Camera
+
+
+   Camera sensor.
+
+   .. py:attribute:: parent
+      :type: simulation.scene._rigid_body.RigidBody
+
+      Parent rigid body.
+
+      The camera will be rigidly attached to its parent, relatively using the camera's pose.    
+
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the geometry, relative to its parent rigid body.
+
+
+

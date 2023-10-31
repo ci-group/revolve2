@@ -1,0 +1,45 @@
+:orphan:
+
+:py:mod:`_modular_robot`
+======================================
+
+.. py:module:: modular_robot._modular_robot
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot._modular_robot.ModularRobot
+
+
+
+
+.. py:class:: ModularRobot(body: modular_robot.body.base.Body, brain: modular_robot.brain.Brain)
+
+
+   A module robot consisting of a body and brain.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:attribute:: body
+      :type: modular_robot.body.base.Body
+
+      
+
+   .. py:attribute:: brain
+      :type: modular_robot.brain.Brain
+
+      
+
+

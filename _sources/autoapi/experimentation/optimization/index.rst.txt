@@ -1,0 +1,20 @@
+:py:mod:`optimization`
+======================================
+
+.. py:module:: experimentation.optimization
+
+.. autoapi-nested-parse::
+
+   Standard algorithms, tools, and SQLAlchemy models and mixing for optimization.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   ea/index.rst
+
+

@@ -1,7 +1,7 @@
 ============
 Installation
 ============
-Revolve2 consists of multiple smaller Python packages.
+Revolve2 consists of multiple Python packages.
 Not all packages are required; pick what you need based on your use case. In the following section you will find out what packages you need for your research.
 
 -------------
@@ -13,10 +13,10 @@ Prerequisites
 
     python3.10 -m pip install virtualenv
 
----------------------
-Create an environment
----------------------
-Keeping your workspace tidy is important, `virtual environments <https://docs.python.org/3/library/venv.html>`_ help with that.
+----------------------------
+Create a virtual environment
+----------------------------
+Keeping your workspace tidy is important, and `virtual environments <https://docs.python.org/3/library/venv.html>`_ help with that.
 Create a directory for your project, then create a virtual environment::
 
     python3.10 -m virtualenv .venv
@@ -33,6 +33,12 @@ Download the source
 Download your preferred version from `<https://github.com/ci-group/revolve2/releases>`_.
 If you need to edit Revolve2 itself to add new features, it is recommended to instead create a fork and clone using git.
 
+-------------
+Common issues
+-------------
+* *For Mac users:* Installing Mujoco sometimes does not work properly. Try `pip install mujoco` to see weather you encounter any issues. If it does not install properly it might be necessary to run the command: `export SYSTEM_VERSION_COMPAT=0` before doing the installation of the modules. `See here. <https://github.com/conda-forge/python-feedstock/issues/445#issuecomment-773835866>`_
+* Conda-environments are not officially supported and can cause issues with installation. (Especially in combination with Mac systems)
+
 ----------------
 Install packages
 ----------------
@@ -46,57 +52,45 @@ This script installs all required packages in editable mode.
 
 Revolve2 contains multiple packages that provide specific functionality. These packages contain functionality for simulations, modular robot description, hardware control and optimization / EA.
 If you need to edit components of Revolve2, or you want to add new features, it is recommended that you use :ref:`installation/index:Editable Mode`.
-Manual installation with editable mode requires you to install the packages in order of dependency, so that all packages are installed in editable mode.
-For the correct order refer to the tables *requires* column or look at the `dev_requirements.sh` script.
+Manual installation with editable mode requires you to install the packages in reverse order of dependency, so that all packages are installed in editable mode.
+For the correct order refer to the tables *requires* column or look at the `dev_install.sh` script.
 
-Installing them without edible mode does not require the right order since it will automatically install dependencies.
+If you do not use editable mode, the order of installation is irrelevant.
 Each package can be installed using: ::
 
-    pip install <package_name>
+    pip install <path_to_revolve>/<package_name>
 
-.. list-table:: Revolve2 packages
+.. list-table:: Revolve2 packages (in alphabetical order)
    :widths: 25 50 25 5
    :header-rows: 1
 
    * - Package Name
-     - Functionality
+     - Description
      - requires
      -
-   * - actor_controller
-     - This package provides a controller interface as well as already implemented controllers for the modular robots.
-     - :code:`serialization`
-     - **!**
    * - ci_group
-     - This package provides Revolve2 with CI group specific revolve configuration and helper tools.
-     - :code:`simulation` & :code:`modular_robot`
+     - Computational Intelligence Group experimentation tools and standards.
+     - :code:`modular_robot_simulation`
      - **!**
    * - experimentation
-     - This package provides functionality for experiments, such as optimization techniques, genotype operations and database usage.
-     - :code:`modular_robot`
+     - Tools for experimentation.
+     - \-
      - **!**
    * - modular_robot
-     - This package provides Revolve2 with all functionality around the robots and their modules.
-     - :code:`simulation` & :code:`actor_controller`
+     - Everything for defining modular robots.
+     - \-
      - **!**
-   * - rpi_controller
-     - This package allows to run a Revolve2 ``ActorController`` on a physical robot, with the same behavior as in the simulations.
-     - :code:`actor_controller`
-     -
-   * - rpi_controller_remote
-     - This package allows to remotely connect to, and run a physical robot using SSH.
-     - :code:`serialization`
-     -
-   * - serialization (Deprecated)
-     - This package does what the name says. (Will be removed soon)
-     -
+   * - modular_robot_simulation
+     - Functionality to define scenes with modular robots in a terrain and simulate them.
+     - :code:`modular_robot`, :code:`simulation`
      - **!**
    * - simulation
-     - This package provides an abstraction layer for physics simulators. Other packages provide a simulator-specific implementation, such as for MuJoCo.
-     - :code:`actor_controller`
+     - Physics simulation abstraction layer.
+     - \-
      - **!**
-   * - simulators/mujoco
-     - This package provides simulation using the MuJoCo simulator.
-     - :code:`simulation` & :code:`modular_robot`
+   * - simulators/mujoco_simulator
+     - MuJoCo simulator.
+     - :code:`simulation`
      - **!**
 
 
@@ -104,7 +98,7 @@ Each package can be installed using: ::
 -------------
 Editable Mode
 -------------
-When developing element in python packages it is crucial to test changes iteratively. To avoid having to constantly :code:`pip uninstall` and :code:`pip install`, you can simply use pip`s built in "developer" mode.
+During the development of python packages it is crucial to test changes iteratively. To avoid having to constantly :code:`pip uninstall` and :code:`pip install` your package, you can simply use pip`s built in "developer" mode.
 If you want to edit Revolve2's code while having it installed, use pip's ``editable mode``::
 
     pip install -e <package>

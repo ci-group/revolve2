@@ -1,0 +1,152 @@
+:py:mod:`ea`
+=========================================
+
+.. py:module:: experimentation.optimization.ea
+
+.. autoapi-nested-parse::
+
+   Everything related to Evolutionary Algorithms.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   population_management/index.rst
+   selection/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.Generation
+   experimentation.optimization.ea.Individual
+   experimentation.optimization.ea.Parameters
+   experimentation.optimization.ea.Population
+
+
+
+
+.. py:class:: Generation
+
+
+   Bases: :py:obj:`experimentation.database.HasId`, :py:obj:`sqlalchemy.orm.MappedAsDataclass`, :py:obj:`Generic`\ [\ :py:obj:`TPopulation`\ ]
+
+   .. autoapi-inheritance-diagram:: experimentation.optimization.ea.Generation
+      :parts: 1
+
+   Generic SQLAlchemy model for a generation.
+
+   Inherit from this to create your own generation type and table.
+
+   The generic parameter `TPopulation` refers to the user-defined population type.
+   This parameter cannot be a forward reference.
+
+   For example::
+
+       class MyGeneration(Base, Generation[MyPopulation]):
+           __tablename__ = "my_generation"
+
+   .. py:method:: __init_subclass__(/, **kwargs: dict[str, Any]) -> None
+      :classmethod:
+
+      Initialize a version of this class when it is subclassed.
+
+      Gets the actual type of `TPopulation` and stores it for later use.
+      :param kwargs: Remaining arguments passed to super.
+
+
+
+.. py:class:: Individual
+
+
+   Bases: :py:obj:`experimentation.database.HasId`, :py:obj:`sqlalchemy.orm.MappedAsDataclass`, :py:obj:`Generic`\ [\ :py:obj:`TGenotype`\ ]
+
+   .. autoapi-inheritance-diagram:: experimentation.optimization.ea.Individual
+      :parts: 1
+
+   Generic SQLAlchemy model for an individual.
+
+   Inherit from this to create your own individual type.
+
+   This class is designed to be part of a `Population`.
+   The metaclass argument `population_table` must contain the name of the population table.
+
+   The generic parameter `TGenotype` refers to the user-defined genotype type,
+   which should have an `id` field that will be used as a foreign key reference.
+   This parameter cannot be a forward reference.
+
+   For example::
+
+       class MyIndividual(Base, Individual[MyGenotype], population_table="my_population"):
+           __tablename__ = "my_individual"
+
+   .. py:method:: __init_subclass__(population_table: str, **kwargs: dict[str, Any]) -> None
+      :classmethod:
+
+      Initialize a version of this class when it is subclassed.
+
+      Gets the actual type of `TGenotype` and value of `population_table` and stores them for later use.
+
+      :param population_table: Name of the population table.
+      :param kwargs: Remaining arguments passed to super.
+
+
+
+.. py:class:: Parameters
+
+
+   Bases: :py:obj:`sqlalchemy.orm.MappedAsDataclass`
+
+   .. autoapi-inheritance-diagram:: experimentation.optimization.ea.Parameters
+      :parts: 1
+
+   An SQLAlchemy mixing that provides a parameters column that is a tuple of floats.
+
+   The parameters are saved in the database as string of semicolon seperated floats.
+
+   .. py:attribute:: parameters
+      :type: numpy.typing.NDArray[numpy.float_]
+
+      
+
+
+.. py:class:: Population
+
+
+   Bases: :py:obj:`experimentation.database.HasId`, :py:obj:`sqlalchemy.orm.MappedAsDataclass`, :py:obj:`Generic`\ [\ :py:obj:`TIndividual`\ ]
+
+   .. autoapi-inheritance-diagram:: experimentation.optimization.ea.Population
+      :parts: 1
+
+   Generic SQLAlchemy model for a population.
+
+   Inherit from this to create your own population type.
+
+   The generic parameter `TIndividual` refers to the user-defined individual type.
+   This parameter cannot be a forward reference.
+
+   For example::
+
+       class MyPopulation(Base, Population[MyIndividual]):
+           __tablename__ = "my_population"
+
+   .. py:method:: __init_subclass__(/, **kwargs: dict[str, Any]) -> None
+      :classmethod:
+
+      Initialize a version of this class when it is subclassed.
+
+      Gets the actual type of `TIndividual` and stores it for later use.
+
+      :param kwargs: Remaining arguments passed to super.
+
+
+

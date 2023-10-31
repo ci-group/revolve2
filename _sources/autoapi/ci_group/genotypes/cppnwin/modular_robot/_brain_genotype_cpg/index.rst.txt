@@ -1,0 +1,72 @@
+:orphan:
+
+:py:mod:`_brain_genotype_cpg`
+======================================================================
+
+.. py:module:: ci_group.genotypes.cppnwin.modular_robot._brain_genotype_cpg
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ci_group.genotypes.cppnwin.modular_robot._brain_genotype_cpg.BrainGenotypeCpg
+
+
+
+
+.. py:class:: BrainGenotypeCpg
+
+
+   An SQLAlchemy model for a CPPNWIN cpg brain genotype.
+
+   .. py:attribute:: brain
+      :type: ci_group.genotypes.cppnwin._multineat_genotype_pickle_wrapper.MultineatGenotypePickleWrapper
+
+      
+
+   .. py:method:: random_brain(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BrainGenotypeCpg
+      :classmethod:
+
+      Create a random genotype.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: The created genotype.
+
+
+   .. py:method:: mutate_brain(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BrainGenotypeCpg
+
+      Mutate this genotype.
+
+      This genotype will not be changed; a mutated copy will be returned.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: A mutated copy of the provided genotype.
+
+
+   .. py:method:: crossover_brain(parent1: typing_extensions.Self, parent2: typing_extensions.Self, rng: numpy.random.Generator) -> BrainGenotypeCpg
+      :classmethod:
+
+      Perform crossover between two genotypes.
+
+      :param parent1: The first genotype.
+      :param parent2: The second genotype.
+      :param rng: Random number generator.
+      :returns: A newly created genotype.
+
+
+   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor_v1.BrainCpgNetworkNeighborV1
+
+      Develop the genotype into a modular robot.
+
+      :param body: The body to develop the brain for.
+      :returns: The created robot.
+
+
+

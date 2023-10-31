@@ -1,0 +1,56 @@
+:orphan:
+
+:py:mod:`_modular_robot_simulation_state`
+==================================================================
+
+.. py:module:: modular_robot_simulation._modular_robot_simulation_state
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._modular_robot_simulation_state.ModularRobotSimulationState
+
+
+
+
+.. py:class:: ModularRobotSimulationState(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem)
+
+
+   The state of a modular robot at some moment in a simulation.
+
+   .. py:method:: get_pose() -> revolve2.simulation.scene.Pose
+
+      Get the pose of the modular robot.
+
+      :returns: The retrieved pose.
+
+
+   .. py:method:: get_module_relative_pose(module: revolve2.modular_robot.body.Module) -> revolve2.simulation.scene.Pose
+      :abstractmethod:
+
+      Get the pose of a module, relative to its parent module's reference frame.
+
+      In case there is no parent(the core), this is equal to getting the absolute pose.
+
+      :param module: The module to get the pose for.
+      :returns: The relative pose.
+      :raises NotImplementedError: Always.
+
+
+   .. py:method:: get_module_absolute_pose(module: revolve2.modular_robot.body.Module) -> revolve2.simulation.scene.Pose
+      :abstractmethod:
+
+      Get the pose of this module, relative the global reference frame.
+
+      :param module: The module to get the pose for.
+      :returns: The absolute pose.
+      :raises NotImplementedError: Always.
+
+
+

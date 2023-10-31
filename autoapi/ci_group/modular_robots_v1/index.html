@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>modular_robots_v1 &mdash; Revolve2 1.0.0rc1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=77c1c56c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="modular_robots_v2" href="../modular_robots_v2/index.html" />
+    <link rel="prev" title="fitness_functions" href="../fitness_functions/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Revolve2
+              <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started/index.html#step-1-installation">Step 1: Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started/index.html#step-2-play-with-the-examples">Step 2: Play with the examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#create-a-virtual-environment">Create a virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#download-the-source">Download the source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#common-issues">Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#install-packages">Install packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#editable-mode">Editable Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../physical_robot_setup/index.html">Physical Robot Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../physical_robot_setup/index.html#preparation-install-the-hardware">Preparation + Install the Hardware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../physical_robot_setup/index.html#hardware-setup-for-a-v1-robot">Hardware setup for a V1 Robot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../physical_robot_setup/index.html#hardware-setup-for-a-v2-robot">Hardware setup for a V2 Robot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../physical_robot_setup/index.html#setting-up-the-rpi">Setting up the RPi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../physical_robot_setup/index.html#install-revolve2-on-the-rpi">Install Revolve2 on the RPi</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../physical_robot_setup/index.html#v1-additional-steps">V1 Additional Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing_guide/index.html">Contributing guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#publishing-your-contribution">Publishing your contribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#developer-installation">Developer installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#continuous-integration">Continuous integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#code-tools">Code tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#version-control">Version control</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../fitness_functions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitness_functions</span></code></a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../modular_robots_v2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../morphological_measures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_measures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../terrains/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">terrains</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../experimentation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../experimentation/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/logging/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/rng/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rng</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../modular_robot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot/body/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot/brain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">brain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot/sensor_state/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensor_state</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../modular_robot_simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot_simulation/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot_simulation/index.html#classes">Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot_simulation/index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../simulation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../simulation/scene/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scene</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../simulation/simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../mujoco_simulator/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../modular_robot_physical/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_physical</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot_physical/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot_physical/physical_interfaces/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">physical_interfaces</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot_physical/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot_physical/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Revolve2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v1</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ci_group.modular_robots_v1">
+<span id="modular-robots-v1"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v1</span></code><a class="headerlink" href="#module-ci_group.modular_robots_v1" title="Link to this heading"></a></h1>
+<p>Standard modular robots.</p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.all" title="ci_group.modular_robots_v1.all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">all</span></code></a>(→ list[revolve2.modular_robot.body.v1.BodyV1])</p></td>
+<td><p>Get a list of all standard module robots.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.spider_v1" title="ci_group.modular_robots_v1.spider_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spider_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the spider modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.gecko_v1" title="ci_group.modular_robots_v1.gecko_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gecko_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the gecko modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.babya_v1" title="ci_group.modular_robots_v1.babya_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">babya_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the babya modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.ant_v1" title="ci_group.modular_robots_v1.ant_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ant_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the ant modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.salamander_v1" title="ci_group.modular_robots_v1.salamander_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">salamander_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the salamander modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.blokky_v1" title="ci_group.modular_robots_v1.blokky_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">blokky_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the blokky modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.park_v1" title="ci_group.modular_robots_v1.park_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">park_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the park modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.babyb_v1" title="ci_group.modular_robots_v1.babyb_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">babyb_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the babyb modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.garrix_v1" title="ci_group.modular_robots_v1.garrix_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">garrix_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the garrix modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.insect_v1" title="ci_group.modular_robots_v1.insect_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insect_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the insect modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.linkin_v1" title="ci_group.modular_robots_v1.linkin_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">linkin_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the linkin modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.longleg_v1" title="ci_group.modular_robots_v1.longleg_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">longleg_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the longleg modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.penguin_v1" title="ci_group.modular_robots_v1.penguin_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">penguin_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the penguin modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.pentapod_v1" title="ci_group.modular_robots_v1.pentapod_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pentapod_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the pentapod modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.queen_v1" title="ci_group.modular_robots_v1.queen_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">queen_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the queen modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.squarish_v1" title="ci_group.modular_robots_v1.squarish_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">squarish_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the squarish modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.snake_v1" title="ci_group.modular_robots_v1.snake_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">snake_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the snake modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.stingray_v1" title="ci_group.modular_robots_v1.stingray_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stingray_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the stingray modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.tinlicker_v1" title="ci_group.modular_robots_v1.tinlicker_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tinlicker_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the tinlicker modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.turtle_v1" title="ci_group.modular_robots_v1.turtle_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">turtle_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the turtle modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.ww_v1" title="ci_group.modular_robots_v1.ww_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ww_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the ww modular robot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.zappa_v1" title="ci_group.modular_robots_v1.zappa_v1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">zappa_v1</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get the zappa modular robot.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ci_group.modular_robots_v1.get" title="ci_group.modular_robots_v1.get"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get</span></code></a>(→ revolve2.modular_robot.body.v1.BodyV1)</p></td>
+<td><p>Get a robot by name.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.all">
+<span class="sig-name descname"><span class="pre">all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.all" title="Link to this definition"></a></dt>
+<dd><p>Get a list of all standard module robots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list of robots.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.spider_v1">
+<span class="sig-name descname"><span class="pre">spider_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.spider_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the spider modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.gecko_v1">
+<span class="sig-name descname"><span class="pre">gecko_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.gecko_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the gecko modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.babya_v1">
+<span class="sig-name descname"><span class="pre">babya_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.babya_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the babya modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.ant_v1">
+<span class="sig-name descname"><span class="pre">ant_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.ant_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the ant modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.salamander_v1">
+<span class="sig-name descname"><span class="pre">salamander_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.salamander_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the salamander modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.blokky_v1">
+<span class="sig-name descname"><span class="pre">blokky_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.blokky_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the blokky modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.park_v1">
+<span class="sig-name descname"><span class="pre">park_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.park_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the park modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.babyb_v1">
+<span class="sig-name descname"><span class="pre">babyb_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.babyb_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the babyb modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.garrix_v1">
+<span class="sig-name descname"><span class="pre">garrix_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.garrix_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the garrix modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.insect_v1">
+<span class="sig-name descname"><span class="pre">insect_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.insect_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the insect modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.linkin_v1">
+<span class="sig-name descname"><span class="pre">linkin_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.linkin_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the linkin modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.longleg_v1">
+<span class="sig-name descname"><span class="pre">longleg_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.longleg_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the longleg modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.penguin_v1">
+<span class="sig-name descname"><span class="pre">penguin_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.penguin_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the penguin modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.pentapod_v1">
+<span class="sig-name descname"><span class="pre">pentapod_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.pentapod_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the pentapod modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.queen_v1">
+<span class="sig-name descname"><span class="pre">queen_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.queen_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the queen modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.squarish_v1">
+<span class="sig-name descname"><span class="pre">squarish_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.squarish_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the squarish modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.snake_v1">
+<span class="sig-name descname"><span class="pre">snake_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.snake_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the snake modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.stingray_v1">
+<span class="sig-name descname"><span class="pre">stingray_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.stingray_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the stingray modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.tinlicker_v1">
+<span class="sig-name descname"><span class="pre">tinlicker_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.tinlicker_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the tinlicker modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.turtle_v1">
+<span class="sig-name descname"><span class="pre">turtle_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.turtle_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the turtle modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.ww_v1">
+<span class="sig-name descname"><span class="pre">ww_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.ww_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the ww modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.zappa_v1">
+<span class="sig-name descname"><span class="pre">zappa_v1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.zappa_v1" title="Link to this definition"></a></dt>
+<dd><p>Get the zappa modular robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the robot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ci_group.modular_robots_v1.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.body.v1.BodyV1</span></span></span><a class="headerlink" href="#ci_group.modular_robots_v1.get" title="Link to this definition"></a></dt>
+<dd><p>Get a robot by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> – The name of the robot to get.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The robot with that name.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – When a robot with that name does not exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Computational Intelligence Group, Vrije Universiteit Amsterdam &amp; Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

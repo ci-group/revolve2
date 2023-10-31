@@ -1,0 +1,5 @@
+<map id="inheritancefe353044a6" name="inheritancefe353044a6">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" href="../_brain/index.html#modular_robot.brain._brain.Brain" target="_top" title="The brain of a modular robot." alt="" coords="125,5,197,31"/>
+<area shape="rect" id="node3" href="_brain_cpg_network_static/index.html#modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" target="_top" title="A CPG brain with cpgs and connections defined by the user." alt="" coords="245,5,419,31"/>
+</map>

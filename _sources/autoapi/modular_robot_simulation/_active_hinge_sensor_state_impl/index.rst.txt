@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_active_hinge_sensor_state_impl`
+==================================================================
+
+.. py:module:: modular_robot_simulation._active_hinge_sensor_state_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._active_hinge_sensor_state_impl.ActiveHingeSensorStateImpl
+
+
+
+
+.. py:class:: ActiveHingeSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, hinge_joint: revolve2.simulation.scene.JointHinge)
+
+
+   Bases: :py:obj:`revolve2.modular_robot.sensor_state.ActiveHingeSensorState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._active_hinge_sensor_state_impl.ActiveHingeSensorStateImpl
+      :parts: 1
+
+   Implements the active hinge sensor state.
+
+   .. py:property:: position
+      :type: float
+
+      Get the measured position of the active hinge.
+
+      :returns: The measured position.
+
+
+

@@ -1,0 +1,78 @@
+:orphan:
+
+:py:mod:`_uuid_key`
+==========================================
+
+.. py:module:: modular_robot_physical._uuid_key
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical._uuid_key.HasUUID
+   modular_robot_physical._uuid_key.UUIDKey
+
+
+
+
+.. py:class:: HasUUID
+
+
+   Bases: :py:obj:`Protocol`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical._uuid_key.HasUUID
+      :parts: 1
+
+   A class where each instance has a UUID.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+      # noqa: DAR202
+
+
+
+.. py:class:: UUIDKey(value: _T)
+
+
+   Bases: :py:obj:`Generic`\ [\ :py:obj:`_T`\ ]
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical._uuid_key.UUIDKey
+      :parts: 1
+
+   Wraps a value and implements __eq__ and __hash__ based purely on id(value).
+
+   .. py:property:: value
+      :type: _T
+
+      Get the wrapped value.
+
+      :returns: The value.
+
+
+   .. py:method:: __eq__(other: object) -> bool
+
+      Compare with another wrapped value using their ids.
+
+      :param other: The object to compare with.
+      :returns: Whether their ids are equal.
+      :raises ValueError: If the other objecgt is not an UUIDKey.
+
+
+   .. py:method:: __hash__() -> int
+
+      Hash this object using its id only.
+
+      :returns: The hash.
+
+
+

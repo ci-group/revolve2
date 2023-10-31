@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`_brain_cpg_network_neighbor`
+=============================================================
+
+.. py:module:: modular_robot.brain.cpg._brain_cpg_network_neighbor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.brain.cpg._brain_cpg_network_neighbor.BrainCpgNetworkNeighbor
+
+
+
+
+.. py:class:: BrainCpgNetworkNeighbor(body: modular_robot.body.base.Body)
+
+
+   Bases: :py:obj:`modular_robot.brain._brain.Brain`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.cpg._brain_cpg_network_neighbor.BrainCpgNetworkNeighbor
+      :parts: 1
+
+   A CPG brain with active hinges that are connected if they are within 2 jumps in the modular robot tree structure.
+
+   That means, NOT grid coordinates, but tree distance.
+
+   .. py:method:: make_instance() -> modular_robot.brain._brain_instance.BrainInstance
+
+      Create an instance of this brain.
+
+      :returns: The created instance.
+
+
+

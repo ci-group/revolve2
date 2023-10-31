@@ -1,0 +1,64 @@
+:orphan:
+
+:py:mod:`_population`
+=====================================================
+
+.. py:module:: experimentation.optimization.ea._population
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea._population.Population
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea._population.TIndividual
+
+
+.. py:data:: TIndividual
+
+   
+
+.. py:class:: Population
+
+
+   Bases: :py:obj:`experimentation.database.HasId`, :py:obj:`sqlalchemy.orm.MappedAsDataclass`, :py:obj:`Generic`\ [\ :py:obj:`TIndividual`\ ]
+
+   .. autoapi-inheritance-diagram:: experimentation.optimization.ea._population.Population
+      :parts: 1
+
+   Generic SQLAlchemy model for a population.
+
+   Inherit from this to create your own population type.
+
+   The generic parameter `TIndividual` refers to the user-defined individual type.
+   This parameter cannot be a forward reference.
+
+   For example::
+
+       class MyPopulation(Base, Population[MyIndividual]):
+           __tablename__ = "my_population"
+
+   .. py:method:: __init_subclass__(/, **kwargs: dict[str, Any]) -> None
+      :classmethod:
+
+      Initialize a version of this class when it is subclassed.
+
+      Gets the actual type of `TIndividual` and stores it for later use.
+
+      :param kwargs: Remaining arguments passed to super.
+
+
+

@@ -1,0 +1,80 @@
+:py:mod:`modular_robot`
+=======================
+
+.. py:module:: modular_robot
+
+.. autoapi-nested-parse::
+
+   Classes and functions to describe and work with modular robots as used in the CI Group at VU Amsterdam.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   body/index.rst
+   brain/index.rst
+   sensor_state/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.ModularRobot
+   modular_robot.ModularRobotControlInterface
+
+
+
+
+.. py:class:: ModularRobot(body: modular_robot.body.base.Body, brain: modular_robot.brain.Brain)
+
+
+   A module robot consisting of a body and brain.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:attribute:: body
+      :type: modular_robot.body.base.Body
+
+      
+
+   .. py:attribute:: brain
+      :type: modular_robot.brain.Brain
+
+      
+
+
+.. py:class:: ModularRobotControlInterface
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.ModularRobotControlInterface
+      :parts: 1
+
+   Interface for controlling modular robots.
+
+   .. py:method:: set_active_hinge_target(active_hinge: modular_robot.body.base.ActiveHinge, target: float) -> None
+      :abstractmethod:
+
+      Set the position target for an active hinge.
+
+      :param active_hinge: The active hinge to set the target for.
+      :param target: The target to set.
+
+
+

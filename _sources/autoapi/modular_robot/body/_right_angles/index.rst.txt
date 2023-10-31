@@ -1,0 +1,66 @@
+:orphan:
+
+:py:mod:`_right_angles`
+==========================================
+
+.. py:module:: modular_robot.body._right_angles
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body._right_angles.RightAngles
+
+
+
+
+.. py:class:: RightAngles(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body._right_angles.RightAngles
+      :parts: 1
+
+   Standard angles at which  modular robot modules can be attached.
+
+   .. py:attribute:: DEG_0
+      :value: 0
+
+      
+
+   .. py:attribute:: DEG_90
+
+      
+
+   .. py:attribute:: DEG_180
+
+      
+
+   .. py:attribute:: DEG_270
+
+      
+
+   .. py:attribute:: RAD_0
+      :value: 0
+
+      
+
+   .. py:attribute:: RAD_HALFPI
+
+      
+
+   .. py:attribute:: RAD_PI
+
+      
+
+   .. py:attribute:: RAD_ONEANDAHALFPI
+
+      
+
+

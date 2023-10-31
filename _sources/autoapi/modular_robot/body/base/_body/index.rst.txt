@@ -1,0 +1,83 @@
+:orphan:
+
+:py:mod:`_body`
+=======================================
+
+.. py:module:: modular_robot.body.base._body
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.base._body.Body
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.base._body.TModule
+
+
+.. py:data:: TModule
+
+   
+
+.. py:class:: Body
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.base._body.Body
+      :parts: 1
+
+   Body of a modular robot.
+
+   .. py:attribute:: core
+      :type: modular_robot.body.base._core.Core
+
+      
+
+   .. py:method:: grid_position(module: modular_robot.body._module.Module) -> pyrr.Vector3
+
+      Calculate the position of this module in a 3d grid with the core as center.
+
+      The distance between all modules is assumed to be one grid cell.
+      All module angles must be multiples of 90 degrees.
+
+      :param module: The module to calculate the position for.
+      :returns: The calculated position.
+      :raises NotImplementedError: In case a module is encountered that is not supported.
+
+
+   .. py:method:: find_modules_of_type(module_type: Type[TModule]) -> list[TModule]
+
+      Find all Modules of a certain type in the robot.
+
+      :param module_type: The type.
+      :return: The list of Modules.
+
+
+   .. py:method:: to_grid() -> tuple[list[list[list[modular_robot.body._module.Module | None]]], tuple[int, int, int]]
+      :abstractmethod:
+
+      Convert the tree structure to a grid.
+
+      The distance between all modules is assumed to be one grid cell.
+      All module angles must be multiples of 90 degrees.
+
+      The grid is indexed depth, width, height, or x, y, z, from the perspective of the core.
+
+      :returns: The created grid with cells set to either a Module or None and a tuple representing the position of the core.
+      :raises NotImplementedError: In case a module is encountered that is not supported.
+
+
+

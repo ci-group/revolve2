@@ -1,0 +1,520 @@
+:py:mod:`scene`
+==========================
+
+.. py:module:: simulation.scene
+
+.. autoapi-nested-parse::
+
+   Everything to describe scenes to be simulated.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   conversion/index.rst
+   geometry/index.rst
+   vector2/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.AABB
+   simulation.scene.Color
+   simulation.scene.ControlInterface
+   simulation.scene.Joint
+   simulation.scene.JointFixed
+   simulation.scene.JointHinge
+   simulation.scene.MultiBodySystem
+   simulation.scene.Pose
+   simulation.scene.RigidBody
+   simulation.scene.Scene
+   simulation.scene.SimulationHandler
+   simulation.scene.SimulationState
+   simulation.scene.UUIDKey
+
+
+
+
+.. py:class:: AABB
+
+
+   An axis aligned bounding box.
+
+   .. py:attribute:: size
+      :type: pyrr.Vector3
+
+      Sizes of the length of the bounding box.
+
+      Not half of the box.
+
+
+
+.. py:class:: Color
+
+
+   Represents a color in RGBA format.
+
+   All values should from 0 to 255.
+
+   .. py:attribute:: red
+      :type: int
+
+      
+
+   .. py:attribute:: green
+      :type: int
+
+      
+
+   .. py:attribute:: blue
+      :type: int
+
+      
+
+   .. py:attribute:: alpha
+      :type: int
+
+      
+
+   .. py:method:: to_normalized_rgba_list() -> list[float]
+
+      Convert to rgba list where each value is between 0 and 1.
+
+      :returns: The list.
+
+
+
+.. py:class:: ControlInterface
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.ControlInterface
+      :parts: 1
+
+   Interface for controlling a scene during simulation.
+
+   .. py:method:: set_joint_hinge_position_target(joint_hinge: simulation.scene._joint_hinge.JointHinge, position: float) -> None
+      :abstractmethod:
+
+      Set the position target of a hinge joint.
+
+      :param joint_hinge: The hinge to set the position target for.
+      :param position: The position target.
+
+
+
+.. py:class:: Joint
+
+
+   Base class for all joints.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the joint.
+
+
+   .. py:attribute:: rigid_body1
+      :type: simulation.scene._rigid_body.RigidBody
+
+      The first attached rigid body.
+
+
+   .. py:attribute:: rigid_body2
+      :type: simulation.scene._rigid_body.RigidBody
+
+      The second attached rigid body.
+
+
+
+.. py:class:: JointFixed
+
+
+   Bases: :py:obj:`simulation.scene._joint.Joint`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.JointFixed
+      :parts: 1
+
+   A joint fixing the rigid bodies together rigidly.
+
+   This makes them effectively a single rigid body.
+
+
+.. py:class:: JointHinge
+
+
+   Bases: :py:obj:`simulation.scene._joint.Joint`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.JointHinge
+      :parts: 1
+
+   A hinge joint, also known as revolute joint.
+
+   Rotates around a single axis.
+
+   .. py:attribute:: axis
+      :type: pyrr.Vector3
+
+      Directional vector the joint rotates about.
+
+
+   .. py:attribute:: range
+      :type: float
+
+      Rotation range of the joint in radians.
+
+      How much it can rotate to each side, in radians.
+      So double this is the complete range of motion.
+
+
+   .. py:attribute:: effort
+      :type: float
+
+      Maximum effort the joint can exert, in newton-meter.
+
+
+   .. py:attribute:: velocity
+      :type: float
+
+      Maximum velocity of the joint, in radian per second.
+
+
+   .. py:attribute:: armature
+      :type: float
+
+      Armature of the joint.
+
+      This represents the inertia of the motor itself when nothing is attached.
+
+
+   .. py:attribute:: pid_gain_p
+      :type: float
+
+      Proportional gain of the pid position controller.
+
+
+   .. py:attribute:: pid_gain_d
+      :type: float
+
+      Derivative gain of the pid position controller.
+
+
+
+.. py:class:: MultiBodySystem
+
+
+   A (possibly cyclic) graph of interconnected rigid bodies, joints, and other objects, such as cameras.
+
+   The first rigid body added is considered the root of the system.
+   That is, if the system is static, that rigid body will be static.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:property:: root
+      :type: simulation.scene._rigid_body.RigidBody
+
+      Get the root rigid body of this multi-body system.
+
+      The root rigid body is the first rigid body that has been added.
+
+      :returns: The root rigid body.
+
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the system.
+
+
+   .. py:attribute:: is_static
+      :type: bool
+
+      Whether the root rigid body is static.
+
+      I.e. its root (the first rigid body) is attached to the world and will not move or rotate.
+
+
+   .. py:method:: add_rigid_body(rigid_body: simulation.scene._rigid_body.RigidBody) -> None
+
+      Add a rigid body to the system.
+
+      :param rigid_body: The rigid body to add.
+
+
+   .. py:method:: add_joint(joint: simulation.scene._joint.Joint) -> None
+
+      Add a joint between two rigid bodies.
+
+      :param joint: The joint to add.
+
+
+   .. py:method:: has_root() -> bool
+
+      Check whether a root has been added.
+
+      The root rigid body is the first rigid body that has been added,
+      so this is only false if there are zero rigid bodies in this multi-body system.
+
+      :returns: Whether there is a root joint.
+
+
+   .. py:method:: get_joints_for_rigid_body(rigid_body: simulation.scene._rigid_body.RigidBody) -> list[simulation.scene._joint.Joint]
+
+      Get all joints attached to the provided rigid body.
+
+      :param rigid_body: A previously added rigid body.
+      :returns: The attached joints.
+
+
+   .. py:method:: calculate_aabb() -> tuple[pyrr.Vector3, simulation.scene._aabb.AABB]
+
+      Calculate the axis-aligned bounding box of this multi-body system when it is in T-pose.
+
+      That is, when all joints are at position 0.
+      Only box geometries are currently supported.
+
+      :returns: Position, AABB
+      :raises ValueError: If one of the geometries is not a box.
+
+
+
+.. py:class:: Pose
+
+
+   A position and orientation.
+
+   .. py:attribute:: position
+      :type: pyrr.Vector3
+
+      Position of the object.
+
+
+   .. py:attribute:: orientation
+      :type: pyrr.Quaternion
+
+      Orientation of the object.
+
+
+
+.. py:class:: RigidBody
+
+
+   A collection of geometries and physics parameters.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:attribute:: initial_pose
+      :type: simulation.scene._pose.Pose
+
+      Initial pose of the rigid body.
+
+      Relative to its parent multi-body system.
+
+
+   .. py:attribute:: static_friction
+      :type: float
+
+      Static friction of the body.
+
+
+   .. py:attribute:: dynamic_friction
+      :type: float
+
+      Dynamic friction of the body.
+
+
+   .. py:attribute:: geometries
+      :type: list[simulation.scene.geometry.Geometry]
+
+      Geometries describing the shape of the body.
+
+
+   .. py:method:: mass() -> float
+
+      Get mass of the rigid body.
+
+      :returns: The mass.
+
+
+   .. py:method:: center_of_mass() -> pyrr.Vector3
+
+      Calculate the center of mass in the local reference frame of this rigid body.
+
+      If no geometry has mass, the average position of all geometries is returned, unweighted.
+
+      :returns: The center of mass.
+
+
+   .. py:method:: inertia_tensor() -> pyrr.Matrix33
+
+      Calculate the inertia tensor in the local reference frame of this rigid body.
+
+      Only box geometries are currently supported.
+
+      :returns: The inertia tensor.
+      :raises ValueError: If one of the geometries is not a box.
+
+
+
+.. py:class:: Scene
+
+
+   Description of a scene that can be simulated.
+
+   .. py:property:: multi_body_systems
+      :type: list[simulation.scene._multi_body_system.MultiBodySystem]
+
+      Get the multi-body systems in scene.
+
+      Do not make changes to this list.
+
+      :returns: The multi-body systems in the scene.
+
+
+   .. py:attribute:: handler
+      :type: simulation.scene._simulation_handler.SimulationHandler
+
+      
+
+   .. py:method:: add_multi_body_system(multi_body_system: simulation.scene._multi_body_system.MultiBodySystem) -> None
+
+      Add a multi-body system to the scene.
+
+      :param multi_body_system: The multi-body system to add.
+
+
+
+.. py:class:: SimulationHandler
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.SimulationHandler
+      :parts: 1
+
+   Base class for handling a simulation, which includes, for example, controlling robots.
+
+   .. py:method:: handle(state: simulation.scene._simulation_state.SimulationState, control: simulation.scene._control_interface.ControlInterface, dt: float) -> None
+      :abstractmethod:
+
+      Handle a simulation frame.
+
+      :param state: The current state of the simulation.
+      :param control: Interface for setting control targets.
+      :param dt: The time since the last call to this function.
+
+
+
+.. py:class:: SimulationState
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.SimulationState
+      :parts: 1
+
+   Interface for the state of a simulation at certain point.
+
+   .. py:method:: get_rigid_body_relative_pose(rigid_body: simulation.scene._rigid_body.RigidBody) -> simulation.scene._pose.Pose
+      :abstractmethod:
+
+      Get the pose of a rigid body, relative to its parent multi-body system's reference frame.
+
+      :param rigid_body: The rigid body to get the pose for.
+      :returns: The relative pose.
+
+
+   .. py:method:: get_rigid_body_absolute_pose(rigid_body: simulation.scene._rigid_body.RigidBody) -> simulation.scene._pose.Pose
+      :abstractmethod:
+
+      Get the pose of a rigid body, relative the global reference frame.
+
+      :param rigid_body: The rigid body to get the pose for.
+      :returns: The absolute pose.
+
+
+   .. py:method:: get_multi_body_system_pose(multi_body_system: simulation.scene._multi_body_system.MultiBodySystem) -> simulation.scene._pose.Pose
+      :abstractmethod:
+
+      Get the pose of a multi-body system, relative to the global reference frame.
+
+      :param multi_body_system: The multi-body system to get the pose for.
+      :returns: The relative pose.
+
+
+   .. py:method:: get_hinge_joint_position(joint: simulation.scene._joint_hinge.JointHinge) -> float
+      :abstractmethod:
+
+      Get the rotational position of a hinge joint.
+
+      :param joint: The joint to get the rotational position for.
+      :returns: The rotational position.
+
+
+
+.. py:class:: UUIDKey(value: _T)
+
+
+   Bases: :py:obj:`Generic`\ [\ :py:obj:`_T`\ ]
+
+   .. autoapi-inheritance-diagram:: simulation.scene.UUIDKey
+      :parts: 1
+
+   Wraps a value and implements __eq__ and __hash__ based purely on id(value).
+
+   .. py:property:: value
+      :type: _T
+
+      Get the wrapped value.
+
+      :returns: The value.
+
+
+   .. py:method:: __eq__(other: object) -> bool
+
+      Compare with another wrapped value using their ids.
+
+      :param other: The object to compare with.
+      :returns: Whether their ids are equal.
+      :raises ValueError: If the other objecgt is not an UUIDKey.
+
+
+   .. py:method:: __hash__() -> int
+
+      Hash this object using its id only.
+
+      :returns: The hash.
+
+
+

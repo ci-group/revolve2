@@ -1,0 +1,29 @@
+:orphan:
+
+:py:mod:`_convert_color`
+===========================================================================
+
+.. py:module:: modular_robot_simulation._build_multi_body_systems._convert_color
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._build_multi_body_systems._convert_color.convert_color
+
+
+
+.. py:function:: convert_color(color: revolve2.modular_robot.body.Color) -> revolve2.simulation.scene.Color
+
+   Convert ModularRobot Color to Simulator Color.
+
+   :param color: The ModularRobot color.
+   :return: The Simulator color.
+
+

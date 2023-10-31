@@ -1,0 +1,69 @@
+:orphan:
+
+:py:mod:`_individual`
+=====================================================
+
+.. py:module:: experimentation.optimization.ea._individual
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea._individual.Individual
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea._individual.TGenotype
+
+
+.. py:data:: TGenotype
+
+   
+
+.. py:class:: Individual
+
+
+   Bases: :py:obj:`experimentation.database.HasId`, :py:obj:`sqlalchemy.orm.MappedAsDataclass`, :py:obj:`Generic`\ [\ :py:obj:`TGenotype`\ ]
+
+   .. autoapi-inheritance-diagram:: experimentation.optimization.ea._individual.Individual
+      :parts: 1
+
+   Generic SQLAlchemy model for an individual.
+
+   Inherit from this to create your own individual type.
+
+   This class is designed to be part of a `Population`.
+   The metaclass argument `population_table` must contain the name of the population table.
+
+   The generic parameter `TGenotype` refers to the user-defined genotype type,
+   which should have an `id` field that will be used as a foreign key reference.
+   This parameter cannot be a forward reference.
+
+   For example::
+
+       class MyIndividual(Base, Individual[MyGenotype], population_table="my_population"):
+           __tablename__ = "my_individual"
+
+   .. py:method:: __init_subclass__(population_table: str, **kwargs: dict[str, Any]) -> None
+      :classmethod:
+
+      Initialize a version of this class when it is subclassed.
+
+      Gets the actual type of `TGenotype` and value of `population_table` and stores them for later use.
+
+      :param population_table: Name of the population table.
+      :param kwargs: Remaining arguments passed to super.
+
+
+

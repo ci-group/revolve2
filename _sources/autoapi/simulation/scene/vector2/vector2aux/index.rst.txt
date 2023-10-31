@@ -1,0 +1,103 @@
+:py:mod:`vector2aux`
+=============================================
+
+.. py:module:: simulation.scene.vector2.vector2aux
+
+.. autoapi-nested-parse::
+
+   Provides functions for creating and manipulating 2D vectors.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.vector2.vector2aux.index
+   simulation.scene.vector2.vector2aux.unit
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.vector2.vector2aux.create
+   simulation.scene.vector2.vector2aux.create_unit_length_x
+   simulation.scene.vector2.vector2aux.create_unit_length_y
+   simulation.scene.vector2.vector2aux.create_from_matrix33_translation
+
+
+
+.. py:function:: create(x: float = 0.0, y: float = 0.0, dtype: Any = None) -> numpy.ndarray
+
+   Create a Vector2 object.
+
+   # noqa: DAR401
+
+   :param x: x size.
+   :param y: y size.
+   :param dtype: data-type.
+   :return: The Vector.
+
+
+.. py:function:: create_unit_length_x(dtype: Any = None) -> numpy.ndarray
+
+   Create a x unit Vector2.
+
+   :param dtype: data-type.
+   :return: The Vector.
+
+
+.. py:function:: create_unit_length_y(dtype: Any = None) -> numpy.ndarray
+
+   Create a y unit Vector2.
+
+   :param dtype: data-type.
+   :return: The Vector.
+
+
+.. py:function:: create_from_matrix33_translation(mat: Any, dtype: Any = None) -> numpy.ndarray
+
+   Create a Vector2 from a 3x3 Matrix.
+
+   :param mat: The 3x3 Matrix.
+   :param dtype: The data-type.
+   :return: The Vector2.
+
+
+.. py:class:: index
+
+
+   Index class for the Vector2.
+
+   .. py:attribute:: x
+      :value: 0
+
+      
+
+   .. py:attribute:: y
+      :value: 1
+
+      
+
+
+.. py:class:: unit
+
+
+   Unit class for the Vector2.
+
+   .. py:attribute:: x
+
+      
+
+   .. py:attribute:: y
+
+      
+
+

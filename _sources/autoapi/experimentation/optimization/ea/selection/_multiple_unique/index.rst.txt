@@ -1,0 +1,49 @@
+:orphan:
+
+:py:mod:`_multiple_unique`
+====================================================================
+
+.. py:module:: experimentation.optimization.ea.selection._multiple_unique
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.selection._multiple_unique.multiple_unique
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.selection._multiple_unique.TIndividual
+   experimentation.optimization.ea.selection._multiple_unique.TFitness
+
+
+.. py:data:: TIndividual
+
+   
+
+.. py:data:: TFitness
+
+   
+
+.. py:function:: multiple_unique(selection_size: int, population: list[TIndividual], fitnesses: list[TFitness], selection_function: Callable[[list[TIndividual], list[TFitness]], int]) -> numpy.typing.NDArray[numpy.float_]
+
+   Select multiple distinct individuals from a population using the provided selection function.
+
+   :param selection_size: Amount of of individuals to select.
+   :param population: List of individuals to select from.
+   :param fitnesses: Fitnesses of the population.
+   :param selection_function: Function that select a single individual from a population. ([TIndividual], [TFitness]) -> index.
+   :returns: Indices of the selected individuals.
+
+

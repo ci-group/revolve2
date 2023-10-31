@@ -1,0 +1,217 @@
+:py:mod:`modular_robots_v1`
+====================================
+
+.. py:module:: ci_group.modular_robots_v1
+
+.. autoapi-nested-parse::
+
+   Standard modular robots.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ci_group.modular_robots_v1.all
+   ci_group.modular_robots_v1.spider_v1
+   ci_group.modular_robots_v1.gecko_v1
+   ci_group.modular_robots_v1.babya_v1
+   ci_group.modular_robots_v1.ant_v1
+   ci_group.modular_robots_v1.salamander_v1
+   ci_group.modular_robots_v1.blokky_v1
+   ci_group.modular_robots_v1.park_v1
+   ci_group.modular_robots_v1.babyb_v1
+   ci_group.modular_robots_v1.garrix_v1
+   ci_group.modular_robots_v1.insect_v1
+   ci_group.modular_robots_v1.linkin_v1
+   ci_group.modular_robots_v1.longleg_v1
+   ci_group.modular_robots_v1.penguin_v1
+   ci_group.modular_robots_v1.pentapod_v1
+   ci_group.modular_robots_v1.queen_v1
+   ci_group.modular_robots_v1.squarish_v1
+   ci_group.modular_robots_v1.snake_v1
+   ci_group.modular_robots_v1.stingray_v1
+   ci_group.modular_robots_v1.tinlicker_v1
+   ci_group.modular_robots_v1.turtle_v1
+   ci_group.modular_robots_v1.ww_v1
+   ci_group.modular_robots_v1.zappa_v1
+   ci_group.modular_robots_v1.get
+
+
+
+.. py:function:: all() -> list[revolve2.modular_robot.body.v1.BodyV1]
+
+   Get a list of all standard module robots.
+
+   :returns: The list of robots.
+
+
+.. py:function:: spider_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the spider modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: gecko_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the gecko modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: babya_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the babya modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: ant_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the ant modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: salamander_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the salamander modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: blokky_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the blokky modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: park_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the park modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: babyb_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the babyb modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: garrix_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the garrix modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: insect_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the insect modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: linkin_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the linkin modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: longleg_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the longleg modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: penguin_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the penguin modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: pentapod_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the pentapod modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: queen_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the queen modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: squarish_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the squarish modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: snake_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the snake modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: stingray_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the stingray modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: tinlicker_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the tinlicker modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: turtle_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the turtle modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: ww_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the ww modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: zappa_v1() -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get the zappa modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: get(name: str) -> revolve2.modular_robot.body.v1.BodyV1
+
+   Get a robot by name.
+
+   :param name: The name of the robot to get.
+   :returns: The robot with that name.
+   :raises ValueError: When a robot with that name does not exist.
+
+

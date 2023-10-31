@@ -1,0 +1,59 @@
+:py:mod:`rng`
+=============================
+
+.. py:module:: experimentation.rng
+
+.. autoapi-nested-parse::
+
+   Functions for standardized number generation.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.rng.seed_from_time
+   experimentation.rng.seed_from_string
+   experimentation.rng.make_rng
+   experimentation.rng.make_rng_time_seed
+
+
+
+.. py:function:: seed_from_time(log_seed: bool = True) -> int
+
+   Create a seed from the current time in microseconds.
+
+   :param log_seed: If the seed should be logged. It probably should.
+   :returns: The created seed.
+
+
+.. py:function:: seed_from_string(text: str) -> int
+
+   Convert a string seed to an integer seed.
+
+   :param text: The seed as string.
+   :returns: The seed as integer.
+
+
+.. py:function:: make_rng(seed: int) -> numpy.random.Generator
+
+   Create a numpy random number generator from a seed.
+
+   :param seed: The seed to use.
+   :returns: The random number generator.
+
+
+.. py:function:: make_rng_time_seed(log_seed: bool = True) -> numpy.random.Generator
+
+   Create a numpy random number generator from a seed.
+
+   :param log_seed: If the automatically created seed should be logged. It probably should.
+   :returns: The random number generator.
+
+

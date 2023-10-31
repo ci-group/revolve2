@@ -1,0 +1,29 @@
+:orphan:
+
+:py:mod:`_convert_terrain`
+===================================================
+
+.. py:module:: modular_robot_simulation._convert_terrain
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._convert_terrain.convert_terrain
+
+
+
+.. py:function:: convert_terrain(terrain: modular_robot_simulation._terrain.Terrain) -> revolve2.simulation.scene.MultiBodySystem
+
+   Convert a terrain to a multi-body system.
+
+   :param terrain: The terrain to convert.
+   :returns: The created multi-body system.
+
+

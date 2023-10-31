@@ -1,0 +1,158 @@
+:py:mod:`modular_robot`
+==================================================
+
+.. py:module:: ci_group.genotypes.cppnwin.modular_robot
+
+.. autoapi-nested-parse::
+
+   CPPNWIN genotypes for modular robots.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   v1/index.rst
+   v2/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ci_group.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighborV1
+   ci_group.genotypes.cppnwin.modular_robot.BrainGenotypeCpg
+   ci_group.genotypes.cppnwin.modular_robot.BrainGenotypeCpgOrm
+
+
+
+
+.. py:class:: BrainCpgNetworkNeighborV1(genotype: multineat.Genome, body: revolve2.modular_robot.body.base.Body)
+
+
+   Bases: :py:obj:`revolve2.modular_robot.brain.cpg.BrainCpgNetworkNeighbor`
+
+   .. autoapi-inheritance-diagram:: ci_group.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighborV1
+      :parts: 1
+
+   A CPG brain based on `ModularRobotBrainCpgNetworkNeighbor` that creates weights from a CPPNWIN network.
+
+   Weights are determined by querying the CPPN network with inputs:
+   (hinge1_posx, hinge1_posy, hinge1_posz, hinge2_posx, hinge2_posy, hinge3_posz)
+   If the weight in internal, hinge1 and hinge2 position will be the same.
+
+
+.. py:class:: BrainGenotypeCpg
+
+
+   An SQLAlchemy model for a CPPNWIN cpg brain genotype.
+
+   .. py:attribute:: brain
+      :type: ci_group.genotypes.cppnwin._multineat_genotype_pickle_wrapper.MultineatGenotypePickleWrapper
+
+      
+
+   .. py:method:: random_brain(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BrainGenotypeCpg
+      :classmethod:
+
+      Create a random genotype.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: The created genotype.
+
+
+   .. py:method:: mutate_brain(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BrainGenotypeCpg
+
+      Mutate this genotype.
+
+      This genotype will not be changed; a mutated copy will be returned.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: A mutated copy of the provided genotype.
+
+
+   .. py:method:: crossover_brain(parent1: typing_extensions.Self, parent2: typing_extensions.Self, rng: numpy.random.Generator) -> BrainGenotypeCpg
+      :classmethod:
+
+      Perform crossover between two genotypes.
+
+      :param parent1: The first genotype.
+      :param parent2: The second genotype.
+      :param rng: Random number generator.
+      :returns: A newly created genotype.
+
+
+   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor_v1.BrainCpgNetworkNeighborV1
+
+      Develop the genotype into a modular robot.
+
+      :param body: The body to develop the brain for.
+      :returns: The created robot.
+
+
+
+.. py:class:: BrainGenotypeCpgOrm
+
+
+   Bases: :py:obj:`sqlalchemy.orm.MappedAsDataclass`
+
+   .. autoapi-inheritance-diagram:: ci_group.genotypes.cppnwin.modular_robot.BrainGenotypeCpgOrm
+      :parts: 1
+
+   An SQLAlchemy model for a CPPNWIN cpg brain genotype.
+
+   .. py:attribute:: brain
+      :type: multineat.Genome
+
+      
+
+   .. py:method:: random_brain(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BrainGenotypeCpgOrm
+      :classmethod:
+
+      Create a random genotype.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: The created genotype.
+
+
+   .. py:method:: mutate_brain(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BrainGenotypeCpgOrm
+
+      Mutate this genotype.
+
+      This genotype will not be changed; a mutated copy will be returned.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: A mutated copy of the provided genotype.
+
+
+   .. py:method:: crossover_brain(parent1: typing_extensions.Self, parent2: typing_extensions.Self, rng: numpy.random.Generator) -> BrainGenotypeCpgOrm
+      :classmethod:
+
+      Perform crossover between two genotypes.
+
+      :param parent1: The first genotype.
+      :param parent2: The second genotype.
+      :param rng: Random number generator.
+      :returns: A newly created genotype.
+
+
+   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor_v1.BrainCpgNetworkNeighborV1
+
+      Develop the genotype into a modular robot.
+
+      :param body: The body to develop the brain for.
+      :returns: The created robot.
+
+
+

@@ -1,0 +1,39 @@
+:orphan:
+
+:py:mod:`_parameters`
+=====================================================
+
+.. py:module:: experimentation.optimization.ea._parameters
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea._parameters.Parameters
+
+
+
+
+.. py:class:: Parameters
+
+
+   Bases: :py:obj:`sqlalchemy.orm.MappedAsDataclass`
+
+   .. autoapi-inheritance-diagram:: experimentation.optimization.ea._parameters.Parameters
+      :parts: 1
+
+   An SQLAlchemy mixing that provides a parameters column that is a tuple of floats.
+
+   The parameters are saved in the database as string of semicolon seperated floats.
+
+   .. py:attribute:: parameters
+      :type: numpy.typing.NDArray[numpy.float_]
+
+      
+
+

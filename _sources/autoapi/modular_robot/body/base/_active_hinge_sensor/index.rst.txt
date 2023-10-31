@@ -1,0 +1,35 @@
+:orphan:
+
+:py:mod:`_active_hinge_sensor`
+======================================================
+
+.. py:module:: modular_robot.body.base._active_hinge_sensor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor
+
+
+
+
+.. py:class:: ActiveHingeSensor
+
+
+   A sensor for an active hinge that measures its angle.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+

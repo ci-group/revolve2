@@ -1,0 +1,21 @@
+:py:mod:`simulation`
+====================
+
+.. py:module:: simulation
+
+.. autoapi-nested-parse::
+
+   Abstraction layer for physics simulators.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   scene/index.rst
+   simulator/index.rst
+
+

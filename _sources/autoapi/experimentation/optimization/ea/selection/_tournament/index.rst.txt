@@ -1,0 +1,43 @@
+:orphan:
+
+:py:mod:`_tournament`
+===============================================================
+
+.. py:module:: experimentation.optimization.ea.selection._tournament
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.selection._tournament.tournament
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.selection._tournament.Fitness
+
+
+.. py:data:: Fitness
+
+   
+
+.. py:function:: tournament(rng: numpy.random.Generator, fitnesses: list[Fitness], k: int) -> int
+
+   Perform tournament selection and return the index of the best individual.
+
+   :param rng: Random number generator.
+   :param fitnesses: List of finesses of individuals that joint the tournamente.
+   :param k: Amount of individuals to participate in tournament.
+   :returns: The index of te individual that won the tournament.
+
+

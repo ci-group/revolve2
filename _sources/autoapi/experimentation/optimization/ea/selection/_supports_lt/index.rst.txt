@@ -1,0 +1,51 @@
+:orphan:
+
+:py:mod:`_supports_lt`
+================================================================
+
+.. py:module:: experimentation.optimization.ea.selection._supports_lt
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.selection._supports_lt.SupportsLt
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.selection._supports_lt.TSupportsLt
+
+
+.. py:data:: TSupportsLt
+
+   
+
+.. py:class:: SupportsLt
+
+
+   Bases: :py:obj:`Protocol`
+
+   .. autoapi-inheritance-diagram:: experimentation.optimization.ea.selection._supports_lt.SupportsLt
+      :parts: 1
+
+   Interface for types supporting the < operator.
+
+   .. py:method:: __lt__(other: TSupportsLt) -> bool
+
+      Compare two objects using the < operator.
+
+      :param other: The object to compare this with.
+
+
+

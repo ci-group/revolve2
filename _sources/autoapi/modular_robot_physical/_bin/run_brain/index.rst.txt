@@ -1,0 +1,87 @@
+:py:mod:`run_brain`
+===============================================
+
+.. py:module:: modular_robot_physical._bin.run_brain
+
+.. autoapi-nested-parse::
+
+   Run a brain on a physical robot.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical._bin.run_brain.Args
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical._bin.run_brain.runner
+   modular_robot_physical._bin.run_brain.main
+
+
+
+.. py:class:: Args
+
+
+   Bases: :py:obj:`typed_argparse.TypedArgs`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical._bin.run_brain.Args
+      :parts: 1
+
+   Arguments for the program.
+
+   .. py:attribute:: config
+      :type: pathlib.Path
+
+      
+
+   .. py:attribute:: hardware
+      :type: modular_robot_physical._harware_type.HardwareType
+
+      
+
+   .. py:attribute:: debug
+      :type: bool
+
+      
+
+   .. py:attribute:: dry
+      :type: bool
+
+      
+
+   .. py:attribute:: log
+      :type: pathlib.Path | None
+
+      
+
+   .. py:attribute:: all
+      :type: float | None
+
+      
+
+
+.. py:function:: runner(args: Args) -> None
+
+   Run the program from the point were arguments were parsed.
+
+   :param args: The parsed program arguments.
+   :raises RuntimeError: If shutdown was not clean.
+
+
+.. py:function:: main() -> None
+
+   Run the script.
+
+

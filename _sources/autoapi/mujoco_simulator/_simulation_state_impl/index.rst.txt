@@ -1,0 +1,68 @@
+:orphan:
+
+:py:mod:`_simulation_state_impl`
+=================================================
+
+.. py:module:: mujoco_simulator._simulation_state_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._simulation_state_impl.SimulationStateImpl
+
+
+
+
+.. py:class:: SimulationStateImpl(data: mujoco.MjData, abstraction_to_mujoco_mapping: mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping)
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.SimulationState`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator._simulation_state_impl.SimulationStateImpl
+      :parts: 1
+
+   Implementation of the simulation state interface for MuJoCo.
+
+   .. py:method:: get_rigid_body_relative_pose(rigid_body: revolve2.simulation.scene.RigidBody) -> revolve2.simulation.scene.Pose
+      :abstractmethod:
+
+      Get the pose of a rigid body, relative to its parent multi-body system's reference frame.
+
+      :param rigid_body: The rigid body to get the pose for.
+      :returns: The relative pose.
+      :raises NotImplementedError: Always.
+
+
+   .. py:method:: get_rigid_body_absolute_pose(rigid_body: revolve2.simulation.scene.RigidBody) -> revolve2.simulation.scene.Pose
+      :abstractmethod:
+
+      Get the pose of a rigid body, relative the global reference frame.
+
+      :param rigid_body: The rigid body to get the pose for.
+      :returns: The absolute pose.
+      :raises NotImplementedError: Always.
+
+
+   .. py:method:: get_multi_body_system_pose(multi_body_system: revolve2.simulation.scene.MultiBodySystem) -> revolve2.simulation.scene.Pose
+
+      Get the pose of a multi-body system, relative to the global reference frame.
+
+      :param multi_body_system: The multi-body system to get the pose for.
+      :returns: The relative pose.
+
+
+   .. py:method:: get_hinge_joint_position(joint: revolve2.simulation.scene.JointHinge) -> float
+
+      Get the rotational position of a hinge joint.
+
+      :param joint: The joint to get the rotational position for.
+      :returns: The rotational position.
+
+
+

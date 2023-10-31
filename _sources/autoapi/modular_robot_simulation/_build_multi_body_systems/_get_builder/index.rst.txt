@@ -1,0 +1,30 @@
+:orphan:
+
+:py:mod:`_get_builder`
+=========================================================================
+
+.. py:module:: modular_robot_simulation._build_multi_body_systems._get_builder
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._build_multi_body_systems._get_builder.get_builder
+
+
+
+.. py:function:: get_builder(unbuilt_child: modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild) -> modular_robot_simulation._build_multi_body_systems._builder.Builder
+
+   Get and initialize the corresponding Builder for the module.
+
+   :param unbuilt_child: The target child to be built.
+   :return: The initialized Builder.
+   :raises KeyError: If no Builder available for the Module type.
+
+

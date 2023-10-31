@@ -4,22 +4,25 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; revolve2 v0.4.2-beta2 documentation</title>
+  <title>Installation &mdash; Revolve2 1.0.0rc1 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
     <link rel="shortcut icon" href="../_static/favicon.png"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/doctools.js"></script>
-        <script src="../_static/sphinx_highlight.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=77c1c56c"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="User Guide" href="../user_guide/index.html" />
-    <link rel="prev" title="Getting Started" href="../student_tutorial/index.html" /> 
+    <link rel="next" title="Setting up a new modular robot core" href="../physical_robot_setup/index.html" />
+    <link rel="prev" title="Getting Started" href="../getting_started/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,7 +34,7 @@
           
           
           <a href="../index.html" class="icon icon-home">
-            revolve2
+            Revolve2
               <img src="../_static/logo.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
@@ -43,75 +46,121 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="../student_tutorial/index.html">Getting Started</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../user_guide/index.html">User Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/optimization.html">Optimization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/database.html">Database</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/physics_runners.html">Physics runners</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/modular_robots.html">Modular robots</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../user_guide/rpi_controller.html">Raspberry Pi actor controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/index.html#step-1-installation">Step 1: Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../getting_started/index.html#step-2-play-with-the-examples">Step 2: Play with the examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../api_reference/revolve2.html">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.actor_controller.html">actor_controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.actor_controllers.html">actor_controllers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.actor_controllers.cpg.html">cpg</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#create-a-virtual-environment">Create a virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#download-the-source">Download the source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-issues">Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-packages">Install packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#editable-mode">Editable Mode</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.bin.html">bin</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.bin.rpi_controller.html">rpi_controller</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.bin.rpi_controller.revolve2_rpi_controller.html">revolve2_rpi_controller</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../physical_robot_setup/index.html">Physical Robot Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../physical_robot_setup/index.html#preparation-install-the-hardware">Preparation + Install the Hardware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../physical_robot_setup/index.html#hardware-setup-for-a-v1-robot">Hardware setup for a V1 Robot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../physical_robot_setup/index.html#hardware-setup-for-a-v2-robot">Hardware setup for a V2 Robot</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.ci_group.html">ci_group</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.ci_group.fitness_functions.html">fitness_functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.ci_group.logging.html">logging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.ci_group.modular_robots.html">modular_robots</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.ci_group.rng.html">rng</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.ci_group.simulation.html">simulation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.ci_group.terrains.html">terrains</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.experimentation.html">experimentation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.experimentation.database.html">database</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.experimentation.genotypes.html">genotypes</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.experimentation.genotypes.cppnwin.html">cppnwin</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.experimentation.optimization.html">optimization</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.experimentation.optimization.ea.html">ea</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../physical_robot_setup/index.html#setting-up-the-rpi">Setting up the RPi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../physical_robot_setup/index.html#install-revolve2-on-the-rpi">Install Revolve2 on the RPi</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../physical_robot_setup/index.html#v1-additional-steps">V1 Additional Steps</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.modular_robot.html">modular_robot</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.modular_robot.brains.html">brains</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing_guide/index.html">Contributing guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#publishing-your-contribution">Publishing your contribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#developer-installation">Developer installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#continuous-integration">Continuous integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#code-tools">Code tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#version-control">Version control</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.rpi_controller_remote.html">rpi_controller_remote</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.serialization.html">serialization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.simulation.html">simulation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.simulation.actor.html">actor</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.simulation.actor.urdf.html">urdf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../autoapi/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.simulation.running.html">running</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="../api_reference/revolve2.simulation.running.geometry.html">geometry</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/ci_group/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/fitness_functions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitness_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/modular_robots_v1/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/modular_robots_v2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/morphological_measures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_measures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/terrains/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">terrains</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/revolve2.simulators.html">simulators</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../api_reference/revolve2.simulators.mujoco.html">mujoco</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/experimentation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/experimentation/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/experimentation/logging/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/experimentation/rng/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rng</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../development_guide/index.html">Development guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/modular_robot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot/body/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot/brain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">brain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot/sensor_state/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensor_state</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/modular_robot_simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot_simulation/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot_simulation/index.html#classes">Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot_simulation/index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/simulation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/simulation/scene/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scene</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/simulation/simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/modular_robot_physical/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_physical</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot_physical/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot_physical/physical_interfaces/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">physical_interfaces</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot_physical/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot_physical/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -120,7 +169,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">revolve2</a>
+          <a href="../index.html">Revolve2</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -138,11 +187,11 @@
            <div itemprop="articleBody">
              
   <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
-<p>Revolve2 consists of multiple smaller Python packages.
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<p>Revolve2 consists of multiple Python packages.
 Not all packages are required; pick what you need based on your use case. In the following section you will find out what packages you need for your research.</p>
 <section id="prerequisites">
-<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading"></a></h2>
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h2>
 <ul>
 <li><p>Python 3.10 or higher.</p></li>
 <li><p>Pip. If you do not have pip for python 3.10, take a look at the get-pip script: <a class="reference external" href="https://pip.pypa.io/en/stable/installation/">https://pip.pypa.io/en/stable/installation/</a>.</p></li>
@@ -153,9 +202,9 @@ Not all packages are required; pick what you need based on your use case. In the
 </li>
 </ul>
 </section>
-<section id="create-an-environment">
-<h2>Create an environment<a class="headerlink" href="#create-an-environment" title="Permalink to this heading"></a></h2>
-<p>Keeping your workspace tidy is important, <a class="reference external" href="https://docs.python.org/3/library/venv.html">virtual environments</a> help with that.
+<section id="create-a-virtual-environment">
+<h2>Create a virtual environment<a class="headerlink" href="#create-a-virtual-environment" title="Link to this heading"></a></h2>
+<p>Keeping your workspace tidy is important, and <a class="reference external" href="https://docs.python.org/3/library/venv.html">virtual environments</a> help with that.
 Create a directory for your project, then create a virtual environment:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span><span class="mf">.10</span> <span class="o">-</span><span class="n">m</span> <span class="n">virtualenv</span> <span class="o">.</span><span class="n">venv</span>
 </pre></div>
@@ -167,12 +216,19 @@ Create a directory for your project, then create a virtual environment:</p>
 <p>Leave the <code class="docutils literal notranslate"><span class="pre">.venv</span></code> directory as is and do not manually edit it, unless you know what you are doing.</p>
 </section>
 <section id="download-the-source">
-<h2>Download the source<a class="headerlink" href="#download-the-source" title="Permalink to this heading"></a></h2>
+<h2>Download the source<a class="headerlink" href="#download-the-source" title="Link to this heading"></a></h2>
 <p>Download your preferred version from <a class="reference external" href="https://github.com/ci-group/revolve2/releases">https://github.com/ci-group/revolve2/releases</a>.
 If you need to edit Revolve2 itself to add new features, it is recommended to instead create a fork and clone using git.</p>
 </section>
+<section id="common-issues">
+<h2>Common issues<a class="headerlink" href="#common-issues" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><em>For Mac users:</em> Installing Mujoco sometimes does not work properly. Try <cite>pip install mujoco</cite> to see weather you encounter any issues. If it does not install properly it might be necessary to run the command: <cite>export SYSTEM_VERSION_COMPAT=0</cite> before doing the installation of the modules. <a class="reference external" href="https://github.com/conda-forge/python-feedstock/issues/445#issuecomment-773835866">See here.</a></p></li>
+<li><p>Conda-environments are not officially supported and can cause issues with installation. (Especially in combination with Mac systems)</p></li>
+</ul>
+</section>
 <section id="install-packages">
-<h2>Install packages<a class="headerlink" href="#install-packages" title="Permalink to this heading"></a></h2>
+<h2>Install packages<a class="headerlink" href="#install-packages" title="Link to this heading"></a></h2>
 <p><strong>For Students of the CI group:</strong>
 Packages with a <strong>!</strong> next to them are most likely required.
 You can also use a shortcut to install all required packages:</p>
@@ -182,15 +238,15 @@ You can also use a shortcut to install all required packages:</p>
 <p>This script installs all required packages in editable mode.</p>
 <p>Revolve2 contains multiple packages that provide specific functionality. These packages contain functionality for simulations, modular robot description, hardware control and optimization / EA.
 If you need to edit components of Revolve2, or you want to add new features, it is recommended that you use <a class="reference internal" href="#editable-mode"><span class="std std-ref">Editable Mode</span></a>.
-Manual installation with editable mode requires you to install the packages in order of dependency, so that all packages are installed in editable mode.
-For the correct order refer to the tables <em>requires</em> column or look at the <cite>dev_requirements.sh</cite> script.</p>
-<p>Installing them without edible mode does not require the right order since it will automatically install dependencies.
+Manual installation with editable mode requires you to install the packages in reverse order of dependency, so that all packages are installed in editable mode.
+For the correct order refer to the tables <em>requires</em> column or look at the <cite>dev_install.sh</cite> script.</p>
+<p>If you do not use editable mode, the order of installation is irrelevant.
 Each package can be installed using:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">package_name</span><span class="o">&gt;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">&lt;</span><span class="n">path_to_revolve</span><span class="o">&gt;/&lt;</span><span class="n">package_name</span><span class="o">&gt;</span>
 </pre></div>
 </div>
 <table class="docutils align-default" id="id1">
-<caption><span class="caption-text">Revolve2 packages</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<caption><span class="caption-text">Revolve2 packages (in alphabetical order)</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
 <colgroup>
 <col style="width: 24%" />
 <col style="width: 48%" />
@@ -199,63 +255,48 @@ Each package can be installed using:</p>
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Package Name</p></th>
-<th class="head"><p>Functionality</p></th>
+<th class="head"><p>Description</p></th>
 <th class="head"><p>requires</p></th>
 <th class="head"></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p>actor_controller</p></td>
-<td><p>This package provides a controller interface as well as already implemented controllers for the modular robots.</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">serialization</span></code></p></td>
+<tr class="row-even"><td><p>ci_group</p></td>
+<td><p>Computational Intelligence Group experimentation tools and standards.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">modular_robot_simulation</span></code></p></td>
 <td><p><strong>!</strong></p></td>
 </tr>
-<tr class="row-odd"><td><p>ci_group</p></td>
-<td><p>This package provides Revolve2 with CI group specific revolve configuration and helper tools.</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">simulation</span></code> &amp; <code class="code docutils literal notranslate"><span class="pre">modular_robot</span></code></p></td>
+<tr class="row-odd"><td><p>experimentation</p></td>
+<td><p>Tools for experimentation.</p></td>
+<td><p>-</p></td>
 <td><p><strong>!</strong></p></td>
 </tr>
-<tr class="row-even"><td><p>experimentation</p></td>
-<td><p>This package provides functionality for experiments, such as optimization techniques, genotype operations and database usage.</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">modular_robot</span></code></p></td>
+<tr class="row-even"><td><p>modular_robot</p></td>
+<td><p>Everything for defining modular robots.</p></td>
+<td><p>-</p></td>
 <td><p><strong>!</strong></p></td>
 </tr>
-<tr class="row-odd"><td><p>modular_robot</p></td>
-<td><p>This package provides Revolve2 with all functionality around the robots and their modules.</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">simulation</span></code> &amp; <code class="code docutils literal notranslate"><span class="pre">actor_controller</span></code></p></td>
+<tr class="row-odd"><td><p>modular_robot_simulation</p></td>
+<td><p>Functionality to define scenes with modular robots in a terrain and simulate them.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">modular_robot</span></code>, <code class="code docutils literal notranslate"><span class="pre">simulation</span></code></p></td>
 <td><p><strong>!</strong></p></td>
 </tr>
-<tr class="row-even"><td><p>rpi_controller</p></td>
-<td><p>This package allows to run a Revolve2 <code class="docutils literal notranslate"><span class="pre">ActorController</span></code> on a physical robot, with the same behavior as in the simulations.</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">actor_controller</span></code></p></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><p>rpi_controller_remote</p></td>
-<td><p>This package allows to remotely connect to, and run a physical robot using SSH.</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">serialization</span></code></p></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><p>serialization (Deprecated)</p></td>
-<td><p>This package does what the name says. (Will be removed soon)</p></td>
-<td></td>
+<tr class="row-even"><td><p>simulation</p></td>
+<td><p>Physics simulation abstraction layer.</p></td>
+<td><p>-</p></td>
 <td><p><strong>!</strong></p></td>
 </tr>
-<tr class="row-odd"><td><p>simulation</p></td>
-<td><p>This package provides an abstraction layer for physics simulators. Other packages provide a simulator-specific implementation, such as for MuJoCo.</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">actor_controller</span></code></p></td>
-<td><p><strong>!</strong></p></td>
-</tr>
-<tr class="row-even"><td><p>simulators/mujoco</p></td>
-<td><p>This package provides simulation using the MuJoCo simulator.</p></td>
-<td><p><code class="code docutils literal notranslate"><span class="pre">simulation</span></code> &amp; <code class="code docutils literal notranslate"><span class="pre">modular_robot</span></code></p></td>
+<tr class="row-odd"><td><p>simulators/mujoco_simulator</p></td>
+<td><p>MuJoCo simulator.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simulation</span></code></p></td>
 <td><p><strong>!</strong></p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="editable-mode">
-<h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Permalink to this heading"></a></h2>
-<p>When developing element in python packages it is crucial to test changes iteratively. To avoid having to constantly <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span></code> and <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code>, you can simply use pip`s built in “developer” mode.
+<h2>Editable Mode<a class="headerlink" href="#editable-mode" title="Link to this heading"></a></h2>
+<p>During the development of python packages it is crucial to test changes iteratively. To avoid having to constantly <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">uninstall</span></code> and <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span></code> your package, you can simply use pip`s built in “developer” mode.
 If you want to edit Revolve2’s code while having it installed, use pip’s <code class="docutils literal notranslate"><span class="pre">editable</span> <span class="pre">mode</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">&lt;</span><span class="n">package</span><span class="o">&gt;</span>
 </pre></div>

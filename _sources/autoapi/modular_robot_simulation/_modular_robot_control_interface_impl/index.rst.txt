@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_modular_robot_control_interface_impl`
+========================================================================
+
+.. py:module:: modular_robot_simulation._modular_robot_control_interface_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._modular_robot_control_interface_impl.ModularRobotControlInterfaceImpl
+
+
+
+
+.. py:class:: ModularRobotControlInterfaceImpl(simulation_control: revolve2.simulation.scene.ControlInterface, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems.BodyToMultiBodySystemMapping)
+
+
+   Bases: :py:obj:`revolve2.modular_robot.ModularRobotControlInterface`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._modular_robot_control_interface_impl.ModularRobotControlInterfaceImpl
+      :parts: 1
+
+   Implementation for ModularRobotControlInterface.
+
+   .. py:method:: set_active_hinge_target(active_hinge: revolve2.modular_robot.body.base.ActiveHinge, target: float) -> None
+
+      Set the position target for an active hinge.
+
+      :param active_hinge: The active hinge to set the target for.
+      :param target: The target to set.
+
+
+

@@ -1,0 +1,24 @@
+:orphan:
+
+:py:mod:`_bin`
+=====================================
+
+.. py:module:: modular_robot_physical._bin
+
+.. autoapi-nested-parse::
+
+   Executable scripts shipped with this library.
+
+   These are not meant to be imported and are simply a module because of packaging reasons.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   run_brain/index.rst
+
+

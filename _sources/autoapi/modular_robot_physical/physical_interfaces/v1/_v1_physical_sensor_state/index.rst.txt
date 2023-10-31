@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`_v1_physical_sensor_state`
+=================================================================================
+
+.. py:module:: modular_robot_physical.physical_interfaces.v1._v1_physical_sensor_state
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.physical_interfaces.v1._v1_physical_sensor_state.V1PhysicalSensorState
+
+
+
+
+.. py:class:: V1PhysicalSensorState
+
+
+   Bases: :py:obj:`modular_robot_physical.physical_interfaces._physical_sensor_state.PhysicalSensorState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical.physical_interfaces.v1._v1_physical_sensor_state.V1PhysicalSensorState
+      :parts: 1
+
+   Implements PhysicalSensorState for v1 harware.
+
+   .. py:method:: get_active_hinge_sensor_state(sensor: revolve2.modular_robot.body.base.ActiveHingeSensor) -> revolve2.modular_robot.sensor_state.ActiveHingeSensorState
+      :abstractmethod:
+
+      Get sensor states for Hinges.
+
+      :param sensor: The sensor to query.
+      :raises NotImplementedError: If there is no implemented sensor of this type.
+
+
+

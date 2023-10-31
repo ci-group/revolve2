@@ -1,0 +1,105 @@
+:orphan:
+
+:py:mod:`_multi_body_system`
+=============================================
+
+.. py:module:: simulation.scene._multi_body_system
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._multi_body_system.MultiBodySystem
+
+
+
+
+.. py:class:: MultiBodySystem
+
+
+   A (possibly cyclic) graph of interconnected rigid bodies, joints, and other objects, such as cameras.
+
+   The first rigid body added is considered the root of the system.
+   That is, if the system is static, that rigid body will be static.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:property:: root
+      :type: simulation.scene._rigid_body.RigidBody
+
+      Get the root rigid body of this multi-body system.
+
+      The root rigid body is the first rigid body that has been added.
+
+      :returns: The root rigid body.
+
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the system.
+
+
+   .. py:attribute:: is_static
+      :type: bool
+
+      Whether the root rigid body is static.
+
+      I.e. its root (the first rigid body) is attached to the world and will not move or rotate.
+
+
+   .. py:method:: add_rigid_body(rigid_body: simulation.scene._rigid_body.RigidBody) -> None
+
+      Add a rigid body to the system.
+
+      :param rigid_body: The rigid body to add.
+
+
+   .. py:method:: add_joint(joint: simulation.scene._joint.Joint) -> None
+
+      Add a joint between two rigid bodies.
+
+      :param joint: The joint to add.
+
+
+   .. py:method:: has_root() -> bool
+
+      Check whether a root has been added.
+
+      The root rigid body is the first rigid body that has been added,
+      so this is only false if there are zero rigid bodies in this multi-body system.
+
+      :returns: Whether there is a root joint.
+
+
+   .. py:method:: get_joints_for_rigid_body(rigid_body: simulation.scene._rigid_body.RigidBody) -> list[simulation.scene._joint.Joint]
+
+      Get all joints attached to the provided rigid body.
+
+      :param rigid_body: A previously added rigid body.
+      :returns: The attached joints.
+
+
+   .. py:method:: calculate_aabb() -> tuple[pyrr.Vector3, simulation.scene._aabb.AABB]
+
+      Calculate the axis-aligned bounding box of this multi-body system when it is in T-pose.
+
+      That is, when all joints are at position 0.
+      Only box geometries are currently supported.
+
+      :returns: Position, AABB
+      :raises ValueError: If one of the geometries is not a box.
+
+
+

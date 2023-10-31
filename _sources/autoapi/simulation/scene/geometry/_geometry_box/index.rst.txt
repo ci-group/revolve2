@@ -1,0 +1,38 @@
+:orphan:
+
+:py:mod:`_geometry_box`
+=================================================
+
+.. py:module:: simulation.scene.geometry._geometry_box
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry._geometry_box.GeometryBox
+
+
+
+
+.. py:class:: GeometryBox
+
+
+   Bases: :py:obj:`simulation.scene.geometry._geometry.Geometry`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry._geometry_box.GeometryBox
+      :parts: 1
+
+   Box geometry.
+
+   .. py:attribute:: aabb
+      :type: simulation.scene._aabb.AABB
+
+      AABB describing the box's shape.
+
+
+

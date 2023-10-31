@@ -1,0 +1,159 @@
+:py:mod:`modular_robot_physical`
+================================
+
+.. py:module:: modular_robot_physical
+
+.. autoapi-nested-parse::
+
+   Physical Robot Control and Utils.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   physical_interfaces/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.BrainRunner
+   modular_robot_physical.Config
+   modular_robot_physical.HardwareType
+   modular_robot_physical.UUIDKey
+
+
+
+
+.. py:class:: BrainRunner(hardware_type: modular_robot_physical._harware_type.HardwareType, config: modular_robot_physical._config.Config, debug: bool, dry: bool)
+
+
+   Interfaces with hardware to run brains or manually control the robot.
+
+   .. py:method:: set_all_active_hinges(target: float) -> None
+
+      Set all servos to the specified target.
+
+      :param target: The target in radians.
+
+
+   .. py:method:: set_active_hinges_initial_positions() -> None
+
+      Set all servos to their initial positions.
+
+
+   .. py:method:: run_brain() -> None
+
+      Run the brain from the config.
+
+
+   .. py:method:: shutdown() -> None
+
+      Gracefully shut down the hardware, moving to a low power state.
+
+      This does not shut down the CPU, just the servos and such.
+
+
+
+.. py:class:: Config
+
+
+   The configuration for running a physical robot.
+
+   .. py:attribute:: modular_robot
+      :type: revolve2.modular_robot.ModularRobot
+
+      The Modular Robot Object.
+
+
+   .. py:attribute:: hinge_mapping
+      :type: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], int]
+
+      Hinge mapping: map each active hinge object to a specific Servo with its ID (int).
+
+
+   .. py:attribute:: initial_hinge_positions
+      :type: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], float]
+
+      Initial positions of the active hinges.
+
+
+   .. py:attribute:: run_duration
+      :type: int
+
+      Duration to run the brain for in seconds.
+
+
+   .. py:attribute:: control_frequency
+      :type: int
+
+      Frequency at which to call the brain control functions in seconds.
+
+
+   .. py:attribute:: inverse_servos
+      :type: dict[int, bool]
+
+      If a servo is mounted in the wrong direction on the body one can fix it by inversing the action.
+      inverse_servos allows you to inverse specific servos with their gpio number as key.
+
+
+
+.. py:class:: HardwareType(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical.HardwareType
+      :parts: 1
+
+   The types of hardware.
+
+   .. py:attribute:: v1
+
+      
+
+
+.. py:class:: UUIDKey(value: _T)
+
+
+   Bases: :py:obj:`Generic`\ [\ :py:obj:`_T`\ ]
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical.UUIDKey
+      :parts: 1
+
+   Wraps a value and implements __eq__ and __hash__ based purely on id(value).
+
+   .. py:property:: value
+      :type: _T
+
+      Get the wrapped value.
+
+      :returns: The value.
+
+
+   .. py:method:: __eq__(other: object) -> bool
+
+      Compare with another wrapped value using their ids.
+
+      :param other: The object to compare with.
+      :returns: Whether their ids are equal.
+      :raises ValueError: If the other objecgt is not an UUIDKey.
+
+
+   .. py:method:: __hash__() -> int
+
+      Hash this object using its id only.
+
+      :returns: The hash.
+
+
+

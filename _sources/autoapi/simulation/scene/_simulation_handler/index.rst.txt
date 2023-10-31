@@ -1,0 +1,42 @@
+:orphan:
+
+:py:mod:`_simulation_handler`
+==============================================
+
+.. py:module:: simulation.scene._simulation_handler
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._simulation_handler.SimulationHandler
+
+
+
+
+.. py:class:: SimulationHandler
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene._simulation_handler.SimulationHandler
+      :parts: 1
+
+   Base class for handling a simulation, which includes, for example, controlling robots.
+
+   .. py:method:: handle(state: simulation.scene._simulation_state.SimulationState, control: simulation.scene._control_interface.ControlInterface, dt: float) -> None
+      :abstractmethod:
+
+      Handle a simulation frame.
+
+      :param state: The current state of the simulation.
+      :param control: Interface for setting control targets.
+      :param dt: The time since the last call to this function.
+
+
+

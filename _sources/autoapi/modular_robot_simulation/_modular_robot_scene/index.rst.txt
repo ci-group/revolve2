@@ -1,0 +1,49 @@
+:orphan:
+
+:py:mod:`_modular_robot_scene`
+=======================================================
+
+.. py:module:: modular_robot_simulation._modular_robot_scene
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._modular_robot_scene.ModularRobotScene
+
+
+
+
+.. py:class:: ModularRobotScene
+
+
+   A scene of modular robots in a terrain.
+
+   .. py:attribute:: terrain
+      :type: modular_robot_simulation._terrain.Terrain
+
+      The terrain of the scene.
+
+
+   .. py:method:: add_robot(robot: revolve2.modular_robot.ModularRobot, pose: revolve2.simulation.scene.Pose = Pose(), translate_z_aabb: bool = True) -> None
+
+      Add a robot to the scene.
+
+      :param robot: The robot to add.
+      :param pose: The pose of the robot.
+      :param translate_z_aabb: Whether the robot should be translated upwards so it's T-pose axis-aligned bounding box is exactly on the ground. I.e. if the robot should be placed exactly on the ground. The pose parameters is still added afterwards.
+
+
+   .. py:method:: to_simulation_scene() -> tuple[revolve2.simulation.scene.Scene, dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.ModularRobot], revolve2.simulation.scene.MultiBodySystem]]
+
+      Convert this to a simulation scene.
+
+      :returns: The created scene.
+
+
+

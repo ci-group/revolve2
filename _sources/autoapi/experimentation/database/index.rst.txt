@@ -1,0 +1,95 @@
+:py:mod:`database`
+==================================
+
+.. py:module:: experimentation.database
+
+.. autoapi-nested-parse::
+
+   Standard SQLAlchemy models and different ways to open databases.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.database.HasId
+   experimentation.database.OpenMethod
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.database.open_async_database_sqlite
+   experimentation.database.open_database_sqlite
+
+
+
+.. py:class:: HasId
+
+
+   Bases: :py:obj:`sqlalchemy.orm.MappedAsDataclass`
+
+   .. autoapi-inheritance-diagram:: experimentation.database.HasId
+      :parts: 1
+
+   An SQLAlchemy mixin that provides an id column.
+
+   .. py:attribute:: id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+
+.. py:class:: OpenMethod(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: experimentation.database.OpenMethod
+      :parts: 1
+
+   Describes the way a database should be opened.
+
+   .. py:attribute:: OPEN_IF_EXISTS
+
+      
+
+   .. py:attribute:: OPEN_OR_CREATE
+
+      
+
+   .. py:attribute:: NOT_EXISTS_AND_CREATE
+
+      
+
+   .. py:attribute:: OVERWITE_IF_EXISTS
+
+      
+
+
+.. py:function:: open_async_database_sqlite(db_file: str, open_method: experimentation.database._open_method.OpenMethod = OpenMethod.OPEN_IF_EXISTS) -> sqlalchemy.ext.asyncio.AsyncEngine
+
+   Open an SQLAlchemy SQLite async database.
+
+   :param db_file: File for the database.
+   :param open_method: The way the database should be opened.
+   :returns: The opened database.
+
+
+.. py:function:: open_database_sqlite(db_file: str, open_method: experimentation.database._open_method.OpenMethod = OpenMethod.OPEN_IF_EXISTS) -> sqlalchemy.engine.Engine
+
+   Open an SQLAlchemy SQLite database.
+
+   :param db_file: File for the database.
+   :param open_method: The way the database should be opened.
+   :returns: The opened database.
+
+

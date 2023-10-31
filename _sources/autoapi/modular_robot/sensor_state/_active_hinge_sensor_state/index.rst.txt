@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`_active_hinge_sensor_state`
+===============================================================
+
+.. py:module:: modular_robot.sensor_state._active_hinge_sensor_state
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState
+
+
+
+
+.. py:class:: ActiveHingeSensorState
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState
+      :parts: 1
+
+   The state of an active hinge sensor.
+
+   .. py:property:: position
+      :type: float
+      :abstractmethod:
+
+      Get the measured position of the active hinge.
+
+      :returns: The measured position.
+
+
+

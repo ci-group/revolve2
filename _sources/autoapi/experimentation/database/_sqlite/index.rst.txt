@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_sqlite`
+==========================================
+
+.. py:module:: experimentation.database._sqlite
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.database._sqlite.open_async_database_sqlite
+   experimentation.database._sqlite.open_database_sqlite
+
+
+
+.. py:function:: open_async_database_sqlite(db_file: str, open_method: experimentation.database._open_method.OpenMethod = OpenMethod.OPEN_IF_EXISTS) -> sqlalchemy.ext.asyncio.AsyncEngine
+
+   Open an SQLAlchemy SQLite async database.
+
+   :param db_file: File for the database.
+   :param open_method: The way the database should be opened.
+   :returns: The opened database.
+
+
+.. py:function:: open_database_sqlite(db_file: str, open_method: experimentation.database._open_method.OpenMethod = OpenMethod.OPEN_IF_EXISTS) -> sqlalchemy.engine.Engine
+
+   Open an SQLAlchemy SQLite database.
+
+   :param db_file: File for the database.
+   :param open_method: The way the database should be opened.
+   :returns: The opened database.
+
+

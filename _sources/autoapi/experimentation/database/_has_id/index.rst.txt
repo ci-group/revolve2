@@ -1,0 +1,37 @@
+:orphan:
+
+:py:mod:`_has_id`
+==========================================
+
+.. py:module:: experimentation.database._has_id
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.database._has_id.HasId
+
+
+
+
+.. py:class:: HasId
+
+
+   Bases: :py:obj:`sqlalchemy.orm.MappedAsDataclass`
+
+   .. autoapi-inheritance-diagram:: experimentation.database._has_id.HasId
+      :parts: 1
+
+   An SQLAlchemy mixin that provides an id column.
+
+   .. py:attribute:: id
+      :type: sqlalchemy.orm.Mapped[int]
+
+      
+
+

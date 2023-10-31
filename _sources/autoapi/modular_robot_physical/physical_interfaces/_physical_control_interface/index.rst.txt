@@ -1,0 +1,59 @@
+:orphan:
+
+:py:mod:`_physical_control_interface`
+================================================================================
+
+.. py:module:: modular_robot_physical.physical_interfaces._physical_control_interface
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.physical_interfaces._physical_control_interface.Pin
+   modular_robot_physical.physical_interfaces._physical_control_interface.PhysicalControlInterface
+
+
+
+
+.. py:class:: Pin
+
+
+   A wrapper for pins.
+
+   .. py:attribute:: pin
+      :type: int
+
+      
+
+   .. py:attribute:: invert
+      :type: bool
+
+      
+
+
+.. py:class:: PhysicalControlInterface(debug: bool, dry: bool, hinge_mapping: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], int], inverse_pin: dict[int, bool])
+
+
+   Bases: :py:obj:`revolve2.modular_robot.ModularRobotControlInterface`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical.physical_interfaces._physical_control_interface.PhysicalControlInterface
+      :parts: 1
+
+   A base interface for physical robot control.
+
+   .. py:method:: set_active_hinge_target(active_hinge: revolve2.modular_robot.body.base.ActiveHinge, target: float) -> None
+
+      Set the position target for an active hinge.
+
+      Target is clamped within the active hinges range.
+
+      :param active_hinge: The active hinge to set the target for.
+      :param target: The target to set.
+
+
+

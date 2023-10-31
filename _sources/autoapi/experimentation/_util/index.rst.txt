@@ -1,0 +1,17 @@
+:orphan:
+
+:py:mod:`_util`
+===============================
+
+.. py:module:: experimentation._util
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   init_subclass_get_generic_args/index.rst
+
+

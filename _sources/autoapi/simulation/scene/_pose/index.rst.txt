@@ -1,0 +1,39 @@
+:orphan:
+
+:py:mod:`_pose`
+================================
+
+.. py:module:: simulation.scene._pose
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._pose.Pose
+
+
+
+
+.. py:class:: Pose
+
+
+   A position and orientation.
+
+   .. py:attribute:: position
+      :type: pyrr.Vector3
+
+      Position of the object.
+
+
+   .. py:attribute:: orientation
+      :type: pyrr.Quaternion
+
+      Orientation of the object.
+
+
+

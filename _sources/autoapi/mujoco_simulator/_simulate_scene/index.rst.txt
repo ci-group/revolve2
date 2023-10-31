@@ -1,0 +1,37 @@
+:orphan:
+
+:py:mod:`_simulate_scene`
+==========================================
+
+.. py:module:: mujoco_simulator._simulate_scene
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._simulate_scene.simulate_scene
+
+
+
+.. py:function:: simulate_scene(scene_id: int, scene: revolve2.simulation.scene.Scene, headless: bool, record_settings: revolve2.simulation.simulator.RecordSettings | None, start_paused: bool, control_step: float, sample_step: float | None, simulation_time: int | None, simulation_timestep: float) -> list[revolve2.simulation.scene.SimulationState]
+
+   Simulate a scene.
+
+   :param scene_id: An id for this scene, unique between all scenes ran in parallel.
+   :param scene: The scene to simulate.
+   :param headless: If False, a viewer will be opened that allows a user to manually view and manually interact with the simulation.
+   :param record_settings: If not None, recording will be done according to these settings.
+   :param start_paused: If true, the simulation will start in a paused state. Only makessense when headless is False.
+   :param control_step: The time between each call to the handle function of the scene handler. In seconds.
+   :param sample_step: The time between each state sample of the simulation. In seconds.
+   :param simulation_time: How long to simulate for. In seconds.
+   :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
+   :returns: The results of simulation. The number of returned states depends on `sample_step`.
+
+

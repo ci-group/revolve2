@@ -1,0 +1,123 @@
+:py:mod:`simulator`
+==============================
+
+.. py:module:: simulation.simulator
+
+.. autoapi-nested-parse::
+
+   Interface for simulators and everything to tell them what to do.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.simulator.Batch
+   simulation.simulator.BatchParameters
+   simulation.simulator.RecordSettings
+   simulation.simulator.Simulator
+
+
+
+
+.. py:class:: Batch
+
+
+   A set of scenes and shared parameters for simulation.
+
+   .. py:attribute:: parameters
+      :type: simulation.simulator._batch_parameters.BatchParameters
+
+      
+
+   .. py:attribute:: scenes
+      :type: list[simulation.scene.Scene]
+
+      The scenes to simulate.
+
+
+   .. py:attribute:: record_settings
+      :type: simulation.simulator._record_settings.RecordSettings | None
+
+      
+
+
+.. py:class:: BatchParameters
+
+
+   Parameters for a simulation batch.
+
+   .. py:attribute:: simulation_time
+      :type: int | None
+
+      Seconds. The duration for which each robot should be simulated.
+      If set to 'None', the simulation will run indefinitely.
+
+
+   .. py:attribute:: sampling_frequency
+      :type: float | None
+
+      Hz. Frequency for state sampling during the simulation.
+      The simulator will attempt to follow this as closely as possible,
+      but is dependent on the actual step frequency of the simulator.
+      If set to 'None', no sampling will be performed.
+
+
+   .. py:attribute:: simulation_timestep
+      :type: float
+
+      Simulation time step in seconds. This is an important parameter that affects the trade-off between speed and accuracy,
+      as well as the stability of the robot model.
+      Smaller values of this parameter generally result in better accuracy and stability.
+      However, the specific value of this parameter may vary depending on the scenes being simulated and other batch parameters.
+
+
+   .. py:attribute:: control_frequency
+      :type: float
+
+      Similar to `sampling_frequency` but for how often the control function is called.
+
+
+
+.. py:class:: RecordSettings
+
+
+   Settings for recording a simulation.
+
+   .. py:attribute:: video_directory
+      :type: str
+
+      
+
+   .. py:attribute:: fps
+      :type: int
+      :value: 24
+
+      
+
+
+.. py:class:: Simulator
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.simulator.Simulator
+      :parts: 1
+
+   Interface for a simulator.
+
+   .. py:method:: simulate_batch(batch: simulation.simulator._batch.Batch) -> list[list[simulation.scene.SimulationState]]
+      :abstractmethod:
+
+      Simulate the provided batch by simulating each contained scene.
+
+      :param batch: The batch to run.
+      :returns: List of simulation states in ascending order of time.
+
+
+

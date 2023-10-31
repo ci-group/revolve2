@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scene &mdash; Revolve2 1.0.0rc1 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/graphviz.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=77c1c56c"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="conversion" href="conversion/index.html" />
+    <link rel="prev" title="simulation" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Revolve2
+              <img src="../../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started/index.html#step-1-installation">Step 1: Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../getting_started/index.html#step-2-play-with-the-examples">Step 2: Play with the examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#create-a-virtual-environment">Create a virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#download-the-source">Download the source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#common-issues">Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#install-packages">Install packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation/index.html#editable-mode">Editable Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../physical_robot_setup/index.html">Physical Robot Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../physical_robot_setup/index.html#preparation-install-the-hardware">Preparation + Install the Hardware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../physical_robot_setup/index.html#hardware-setup-for-a-v1-robot">Hardware setup for a V1 Robot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../physical_robot_setup/index.html#hardware-setup-for-a-v2-robot">Hardware setup for a V2 Robot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../physical_robot_setup/index.html#setting-up-the-rpi">Setting up the RPi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../physical_robot_setup/index.html#install-revolve2-on-the-rpi">Install Revolve2 on the RPi</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../physical_robot_setup/index.html#v1-additional-steps">V1 Additional Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing_guide/index.html">Contributing guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#publishing-your-contribution">Publishing your contribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#developer-installation">Developer installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#continuous-integration">Continuous integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#code-tools">Code tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../contributing_guide/index.html#version-control">Version control</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../ci_group/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/fitness_functions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitness_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/modular_robots_v1/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/modular_robots_v2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/morphological_measures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_measures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/terrains/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">terrains</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../experimentation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../experimentation/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/logging/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/rng/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rng</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../modular_robot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot/body/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot/brain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">brain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot/sensor_state/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensor_state</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../modular_robot_simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot_simulation/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot_simulation/index.html#classes">Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot_simulation/index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scene</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../mujoco_simulator/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../modular_robot_physical/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_physical</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot_physical/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot_physical/physical_interfaces/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">physical_interfaces</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../modular_robot_physical/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../modular_robot_physical/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Revolve2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scene</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-simulation.scene">
+<span id="scene"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">scene</span></code><a class="headerlink" href="#module-simulation.scene" title="Link to this heading"></a></h1>
+<p>Everything to describe scenes to be simulated.</p>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="conversion/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">conversion</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="geometry/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">geometry</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="vector2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vector2</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="vector2/vector2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vector2</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="vector2/vector2aux/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vector2aux</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulation.scene.AABB" title="simulation.scene.AABB"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AABB</span></code></a></p></td>
+<td><p>An axis aligned bounding box.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#simulation.scene.Color" title="simulation.scene.Color"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Color</span></code></a></p></td>
+<td><p>Represents a color in RGBA format.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulation.scene.ControlInterface" title="simulation.scene.ControlInterface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ControlInterface</span></code></a></p></td>
+<td><p>Interface for controlling a scene during simulation.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#simulation.scene.Joint" title="simulation.scene.Joint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Joint</span></code></a></p></td>
+<td><p>Base class for all joints.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulation.scene.JointFixed" title="simulation.scene.JointFixed"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JointFixed</span></code></a></p></td>
+<td><p>A joint fixing the rigid bodies together rigidly.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#simulation.scene.JointHinge" title="simulation.scene.JointHinge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JointHinge</span></code></a></p></td>
+<td><p>A hinge joint, also known as revolute joint.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulation.scene.MultiBodySystem" title="simulation.scene.MultiBodySystem"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiBodySystem</span></code></a></p></td>
+<td><p>A (possibly cyclic) graph of interconnected rigid bodies, joints, and other objects, such as cameras.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#simulation.scene.Pose" title="simulation.scene.Pose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pose</span></code></a></p></td>
+<td><p>A position and orientation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulation.scene.RigidBody" title="simulation.scene.RigidBody"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RigidBody</span></code></a></p></td>
+<td><p>A collection of geometries and physics parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#simulation.scene.Scene" title="simulation.scene.Scene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Scene</span></code></a></p></td>
+<td><p>Description of a scene that can be simulated.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulation.scene.SimulationHandler" title="simulation.scene.SimulationHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimulationHandler</span></code></a></p></td>
+<td><p>Base class for handling a simulation, which includes, for example, controlling robots.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#simulation.scene.SimulationState" title="simulation.scene.SimulationState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimulationState</span></code></a></p></td>
+<td><p>Interface for the state of a simulation at certain point.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulation.scene.UUIDKey" title="simulation.scene.UUIDKey"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UUIDKey</span></code></a></p></td>
+<td><p>Wraps a value and implements __eq__ and __hash__ based purely on id(value).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.AABB">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AABB</span></span><a class="headerlink" href="#simulation.scene.AABB" title="Link to this definition"></a></dt>
+<dd><p>An axis aligned bounding box.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.AABB.size">
+<span class="sig-name descname"><span class="pre">size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#simulation.scene.AABB.size" title="Link to this definition"></a></dt>
+<dd><p>Sizes of the length of the bounding box.</p>
+<p>Not half of the box.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.Color">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Color</span></span><a class="headerlink" href="#simulation.scene.Color" title="Link to this definition"></a></dt>
+<dd><p>Represents a color in RGBA format.</p>
+<p>All values should from 0 to 255.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Color.red">
+<span class="sig-name descname"><span class="pre">red</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#simulation.scene.Color.red" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Color.green">
+<span class="sig-name descname"><span class="pre">green</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#simulation.scene.Color.green" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Color.blue">
+<span class="sig-name descname"><span class="pre">blue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#simulation.scene.Color.blue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Color.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#simulation.scene.Color.alpha" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.Color.to_normalized_rgba_list">
+<span class="sig-name descname"><span class="pre">to_normalized_rgba_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#simulation.scene.Color.to_normalized_rgba_list" title="Link to this definition"></a></dt>
+<dd><p>Convert to rgba list where each value is between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.ControlInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ControlInterface</span></span><a class="headerlink" href="#simulation.scene.ControlInterface" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<div class="graphviz"><img src="../../../_images/inheritance-e1609d55975f19d28598faa896d405552a7b0609.png" alt="Inheritance diagram of simulation.scene.ControlInterface" usemap="#inheritance8f5f940cf0" class="inheritance graphviz" /></div>
+<map id="inheritance8f5f940cf0" name="inheritance8f5f940cf0">
+<area shape="rect" id="node2" href="_control_interface/index.html#simulation.scene._control_interface.ControlInterface" target="_top" title="Interface for controlling a scene during simulation." alt="" coords="125,5,252,31"/>
+</map><p>Interface for controlling a scene during simulation.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.ControlInterface.set_joint_hinge_position_target">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_joint_hinge_position_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joint_hinge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_joint_hinge/index.html#simulation.scene._joint_hinge.JointHinge" title="simulation.scene._joint_hinge.JointHinge"><span class="pre">simulation.scene._joint_hinge.JointHinge</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#simulation.scene.ControlInterface.set_joint_hinge_position_target" title="Link to this definition"></a></dt>
+<dd><p>Set the position target of a hinge joint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>joint_hinge</strong> – The hinge to set the position target for.</p></li>
+<li><p><strong>position</strong> – The position target.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.Joint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Joint</span></span><a class="headerlink" href="#simulation.scene.Joint" title="Link to this definition"></a></dt>
+<dd><p>Base class for all joints.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.scene.Joint.uuid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uuid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></em><a class="headerlink" href="#simulation.scene.Joint.uuid" title="Link to this definition"></a></dt>
+<dd><p>Get the uuid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The uuid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Joint.pose">
+<span class="sig-name descname"><span class="pre">pose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="_pose/index.html#simulation.scene._pose.Pose" title="simulation.scene._pose.Pose"><span class="pre">simulation.scene._pose.Pose</span></a></em><a class="headerlink" href="#simulation.scene.Joint.pose" title="Link to this definition"></a></dt>
+<dd><p>Pose of the joint.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Joint.rigid_body1">
+<span class="sig-name descname"><span class="pre">rigid_body1</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="_rigid_body/index.html#simulation.scene._rigid_body.RigidBody" title="simulation.scene._rigid_body.RigidBody"><span class="pre">simulation.scene._rigid_body.RigidBody</span></a></em><a class="headerlink" href="#simulation.scene.Joint.rigid_body1" title="Link to this definition"></a></dt>
+<dd><p>The first attached rigid body.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Joint.rigid_body2">
+<span class="sig-name descname"><span class="pre">rigid_body2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="_rigid_body/index.html#simulation.scene._rigid_body.RigidBody" title="simulation.scene._rigid_body.RigidBody"><span class="pre">simulation.scene._rigid_body.RigidBody</span></a></em><a class="headerlink" href="#simulation.scene.Joint.rigid_body2" title="Link to this definition"></a></dt>
+<dd><p>The second attached rigid body.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.JointFixed">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JointFixed</span></span><a class="headerlink" href="#simulation.scene.JointFixed" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_joint/index.html#simulation.scene._joint.Joint" title="simulation.scene._joint.Joint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulation.scene._joint.Joint</span></code></a></p>
+<div class="graphviz"><img src="../../../_images/inheritance-30c1798656f4b84b9d7c88bab3497fd255236d07.png" alt="Inheritance diagram of simulation.scene.JointFixed" usemap="#inheritance6e1b8ff589" class="inheritance graphviz" /></div>
+<map id="inheritance6e1b8ff589" name="inheritance6e1b8ff589">
+<area shape="rect" id="node1" href="_joint/index.html#simulation.scene._joint.Joint" target="_top" title="Base class for all joints." alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" href="_joint_fixed/index.html#simulation.scene._joint_fixed.JointFixed" target="_top" title="A joint fixing the rigid bodies together rigidly." alt="" coords="125,5,211,31"/>
+</map><p>A joint fixing the rigid bodies together rigidly.</p>
+<p>This makes them effectively a single rigid body.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.JointHinge">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">JointHinge</span></span><a class="headerlink" href="#simulation.scene.JointHinge" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_joint/index.html#simulation.scene._joint.Joint" title="simulation.scene._joint.Joint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulation.scene._joint.Joint</span></code></a></p>
+<div class="graphviz"><img src="../../../_images/inheritance-869341e3bbff3d6a109d79e3e74606db1453233b.png" alt="Inheritance diagram of simulation.scene.JointHinge" usemap="#inheritance296bff9b6b" class="inheritance graphviz" /></div>
+<map id="inheritance296bff9b6b" name="inheritance296bff9b6b">
+<area shape="rect" id="node1" href="_joint/index.html#simulation.scene._joint.Joint" target="_top" title="Base class for all joints." alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" href="_joint_hinge/index.html#simulation.scene._joint_hinge.JointHinge" target="_top" title="A hinge joint, also known as revolute joint." alt="" coords="125,5,215,31"/>
+</map><p>A hinge joint, also known as revolute joint.</p>
+<p>Rotates around a single axis.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.JointHinge.axis">
+<span class="sig-name descname"><span class="pre">axis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#simulation.scene.JointHinge.axis" title="Link to this definition"></a></dt>
+<dd><p>Directional vector the joint rotates about.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.JointHinge.range">
+<span class="sig-name descname"><span class="pre">range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulation.scene.JointHinge.range" title="Link to this definition"></a></dt>
+<dd><p>Rotation range of the joint in radians.</p>
+<p>How much it can rotate to each side, in radians.
+So double this is the complete range of motion.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.JointHinge.effort">
+<span class="sig-name descname"><span class="pre">effort</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulation.scene.JointHinge.effort" title="Link to this definition"></a></dt>
+<dd><p>Maximum effort the joint can exert, in newton-meter.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.JointHinge.velocity">
+<span class="sig-name descname"><span class="pre">velocity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulation.scene.JointHinge.velocity" title="Link to this definition"></a></dt>
+<dd><p>Maximum velocity of the joint, in radian per second.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.JointHinge.armature">
+<span class="sig-name descname"><span class="pre">armature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulation.scene.JointHinge.armature" title="Link to this definition"></a></dt>
+<dd><p>Armature of the joint.</p>
+<p>This represents the inertia of the motor itself when nothing is attached.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.JointHinge.pid_gain_p">
+<span class="sig-name descname"><span class="pre">pid_gain_p</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulation.scene.JointHinge.pid_gain_p" title="Link to this definition"></a></dt>
+<dd><p>Proportional gain of the pid position controller.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.JointHinge.pid_gain_d">
+<span class="sig-name descname"><span class="pre">pid_gain_d</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulation.scene.JointHinge.pid_gain_d" title="Link to this definition"></a></dt>
+<dd><p>Derivative gain of the pid position controller.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultiBodySystem</span></span><a class="headerlink" href="#simulation.scene.MultiBodySystem" title="Link to this definition"></a></dt>
+<dd><p>A (possibly cyclic) graph of interconnected rigid bodies, joints, and other objects, such as cameras.</p>
+<p>The first rigid body added is considered the root of the system.
+That is, if the system is static, that rigid body will be static.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.uuid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uuid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></em><a class="headerlink" href="#simulation.scene.MultiBodySystem.uuid" title="Link to this definition"></a></dt>
+<dd><p>Get the uuid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The uuid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.root">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="_rigid_body/index.html#simulation.scene._rigid_body.RigidBody" title="simulation.scene._rigid_body.RigidBody"><span class="pre">simulation.scene._rigid_body.RigidBody</span></a></em><a class="headerlink" href="#simulation.scene.MultiBodySystem.root" title="Link to this definition"></a></dt>
+<dd><p>Get the root rigid body of this multi-body system.</p>
+<p>The root rigid body is the first rigid body that has been added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The root rigid body.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.pose">
+<span class="sig-name descname"><span class="pre">pose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="_pose/index.html#simulation.scene._pose.Pose" title="simulation.scene._pose.Pose"><span class="pre">simulation.scene._pose.Pose</span></a></em><a class="headerlink" href="#simulation.scene.MultiBodySystem.pose" title="Link to this definition"></a></dt>
+<dd><p>Pose of the system.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.is_static">
+<span class="sig-name descname"><span class="pre">is_static</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#simulation.scene.MultiBodySystem.is_static" title="Link to this definition"></a></dt>
+<dd><p>Whether the root rigid body is static.</p>
+<p>I.e. its root (the first rigid body) is attached to the world and will not move or rotate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.add_rigid_body">
+<span class="sig-name descname"><span class="pre">add_rigid_body</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rigid_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_rigid_body/index.html#simulation.scene._rigid_body.RigidBody" title="simulation.scene._rigid_body.RigidBody"><span class="pre">simulation.scene._rigid_body.RigidBody</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#simulation.scene.MultiBodySystem.add_rigid_body" title="Link to this definition"></a></dt>
+<dd><p>Add a rigid body to the system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rigid_body</strong> – The rigid body to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.add_joint">
+<span class="sig-name descname"><span class="pre">add_joint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_joint/index.html#simulation.scene._joint.Joint" title="simulation.scene._joint.Joint"><span class="pre">simulation.scene._joint.Joint</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#simulation.scene.MultiBodySystem.add_joint" title="Link to this definition"></a></dt>
+<dd><p>Add a joint between two rigid bodies.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>joint</strong> – The joint to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.has_root">
+<span class="sig-name descname"><span class="pre">has_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#simulation.scene.MultiBodySystem.has_root" title="Link to this definition"></a></dt>
+<dd><p>Check whether a root has been added.</p>
+<p>The root rigid body is the first rigid body that has been added,
+so this is only false if there are zero rigid bodies in this multi-body system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Whether there is a root joint.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.get_joints_for_rigid_body">
+<span class="sig-name descname"><span class="pre">get_joints_for_rigid_body</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rigid_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_rigid_body/index.html#simulation.scene._rigid_body.RigidBody" title="simulation.scene._rigid_body.RigidBody"><span class="pre">simulation.scene._rigid_body.RigidBody</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_joint/index.html#simulation.scene._joint.Joint" title="simulation.scene._joint.Joint"><span class="pre">simulation.scene._joint.Joint</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#simulation.scene.MultiBodySystem.get_joints_for_rigid_body" title="Link to this definition"></a></dt>
+<dd><p>Get all joints attached to the provided rigid body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rigid_body</strong> – A previously added rigid body.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The attached joints.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.MultiBodySystem.calculate_aabb">
+<span class="sig-name descname"><span class="pre">calculate_aabb</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">pyrr.Vector3</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="_aabb/index.html#simulation.scene._aabb.AABB" title="simulation.scene._aabb.AABB"><span class="pre">simulation.scene._aabb.AABB</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#simulation.scene.MultiBodySystem.calculate_aabb" title="Link to this definition"></a></dt>
+<dd><p>Calculate the axis-aligned bounding box of this multi-body system when it is in T-pose.</p>
+<p>That is, when all joints are at position 0.
+Only box geometries are currently supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Position, AABB</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If one of the geometries is not a box.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.Pose">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Pose</span></span><a class="headerlink" href="#simulation.scene.Pose" title="Link to this definition"></a></dt>
+<dd><p>A position and orientation.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Pose.position">
+<span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#simulation.scene.Pose.position" title="Link to this definition"></a></dt>
+<dd><p>Position of the object.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Pose.orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Quaternion</span></em><a class="headerlink" href="#simulation.scene.Pose.orientation" title="Link to this definition"></a></dt>
+<dd><p>Orientation of the object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RigidBody</span></span><a class="headerlink" href="#simulation.scene.RigidBody" title="Link to this definition"></a></dt>
+<dd><p>A collection of geometries and physics parameters.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.uuid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uuid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></em><a class="headerlink" href="#simulation.scene.RigidBody.uuid" title="Link to this definition"></a></dt>
+<dd><p>Get the uuid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The uuid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.initial_pose">
+<span class="sig-name descname"><span class="pre">initial_pose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="_pose/index.html#simulation.scene._pose.Pose" title="simulation.scene._pose.Pose"><span class="pre">simulation.scene._pose.Pose</span></a></em><a class="headerlink" href="#simulation.scene.RigidBody.initial_pose" title="Link to this definition"></a></dt>
+<dd><p>Initial pose of the rigid body.</p>
+<p>Relative to its parent multi-body system.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.static_friction">
+<span class="sig-name descname"><span class="pre">static_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulation.scene.RigidBody.static_friction" title="Link to this definition"></a></dt>
+<dd><p>Static friction of the body.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.dynamic_friction">
+<span class="sig-name descname"><span class="pre">dynamic_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#simulation.scene.RigidBody.dynamic_friction" title="Link to this definition"></a></dt>
+<dd><p>Dynamic friction of the body.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.geometries">
+<span class="sig-name descname"><span class="pre">geometries</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="geometry/index.html#simulation.scene.geometry.Geometry" title="simulation.scene.geometry.Geometry"><span class="pre">simulation.scene.geometry.Geometry</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#simulation.scene.RigidBody.geometries" title="Link to this definition"></a></dt>
+<dd><p>Geometries describing the shape of the body.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.mass">
+<span class="sig-name descname"><span class="pre">mass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#simulation.scene.RigidBody.mass" title="Link to this definition"></a></dt>
+<dd><p>Get mass of the rigid body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The mass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.center_of_mass">
+<span class="sig-name descname"><span class="pre">center_of_mass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.Vector3</span></span></span><a class="headerlink" href="#simulation.scene.RigidBody.center_of_mass" title="Link to this definition"></a></dt>
+<dd><p>Calculate the center of mass in the local reference frame of this rigid body.</p>
+<p>If no geometry has mass, the average position of all geometries is returned, unweighted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The center of mass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.inertia_tensor">
+<span class="sig-name descname"><span class="pre">inertia_tensor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.Matrix33</span></span></span><a class="headerlink" href="#simulation.scene.RigidBody.inertia_tensor" title="Link to this definition"></a></dt>
+<dd><p>Calculate the inertia tensor in the local reference frame of this rigid body.</p>
+<p>Only box geometries are currently supported.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The inertia tensor.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If one of the geometries is not a box.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.Scene">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Scene</span></span><a class="headerlink" href="#simulation.scene.Scene" title="Link to this definition"></a></dt>
+<dd><p>Description of a scene that can be simulated.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.scene.Scene.multi_body_systems">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">multi_body_systems</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_multi_body_system/index.html#simulation.scene._multi_body_system.MultiBodySystem" title="simulation.scene._multi_body_system.MultiBodySystem"><span class="pre">simulation.scene._multi_body_system.MultiBodySystem</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#simulation.scene.Scene.multi_body_systems" title="Link to this definition"></a></dt>
+<dd><p>Get the multi-body systems in scene.</p>
+<p>Do not make changes to this list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The multi-body systems in the scene.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.Scene.handler">
+<span class="sig-name descname"><span class="pre">handler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="_simulation_handler/index.html#simulation.scene._simulation_handler.SimulationHandler" title="simulation.scene._simulation_handler.SimulationHandler"><span class="pre">simulation.scene._simulation_handler.SimulationHandler</span></a></em><a class="headerlink" href="#simulation.scene.Scene.handler" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.Scene.add_multi_body_system">
+<span class="sig-name descname"><span class="pre">add_multi_body_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_body_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_multi_body_system/index.html#simulation.scene._multi_body_system.MultiBodySystem" title="simulation.scene._multi_body_system.MultiBodySystem"><span class="pre">simulation.scene._multi_body_system.MultiBodySystem</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#simulation.scene.Scene.add_multi_body_system" title="Link to this definition"></a></dt>
+<dd><p>Add a multi-body system to the scene.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>multi_body_system</strong> – The multi-body system to add.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.SimulationHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SimulationHandler</span></span><a class="headerlink" href="#simulation.scene.SimulationHandler" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<div class="graphviz"><img src="../../../_images/inheritance-0321989471f87576095379408e23f82dfbb377ba.png" alt="Inheritance diagram of simulation.scene.SimulationHandler" usemap="#inheritance6ebc01a7b4" class="inheritance graphviz" /></div>
+<map id="inheritance6ebc01a7b4" name="inheritance6ebc01a7b4">
+<area shape="rect" id="node2" href="_simulation_handler/index.html#simulation.scene._simulation_handler.SimulationHandler" target="_top" title="Base class for handling a simulation, which includes, for example, controlling robots." alt="" coords="125,5,268,31"/>
+</map><p>Base class for handling a simulation, which includes, for example, controlling robots.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.SimulationHandler.handle">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_simulation_state/index.html#simulation.scene._simulation_state.SimulationState" title="simulation.scene._simulation_state.SimulationState"><span class="pre">simulation.scene._simulation_state.SimulationState</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">control</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_control_interface/index.html#simulation.scene._control_interface.ControlInterface" title="simulation.scene._control_interface.ControlInterface"><span class="pre">simulation.scene._control_interface.ControlInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#simulation.scene.SimulationHandler.handle" title="Link to this definition"></a></dt>
+<dd><p>Handle a simulation frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> – The current state of the simulation.</p></li>
+<li><p><strong>control</strong> – Interface for setting control targets.</p></li>
+<li><p><strong>dt</strong> – The time since the last call to this function.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.SimulationState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SimulationState</span></span><a class="headerlink" href="#simulation.scene.SimulationState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<div class="graphviz"><img src="../../../_images/inheritance-f4cf8e91b3cb7362b354cedc9efabf795644e4b3.png" alt="Inheritance diagram of simulation.scene.SimulationState" usemap="#inheritancec678bf7b5d" class="inheritance graphviz" /></div>
+<map id="inheritancec678bf7b5d" name="inheritancec678bf7b5d">
+<area shape="rect" id="node2" href="_simulation_state/index.html#simulation.scene._simulation_state.SimulationState" target="_top" title="Interface for the state of a simulation at certain point." alt="" coords="125,5,252,31"/>
+</map><p>Interface for the state of a simulation at certain point.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.SimulationState.get_rigid_body_relative_pose">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_rigid_body_relative_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rigid_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_rigid_body/index.html#simulation.scene._rigid_body.RigidBody" title="simulation.scene._rigid_body.RigidBody"><span class="pre">simulation.scene._rigid_body.RigidBody</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="_pose/index.html#simulation.scene._pose.Pose" title="simulation.scene._pose.Pose"><span class="pre">simulation.scene._pose.Pose</span></a></span></span><a class="headerlink" href="#simulation.scene.SimulationState.get_rigid_body_relative_pose" title="Link to this definition"></a></dt>
+<dd><p>Get the pose of a rigid body, relative to its parent multi-body system’s reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rigid_body</strong> – The rigid body to get the pose for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The relative pose.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.SimulationState.get_rigid_body_absolute_pose">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_rigid_body_absolute_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rigid_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_rigid_body/index.html#simulation.scene._rigid_body.RigidBody" title="simulation.scene._rigid_body.RigidBody"><span class="pre">simulation.scene._rigid_body.RigidBody</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="_pose/index.html#simulation.scene._pose.Pose" title="simulation.scene._pose.Pose"><span class="pre">simulation.scene._pose.Pose</span></a></span></span><a class="headerlink" href="#simulation.scene.SimulationState.get_rigid_body_absolute_pose" title="Link to this definition"></a></dt>
+<dd><p>Get the pose of a rigid body, relative the global reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rigid_body</strong> – The rigid body to get the pose for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The absolute pose.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.SimulationState.get_multi_body_system_pose">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_multi_body_system_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_body_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_multi_body_system/index.html#simulation.scene._multi_body_system.MultiBodySystem" title="simulation.scene._multi_body_system.MultiBodySystem"><span class="pre">simulation.scene._multi_body_system.MultiBodySystem</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="_pose/index.html#simulation.scene._pose.Pose" title="simulation.scene._pose.Pose"><span class="pre">simulation.scene._pose.Pose</span></a></span></span><a class="headerlink" href="#simulation.scene.SimulationState.get_multi_body_system_pose" title="Link to this definition"></a></dt>
+<dd><p>Get the pose of a multi-body system, relative to the global reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>multi_body_system</strong> – The multi-body system to get the pose for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The relative pose.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.SimulationState.get_hinge_joint_position">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_hinge_joint_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">joint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_joint_hinge/index.html#simulation.scene._joint_hinge.JointHinge" title="simulation.scene._joint_hinge.JointHinge"><span class="pre">simulation.scene._joint_hinge.JointHinge</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#simulation.scene.SimulationState.get_hinge_joint_position" title="Link to this definition"></a></dt>
+<dd><p>Get the rotational position of a hinge joint.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>joint</strong> – The joint to get the rotational position for.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rotational position.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.scene.UUIDKey">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UUIDKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#simulation.scene.UUIDKey" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Generic</span></code>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">_T</span></code>]</p>
+<div class="graphviz"><img src="../../../_images/inheritance-c5924ef5df6987b6e97b61adc4ed287da42394f3.png" alt="Inheritance diagram of simulation.scene.UUIDKey" usemap="#inheritance1064ff1233" class="inheritance graphviz" /></div>
+<map id="inheritance1064ff1233" name="inheritance1064ff1233">
+<area shape="rect" id="node2" href="_uuid_key/index.html#simulation.scene._uuid_key.UUIDKey" target="_top" title="Wraps a value and implements __eq__ and __hash__ based purely on id(value)." alt="" coords="125,5,205,31"/>
+</map><p>Wraps a value and implements __eq__ and __hash__ based purely on id(value).</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.scene.UUIDKey.value">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">_T</span></em><a class="headerlink" href="#simulation.scene.UUIDKey.value" title="Link to this definition"></a></dt>
+<dd><p>Get the wrapped value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.UUIDKey.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">object</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#simulation.scene.UUIDKey.__eq__" title="Link to this definition"></a></dt>
+<dd><p>Compare with another wrapped value using their ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> – The object to compare with.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether their ids are equal.</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the other objecgt is not an UUIDKey.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.UUIDKey.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#simulation.scene.UUIDKey.__hash__" title="Link to this definition"></a></dt>
+<dd><p>Hash this object using its id only.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The hash.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Computational Intelligence Group, Vrije Universiteit Amsterdam &amp; Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

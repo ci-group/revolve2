@@ -1,0 +1,49 @@
+:orphan:
+
+:py:mod:`_scene`
+=================================
+
+.. py:module:: simulation.scene._scene
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._scene.Scene
+
+
+
+
+.. py:class:: Scene
+
+
+   Description of a scene that can be simulated.
+
+   .. py:property:: multi_body_systems
+      :type: list[simulation.scene._multi_body_system.MultiBodySystem]
+
+      Get the multi-body systems in scene.
+
+      Do not make changes to this list.
+
+      :returns: The multi-body systems in the scene.
+
+
+   .. py:attribute:: handler
+      :type: simulation.scene._simulation_handler.SimulationHandler
+
+      
+
+   .. py:method:: add_multi_body_system(multi_body_system: simulation.scene._multi_body_system.MultiBodySystem) -> None
+
+      Add a multi-body system to the scene.
+
+      :param multi_body_system: The multi-body system to add.
+
+
+

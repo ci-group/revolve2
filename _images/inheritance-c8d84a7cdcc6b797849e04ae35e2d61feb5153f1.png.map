@@ -1,0 +1,5 @@
+<map id="inheritance6aaa3b6f7d" name="inheritance6aaa3b6f7d">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node3" title="Base class for handling a simulation, which includes, for example, controlling robots." alt="" coords="125,5,268,31"/>
+<area shape="rect" id="node2" href="#modular_robot_simulation._modular_robot_simulation_handler.ModularRobotSimulationHandler" target="_top" title="Implements the simulation handler for a modular robot scene." alt="" coords="316,5,551,31"/>
+</map>

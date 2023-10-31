@@ -1,0 +1,55 @@
+:orphan:
+
+:py:mod:`_physical_interface`
+========================================================================
+
+.. py:module:: modular_robot_physical.physical_interfaces._physical_interface
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface
+
+
+
+
+.. py:class:: PhysicalInterface
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface
+      :parts: 1
+
+   Abstract implementation for interfacing with hardware.
+
+   .. py:property:: control_interface
+      :type: modular_robot_physical.physical_interfaces._physical_control_interface.PhysicalControlInterface
+      :abstractmethod:
+
+      Get the control interface.
+
+      :returns: The control interface.
+
+
+   .. py:method:: read_sensor_state() -> modular_robot_physical.physical_interfaces._physical_sensor_state.PhysicalSensorState
+      :abstractmethod:
+
+      Read the current sensor state.
+
+      :returns: The sensor state.
+
+
+   .. py:method:: shutdown() -> None
+      :abstractmethod:
+
+      Shutdown the interface.
+
+
+

@@ -1,0 +1,42 @@
+:orphan:
+
+:py:mod:`_scene_to_model`
+==========================================
+
+.. py:module:: mujoco_simulator._scene_to_model
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._scene_to_model.scene_to_model
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._scene_to_model.old_len
+
+
+.. py:data:: old_len
+
+   
+
+.. py:function:: scene_to_model(scene: revolve2.simulation.scene.Scene, simulation_timestep: float) -> tuple[mujoco.MjModel, mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping]
+
+   Convert a scene to a MuJoCo model.
+
+   :param scene: The scene to convert.
+   :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
+   :returns: The created MuJoCo model and mapping from the simulation abstraction to the model.
+
+

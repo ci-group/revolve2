@@ -1,0 +1,129 @@
+:py:mod:`geometry`
+===================================
+
+.. py:module:: simulation.scene.geometry
+
+.. autoapi-nested-parse::
+
+   Interface and implementation of geometries.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry.Geometry
+   simulation.scene.geometry.GeometryBox
+   simulation.scene.geometry.GeometryHeightmap
+   simulation.scene.geometry.GeometryPlane
+
+
+
+
+.. py:class:: Geometry
+
+
+   Geometry describing part of a rigid body shape.
+
+   Currently always a box.
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the geometry.
+
+
+   .. py:attribute:: mass
+      :type: float
+
+      Mass of the geometry.
+
+      This the absolute mass, irrespective of the size of the bounding box.
+
+
+   .. py:attribute:: color
+      :type: simulation.scene._color.Color
+
+      Color when rendering this geometry.
+
+
+
+.. py:class:: GeometryBox
+
+
+   Bases: :py:obj:`simulation.scene.geometry._geometry.Geometry`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry.GeometryBox
+      :parts: 1
+
+   Box geometry.
+
+   .. py:attribute:: aabb
+      :type: simulation.scene._aabb.AABB
+
+      AABB describing the box's shape.
+
+
+
+.. py:class:: GeometryHeightmap
+
+
+   Bases: :py:obj:`simulation.scene.geometry._geometry.Geometry`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry.GeometryHeightmap
+      :parts: 1
+
+   A heightmap geometry.
+
+   Similarly to the `Plane` geometry, x and y of `size` define the space the heighmap encompasses.
+   The z-coordinate defines the height of a heightmap edge when it's value is maximum.
+   `heights` defines the edge of the heighmap. Values much lie between 0.0 and 1.0, inclusive.
+   `base_thickness` defines the thickness of the box below the heighmap, which is requires for proper collision detection in some simulators.
+
+   .. py:attribute:: size
+      :type: pyrr.Vector3
+
+      
+
+   .. py:attribute:: base_thickness
+      :type: float
+
+      
+
+   .. py:attribute:: heights
+      :type: numpy.typing.NDArray[numpy.float_]
+
+      
+
+   .. py:attribute:: color
+      :type: simulation.scene._color.Color
+
+      
+
+
+.. py:class:: GeometryPlane
+
+
+   Bases: :py:obj:`simulation.scene.geometry._geometry.Geometry`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry.GeometryPlane
+      :parts: 1
+
+   A flat plane geometry.
+
+   .. py:attribute:: size
+      :type: simulation.scene.vector2.Vector2
+
+      
+
+   .. py:attribute:: color
+      :type: simulation.scene._color.Color
+
+      
+
+

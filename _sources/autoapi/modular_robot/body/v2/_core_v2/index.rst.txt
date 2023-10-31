@@ -1,0 +1,56 @@
+:orphan:
+
+:py:mod:`_core_v2`
+========================================
+
+.. py:module:: modular_robot.body.v2._core_v2
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.v2._core_v2.CoreV2
+
+
+
+
+.. py:class:: CoreV2(rotation: float | modular_robot.body._right_angles.RightAngles, attachment_positions: list[int], num_batteries: int = 1)
+
+
+   Bases: :py:obj:`modular_robot.body.base.Core`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.v2._core_v2.CoreV2
+      :parts: 1
+
+   The core module of a modular robot.
+
+   .. py:property:: horizontal_offset
+      :type: float
+
+      Get the horizontal offset for attachment positions (in m).
+
+      :return: The value.
+
+
+   .. py:property:: vertical_offset
+      :type: float
+
+      Get the vertical offset for attachment positions (in m).
+
+      :return: The value.
+
+
+   .. py:property:: attachment_positions
+      :type: list[int]
+
+      Get the populated attachment positions for each core side.
+
+      :return: The value.
+
+
+

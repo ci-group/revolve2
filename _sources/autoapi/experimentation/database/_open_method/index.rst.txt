@@ -1,0 +1,48 @@
+:orphan:
+
+:py:mod:`_open_method`
+===============================================
+
+.. py:module:: experimentation.database._open_method
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.database._open_method.OpenMethod
+
+
+
+
+.. py:class:: OpenMethod(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: experimentation.database._open_method.OpenMethod
+      :parts: 1
+
+   Describes the way a database should be opened.
+
+   .. py:attribute:: OPEN_IF_EXISTS
+
+      
+
+   .. py:attribute:: OPEN_OR_CREATE
+
+      
+
+   .. py:attribute:: NOT_EXISTS_AND_CREATE
+
+      
+
+   .. py:attribute:: OVERWITE_IF_EXISTS
+
+      
+
+

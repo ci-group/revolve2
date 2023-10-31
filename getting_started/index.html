@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; Revolve2 1.0.0rc1 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/graphviz.css" type="text/css" />
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=77c1c56c"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Installation" href="../installation/index.html" />
+    <link rel="prev" title="Revolve2 documentation" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Revolve2
+              <img src="../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#step-1-installation">Step 1: Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#step-2-play-with-the-examples">Step 2: Play with the examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#create-a-virtual-environment">Create a virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#download-the-source">Download the source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#common-issues">Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#install-packages">Install packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation/index.html#editable-mode">Editable Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../physical_robot_setup/index.html">Physical Robot Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../physical_robot_setup/index.html#preparation-install-the-hardware">Preparation + Install the Hardware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../physical_robot_setup/index.html#hardware-setup-for-a-v1-robot">Hardware setup for a V1 Robot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../physical_robot_setup/index.html#hardware-setup-for-a-v2-robot">Hardware setup for a V2 Robot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../physical_robot_setup/index.html#setting-up-the-rpi">Setting up the RPi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../physical_robot_setup/index.html#install-revolve2-on-the-rpi">Install Revolve2 on the RPi</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../physical_robot_setup/index.html#v1-additional-steps">V1 Additional Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing_guide/index.html">Contributing guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#publishing-your-contribution">Publishing your contribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#developer-installation">Developer installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#continuous-integration">Continuous integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#code-tools">Code tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../contributing_guide/index.html#version-control">Version control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../autoapi/index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/ci_group/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/fitness_functions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitness_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/modular_robots_v1/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/modular_robots_v2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/morphological_measures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_measures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/terrains/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">terrains</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/experimentation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/experimentation/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/experimentation/logging/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/experimentation/rng/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rng</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/modular_robot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot/body/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot/brain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">brain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot/sensor_state/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensor_state</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/modular_robot_simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot_simulation/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot_simulation/index.html#classes">Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot_simulation/index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/simulation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/simulation/scene/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scene</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/simulation/simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../autoapi/modular_robot_physical/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_physical</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot_physical/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot_physical/physical_interfaces/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">physical_interfaces</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../autoapi/modular_robot_physical/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/modular_robot_physical/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Revolve2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
+<p>Revolve2 is research software designed for the optimization of modular robot designs, both in terms of their physical structures (bodies) and their behaviour (brains). It primarily employs evolutionary algorithms for optimization, although other techniques can be used as well. Furthermore, Revolve2 offers capabilities to test these robots in simulation as well as in the real-world.</p>
+<p>The software comes with several packages. Depending on your research needs, you may choose to work with a specific subset of these packages.
+This tutorial will guide you through the key steps to initiate your studies and research using Revolve2 efficiently.</p>
+<section id="step-1-installation">
+<h2>Step 1: Installation<a class="headerlink" href="#step-1-installation" title="Link to this heading"></a></h2>
+<p>The first step is to install Revolve2. For this follow the detailed tutorial from <a class="reference internal" href="../installation/index.html"><span class="doc">Installation Guide</span></a>.
+Keep in mind that installation can vary depending on the release you choose. This documentation matches the latest release of Revolve2.</p>
+</section>
+<section id="step-2-play-with-the-examples">
+<h2>Step 2: Play with the examples<a class="headerlink" href="#step-2-play-with-the-examples" title="Link to this heading"></a></h2>
+<p>Based on your research topic, certain functionalities in Revolve2 may be of interest to you.
+A good starting point to delve deeper into Revolve2’s inner workings is the example directory found in the repository.
+Some examples come in two versions: one with and one without a database.
+It is recommended to explore the examples without the database first to better grasp the significance of this addition.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Revolve2 examples</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 50%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Example</p></th>
+<th class="head"><p>Contents</p></th>
+<th class="head"><p>Prequisite examples</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Simulation</strong></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>simulate single robot</p></td>
+<td><p>Simulate and visualize a single modular robot.</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>evaluate single robot</p></td>
+<td><p>Evaluate a robot by simulating it and calculating its displacement.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simulate</span> <span class="pre">single</span> <span class="pre">robot</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>evaluate multiple isolated robots</p></td>
+<td><p>Evaluate multiple non-interacting robots concurrently.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">evaluate</span> <span class="pre">single</span> <span class="pre">robot</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>evaluate multiple interacting robots</p></td>
+<td><p>Evaluate multiple interacting robots.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">evaluate</span> <span class="pre">single</span> <span class="pre">robot</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>evaluate multiple isolated robots</p></td>
+<td><p>Evaluate multiple non-interacting robots concurrently.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">evaluate</span> <span class="pre">single</span> <span class="pre">robot</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>custom brain</p></td>
+<td><p>Design your own brain and test it in simulation.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simulate</span> <span class="pre">single</span> <span class="pre">robot</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>custom terrain</p></td>
+<td><p>Design your own terrain and test it in simulation</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simulate</span> <span class="pre">single</span> <span class="pre">robot</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Experiments</strong></p></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>experiment setup</p></td>
+<td><p>Set up your first experiment.</p></td>
+<td><p>-</p></td>
+</tr>
+<tr class="row-even"><td><p>simple ea xor</p></td>
+<td><p>Use an evolutionary algorithm to train a neural network to perform XOR.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">experiment</span> <span class="pre">setup</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>simple ea xor database</p></td>
+<td><p>Similar to <code class="code docutils literal notranslate"><span class="pre">simple</span> <span class="pre">ea</span> <span class="pre">xor</span></code>, but now using a database to store experiment results.
+Learn how to read the database for e.g. plotting or recovering crashed experiments.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simple</span> <span class="pre">ea</span> <span class="pre">xor</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>robot bodybrain ea</p></td>
+<td><p>Optimize the bodies and brains of modular robots using an evolutionary algorithm.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">evaluate</span> <span class="pre">multiple</span> <span class="pre">isolated</span> <span class="pre">robots</span></code>, <code class="code docutils literal notranslate"><span class="pre">simple</span> <span class="pre">ea</span> <span class="pre">xor</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>robot bodybrain ea database</p></td>
+<td><p>Similar to <code class="code docutils literal notranslate"><span class="pre">robot</span> <span class="pre">bodybrain</span> <span class="pre">ea</span></code>, but now using a database to store experiment results.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">robot</span> <span class="pre">bodybrain</span> <span class="pre">ea</span></code>, <code class="code docutils literal notranslate"><span class="pre">simple</span> <span class="pre">ea</span> <span class="pre">xor</span> <span class="pre">database</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>robot brain cmaes</p></td>
+<td><p>Optimize the brains of modular robots using CMA-ES.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">evaluate</span> <span class="pre">multiple</span> <span class="pre">isolated</span> <span class="pre">robots</span></code>, <code class="code docutils literal notranslate"><span class="pre">simple</span> <span class="pre">ea</span> <span class="pre">xor</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>robot brain cmaes database</p></td>
+<td><p>Similar to <code class="code docutils literal notranslate"><span class="pre">robot</span> <span class="pre">brain</span> <span class="pre">cmaes</span></code>, but now using a database to store experiment results.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">robot</span> <span class="pre">brain</span> <span class="pre">cmaes</span></code>, <code class="code docutils literal notranslate"><span class="pre">simple</span> <span class="pre">ea</span> <span class="pre">xor</span> <span class="pre">database</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>run physical robot manually</p></td>
+<td><p>Learn how to use your evolved robots in the physical world.</p></td>
+<td><p><code class="code docutils literal notranslate"><span class="pre">simulate</span> <span class="pre">single</span> <span class="pre">robot</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Computational Intelligence Group, Vrije Universiteit Amsterdam &amp; Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

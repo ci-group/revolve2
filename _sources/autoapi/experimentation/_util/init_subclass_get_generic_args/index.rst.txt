@@ -1,0 +1,45 @@
+:py:mod:`init_subclass_get_generic_args`
+==============================================================
+
+.. py:module:: experimentation._util.init_subclass_get_generic_args
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation._util.init_subclass_get_generic_args.init_subclass_get_generic_args
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation._util.init_subclass_get_generic_args.TChild
+   experimentation._util.init_subclass_get_generic_args.TParent
+
+
+.. py:data:: TChild
+
+   
+
+.. py:data:: TParent
+
+   
+
+.. py:function:: init_subclass_get_generic_args(child: Type[TChild], parent: Type[TParent]) -> tuple[Any, Ellipsis]
+
+   Get the generic arguments from a class within the __init_subclass__ function.
+
+   :param child: The type passed to the __init_subclass__ function.
+   :param parent: The type of the parent class, which is the class __init_subclass__ is implemented for.
+   :returns: The types. Keep in mind these can be `ForwardRef`.
+
+

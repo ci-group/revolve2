@@ -1,0 +1,42 @@
+:orphan:
+
+:py:mod:`_geometry_plane`
+===================================================
+
+.. py:module:: simulation.scene.geometry._geometry_plane
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry._geometry_plane.GeometryPlane
+
+
+
+
+.. py:class:: GeometryPlane
+
+
+   Bases: :py:obj:`simulation.scene.geometry._geometry.Geometry`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry._geometry_plane.GeometryPlane
+      :parts: 1
+
+   A flat plane geometry.
+
+   .. py:attribute:: size
+      :type: simulation.scene.vector2.Vector2
+
+      
+
+   .. py:attribute:: color
+      :type: simulation.scene._color.Color
+
+      
+
+

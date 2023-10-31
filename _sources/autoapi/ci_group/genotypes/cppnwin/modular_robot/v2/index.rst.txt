@@ -1,0 +1,130 @@
+:py:mod:`v2`
+=====================================================
+
+.. py:module:: ci_group.genotypes.cppnwin.modular_robot.v2
+
+.. autoapi-nested-parse::
+
+   Body Genotype Mapping for V1 Robot.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ci_group.genotypes.cppnwin.modular_robot.v2.BodyGenotypeOrmV2
+   ci_group.genotypes.cppnwin.modular_robot.v2.BodyGenotypeV2
+
+
+
+
+.. py:class:: BodyGenotypeOrmV2
+
+
+   Bases: :py:obj:`sqlalchemy.orm.MappedAsDataclass`
+
+   .. autoapi-inheritance-diagram:: ci_group.genotypes.cppnwin.modular_robot.v2.BodyGenotypeOrmV2
+      :parts: 1
+
+   SQLAlchemy model for a CPPNWIN body genotype.
+
+   .. py:attribute:: body
+      :type: multineat.Genome
+
+      
+
+   .. py:method:: random_body(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BodyGenotypeOrmV2
+      :classmethod:
+
+      Create a random genotype.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: The created genotype.
+
+
+   .. py:method:: mutate_body(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BodyGenotypeOrmV2
+
+      Mutate this genotype.
+
+      This genotype will not be changed; a mutated copy will be returned.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: A mutated copy of the provided genotype.
+
+
+   .. py:method:: crossover_body(parent1: typing_extensions.Self, parent2: typing_extensions.Self, rng: numpy.random.Generator) -> BodyGenotypeOrmV2
+      :classmethod:
+
+      Perform crossover between two genotypes.
+
+      :param parent1: The first genotype.
+      :param parent2: The second genotype.
+      :param rng: Random number generator.
+      :returns: A newly created genotype.
+
+
+   .. py:method:: develop_body() -> revolve2.modular_robot.body.v2.BodyV2
+
+      Develop the genotype into a modular robot.
+
+      :returns: The created robot.
+
+
+
+.. py:class:: BodyGenotypeV2
+
+
+   CPPNWIN body genotype.
+
+   .. py:attribute:: body
+      :type: ci_group.genotypes.cppnwin._multineat_genotype_pickle_wrapper.MultineatGenotypePickleWrapper
+
+      
+
+   .. py:method:: random_body(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BodyGenotypeV2
+      :classmethod:
+
+      Create a random genotype.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: The created genotype.
+
+
+   .. py:method:: mutate_body(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BodyGenotypeV2
+
+      Mutate this genotype.
+
+      This genotype will not be changed; a mutated copy will be returned.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: A mutated copy of the provided genotype.
+
+
+   .. py:method:: crossover_body(parent1: typing_extensions.Self, parent2: typing_extensions.Self, rng: numpy.random.Generator) -> BodyGenotypeV2
+      :classmethod:
+
+      Perform crossover between two genotypes.
+
+      :param parent1: The first genotype.
+      :param parent2: The second genotype.
+      :param rng: Random number generator.
+      :returns: A newly created genotype.
+
+
+   .. py:method:: develop_body() -> revolve2.modular_robot.body.v2.BodyV2
+
+      Develop the genotype into a modular robot.
+
+      :returns: The created robot.
+
+
+

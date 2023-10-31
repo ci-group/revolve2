@@ -1,0 +1,64 @@
+:orphan:
+
+:py:mod:`_config`
+========================================
+
+.. py:module:: modular_robot_physical._config
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical._config.Config
+
+
+
+
+.. py:class:: Config
+
+
+   The configuration for running a physical robot.
+
+   .. py:attribute:: modular_robot
+      :type: revolve2.modular_robot.ModularRobot
+
+      The Modular Robot Object.
+
+
+   .. py:attribute:: hinge_mapping
+      :type: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], int]
+
+      Hinge mapping: map each active hinge object to a specific Servo with its ID (int).
+
+
+   .. py:attribute:: initial_hinge_positions
+      :type: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], float]
+
+      Initial positions of the active hinges.
+
+
+   .. py:attribute:: run_duration
+      :type: int
+
+      Duration to run the brain for in seconds.
+
+
+   .. py:attribute:: control_frequency
+      :type: int
+
+      Frequency at which to call the brain control functions in seconds.
+
+
+   .. py:attribute:: inverse_servos
+      :type: dict[int, bool]
+
+      If a servo is mounted in the wrong direction on the body one can fix it by inversing the action.
+      inverse_servos allows you to inverse specific servos with their gpio number as key.
+
+
+

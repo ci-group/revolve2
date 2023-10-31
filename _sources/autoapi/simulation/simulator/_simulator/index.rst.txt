@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`_simulator`
+=========================================
+
+.. py:module:: simulation.simulator._simulator
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.simulator._simulator.Simulator
+
+
+
+
+.. py:class:: Simulator
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.simulator._simulator.Simulator
+      :parts: 1
+
+   Interface for a simulator.
+
+   .. py:method:: simulate_batch(batch: simulation.simulator._batch.Batch) -> list[list[simulation.scene.SimulationState]]
+      :abstractmethod:
+
+      Simulate the provided batch by simulating each contained scene.
+
+      :param batch: The batch to run.
+      :returns: List of simulation states in ascending order of time.
+
+
+

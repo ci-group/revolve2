@@ -1,0 +1,4 @@
+<map id="inheritance1a9de2cd13" name="inheritance1a9de2cd13">
+<area shape="rect" id="node1" href="../_joint/index.html#simulation.scene._joint.Joint" target="_top" title="Base class for all joints." alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" href="#simulation.scene._joint_hinge.JointHinge" target="_top" title="A hinge joint, also known as revolute joint." alt="" coords="125,5,215,31"/>
+</map>

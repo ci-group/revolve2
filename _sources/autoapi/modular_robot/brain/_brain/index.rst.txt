@@ -1,0 +1,46 @@
+:orphan:
+
+:py:mod:`_brain`
+====================================
+
+.. py:module:: modular_robot.brain._brain
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.brain._brain.Brain
+
+
+
+
+.. py:class:: Brain
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain._brain.Brain
+      :parts: 1
+
+   The brain of a modular robot.
+
+   Inherit from this to implement your own brain.
+   Each brain implements the `make_instance` function,
+   which create the actual brain instance that control the robot.
+   The instance contains all the state associated with the control strategy;
+   this class must be stateless.
+
+   .. py:method:: make_instance() -> modular_robot.brain._brain_instance.BrainInstance
+      :abstractmethod:
+
+      Create an instance of this brain.
+
+      :returns: The created instance.
+
+
+

@@ -1,0 +1,57 @@
+:orphan:
+
+:py:mod:`_geometry_heightmap`
+=======================================================
+
+.. py:module:: simulation.scene.geometry._geometry_heightmap
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry._geometry_heightmap.GeometryHeightmap
+
+
+
+
+.. py:class:: GeometryHeightmap
+
+
+   Bases: :py:obj:`simulation.scene.geometry._geometry.Geometry`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry._geometry_heightmap.GeometryHeightmap
+      :parts: 1
+
+   A heightmap geometry.
+
+   Similarly to the `Plane` geometry, x and y of `size` define the space the heighmap encompasses.
+   The z-coordinate defines the height of a heightmap edge when it's value is maximum.
+   `heights` defines the edge of the heighmap. Values much lie between 0.0 and 1.0, inclusive.
+   `base_thickness` defines the thickness of the box below the heighmap, which is requires for proper collision detection in some simulators.
+
+   .. py:attribute:: size
+      :type: pyrr.Vector3
+
+      
+
+   .. py:attribute:: base_thickness
+      :type: float
+
+      
+
+   .. py:attribute:: heights
+      :type: numpy.typing.NDArray[numpy.float_]
+
+      
+
+   .. py:attribute:: color
+      :type: simulation.scene._color.Color
+
+      
+
+

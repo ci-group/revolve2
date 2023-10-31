@@ -1,0 +1,4 @@
+<map id="inheritancecc608c571f" name="inheritancecc608c571f">
+<area shape="rect" id="node1" href="../_joint/index.html#simulation.scene._joint.Joint" target="_top" title="Base class for all joints." alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" href="#simulation.scene._joint_fixed.JointFixed" target="_top" title="A joint fixing the rigid bodies together rigidly." alt="" coords="125,5,211,31"/>
+</map>

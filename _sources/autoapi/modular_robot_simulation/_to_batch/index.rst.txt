@@ -1,0 +1,31 @@
+:orphan:
+
+:py:mod:`_to_batch`
+============================================
+
+.. py:module:: modular_robot_simulation._to_batch
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._to_batch.to_batch
+
+
+
+.. py:function:: to_batch(scenes: modular_robot_simulation._modular_robot_scene.ModularRobotScene | list[modular_robot_simulation._modular_robot_scene.ModularRobotScene], batch_parameters: revolve2.simulation.simulator.BatchParameters, record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> tuple[revolve2.simulation.simulator.Batch, list[dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.ModularRobot], revolve2.simulation.scene.MultiBodySystem]]]
+
+   Convert one or more modular robot scenes to a batch of simulation scenes.
+
+   :param scenes: The modular robot scene(s) to make the batch from.
+   :param batch_parameters: Parameters for the batch that are not contained in the modular robot scenes.
+   :param record_settings: Setting for recording the simulations.
+   :returns: The created batch and a mapping from modular robots to multi-body systems for each scene.
+
+

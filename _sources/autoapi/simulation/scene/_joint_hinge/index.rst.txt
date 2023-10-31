@@ -1,0 +1,81 @@
+:orphan:
+
+:py:mod:`_joint_hinge`
+=======================================
+
+.. py:module:: simulation.scene._joint_hinge
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._joint_hinge.JointHinge
+
+
+
+
+.. py:class:: JointHinge
+
+
+   Bases: :py:obj:`simulation.scene._joint.Joint`
+
+   .. autoapi-inheritance-diagram:: simulation.scene._joint_hinge.JointHinge
+      :parts: 1
+
+   A hinge joint, also known as revolute joint.
+
+   Rotates around a single axis.
+
+   .. py:attribute:: axis
+      :type: pyrr.Vector3
+
+      Directional vector the joint rotates about.
+
+
+   .. py:attribute:: range
+      :type: float
+
+      Rotation range of the joint in radians.
+
+      How much it can rotate to each side, in radians.
+      So double this is the complete range of motion.
+
+
+   .. py:attribute:: effort
+      :type: float
+
+      Maximum effort the joint can exert, in newton-meter.
+
+
+   .. py:attribute:: velocity
+      :type: float
+
+      Maximum velocity of the joint, in radian per second.
+
+
+   .. py:attribute:: armature
+      :type: float
+
+      Armature of the joint.
+
+      This represents the inertia of the motor itself when nothing is attached.
+
+
+   .. py:attribute:: pid_gain_p
+      :type: float
+
+      Proportional gain of the pid position controller.
+
+
+   .. py:attribute:: pid_gain_d
+      :type: float
+
+      Derivative gain of the pid position controller.
+
+
+

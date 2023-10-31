@@ -1,0 +1,33 @@
+:orphan:
+
+:py:mod:`_simulate_scenes`
+===================================================
+
+.. py:module:: modular_robot_simulation._simulate_scenes
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._simulate_scenes.simulate_scenes
+
+
+
+.. py:function:: simulate_scenes(simulator: revolve2.simulation.simulator.Simulator, batch_parameters: revolve2.simulation.simulator.BatchParameters, scenes: modular_robot_simulation._modular_robot_scene.ModularRobotScene, record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> list[modular_robot_simulation._scene_simulation_state.SceneSimulationState]
+                 simulate_scenes(simulator: revolve2.simulation.simulator.Simulator, batch_parameters: revolve2.simulation.simulator.BatchParameters, scenes: list[modular_robot_simulation._modular_robot_scene.ModularRobotScene], record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> list[list[modular_robot_simulation._scene_simulation_state.SceneSimulationState]]
+
+   Simulate one or more scenes.
+
+   :param simulator: The simulator to use for simulation.
+   :param batch_parameters: The batch parameters to use for simulation.
+   :param scenes: One or more scenes to simulate.
+   :param record_settings: The optional record settings to use during simulation.
+   :returns: A list of simulation states for each scene in the provided batch.
+
+

@@ -1,0 +1,87 @@
+:py:mod:`terrains`
+===========================
+
+.. py:module:: ci_group.terrains
+
+.. autoapi-nested-parse::
+
+   Standard terrains.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ci_group.terrains.flat
+   ci_group.terrains.crater
+   ci_group.terrains.rugged_heightmap
+   ci_group.terrains.bowl_heightmap
+
+
+
+.. py:function:: flat(size: revolve2.simulation.scene.vector2.Vector2 = Vector2([20.0, 20.0])) -> revolve2.modular_robot_simulation.Terrain
+
+   Create a flat plane terrain.
+
+   :param size: Size of the plane.
+   :returns: The created terrain.
+
+
+.. py:function:: crater(size: tuple[float, float], ruggedness: float, curviness: float, granularity_multiplier: float = 1.0) -> revolve2.modular_robot_simulation.Terrain
+
+   Create a crater-like terrain with rugged floor using a heightmap.
+
+   It will look like::
+
+       |            |
+        \_        .'
+          '.,^_..'
+
+   A combination of the rugged and bowl heightmaps.
+
+   :param size: Size of the crater.
+   :param ruggedness: How coarse the ground is.
+   :param curviness: Height of the edges of the crater.
+   :param granularity_multiplier: Multiplier for how many edges are used in the heightmap.
+   :returns: The created terrain.
+
+
+.. py:function:: rugged_heightmap(size: tuple[float, float], num_edges: tuple[int, int], density: float = 1.0) -> numpy.typing.NDArray[numpy.float_]
+
+   Create a rugged terrain heightmap.
+
+   It will look like::
+
+       ..^.__,^._.-.
+
+   Be aware: the maximum height of the heightmap is not actually 1.
+   It is around [-1,1] but not exactly.
+
+   :param size: Size of the heightmap.
+   :param num_edges: How many edges to use for the heightmap.
+   :param density: How coarse the ruggedness is.
+   :returns: The created heightmap as a 2 dimensional array.
+
+
+.. py:function:: bowl_heightmap(num_edges: tuple[int, int]) -> numpy.typing.NDArray[numpy.float_]
+
+   Create a terrain heightmap in the shape of a bowl.
+
+   It will look like::
+
+       |         |
+        \       /
+         '.___.'
+
+   The height of the edges of the bowl is 1.0 and the center is 0.0.
+
+   :param num_edges: How many edges to use for the heightmap.
+   :returns: The created heightmap as a 2 dimensional array.
+
+

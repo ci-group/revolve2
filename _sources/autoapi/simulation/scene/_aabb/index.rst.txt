@@ -1,0 +1,35 @@
+:orphan:
+
+:py:mod:`_aabb`
+================================
+
+.. py:module:: simulation.scene._aabb
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._aabb.AABB
+
+
+
+
+.. py:class:: AABB
+
+
+   An axis aligned bounding box.
+
+   .. py:attribute:: size
+      :type: pyrr.Vector3
+
+      Sizes of the length of the bounding box.
+
+      Not half of the box.
+
+
+

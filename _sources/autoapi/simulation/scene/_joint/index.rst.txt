@@ -1,0 +1,53 @@
+:orphan:
+
+:py:mod:`_joint`
+=================================
+
+.. py:module:: simulation.scene._joint
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene._joint.Joint
+
+
+
+
+.. py:class:: Joint
+
+
+   Base class for all joints.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the joint.
+
+
+   .. py:attribute:: rigid_body1
+      :type: simulation.scene._rigid_body.RigidBody
+
+      The first attached rigid body.
+
+
+   .. py:attribute:: rigid_body2
+      :type: simulation.scene._rigid_body.RigidBody
+
+      The second attached rigid body.
+
+
+

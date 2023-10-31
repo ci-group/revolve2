@@ -1,0 +1,71 @@
+:orphan:
+
+:py:mod:`_abstraction_to_mujoco_mapping`
+=========================================================
+
+.. py:module:: mujoco_simulator._abstraction_to_mujoco_mapping
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._abstraction_to_mujoco_mapping.JointHingeMujoco
+   mujoco_simulator._abstraction_to_mujoco_mapping.MultiBodySystemMujoco
+   mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping
+
+
+
+
+.. py:class:: JointHingeMujoco
+
+
+   Information about a MuJoCo hinge joint.
+
+   .. py:attribute:: id
+      :type: int
+
+      
+
+   .. py:attribute:: ctrl_index_position
+      :type: int
+
+      
+
+   .. py:attribute:: ctrl_index_velocity
+      :type: int
+
+      
+
+
+.. py:class:: MultiBodySystemMujoco
+
+
+   Information about a MuJoCo body.
+
+   .. py:attribute:: id
+      :type: int
+
+      
+
+
+.. py:class:: AbstractionToMujocoMapping
+
+
+   Data to interpret a MuJoCo model using the simulation abstraction.
+
+   .. py:attribute:: hinge_joint
+      :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.simulation.scene.JointHinge], JointHingeMujoco]
+
+      
+
+   .. py:attribute:: multi_body_system
+      :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.simulation.scene.MultiBodySystem], MultiBodySystemMujoco]
+
+      
+
+

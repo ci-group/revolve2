@@ -1,0 +1,32 @@
+:orphan:
+
+:py:mod:`_core_v1`
+========================================
+
+.. py:module:: modular_robot.body.v1._core_v1
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.v1._core_v1.CoreV1
+
+
+
+
+.. py:class:: CoreV1(rotation: float | modular_robot.body._right_angles.RightAngles)
+
+
+   Bases: :py:obj:`modular_robot.body.base.Core`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.v1._core_v1.CoreV1
+      :parts: 1
+
+   The core module of a modular robot.
+
+

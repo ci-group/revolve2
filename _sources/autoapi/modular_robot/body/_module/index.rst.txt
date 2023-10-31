@@ -1,0 +1,99 @@
+:orphan:
+
+:py:mod:`_module`
+====================================
+
+.. py:module:: modular_robot.body._module
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body._module.Module
+
+
+
+
+.. py:class:: Module(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color)
+
+
+   Base class for a module for modular robots.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+   .. py:property:: children
+      :type: list[Module | None]
+
+      Get the children of this module.
+
+      Do not alter the returned list.
+      It will break stuff.
+
+      :returns: The list of children.
+
+
+   .. py:property:: rotation
+      :type: float
+
+      Get the orientation of this model relative to its parent.
+
+      :returns: The orientation.
+
+
+   .. py:property:: parent
+      :type: Module | None
+
+      Get the parent module of this module.
+
+      None if this module has not yet been added to a body.
+
+      :returns: The parent module of this module, or None if this module has not yet been added to a body.
+
+
+   .. py:property:: parent_child_index
+      :type: int | None
+
+      Index of this module in the parent modules child list.
+
+      None if this module has not yet been added to a body.
+
+      :returns: The index of this module in the parent modules child list, or None if this module has not yet been added to a body.
+
+
+   .. py:property:: color
+      :type: modular_robot.body._color.Color
+
+      Get the color of this module.
+
+      :returns: The color.
+
+
+   .. py:method:: set_child(module: Module, child_index: int) -> None
+
+      Attach a module to a slot.
+
+      :param module: The module to attach.
+      :param child_index: The slot to attach it to.
+      :raises RuntimeError: If that slot is already taken by another module.
+
+
+   .. py:method:: neighbours(within_range: int) -> list[Module]
+
+      Get the neighbours of this module with a certain range of the module tree.
+
+      :param within_range: The range in which modules are considered a neighbour. Minimum is 1.
+      :returns: The neighbouring modules.
+
+
+

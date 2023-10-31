@@ -1,0 +1,42 @@
+:orphan:
+
+:py:mod:`_unbuilt_child`
+===========================================================================
+
+.. py:module:: modular_robot_simulation._build_multi_body_systems._unbuilt_child
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild
+
+
+
+
+.. py:class:: UnbuiltChild
+
+
+   A dataclass to store unbuilt children for the builders.
+
+   .. py:attribute:: module
+      :type: revolve2.modular_robot.body.Module
+
+      
+
+   .. py:attribute:: rigid_body
+      :type: revolve2.simulation.scene.RigidBody
+
+      
+
+   .. py:attribute:: pose
+      :type: revolve2.simulation.scene.Pose
+
+      
+
+

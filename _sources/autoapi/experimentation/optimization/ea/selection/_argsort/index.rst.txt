@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`_argsort`
+============================================================
+
+.. py:module:: experimentation.optimization.ea.selection._argsort
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.selection._argsort.argsort
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.optimization.ea.selection._argsort.Item
+
+
+.. py:data:: Item
+
+   
+
+.. py:function:: argsort(seq: Sequence[Item]) -> list[int]
+
+   Get the indices of the sequence sorted by value.
+
+   :param seq: The sequence.
+   :returns: The indices.
+
+

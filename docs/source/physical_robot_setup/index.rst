@@ -85,7 +85,7 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
 
     #. Log in and out of the RPi.
     #. Get the right Python version (this takes a long time): :code:`pyenv install 3.11`
-    #. create a global virtualenv: :code:`pyenv virtualenv 3.11 global_env` & :code:`pyenv global global_env`
+    #. Create a global virtualenv: :code:`pyenv virtualenv 3.11 global_env` & :code:`pyenv global global_env`
 
 #. Then install Revolve2 using:
 

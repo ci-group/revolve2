@@ -1,7 +1,7 @@
 import time
 
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
-from ._config import Config
+from .. import Config
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
 

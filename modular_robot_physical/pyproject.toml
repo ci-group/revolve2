@@ -28,11 +28,13 @@ packages = [{ include = "revolve2" }]
 python = "^3.10,<3.12"
 typed-argparse = "^0.3.1"
 pigpio = { version = "^1.78", optional = true }
+paramiko = { version = "^3.3.1", optional = true }
 revolve2-modular-robot = { path = "../modular_robot", develop = true }
 
 [tool.poetry.extras]
 botv1 = ["pigpio"]
-dev = ["pigpio"]
+remote = ["paramiko"]
+dev = ["pigpio", "paramiko"]
 
 [tool.poetry.scripts]
 run_brain = { callable = "revolve2.modular_robot_physical._bin.run_brain:main" }

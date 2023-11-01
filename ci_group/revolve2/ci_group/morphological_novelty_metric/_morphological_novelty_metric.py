@@ -39,7 +39,7 @@ class MorphologicalNoveltyMetric:
         Get the morphological novelty score for individuals in a population.
 
         :param population: The population of robots.
-        :param cob_heuristic: Wether the Heuristic approximation of change of basis is used.
+        :param cob_heuristic: Weather the heuristic approximation of change of basis is used.
         :return: The novelty scores.
         :raises ModuleNotFoundError: If the cython module for novelty calculation is not present.
         """
@@ -127,12 +127,14 @@ class MorphologicalNoveltyMetric:
         """Calculate a softmax for an array, making it sum = _INT_CASTER."""
         instances = self._histograms.shape[0]
         for i in range(instances):
-            array = self._histograms[i].copy() * self._INT_CASTER
-            array += self._INT_CASTER / array.size
-            array = np.asarray(array / np.sum(array) * self._INT_CASTER, dtype=np.int64)
-            error = self._INT_CASTER - np.sum(array)
-            mask = np.zeros(shape=array.shape, dtype=np.int64)
-            if error > 0:
-                mask[:error] = 1
-                np.random.shuffle(mask)
-            self._int_histograms[i] = array + mask
+            histogram = self._histograms[i].copy()
+            histogram = np.array(
+                (histogram / histogram.sum()) * self._INT_CASTER, dtype=np.int64
+            )
+
+            error = self._INT_CASTER - histogram.sum()
+            mask = np.zeros(shape=histogram.size, dtype=np.int64)
+            mask[:error] += 1
+            self._int_histograms[i] = histogram + np.reshape(
+                mask, (-1, histogram.shape[0])
+            )

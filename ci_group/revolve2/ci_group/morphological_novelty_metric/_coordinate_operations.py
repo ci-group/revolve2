@@ -3,7 +3,6 @@ from itertools import product
 
 import numpy as np
 from numpy.typing import NDArray
-from scipy.spatial.transform import Rotation
 
 from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.base import Body
@@ -75,15 +74,38 @@ class CoordinateOperations:
                     if srt[j] == j:
                         continue
                     candidate = srt[j]
-                    rotation = Rotation.from_rotvec(
-                        np.radians(180) * eigen_vectors[candidate]
+
+                    # Here we start rotating. If you are interested in the method check Rodrigues` rotation formula.
+                    axis = eigen_vectors[candidate]
+                    c, s = np.cos(np.pi), np.sin(np.pi)
+                    C = 1 - c
+
+                    rotation_matrix = np.array(
+                        [
+                            [
+                                c + axis[0] ** 2 * C,
+                                axis[0] * axis[1] * C - axis[2] * s,
+                                axis[0] * axis[2] * C + axis[1] * s,
+                            ],
+                            [
+                                axis[1] * axis[0] * C + axis[2] * s,
+                                c + axis[1] ** 2 * C,
+                                axis[1] * axis[2] * C - axis[0] * s,
+                            ],
+                            [
+                                axis[2] * axis[0] * C - axis[1] * s,
+                                axis[2] * axis[1] * C + axis[0] * s,
+                                c + axis[2] ** 2 * C,
+                            ],
+                        ]
                     )
-                    coordinates = rotation.apply(coordinates)
+
+                    coordinates = np.dot(coordinates, rotation_matrix)
 
                     eigen_vectors[[j, candidate]] = eigen_vectors[[candidate, j]]
                     srt[[j, candidate]] = srt[[candidate, j]]
 
-                coordinates = np.linalg.inv(eigen_vectors).dot(coordinates.T)
+                coordinates = np.dot(np.linalg.inv(eigen_vectors), coordinates.T)
                 self._coords[i] = coordinates.T
             i += 1
 

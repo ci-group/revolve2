@@ -98,7 +98,6 @@ class MorphologicalMeasures(Generic[TModule]):
 
         :param body: The body to measure.
         """
-
         grid, self.core_grid_position = body.to_grid()
         self.grid = np.asarray(grid)
         self.core = body.core

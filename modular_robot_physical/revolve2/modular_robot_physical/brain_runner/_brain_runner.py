@@ -1,7 +1,6 @@
 import time
 
-from .._harware_type import HardwareType
-from ..physical_interfaces import PhysicalInterface
+from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
 from ._config import Config
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
@@ -27,21 +26,15 @@ class BrainRunner:
         :param config: Configuration of the brain and knowledge of the physical robot.
         :param debug: Whether to print debug information.
         :param dry: If set, control inputs for the robot not be propogated to the hardware.
-        :raises NotImplementedError: If the hardware type is not supported.
         """
         self._config = config
 
-        match hardware_type:
-            case HardwareType.v1:
-                from ..physical_interfaces.v1 import V1PhysicalInterface
-
-                self._physical_interface = V1PhysicalInterface(
-                    debug=debug,
-                    dry=dry,
-                    pins=[pin for pin in config.hinge_mapping.values()],
-                )
-            case _:
-                raise NotImplementedError()
+        self._physical_interface = get_interface(
+            hardware_type=hardware_type,
+            debug=debug,
+            dry=dry,
+            pins=[pin for pin in config.hinge_mapping.values()],
+        )
 
         self._control_interface = ModularRobotControlInterfaceImpl(
             hinge_mapping=config.hinge_mapping,

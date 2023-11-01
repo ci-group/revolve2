@@ -1,8 +1,7 @@
 """Run a brain on a physical robot."""
 import typed_argparse as tap
 
-from .._harware_type import HardwareType
-from ..physical_interfaces import PhysicalInterface
+from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
 
 
 class Args(tap.TypedArgs):
@@ -29,22 +28,14 @@ class Program:
         :param debug: If debugging messages are activated.
         :param dry: If servo outputs are not propagated to the physical servos.:
         :param pins: The GPIO pins that will be used.
-        :raises NotImplementedError: When the provided hardware type is not supported.
         :raises RuntimeError: If shutdown was not clean.
         """
-        print("Exit the program at any time by pressing Ctrl-C.")
         try:
-            match hardware_type:
-                case HardwareType.v1:
-                    from ..physical_interfaces.v1 import V1PhysicalInterface
+            print("Exit the program at any time by pressing Ctrl-C.")
 
-                    self._physical_interface = V1PhysicalInterface(
-                        debug=debug,
-                        dry=dry,
-                        pins=pins,
-                    )
-                case _:
-                    raise NotImplementedError()
+            self._physical_interface = get_interface(
+                hardware_type=hardware_type, debug=debug, dry=dry, pins=pins
+            )
 
             while True:
                 pass

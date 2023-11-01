@@ -1,5 +1,4 @@
 """MorphologicalMeasures class."""
-
 from itertools import product
 from typing import Generic, TypeVar
 

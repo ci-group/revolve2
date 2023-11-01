@@ -4,9 +4,8 @@ from pathlib import Path
 
 import typed_argparse as tap
 
-from .._brain_runner import BrainRunner
-from .._config import Config
 from .._harware_type import HardwareType
+from ..brain_runner import BrainRunner, Config
 
 
 class Args(tap.TypedArgs):
@@ -18,9 +17,6 @@ class Args(tap.TypedArgs):
     hardware: HardwareType = tap.arg(help="The type of hardware this brain runs on.")
     debug: bool = tap.arg(help="Print debug information.")
     dry: bool = tap.arg(help="Skip GPIO output.")
-    log: Path | None = tap.arg(
-        help="If set, controller output will be written to this file."
-    )
     all: float | None = tap.arg(
         help="Instead of running the brain, set all servos to this angle (radians)."
     )
@@ -59,11 +55,11 @@ def runner(args: Args) -> None:
         print("Program interrupted by user. Exiting..")
     finally:
         try:
-            print("Shutting down hardware..")
+            print("Setting hardware to low power mode..")
             brain_runner.shutdown()
             print("Done.")
         except:
-            raise RuntimeError("Failed to shutdown hardware.")
+            raise RuntimeError("Failed to set hardware to low power mode.")
 
 
 def main() -> None:

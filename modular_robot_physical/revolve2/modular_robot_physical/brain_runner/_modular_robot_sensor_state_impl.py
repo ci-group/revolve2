@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 from revolve2.modular_robot.body.base import ActiveHingeSensor
 from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
@@ -7,10 +5,9 @@ from revolve2.modular_robot.sensor_state import (
 )
 
 
-class PhysicalSensorState(ModularRobotSensorState):
-    """A Class for using physical sensors."""
+class ModularRobotSensorStateImpl(ModularRobotSensorState):
+    """Implementation of ModularRobotSensorState."""
 
-    @abstractmethod
     def get_active_hinge_sensor_state(
         self, sensor: ActiveHingeSensor
     ) -> ActiveHingeSensorState:
@@ -18,6 +15,8 @@ class PhysicalSensorState(ModularRobotSensorState):
         Get sensor states for Hinges.
 
         :param sensor: The sensor to query.
-        :return: The Sensor State.
+        :returns: The Sensor State.
+        :raises NotImplementedError: Always.
         """
-        pass
+        raise NotImplementedError()
+        return ActiveHingeSensorState()

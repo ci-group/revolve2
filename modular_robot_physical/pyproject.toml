@@ -36,3 +36,4 @@ dev = ["pigpio"]
 
 [tool.poetry.scripts]
 run_brain = { callable = "revolve2.modular_robot_physical._bin.run_brain:main" }
+stream_brain = { callable = "revolve2.modular_robot_physical._bin.stream_brain:main" }

@@ -5,7 +5,7 @@ from dataclasses import dataclass, field
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body.base import ActiveHinge
 
-from ._uuid_key import UUIDKey
+from .._uuid_key import UUIDKey
 
 
 @dataclass

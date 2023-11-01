@@ -1,29 +1,22 @@
 from abc import ABC, abstractmethod
 
-from ._physical_control_interface import PhysicalControlInterface
-from ._physical_sensor_state import PhysicalSensorState
-
 
 class PhysicalInterface(ABC):
     """Abstract implementation for interfacing with hardware."""
 
-    @property
     @abstractmethod
-    def control_interface(self) -> PhysicalControlInterface:
+    def set_servo_target(self, pin: int, target: float) -> None:
         """
-        Get the control interface.
+        Set the target for a single Servo.
 
-        :returns: The control interface.
-        """
-
-    @abstractmethod
-    def read_sensor_state(self) -> PhysicalSensorState:
-        """
-        Read the current sensor state.
-
-        :returns: The sensor state.
+        :param pin: The GPIO pin number.
+        :param target: The target angle.
         """
 
     @abstractmethod
-    def shutdown(self) -> None:
-        """Shutdown the interface."""
+    def to_low_power_mode(self) -> None:
+        """
+        Set the robot to low power mode.
+
+        This disables all active modules and sensors.
+        """

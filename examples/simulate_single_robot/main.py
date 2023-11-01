@@ -21,7 +21,7 @@ def make_body() -> BodyV1:
     # A modular robot body follows a 'tree' structure.
     # The 'Body' class automatically creates a center 'core'.
     # From here, other modular can be attached.
-    # Modules can be attach in a rotated fashion.
+    # Modules can be attached in a rotated fashion.
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
     body = BodyV1()
     body.core.left = ActiveHingeV1(RightAngles.DEG_0)

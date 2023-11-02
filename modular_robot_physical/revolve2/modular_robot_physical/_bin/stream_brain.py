@@ -71,6 +71,7 @@ class Program:
             print(json.dumps({"is_ok": True}))
 
             for line in sys.stdin:
+                print(time.time())
                 try:
                     parsed = json.loads(line)
 

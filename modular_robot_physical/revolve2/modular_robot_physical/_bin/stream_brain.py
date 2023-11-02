@@ -71,6 +71,7 @@ class Program:
 
             for line in sys.stdin:
                 try:
+                    print("parsing..")
                     parsed = json.loads(line)
 
                     print(parsed)

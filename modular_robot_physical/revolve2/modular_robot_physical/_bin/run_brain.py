@@ -4,7 +4,8 @@ from pathlib import Path
 
 import typed_argparse as tap
 
-from ..brain_runner import BrainRunner, Config
+from .._config import Config
+from ..brain_runner import BrainRunner
 from ..physical_interfaces import HardwareType
 
 

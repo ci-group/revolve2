@@ -1,5 +1,5 @@
 """
-Directly control a physical robot robot by providing commands over an input stream
+Directly control a physical robot robot by providing commands over an input stream.
 
 Commands:
 
@@ -7,13 +7,14 @@ setpins:
     {"cmd": "setpins", "pins": [{"pin": int, "target": float}]}
     Sets the target for the provided pins.
 """
+import json
+import sys
+import traceback
+from json.decoder import JSONDecodeError
+
 import typed_argparse as tap
 
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
-import sys
-import json
-from json.decoder import JSONDecodeError
-import traceback
 
 
 class Args(tap.TypedArgs):
@@ -29,6 +30,8 @@ class Args(tap.TypedArgs):
 
 
 class CommandError(Exception):
+    """Error representing invalid cli commands."""
+
     pass
 
 
@@ -54,6 +57,7 @@ class Program:
         :param pins: The GPIO pins that will be used.
         :param m2m: Enable machine-to-machine mode. Only print messages relevant to the protocol.
         :raises RuntimeError: If shutdown was not clean.
+        :raises CommandError: When a cli command is invalid.
         """
         try:
             if not m2m:
@@ -78,11 +82,12 @@ class Program:
                                         self._physical_interface.set_servo_target(
                                             pin=pin, target=target
                                         )
+                                        print(json.dumps({"is_ok": True}))
                                     case _:
                                         raise CommandError("Invalid command.")
                         case _:
                             raise CommandError("Invalid command.")
-                except (CommandError, JSONDecodeError) as e:
+                except (CommandError, JSONDecodeError):
                     if not m2m:
                         print("Error parsing command:")
                         print(traceback.format_exc())

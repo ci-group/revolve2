@@ -7,9 +7,10 @@ from .._uuid_key import UUIDKey
 class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
     """Implementation of ModularRobotControlInterface."""
 
-    _set_active_hinges: dict[UUIDKey[ActiveHinge], int]
+    _set_active_hinges: dict[UUIDKey[ActiveHinge], float]
 
     def __init__(self) -> None:
+        """Initialize this object."""
         self._set_active_hinges = {}
 
     def set_active_hinge_target(self, active_hinge: ActiveHinge, target: float) -> None:

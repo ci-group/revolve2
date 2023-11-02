@@ -6,6 +6,7 @@ from pyrr import Vector3
 
 from .._color import Color
 from ._geometry import Geometry
+from .textures import Flat, Texture
 
 
 @dataclass(kw_only=True)
@@ -22,4 +23,6 @@ class GeometryHeightmap(Geometry):
     size: Vector3
     base_thickness: float
     heights: npt.NDArray[np.float_]  # MxN matrix. outer list is x, inner list is y
-    color: Color = field(default_factory=lambda: Color(100, 100, 100, 255))
+    texture: Texture = field(
+        default_factory=lambda: Flat(Color(100, 100, 100, 255), map_type="2d")
+    )

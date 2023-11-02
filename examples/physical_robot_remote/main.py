@@ -62,10 +62,10 @@ def main() -> None:
     """
     hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {
-        UUIDKey(hinge_1): 6,
-        UUIDKey(hinge_2): 12,
-        UUIDKey(hinge_3): 13,
-        UUIDKey(hinge_4): 16,
+        UUIDKey(hinge_1): 19,
+        UUIDKey(hinge_2): 20,
+        UUIDKey(hinge_3): 26,
+        UUIDKey(hinge_4): 21,
     }
 
     """
@@ -81,19 +81,19 @@ def main() -> None:
     config = Config(
         modular_robot=robot,
         hinge_mapping=hinge_mapping,
-        run_duration=10,
+        run_duration=2,
         control_frequency=10,
         initial_hinge_positions={UUIDKey(active_hinge): 0.0 for active_hinge in hinges},
         inverse_servos={},
     )
 
     remote = Remote(
-        hostname="localhost",
+        hostname="10.15.3.98",
         username="pi",
         password="raspberry",
         hardware_type=HardwareType.v1,
-        dry=True,
         config=config,
+        debug=True,
     )
     remote.run_brain()
 

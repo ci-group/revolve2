@@ -95,10 +95,7 @@ class Program:
                             print("aaaaaa")
                             raise CommandError("Invalid command.")
                 except (CommandError, JSONDecodeError):
-                    if not m2m:
-                        print("Error parsing command:")
-                        print(traceback.format_exc())
-                        print("Recovered from error. You can send another command.")
+                    raise RuntimeError(f"Error parsing command: {line}")
 
         except KeyboardInterrupt:
             print("Program interrupted by user. Exiting..")

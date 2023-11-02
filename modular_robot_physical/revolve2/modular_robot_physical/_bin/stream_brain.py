@@ -60,12 +60,18 @@ class Program:
         :raises CommandError: When a cli command is invalid.
         """
         try:
+            print("1")
+
             if not m2m:
                 print("Exit the program at any time by pressing Ctrl-C.")
 
             self._physical_interface = get_interface(
                 hardware_type=hardware_type, debug=debug, dry=dry, pins=pins
             )
+
+            print(json.dumps({"is_ok": True}))
+
+            print("2")
 
             for line in sys.stdin:
                 try:

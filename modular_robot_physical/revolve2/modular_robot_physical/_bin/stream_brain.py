@@ -127,6 +127,7 @@ def runner(args: Args) -> None:
 
 def main() -> None:
     """Run the script."""
+    print("TEAIUHDAIUSHDUI")
     tap.Parser(Args).bind(runner).run()
 
 

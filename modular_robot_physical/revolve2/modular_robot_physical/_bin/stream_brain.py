@@ -15,6 +15,7 @@ from json.decoder import JSONDecodeError
 import typed_argparse as tap
 
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
+import time
 
 
 class Args(tap.TypedArgs):
@@ -71,14 +72,10 @@ class Program:
 
             for line in sys.stdin:
                 try:
-                    print("parsing..")
                     parsed = json.loads(line)
-
-                    print(parsed)
 
                     match parsed:
                         case {"cmd": "setpins", "pins": list(pins_to_set)}:
-                            print("bbbbbb")
                             for pin in pins_to_set:
                                 match pin:
                                     case {
@@ -88,7 +85,7 @@ class Program:
                                         self._physical_interface.set_servo_target(
                                             pin=pin, target=target
                                         )
-                                        print(json.dumps({"is_ok": True}))
+                                        print(time.time(), json.dumps({"is_ok": True}))
                                     case _:
                                         raise CommandError("Invalid command.")
                         case _:

@@ -70,9 +70,10 @@ class Program:
             print(json.dumps({"is_ok": True}))
 
             for line in sys.stdin:
-                print("123123")
                 try:
                     parsed = json.loads(line)
+
+                    print(parsed)
 
                     match parsed:
                         case {"cmd": "setpins", "pins": list(pins_to_set)}:

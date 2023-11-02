@@ -5,6 +5,8 @@ from ._texture import Texture
 class Flat(Texture):
     """A flat texture for mujoco models."""
 
+    _translucent: bool
+
     def __init__(
         self,
         color1: Color,
@@ -15,6 +17,7 @@ class Flat(Texture):
         shininess: float = 0.5,
         reflectance: float = 0.0,
         emission: float = 0.0,
+        translucent: bool = False,
     ) -> None:
         """
         Initialize a flat color for some geometry.
@@ -27,6 +30,7 @@ class Flat(Texture):
         :param shininess: How shiny a texture is.
         :param reflectance: How reflective a texture is.
         :param emission: How emissive a surface is.
+        :param translucent: If the surface should be translucent.
         """
         self._name = "flat"
         self._primary_color = self._secondary_color = color1
@@ -37,3 +41,13 @@ class Flat(Texture):
         self._shininess = shininess
         self._reflectance = reflectance
         self._emission = emission
+        self._translucent = translucent
+
+    @property
+    def translucent(self) -> bool:
+        """
+        Check if surface should be translucent.
+
+        :return: The boolean.
+        """
+        return self._translucent

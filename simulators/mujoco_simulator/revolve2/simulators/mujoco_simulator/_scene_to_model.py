@@ -24,6 +24,7 @@ except Exception as e:
 from revolve2.simulation.scene import Scene, UUIDKey
 from revolve2.simulation.scene.conversion import multi_body_system_to_urdf
 from revolve2.simulation.scene.geometry import Geometry, GeometryHeightmap
+from revolve2.simulation.scene.geometry.textures import Flat
 
 from ._abstraction_to_mujoco_mapping import (
     AbstractionToMujocoMapping,
@@ -269,25 +270,36 @@ def scene_to_model(
 
 
 def __make_material(env: mjcf.RootElement, name: str, element: Geometry) -> None:
-    width, height = element.texture.size
-    env.asset.add(
-        "texture",
-        name=f"{name}_texture",
-        type=element.texture.map_type,
-        width=width,
-        height=height,
-        builtin=element.texture.name,
-        rgb1=element.texture.primary_color.to_normalized_rgb_list(),
-        rgb2=element.texture.secondary_color.to_normalized_rgb_list(),
-    )
+    if isinstance(element.texture, Flat) and element.texture.translucent:
+        env.asset.add(
+            "material",
+            name=f"{name}_material",
+            rgba=element.texture.primary_color.to_normalized_rgba_list(),
+            emission=element.texture.emission,
+            specular=element.texture.specular,
+            shininess=element.texture.shininess,
+            reflectance=element.texture.reflectance,
+        )
+    else:
+        width, height = element.texture.size
+        env.asset.add(
+            "texture",
+            name=f"{name}_texture",
+            type=element.texture.map_type,
+            width=width,
+            height=height,
+            builtin=element.texture.name,
+            rgb1=element.texture.primary_color.to_normalized_rgb_list(),
+            rgb2=element.texture.secondary_color.to_normalized_rgb_list(),
+        )
 
-    env.asset.add(
-        "material",
-        name=f"{name}_material",
-        texture=f"{name}_texture",
-        texrepeat=element.texture.repeat,
-        emission=element.texture.emission,
-        specular=element.texture.specular,
-        shininess=element.texture.shininess,
-        reflectance=element.texture.reflectance,
-    )
+        env.asset.add(
+            "material",
+            name=f"{name}_material",
+            texture=f"{name}_texture",
+            texrepeat=element.texture.repeat,
+            emission=element.texture.emission,
+            specular=element.texture.specular,
+            shininess=element.texture.shininess,
+            reflectance=element.texture.reflectance,
+        )

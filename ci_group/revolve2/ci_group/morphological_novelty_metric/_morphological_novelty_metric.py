@@ -59,7 +59,7 @@ class MorphologicalNoveltyMetric:
 
         self._coordinates_to_magnitudes_orientation()
         self._gen_gradient_histogram()
-        self._wasserstein_softmax()
+        self._normalize_cast_int()
 
         self._check_cmodule()
         try:
@@ -112,7 +112,7 @@ class MorphologicalNoveltyMetric:
 
     @staticmethod
     def _check_cmodule() -> None:
-        """Check weather cmodule is built."""
+        """Check whether cmodule is built."""
         directory_path = os.path.dirname(os.path.abspath(__file__))
         if not any(
             [
@@ -123,8 +123,8 @@ class MorphologicalNoveltyMetric:
             os.chdir(directory_path)
             os.system("python -m _build_cmodule build_ext -i")
 
-    def _wasserstein_softmax(self) -> None:
-        """Calculate a softmax for an array, making it sum = _INT_CASTER."""
+    def _normalize_cast_int(self) -> None:
+        """Normalizes a matrix (array), making it sum = _INT_CASTER."""
         instances = self._histograms.shape[0]
         for i in range(instances):
             histogram = self._histograms[i].copy()

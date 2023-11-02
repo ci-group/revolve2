@@ -60,8 +60,6 @@ class Program:
         :raises CommandError: When a cli command is invalid.
         """
         try:
-            print("1")
-
             if not m2m:
                 print("Exit the program at any time by pressing Ctrl-C.")
 
@@ -71,9 +69,8 @@ class Program:
 
             print(json.dumps({"is_ok": True}))
 
-            print("2")
-
             for line in sys.stdin:
+                print("123123")
                 try:
                     parsed = json.loads(line)
 

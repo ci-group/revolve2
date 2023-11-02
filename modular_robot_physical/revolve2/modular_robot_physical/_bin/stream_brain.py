@@ -77,6 +77,7 @@ class Program:
 
                     match parsed:
                         case {"cmd": "setpins", "pins": list(pins_to_set)}:
+                            print("bbbbbb")
                             for pin in pins_to_set:
                                 match pin:
                                     case {
@@ -90,6 +91,7 @@ class Program:
                                     case _:
                                         raise CommandError("Invalid command.")
                         case _:
+                            print("aaaaaa")
                             raise CommandError("Invalid command.")
                 except (CommandError, JSONDecodeError):
                     if not m2m:

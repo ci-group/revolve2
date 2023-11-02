@@ -62,9 +62,9 @@ def main() -> None:
     """
     hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {
-        UUIDKey(hinge_1): 19,
-        UUIDKey(hinge_2): 20,
-        UUIDKey(hinge_3): 26,
+        UUIDKey(hinge_1): 21,
+        UUIDKey(hinge_2): 26,
+        UUIDKey(hinge_3): 20,
         UUIDKey(hinge_4): 21,
     }
 
@@ -81,8 +81,8 @@ def main() -> None:
     config = Config(
         modular_robot=robot,
         hinge_mapping=hinge_mapping,
-        run_duration=2,
-        control_frequency=10,
+        run_duration=30,
+        control_frequency=0.5,
         initial_hinge_positions={UUIDKey(active_hinge): 0.0 for active_hinge in hinges},
         inverse_servos={},
     )

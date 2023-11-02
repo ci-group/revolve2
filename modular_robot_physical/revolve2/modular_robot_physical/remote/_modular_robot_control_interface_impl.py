@@ -7,11 +7,11 @@ from .._uuid_key import UUIDKey
 class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
     """Implementation of ModularRobotControlInterface."""
 
-    _set_active_hinges: dict[UUIDKey[ActiveHinge], float]
+    _set_active_hinges: list[tuple[UUIDKey[ActiveHinge], float]]
 
     def __init__(self) -> None:
         """Initialize this object."""
-        self._set_active_hinges = {}
+        self._set_active_hinges = []
 
     def set_active_hinge_target(self, active_hinge: ActiveHinge, target: float) -> None:
         """
@@ -22,4 +22,4 @@ class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
         :param active_hinge: The active hinge to set the target for.
         :param target: The target to set.
         """
-        self._set_active_hinges[UUIDKey(active_hinge)] = target
+        self._set_active_hinges.append((UUIDKey(active_hinge), target))

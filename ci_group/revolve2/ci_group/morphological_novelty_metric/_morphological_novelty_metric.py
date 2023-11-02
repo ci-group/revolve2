@@ -124,7 +124,7 @@ class MorphologicalNoveltyMetric:
             os.system("python -m _build_cmodule build_ext -i")
 
     def _normalize_cast_int(self) -> None:
-        """Normalizes a matrix (array), making it sum = _INT_CASTER."""
+        """Normalize a matrix (array), making its sum  = _INT_CASTER."""
         instances = self._histograms.shape[0]
         for i in range(instances):
             histogram = self._histograms[i].copy()

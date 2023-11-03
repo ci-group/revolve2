@@ -151,6 +151,7 @@ class ActiveHingeBuilder(Builder):
             unbuilt = UnbuiltChild(
                 module=child,
                 rigid_body=next_rigid_body,
+
             )
             unbuilt.make_pose(attachment_point.offset)
             tasks.append(unbuilt)

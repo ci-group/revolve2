@@ -19,3 +19,4 @@ class BodyV1(Body):
         :return: The v1 core.
         """
         return self._core
+

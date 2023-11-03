@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from pyrr import Vector3
+=======
+from pyrr import Quaternion, Vector3
+>>>>>>> 3bf3e14 (grid operations better + attachment points + morphological measure bugfixes)
 
 from revolve2.modular_robot.body.base import Brick
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
@@ -71,6 +75,7 @@ class BrickBuilder(Builder):
                     * attachment_point.offset,
                     orientation=brick_center_pose.orientation
                     * attachment_point.orientation,
+
                 )
                 tasks.append(unbuilt)
         return tasks

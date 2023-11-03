@@ -56,11 +56,6 @@ class ActiveHingeBuilder(Builder):
             ]
         )
 
-        ATTACHMENT_OFFSET = (
-            self._module.servo1_bounding_box[0] / 2.0
-            + self._module.servo2_bounding_box[0]
-        )
-
         frame_position = (
             self._slot_pose.position
             + self._slot_pose.orientation
@@ -154,7 +149,9 @@ class ActiveHingeBuilder(Builder):
         if child is not None:
             rotation = Quaternion.from_eulers([child.rotation, 0.0, 0.0])
             child_slot_pose = Pose(
-                rotation * Vector3([ATTACHMENT_OFFSET, 0.0, 0.0]), rotation
+                rotation
+                * self._module.attachment_points[self._module.ATTACHMENT].offset,
+                rotation,
             )
             tasks.append(
                 UnbuiltChild(

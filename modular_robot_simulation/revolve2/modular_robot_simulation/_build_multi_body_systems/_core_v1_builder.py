@@ -1,6 +1,4 @@
-import math
-
-from pyrr import Quaternion, Vector3
+from pyrr import Quaternion
 
 from revolve2.modular_robot.body.v1 import CoreV1
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
@@ -52,21 +50,16 @@ class CoreV1Builder(Builder):
         )
 
         tasks = []
-        for child_index, angle in [
-            (self._module.FRONT, 0.0),
-            (self._module.BACK, math.pi),
-            (self._module.LEFT, math.pi / 2.0),
-            (self._module.RIGHT, math.pi / 2.0 * 3),
-        ]:
+        for child_index, attachment_point in self._module.attachment_points.items():
             child = self._module.children[child_index]
             if child is not None:
                 child_slot_pose = Pose(
                     position=self._slot_pose.position
                     + self._slot_pose.orientation
-                    * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Vector3([self._module.child_offset, 0.0, 0.0]),
+                    * attachment_point.rotation
+                    * attachment_point.offset,
                     orientation=self._slot_pose.orientation
-                    * Quaternion.from_eulers([0.0, 0.0, angle])
+                    * attachment_point.rotation
                     * Quaternion.from_eulers([child.rotation, 0, 0]),
                 )
 

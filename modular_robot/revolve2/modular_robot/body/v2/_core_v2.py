@@ -1,5 +1,8 @@
-from pyrr import Vector3
+import math
 
+from pyrr import Quaternion, Vector3
+
+from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._right_angles import RightAngles
 from ..base import Core
@@ -48,13 +51,32 @@ class CoreV2(Core):
             num_batteries * self._BATTERY_MASS + self._FRAME_MASS
         )  # adjust if multiple batteries are installed
         self._attachment_positions = attachment_positions
+
+        child_offset = Vector3([0.15 / 2.0, 0.0, 0.0])
+        attachment_points = {
+            self.FRONT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]), offset=child_offset
+            ),
+            self.BACK: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi]),
+                offset=child_offset,
+            ),
+            self.LEFT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
+                offset=child_offset,
+            ),
+            self.RIGHT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
+                offset=child_offset,
+            ),
+        }
+
         super().__init__(
-            num_children=4,
             rotation=rotation,
             color=self._COLOR,
             mass=mass,
             bounding_box=Vector3([0.15, 0.15, 0.15]),
-            child_offset=0.15 / 2.0,
+            attachment_points=attachment_points,
         )
 
     @property

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import uuid
 
+from ._attachment_point import AttachmentPoint
 from ._color import Color
 from ._right_angles import RightAngles
 
@@ -12,6 +13,7 @@ class Module:
     _uuid: uuid.UUID
 
     _children: list[Module | None]
+    _attachment_points: dict[int, AttachmentPoint]
     _rotation: float
 
     _parent: Module | None
@@ -31,18 +33,22 @@ class Module:
     _color: Color
 
     def __init__(
-        self, num_children: int, rotation: float | RightAngles, color: Color
+        self,
+        rotation: float | RightAngles,
+        color: Color,
+        attachment_points: dict[int, AttachmentPoint],
     ) -> None:
         """
         Initialize this object.
 
-        :param num_children: The number of children this module can have.
         :param rotation: Orientation of this model relative to its parent.
         :param color: The color of the module.
+        :param attachment_points: The attachment points available on a module.
         """
         self._uuid = uuid.uuid1()
 
-        self._children = [None] * num_children
+        self._children = [None] * len(attachment_points)
+        self._attachment_points = attachment_points
 
         self._rotation = rotation if isinstance(rotation, float) else rotation.value
 
@@ -157,3 +163,12 @@ class Module:
         :returns: The color.
         """
         return self._color
+
+    @property
+    def attachment_points(self) -> dict[int, AttachmentPoint]:
+        """
+        Get all attachment points of this module.
+
+        :return: The attachment points.
+        """
+        return self._attachment_points

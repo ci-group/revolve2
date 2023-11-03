@@ -1,5 +1,8 @@
-from pyrr import Vector3
+import math
 
+from pyrr import Quaternion, Vector3
+
+from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._right_angles import RightAngles
 from ..base import Core
@@ -16,11 +19,29 @@ class CoreV1(Core):
 
         :param rotation: The modules rotation.
         """
+        child_offset = Vector3([0.089 / 2.0, 0.0, 0.0])
+        attachment_points = {
+            self.FRONT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]), offset=child_offset
+            ),
+            self.BACK: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi]),
+                offset=child_offset,
+            ),
+            self.LEFT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
+                offset=child_offset,
+            ),
+            self.RIGHT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
+                offset=child_offset,
+            ),
+        }
+
         super().__init__(
-            num_children=4,
             rotation=rotation,
             color=self._COLOR,
             bounding_box=Vector3([0.089, 0.089, 0.0603]),
             mass=0.250,
-            child_offset=0.089 / 2.0,
+            attachment_points=attachment_points,
         )

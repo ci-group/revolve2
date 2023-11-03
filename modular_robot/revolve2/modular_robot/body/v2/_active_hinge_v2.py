@@ -1,5 +1,6 @@
-from pyrr import Vector3
+from pyrr import Quaternion, Vector3
 
+from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._right_angles import RightAngles
 from ..base import ActiveHinge
@@ -20,8 +21,14 @@ class ActiveHingeV2(ActiveHinge):
 
         :param rotation: The Modules rotation.
         """
+        attachment_points = {
+            self.ATTACHMENT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
+                offset=Vector3([0.0583 / 2 + 0.002, 0.0, 0.0]),
+            ),
+        }
+
         super().__init__(
-            num_children=1,
             rotation=rotation,
             color=self._COLOR,
             range=1.047197551,
@@ -41,4 +48,5 @@ class ActiveHingeV2(ActiveHinge):
             armature=0.002,
             pid_gain_p=5.0,
             pid_gain_d=0.05,
+            attachment_points=attachment_points,
         )

@@ -1,5 +1,6 @@
 from pyrr import Vector3
 
+from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
@@ -14,31 +15,27 @@ class Brick(Module):
 
     _mass: float
     _bounding_box: Vector3
-    _child_offset: float
 
     def __init__(
         self,
-        num_children: int,
         rotation: float | RightAngles,
         color: Color,
         mass: float,
         bounding_box: Vector3,
-        child_offset: float,
+        attachment_points: dict[int, AttachmentPoint],
     ):
         """
         Initialize this object.
 
-        :param num_children: The number of children.
         :param rotation: The Modules rotation.
         :param color: The Modules color.
         :param mass: The Modules mass (in kg).
         :param bounding_box: The bounding box. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
-        :param child_offset: The child offset (in m).
+        :param attachment_points: The attachment points available on a module.
         """
         self._mass = mass
-        self._child_offset = child_offset
         self._bounding_box = bounding_box
-        super().__init__(num_children, rotation, color)
+        super().__init__(rotation, color, attachment_points)
 
     @property
     def front(self) -> Module | None:
@@ -112,12 +109,3 @@ class Brick(Module):
         :return: Vector3 with sizes of bbox in x,y,z dimension (in m).
         """
         return self._bounding_box
-
-    @property
-    def child_offset(self) -> float:
-        """
-        Get the child offset (in m).
-
-        :return: The value.
-        """
-        return self._child_offset

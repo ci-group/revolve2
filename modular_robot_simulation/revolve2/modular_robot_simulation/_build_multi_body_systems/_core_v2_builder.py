@@ -45,12 +45,14 @@ class CoreV2Builder(Builder):
         :return: The next children to be built.
         """
 
-        def __get_attachment_offset(attachment_position: int, angle: float) -> Vector3:
+        def __get_attachment_offset(
+            attachment_position: int, rotation: Quaternion
+        ) -> Vector3:
             """
             Calculate offset.
 
             :param attachment_position: index position of attachment on core.
-            :param angle: angle of core side for determining offset axis / direction.
+            :param rotation: rotation of core side for determining offset axis / direction.
             :returns: The offset Vector.
             """
             HO, VO = self._module.horizontal_offset, self._module.vertical_offset
@@ -61,7 +63,7 @@ class CoreV2Builder(Builder):
                 h_offset = -HO
             elif h_cond == 0:
                 h_offset = HO
-            h_offset = -h_offset if angle >= math.pi else h_offset
+            h_offset = -h_offset if rotation.angle >= math.pi else h_offset
             if v_cond <= 1:
                 v_offset = VO
             elif v_cond > 2:
@@ -69,7 +71,7 @@ class CoreV2Builder(Builder):
 
             offset = (
                 Vector3([0.0, h_offset, v_offset])
-                if angle % math.pi == 0
+                if rotation.angle % math.pi == 0
                 else Vector3([-h_offset, 0.0, v_offset])
             )
             return offset
@@ -84,17 +86,13 @@ class CoreV2Builder(Builder):
         )
 
         tasks = []
-        for child_index, angle in [
-            (self._module.FRONT, 0.0),
-            (self._module.BACK, math.pi),
-            (self._module.LEFT, math.pi / 2.0),
-            (self._module.RIGHT, math.pi / 2.0 * 3),
-        ]:
+        for child_index, attachment_point in self._module.attachment_points.items():
             child = self._module.children[child_index]
             if child is not None:
                 attachment_offset = (
                     __get_attachment_offset(
-                        self._module.attachment_positions[child_index], angle
+                        self._module.attachment_positions[child_index],
+                        attachment_point.rotation,
                     )
                     if self._module.attachment_positions[child_index] > 0
                     else Vector3([0.0, 0.0, 0.0])
@@ -103,11 +101,11 @@ class CoreV2Builder(Builder):
                 child_slot_pose = Pose(
                     position=self._slot_pose.position
                     + self._slot_pose.orientation
-                    * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Vector3([self._module.child_offset, 0.0, 0.0])
+                    * attachment_point.rotation
+                    * attachment_point.offset
                     + attachment_offset,
                     orientation=self._slot_pose.orientation
-                    * Quaternion.from_eulers([0.0, 0.0, angle])
+                    * attachment_point.rotation
                     * Quaternion.from_eulers([child.rotation, 0, 0]),
                 )
 

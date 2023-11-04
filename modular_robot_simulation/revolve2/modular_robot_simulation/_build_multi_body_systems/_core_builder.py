@@ -1,10 +1,4 @@
-<<<<<<< HEAD:modular_robot_simulation/revolve2/modular_robot_simulation/_build_multi_body_systems/_core_builder.py
 from revolve2.modular_robot.body.base import Core
-=======
-from pyrr import Quaternion
-
-from revolve2.modular_robot.body.v1 import CoreV1
->>>>>>> 3bf3e14 (grid operations better + attachment points + morphological measure bugfixes):modular_robot_simulation/revolve2/modular_robot_simulation/_build_multi_body_systems/_core_v1_builder.py
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox
 from revolve2.simulation.scene.geometry.textures import Texture

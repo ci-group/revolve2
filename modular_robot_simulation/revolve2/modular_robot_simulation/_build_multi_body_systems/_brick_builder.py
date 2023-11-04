@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 from pyrr import Vector3
-=======
-from pyrr import Quaternion, Vector3
->>>>>>> 3bf3e14 (grid operations better + attachment points + morphological measure bugfixes)
-
 from revolve2.modular_robot.body.base import Brick
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox

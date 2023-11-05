@@ -95,6 +95,7 @@ def main() -> None:
         simulator=simulator,
         batch_parameters=make_standard_batch_parameters(),
         scenes=scene,
+        fast_sim=True,
     )
 
 

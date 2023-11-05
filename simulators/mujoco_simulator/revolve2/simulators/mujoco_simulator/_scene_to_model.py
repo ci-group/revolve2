@@ -34,7 +34,7 @@ from ._abstraction_to_mujoco_mapping import (
 
 
 def scene_to_model(
-    scene: Scene, simulation_timestep: float, cast_shadows: bool = False
+    scene: Scene, simulation_timestep: float, cast_shadows: bool = False, fast_sim: bool = False,
 ) -> tuple[mujoco.MjModel, AbstractionToMujocoMapping]:
     """
     Convert a scene to a MuJoCo model.
@@ -42,6 +42,7 @@ def scene_to_model(
     :param cast_shadows: Whether shadows are cast by the light.
     :param scene: The scene to convert.
     :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
+    :param fast_sim: If simulations have to be fast, unnecessary stuff will be turned off.
     :returns: The created MuJoCo model and mapping from the simulation abstraction to the model.
     """
     mapping = AbstractionToMujocoMapping()
@@ -165,7 +166,7 @@ def scene_to_model(
         i_plane = 0
         for plane in plane_geometries:
             name = f"heightmap_{i_plane}"
-            __make_material(env_mjcf, name=name, element=plane)
+            __make_material(env_mjcf, name=name, element=plane, fast_sim=fast_sim)
 
             env_mjcf.worldbody.add(
                 "geom",
@@ -203,7 +204,7 @@ def scene_to_model(
             )
 
             name = f"heightmap_{i_heightmap}"
-            __make_material(env_mjcf, name=name, element=heightmap)
+            __make_material(env_mjcf, name=name, element=heightmap, fast_sim=fast_sim)
 
             env_mjcf.worldbody.add(
                 "geom",
@@ -229,7 +230,7 @@ def scene_to_model(
         # Set colors of geometries
         for geom, name in geoms_and_names:
             m_name = f"geom_{name}"
-            __make_material(multi_body_system_mjcf, name=m_name, element=geom)
+            __make_material(multi_body_system_mjcf, name=m_name, element=geom, fast_sim=fast_sim)
 
             multi_body_system_mjcf.find("geom", name).material = f"{m_name}_material"
 
@@ -269,8 +270,14 @@ def scene_to_model(
     return (model, mapping)
 
 
-def __make_material(env: mjcf.RootElement, name: str, element: Geometry) -> None:
-    if isinstance(element.texture, Flat) and element.texture.translucent:
+def __make_material(env: mjcf.RootElement, name: str, element: Geometry, fast_sim: bool) -> None:
+    if fast_sim:
+        env.asset.add(
+            "material",
+            name=f"{name}_material",
+            rgba=element.texture.primary_color.to_normalized_rgba_list(),
+        )
+    elif isinstance(element.texture, Flat) and element.texture.translucent:
         env.asset.add(
             "material",
             name=f"{name}_material",

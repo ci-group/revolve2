@@ -7,7 +7,10 @@ from numpy.typing import NDArray
 from revolve2.modular_robot import ModularRobot
 
 from ._coordinate_operations import CoordinateOperations
-from .calculate_novelty import calculate_novelty  # type: ignore
+try:
+    from .calculate_novelty import calculate_novelty  # type: ignore
+except Exception:
+    raise
 
 
 @dataclass

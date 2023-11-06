@@ -8,11 +8,11 @@ setpins:
     Sets the target for the provided pins.
 """
 import json
+import socket
 
 import typed_argparse as tap
 
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
-import socket
 
 
 class Args(tap.TypedArgs):
@@ -53,7 +53,6 @@ class Program:
         :param pins: The GPIO pins that will be used.
         :param port: The port to open the stream socket on.
         :raises RuntimeError: If shutdown was not clean.
-        :raises CommandError: When a cli command is invalid.
         """
         try:
             print("Exit the program at any time by pressing Ctrl-C.")
@@ -63,7 +62,7 @@ class Program:
             )
 
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as stream_socket:
-                stream_socket.bind(("", port))  # Replace with appropriate port
+                stream_socket.bind(("", port))
                 stream_socket.listen()
                 conn, addr = stream_socket.accept()
                 with conn:

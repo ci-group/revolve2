@@ -1,30 +1,30 @@
 import json
+import socket
 import time
 
 import paramiko
 import paramiko.channel
 
-from .._config import Config
-from ..physical_interfaces import HardwareType
-from .._uuid_key import UUIDKey
-from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
-from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.brain import BrainInstance
-import socket
+
+from .._config import Config
+from .._uuid_key import UUIDKey
+from ..physical_interfaces import HardwareType
+from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
+from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
 
 
 class Remote:
     """Remote control for physical modular robot that locally executes a brain and transmits it over ssh using `stream_brain`."""
 
     _INITIAL_SETUP_DELAY = 0.5
-    _STREAM_PORT = 20812
 
     _config: Config
+    _debug: bool
+
     _stream_brain_ssh_channel: paramiko.Channel
     _stream_socket: socket.socket
-
-    _debug: bool
 
     _controller: BrainInstance
 
@@ -36,6 +36,7 @@ class Remote:
         hardware_type: HardwareType,
         config: Config,
         debug: bool = False,
+        port: int = 20812,
     ) -> None:
         """
         Initialize this object.
@@ -46,6 +47,8 @@ class Remote:
         :param hardware_type: The type of hardware of the physical modular robot.
         :param config: The modular robot configuration.
         :param debug: Whether to print debug information.
+        :param port: The port to use for the robots stream service.
+        :raises ConnectionRefusedError: When a connection cannot be made to the robot.
         """
         self._config = config
         self._debug = debug
@@ -58,6 +61,7 @@ class Remote:
                 username=username,
                 password=password,
                 hardware_type=hardware_type,
+                port=port,
             )
         except (paramiko.AuthenticationException, TimeoutError) as e:
             raise ConnectionRefusedError(
@@ -65,7 +69,7 @@ class Remote:
             ) from None
 
         try:
-            self._open_stream_socket(hostname=hostname)
+            self._open_stream_socket(hostname=hostname, port=port)
         except ConnectionRefusedError as e:
             raise ConnectionRefusedError(
                 f"Could not connect to the robot: {e}"
@@ -77,6 +81,7 @@ class Remote:
         username: str,
         password: str,
         hardware_type: HardwareType,
+        port: int,
     ) -> None:
         """
         Start the brain stream service.
@@ -84,19 +89,21 @@ class Remote:
         :param hostname: The hostname.
         :param username: SSH username.
         :param password: SSH password.
-        :hardware_type: The type of hardware.
+        :param hardware_type: The type of hardware.
+        :param port: The port to use for the stream service.
+        :raises RuntimeError: If the stream service could not be started.
         """
-
         # Connect to the robot
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname, username=username, password=password, timeout=3.0)
 
         transport = ssh.get_transport()
+        assert transport is not None
         self._stream_brain_ssh_channel = transport.open_session()
 
         # Start the stream brain service.
-        actual_command = f"stream_brain --port {self._STREAM_PORT} --hardware {hardware_type.name} --pins {' '.join([str(pin) for pin in self._config.hinge_mapping.values()])}"
+        actual_command = f"stream_brain --port {port} --hardware {hardware_type.name} --pins {' '.join([str(pin) for pin in self._config.hinge_mapping.values()])}"
         self._stream_brain_ssh_channel.exec_command(f'bash -l -c "{actual_command}"')
 
         # Wait until the service starts.
@@ -117,21 +124,21 @@ class Remote:
                     "Brain stream service on the robot exited unexpectedly but reported no error."
                 )
 
-    def _open_stream_socket(self, hostname: str) -> None:
+    def _open_stream_socket(self, hostname: str, port: int) -> None:
         self._stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self._stream_socket.connect((hostname, self._STREAM_PORT))
+        self._stream_socket.connect((hostname, port))
 
-    def _send_command(self, command: bytes):
+    def _send_command(self, command: bytes) -> None:
         self._stream_socket.sendall(command)
 
-    def set_active_hinge_targets(
+    def _set_active_hinge_targets(
         self, active_hinges_and_targets: list[tuple[UUIDKey[ActiveHinge], float]]
     ) -> None:
         """
         Set the target for active hinges.
 
         :param active_hinges_and_targets: The active hinges and their targets.
-        :raises RuntimeError: In case of unexpected client response.
+        :raises BrokenPipeError: In case the connection closed.
         """
         pins = [
             self._config.hinge_mapping[active_hinge]
@@ -171,7 +178,7 @@ class Remote:
         """Set all servos to their initial positions."""
         for active_hinge in self._config.hinge_mapping:
             # Set active hinge to initial position.
-            self.set_active_hinge_targets(
+            self._set_active_hinge_targets(
                 [(active_hinge, self._config.initial_hinge_positions[active_hinge])]
             )
 
@@ -205,4 +212,4 @@ class Remote:
                 control_interface=control_interface,
             )
 
-            self.set_active_hinge_targets(control_interface._set_active_hinges)
+            self._set_active_hinge_targets(control_interface._set_active_hinges)

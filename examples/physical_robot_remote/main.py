@@ -88,14 +88,18 @@ def main() -> None:
     )
 
     remote = Remote(
-        hostname="10.15.3.98",
+        hostname="localhost",  # "10.15.3.98",
         username="pi",
         password="raspberry",
         hardware_type=HardwareType.v1,
         config=config,
         debug=True,
     )
-    remote.run_brain()
+    print("Initializing robot..")
+    remote.prepare()
+    print("Done. Press enter to start the brain.")
+    input()
+    remote.run()
 
 
 if __name__ == "__main__":

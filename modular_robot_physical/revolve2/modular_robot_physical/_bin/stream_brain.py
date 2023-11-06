@@ -8,14 +8,11 @@ setpins:
     Sets the target for the provided pins.
 """
 import json
-import sys
-import traceback
-from json.decoder import JSONDecodeError
 
 import typed_argparse as tap
 
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
-import time
+import socket
 
 
 class Args(tap.TypedArgs):
@@ -25,9 +22,7 @@ class Args(tap.TypedArgs):
     debug: bool = tap.arg(help="Print debug information.")
     dry: bool = tap.arg(help="Skip GPIO output.")
     pins: list[int] = tap.arg(help="The GPIO pins that will be used.")
-    m2m: bool = tap.arg(
-        help="Enable machine-to-machine mode. Only print messages relevant to the protocol."
-    )
+    port: int = tap.arg(help="The port the open the stream on.")
 
 
 class CommandError(Exception):
@@ -47,7 +42,7 @@ class Program:
         debug: bool,
         dry: bool,
         pins: list[int],
-        m2m: bool,
+        port: int,
     ) -> None:
         """
         Run the program.
@@ -56,44 +51,31 @@ class Program:
         :param debug: If debugging messages are activated.
         :param dry: If servo outputs are not propagated to the physical servos.:
         :param pins: The GPIO pins that will be used.
-        :param m2m: Enable machine-to-machine mode. Only print messages relevant to the protocol.
+        :param port: The port to open the stream socket on.
         :raises RuntimeError: If shutdown was not clean.
         :raises CommandError: When a cli command is invalid.
         """
         try:
-            if not m2m:
-                print("Exit the program at any time by pressing Ctrl-C.")
+            print("Exit the program at any time by pressing Ctrl-C.")
 
             self._physical_interface = get_interface(
                 hardware_type=hardware_type, debug=debug, dry=dry, pins=pins
             )
 
-            print(json.dumps({"is_ok": True}))
-
-            for line in sys.stdin:
-                print(time.time())
-                try:
-                    parsed = json.loads(line)
-
-                    match parsed:
-                        case {"cmd": "setpins", "pins": list(pins_to_set)}:
-                            for pin in pins_to_set:
-                                match pin:
-                                    case {
-                                        "pin": int(pin),
-                                        "target": float(target),
-                                    }:
-                                        self._physical_interface.set_servo_target(
-                                            pin=pin, target=target
-                                        )
-                                        print(time.time(), json.dumps({"is_ok": True}))
-                                    case _:
-                                        raise CommandError("Invalid command.")
-                        case _:
-                            print("aaaaaa")
-                            raise CommandError("Invalid command.")
-                except (CommandError, JSONDecodeError):
-                    raise RuntimeError(f"Error parsing command: {line}")
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as stream_socket:
+                stream_socket.bind(("", port))  # Replace with appropriate port
+                stream_socket.listen()
+                conn, addr = stream_socket.accept()
+                with conn:
+                    print("Connected by", addr)
+                    while True:
+                        data = conn.recv(1024)
+                        if not data:
+                            print("Stream closed by connection.")
+                            break
+                        command = data.decode("utf-8")
+                        print(command)
+                        self._handle_command(command)
 
         except KeyboardInterrupt:
             print("Program interrupted by user. Exiting..")
@@ -104,6 +86,25 @@ class Program:
                 print("Done.")
             except:
                 raise RuntimeError("Failed to set hardware to low power mode.")
+
+    def _handle_command(self, command: str) -> None:
+        parsed = json.loads(command)
+
+        match parsed:
+            case {"cmd": "setpins", "pins": list(pins_to_set)}:
+                for pin in pins_to_set:
+                    match pin:
+                        case {
+                            "pin": int(pin),
+                            "target": float(target),
+                        }:
+                            self._physical_interface.set_servo_target(
+                                pin=pin, target=target
+                            )
+                        case _:
+                            raise CommandError("Invalid command.")
+            case _:
+                raise CommandError("Invalid command.")
 
 
 def runner(args: Args) -> None:
@@ -117,7 +118,7 @@ def runner(args: Args) -> None:
         debug=args.debug,
         dry=args.dry,
         pins=args.pins,
-        m2m=args.m2m,
+        port=args.port,
     )
 
 

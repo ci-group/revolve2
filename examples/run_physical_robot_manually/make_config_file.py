@@ -1,4 +1,5 @@
 """An example on how to make a config file for running a physical modular robot."""
+
 import pickle
 
 from revolve2.experimentation.rng import make_rng_time_seed
@@ -76,7 +77,6 @@ def main() -> None:
     - initial_hinge_positions: Initial positions for the active hinges. In Revolve2 the simulator defaults to 0.0.
     - inverse_servos: Sometimes servos on the physical robot are mounted backwards by accident. Here you inverse specific servos in software. Example: {13: True} would inverse the servo connected to GPIO pin 13.
     """
-
     config = Config(
         modular_robot=robot,
         hinge_mapping=hinge_mapping,

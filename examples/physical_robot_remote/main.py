@@ -1,4 +1,5 @@
-"""An example on how to make a config file for running a physical modular robot."""
+"""An example on how to remote control a physical modular robot"""
+
 from revolve2.modular_robot_physical.remote import Remote
 from revolve2.modular_robot_physical.physical_interfaces import HardwareType
 from revolve2.experimentation.rng import make_rng_time_seed
@@ -43,7 +44,7 @@ def make_body() -> (
 
 
 def main() -> None:
-    """Create a Config for the physical robot."""
+    """Remote control a physical modular robot"""
     rng = make_rng_time_seed()
     # Create a modular robot, similar to what was done in the simulate_single_robot example. Of course, you can replace this with your own robot, such as one you have optimized using an evolutionary algorithm.
     body, hinges = make_body()
@@ -77,18 +78,22 @@ def main() -> None:
     - initial_hinge_positions: Initial positions for the active hinges. In Revolve2 the simulator defaults to 0.0.
     - inverse_servos: Sometimes servos on the physical robot are mounted backwards by accident. Here you inverse specific servos in software. Example: {13: True} would inverse the servo connected to GPIO pin 13.
     """
-
     config = Config(
         modular_robot=robot,
         hinge_mapping=hinge_mapping,
         run_duration=30,
-        control_frequency=0.5,
+        control_frequency=20,
         initial_hinge_positions={UUIDKey(active_hinge): 0.0 for active_hinge in hinges},
         inverse_servos={},
     )
 
+    """
+    Create a Remote for the physical modular robot.
+    Make sure to target the correct hardware type and fill in the correct IP and credentials.
+    The debug flag is turned on. If the remote complains it cannot keep up, turning off debugging might improve performance.
+    """
     remote = Remote(
-        hostname="localhost",  # "10.15.3.98",
+        hostname="10.15.3.98",
         username="pi",
         password="raspberry",
         hardware_type=HardwareType.v1,

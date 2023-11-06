@@ -1,15 +1,14 @@
-"""An example on how to remote control a physical modular robot"""
+"""An example on how to remote control a physical modular robot."""
 
-from revolve2.modular_robot_physical.remote import Remote
-from revolve2.modular_robot_physical.physical_interfaces import HardwareType
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
-from revolve2.modular_robot_physical import UUIDKey
-from revolve2.modular_robot_physical import Config
+from revolve2.modular_robot_physical import Config, UUIDKey
+from revolve2.modular_robot_physical.physical_interfaces import HardwareType
+from revolve2.modular_robot_physical.remote import Remote
 
 
 def make_body() -> (
@@ -44,7 +43,7 @@ def make_body() -> (
 
 
 def main() -> None:
-    """Remote control a physical modular robot"""
+    """Remote control a physical modular robot."""
     rng = make_rng_time_seed()
     # Create a modular robot, similar to what was done in the simulate_single_robot example. Of course, you can replace this with your own robot, such as one you have optimized using an evolutionary algorithm.
     body, hinges = make_body()

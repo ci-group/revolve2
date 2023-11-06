@@ -8,8 +8,8 @@ from ._map_type import MapType
 class Texture:
     """An abstract texture for geometric models."""
 
-    name: str
-    """name can be used to reference texture files or specific builtin textures."""
+    builtin: str
+    """builtin can be used to reference specific builtin textures."""
     primary_color: Color
     """_primary_color determines the color of the texture."""
     secondary_color: Color

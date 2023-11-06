@@ -9,7 +9,7 @@ from ._texture import Texture
 class Flat(Texture):
     """A flat texture for mujoco models."""
 
-    name: str = field(default="flat")
+    builtin: str = field(default="flat")
     size: tuple[int, int] = field(default=(10, 10))
     repeat: tuple[int, int] = field(default=(1, 1))
     specular: float = field(default=0.5)

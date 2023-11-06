@@ -9,7 +9,7 @@ from ._texture import Texture
 class Gradient(Texture):
     """A color gradient spanning over mujoco models."""
 
-    name: str = field(default="gradient")
+    builtin: str = field(default="gradient")
     size: tuple[int, int] = field(default=(10, 10))
     repeat: tuple[int, int] = field(default=(1, 1))
     specular: float = field(default=0.5)

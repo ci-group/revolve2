@@ -302,7 +302,7 @@ def __make_material(
             type=element.texture.map_type.value,
             width=width,
             height=height,
-            builtin=element.texture.name,
+            builtin=element.texture.builtin,
             rgb1=element.texture.primary_color.to_normalized_rgb_list(),
             rgb2=element.texture.secondary_color.to_normalized_rgb_list(),
         )

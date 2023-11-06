@@ -9,7 +9,7 @@ from ._texture import Texture
 class Checker(Texture):
     """A checker texture for mujoco models."""
 
-    name: str = field(default="checker")
+    builtin: str = field(default="checker")
     size: tuple[int, int] = field(default=(100, 100))
     repeat: tuple[int, int] = field(default=(100, 100))
     specular: float = field(default=0.5)

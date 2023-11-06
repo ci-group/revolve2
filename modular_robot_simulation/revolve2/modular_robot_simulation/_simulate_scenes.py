@@ -13,7 +13,6 @@ def simulate_scenes(
     batch_parameters: BatchParameters,
     scenes: ModularRobotScene,
     record_settings: RecordSettings | None = None,
-    fast_sim: bool = False,
 ) -> list[SceneSimulationState]:
     """
     Simulate a scene.
@@ -22,7 +21,6 @@ def simulate_scenes(
     :param batch_parameters: The batch parameters to use for simulation.
     :param scenes: Te scene to simulate.
     :param record_settings: The optional record settings to use during simulation.
-    :param fast_sim: Disable all fancy rendering options for performance.
     :returns: A list of simulation states.
 
     # noqa: DAR202
@@ -36,7 +34,6 @@ def simulate_scenes(
     batch_parameters: BatchParameters,
     scenes: list[ModularRobotScene],
     record_settings: RecordSettings | None = None,
-    fast_sim: bool = False,
 ) -> list[list[SceneSimulationState]]:
     """
     Simulate multiple scenes.
@@ -45,7 +42,6 @@ def simulate_scenes(
     :param batch_parameters: The batch parameters to use for simulation.
     :param scenes: The scenes to simulate.
     :param record_settings: The optional record settings to use during simulation.
-    :param fast_sim: Disable all fancy rendering options for performance.
     :returns: A list of simulation states for each scene in the provided batch.
 
     # noqa: DAR202
@@ -58,7 +54,6 @@ def simulate_scenes(
     batch_parameters: BatchParameters,
     scenes: ModularRobotScene | list[ModularRobotScene],
     record_settings: RecordSettings | None = None,
-    fast_sim: bool = False,
 ) -> list[SceneSimulationState] | list[list[SceneSimulationState]]:
     """
     Simulate one or more scenes.
@@ -67,7 +62,6 @@ def simulate_scenes(
     :param batch_parameters: The batch parameters to use for simulation.
     :param scenes: One or more scenes to simulate.
     :param record_settings: The optional record settings to use during simulation.
-    :param fast_sim: Disable all fancy rendering options for performance.
     :returns: A list of simulation states for each scene in the provided batch.
     """
     if isinstance(scenes, ModularRobotScene):

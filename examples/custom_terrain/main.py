@@ -36,15 +36,15 @@ def make_custom_terrain() -> Terrain:
                 mass=0.0,
                 size=Vector3([20.0, 20.0, 0.0]),
                 texture=Checker(
-                    Color(170, 170, 180, 255),
-                    Color(150, 150, 150, 255),
+                    primary_color=Color(170, 170, 180, 255),
+                    secondary_color=Color(150, 150, 150, 255),
                     map_type=MapType.MAP2D,
                 ),
             ),
             GeometryBox(
                 pose=Pose(position=Vector3([1.0, 0.0, 0.1]), orientation=Quaternion()),
                 mass=0.0,
-                texture=Flat(Color(0, 255, 0, 255)),
+                texture=Flat(primary_color=Color(0, 255, 0, 255)),
                 aabb=AABB(size=Vector3([0.5, 0.5, 0.2])),
             ),
             GeometryBox(
@@ -52,7 +52,10 @@ def make_custom_terrain() -> Terrain:
                     position=Vector3([-0.8, 0.4, 0.125]), orientation=Quaternion()
                 ),
                 mass=0.0,
-                texture=Gradient(Color(0, 200, 100, 255), Color(0, 100, 200, 255)),
+                texture=Gradient(
+                    primary_color=Color(0, 200, 100, 255),
+                    secondary_color=Color(0, 100, 200, 255),
+                ),
                 aabb=AABB(size=Vector3([0.5, 0.5, 0.25])),
             ),
             GeometryBox(
@@ -61,13 +64,13 @@ def make_custom_terrain() -> Terrain:
                     orientation=Quaternion.from_eulers([0.0, math.pi / 4.0, 0.0]),
                 ),
                 mass=0.0,
-                texture=Flat(Color(50, 80, 180, 255)),
+                texture=Flat(primary_color=Color(50, 80, 180, 255)),
                 aabb=AABB(size=Vector3([0.5, 0.4, 0.02])),
             ),
             GeometryBox(
                 pose=Pose(position=Vector3([-0.1, 0.9, 0.5]), orientation=Quaternion()),
                 mass=0.0,
-                texture=Flat(Color(100, 0, 100, 100), translucent=True),
+                texture=Flat(primary_color=Color(100, 0, 100, 100), translucent=True),
                 aabb=AABB(size=Vector3([0.2, 0.2, 1.0])),
             ),
         ]

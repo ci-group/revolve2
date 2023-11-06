@@ -13,6 +13,8 @@ class GeometryPlane(Geometry):
     size: Vector2
     texture: Texture = field(
         default_factory=lambda: Checker(
-            Color(100, 100, 100, 255), Color(120, 120, 120, 255), map_type=MapType.MAP2D
+            primary_color=Color(100, 100, 100, 255),
+            secondary_color=Color(120, 120, 120, 255),
+            map_type=MapType.MAP2D,
         )
     )

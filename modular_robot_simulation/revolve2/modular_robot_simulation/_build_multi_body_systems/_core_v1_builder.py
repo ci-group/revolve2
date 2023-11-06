@@ -46,7 +46,7 @@ class CoreV1Builder(Builder):
             GeometryBox(
                 pose=self._slot_pose,
                 mass=self._module.mass,
-                texture=Flat(convert_color(self._module.color)),
+                texture=Flat(primary_color=convert_color(self._module.color)),
                 aabb=AABB(self._module.bounding_box),
             )
         )

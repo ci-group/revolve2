@@ -98,7 +98,7 @@ class ActiveHingeBuilder(Builder):
             GeometryBox(
                 pose=frame_pose_real,
                 mass=self._module.frame_mass,
-                texture=Flat(convert_color(self._module.color)),
+                texture=Flat(primary_color=convert_color(self._module.color)),
                 aabb=AABB(self._module.frame_bounding_box),
             )
         )
@@ -136,7 +136,7 @@ class ActiveHingeBuilder(Builder):
             GeometryBox(
                 pose=Pose(Vector3(), Quaternion()),
                 mass=self._module.servo1_mass,
-                texture=Flat(convert_color(self._module.color)),
+                texture=Flat(primary_color=convert_color(self._module.color)),
                 aabb=AABB(self._module.servo1_bounding_box),
             )
         )
@@ -144,7 +144,7 @@ class ActiveHingeBuilder(Builder):
             GeometryBox(
                 pose=Pose(SERVO_BBOX2_POSITION, Quaternion()),
                 mass=self._module.servo2_mass,
-                texture=Flat(convert_color(self._module.color)),
+                texture=Flat(primary_color=convert_color(self._module.color)),
                 aabb=AABB(self._module.servo2_bounding_box),
             )
         )

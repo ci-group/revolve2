@@ -24,5 +24,7 @@ class GeometryHeightmap(Geometry):
     base_thickness: float
     heights: npt.NDArray[np.float_]  # MxN matrix. outer list is x, inner list is y
     texture: Texture = field(
-        default_factory=lambda: Flat(Color(100, 100, 100, 255), map_type=MapType.MAP2D)
+        default_factory=lambda: Flat(
+            primary_color=Color(100, 100, 100, 255), map_type=MapType.MAP2D
+        )
     )

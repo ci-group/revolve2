@@ -1,5 +1,5 @@
 """
-Directly control a physical robot robot by providing commands over an input stream.
+Open a tcp server that will take commands to control the robot.
 
 Commands:
 
@@ -12,6 +12,7 @@ import socket
 
 import typed_argparse as tap
 
+from .._version import REVOLVE2_VERSION
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
 
 
@@ -23,6 +24,9 @@ class Args(tap.TypedArgs):
     dry: bool = tap.arg(help="Skip GPIO output.")
     pins: list[int] = tap.arg(help="The GPIO pins that will be used.")
     port: int = tap.arg(help="The port the open the stream on.")
+    required_version: str | None = tap.arg(
+        help="Assert whether the installed Revolve2 version matches the given value."
+    )
 
 
 class CommandError(Exception):
@@ -111,7 +115,13 @@ def runner(args: Args) -> None:
     Run the program from the point were arguments were parsed.
 
     :param args: The parsed program arguments.
+    :raises RuntimeError: When required version does not match.
     """
+    if args.required_version is not None and args.required_version != REVOLVE2_VERSION:
+        raise RuntimeError(
+            f"Program version is {REVOLVE2_VERSION} but does not match required version {args.required_version}."
+        )
+
     Program().run(
         hardware_type=args.hardware,
         debug=args.debug,

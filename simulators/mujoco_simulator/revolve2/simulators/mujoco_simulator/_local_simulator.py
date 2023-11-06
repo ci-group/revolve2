@@ -74,6 +74,8 @@ class LocalSimulator(Simulator):
                     sample_step,
                     batch.parameters.simulation_time,
                     batch.parameters.simulation_timestep,
+                    batch.parameters.cast_shadows,
+                    batch.parameters.fast_sim,
                 )
                 for scene_index, scene in enumerate(batch.scenes)
             ]

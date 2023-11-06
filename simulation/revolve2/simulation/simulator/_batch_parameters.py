@@ -29,3 +29,9 @@ class BatchParameters:
 
     control_frequency: float
     """Similar to `sampling_frequency` but for how often the control function is called."""
+
+    cast_shadows: bool
+    """Whether shadows are cast in the simulation."""
+
+    fast_sim: bool
+    """Whether more complex rendering prohibited."""

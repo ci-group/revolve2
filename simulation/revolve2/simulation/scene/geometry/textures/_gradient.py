@@ -1,4 +1,5 @@
 from ..._color import Color
+from ._map_type import MapType
 from ._texture import Texture
 
 
@@ -9,7 +10,7 @@ class Gradient(Texture):
         self,
         color1: Color,
         color2: Color,
-        map_type: str = "cube",
+        map_type: MapType = MapType.CUBE,
         size: tuple[int, int] = (10, 10),
         repeat: tuple[int, int] = (1, 1),
         specular: float = 0.5,
@@ -30,13 +31,13 @@ class Gradient(Texture):
         :param reflectance: How reflective a texture is.
         :param emission: How emissive a surface is.
         """
-        self._name = "gradient"
-        self._primary_color = color1
-        self._secondary_color = color2
-        self._map_type = map_type
-        self._repeat = repeat
-        self._size = size
-        self._specular = specular
-        self._shininess = shininess
-        self._reflectance = reflectance
-        self._emission = emission
+        self.name = "gradient"
+        self.primary_color = color1
+        self.secondary_color = color2
+        self.map_type = map_type
+        self.repeat = repeat
+        self.size = size
+        self.specular = specular
+        self.shininess = shininess
+        self.reflectance = reflectance
+        self.emission = emission

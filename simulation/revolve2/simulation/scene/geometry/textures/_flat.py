@@ -1,16 +1,20 @@
+from attrs import field
+from attrs.setters import frozen
+
 from ..._color import Color
+from ._map_type import MapType
 from ._texture import Texture
 
 
 class Flat(Texture):
     """A flat texture for mujoco models."""
 
-    _translucent: bool
+    translucent: bool = field(on_setattr=frozen)
 
     def __init__(
         self,
         color1: Color,
-        map_type: str = "cube",
+        map_type: MapType = MapType.CUBE,
         size: tuple[int, int] = (10, 10),
         repeat: tuple[int, int] = (1, 1),
         specular: float = 0.5,
@@ -32,22 +36,13 @@ class Flat(Texture):
         :param emission: How emissive a surface is.
         :param translucent: If the surface should be translucent.
         """
-        self._name = "flat"
-        self._primary_color = self._secondary_color = color1
-        self._map_type = map_type
-        self._repeat = repeat
-        self._size = size
-        self._specular = specular
-        self._shininess = shininess
-        self._reflectance = reflectance
-        self._emission = emission
-        self._translucent = translucent
-
-    @property
-    def translucent(self) -> bool:
-        """
-        Check if surface should be translucent.
-
-        :return: The boolean.
-        """
-        return self._translucent
+        self.name = "flat"
+        self.primary_color = self.secondary_color = color1
+        self.map_type = map_type
+        self.repeat = repeat
+        self.size = size
+        self.specular = specular
+        self.shininess = shininess
+        self.reflectance = reflectance
+        self.emission = emission
+        self.translucent = translucent

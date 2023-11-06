@@ -34,7 +34,10 @@ from ._abstraction_to_mujoco_mapping import (
 
 
 def scene_to_model(
-    scene: Scene, simulation_timestep: float, cast_shadows: bool = False, fast_sim: bool = False,
+    scene: Scene,
+    simulation_timestep: float,
+    cast_shadows: bool,
+    fast_sim: bool,
 ) -> tuple[mujoco.MjModel, AbstractionToMujocoMapping]:
     """
     Convert a scene to a MuJoCo model.
@@ -230,7 +233,9 @@ def scene_to_model(
         # Set colors of geometries
         for geom, name in geoms_and_names:
             m_name = f"geom_{name}"
-            __make_material(multi_body_system_mjcf, name=m_name, element=geom, fast_sim=fast_sim)
+            __make_material(
+                multi_body_system_mjcf, name=m_name, element=geom, fast_sim=fast_sim
+            )
 
             multi_body_system_mjcf.find("geom", name).material = f"{m_name}_material"
 
@@ -270,7 +275,9 @@ def scene_to_model(
     return (model, mapping)
 
 
-def __make_material(env: mjcf.RootElement, name: str, element: Geometry, fast_sim: bool) -> None:
+def __make_material(
+    env: mjcf.RootElement, name: str, element: Geometry, fast_sim: bool
+) -> None:
     if fast_sim:
         env.asset.add(
             "material",
@@ -292,7 +299,7 @@ def __make_material(env: mjcf.RootElement, name: str, element: Geometry, fast_si
         env.asset.add(
             "texture",
             name=f"{name}_texture",
-            type=element.texture.map_type,
+            type=element.texture.map_type.value,
             width=width,
             height=height,
             builtin=element.texture.name,

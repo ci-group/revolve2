@@ -25,6 +25,8 @@ def simulate_scene(
     sample_step: float | None,
     simulation_time: int | None,
     simulation_timestep: float,
+    cast_shadows: bool,
+    fast_sim: bool,
 ) -> list[SimulationState]:
     """
     Simulate a scene.
@@ -38,11 +40,15 @@ def simulate_scene(
     :param sample_step: The time between each state sample of the simulation. In seconds.
     :param simulation_time: How long to simulate for. In seconds.
     :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
+    :param cast_shadows: If shadows are cast.
+    :param fast_sim: If fancy rendering is disabled.
     :returns: The results of simulation. The number of returned states depends on `sample_step`.
     """
     logging.info(f"Simulating scene {scene_id}")
 
-    model, mapping = scene_to_model(scene, simulation_timestep)
+    model, mapping = scene_to_model(
+        scene, simulation_timestep, cast_shadows=cast_shadows, fast_sim=fast_sim
+    )
     data = mujoco.MjData(model)
 
     if not headless or record_settings is not None:

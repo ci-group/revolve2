@@ -3,7 +3,7 @@ from dataclasses import dataclass, field
 from .._color import Color
 from ..vector2 import Vector2
 from ._geometry import Geometry
-from .textures import Checker, Texture
+from .textures import Checker, MapType, Texture
 
 
 @dataclass(kw_only=True)
@@ -13,6 +13,6 @@ class GeometryPlane(Geometry):
     size: Vector2
     texture: Texture = field(
         default_factory=lambda: Checker(
-            Color(100, 100, 100, 255), Color(120, 120, 120, 255), map_type="2d"
+            Color(100, 100, 100, 255), Color(120, 120, 120, 255), map_type=MapType.MAP2D
         )
     )

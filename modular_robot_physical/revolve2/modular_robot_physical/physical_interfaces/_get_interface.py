@@ -14,6 +14,7 @@ def get_interface(
     :param pins: The GPIO pins that will be used.
     :returns: The interface.
     :raises NotImplementedError: If the hardware type is not supported.
+    :raises ModuleNotFoundError: If some required package are not installed.
     """
     try:
         match hardware_type:

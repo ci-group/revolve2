@@ -1,4 +1,3 @@
-import os
 from dataclasses import dataclass, field
 from math import atan2, pi, sqrt
 
@@ -8,6 +7,7 @@ from numpy.typing import NDArray
 from revolve2.modular_robot import ModularRobot
 
 from ._coordinate_operations import CoordinateOperations
+from .calculate_novelty import calculate_novelty  # type: ignore
 
 
 @dataclass
@@ -41,7 +41,6 @@ class MorphologicalNoveltyMetric:
         :param population: The population of robots.
         :param cob_heuristic: Weather the heuristic approximation of change of basis is used.
         :return: The novelty scores.
-        :raises ModuleNotFoundError: If the cython module for novelty calculation is not present.
         """
         instances = len(population)
         bodies = [robot.body for robot in population]
@@ -60,15 +59,6 @@ class MorphologicalNoveltyMetric:
         self._coordinates_to_magnitudes_orientation()
         self._gen_gradient_histogram()
         self._normalize_cast_int()
-
-        self._check_cmodule()
-        try:
-            # noinspection PyUnresolvedReferences
-            from .calculate_novelty import calculate_novelty  # type: ignore
-        except ModuleNotFoundError:
-            raise ModuleNotFoundError(
-                "The calculate_novelty module was not built properly."
-            )
 
         self._novelty_scores = calculate_novelty(
             self._int_histograms, self._int_histograms.shape[0], self._NUM_BINS
@@ -109,19 +99,6 @@ class MorphologicalNoveltyMetric:
             ):
                 x, z = (int(orientation[0] / bin_size), int(orientation[1] / bin_size))
                 self._histograms[i][x][z] += magnitude
-
-    @staticmethod
-    def _check_cmodule() -> None:
-        """Check whether cmodule is built."""
-        directory_path = os.path.dirname(os.path.abspath(__file__))
-        if not any(
-            [
-                file.startswith("calculate_novelty")
-                for file in os.listdir(directory_path)
-            ]
-        ):
-            os.chdir(directory_path)
-            os.system("python -m _build_cmodule build_ext -i")
 
     def _normalize_cast_int(self) -> None:
         """Normalize a matrix (array), making its sum  = _INT_CASTER."""

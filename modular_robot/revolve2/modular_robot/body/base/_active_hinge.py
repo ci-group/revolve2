@@ -103,20 +103,20 @@ class ActiveHinge(Module):
     @property
     def attachment(self) -> Module | None:
         """
-        Get the module attached to this hinge.
+        Get the attachment point of this hinge.
 
-        :returns: The attached module.
+        :returns: The attachment points module.
         """
-        return self.children[self.ATTACHMENT]
+        return self.attachment_points.get(self.ATTACHMENT).module
 
     @attachment.setter
     def attachment(self, module: Module) -> None:
         """
-        Set the module attached to this hinge.
+        Set a module to the attachment point.
 
-        :param module: The module to attach.
+        :param module: The Module.
         """
-        self.set_child(module, self.ATTACHMENT)
+        self.attachment_points[self.ATTACHMENT].module = module
 
     @property
     def static_friction(self) -> float:

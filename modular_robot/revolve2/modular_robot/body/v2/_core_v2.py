@@ -2,10 +2,10 @@ import math
 
 from pyrr import Quaternion, Vector3
 
-from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._right_angles import RightAngles
 from ..base import Core
+from ._attachment_face_core_v2 import AttachmentFaceCoreV2
 
 
 class CoreV2(Core):
@@ -17,59 +17,51 @@ class CoreV2(Core):
 
     _horizontal_offset = 0.029  # The horizontal offset for attachment positions (in m).
     _vertical_offset = 0.032  # The vertical offset for attachment positions (in m).
-    _attachment_positions: list[int]
-    """
-    Attachment positions provide the core with knowledge where child modules should be attached to. 
-    They are indexed the same as children. (child[0] -> attachment_position[0]).
-    The positions are arranged as such on each side of the core:
-    
-    ---------------------------------------------------
-    |                 |            |                  |
-    | 1 (TOP_LEFT)    | 2 (TOP)    | 3 (TOP_RIGHT)    |
-    |                 |            |                  |
-    | 4 (MIDDLE_LEFT) | 5 (MIDDLE) | 6 (MIDDLE_RIGHT) |
-    |                 |            |                  |
-    | 7 (BOTTOM_LEFT) | 8 (BOTTOM) | 9 (BOTTOM_RIGHT) |
-    |                 |            |                  |
-    ---------------------------------------------------
-    """
+    _attachment_faces: dict[int, AttachmentFaceCoreV2]
 
     def __init__(
         self,
         rotation: float | RightAngles,
-        attachment_positions: list[int],
         num_batteries: int = 1,
     ):
         """
         Initialize this object.
 
         :param rotation: The modules rotation.
-        :param attachment_positions: The attachment positions for child modules.
         :param num_batteries: The amount of batteries in the robot.
         """
         mass = (
             num_batteries * self._BATTERY_MASS + self._FRAME_MASS
         )  # adjust if multiple batteries are installed
-        self._attachment_positions = attachment_positions
 
-        child_offset = Vector3([0.15 / 2.0, 0.0, 0.0])
-        attachment_points = {
-            self.FRONT: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]), offset=child_offset
+        self._attachment_faces = {
+            self.FRONT: AttachmentFaceCoreV2(
+                Quaternion.from_eulers([0.0, 0.0, 0.0]),
+                self._horizontal_offset,
+                self._vertical_offset,
             ),
-            self.BACK: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi]),
-                offset=child_offset,
+            self.BACK: AttachmentFaceCoreV2(
+                Quaternion.from_eulers([0.0, 0.0, math.pi]),
+                self._horizontal_offset,
+                self._vertical_offset,
             ),
-            self.LEFT: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
-                offset=child_offset,
+            self.LEFT: AttachmentFaceCoreV2(
+                Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
+                self._horizontal_offset,
+                self._vertical_offset,
             ),
-            self.RIGHT: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
-                offset=child_offset,
+            self.RIGHT: AttachmentFaceCoreV2(
+                Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
+                self._horizontal_offset,
+                self._vertical_offset,
             ),
         }
+
+        attachment_points = {}
+        for index, face in self._attachment_faces.items():
+            for idx, point in face.attachment_points.items():
+                new_index = self.index_from_face_and_attachment(index, idx)
+                attachment_points[new_index] = point
 
         super().__init__(
             rotation=rotation,
@@ -78,6 +70,42 @@ class CoreV2(Core):
             bounding_box=Vector3([0.15, 0.15, 0.15]),
             attachment_points=attachment_points,
         )
+
+    @property
+    def front(self) -> AttachmentFaceCoreV2:
+        """
+        Get the module attached to the front of the core.
+
+        :returns: The attached module.
+        """
+        return self._attachment_faces[self.FRONT]
+
+    @property
+    def right(self) -> AttachmentFaceCoreV2:
+        """
+        Get the module attached to the right of the core.
+
+        :returns: The attached module.
+        """
+        return self._attachment_faces[self.RIGHT]
+
+    @property
+    def back(self) -> AttachmentFaceCoreV2:
+        """
+        Get the module attached to the back of the core.
+
+        :returns: The attached module.
+        """
+        return self._attachment_faces[self.BACK]
+
+    @property
+    def left(self) -> AttachmentFaceCoreV2:
+        """
+        Get the module attached to the left of the core.
+
+        :returns: The attached module.
+        """
+        return self._attachment_faces[self.LEFT]
 
     @property
     def horizontal_offset(self) -> float:
@@ -97,11 +125,16 @@ class CoreV2(Core):
         """
         return self._vertical_offset
 
-    @property
-    def attachment_positions(self) -> list[int]:
+    @staticmethod
+    def index_from_face_and_attachment(face_index: int, attachment_index: int) -> int:
         """
-        Get the populated attachment positions for each core side.
+        Generate global indices specific for the V2 Core. Formats the new index as such: <face_index>0<point_index>.
 
-        :return: The value.
+        :param face_index: The index of the face.
+        :param attachment_index: The index of the attachment position.
+        :return: The global index.
         """
-        return self._attachment_positions
+        global_index = (
+            face_index * 10 ** (1 + len(str(attachment_index))) + attachment_index
+        )
+        return int(global_index)

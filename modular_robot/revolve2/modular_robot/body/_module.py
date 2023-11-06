@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+from dataclasses import dataclass, field
 
 from ._attachment_point import AttachmentPoint
 from ._color import Color
@@ -12,8 +13,7 @@ class Module:
 
     _uuid: uuid.UUID
 
-    _children: list[Module | None]
-    _attachment_points: dict[int, AttachmentPoint]
+    _attachment_points: dict[int, _AttachmentPoint]
     _rotation: float
 
     _parent: Module | None
@@ -47,8 +47,10 @@ class Module:
         """
         self._uuid = uuid.uuid1()
 
-        self._children = [None] * len(attachment_points)
-        self._attachment_points = attachment_points
+        self._attachment_points = {
+            key: self._AttachmentPoint(attachment_point)
+            for key, attachment_point in attachment_points.items()
+        }
 
         self._rotation = rotation if isinstance(rotation, float) else rotation.value
 
@@ -65,18 +67,6 @@ class Module:
         :returns: The uuid.
         """
         return self._uuid
-
-    @property
-    def children(self) -> list[Module | None]:
-        """
-        Get the children of this module.
-
-        Do not alter the returned list.
-        It will break stuff.
-
-        :returns: The list of children.
-        """
-        return self._children
 
     @property
     def rotation(self) -> float:
@@ -115,17 +105,13 @@ class Module:
 
         :param module: The module to attach.
         :param child_index: The slot to attach it to.
-        :raises RuntimeError: If that slot is already taken by another module.
         """
-        if self.children[child_index] is not None:
-            raise RuntimeError("Slot already has module.")
-        assert self.children[child_index] is None, "Slot already has a module."
         assert (
             module._parent is None
         ), "Child module already connected to a different slot."
         module._parent = self
         module._parent_child_index = child_index
-        self.children[child_index] = module
+        self._attachment_points[child_index].module = module
 
     def neighbours(self, within_range: int) -> list[Module]:
         """
@@ -143,16 +129,20 @@ class Module:
         for _ in range(within_range):
             new_open_nodes: list[tuple[Module, Module | None]] = []
             for open_node, came_from in open_nodes:
+                attached_modules = [
+                    attachment_point.module
+                    for attachment_point in open_node.attachment_points.values()
+                    if attachment_point.module is not None
+                ]
                 neighbours = [
                     mod
-                    for mod in open_node.children + [open_node.parent]
+                    for mod in attached_modules + [open_node.parent]
                     if mod is not None
-                    and (came_from is None or mod.uuid is not came_from.uuid)
+                    and ((came_from is None) or (mod.uuid is not came_from.uuid))
                 ]
-                out_neighbours += neighbours
+                out_neighbours.extend(neighbours)
                 new_open_nodes += list(zip(neighbours, [open_node] * len(neighbours)))
             open_nodes = new_open_nodes
-
         return out_neighbours
 
     @property
@@ -165,10 +155,45 @@ class Module:
         return self._color
 
     @property
-    def attachment_points(self) -> dict[int, AttachmentPoint]:
+    def attachment_points(self) -> dict[int, _AttachmentPoint]:
         """
         Get all attachment points of this module.
 
         :return: The attachment points.
         """
         return self._attachment_points
+
+    @dataclass
+    class _AttachmentPoint:
+        attachment_point_reference: AttachmentPoint
+        _module: Module | None = field(default_factory=lambda: None)
+
+        @property
+        def is_free(self) -> bool:
+            """
+            Return if the attachment-point is free.
+
+            :return: The boolean.
+            """
+            return self._module is None
+
+        @property
+        def module(self) -> Module | None:
+            """
+            Return the module attached.
+
+            :return: The module
+            """
+            return self._module
+
+        @module.setter
+        def module(self, module: Module) -> None:
+            """
+            Populate attachment point with module.
+
+            :param module: The module.
+            :raises Exception: If the AttachmentPoint is already occupied.
+            """
+            if not self.is_free:
+                raise Exception("AttachmentPoint already populated.")
+            self._module = module

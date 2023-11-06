@@ -1,6 +1,6 @@
 from pyrr import Quaternion
 
-from revolve2.modular_robot.body.v1 import CoreV1
+from revolve2.modular_robot.body.base import Core
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox
 from revolve2.simulation.scene.geometry.textures import Texture
@@ -11,12 +11,12 @@ from ._convert_color import convert_color
 from ._unbuilt_child import UnbuiltChild
 
 
-class CoreV1Builder(Builder):
+class CoreBuilder(Builder):
     """A Builder for V1 Cores."""
 
-    _module: CoreV1
+    _module: Core
 
-    def __init__(self, module: CoreV1, rigid_body: RigidBody, slot_pose: Pose):
+    def __init__(self, module: Core, rigid_body: RigidBody, slot_pose: Pose):
         """
         Initialize the Core V1 Builder.
 
@@ -50,8 +50,9 @@ class CoreV1Builder(Builder):
         )
 
         tasks = []
-        for child_index, attachment_point in self._module.attachment_points.items():
-            child = attachment_point.module
+        for child_index, attachment_point_proxy in self._module.attachment_points.items():
+            child = attachment_point_proxy.module
+            attachment_point = attachment_point_proxy.attachment_point_reference
             if child is not None:
                 child_slot_pose = Pose(
                     position=self._slot_pose.position

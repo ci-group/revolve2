@@ -17,7 +17,7 @@ class BrickV1(Brick):
         """
         Initialize this object.
 
-        :param rotation: The modules rotation.
+        :param rotation: The modules' rotation.
         """
         child_offset = Vector3([0.06288625 / 2.0, 0.0, 0.0])
         attachment_points = {

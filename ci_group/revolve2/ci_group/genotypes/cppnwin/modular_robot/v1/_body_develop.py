@@ -4,16 +4,19 @@ from queue import Queue
 from typing import Any
 
 import multineat
+import numpy as np
+from numpy.typing import NDArray
+from pyrr import Vector3
 
 from revolve2.modular_robot.body import Module
-from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1, CoreV1
+from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 
 
 @dataclass
 class __Module:
-    position: tuple[int, int, int]
-    forward: tuple[int, int, int]
-    up: tuple[int, int, int]
+    position: Vector3
+    forward: Vector3
+    up: Vector3
     chain_length: int
     module_reference: Module
 
@@ -28,7 +31,6 @@ def develop(
 
     :param genotype: The genotype to create the body from.
     :returns: The created body.
-    :raises RuntimeError: In case a module is encountered that is not supported.
     """
     max_parts = 10
 
@@ -36,46 +38,33 @@ def develop(
     genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
-    grid: set[tuple[int, int, int]] = set()
+    grid = np.zeros(shape=(max_parts, max_parts, max_parts), dtype=np.uint8)
 
     body = BodyV1()
 
-    to_explore.put(__Module((0, 0, 0), (0, -1, 0), (0, 0, 1), 0, body.core))
-    grid.add((0, 0, 0))
+    to_explore.put(
+        __Module(
+            Vector3([0, 0, 0]), Vector3([0, -1, 0]), Vector3([0, 0, 1]), 0, body.core
+        )
+    )
+    grid[0, 0, 0] = 1
     part_count = 1
 
     while not to_explore.empty():
         module = to_explore.get()
 
-        children: list[tuple[int, int]] = []  # child index, rotation
-
-        if isinstance(module.module_reference, CoreV1):
-            children.append((CoreV1.FRONT, 0))
-            children.append((CoreV1.LEFT, 1))
-            children.append((CoreV1.BACK, 2))
-            children.append((CoreV1.RIGHT, 3))
-        elif isinstance(module.module_reference, BrickV1):
-            children.append((BrickV1.FRONT, 0))
-            children.append((BrickV1.LEFT, 1))
-            children.append((BrickV1.RIGHT, 3))
-        elif isinstance(module.module_reference, ActiveHingeV1):
-            children.append((ActiveHingeV1.ATTACHMENT, 0))
-        else:  # Should actually never arrive here but just checking module type to be sure
-            raise RuntimeError()
-
-        for index, rotation in children:
+        for index in module.module_reference.attachment_points.keys():
             if part_count < max_parts:
-                child = __add_child(body_net, module, index, rotation, grid)
+                child = __add_child(body_net, module, index, grid)
                 if child is not None:
                     to_explore.put(child)
                     part_count += 1
-
     return body
 
 
 def __evaluate_cppn(
     body_net: multineat.NeuralNetwork,
-    position: tuple[int, int, int],
+    position: Vector3,
     chain_length: int,
 ) -> tuple[Any, int]:
     """
@@ -101,26 +90,25 @@ def __evaluate_cppn(
     rotation_probs = [outputs[3], outputs[4]]
     rotation = rotation_probs.index(min(rotation_probs))
 
-    return (module_type, rotation)
+    return module_type, rotation
 
 
 def __add_child(
     body_net: multineat.NeuralNetwork,
     module: __Module,
     child_index: int,
-    rotation: int,
-    grid: set[tuple[int, int, int]],
+    grid: NDArray[np.uint8],
 ) -> __Module | None:
-    forward = __rotate(module.forward, module.up, rotation)
-    position = __add(module.position, forward)
+    forward = __rotate(module.forward, module.up, child_index)
+    position = module.position + forward
     chain_length = module.chain_length + 1
 
     # if grid cell is occupied, don't make a child
     # else, set cell as occupied
-    if position in grid:
+
+    if grid[tuple(position)] > 0:
         return None
-    else:
-        grid.add(position)
+    grid[tuple(position)] += 1
 
     child_type, orientation = __evaluate_cppn(body_net, position, chain_length)
     if child_type is None:
@@ -139,29 +127,7 @@ def __add_child(
     )
 
 
-def __add(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
-    return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
-
-
-def __timesscalar(a: tuple[int, int, int], scalar: int) -> tuple[int, int, int]:
-    return (a[0] * scalar, a[1] * scalar, a[2] * scalar)
-
-
-def __cross(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
-    return (
-        a[1] * b[2] - a[2] * b[1],
-        a[2] * b[0] - a[0] * b[2],
-        a[0] * b[1] - a[1] * b[0],
-    )
-
-
-def __dot(a: tuple[int, int, int], b: tuple[int, int, int]) -> int:
-    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
-
-
-def __rotate(
-    a: tuple[int, int, int], b: tuple[int, int, int], angle: int
-) -> tuple[int, int, int]:
+def __rotate(a: Vector3, b: Vector3, angle: int) -> Vector3:
     """
     Rotates vector a a given angle around b.
 
@@ -172,26 +138,24 @@ def __rotate(
     :param b: Vector b.
     :param angle: The angle to rotate.
     :returns: A copy of a, rotated.
+    :raises KeyError: If rotation in overflowing.
     """
     cosangle: int
     sinangle: int
-    if angle == 0:
-        cosangle = 1
-        sinangle = 0
-    elif angle == 1:
-        cosangle = 0
-        sinangle = 1
-    elif angle == 2:
-        cosangle = -1
-        sinangle = 0
-    else:
-        cosangle = 0
-        sinangle = -1
+    match angle:
+        case 0:
+            cosangle = 1
+            sinangle = 0
+        case 1:
+            cosangle = 0
+            sinangle = 1
+        case 2:
+            cosangle = -1
+            sinangle = 0
+        case 3:
+            cosangle = 0
+            sinangle = -1
+        case _:
+            raise KeyError("This rotation is not supported by the modules.")
 
-    return __add(
-        __add(
-            __timesscalar(a, cosangle),
-            __timesscalar(__cross(b, a), sinangle),
-        ),
-        __timesscalar(b, __dot(b, a) * (1 - cosangle)),
-    )
+    return (a * cosangle + b.cross(a) * sinangle) + b * (b.dot(a) * (1 - cosangle))

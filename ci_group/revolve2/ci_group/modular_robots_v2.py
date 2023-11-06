@@ -39,21 +39,21 @@ def gecko_v2() -> BodyV2:
 
     :returns: the robot
     """
-    attachment_positions = [0, 8, 8, 8]
-    body = BodyV2(attachment_positions)
-    body.core.right = ActiveHingeV2(0.0)
-    body.core.right.attachment = BrickV2(0.0)
+    body = BodyV2()
 
-    body.core.left = ActiveHingeV2(0.0)
-    body.core.left.attachment = BrickV2(0.0)
+    body.core.right.bottom = ActiveHingeV2(0.0)
+    body.core.right.bottom.attachment = BrickV2(0.0)
 
-    body.core.back = ActiveHingeV2(np.pi / 2.0)
-    body.core.back.attachment = BrickV2(-np.pi / 2.0)
-    body.core.back.attachment.front = ActiveHingeV2(np.pi / 2.0)
-    body.core.back.attachment.front.attachment = BrickV2(-np.pi / 2.0)
-    body.core.back.attachment.front.attachment.left = ActiveHingeV2(0.0)
-    body.core.back.attachment.front.attachment.right = ActiveHingeV2(0.0)
-    body.core.back.attachment.front.attachment.left.attachment = BrickV2(0.0)
-    body.core.back.attachment.front.attachment.right.attachment = BrickV2(0.0)
+    body.core.left.bottom = ActiveHingeV2(0.0)
+    body.core.left.bottom.attachment = BrickV2(0.0)
+
+    body.core.back.bottom = ActiveHingeV2(np.pi / 2.0)
+    body.core.back.bottom.attachment = BrickV2(-np.pi / 2.0)
+    body.core.back.bottom.attachment.front = ActiveHingeV2(np.pi / 2.0)
+    body.core.back.bottom.attachment.front.attachment = BrickV2(-np.pi / 2.0)
+    body.core.back.bottom.attachment.front.attachment.left = ActiveHingeV2(0.0)
+    body.core.back.bottom.attachment.front.attachment.right = ActiveHingeV2(0.0)
+    body.core.back.bottom.attachment.front.attachment.left.attachment = BrickV2(0.0)
+    body.core.back.bottom.attachment.front.attachment.right.attachment = BrickV2(0.0)
 
     return body

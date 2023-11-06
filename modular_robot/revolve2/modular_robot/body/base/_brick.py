@@ -40,56 +40,56 @@ class Brick(Module):
     @property
     def front(self) -> Module | None:
         """
-        Get the module attached to the front of the brick.
+        Get the front attachment point of the brick.
 
-        :returns: The attached module.
+        :returns: The attachment points module.
         """
-        return self.children[self.FRONT]
+        return self._attachment_points.get(self.FRONT).module
 
     @front.setter
     def front(self, module: Module) -> None:
         """
-        Set the module attached to the front of the brick.
+        Set a module onto the attachment point.
 
-        :param module: The module to attach.
+        :param module: The Module.
         """
-        self.set_child(module, self.FRONT)
+        self._attachment_points[self.FRONT].module = module
 
     @property
     def right(self) -> Module | None:
         """
-        Get the module attached to the right of the brick.
+        Get right attachment point of the brick.
 
-        :returns: The attached module.
+        :returns: The attachment points module.
         """
-        return self.children[self.RIGHT]
+        return self._attachment_points.get(self.FRONT).module
 
     @right.setter
     def right(self, module: Module) -> None:
         """
-        Set the module attached to the right of the brick.
+        Set a module onto the attachment point.
 
-        :param module: The module to attach.
+        :param module: The Module.
         """
-        self.set_child(module, self.RIGHT)
+        self._attachment_points[self.RIGHT].module = module
 
     @property
     def left(self) -> Module | None:
         """
-        Get the module attached to the left of the brick.
+        Get the left attachment point of the brick.
 
-        :returns: The attached module.
+        :returns: The attachment points module.
         """
-        return self.children[self.LEFT]
+        return self._attachment_points.get(self.FRONT).module
 
     @left.setter
     def left(self, module: Module) -> None:
         """
-        Set the module attached to the left of the brick.
+        Set a module onto the attachment point.
 
-        :param module: The module to attach.
+        :param module: The Module.
         """
-        self.set_child(module, self.LEFT)
+        self._attachment_points[self.LEFT].module = module
 
     @property
     def mass(self) -> float:

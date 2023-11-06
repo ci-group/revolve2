@@ -124,48 +124,69 @@ class MorphologicalMeasures(Generic[TModule]):
         return all(
             [np.isclose(module.rotation, 0.0)]
             + [
-                cls.__calculate_is_2d_recur(child)
-                for child in module.children
-                if child is not None
+                cls.__calculate_is_2d_recur(child.module)
+                for child in module.attachment_points.values()
+                if child.module is not None
             ]
         )
 
     def __calculate_core_is_filled(self) -> bool:
-        return all([child is not None for child in self.core.children])
+        return all(
+            [child.module is not None for child in self.core.attachment_points.values()]
+        )
 
     def __calculate_filled_bricks(self) -> list[Brick]:
         return [
             brick
             for brick in self.bricks
-            if all([child is not None for child in brick.children])
+            if all(
+                [child.module is not None for child in brick.attachment_points.values()]
+            )
         ]
 
     def __calculate_filled_active_hinges(self) -> list[ActiveHinge]:
         return [
             active_hinge
             for active_hinge in self.active_hinges
-            if all([child is not None for child in active_hinge.children])
+            if all(
+                [
+                    child.module is not None
+                    for child in active_hinge.attachment_points.values()
+                ]
+            )
         ]
 
     def __calculate_single_neighbour_bricks(self) -> list[Brick]:
         return [
             brick
             for brick in self.bricks
-            if all([child is None for child in brick.children])
+            if all([child.module is None for child in brick.attachment_points.values()])
         ]
 
     def __calculate_double_neighbour_bricks(self) -> list[Brick]:
         return [
             brick
             for brick in self.bricks
-            if sum([0 if child is None else 1 for child in brick.children]) == 1
+            if sum(
+                [
+                    0 if child.module is None else 1
+                    for child in brick.attachment_points.values()
+                ]
+            )
+            == 1
         ]
 
     def __calculate_double_neighbour_active_hinges(self) -> list[ActiveHinge]:
         return [
             active_hinge
             for active_hinge in self.active_hinges
-            if sum([0 if child is None else 1 for child in active_hinge.children]) == 1
+            if sum(
+                [
+                    0 if child.module is None else 1
+                    for child in active_hinge.attachment_points.values()
+                ]
+            )
+            == 1
         ]
 
     def __pad_grid(self) -> None:

@@ -16,7 +16,7 @@ TModuleNP = TypeVar("TModuleNP", bound=np.generic)
 class Body(ABC):
     """Body of a modular robot."""
 
-    core: Core
+    _core: Core
 
     def __init__(self) -> None:
         """Initialize this object."""
@@ -38,7 +38,7 @@ class Body(ABC):
         parent = module.parent
         child_index = module.parent_child_index
         while parent is not None and child_index is not None:
-            child = parent.children[child_index]
+            child = parent.attachment_points[child_index].module
             assert child is not None
             assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
 
@@ -49,7 +49,7 @@ class Body(ABC):
             if attachment_point is None:
                 raise KeyError("No attachment point found at the specified location.")
 
-            position = attachment_point.rotation * position
+            position = attachment_point.attachment_point_reference.rotation * position
             position = Vector3.round(position)
 
             child_index = parent.parent_child_index
@@ -61,9 +61,9 @@ class Body(ABC):
         modules = []
         if isinstance(module, module_type):
             modules.append(module)
-        for child in module.children:
-            if child is not None:
-                modules.extend(cls.__find_recur(child, module_type))
+        for child in module.attachment_points.values():
+            if child.module is not None:
+                modules.extend(cls.__find_recur(child.module, module_type))
         return modules
 
     def find_modules_of_type(self, module_type: Type[TModule]) -> list[TModule]:
@@ -87,6 +87,15 @@ class Body(ABC):
         :returns: The created grid with cells set to either a Module or None and a position vector of the core.
         """
         return _GridMaker().make_grid(self)
+
+    @property
+    def core(self) -> Core:
+        """
+        Get the core.
+
+        :return: The Core.
+        """
+        return self._core
 
 
 class _GridMaker(Generic[TModuleNP]):
@@ -121,12 +130,12 @@ class _GridMaker(Generic[TModuleNP]):
         self._add(position, module)
 
         for child_index, attachment_point in module.attachment_points.items():
-            child = module.children[child_index]
+            child = module.attachment_points[child_index].module
             if child is not None:
                 assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
                 rotation = (
                     orientation
-                    * attachment_point.rotation
+                    * attachment_point.attachment_point_reference.rotation
                     * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
                 self._make_grid_recur(

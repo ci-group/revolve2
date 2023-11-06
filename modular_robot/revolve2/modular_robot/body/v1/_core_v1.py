@@ -4,6 +4,7 @@ from pyrr import Quaternion, Vector3
 
 from .._attachment_point import AttachmentPoint
 from .._color import Color
+from .._module import Module
 from .._right_angles import RightAngles
 from ..base import Core
 
@@ -45,3 +46,75 @@ class CoreV1(Core):
             mass=0.250,
             attachment_points=attachment_points,
         )
+
+    @property
+    def front(self) -> Module | None:
+        """
+        Get the front attachment point of the core.
+
+        :returns: The attachment points module.
+        """
+        return self._attachment_points[self.FRONT].module
+
+    @front.setter
+    def front(self, module: Module) -> None:
+        """
+        Set a module onto the attachment point.
+
+        :param module: The Module.
+        """
+        self._attachment_points[self.FRONT].module = module
+
+    @property
+    def right(self) -> Module | None:
+        """
+        Get the right attachment point of the core.
+
+        :returns: The attachment points module.
+        """
+        return self._attachment_points[self.RIGHT].module
+
+    @right.setter
+    def right(self, module: Module) -> None:
+        """
+        Set a module onto the attachment point.
+
+        :param module: The Module.
+        """
+        self._attachment_points[self.RIGHT].module = module
+
+    @property
+    def back(self) -> Module | None:
+        """
+        Get the back attachment point of the core.
+
+        :returns: The attachment points module.
+        """
+        return self._attachment_points[self.BACK].module
+
+    @back.setter
+    def back(self, module: Module) -> None:
+        """
+        Set a module onto the attachment point.
+
+        :param module: The Module.
+        """
+        self._attachment_points[self.BACK].module = module
+
+    @property
+    def left(self) -> Module | None:
+        """
+        Get the left attachment point of the core.
+
+        :returns: The attachment points module.
+        """
+        return self._attachment_points[self.LEFT].module
+
+    @left.setter
+    def left(self, module: Module) -> None:
+        """
+        Set a module onto the attachment point.
+
+        :param module: The Module.
+        """
+        self._attachment_points[self.LEFT].module = module

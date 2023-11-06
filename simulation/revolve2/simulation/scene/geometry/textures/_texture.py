@@ -1,4 +1,3 @@
-from abc import ABC
 from dataclasses import dataclass
 
 from ..._color import Color
@@ -6,7 +5,7 @@ from ._map_type import MapType
 
 
 @dataclass(frozen=True, kw_only=True)
-class Texture(ABC):
+class Texture:
     """An abstract texture for geometric models."""
 
     name: str

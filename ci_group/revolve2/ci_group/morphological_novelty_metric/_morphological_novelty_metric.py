@@ -7,6 +7,7 @@ from numpy.typing import NDArray
 from revolve2.modular_robot import ModularRobot
 
 from ._coordinate_operations import CoordinateOperations
+
 try:
     from .calculate_novelty import calculate_novelty  # type: ignore
 except Exception:

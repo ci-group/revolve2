@@ -30,15 +30,16 @@ def runner(args: Args) -> None:
     :param args: The parsed program arguments.
     :raises RuntimeError: If shutdown was not clean.
     """
-    print("Exit the program at any time by pressing Ctrl-C.")
-    try:
-        with args.config.open("rb") as config_file:
-            config = pickle.load(config_file)
-            assert isinstance(config, Config)
+    with args.config.open("rb") as config_file:
+        config = pickle.load(config_file)
+        assert isinstance(config, Config)
 
-        brain_runner = BrainRunner(
-            hardware_type=args.hardware, config=config, debug=args.debug, dry=args.dry
-        )
+    brain_runner = BrainRunner(
+        hardware_type=args.hardware, config=config, debug=args.debug, dry=args.dry
+    )
+
+    try:
+        print("Exit the program at any time by pressing Ctrl-C.")
 
         if args.all is not None:
             brain_runner.set_all_active_hinges(args.all)

@@ -15,14 +15,19 @@ def get_interface(
     :returns: The interface.
     :raises NotImplementedError: If the hardware type is not supported.
     """
-    match hardware_type:
-        case HardwareType.v1:
-            from ..physical_interfaces.v1 import V1PhysicalInterface
+    try:
+        match hardware_type:
+            case HardwareType.v1:
+                from ..physical_interfaces.v1 import V1PhysicalInterface
 
-            return V1PhysicalInterface(
-                debug=debug,
-                dry=dry,
-                pins=pins,
-            )
-        case _:
-            raise NotImplementedError()
+                return V1PhysicalInterface(
+                    debug=debug,
+                    dry=dry,
+                    pins=pins,
+                )
+            case _:
+                raise NotImplementedError()
+    except ModuleNotFoundError as e:
+        raise ModuleNotFoundError(
+            f"Could not import physical interface, did you install the required extras? Error: {e}"
+        ) from None

@@ -51,7 +51,7 @@ class CoreV1Builder(Builder):
 
         tasks = []
         for child_index, attachment_point in self._module.attachment_points.items():
-            child = self._module.children[child_index]
+            child = attachment_point.module
             if child is not None:
                 child_slot_pose = Pose(
                     position=self._slot_pose.position

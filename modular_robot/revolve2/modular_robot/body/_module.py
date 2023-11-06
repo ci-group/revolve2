@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+from dataclasses import dataclass, field
 
 from ._attachment_point import AttachmentPoint
 from ._color import Color

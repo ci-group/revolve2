@@ -7,6 +7,7 @@ from .._module import Module
 
 @dataclass
 class AttachmentFace:
+
     """Collect AttachmentPoints on a modules face."""
 
     _attachment_points: dict[int, AttachmentPoint] = field(default_factory=lambda: {})
@@ -19,7 +20,7 @@ class AttachmentFace:
         allow_repopulation: bool = False,
     ) -> None:
         """
-        Add an attachment point to the Face.
+        Add an attachm<<<<<<< HEADent point to the Face.
 
         :param index: The index of the attachment point.
         :param attachment_point: The attachment point.

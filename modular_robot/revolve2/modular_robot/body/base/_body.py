@@ -134,7 +134,7 @@ class _GridMaker(Generic[TModuleNP]):
                 assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
                 rotation = (
                     orientation
-                    * attachment_point.rotation
+                    * attachment_point.attachment_point_reference.rotation
                     * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
                 self._make_grid_recur(

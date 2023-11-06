@@ -50,9 +50,8 @@ class CoreBuilder(Builder):
         )
 
         tasks = []
-        for child_index, attachment_point_proxy in self._module.attachment_points.items():
-            child = attachment_point_proxy.module
-            attachment_point = attachment_point_proxy.attachment_point_reference
+        for child_index, attachment_point in self._module.attachment_points.items():
+            child = attachment_point.module
             if child is not None:
                 child_slot_pose = Pose(
                     position=self._slot_pose.position

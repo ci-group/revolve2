@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import uuid
-from dataclasses import dataclass, field
 
 from ._attachment_point import AttachmentPoint
 from ._color import Color
@@ -13,7 +12,8 @@ class Module:
 
     _uuid: uuid.UUID
 
-    _attachment_points: dict[int, _AttachmentPoint]
+    _attachment_points: dict[int, AttachmentPoint]
+    _children: dict[int, Module]
     _rotation: float
 
     _parent: Module | None
@@ -47,10 +47,8 @@ class Module:
         """
         self._uuid = uuid.uuid1()
 
-        self._attachment_points = {
-            key: self._AttachmentPoint(attachment_point)
-            for key, attachment_point in attachment_points.items()
-        }
+        self._attachment_points = attachment_points
+        self._children = {}
 
         self._rotation = rotation if isinstance(rotation, float) else rotation.value
 
@@ -99,19 +97,32 @@ class Module:
         """
         return self._parent_child_index
 
+    @property
+    def children(self) -> dict[int, Module]:
+        """
+        Get all children on this module.
+
+        :return: The children and their respective attachment point index.
+        """
+        return self._children
+
     def set_child(self, module: Module, child_index: int) -> None:
         """
         Attach a module to a slot.
 
         :param module: The module to attach.
         :param child_index: The slot to attach it to.
+        :raises KeyError: If attachment point is already populated.
         """
         assert (
             module._parent is None
         ), "Child module already connected to a different slot."
         module._parent = self
         module._parent_child_index = child_index
-        self._attachment_points[child_index].module = module
+        if self.is_free(child_index):
+            self._children[child_index] = module
+        else:
+            raise KeyError("Attachment point already populated")
 
     def neighbours(self, within_range: int) -> list[Module]:
         """
@@ -130,9 +141,9 @@ class Module:
             new_open_nodes: list[tuple[Module, Module | None]] = []
             for open_node, came_from in open_nodes:
                 attached_modules = [
-                    attachment_point.module
-                    for attachment_point in open_node.attachment_points.values()
-                    if attachment_point.module is not None
+                    self._children.get(index)
+                    for index, attachment_point in open_node.attachment_points.items()
+                    if self._children.get(index) is not None
                 ]
                 neighbours = [
                     mod
@@ -155,7 +166,7 @@ class Module:
         return self._color
 
     @property
-    def attachment_points(self) -> dict[int, _AttachmentPoint]:
+    def attachment_points(self) -> dict[int, AttachmentPoint]:
         """
         Get all attachment points of this module.
 
@@ -163,37 +174,11 @@ class Module:
         """
         return self._attachment_points
 
-    @dataclass
-    class _AttachmentPoint:
-        attachment_point_reference: AttachmentPoint
-        _module: Module | None = field(default_factory=lambda: None)
+    def is_free(self, index: int) -> bool:
+        """
+        Return if the attachment-point is free.
 
-        @property
-        def is_free(self) -> bool:
-            """
-            Return if the attachment-point is free.
-
-            :return: The boolean.
-            """
-            return self._module is None
-
-        @property
-        def module(self) -> Module | None:
-            """
-            Return the module attached.
-
-            :return: The module
-            """
-            return self._module
-
-        @module.setter
-        def module(self, module: Module) -> None:
-            """
-            Populate attachment point with module.
-
-            :param module: The module.
-            :raises Exception: If the AttachmentPoint is already occupied.
-            """
-            if not self.is_free:
-                raise Exception("AttachmentPoint already populated.")
-            self._module = module
+        :param index: The index to check.
+        :return: The boolean.
+        """
+        return self._children.get(index) is None

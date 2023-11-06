@@ -44,7 +44,7 @@ class Brick(Module):
 
         :returns: The attachment points module.
         """
-        return self._attachment_points.get(self.FRONT).module
+        return self._children.get(self.FRONT)
 
     @front.setter
     def front(self, module: Module) -> None:
@@ -53,7 +53,7 @@ class Brick(Module):
 
         :param module: The Module.
         """
-        self._attachment_points[self.FRONT].module = module
+        self._children[self.FRONT] = module
 
     @property
     def right(self) -> Module | None:
@@ -62,7 +62,7 @@ class Brick(Module):
 
         :returns: The attachment points module.
         """
-        return self._attachment_points.get(self.FRONT).module
+        return self._children.get(self.FRONT)
 
     @right.setter
     def right(self, module: Module) -> None:
@@ -71,7 +71,7 @@ class Brick(Module):
 
         :param module: The Module.
         """
-        self._attachment_points[self.RIGHT].module = module
+        self._children[self.RIGHT] = module
 
     @property
     def left(self) -> Module | None:
@@ -80,7 +80,7 @@ class Brick(Module):
 
         :returns: The attachment points module.
         """
-        return self._attachment_points.get(self.FRONT).module
+        return self._children.get(self.FRONT)
 
     @left.setter
     def left(self, module: Module) -> None:
@@ -89,7 +89,7 @@ class Brick(Module):
 
         :param module: The Module.
         """
-        self._attachment_points[self.LEFT].module = module
+        self._children[self.LEFT] = module
 
     @property
     def mass(self) -> float:

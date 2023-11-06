@@ -38,7 +38,7 @@ class Body(ABC):
         parent = module.parent
         child_index = module.parent_child_index
         while parent is not None and child_index is not None:
-            child = parent.attachment_points[child_index].module
+            child = parent.children.get(child_index)
             assert child is not None
             assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
 
@@ -49,7 +49,7 @@ class Body(ABC):
             if attachment_point is None:
                 raise KeyError("No attachment point found at the specified location.")
 
-            position = attachment_point.attachment_point_reference.rotation * position
+            position = attachment_point.rotation * position
             position = Vector3.round(position)
 
             child_index = parent.parent_child_index
@@ -61,9 +61,8 @@ class Body(ABC):
         modules = []
         if isinstance(module, module_type):
             modules.append(module)
-        for child in module.attachment_points.values():
-            if child.module is not None:
-                modules.extend(cls.__find_recur(child.module, module_type))
+        for child in module.children.values():
+            modules.extend(cls.__find_recur(child, module_type))
         return modules
 
     def find_modules_of_type(self, module_type: Type[TModule]) -> list[TModule]:
@@ -130,12 +129,12 @@ class _GridMaker(Generic[TModuleNP]):
         self._add(position, module)
 
         for child_index, attachment_point in module.attachment_points.items():
-            child = module.attachment_points[child_index].module
+            child = module.children.get(child_index)
             if child is not None:
                 assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
                 rotation = (
                     orientation
-                    * attachment_point.attachment_point_reference.rotation
+                    * attachment_point.rotation
                     * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
                 self._make_grid_recur(

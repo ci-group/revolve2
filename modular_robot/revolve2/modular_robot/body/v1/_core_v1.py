@@ -54,7 +54,7 @@ class CoreV1(Core):
 
         :returns: The attachment points module.
         """
-        return self._attachment_points[self.FRONT].module
+        return self._children.get(self.FRONT)
 
     @front.setter
     def front(self, module: Module) -> None:
@@ -63,7 +63,7 @@ class CoreV1(Core):
 
         :param module: The Module.
         """
-        self._attachment_points[self.FRONT].module = module
+        self._children[self.FRONT] = module
 
     @property
     def right(self) -> Module | None:
@@ -72,7 +72,7 @@ class CoreV1(Core):
 
         :returns: The attachment points module.
         """
-        return self._attachment_points[self.RIGHT].module
+        return self._children.get(self.RIGHT)
 
     @right.setter
     def right(self, module: Module) -> None:
@@ -81,7 +81,7 @@ class CoreV1(Core):
 
         :param module: The Module.
         """
-        self._attachment_points[self.RIGHT].module = module
+        self._children[self.RIGHT] = module
 
     @property
     def back(self) -> Module | None:
@@ -90,7 +90,7 @@ class CoreV1(Core):
 
         :returns: The attachment points module.
         """
-        return self._attachment_points[self.BACK].module
+        return self._children.get(self.BACK)
 
     @back.setter
     def back(self, module: Module) -> None:
@@ -99,7 +99,7 @@ class CoreV1(Core):
 
         :param module: The Module.
         """
-        self._attachment_points[self.BACK].module = module
+        self._children[self.BACK] = module
 
     @property
     def left(self) -> Module | None:
@@ -108,7 +108,7 @@ class CoreV1(Core):
 
         :returns: The attachment points module.
         """
-        return self._attachment_points[self.LEFT].module
+        return self._children.get(self.LEFT)
 
     @left.setter
     def left(self, module: Module) -> None:
@@ -117,4 +117,4 @@ class CoreV1(Core):
 
         :param module: The Module.
         """
-        self._attachment_points[self.LEFT].module = module
+        self._children[self.LEFT] = module

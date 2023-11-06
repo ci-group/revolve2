@@ -123,16 +123,15 @@ class MorphologicalMeasures(Generic[TModule]):
     def __calculate_is_2d_recur(cls, module: Module) -> bool:
         return all(
             [np.isclose(module.rotation, 0.0)]
-            + [
-                cls.__calculate_is_2d_recur(child.module)
-                for child in module.attachment_points.values()
-                if child.module is not None
-            ]
+            + [cls.__calculate_is_2d_recur(child) for child in module.children.values()]
         )
 
     def __calculate_core_is_filled(self) -> bool:
         return all(
-            [child.module is not None for child in self.core.attachment_points.values()]
+            [
+                self.core.children.get(child_index) is not None
+                for child_index in self.core.attachment_points.keys()
+            ]
         )
 
     def __calculate_filled_bricks(self) -> list[Brick]:
@@ -140,7 +139,10 @@ class MorphologicalMeasures(Generic[TModule]):
             brick
             for brick in self.bricks
             if all(
-                [child.module is not None for child in brick.attachment_points.values()]
+                [
+                    brick.children.get(child_index) is not None
+                    for child_index in brick.attachment_points.keys()
+                ]
             )
         ]
 
@@ -150,8 +152,8 @@ class MorphologicalMeasures(Generic[TModule]):
             for active_hinge in self.active_hinges
             if all(
                 [
-                    child.module is not None
-                    for child in active_hinge.attachment_points.values()
+                    active_hinge.children.get(child_index) is not None
+                    for child_index in active_hinge.attachment_points.keys()
                 ]
             )
         ]
@@ -160,7 +162,12 @@ class MorphologicalMeasures(Generic[TModule]):
         return [
             brick
             for brick in self.bricks
-            if all([child.module is None for child in brick.attachment_points.values()])
+            if all(
+                [
+                    brick.children.get(child_index) is None
+                    for child_index in brick.attachment_points.keys()
+                ]
+            )
         ]
 
     def __calculate_double_neighbour_bricks(self) -> list[Brick]:
@@ -169,8 +176,8 @@ class MorphologicalMeasures(Generic[TModule]):
             for brick in self.bricks
             if sum(
                 [
-                    0 if child.module is None else 1
-                    for child in brick.attachment_points.values()
+                    0 if brick.children.get(child_index) is None else 1
+                    for child_index in brick.attachment_points.keys()
                 ]
             )
             == 1
@@ -182,8 +189,8 @@ class MorphologicalMeasures(Generic[TModule]):
             for active_hinge in self.active_hinges
             if sum(
                 [
-                    0 if child.module is None else 1
-                    for child in active_hinge.attachment_points.values()
+                    0 if active_hinge.children.get(child_index) is None else 1
+                    for child_index in active_hinge.attachment_points.keys()
                 ]
             )
             == 1

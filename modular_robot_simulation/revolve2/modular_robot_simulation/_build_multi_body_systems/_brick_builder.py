@@ -58,7 +58,7 @@ class BrickBuilder(Builder):
 
         tasks = []
         for child_index, attachment_point in self._module.attachment_points.items():
-            child = attachment_point.module
+            child = self._module.children.get(child_index)
             if child is not None:
                 child_slot_pose = Pose(
                     position=brick_center_pose.position

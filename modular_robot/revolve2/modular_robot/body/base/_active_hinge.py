@@ -107,7 +107,7 @@ class ActiveHinge(Module):
 
         :returns: The attachment points module.
         """
-        return self.attachment_points.get(self.ATTACHMENT).module
+        return self._children.get(self.ATTACHMENT)
 
     @attachment.setter
     def attachment(self, module: Module) -> None:
@@ -116,7 +116,7 @@ class ActiveHinge(Module):
 
         :param module: The Module.
         """
-        self.attachment_points[self.ATTACHMENT].module = module
+        self._children[self.ATTACHMENT] = module
 
     @property
     def static_friction(self) -> float:

@@ -10,8 +10,8 @@ from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.brain import BrainInstance
 
 from .._config import Config
+from .._protocol_version import PROTOCOL_VERSION
 from .._uuid_key import UUIDKey
-from .._version import REVOLVE2_VERSION
 from ..physical_interfaces import HardwareType
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
@@ -106,7 +106,7 @@ class Remote:
         self._stream_brain_ssh_channel.get_pty()
 
         # Start the stream brain service.
-        actual_command = f"stream_brain --required-version {REVOLVE2_VERSION} --port {port} --hardware {hardware_type.name} --pins {' '.join([str(pin) for pin in self._config.hinge_mapping.values()])}"
+        actual_command = f"stream_brain --required-version {PROTOCOL_VERSION} --port {port} --hardware {hardware_type.name} --pins {' '.join([str(pin) for pin in self._config.hinge_mapping.values()])}"
         self._stream_brain_ssh_channel.exec_command(f'bash -l -c "{actual_command}"')
 
         # Wait for the service to start.

@@ -17,7 +17,7 @@ import struct
 
 import typed_argparse as tap
 
-from .._version import REVOLVE2_VERSION
+from .._protocol_version import PROTOCOL_VERSION
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
 
 
@@ -139,9 +139,9 @@ def runner(args: Args) -> None:
     :param args: The parsed program arguments.
     :raises RuntimeError: When required version does not match.
     """
-    if args.required_version is not None and args.required_version != REVOLVE2_VERSION:
+    if args.required_version is not None and args.required_version != PROTOCOL_VERSION:
         raise RuntimeError(
-            f"Program version is {REVOLVE2_VERSION} but does not match required version {args.required_version}."
+            f"Program version is {PROTOCOL_VERSION} but does not match required version {args.required_version}."
         )
 
     Program().run(

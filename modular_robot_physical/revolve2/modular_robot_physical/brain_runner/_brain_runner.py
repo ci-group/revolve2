@@ -10,7 +10,10 @@ class BrainRunner:
     """Interfaces with hardware to run brains or manually control the robot."""
 
     _INITIAL_SETUP_DELAY = 0.2
-    """Delay between setting each active hinge to it's initial postion."""
+    """
+    Delay between setting each active hinge to it's initial postion.
+    This is a workaround to prevent the v1 robot from directly crashing when all hinges suddenly move.
+    """
 
     _config: Config
     _physical_interface: PhysicalInterface

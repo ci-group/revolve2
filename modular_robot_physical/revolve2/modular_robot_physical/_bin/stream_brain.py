@@ -63,53 +63,62 @@ class Program:
         :param port: The port to open the stream socket on.
         :raises RuntimeError: If shutdown was not clean.
         """
-        try:
-            print("Exit the program at any time by pressing Ctrl-C.")
-
-            self._physical_interface = get_interface(
-                hardware_type=hardware_type, debug=debug, dry=dry, pins=pins
-            )
-
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as stream_socket:
-                stream_socket.bind(("", port))
-                stream_socket.listen()
-                conn, addr = stream_socket.accept()
-                with conn:
-                    print("Connected by", addr)
-
-                    buffer: bytes = b""
-                    while True:
-                        while len(buffer) < 4:
-                            received = conn.recv(4 - len(buffer))
-                            if not received:
-                                print("Stream closed by connection.")
-                                break
-                            buffer += received
-
-                        msg_len = struct.unpack(">I", buffer[:4])[0]
-                        buffer = buffer[4:]
-
-                        while len(buffer) < msg_len:
-                            received = conn.recv(msg_len - len(buffer))
-                            if not received:
-                                print("Stream closed by connection.")
-                                break
-                            buffer += received
-
-                        command = buffer[:msg_len].decode("utf-8")
-                        buffer = buffer[msg_len:]
-                        print(command)
-                        self._handle_command(command)
-
-        except KeyboardInterrupt:
-            print("Program interrupted by user. Exiting..")
-        finally:
+        with open("test.txt", "w") as f:
             try:
-                print("Setting hardware to low power mode..")
-                self._physical_interface.to_low_power_mode()
-                print("Done.")
-            except:
-                raise RuntimeError("Failed to set hardware to low power mode.")
+                print("Exit the program at any time by pressing Ctrl-C.")
+
+                f.write("opening interface\n")
+
+                self._physical_interface = get_interface(
+                    hardware_type=hardware_type, debug=debug, dry=dry, pins=pins
+                )
+
+                f.write("opening socket\n")
+
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as stream_socket:
+                    f.write("binding\n")
+                    stream_socket.bind(("", port))
+                    f.write("listening\n")
+                    stream_socket.listen()
+                    f.write("accepting\n")
+                    conn, addr = stream_socket.accept()
+                    f.write("Ok\n")
+                    with conn:
+                        print("Connected by", addr)
+
+                        buffer: bytes = b""
+                        while True:
+                            while len(buffer) < 4:
+                                received = conn.recv(4 - len(buffer))
+                                if not received:
+                                    print("Stream closed by connection.")
+                                    break
+                                buffer += received
+
+                            msg_len = struct.unpack(">I", buffer[:4])[0]
+                            buffer = buffer[4:]
+
+                            while len(buffer) < msg_len:
+                                received = conn.recv(msg_len - len(buffer))
+                                if not received:
+                                    print("Stream closed by connection.")
+                                    break
+                                buffer += received
+
+                            command = buffer[:msg_len].decode("utf-8")
+                            buffer = buffer[msg_len:]
+                            print(command)
+                            self._handle_command(command)
+
+            except KeyboardInterrupt:
+                print("Program interrupted by user. Exiting..")
+            finally:
+                try:
+                    print("Setting hardware to low power mode..")
+                    self._physical_interface.to_low_power_mode()
+                    print("Done.")
+                except:
+                    raise RuntimeError("Failed to set hardware to low power mode.")
 
     def _handle_command(self, command: str) -> None:
         parsed = json.loads(command)

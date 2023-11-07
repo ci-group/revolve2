@@ -140,6 +140,8 @@ class Remote:
 
     def _open_stream_socket(self, hostname: str, port: int) -> None:
         self._stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._stream_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+
         self._stream_socket.connect((hostname, port))
 
     def _send_command(self, command: str) -> None:
@@ -190,7 +192,7 @@ class Remote:
 
         try:
             self._send_command(cmd_str)
-        except BrokenPipeError as e:
+        except (ConnectionResetError, BrokenPipeError) as e:
             raise BrokenPipeError(f"Lost connection to the robot: {e}") from None
 
     def _set_active_hinges_initial_positions(self) -> None:

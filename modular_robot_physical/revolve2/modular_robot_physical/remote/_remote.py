@@ -103,28 +103,40 @@ class Remote:
         transport = ssh.get_transport()
         assert transport is not None
         self._stream_brain_ssh_channel = transport.open_session()
+        self._stream_brain_ssh_channel.get_pty()
 
-        # # Start the stream brain service.
-        # actual_command = f"stream_brain --require-version {REVOLVE2_VERSION} --port {port} --hardware {hardware_type.name} --pins {' '.join([str(pin) for pin in self._config.hinge_mapping.values()])}"
-        # self._stream_brain_ssh_channel.exec_command(f'bash -l -c "{actual_command}"')
+        # Start the stream brain service.
+        actual_command = f"stream_brain --required-version {REVOLVE2_VERSION} --port {port} --hardware {hardware_type.name} --pins {' '.join([str(pin) for pin in self._config.hinge_mapping.values()])}"
+        self._stream_brain_ssh_channel.exec_command(f'bash -l -c "{actual_command}"')
 
-        # # Wait until the service starts.
-        # time.sleep(1.0)
+        # Wait for the service to start.
+        start_time = time.time()
+        while True:
+            if time.time() - start_time > 5:
+                raise RuntimeError("Brain stream service did not start within timeout.")
 
-        # Check if the service successfully started.
-        if self._stream_brain_ssh_channel.exit_status_ready():
-            exit_status = self._stream_brain_ssh_channel.recv_exit_status()
-            if exit_status != 0:
-                # The server exited with an error, attempt to read the error stream.
-                error_msg = self._stream_brain_ssh_channel.recv_stderr(1024).decode()
-                raise RuntimeError(
-                    f"Brain stream service on the robot exited with error status {exit_status}: {error_msg}"
-                )
-            else:
-                # The server exited cleanly but unexpectedly.
-                raise RuntimeError(
-                    "Brain stream service on the robot exited unexpectedly but reported no error."
-                )
+            # Check if there was an error.
+            if self._stream_brain_ssh_channel.exit_status_ready():
+                exit_status = self._stream_brain_ssh_channel.recv_exit_status()
+                if exit_status != 0:
+                    # The service exited with an error, attempt to read the error stream.
+                    error_msg = self._stream_brain_ssh_channel.recv_stderr(
+                        1024
+                    ).decode()
+                    raise RuntimeError(
+                        f"Brain stream service on the robot exited with error status {exit_status}: {error_msg}"
+                    )
+                else:
+                    # The service exited cleanly but unexpectedly.
+                    raise RuntimeError(
+                        "Brain stream service on the robot exited unexpectedly but reported no error."
+                    )
+
+            # Check if the service started.
+            if self._stream_brain_ssh_channel.recv_ready():
+                output = self._stream_brain_ssh_channel.recv(1024).decode("utf-8")
+                if "///start up complete\\\\\\" in output:
+                    break
 
     def _open_stream_socket(self, hostname: str, port: int) -> None:
         self._stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

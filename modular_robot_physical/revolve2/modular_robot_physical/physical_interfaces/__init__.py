@@ -1,11 +1,7 @@
 """Interfaces to the hardware."""
 
-from ._physical_control_interface import PhysicalControlInterface
+from ._get_interface import get_interface
+from ._harware_type import HardwareType
 from ._physical_interface import PhysicalInterface
-from ._physical_sensor_state import PhysicalSensorState
 
-__all__ = [
-    "PhysicalControlInterface",
-    "PhysicalInterface",
-    "PhysicalSensorState",
-]
+__all__ = ["HardwareType", "PhysicalInterface", "get_interface"]

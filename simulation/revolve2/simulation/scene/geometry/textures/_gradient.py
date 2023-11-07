@@ -7,7 +7,7 @@ from ._texture import Texture
 
 @dataclass(kw_only=True, frozen=True)
 class Gradient(Texture):
-    """A color gradient spanning over mujoco models."""
+    """A color gradient spanning over geometric models."""
 
     builtin: str = field(default="gradient")
     size: tuple[int, int] = field(default=(10, 10))

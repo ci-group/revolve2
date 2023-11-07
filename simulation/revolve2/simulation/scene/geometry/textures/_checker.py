@@ -7,7 +7,7 @@ from ._texture import Texture
 
 @dataclass(kw_only=True, frozen=True)
 class Checker(Texture):
-    """A checker texture for mujoco models."""
+    """A checker texture for geometric models."""
 
     builtin: str = field(default="checker")
     size: tuple[int, int] = field(default=(100, 100))

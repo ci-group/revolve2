@@ -7,7 +7,7 @@ from ._texture import Texture
 
 @dataclass(kw_only=True, frozen=True)
 class Flat(Texture):
-    """A flat texture for mujoco models."""
+    """A flat texture for geometric models."""
 
     builtin: str = field(default="flat")
     size: tuple[int, int] = field(default=(10, 10))
@@ -17,7 +17,7 @@ class Flat(Texture):
     reflectance: float = field(default=0.0)
     emission: float = field(default=0.0)
     map_type: MapType = field(default=MapType.CUBE)
-    translucent: bool = field(default=False)  #
+    translucent: bool = field(default=False)
     secondary_color: Color = field(default=Color(0, 0, 0, 0))
 
     primary_color: Color

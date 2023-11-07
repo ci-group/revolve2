@@ -13,12 +13,12 @@ setpins:
 """
 import json
 import socket
+import struct
 
 import typed_argparse as tap
 
 from .._version import REVOLVE2_VERSION
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
-import struct
 
 
 class Args(tap.TypedArgs):

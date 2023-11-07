@@ -1,5 +1,6 @@
 import json
 import socket
+import struct
 import time
 
 import paramiko
@@ -14,7 +15,6 @@ from .._version import REVOLVE2_VERSION
 from ..physical_interfaces import HardwareType
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
-import struct
 
 
 class Remote:
@@ -148,7 +148,7 @@ class Remote:
         """
         Send a command.
 
-        :command: The command to send.
+        :param command: The command to send.
         """
         self._stream_socket.sendall(struct.pack(">I", len(command)) + command.encode())
 

@@ -1,6 +1,10 @@
 """
 Open a tcp server that will take commands to control the robot.
 
+Every message consists of <length><command>,
+where <command> is a byte encoded json command,
+and <length> is the 4 byte big endian encoded length of the command in bytes (struct.pack(">I", msg))
+
 Commands:
 
 setpins:
@@ -14,6 +18,7 @@ import typed_argparse as tap
 
 from .._version import REVOLVE2_VERSION
 from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
+import struct
 
 
 class Args(tap.TypedArgs):
@@ -71,12 +76,28 @@ class Program:
                 conn, addr = stream_socket.accept()
                 with conn:
                     print("Connected by", addr)
+
+                    buffer: bytes = b""
                     while True:
-                        data = conn.recv(1024)
-                        if not data:
-                            print("Stream closed by connection.")
-                            break
-                        command = data.decode("utf-8")
+                        while len(buffer) < 4:
+                            received = conn.recv(4 - len(buffer))
+                            if not received:
+                                print("Stream closed by connection.")
+                                break
+                            buffer += received
+
+                        msg_len = struct.unpack(">I", buffer[:4])[0]
+                        buffer = buffer[4:]
+
+                        while len(buffer) < msg_len:
+                            received = conn.recv(msg_len - len(buffer))
+                            if not received:
+                                print("Stream closed by connection.")
+                                break
+                            buffer += received
+
+                        command = buffer[:msg_len].decode("utf-8")
+                        buffer = buffer[msg_len:]
                         print(command)
                         self._handle_command(command)
 

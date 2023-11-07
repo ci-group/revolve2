@@ -14,6 +14,7 @@ from .._version import REVOLVE2_VERSION
 from ..physical_interfaces import HardwareType
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
+import struct
 
 
 class Remote:
@@ -103,12 +104,12 @@ class Remote:
         assert transport is not None
         self._stream_brain_ssh_channel = transport.open_session()
 
-        # Start the stream brain service.
-        actual_command = f"stream_brain --require-version {REVOLVE2_VERSION} --port {port} --hardware {hardware_type.name} --pins {' '.join([str(pin) for pin in self._config.hinge_mapping.values()])}"
-        self._stream_brain_ssh_channel.exec_command(f'bash -l -c "{actual_command}"')
+        # # Start the stream brain service.
+        # actual_command = f"stream_brain --require-version {REVOLVE2_VERSION} --port {port} --hardware {hardware_type.name} --pins {' '.join([str(pin) for pin in self._config.hinge_mapping.values()])}"
+        # self._stream_brain_ssh_channel.exec_command(f'bash -l -c "{actual_command}"')
 
-        # Wait until the service starts.
-        time.sleep(1.0)
+        # # Wait until the service starts.
+        # time.sleep(1.0)
 
         # Check if the service successfully started.
         if self._stream_brain_ssh_channel.exit_status_ready():
@@ -129,8 +130,13 @@ class Remote:
         self._stream_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._stream_socket.connect((hostname, port))
 
-    def _send_command(self, command: bytes) -> None:
-        self._stream_socket.sendall(command)
+    def _send_command(self, command: str) -> None:
+        """
+        Send a command.
+
+        :command: The command to send.
+        """
+        self._stream_socket.sendall(struct.pack(">I", len(command)) + command.encode())
 
     def _set_active_hinge_targets(
         self, active_hinges_and_targets: list[tuple[UUIDKey[ActiveHinge], float]]
@@ -171,7 +177,7 @@ class Remote:
             print(f"Sending command: {cmd_str}")
 
         try:
-            self._send_command(cmd_str.encode())
+            self._send_command(cmd_str)
         except BrokenPipeError as e:
             raise BrokenPipeError(f"Lost connection to the robot: {e}") from None
 

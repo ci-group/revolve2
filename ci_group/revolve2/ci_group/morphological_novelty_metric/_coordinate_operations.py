@@ -75,7 +75,7 @@ class CoordinateOperations:
                         continue
                     candidate = srt[j]
 
-                    # here we start rotating using Rodrigue` rotation formula.
+                    # here we start rotating using Rodrigues` rotation formula.
                     rx, ry, rz = eigen_vectors[candidate] / np.linalg.norm(
                         eigen_vectors[candidate]
                     )
@@ -84,9 +84,7 @@ class CoordinateOperations:
 
                     coordinates = np.dot(coordinates, rotation_matrix.T)
 
-                    eigen_vectors[[j, candidate]] = np.copy(
-                        eigen_vectors[[candidate, j]]
-                    )
+                    eigen_vectors[[j, candidate]] = eigen_vectors[[candidate, j]]
                     srt[[j, candidate]] = srt[[candidate, j]]
 
                 coordinates = np.linalg.inv(eigen_vectors).dot(coordinates.T)

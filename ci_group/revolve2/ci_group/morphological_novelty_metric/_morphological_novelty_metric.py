@@ -10,6 +10,7 @@ from ._coordinate_operations import CoordinateOperations
 
 try:
     from .calculate_novelty import calculate_novelty  # type: ignore
+
     """
     This type ignore is necessary since the calculate_novelty.so is built on install and cant be resolved by mypy.
     

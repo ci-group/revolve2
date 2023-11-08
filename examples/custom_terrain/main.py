@@ -70,7 +70,10 @@ def make_custom_terrain() -> Terrain:
             GeometryBox(
                 pose=Pose(position=Vector3([-0.1, 0.9, 0.5]), orientation=Quaternion()),
                 mass=0.0,
-                texture=Flat(primary_color=Color(100, 0, 100, 255), base_color=Color(255, 255, 255, 100)),
+                texture=Flat(
+                    primary_color=Color(100, 0, 100, 255),
+                    base_color=Color(255, 255, 255, 100),
+                ),
                 aabb=AABB(size=Vector3([0.2, 0.2, 1.0])),
             ),
         ]

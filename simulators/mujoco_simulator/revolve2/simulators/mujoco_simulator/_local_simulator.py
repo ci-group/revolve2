@@ -24,7 +24,6 @@ class LocalSimulator(Simulator):
         num_simulators: int = 1,
         cast_shadows: bool = False,
         fast_sim: bool = False,
-
     ):
         """
         Initialize this object.

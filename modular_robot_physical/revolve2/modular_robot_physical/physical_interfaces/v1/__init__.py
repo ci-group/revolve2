@@ -1,4 +1,4 @@
-"""Interfaces to v1 hardware."""
+"""V1 physical interface implementation."""
 
 from ._v1_physical_interface import V1PhysicalInterface
 

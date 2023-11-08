@@ -1,6 +1,4 @@
-"""An example on how to make a config file for running a physical modular robot."""
-
-import pickle
+"""An example on how to remote control a physical modular robot."""
 
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
@@ -9,6 +7,8 @@ from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_physical import Config, UUIDKey
+from revolve2.modular_robot_physical.physical_interfaces import HardwareType
+from revolve2.modular_robot_physical.remote import Remote
 
 
 def make_body() -> (
@@ -43,7 +43,7 @@ def make_body() -> (
 
 
 def main() -> None:
-    """Create a Config for the physical robot."""
+    """Remote control a physical modular robot."""
     rng = make_rng_time_seed()
     # Create a modular robot, similar to what was done in the simulate_single_robot example. Of course, you can replace this with your own robot, such as one you have optimized using an evolutionary algorithm.
     body, hinges = make_body()
@@ -62,10 +62,10 @@ def main() -> None:
     """
     hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {
-        UUIDKey(hinge_1): 6,
-        UUIDKey(hinge_2): 12,
-        UUIDKey(hinge_3): 13,
-        UUIDKey(hinge_4): 16,
+        UUIDKey(hinge_1): 21,
+        UUIDKey(hinge_2): 26,
+        UUIDKey(hinge_3): 20,
+        UUIDKey(hinge_4): 21,
     }
 
     """
@@ -86,9 +86,24 @@ def main() -> None:
         inverse_servos={},
     )
 
-    # Serialize the configuration object and save it to a file. This file will later be read by the modular robot core.
-    with open("config.pickle", "wb") as f:
-        pickle.dump(config, f)
+    """
+    Create a Remote for the physical modular robot.
+    Make sure to target the correct hardware type and fill in the correct IP and credentials.
+    The debug flag is turned on. If the remote complains it cannot keep up, turning off debugging might improve performance.
+    """
+    remote = Remote(
+        hostname="10.15.3.98",
+        username="pi",
+        password="raspberry",
+        hardware_type=HardwareType.v1,
+        config=config,
+        debug=True,
+    )
+    print("Initializing robot..")
+    remote.prepare()
+    print("Done. Press enter to start the brain.")
+    input()
+    remote.run()
 
 
 if __name__ == "__main__":

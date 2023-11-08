@@ -1,5 +1,6 @@
 import os
 import tempfile
+from typing import Any
 
 import mujoco
 
@@ -168,7 +169,14 @@ def scene_to_model(
         i_plane = 0
         for plane in plane_geometries:
             name = f"heightmap_{i_plane}"
-            __make_material(env_mjcf, name=name, element=plane, fast_sim=fast_sim)
+            plane_kwargs: dict[str, Any] = {}
+            if fast_sim:
+                plane_kwargs[
+                    "rgba"
+                ] = plane.texture.primary_color.to_normalized_rgba_list()
+            else:
+                plane_kwargs["material"] = f"{name}_material"
+                __make_material(env_mjcf, name=name, element=plane)
 
             env_mjcf.worldbody.add(
                 "geom",
@@ -185,7 +193,7 @@ def scene_to_model(
                     plane.pose.orientation.w,
                 ],
                 size=[plane.size.x / 2.0, plane.size.y / 2.0, 1.0],
-                material=f"{name}_material",
+                **plane_kwargs,
             )
             i_plane += 1
 
@@ -206,7 +214,14 @@ def scene_to_model(
             )
 
             name = f"heightmap_{i_heightmap}"
-            __make_material(env_mjcf, name=name, element=heightmap, fast_sim=fast_sim)
+            hm_kwargs: dict[str, Any] = {}
+            if fast_sim:
+                hm_kwargs[
+                    "rgba"
+                ] = heightmap.texture.primary_color.to_normalized_rgba_list()
+            else:
+                hm_kwargs["material"] = f"{name}_material"
+                __make_material(env_mjcf, name=name, element=heightmap)
 
             env_mjcf.worldbody.add(
                 "geom",
@@ -223,7 +238,7 @@ def scene_to_model(
                     heightmap.pose.orientation.z,
                     heightmap.pose.orientation.w,
                 ],
-                material=f"{name}_material",
+                **hm_kwargs,
             )
 
             heightmaps.append(heightmap)
@@ -231,12 +246,16 @@ def scene_to_model(
 
         # Set colors of geometries
         for geom, name in geoms_and_names:
-            m_name = f"geom_{name}"
-            __make_material(
-                multi_body_system_mjcf, name=m_name, element=geom, fast_sim=fast_sim
-            )
-
-            multi_body_system_mjcf.find("geom", name).material = f"{m_name}_material"
+            if fast_sim:
+                multi_body_system_mjcf.find(
+                    "geom", name
+                ).rgba = geom.texture.primary_color.to_normalized_rgba_list()
+            else:
+                m_name = f"geom_{name}"
+                __make_material(multi_body_system_mjcf, name=m_name, element=geom)
+                multi_body_system_mjcf.find(
+                    "geom", name
+                ).material = f"{m_name}_material"
 
     xml = env_mjcf.to_xml_string()
     assert isinstance(xml, str)
@@ -274,36 +293,27 @@ def scene_to_model(
     return (model, mapping)
 
 
-def __make_material(
-    env: mjcf.RootElement, name: str, element: Geometry, fast_sim: bool
-) -> None:
-    if fast_sim:
-        env.asset.add(
-            "material",
-            name=f"{name}_material",
-            rgba=element.texture.primary_color.to_normalized_rgba_list(),
-        )
-    else:
-        width, height = element.texture.size
-        env.asset.add(
-            "texture",
-            name=f"{name}_texture",
-            type=element.texture.map_type.value,
-            width=width,
-            height=height,
-            builtin=element.texture.builtin,
-            rgb1=element.texture.primary_color.to_normalized_rgb_list(),
-            rgb2=element.texture.secondary_color.to_normalized_rgb_list(),
-        )
+def __make_material(env: mjcf.RootElement, name: str, element: Geometry) -> None:
+    width, height = element.texture.size
+    env.asset.add(
+        "texture",
+        name=f"{name}_texture",
+        type=element.texture.map_type.value,
+        width=width,
+        height=height,
+        builtin=element.texture.builtin,
+        rgb1=element.texture.primary_color.to_normalized_rgb_list(),
+        rgb2=element.texture.secondary_color.to_normalized_rgb_list(),
+    )
 
-        env.asset.add(
-            "material",
-            name=f"{name}_material",
-            texture=f"{name}_texture",
-            rgba=element.texture.base_color.to_normalized_rgba_list(),
-            texrepeat=element.texture.repeat,
-            emission=element.texture.emission,
-            specular=element.texture.specular,
-            shininess=element.texture.shininess,
-            reflectance=element.texture.reflectance,
-        )
+    env.asset.add(
+        "material",
+        name=f"{name}_material",
+        texture=f"{name}_texture",
+        rgba=element.texture.base_color.to_normalized_rgba_list(),
+        texrepeat=element.texture.repeat,
+        emission=element.texture.emission,
+        specular=element.texture.specular,
+        shininess=element.texture.shininess,
+        reflectance=element.texture.reflectance,
+    )

@@ -84,6 +84,10 @@ Each package can be installed using: ::
      - Functionality to define scenes with modular robots in a terrain and simulate them.
      - :code:`modular_robot`, :code:`simulation`
      - **!**
+   * - modular_robot_physical
+     - Functionality to control and use physical robots.
+     - :code:`modular_robot`
+     -
    * - simulation
      - Physics simulation abstraction layer.
      - \-

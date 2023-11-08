@@ -284,16 +284,6 @@ def __make_material(
             name=f"{name}_material",
             rgba=element.texture.primary_color.to_normalized_rgba_list(),
         )
-    elif isinstance(element.texture, Flat) and element.texture.translucent:
-        env.asset.add(
-            "material",
-            name=f"{name}_material",
-            rgba=element.texture.primary_color.to_normalized_rgba_list(),
-            emission=element.texture.emission,
-            specular=element.texture.specular,
-            shininess=element.texture.shininess,
-            reflectance=element.texture.reflectance,
-        )
     else:
         width, height = element.texture.size
         env.asset.add(
@@ -311,6 +301,7 @@ def __make_material(
             "material",
             name=f"{name}_material",
             texture=f"{name}_texture",
+            rgba=element.texture.base_color.to_normalized_rgba_list(),
             texrepeat=element.texture.repeat,
             emission=element.texture.emission,
             specular=element.texture.specular,

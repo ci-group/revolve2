@@ -17,6 +17,7 @@ class Checker(Texture):
     reflectance: float = field(default=0.0)
     emission: float = field(default=0.0)
     map_type: MapType = field(default=MapType.CUBE)
+    base_color: Color = field(default_factory=lambda: Color(255, 255, 255, 255))
 
     primary_color: Color
     secondary_color: Color

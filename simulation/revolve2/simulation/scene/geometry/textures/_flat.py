@@ -17,7 +17,7 @@ class Flat(Texture):
     reflectance: float = field(default=0.0)
     emission: float = field(default=0.0)
     map_type: MapType = field(default=MapType.CUBE)
-    translucent: bool = field(default=False)
     secondary_color: Color = field(default=Color(0, 0, 0, 0))
+    base_color: Color = field(default_factory=lambda: Color(255, 255, 255, 255))
 
     primary_color: Color

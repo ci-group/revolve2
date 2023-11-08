@@ -9,11 +9,20 @@ class Texture:
     """An abstract texture for geometric models."""
 
     builtin: str
-    """builtin can be used to reference specific builtin textures."""
+    """
+    builtin can be used to reference specific builtin textures in the target simulator.
+    
+    Mujoco has the following builtin textures available: 
+    - flat
+    - checker
+    - gradient
+    """
+    base_color: Color
+    """Determines the base color of a material and its alpha value."""
     primary_color: Color
-    """_primary_color determines the color of the texture."""
+    """Determines the primary color of the texture."""
     secondary_color: Color
-    """_secondary_color facilitates more complex textures that use two colors."""
+    """facilitates more complex textures that use two colors."""
     map_type: MapType
     """_map_type represents how the texture is mapped to an object."""
     repeat: tuple[int, int]
@@ -28,3 +37,4 @@ class Texture:
     reflectance: float
     """Reflectance ranges between [0, 1]."""
     emission: float
+    """Allows Objects to emit light [0, inf)."""

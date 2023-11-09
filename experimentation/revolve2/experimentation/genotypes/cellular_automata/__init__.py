@@ -1,1 +1,1 @@
- """Cellular automata genotype representation for evolutionary algorithms."""
+"""Cellular automata genotype representation for evolutionary algorithms."""

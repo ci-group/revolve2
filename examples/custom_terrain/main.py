@@ -17,7 +17,8 @@ from revolve2.modular_robot_simulation import (
 )
 from revolve2.simulation.scene import AABB, Color, Pose
 from revolve2.simulation.scene.geometry import GeometryBox, GeometryPlane
-from revolve2.simulation.scene.geometry.textures import Checker, Flat, Gradient, MapType
+from revolve2.simulation.scene.geometry.textures import MapType
+from revolve2.simulators.mujoco_simulator.textures import Checker, Flat, Gradient
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 

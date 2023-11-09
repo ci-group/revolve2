@@ -295,21 +295,27 @@ def scene_to_model(
 
 def __make_material(env: mjcf.RootElement, name: str, element: Geometry) -> None:
     width, height = element.texture.size
-    env.asset.add(
-        "texture",
-        name=f"{name}_texture",
-        type=element.texture.map_type.value,
-        width=width,
-        height=height,
-        builtin=element.texture.builtin,
-        rgb1=element.texture.primary_color.to_normalized_rgb_list(),
-        rgb2=element.texture.secondary_color.to_normalized_rgb_list(),
-    )
+    mat_kwargs = {}
+
+    if element.texture.reference is not None:
+        tex_kwargs = element.texture.reference.get_kwargs()
+
+        env.asset.add(
+            "texture",
+            **tex_kwargs,
+            name=f"{name}_texture",
+            type=element.texture.map_type.value,
+            width=width,
+            height=height,
+            rgb1=element.texture.primary_color.to_normalized_rgb_list(),
+            rgb2=element.texture.secondary_color.to_normalized_rgb_list(),
+        )
+        mat_kwargs["texture"] = f"{name}_texture"
 
     env.asset.add(
         "material",
+        **mat_kwargs,
         name=f"{name}_material",
-        texture=f"{name}_texture",
         rgba=element.texture.base_color.to_normalized_rgba_list(),
         texrepeat=element.texture.repeat,
         emission=element.texture.emission,

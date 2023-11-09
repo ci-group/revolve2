@@ -10,7 +10,7 @@ from revolve2.simulation.scene import (
     UUIDKey,
 )
 from revolve2.simulation.scene.geometry import GeometryBox
-from revolve2.simulation.scene.geometry.textures import Flat
+from revolve2.simulation.scene.geometry.textures import Texture
 
 from ._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
 from ._builder import Builder
@@ -98,7 +98,7 @@ class ActiveHingeBuilder(Builder):
             GeometryBox(
                 pose=frame_pose_real,
                 mass=self._module.frame_mass,
-                texture=Flat(primary_color=convert_color(self._module.color)),
+                texture=Texture(base_color=convert_color(self._module.color)),
                 aabb=AABB(self._module.frame_bounding_box),
             )
         )
@@ -136,7 +136,7 @@ class ActiveHingeBuilder(Builder):
             GeometryBox(
                 pose=Pose(Vector3(), Quaternion()),
                 mass=self._module.servo1_mass,
-                texture=Flat(primary_color=convert_color(self._module.color)),
+                texture=Texture(base_color=convert_color(self._module.color)),
                 aabb=AABB(self._module.servo1_bounding_box),
             )
         )
@@ -144,7 +144,7 @@ class ActiveHingeBuilder(Builder):
             GeometryBox(
                 pose=Pose(SERVO_BBOX2_POSITION, Quaternion()),
                 mass=self._module.servo2_mass,
-                texture=Flat(primary_color=convert_color(self._module.color)),
+                texture=Texture(base_color=convert_color(self._module.color)),
                 aabb=AABB(self._module.servo2_bounding_box),
             )
         )

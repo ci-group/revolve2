@@ -5,7 +5,7 @@ from pyrr import Quaternion, Vector3
 from revolve2.modular_robot.body.v1 import CoreV1
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox
-from revolve2.simulation.scene.geometry.textures import Flat
+from revolve2.simulation.scene.geometry.textures import Texture
 
 from ._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
 from ._builder import Builder
@@ -46,7 +46,7 @@ class CoreV1Builder(Builder):
             GeometryBox(
                 pose=self._slot_pose,
                 mass=self._module.mass,
-                texture=Flat(primary_color=convert_color(self._module.color)),
+                texture=Texture(base_color=convert_color(self._module.color)),
                 aabb=AABB(self._module.bounding_box),
             )
         )

@@ -1,9 +1,6 @@
-"""Standard textures for geometries in mujoco."""
-
-from ._checker import Checker
-from ._flat import Flat
-from ._gradient import Gradient
+"""Standard resources for textures in simulation."""
 from ._map_type import MapType
 from ._texture import Texture
+from ._texture_reference import TextureReference
 
-__all__ = ["Checker", "Flat", "Gradient", "MapType", "Texture"]
+__all__ = ["MapType", "Texture", "TextureReference"]

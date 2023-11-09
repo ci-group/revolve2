@@ -11,9 +11,9 @@ class TextureReference(ABC):
     file: str | None = field(default=None)
     """The source file of the specified texture, if custom."""
     content_type: str | None = field(default=None)
-    """The type of the source file."""
+    """The type of the source file. The supported types depend on the simulator used. Please check the simulators documentation for supported filetypes."""
     gridlayout: str | None = field(default=None)
-    """Specify the layout of the texture to be mapped onto an object."""
+    """Specify the layout of the texture to be mapped onto an object. This again depends on how the simulator implements grid layouts. Therefore refer to the simulators documentation."""
 
     def __post_init__(self) -> None:
         """
@@ -29,11 +29,3 @@ class TextureReference(ABC):
             raise NotImplementedError(
                 "Please indicate the content type of your texture source file."
             )
-
-    def get_kwargs(self) -> dict[str, str]:
-        """
-        Get all non-None kwargs for the simulator.
-
-        :return: The kwargs in form of a dict.
-        """
-        return {k: v for k, v in self.__dict__.items() if v is not None}

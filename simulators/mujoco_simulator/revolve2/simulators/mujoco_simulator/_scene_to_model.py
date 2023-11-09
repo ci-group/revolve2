@@ -298,8 +298,9 @@ def __make_material(env: mjcf.RootElement, name: str, element: Geometry) -> None
     mat_kwargs = {}
 
     if element.texture.reference is not None:
-        tex_kwargs = element.texture.reference.get_kwargs()
-
+        tex_kwargs = {
+            k: v for k, v in element.texture.reference.__dict__.items() if v is not None
+        }
         env.asset.add(
             "texture",
             **tex_kwargs,

@@ -8,6 +8,7 @@ from ._texture_reference import TextureReference
 @dataclass(frozen=True, kw_only=True)
 class Texture:
     """An abstract texture for geometric models."""
+
     reference: TextureReference | None = field(default=None)
     """Reference the specific type of texture."""
     base_color: Color = field(default_factory=lambda: Color(255, 255, 255, 255))

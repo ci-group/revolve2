@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 @dataclass(frozen=True, kw_only=True)
 class TextureReference(ABC):
     """Reference texture information for the simulators."""
+
     builtin: str | None = field(default=None)
     """Allows to reference builtin textures of the targeted simulator."""
     file: str | None = field(default=None)
@@ -21,9 +22,13 @@ class TextureReference(ABC):
         :raises NotImplementedError: If not sufficient arguments are given.
         """
         if self.builtin is None and self.file is None:
-            raise NotImplementedError("No texture reference given in form of a file or builtin texture.")
+            raise NotImplementedError(
+                "No texture reference given in form of a file or builtin texture."
+            )
         if self.file is not None and self.content_type is None:
-            raise NotImplementedError("Please indicate the content type of your texture source file.")
+            raise NotImplementedError(
+                "Please indicate the content type of your texture source file."
+            )
 
     def get_kwargs(self) -> dict[str, str]:
         """
@@ -31,5 +36,4 @@ class TextureReference(ABC):
 
         :return: The kwargs in form of a dict.
         """
-
         return {k: v for k, v in self.__dict__.items() if v is not None}

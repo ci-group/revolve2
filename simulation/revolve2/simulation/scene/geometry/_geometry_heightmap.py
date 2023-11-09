@@ -6,7 +6,7 @@ from pyrr import Vector3
 
 from .._color import Color
 from ._geometry import Geometry
-from .textures import  MapType, Texture
+from .textures import MapType, Texture
 
 
 @dataclass(kw_only=True)

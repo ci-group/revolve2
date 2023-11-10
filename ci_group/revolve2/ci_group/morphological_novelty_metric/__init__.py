@@ -1,7 +1,7 @@
 """
 Calculate Morphological Novelty across a Population.
 
-Using the MorphologicalNoveltyMetric for evaluation of populations can be done as follows:
+Using the MorphologicalNoveltyMetric for evaluating a population of robots can be done as follows:
 
  >>> robots: list[revolve2.modular_robot.ModularRobot]
  >>> mnm = MorphologicalNoveltyMetric()

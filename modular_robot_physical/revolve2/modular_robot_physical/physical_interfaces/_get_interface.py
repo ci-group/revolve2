@@ -14,7 +14,7 @@ def get_interface(
     :param pins: The GPIO pins that will be used.
     :param careful: Enable careful mode, which slowly steps the servo to its target, instead of going as fast as possible. This decreases current drawn by the motors, which might be necessary for some robots. This is only available for V2 robots.
     :returns: The interface.
-    :raises NotImplementedError: If the hardware type is not supported or if careful is enable and not supported for the hardware type.
+    :raises NotImplementedError: If the hardware type is not supported or if careful is enabled and not supported for the hardware type.
     :raises ModuleNotFoundError: If some required package are not installed.
     """
     try:

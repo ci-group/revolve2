@@ -13,7 +13,7 @@ class TextureReference(ABC):
     content_type: str | None = field(default=None)
     """The type of the source file. The supported types depend on the simulator used. Please check the simulators documentation for supported filetypes."""
     gridlayout: str | None = field(default=None)
-    """Specify the layout of the texture to be mapped onto an object. This again depends on how the simulator implements grid layouts. Therefore refer to the simulators documentation."""
+    """Specify the layout of the texture to be mapped onto an object. This depends on the simulator used. Please check the simulators documentation for supported grid layouts."""
 
     def __post_init__(self) -> None:
         """

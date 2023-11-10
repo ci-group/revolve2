@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from .._color import Color
 from .._pose import Pose
+from .textures import Texture
 
 
 @dataclass(kw_only=True)
@@ -22,5 +22,5 @@ class Geometry:
     This the absolute mass, irrespective of the size of the bounding box.
     """
 
-    color: Color
-    """Color when rendering this geometry."""
+    texture: Texture
+    """Texture when rendering this geometry."""

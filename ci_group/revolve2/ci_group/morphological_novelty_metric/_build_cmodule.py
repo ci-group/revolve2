@@ -9,26 +9,36 @@ from Cython.Build import cythonize
 
 
 def build() -> None:
-    """Build the morphological novelty shared object."""
+    """
+    Build the morphological novelty shared object.
+
+    :raises OSError: If the users OS is not Windows or UNIX-based.
+    """
     directory_path = os.path.dirname(os.path.abspath(__file__))
 
     source = join(directory_path, "_calculate_novelty.pyx")
     include = numpy.get_include()
 
-    if os.name == "nt":  # Windows
-        extra_compile_args = [
-            "/O2",
-        ]
-    else:  # UNIX-based systems
-        extra_compile_args = [
-            "-O3",
-            "-Werror",
-            "-Wno-unreachable-code-fallthrough",
-            "-Wno-deprecated-declarations",
-            "-Wno-parentheses-equality",
-            "-ffast-math",
-        ]
-    extra_compile_args.append("-UNDEBUG")  # Cython disables asserts by default.
+    match os.name:
+        case "nt":  # Windows
+            extra_compile_args = [
+                "/O2",
+                "-UNDEBUG",
+            ]
+        case "posix":  # UNIX-based systems
+            extra_compile_args = [
+                "-O3",
+                "-Werror",
+                "-Wno-unreachable-code-fallthrough",
+                "-Wno-deprecated-declarations",
+                "-Wno-parentheses-equality",
+                "-ffast-math",
+                "-UNDEBUG",
+            ]
+        case _:
+            raise OSError(
+                f"No build parameter set for operating systems of type {os.name}"
+            )
 
     ext = Extension(
         name="calculate_novelty",
@@ -44,23 +54,24 @@ def build() -> None:
         compiler_directives={"binding": True, "language_level": 3},
     )
 
-    distribution = Distribution({"name": "extended", "ext_modules": ext_modules})
-    distribution.package_dir = "extended"
+    distribution = Distribution(
+        {"name": "morphological_novelty_metric", "ext_modules": ext_modules}
+    )
+    distribution.package_dir = "morphological_novelty_metric"
 
     cmd = build_ext(distribution)
     cmd.ensure_finalized()
     cmd.run()
 
-    # Copy built extensions back to the project
-    for output in cmd.get_outputs():  # type: ignore
+    for output in cmd.get_outputs():  # type: ignore # is an untyped function so need s to be ignored
+        # Copy built extensions back to the project
         relative_extension = os.path.relpath(output, cmd.build_lib)
-        shutil.copyfile(output, relative_extension)
-        new_re = f"{directory_path}/calculate_novelty.so"
-        shutil.copyfile(relative_extension, new_re)
-        os.remove(relative_extension)
-        mode = os.stat(new_re).st_mode
-        mode |= (mode & 0o444) >> 2
-        os.chmod(new_re, mode)
+        extension_file_in_library = join(directory_path, relative_extension)
+        shutil.copyfile(output, extension_file_in_library)
+
+        # For the built extension, keep original permissions but add read and execute permissions for everyone.
+        current_mode = os.stat(extension_file_in_library).st_mode
+        os.chmod(extension_file_in_library, current_mode | 0o0555)
 
 
 if __name__ == "__main__":

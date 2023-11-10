@@ -22,7 +22,7 @@ class V1PhysicalInterface(PhysicalInterface):
         Initialize this object.
 
         :param debug: If debugging messages are activated.
-        :param dry: If servo outputs are not propagated to the physical servos.:
+        :param dry: If servo outputs are not propagated to the physical servos.
         :param pins: The GPIO pins that will be used.
         :raises RuntimeError: If GPIOs could not initialize.
         """

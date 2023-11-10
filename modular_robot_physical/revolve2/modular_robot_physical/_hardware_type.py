@@ -5,3 +5,4 @@ class HardwareType(Enum):
     """The types of hardware."""
 
     v1 = auto()
+    v2 = auto()

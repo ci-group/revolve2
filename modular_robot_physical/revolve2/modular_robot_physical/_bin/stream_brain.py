@@ -17,8 +17,9 @@ import struct
 
 import typed_argparse as tap
 
+from .._hardware_type import HardwareType
 from .._protocol_version import PROTOCOL_VERSION
-from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
+from ..physical_interfaces import PhysicalInterface, get_interface
 
 
 class Args(tap.TypedArgs):
@@ -31,6 +32,10 @@ class Args(tap.TypedArgs):
     port: int = tap.arg(help="The port the open the stream on.")
     required_version: str | None = tap.arg(
         help="Assert whether the installed Revolve2 version matches the given value."
+    )
+    careful: bool = tap.arg(
+        help="Enable careful mode, which slowly steps the servo to its target, instead of going as fast as possible. This decreases current drawn by the motors, which might be necessary for some robots. This is only available for V2 robots.",
+        default=False,
     )
 
 
@@ -52,6 +57,7 @@ class Program:
         dry: bool,
         pins: list[int],
         port: int,
+        careful: bool,
     ) -> None:
         """
         Run the program.
@@ -61,13 +67,18 @@ class Program:
         :param dry: If servo outputs are not propagated to the physical servos.:
         :param pins: The GPIO pins that will be used.
         :param port: The port to open the stream socket on.
+        :param careful: Enable careful mode, which slowly steps the servo to its target, instead of going as fast as possible. This decreases current drawn by the motors, which might be necessary for some robots. This is only available for V2 robots.
         :raises RuntimeError: If shutdown was not clean.
         """
         try:
             print("Exit the program at any time by pressing Ctrl-C.")
 
             self._physical_interface = get_interface(
-                hardware_type=hardware_type, debug=debug, dry=dry, pins=pins
+                hardware_type=hardware_type,
+                debug=debug,
+                dry=dry,
+                pins=pins,
+                careful=careful,
             )
 
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as stream_socket:
@@ -150,6 +161,7 @@ def runner(args: Args) -> None:
         dry=args.dry,
         pins=args.pins,
         port=args.port,
+        careful=args.careful,
     )
 
 

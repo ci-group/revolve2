@@ -22,7 +22,15 @@ except Exception:
 
 @dataclass
 class MorphologicalNoveltyMetric:
-    """Calculate the Morphological Novelty Score for a Population."""
+    """
+    Calculate the Morphological Novelty Score for a Population.
+
+    This metric for Morphological Novelty considers robots a distribution in space, which can be reshaped into any other distribution.
+    The work that has to be done to reshape distribution 1 to distribution 2 is used for the final novelty calculation.
+
+    A detailed description of the Algorithm can be found in:
+    Oliver Weissl, and A.E. Eiben. "Morphological-Novelty in Modular Robot Evolution". 2023  IEEE Symposium Series on Computational Intelligence (SSCI)(pp. 1066-1071). IEEE, 2023.
+    """
 
     _coordinates: list[NDArray[np.float128]] = field(init=False)
     _magnitudes: list[list[float]] = field(default_factory=lambda: [[0.0]])
@@ -37,8 +45,10 @@ class MorphologicalNoveltyMetric:
     )
     _novelty_scores: NDArray[np.float64] = field(init=False)
 
-    _NUM_BINS: int = 20  # amount of bins for the histogram descriptor
-    _INT_CASTER: int = 10_000  # to counteract floating-point issues
+    _NUM_BINS: int = 20
+    """The amount of bins in the histogram. Increasing this allows for more detail, but risks sparseness, while lower values generalize more."""
+    _INT_CASTER: int = 10_000
+    """Casting floats to INT allows to mitigate floating-point issues in the distribution reshaping. The higher the number, the more presicion you get."""
 
     def get_novelty_from_population(
         self,
@@ -49,7 +59,7 @@ class MorphologicalNoveltyMetric:
         Get the morphological novelty score for individuals in a population.
 
         :param population: The population of robots.
-        :param cob_heuristic: Weather the heuristic approximation of change of basis is used.
+        :param cob_heuristic: Whether the heuristic approximation for change of basis is used.
         :return: The novelty scores.
         """
         instances = len(population)
@@ -117,11 +127,17 @@ class MorphologicalNoveltyMetric:
             histogram = self._histograms[i].copy()
             histogram = np.array(
                 (histogram / histogram.sum()) * self._INT_CASTER, dtype=np.int64
-            )
+            )  # Casting the float histograms to int, in order to avoid floating point errors in the reshaping.
 
-            error = self._INT_CASTER - histogram.sum()
+            error = (
+                self._INT_CASTER - histogram.sum()
+            )  # Due to the int-casting the histogram sums are marginally smaller than _INT_CASTER.
             mask = np.zeros(shape=histogram.size, dtype=np.int64)
-            mask[:error] += 1
+            mask[
+                :error
+            ] += 1  # each histogram must sum up to _INT_CASTER. Therefore, a mask is applied.
+            np.random.seed(42)  # forces shuffles into reproducible patterns
+            np.random.shuffle(mask)  # shuffling the mask to avoid bias in the histogram
             self._int_histograms[i] = histogram + np.reshape(
                 mask, (-1, histogram.shape[0])
             )

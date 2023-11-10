@@ -11,14 +11,6 @@ from .._physical_interface import PhysicalInterface
 class V2PhysicalInterface(PhysicalInterface):
     """Implementation of PhysicalInterface for V2 modular robots."""
 
-    _SERVOBOARD_2_DATAS_LIST: list[ServoData]
-    _SERVOBOARD_1_DATAS_LIST: list[ServoData]
-
-    _INITIAL_VOLT_TO_ANGLE_FORMULA_A = 68.50117096018737  # parameter A of the formula servo voltage to angle (y = Ax + B)
-    _INITIAL_VOLT_TO_ANGLE_FORMULA_B = (
-        -15.294412847106067
-    )  # parameter B of the formula servo voltage to angle (y = Ax + B)
-
     _SERVOASSEMBLY_1_CONFIG = ServoAssemblyConfig(
         _name="servoassembly_1",
         _sw1_pwm_address=0,
@@ -47,30 +39,34 @@ class V2PhysicalInterface(PhysicalInterface):
         :param pins: The GPIO pins that will be used.
         :param careful: Enable careful mode, which slowly steps the servo to its target, instead of going as fast as possible. This decreases current drawn by the motors, which might be necessary for some robots.
         """
-        self._SERVOBOARD_1_DATAS_LIST = [
+        # Parameters for servo angle calculation.
+        # These might be runtime parameters coming from some config in the future, so defining them in the init for now.
+        INITIAL_VOLT_TO_ANGLE_FORMULA_A = 68.50117096018737
+        INITIAL_VOLT_TO_ANGLE_FORMULA_B = -15.294412847106067
+
+        servoboard_1_datas_list = [
             ServoData(
-                i,
-                500,
-                2500,
-                0,
-                180,
-                0,
-                self._INITIAL_VOLT_TO_ANGLE_FORMULA_A,
-                self._INITIAL_VOLT_TO_ANGLE_FORMULA_B,
+                _servo_nr=i,
+                _min_time=500,
+                _max_time=2500,
+                _time_offset=0,
+                _running_degree=180,
+                _offset_degree=0,
+                _formula_a=INITIAL_VOLT_TO_ANGLE_FORMULA_A,
+                _formula_b=INITIAL_VOLT_TO_ANGLE_FORMULA_B,
             )
             for i in range(16)
         ]
-
-        self._SERVOBOARD_2_DATAS_LIST = [
+        servoboard_2_datas_list = [
             ServoData(
-                i,
-                500,
-                2500,
-                0,
-                180,
-                0,
-                self._INITIAL_VOLT_TO_ANGLE_FORMULA_A,
-                self._INITIAL_VOLT_TO_ANGLE_FORMULA_B,
+                _servo_nr=i,
+                _min_time=500,
+                _max_time=2500,
+                _time_offset=0,
+                _running_degree=180,
+                _offset_degree=0,
+                _formula_a=INITIAL_VOLT_TO_ANGLE_FORMULA_A,
+                _formula_b=INITIAL_VOLT_TO_ANGLE_FORMULA_B,
             )
             for i in range(16)
         ]
@@ -82,9 +78,7 @@ class V2PhysicalInterface(PhysicalInterface):
             self._robohat = Robohat(
                 self._SERVOASSEMBLY_1_CONFIG, self._SERVOASSEMBLY_2_CONFIG, 7
             )
-            self._robohat.init(
-                self._SERVOBOARD_1_DATAS_LIST, self._SERVOBOARD_2_DATAS_LIST
-            )
+            self._robohat.init(servoboard_1_datas_list, servoboard_2_datas_list)
             self._robohat.do_buzzer_beep()
         self._robohat.set_servo_direct_mode(careful)
 

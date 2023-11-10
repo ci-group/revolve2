@@ -17,7 +17,9 @@ from revolve2.modular_robot_simulation import (
 )
 from revolve2.simulation.scene import AABB, Color, Pose
 from revolve2.simulation.scene.geometry import GeometryBox, GeometryPlane
+from revolve2.simulation.scene.geometry.textures import MapType
 from revolve2.simulators.mujoco_simulator import LocalSimulator
+from revolve2.simulators.mujoco_simulator.textures import Checker, Flat, Gradient
 
 
 def make_custom_terrain() -> Terrain:
@@ -34,12 +36,16 @@ def make_custom_terrain() -> Terrain:
                 pose=Pose(position=Vector3(), orientation=Quaternion()),
                 mass=0.0,
                 size=Vector3([20.0, 20.0, 0.0]),
-                color=Color(170, 170, 180, 255),
+                texture=Checker(
+                    primary_color=Color(170, 170, 180, 255),
+                    secondary_color=Color(150, 150, 150, 255),
+                    map_type=MapType.MAP2D,
+                ),
             ),
             GeometryBox(
                 pose=Pose(position=Vector3([1.0, 0.0, 0.1]), orientation=Quaternion()),
                 mass=0.0,
-                color=Color(0, 255, 0, 255),
+                texture=Flat(primary_color=Color(0, 255, 0, 255)),
                 aabb=AABB(size=Vector3([0.5, 0.5, 0.2])),
             ),
             GeometryBox(
@@ -47,7 +53,10 @@ def make_custom_terrain() -> Terrain:
                     position=Vector3([-0.8, 0.4, 0.125]), orientation=Quaternion()
                 ),
                 mass=0.0,
-                color=Color(0, 200, 100, 255),
+                texture=Gradient(
+                    primary_color=Color(0, 200, 100, 255),
+                    secondary_color=Color(0, 100, 200, 255),
+                ),
                 aabb=AABB(size=Vector3([0.5, 0.5, 0.25])),
             ),
             GeometryBox(
@@ -56,13 +65,16 @@ def make_custom_terrain() -> Terrain:
                     orientation=Quaternion.from_eulers([0.0, math.pi / 4.0, 0.0]),
                 ),
                 mass=0.0,
-                color=Color(50, 80, 180, 255),
+                texture=Flat(primary_color=Color(50, 80, 180, 255)),
                 aabb=AABB(size=Vector3([0.5, 0.4, 0.02])),
             ),
             GeometryBox(
                 pose=Pose(position=Vector3([-0.1, 0.9, 0.5]), orientation=Quaternion()),
                 mass=0.0,
-                color=Color(100, 0, 100, 100),
+                texture=Flat(
+                    primary_color=Color(100, 0, 100, 255),
+                    base_color=Color(255, 255, 255, 100),
+                ),
                 aabb=AABB(size=Vector3([0.2, 0.2, 1.0])),
             ),
         ]

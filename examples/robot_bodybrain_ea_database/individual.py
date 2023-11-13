@@ -15,5 +15,5 @@ class Individual(
 ):
     """An individual in a population."""
 
-    age: orm.Mapped[int] = orm.mapped_column(nullable=True, init=False)
+    age: orm.Mapped[int] = orm.mapped_column(nullable=True)
     __tablename__ = "individual"

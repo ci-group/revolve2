@@ -72,7 +72,7 @@ def select_survivors(
         [i.genotype for i in offspring_population.individuals],
         [i.fitness for i in offspring_population.individuals],
         [i.age for i in offspring_population.individuals],
-        lambda n, genotypes, fitnesses, ages: selection.pareto_frontier(
+        lambda genotypes, fitnesses, ages, n: selection.pareto_frontier(
             genotypes,
             fitnesses,
             ages,

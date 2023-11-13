@@ -1,11 +1,11 @@
 import os
 import shutil
-from distutils.command.build_ext import build_ext
-from distutils.core import Distribution, Extension
+from glob import glob
 from os.path import join
 
 import numpy
 from Cython.Build import cythonize
+from setuptools import Extension, setup
 
 
 def build() -> None:
@@ -54,20 +54,19 @@ def build() -> None:
         compiler_directives={"binding": True, "language_level": 3},
     )
 
-    distribution = Distribution(
-        {"name": "morphological_novelty_metric", "ext_modules": ext_modules}
+    setup(
+        ext_modules=ext_modules,
+        script_args=["build_ext", "--inplace"],
     )
-    distribution.package_dir = "morphological_novelty_metric"
 
-    cmd = build_ext(distribution)
-    cmd.ensure_finalized()
-    cmd.run()
-
-    for output in cmd.get_outputs():  # type: ignore # is an untyped function so need s to be ignored
+    curr_path = os.getcwd()
+    outputs = glob(f"{curr_path}/*.so")
+    for path in outputs:
         # Copy built extensions back to the project
-        relative_extension = os.path.relpath(output, cmd.build_lib)
+        relative_extension = os.path.relpath(path, curr_path)
         extension_file_in_library = join(directory_path, relative_extension)
-        shutil.copyfile(output, extension_file_in_library)
+        shutil.copyfile(path, extension_file_in_library)
+        os.remove(path)
 
         # For the built extension, keep original permissions but add read and execute permissions for everyone.
         current_mode = os.stat(extension_file_in_library).st_mode

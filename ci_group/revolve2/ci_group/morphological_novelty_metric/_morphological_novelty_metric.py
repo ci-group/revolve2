@@ -9,9 +9,9 @@ from revolve2.modular_robot import ModularRobot
 from ._coordinate_operations import CoordinateOperations
 
 try:  # The try except is necessary for sphinx to ignore the import, since it also cant resolve .so imports.
-    from .calculate_novelty import (
-        calculate_novelty,  # type: ignore  # This is necessary since the calculate_novelty.so is built on install and cant be resolved by mypy.
-    )
+    from .calculate_novelty import calculate_novelty  # type: ignore
+
+    """This type-ignore is necessary since the calculate_novelty.so is built on install and cant be resolved by mypy."""
 except Exception:
     raise
 

@@ -29,7 +29,7 @@ def pareto_frontier(individuals: list[TIndividual], fitnesses: list[TFitness], o
     return indices[:to_take].tolist()
 
 
-def _get_domination_order(pairs: NDArray(np.float_)) -> NDArray(np.int_):
+def _get_domination_order(pairs: NDArray[np.float_]) -> NDArray[np.int_]:
     """
     Find the pareto domination order for each point.
 

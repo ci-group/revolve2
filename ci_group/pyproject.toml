@@ -20,7 +20,7 @@ classifiers = [
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
 ]
 packages = [{ include = "revolve2" }]
-include = [{ path = "revolve2/ci_group/morphological_novelty_metric/*.so", format = "wheel" }]
+include = [{ path = "revolve2/ci_group/morphological_novelty_metric/calculate_novelty*.*", format = "wheel" }]
 
 [tool.poetry.build]
 script = "revolve2/ci_group/morphological_novelty_metric/_build_cmodule.py"

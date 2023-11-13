@@ -4,6 +4,7 @@ from dataclasses import dataclass
 
 from base import Base
 from genotype import Genotype
+import sqlalchemy.orm as orm
 
 from revolve2.experimentation.optimization.ea import Individual as GenericIndividual
 
@@ -14,4 +15,5 @@ class Individual(
 ):
     """An individual in a population."""
 
+    age: orm.Mapped[int] = orm.mapped_column(nullable=True, init=False)
     __tablename__ = "individual"

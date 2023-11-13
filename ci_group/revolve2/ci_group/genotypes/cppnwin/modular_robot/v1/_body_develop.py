@@ -30,7 +30,7 @@ def develop(
     :returns: The created body.
     :raises RuntimeError: In case a module is encountered that is not supported.
     """
-    max_parts = 10
+    max_parts = 25
 
     body_net = multineat.NeuralNetwork()
     genotype.BuildPhenotype(body_net)

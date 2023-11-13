@@ -46,11 +46,13 @@ class Evaluator:
         :returns: Fitnesses of the robots.
         """
         # Create the scenes.
-        scenes = []
+        scenes: list[ModularRobotScene] = [None] * len(robots)
+        i = 0
         for robot in robots:
             scene = ModularRobotScene(terrain=self._terrain)
             scene.add_robot(robot)
-            scenes.append(scene)
+            scenes[i] = scene
+            i += 1
 
         # Simulate all scenes.
         scene_states = simulate_scenes(

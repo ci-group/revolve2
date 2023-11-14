@@ -7,7 +7,7 @@ import numpy as np
 from numpy.typing import NDArray
 from pyrr import Quaternion, Vector3
 
-from revolve2.modular_robot.body import Module
+from revolve2.modular_robot.body import AttachmentPoint, Module
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 
 
@@ -52,9 +52,9 @@ def develop(
     while not to_explore.empty():
         module = to_explore.get()
 
-        for index in module.module_reference.attachment_points.keys():
+        for attachment_point_tuple in module.module_reference.attachment_points.items():
             if part_count < max_parts:
-                child = __add_child(body_net, module, index, grid)
+                child = __add_child(body_net, module, attachment_point_tuple, grid)
                 if child is not None:
                     to_explore.put(child)
                     part_count += 1
@@ -95,10 +95,11 @@ def __evaluate_cppn(
 def __add_child(
     body_net: multineat.NeuralNetwork,
     module: __Module,
-    attachment_index: int,
+    attachment_point_tuple: tuple[int, AttachmentPoint],
     grid: NDArray[np.uint8],
 ) -> __Module | None:
-    attachment_point = module.module_reference.attachment_points[attachment_index]
+    attachment_index, attachment_point = attachment_point_tuple
+
     forward = __rotate(module.forward, module.up, attachment_point.rotation)
     position = module.position + forward
     chain_length = module.chain_length + 1
@@ -116,7 +117,7 @@ def __add_child(
         return None
     up = __rotate(module.up, forward, child_orientation)
 
-    child = child_type(child_orientation)
+    child = child_type(child_orientation.angle)
     module.module_reference.set_child(child, attachment_index)
 
     return __Module(

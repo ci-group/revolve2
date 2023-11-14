@@ -2,6 +2,7 @@ import math
 
 from pyrr import Quaternion, Vector3
 
+from ...body import Module
 from .._color import Color
 from .._right_angles import RightAngles
 from ..base import Core
@@ -134,7 +135,56 @@ class CoreV2(Core):
         :param attachment_index: The index of the attachment position.
         :return: The global index.
         """
-        global_index = (
-            face_index * 10 ** (1 + len(str(attachment_index))) + attachment_index
-        )
+        global_index = "1" * face_index + "0" + "1" * attachment_index
         return int(global_index)
+
+    @staticmethod
+    def face_and_attachment_from_index(global_index: int) -> tuple[int, int]:
+        """
+        Get face and attachment indices from global index.
+
+        :param global_index: The global index.
+        :return: The face and attachment index.
+        """
+        head, tail = str(global_index).split("0")
+        return len(head), len(tail)
+
+    @property
+    def attachment_faces(self) -> dict[int, AttachmentFaceCoreV2]:
+        """
+        Get all attachment faces for the Core.
+
+        :return: The attachment faces.
+        """
+        return self._attachment_faces
+
+    def set_child(self, module: Module, child_index: int) -> None:
+        """
+        Attach a module to a slot.
+
+        :param module: The module to attach.
+        :param child_index: The slot to attach it to.
+        :raises KeyError: If attachment point is already populated.
+        """
+        assert (
+            module._parent is None
+        ), "Child module already connected to a different slot."
+        module._parent = self
+        module._parent_child_index = child_index
+        if self.is_free(child_index):
+            self._children[child_index] = module
+        else:
+            raise KeyError("Attachment point already populated")
+
+    def can_set_child(self, module: Module, child_index: int) -> bool:
+        """
+        Check if attaching child is allowed or has conflicts.
+
+        :param module: The module to set.
+        :param child_index: The childs global index.
+        :return: Whether it is legal.
+        """
+        face_index, attachment_index = self.face_and_attachment_from_index(child_index)
+        return self._attachment_faces[face_index].mount_module(
+            attachment_index, module, ignore_conflict=True
+        )

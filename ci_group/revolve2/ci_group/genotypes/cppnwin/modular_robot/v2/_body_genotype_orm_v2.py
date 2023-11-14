@@ -48,7 +48,7 @@ class BodyGenotypeOrmV2(orm.MappedAsDataclass, kw_only=True):
             multineat_params=cls._MULTINEAT_PARAMS,
             output_activation_func=multineat.ActivationFunction.TANH,
             num_inputs=5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
-            num_outputs=9,  # empty, brick, activehinge, rot0, rot90, *attachment_positions
+            num_outputs=5,  # empty, brick, activehinge, rot0, rot90
             num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
         )
 

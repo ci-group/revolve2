@@ -7,8 +7,8 @@ import numpy as np
 from numpy.typing import NDArray
 from pyrr import Quaternion, Vector3
 
-from revolve2.modular_robot.body import Module
-from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2, CoreV2
+from revolve2.modular_robot.body import AttachmentPoint, Module
+from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
 
 
 @dataclass
@@ -39,9 +39,6 @@ def develop(
     to_explore: Queue[__Module] = Queue()
     grid = np.zeros(shape=(max_parts, max_parts, max_parts), dtype=np.uint8)
 
-    outputs = __evaluate_cppn(body_net, Vector3([0, 0, 0]), 0)
-
-    attachment_positions = list(map(__get_position_index, outputs[5:]))
     body = BodyV2()
 
     to_explore.put(
@@ -55,9 +52,9 @@ def develop(
     while not to_explore.empty():
         module = to_explore.get()
 
-        for index in module.module_reference.attachment_points.keys():
+        for attachment_point_tuple in module.module_reference.attachment_points.items():
             if part_count < max_parts:
-                child = __add_child(body_net, module, index, grid, attachment_positions)
+                child = __add_child(body_net, module, attachment_point_tuple, grid)
                 if child is not None:
                     to_explore.put(child)
                     part_count += 1
@@ -99,12 +96,12 @@ def __evaluate_cppn(
 def __add_child(
     body_net: multineat.NeuralNetwork,
     module: __Module,
-    child_index: int,
+    attachment_point_tuple: tuple[int, AttachmentPoint],
     grid: NDArray[np.uint8],
-    attachment_positions: list[int] | None = None,
 ) -> __Module | None:
-    atp = module.module_reference.attachment_points
-    forward = __rotate(module.forward, module.up, atp[child_index].rotation)
+    attachment_index, attachment_point = attachment_point_tuple
+
+    forward = __rotate(module.forward, module.up, attachment_point.rotation)
     position = module.position + forward
     chain_length = module.chain_length + 1
 
@@ -116,19 +113,13 @@ def __add_child(
 
     child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
     child_orientation = __make_quaternion_from_index(child_rotation)
-    if child_type is None:
+    if child_type is None or not module.module_reference.can_set_child(
+        child := child_type(child_orientation.angle), attachment_index
+    ):
         return None
+
     up = __rotate(module.up, forward, child_orientation)
-
-    child = child_type(child_orientation)
-
-    global_index = child_index
-    if attachment_positions is not None and isinstance(module.module_reference, CoreV2):
-        global_index = module.module_reference.index_from_face_and_attachment(
-            child_index, attachment_positions[child_index]
-        )
-
-    module.module_reference.set_child(child, global_index)
+    module.module_reference.set_child(child, attachment_index)
 
     return __Module(
         position,
@@ -152,10 +143,6 @@ def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     sinangle = np.sin(rotation.angle)
     x, y, z = (a * cosangle + b.cross(a) * sinangle) + b * (b.dot(a) * (1 - cosangle))
     return Vector3(np.array([x, y, z], dtype=np.int64))
-
-
-def __get_position_index(x: float) -> int:
-    return int(abs(x) * 10 - (1 + 1e-3))
 
 
 def __make_quaternion_from_index(index: int) -> Quaternion:

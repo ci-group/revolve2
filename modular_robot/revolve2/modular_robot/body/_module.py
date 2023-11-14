@@ -124,6 +124,19 @@ class Module:
         else:
             raise KeyError("Attachment point already populated")
 
+    def can_set_child(self, module: Module, child_index: int) -> bool:
+        """
+        Check if a child can be set onto a specific index.
+
+        This is for more advanced conflict checks, sucha as big modules that have the possibility to block other, non-related attachment points.
+        By default this returns true, since the basic modules do not block attachment points.
+
+        :param module: The module to set.
+        :param child_index: The child index to check.
+        :return: Whether it is possible.
+        """
+        return True
+
     def neighbours(self, within_range: int) -> list[Module]:
         """
         Get the neighbours of this module with a certain range of the module tree.

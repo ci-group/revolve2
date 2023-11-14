@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import dataclass, field
 
 from .._attachment_point import AttachmentPoint
@@ -6,7 +6,7 @@ from .._module import Module
 
 
 @dataclass
-class AttachmentFace(ABC):
+class AttachmentFace:
     """Collect AttachmentPoints on a modules face."""
 
     _attachment_points: dict[int, AttachmentPoint] = field(default_factory=lambda: {})
@@ -32,16 +32,19 @@ class AttachmentFace(ABC):
 
     def mount_module(
         self, index: int, module: Module, ignore_conflict: bool = False
-    ) -> None:
+    ) -> bool:
         """
         Mount a Module onto a attachment point.
 
         :param index: The index of the attachment point.
         :param module: The module.
         :param ignore_conflict: Ignore potential errors when mounting to attachment_point.
+        :return: If successful or not.
         """
         if not self._check_for_conflict(index, module, ignore_conflict):
             self._mounted_modules[index] = module
+            return True
+        return False
 
     @property
     def attachment_points(self) -> dict[int, AttachmentPoint]:

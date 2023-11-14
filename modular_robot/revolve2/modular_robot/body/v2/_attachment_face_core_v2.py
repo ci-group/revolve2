@@ -14,11 +14,11 @@ from ..base._attachment_face import AttachmentFace
 class AttachmentFaceCoreV2(AttachmentFace):
     """An AttachmentFace for the V2 robot."""
 
+    _check_matrix: NDArray[np.uint8] = field(default=np.zeros(0, dtype=np.uint8))
+
     _child_offset: Vector3 = field(default_factory=lambda: Vector3())
     _rotation: Quaternion = field(default_factory=lambda: Quaternion())
-    _check_matrix: NDArray[np.uint8] = field(
-        default_factory=lambda: np.zeros(shape=(3, 3), dtype=np.uint8)
-    )
+
     """
     Check matrix allows us to determine which attachment points can be filled in the face.
     
@@ -59,6 +59,8 @@ class AttachmentFaceCoreV2(AttachmentFace):
         |                 |            |                  |
         ---------------------------------------------------
         """
+        self._check_matrix = np.zeros(shape=(3, 3), dtype=np.uint8)
+        super().__init__()
         for i in range(9):
             h_o = (i % 3 - 1) * horizontal_offset
             v_o = -(i // 3 - 1) * vertical_offset

@@ -1,4 +1,3 @@
-import math
 from dataclasses import dataclass
 from queue import Queue
 from typing import Any
@@ -6,7 +5,7 @@ from typing import Any
 import multineat
 import numpy as np
 from numpy.typing import NDArray
-from pyrr import Vector3
+from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2, CoreV2
@@ -104,7 +103,8 @@ def __add_child(
     grid: NDArray[np.uint8],
     attachment_positions: list[int] | None = None,
 ) -> __Module | None:
-    forward = __rotate(module.forward, module.up, child_index)
+    atp = module.module_reference.attachment_points
+    forward = __rotate(module.forward, module.up, atp[child_index].rotation)
     position = module.position + forward
     chain_length = module.chain_length + 1
 
@@ -114,12 +114,13 @@ def __add_child(
         return None
     grid[tuple(position)] += 1
 
-    child_type, orientation = __evaluate_cppn(body_net, position, chain_length)
+    child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
+    child_orientation = __make_quaternion_from_index(child_rotation)
     if child_type is None:
         return None
-    up = __rotate(module.up, forward, orientation)
+    up = __rotate(module.up, forward, child_orientation)
 
-    child = child_type(orientation * (math.pi / 2.0))
+    child = child_type(child_orientation)
 
     global_index = child_index
     if attachment_positions is not None and isinstance(module.module_reference, CoreV2):
@@ -138,36 +139,30 @@ def __add_child(
     )
 
 
-def __rotate(a: Vector3, b: Vector3, angle: int) -> Vector3:
+def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
     Rotates vector a a given angle around b.
 
-    Angle from [0,1,2,3].
-    90 degrees each.
-
     :param a: Vector a.
     :param b: Vector b.
-    :param angle: The angle to rotate.
+    :param rotation: The rotation quaternion.
     :returns: A copy of a, rotated.
     """
-    cosangle: int
-    sinangle: int
-    match angle:
-        case 0:
-            cosangle = 1
-            sinangle = 0
-        case 1:
-            cosangle = 0
-            sinangle = 1
-        case 2:
-            cosangle = -1
-            sinangle = 0
-        case 3:
-            cosangle = 0
-            sinangle = -1
-
-    return (a * cosangle + b.cross(a) * sinangle) + b * (b.dot(a) * (1 - cosangle))
+    cosangle = np.cos(rotation.angle)
+    sinangle = np.sin(rotation.angle)
+    x, y, z = (a * cosangle + b.cross(a) * sinangle) + b * (b.dot(a) * (1 - cosangle))
+    return Vector3(np.array([x, y, z], dtype=np.int64))
 
 
 def __get_position_index(x: float) -> int:
-    return max(1, int(abs(x) * 10 - 1e-3))
+    return int(abs(x) * 10 - (1 + 1e-3))
+
+
+def __make_quaternion_from_index(index: int) -> Quaternion:
+    """
+    Make a quaternion from a rotation index.
+
+    :param index: The index of rotation.
+    :return: The Quaternion.
+    """
+    return Quaternion.from_x_rotation((np.pi / 2) * index)

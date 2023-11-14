@@ -7,7 +7,6 @@ from .._module import Module
 
 @dataclass
 class AttachmentFace:
-
     """Collect AttachmentPoints on a modules face."""
 
     _attachment_points: dict[int, AttachmentPoint] = field(default_factory=lambda: {})

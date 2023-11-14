@@ -5,15 +5,9 @@ from typing import Any
 import multineat
 import numpy as np
 from numpy.typing import NDArray
-<<<<<<< HEAD
 from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.body import AttachmentPoint, Module
-=======
-from pyrr import Vector3
-
-from revolve2.modular_robot.body import Module
->>>>>>> 0211bfc (upd WIP)
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 
 
@@ -58,15 +52,9 @@ def develop(
     while not to_explore.empty():
         module = to_explore.get()
 
-<<<<<<< HEAD
         for attachment_point_tuple in module.module_reference.attachment_points.items():
             if part_count < max_parts:
                 child = __add_child(body_net, module, attachment_point_tuple, grid)
-=======
-        for index in module.module_reference.attachment_points.keys():
-            if part_count < max_parts:
-                child = __add_child(body_net, module, index, grid)
->>>>>>> 0211bfc (upd WIP)
                 if child is not None:
                     to_explore.put(child)
                     part_count += 1
@@ -101,41 +89,23 @@ def __evaluate_cppn(
     rotation_probs = [outputs[3], outputs[4]]
     rotation_index = rotation_probs.index(min(rotation_probs))
 
-<<<<<<< HEAD
     return module_type, rotation_index
-=======
-    return module_type, rotation
->>>>>>> 0211bfc (upd WIP)
 
 
 def __add_child(
     body_net: multineat.NeuralNetwork,
     module: __Module,
-<<<<<<< HEAD
     attachment_point_tuple: tuple[int, AttachmentPoint],
     grid: NDArray[np.uint8],
 ) -> __Module | None:
     attachment_index, attachment_point = attachment_point_tuple
 
     forward = __rotate(module.forward, module.up, attachment_point.rotation)
-=======
-    child_index: int,
-    grid: NDArray[np.uint8],
-) -> __Module | None:
-    forward = __rotate(module.forward, module.up, child_index)
->>>>>>> 0211bfc (upd WIP)
     position = module.position + forward
     chain_length = module.chain_length + 1
 
     # if grid cell is occupied, don't make a child
     # else, set cell as occupied
-<<<<<<< HEAD
-=======
-
-    if grid[tuple(position)] > 0:
-        return None
-    grid[tuple(position)] += 1
->>>>>>> 0211bfc (upd WIP)
 
     if grid[tuple(position)] > 0:
         return None
@@ -159,11 +129,7 @@ def __add_child(
     )
 
 
-<<<<<<< HEAD
 def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
-=======
-def __rotate(a: Vector3, b: Vector3, angle: int) -> Vector3:
->>>>>>> 0211bfc (upd WIP)
     """
     Rotates vector a a given angle around b.
 
@@ -171,9 +137,7 @@ def __rotate(a: Vector3, b: Vector3, angle: int) -> Vector3:
     :param b: Vector b.
     :param rotation: The rotation Quaternion.
     :returns: A copy of a, rotated.
-    :raises KeyError: If rotation in overflowing.
     """
-<<<<<<< HEAD
     cosangle = np.cos(rotation.angle)
     sinangle = np.sin(rotation.angle)
     x, y, z = (a * cosangle + b.cross(a) * sinangle) + b * (b.dot(a) * (1 - cosangle))
@@ -188,24 +152,3 @@ def __make_quaternion_from_index(index: int) -> Quaternion:
     :return: The Quaternion.
     """
     return Quaternion.from_x_rotation((np.pi / 2) * index)
-=======
-    cosangle: int
-    sinangle: int
-    match angle:
-        case 0:
-            cosangle = 1
-            sinangle = 0
-        case 1:
-            cosangle = 0
-            sinangle = 1
-        case 2:
-            cosangle = -1
-            sinangle = 0
-        case 3:
-            cosangle = 0
-            sinangle = -1
-        case _:
-            raise KeyError("This rotation is not supported by the modules.")
-
-    return (a * cosangle + b.cross(a) * sinangle) + b * (b.dot(a) * (1 - cosangle))
->>>>>>> 0211bfc (upd WIP)

@@ -145,7 +145,6 @@ def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     :param b: Vector b.
     :param rotation: The quaternion for rotation.
     :returns: A copy of a, rotated.
-    :raises KeyError: If rotation in overflowing.
     """
     cosangle: int = int(round(np.cos(rotation.angle)))
     sinangle: int = int(round(np.sin(rotation.angle)))

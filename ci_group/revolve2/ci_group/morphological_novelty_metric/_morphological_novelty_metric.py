@@ -49,7 +49,8 @@ class MorphologicalNoveltyMetric:
         instances = len(population)
         bodies = [robot.body for robot in population]
 
-        self._coordinates = CoordinateOperations().coords_from_bodies(
+        coord_ops = CoordinateOperations()
+        self._coordinates = coord_ops.coords_from_bodies(
             bodies, cob_heuristics=cob_heuristic
         )
 
@@ -68,8 +69,10 @@ class MorphologicalNoveltyMetric:
             self._int_histograms, self._int_histograms.shape[0], self._NUM_BINS
         )
         max_novelty = self._novelty_scores.max()
-        novelty_scores = [float(score / max_novelty) for score in self._novelty_scores]
-        return novelty_scores
+        try:
+            return [float(score / max_novelty) for score in self._novelty_scores]
+        finally:
+            self.__reset_class()
 
     def _coordinates_to_magnitudes_orientation(self) -> None:
         """Calculate the magnitude and orientation for the coordinates supplied."""
@@ -125,3 +128,12 @@ class MorphologicalNoveltyMetric:
             self._int_histograms[i] = histogram + np.reshape(
                 mask, (-1, histogram.shape[0])
             )
+
+    def __reset_class(self) -> None:
+        """Reset the class in order to avoid potential propagation mistakes."""
+        del self._coordinates
+        del self._novelty_scores
+        del self._int_histograms
+        del self._magnitudes
+        del self._orientations
+        del self._histograms

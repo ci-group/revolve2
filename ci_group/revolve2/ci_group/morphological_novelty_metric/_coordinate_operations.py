@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from itertools import product
 
 import numpy as np
@@ -8,13 +8,11 @@ from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.base import Body
 
 
-@dataclass
+@dataclass(init=False)
 class CoordinateOperations:
     """Transform points in a distribution."""
 
-    _coords: list[NDArray[np.float128]] = field(
-        default_factory=lambda: [np.empty(shape=0, dtype=np.float128)]
-    )
+    _coords: list[NDArray[np.float128]]
 
     def coords_from_bodies(
         self, bodies: list[Body], cob_heuristics: bool
@@ -31,7 +29,12 @@ class CoordinateOperations:
             self._coordinates_pca_heuristic()
         else:
             self._coordinates_pca_change_basis()
-        return self._coords
+
+        try:
+            return self._coords
+        finally:
+            """Ensure new operations are independent from old ones."""
+            del self._coords
 
     def _body_to_adjusted_coordinates(self, bodies: list[Body]) -> None:
         """
@@ -39,7 +42,7 @@ class CoordinateOperations:
 
         :param bodies: The body.
         """
-        self._coords *= len(bodies)
+        self._coords = [np.empty(shape=0, dtype=np.float128)] * len(bodies)
         i = 0
         for body in bodies:
             body_array, core_position = body.to_grid()

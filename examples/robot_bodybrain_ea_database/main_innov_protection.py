@@ -38,7 +38,7 @@ def mutate_parents(
     :returns: The offspring.
     """
     offspring_genotypes = [None] * offspring_size
-    generation = [None] * offspring_size
+    ages = [None] * offspring_size
 
     i = 0
     args = {
@@ -51,11 +51,12 @@ def mutate_parents(
         if rng.choice([True, False]):
             """Mutate body."""
             offspring_genotypes[i] = individual.genotype.mutate(**args)
-            generation[i] = generation_index + 1
+            ages[i] = generation_index + 1
         else:
+            """Only mutate brain and as such, we dont change age."""
             brain = individual.genotype.mutate_brain(**args)
             offspring_genotypes[i] = Genotype(body=individual.genotype.body, brain=brain.brain)
-            generation[i] = individual.age
+            ages[i] = individual.age
         i += 1
 
     offspring_fitnesses = evaluator.evaluate(
@@ -68,7 +69,7 @@ def mutate_parents(
     offspring_population = Population(
         individuals=[
             Individual(genotype=genotype, fitness=fitness, age=age)
-            for genotype, fitness, age in zip(offspring_genotypes, offspring_fitnesses, generation)
+            for genotype, fitness, age in zip(offspring_genotypes, offspring_fitnesses, ages)
         ]
     )
     return offspring_population

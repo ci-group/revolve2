@@ -42,20 +42,15 @@ def mutate_parents(
     ages = [None] * offspring_size
 
     i = 0
-    args = {
-        "innov_db_body": innov_db_body,
-        "innov_db_brain": innov_db_brain,
-        "rng": rng,
-    }
 
     for individual in population.individuals:
         if rng.choice([True, False]):
             """Mutate body."""
-            offspring_genotypes[i] = individual.genotype.mutate(**args)
+            offspring_genotypes[i] = individual.genotype.mutate(innov_db_body=innov_db_body, innov_db_brain=innov_db_brain, rng=rng)
             ages[i] = generation_index + 1
         else:
             """Only mutate brain and as such, we dont change age."""
-            brain = individual.genotype.mutate_brain(innov_db_brain=innov_db_brain, rng=rng)
+            brain = individual.genotype.mutate_brain(innov_db=innov_db_brain, rng=rng)
             offspring_genotypes[i] = Genotype(body=individual.genotype.body, brain=brain.brain)
             ages[i] = individual.age
         i += 1

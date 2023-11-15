@@ -2,10 +2,9 @@
 
 import logging
 
-import config
+import innov_protection_config as config
 import multineat
 import numpy as np
-import numpy.typing as npt
 from base import Base
 from evaluator import Evaluator
 from experiment import Experiment
@@ -19,48 +18,69 @@ from sqlalchemy.orm import Session
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
-from revolve2.experimentation.rng import make_rng, seed_from_time, make_rng_time_seed
+from revolve2.experimentation.rng import make_rng, seed_from_time
 
-
-N_GEN = 10
-INITIAL_POPULATION_INNER_SIZE = 10
-RNG = make_rng_time_seed()
-
-def select_parents(
+def mutate_parents(
         rng: np.random.Generator,
         population: Population,
         offspring_size: int,
-) -> npt.NDArray[np.float_]:
+        evaluator: Evaluator,
+        innov_db_body: multineat.InnovationDatabase,
+        innov_db_brain: multineat.InnovationDatabase,
+        generation_index: int,
+) -> Population:
     """
     Select pairs of parents using a tournament.
 
     :param rng: Random number generator.
     :param population: The population to select from.
     :param offspring_size: The number of parent pairs to select.
-    :returns: Pairs of indices of selected parents. offspring_size x 2 ints.
+    :returns: The offspring.
     """
-    return np.array(
-        [
-            selection.multiple_unique(
-                2,
-                [individual.genotype for individual in population.individuals],
-                [individual.fitness for individual in population.individuals],
-                lambda _, fitnesses: selection.tournament(rng, fitnesses, k=1),
-            )
-            for _ in range(offspring_size)
-        ],
+    offspring_genotypes = [None] * offspring_size
+    generation = [None] * offspring_size
+
+    i = 0
+    args = {
+        "innov_db_body": innov_db_body,
+        "innov_db_brain": innov_db_brain,
+        "rng": rng,
+    }
+
+    for individual in population.individuals:
+        if rng.choice([True, False]):
+            """Mutate body."""
+            offspring_genotypes[i] = individual.genotype.mutate(**args)
+            generation[i] = generation_index + 1
+        else:
+            brain = individual.genotype.mutate_brain(**args)
+            offspring_genotypes[i] = Genotype(body=individual.genotype.body, brain=brain.brain)
+            generation[i] = individual.age
+        i += 1
+
+    offspring_fitnesses = evaluator.evaluate(
+        [genotype.develop() for genotype in offspring_genotypes]
     )
 
 
+
+    # Make an intermediate offspring population.
+    offspring_population = Population(
+        individuals=[
+            Individual(genotype=genotype, fitness=fitness, age=age)
+            for genotype, fitness, age in zip(offspring_genotypes, offspring_fitnesses, generation)
+        ]
+    )
+    return offspring_population
+
+
 def select_survivors(
-        rng: np.random.Generator,
         original_population: Population,
         offspring_population: Population,
 ) -> Population:
     """
-    Select survivors using a tournament.
+    Select survivors using a pareto frontier.
 
-    :param rng: Random number generator.
     :param original_population: The population the parents come from.
     :param offspring_population: The offspring.
     :returns: A newly created population.
@@ -188,31 +208,19 @@ def run_experiment(dbengine: Engine) -> None:
         )
 
         # Create offspring.
-        parents = select_parents(rng, population, config.OFFSPRING_SIZE)
-        offspring_genotypes = [
-            Genotype.crossover(
-                population.individuals[parent1_i].genotype,
-                population.individuals[parent2_i].genotype,
-                rng,
-            ).mutate(innov_db_body, innov_db_brain, rng)
-            for parent1_i, parent2_i in parents
-        ]
-
-        offspring_fitnesses = evaluator.evaluate(
-            [genotype.develop() for genotype in offspring_genotypes]
+        offspring_population = mutate_parents(
+            rng,
+            population,
+            config.OFFSPRING_SIZE,
+            evaluator,
+            innov_db_body,
+            innov_db_brain,
+            generation.generation_index,
         )
 
-        # Make an intermediate offspring population.
-        offspring_population = Population(
-            individuals=[
-                Individual(genotype=genotype, fitness=fitness, age=generation.generation_index + 1)
-                for genotype, fitness in zip(offspring_genotypes, offspring_fitnesses)
-            ]
-        )
 
         # Create the next population by selecting survivors.
         population = select_survivors(
-            rng,
             population,
             offspring_population,
         )

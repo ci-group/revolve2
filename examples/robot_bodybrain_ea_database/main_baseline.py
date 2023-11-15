@@ -2,7 +2,7 @@
 
 import logging
 
-import config
+import baseline_config as config
 import multineat
 import numpy as np
 import numpy.typing as npt

@@ -1,6 +1,6 @@
 """Rerun the best robot between all experiments."""
 
-import config
+import baseline_config
 from evaluator import Evaluator
 from genotype import Genotype
 from individual import Individual

@@ -1,6 +1,6 @@
 """Plot fitness over generations for all experiments, averaged."""
 
-import config
+import baseline_config
 import matplotlib.pyplot as plt
 import pandas
 from experiment import Experiment

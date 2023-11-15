@@ -49,7 +49,7 @@ class CoordinateOperations:
 
             elements = []
             for xe, ye, ze in product(range(x), range(y), range(z)):
-                target = body_np_array[xe][ye][ze]
+                target = body_np_array[xe, ye, ze]
                 if isinstance(target, Module):
                     elements.append(np.subtract((xe, ye, ze), core_position))
             self._coords[i] = np.asarray(elements)

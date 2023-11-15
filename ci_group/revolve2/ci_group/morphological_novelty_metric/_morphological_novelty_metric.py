@@ -114,7 +114,7 @@ class MorphologicalNoveltyMetric:
                 self._orientations[i], self._magnitudes[i]
             ):
                 x, z = (int(orientation[0] / bin_size), int(orientation[1] / bin_size))
-                self._histograms[i][x][z] += magnitude
+                self._histograms[i, x, z] += magnitude
 
     def _normalize_cast_int(self) -> None:
         """Normalize a matrix (array), making its sum  = _INT_CASTER."""

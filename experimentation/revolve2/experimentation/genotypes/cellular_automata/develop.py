@@ -1,7 +1,7 @@
 import numpy as np
 import math
 from queue import Queue
-from typing import Any
+from typing import Any, Tuple, Set, List
 from dataclasses import dataclass
 
 from revolve2.modular_robot import (
@@ -18,9 +18,9 @@ from revolve2.experimentation.genotypes.cellular_automata.ca_genotype import CAG
 
 @dataclass
 class __Module:
-    position: tuple[int, int, int]
-    forward: tuple[int, int, int]
-    up: tuple[int, int, int]
+    position: Tuple[int, int, int]
+    forward: Tuple[int, int, int]
+    up: Tuple[int, int, int]
     chain_length: int
     module_reference: Module
 
@@ -38,7 +38,7 @@ def develop(
     max_parts = 100
 
     to_explore: Queue[__Module] = Queue()
-    grid: set[tuple[int, int]] = set()
+    grid: Set[Tuple[int, int, int]] = set()
 
     body = Body()
     ca_grid = genotype.ca_grid
@@ -53,7 +53,7 @@ def develop(
     while not to_explore.empty():
         module = to_explore.get()
 
-        children: list[tuple[int, int]] = []  # child index, rotation
+        children: List[Tuple[int, int]] = []  # child index, rotation
 
         if isinstance(module.module_reference, Core):
             children.append((Directions.FRONT, 0))
@@ -82,8 +82,8 @@ def develop(
 
 def __module_from_ca(
     ca_grid,
-    position: tuple[int, int, int],
-) -> tuple[Any, int]:
+    position: Tuple[int, int, int],
+) -> Tuple[Any, int]:
     """
     Identifies which module type is present in ca_grid[position]
 
@@ -93,8 +93,8 @@ def __module_from_ca(
     :returns: (module type, rotation)
     """
 
-    #print("current position on ca_grid: ", position)
-    #print("ca_grid value at position: ", ca_grid[position[0]][position[1]])
+    # print("current position on ca_grid: ", position)
+    # print("ca_grid value at position: ", ca_grid[position[0]][position[1]])
 
     if ca_grid[position[0]][position[1]] == 1:
         module_type = Brick
@@ -107,7 +107,7 @@ def __module_from_ca(
 
     rotation = 0  # ca_grid[position[0]][position[1]]
 
-    #print("module_type: ", module_type)
+    # print("module_type: ", module_type)
 
     return (module_type, rotation)
 
@@ -117,7 +117,7 @@ def __add_child(
     module: __Module,
     child_index: int,
     rotation: int,
-    grid: set[tuple[int, int, int]],
+    grid: Set[Tuple[int, int, int]],
 ) -> __Module | None:
     forward = __rotate(module.forward, module.up, rotation)
     position = __add(module.position, forward)
@@ -147,15 +147,15 @@ def __add_child(
     )
 
 
-def __add(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
+def __add(a: Tuple[int, int, int], b: Tuple[int, int, int]) -> Tuple[int, int, int]:
     return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
 
 
-def __timesscalar(a: tuple[int, int, int], scalar: int) -> tuple[int, int, int]:
+def __timesscalar(a: Tuple[int, int, int], scalar: int) -> Tuple[int, int, int]:
     return (a[0] * scalar, a[1] * scalar, a[2] * scalar)
 
 
-def __cross(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
+def __cross(a: Tuple[int, int, int], b: Tuple[int, int, int]) -> Tuple[int, int, int]:
     return (
         a[1] * b[2] - a[2] * b[1],
         a[2] * b[0] - a[0] * b[2],
@@ -163,13 +163,13 @@ def __cross(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int,
     )
 
 
-def __dot(a: tuple[int, int, int], b: tuple[int, int, int]) -> int:
+def __dot(a: Tuple[int, int, int], b: Tuple[int, int, int]) -> int:
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 
 
 def __rotate(
-    a: tuple[int, int, int], b: tuple[int, int, int], angle: int
-) -> tuple[int, int, int]:
+    a: Tuple[int, int, int], b: Tuple[int, int, int], angle: int
+) -> Tuple[int, int, int]:
     """
     Rotates vector a a given angle around b.
 

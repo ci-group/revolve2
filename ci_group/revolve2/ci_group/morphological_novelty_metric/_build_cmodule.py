@@ -1,6 +1,4 @@
 import os
-import shutil
-from glob import glob
 from os.path import join
 
 import numpy
@@ -17,6 +15,7 @@ def build() -> None:
     directory_path = os.path.dirname(os.path.abspath(__file__))
 
     source = join(directory_path, "_calculate_novelty.pyx")
+
     include = numpy.get_include()
 
     match os.name:
@@ -56,21 +55,8 @@ def build() -> None:
 
     setup(
         ext_modules=ext_modules,
-        script_args=["build_ext", "--inplace"],
+        script_args=["build_ext", f"--build-lib={directory_path}"],
     )
-
-    curr_path = os.getcwd()
-    outputs = glob(f"{curr_path}/*.so")
-    for path in outputs:
-        # Copy built extensions back to the project
-        relative_extension = os.path.relpath(path, curr_path)
-        extension_file_in_library = join(directory_path, relative_extension)
-        shutil.copyfile(path, extension_file_in_library)
-        os.remove(path)
-
-        # For the built extension, keep original permissions but add read and execute permissions for everyone.
-        current_mode = os.stat(extension_file_in_library).st_mode
-        os.chmod(extension_file_in_library, current_mode | 0o0555)
 
 
 if __name__ == "__main__":

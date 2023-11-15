@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from math import atan2, pi, sqrt
 
 import numpy as np
@@ -7,16 +7,10 @@ from numpy.typing import NDArray
 from revolve2.modular_robot import ModularRobot
 
 from ._coordinate_operations import CoordinateOperations
-
-try:  # The try except is necessary for sphinx to ignore the import, since it also cant resolve .so imports.
-    from .calculate_novelty import calculate_novelty  # type: ignore
-
-    """This type-ignore is necessary since the calculate_novelty.so is built on install and cant be resolved by mypy."""
-except Exception:
-    raise
+from .calculate_novelty import calculate_novelty
 
 
-@dataclass
+@dataclass(init=False)
 class MorphologicalNoveltyMetric:
     """
     Calculate the Morphological Novelty Score for a Population.
@@ -25,21 +19,15 @@ class MorphologicalNoveltyMetric:
     The work that has to be done to reshape distribution 1 to distribution 2 is used for the final novelty calculation.
 
     A detailed description of the Algorithm can be found in:
-    Oliver Weissl, and A.E. Eiben. "Morphological-Novelty in Modular Robot Evolution". 2023  IEEE Symposium Series on Computational Intelligence (SSCI)(pp. 1066-1071). IEEE, 2023.
+    Oliver Weissl, and A.E. Eiben. "Morphological-Novelty in Modular Robot Evolution". 2023 IEEE Symposium Series on Computational Intelligence (SSCI)(pp. 1066-1071). IEEE, 2023.
     """
 
-    _coordinates: list[NDArray[np.float128]] = field(init=False)
-    _magnitudes: list[list[float]] = field(default_factory=lambda: [[0.0]])
-    _orientations: list[list[tuple[float, float]]] = field(
-        default_factory=lambda: [[(0.0, 0.0)]]
-    )
-    _histograms: NDArray[np.float128] = field(
-        default_factory=lambda: np.empty(1, dtype=np.float128)
-    )
-    _int_histograms: NDArray[np.int64] = field(
-        default_factory=lambda: np.empty(1, dtype=np.int64)
-    )
-    _novelty_scores: NDArray[np.float64] = field(init=False)
+    _coordinates: list[NDArray[np.float128]]
+    _magnitudes: list[list[float]]
+    _orientations: list[list[tuple[float, float]]]
+    _histograms: NDArray[np.float128]
+    _int_histograms: NDArray[np.int64]
+    _novelty_scores: NDArray[np.float64]
 
     _NUM_BINS: int = 20
     """The amount of bins in the histogram. Increasing this allows for more detail, but risks sparseness, while lower values generalize more."""
@@ -86,8 +74,8 @@ class MorphologicalNoveltyMetric:
     def _coordinates_to_magnitudes_orientation(self) -> None:
         """Calculate the magnitude and orientation for the coordinates supplied."""
         instances = len(self._coordinates)
-        self._magnitudes *= instances
-        self._orientations *= instances
+        self._magnitudes = [[0.0]] * instances
+        self._orientations = [[(0.0, 0.0)]] * instances
         for i in range(instances):
             coordinates_amount = len(self._coordinates[i])
             magnitudes = [0.0] * coordinates_amount

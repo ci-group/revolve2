@@ -20,6 +20,7 @@ from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
 from revolve2.experimentation.rng import make_rng, seed_from_time
 
+
 def mutate_parents(
         rng: np.random.Generator,
         population: Population,
@@ -54,7 +55,7 @@ def mutate_parents(
             ages[i] = generation_index + 1
         else:
             """Only mutate brain and as such, we dont change age."""
-            brain = individual.genotype.mutate_brain(**args)
+            brain = individual.genotype.mutate_brain(innov_db_brain=innov_db_brain, rng=rng)
             offspring_genotypes[i] = Genotype(body=individual.genotype.body, brain=brain.brain)
             ages[i] = individual.age
         i += 1
@@ -62,8 +63,6 @@ def mutate_parents(
     offspring_fitnesses = evaluator.evaluate(
         [genotype.develop() for genotype in offspring_genotypes]
     )
-
-
 
     # Make an intermediate offspring population.
     offspring_population = Population(
@@ -218,7 +217,6 @@ def run_experiment(dbengine: Engine) -> None:
             innov_db_brain,
             generation.generation_index,
         )
-
 
         # Create the next population by selecting survivors.
         population = select_survivors(

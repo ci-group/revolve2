@@ -1,33 +1,39 @@
 import numpy as np
-from develop import develop
-from ca_genotype import CAGenotype
+from ca_genotype import CAGenotype, CAInitParameters, _CAGenotype
 from revolve2.modular_robot import MorphologicalMeasures, get_body_states_single_robot
+from revolve2.ci_group.rng import make_rng_time_seed
 import matplotlib.pyplot as plt
 from revolve2.ci_group import fitness_functions, modular_robots, terrains
 
 
 def main():
+    rng = make_rng_time_seed()
+    # If you run with a set seed, use the following lines instead.
+    # SEED = 1234
+    # rng = revolve2.ci_group.rng.make_rng(SEED)
+
+    params = CAInitParameters(domain_size=7, iterations=15, nr_rules=10)
+    g = CAGenotype.random(params, rng)
+
     dsize = 7
     domain = np.zeros((dsize, dsize))
     domain[dsize // 2, dsize // 2] = 1
 
-    g = CAGenotype()
-    g.set_params(domain, 15)
-    g.generate_random_genotype(10)
-    g.generate_body()
-    g.set_core(dsize // 2, dsize // 2)
+    g._ca_type.generate_random_genotype(10)
+    g._ca_type.generate_body()
+    g._ca_type.set_core(dsize // 2, dsize // 2)
 
-    ca_grid = g.ca_grid
+    ca_grid = g._ca_type.ca_grid
     ca_grid[3][2] = 2
     ca_grid[4][5] = 2
-    g.ca_grid = ca_grid
+    g._ca_type.ca_grid = ca_grid
 
     print("genotype: \n", g.get_grid())
 
-    body = develop(g)
+    body = g._ca_type.develop()
 
     body_measures = MorphologicalMeasures(body=body)
-    grid_arr = np.zeros_like(g.ca_grid)
+    grid_arr = np.zeros_like(g._ca_type.ca_grid)
     grid = body_measures.body_as_grid
 
     for x in range(body_measures.bounding_box_depth):
@@ -49,7 +55,7 @@ def main():
     import matplotlib.pyplot as plt
 
     fig, axs = plt.subplots(1, 2)
-    axs[0].imshow(g.ca_grid)
+    axs[0].imshow(g._ca_type.ca_grid)
     axs[1].imshow(grid_arr)
     plt.show()
 
@@ -60,13 +66,13 @@ def additional():
     domain[dsize // 2, dsize // 2] = 1
     rule_set = {}
 
-    g = CAGenotype()
+    g = _CAGenotype()
     g.set_params(init_state=domain, iterations=3, rule_set=rule_set)
     g.generate_random_genotype(30)
     g.generate_body()
     g.set_core(dsize // 2, dsize // 2)
 
-    body = develop(g)
+    body = g.develop()
 
     # plt.imshow(g.ca_grid)
     # plt.show()
@@ -117,7 +123,7 @@ def modular_robot_test():
     domain = np.zeros((dsize, dsize))
     domain[dsize // 2, dsize // 2] = 1
 
-    g = CAGenotype()
+    g = _CAGenotype()
     g.set_params(init_state=domain, iterations=5, rule_set={})
     g.rule_set = {
         (1.0, 0.0, 0.0, 0.0): 1.0,
@@ -130,31 +136,32 @@ def modular_robot_test():
     g.ca_grid[4][3] = 2
     g.ca_grid[3][4] = 2
 
-    body = develop(g)
+    body = g.develop()
 
-    body_measures = MorphologicalMeasures(body=body)
-    grid_arr = np.zeros_like(g.ca_grid)
-    grid = body_measures.body_as_grid
-    print("core in ca_grid", g.core_position)
-    print("core in body_measures", body_measures.core_grid_position)
+    # TODO: make this show the correct visual measur
+    # body_measures = MorphologicalMeasures(body=body)
+    # grid_arr = np.zeros_like(g.ca_grid)
+    # grid = body_measures.body_as_grid
+    # print("core in ca_grid", g.core_position)
+    # print("core in body_measures", body_measures.core_grid_position)
 
-    for x in range(body_measures.bounding_box_depth):
-        for y in range(body_measures.bounding_box_width):
-            # if grid[x][y][body_measures.core_grid_position[2]] is not None:
-            if "Brick" in str(grid[x][y][body_measures.core_grid_position[2]]):
-                grid_arr[x][y] = 1.0
-            elif "ActiveHinge" in str(grid[x][y][body_measures.core_grid_position[2]]):
-                grid_arr[x][y] = 2.0
-            elif "Core" in str(grid[x][y][body_measures.core_grid_position[2]]):
-                grid_arr[x][y] = 3.0
+    # for x in range(body_measures.bounding_box_depth):
+    #     for y in range(body_measures.bounding_box_width):
+    #         # if grid[x][y][body_measures.core_grid_position[2]] is not None:
+    #         if "Brick" in str(grid[x][y][body_measures.core_grid_position[2]]):
+    #             grid_arr[x][y] = 1.0
+    #         elif "ActiveHinge" in str(grid[x][y][body_measures.core_grid_position[2]]):
+    #             grid_arr[x][y] = 2.0
+    #         elif "Core" in str(grid[x][y][body_measures.core_grid_position[2]]):
+    #             grid_arr[x][y] = 3.0
 
-    print(grid)
+    # print(grid)
 
     """
     fig, axs = plt.subplots(nrows=1, ncols=2)
     axs[0].imshow(grid_arr)
-    axs[1].imshow(g.ca_grid)
-    cbar = fig.colorbar(axs[1].imshow(g.ca_grid), ax=axs, fraction=0.02)
+    axs[1].imshow(g._ca_type.ca_grid)
+    cbar = fig.colorbar(axs[1].imshow(g._ca_type.ca_grid), ax=axs, fraction=0.02)
     plt.show()
     """
 
@@ -183,7 +190,7 @@ def modular_robot_test():
     asyncio.run(runner.run_batch(batch))
 
     """
-    
+
     # Create a runner that will perform the simulation.
     # This tutorial chooses to use Mujoco, but your version of revolve might contain other simulators as well.
     runner = LocalRunner(headless=True)
@@ -191,7 +198,7 @@ def modular_robot_test():
     # Once a runner finishes a batch, it can be reused to run a new batch.
     # (We only run one batch in this tutorial, so we only use the runner once.)
 
-    
+
     results = asyncio.run(runner.run_batch(batch))
     environment_results = results.environment_results[0]
 

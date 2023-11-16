@@ -1,14 +1,18 @@
 """
 CA representation testing, generates robot with simple survivor selection (top k% of fittest) with
-fixed starting gene length (dict of CA rules) and mutation that replaces one random chosen rule with a randomly 
-generated rule 
+fixed starting gene length (dict of CA rules) and mutation that replaces one random chosen rule with a randomly
+generated rule
 """
 
 import logging
+from typing import List, Tuple
 import numpy as np
 import asyncio
 import json
 import matplotlib.pyplot as plt
+from pathlib import Path
+
+from numpy.typing import NDArray
 
 import config
 import revolve2.ci_group.rng
@@ -16,72 +20,55 @@ from revolve2.ci_group.logging import setup_logging
 from revolve2.ci_group import terrains, fitness_functions
 from revolve2.ci_group.rng import make_rng
 from revolve2.ci_group.simulation import create_batch_single_robot_standard
-from revolve2.modular_robot import ActiveHinge, Body, Brick, ModularRobot, RightAngles
+from revolve2.modular_robot import (
+    ActiveHinge,
+    Body,
+    Brick,
+    ModularRobot,
+    RightAngles,
+    ModularRobot,
+    get_body_states_single_robot,
+)
 from revolve2.modular_robot.brains import BrainCpgNetworkNeighborRandom
-from revolve2.modular_robot import ModularRobot, get_body_states_single_robot
+from revolve2.modular_robot.representations import render_robot
 from revolve2.simulators.mujoco import LocalRunner
 
-from revolve2.experimentation.genotypes.cellular_automata.ca_genotype import CAGenotype
-from revolve2.experimentation.genotypes.cellular_automata.develop import develop
+from revolve2.experimentation.genotypes.cellular_automata import (
+    CAGenotype,
+    CAInitParameters,
+)
 
 
-def initialize():
-    population = []
+def initialize() -> List[CAGenotype]:
+    rng = revolve2.ci_group.rng.make_rng_time_seed()
+    # If you run with a set seed, use the following lines instead.
+    # SEED = 1234
+    # rng = revolve2.ci_group.rng.make_rng(SEED)
 
-    for i in range(config.NUM_INDIVIDUALS):
-        rng = revolve2.ci_group.rng.make_rng_time_seed()
-
-        # If you run with a set seed, use the following lines instead.
-        # SEED = 1234
-        # rng = revolve2.ci_group.rng.make_rng(SEED)
-
-        dsize = 10
-        domain = np.zeros((dsize, dsize))
-        domain[dsize // 2, dsize // 2] = 1
-
-        g = CAGenotype()
-        g.set_params(init_state=domain, iterations=6, rule_set={})
-        g.generate_random_genotype(10)
-        g.generate_body()
-        g.set_core(dsize // 2, dsize // 2)
-
-        body = develop(g)
-
-        population.append(g.rule_set)
-
-    return population, domain
+    params = CAInitParameters(domain_size=10, iterations=6, nr_rules=10)
+    return CAGenotype.random_individuals(params, config.NUM_INDIVIDUALS, rng)
 
 
-def run_experiment(previous_population, init_domain):
+def run_experiment(previous_population: List[CAGenotype], itteration: int):
     """
     Run all runs of an experiment using the provided parameters.
 
     """
     # Create a list where we will store the success ratio for each repetition.
-
     generation_fitness = []
     current_population = []
 
-    for i in range(len(previous_population)):
+    for itter, individual in enumerate(previous_population):
         rng = revolve2.ci_group.rng.make_rng_time_seed()
 
-        g = CAGenotype()
-
-        g.rule_set = previous_population[i]
-        g.init_state = init_domain.copy()
-        g.mutate()
-        g.generate_body()
-        dsize = len(g.ca_grid)
-        g.set_core(dsize // 2, dsize // 2)
-
-        print(g.ca_grid)
-
-        body = develop(g)
+        g = individual.mutate()
+        body = g.develop()
 
         # We choose a 'CPG' brain with random parameters (the exact working will not be explained here).
         brain = BrainCpgNetworkNeighborRandom(rng)
         # Combine the body and brain into a modular robot.
         robot = ModularRobot(body, brain)
+        # render_robot(robot, Path() / f"{itteration}_{itter}_robot.png")
 
         batch = create_batch_single_robot_standard(robot=robot, terrain=terrains.flat())
 
@@ -104,21 +91,21 @@ def run_experiment(previous_population, init_domain):
         generation_fitness.append(xy_displacement)
         logging.info(f"xy_displacement = {xy_displacement}")
 
-        current_population.append(g.rule_set)
+        current_population.append(g)
 
     return generation_fitness, current_population
 
 
 def survivor_selection(generation_fitness, population, percent_survivors):
     # Create a list of (fitness, individual_id) tuples and sort it in descending order
-    fitness_with_id = [(fitness, id) for id, fitness in enumerate(generation_fitness)]
+    fitness_with_id = [(fitness, i) for i, fitness in enumerate(generation_fitness)]
     fitness_with_id.sort(reverse=True)
 
     num_individuals = len(generation_fitness)
     num_survivors = int((percent_survivors / 100) * num_individuals)
 
     # Select the top N individuals
-    top_individuals = [population[id] for _, id in fitness_with_id[:num_survivors]]
+    top_individuals = [population[i] for _, i in fitness_with_id[:num_survivors]]
 
     # Determine the number of additional individuals needed to fill the gap
     gap_size = len(population) - len(top_individuals)
@@ -130,14 +117,13 @@ def survivor_selection(generation_fitness, population, percent_survivors):
     return top_individuals
 
 
-
-def save_population_to_file(population, file_path):
-    with open(file_path, 'w') as file:
-        for individual in population:
-            converted_individual = {str(k): v for k, v in individual.items()}
-            json.dump(converted_individual, file)
-            file.write('\n')
-
+def save_population_to_file(population: List[CAGenotype], file_path: str):
+    population_data = [
+        {str(k): v for k, v in individual._ca_type.rule_set.items()}
+        for individual in population
+    ]
+    with open(file_path, "w") as f:
+        json.dump(population_data, f)
 
 
 def main() -> None:
@@ -150,39 +136,30 @@ def main() -> None:
     # We also provide a file name, so the log will be written to both the console and that file.
     setup_logging(file_name="log.txt")
 
-    # Let's print a simple message.
-    # We use the 'info' function to give the message the 'INFO' severity.
-    logging.info("Starting program.")
-    # The following message will be invisible.
-    logging.debug(
-        "This debug message is invisible, because we set our visible severity to 'INFO' and higher."
-    )
-
     fitness_data = []
-    population, init_domain = initialize()
-    for repetition in range(config.NUM_GENERATIONS):
-        generation_fitness, population_next = run_experiment(population, init_domain)
+    population = initialize()
+
+    for i in range(config.NUM_GENERATIONS):
+        generation_fitness, population_next = run_experiment(population, i)
         fitness_data.append([generation_fitness])
         population = survivor_selection(
             generation_fitness.copy(), population_next.copy(), 70
         )
 
     plt.figure()
-    plt.title(f'# generations = {config.NUM_GENERATIONS}, population size = {config.NUM_INDIVIDUALS}')
-    plt.xlabel('generation')
-    plt.ylabel('mean fitness')
-    fitness_means = []
-    x = [i for i in range(len(fitness_data))]
-    for i in range(len(fitness_data)):
-        fitness_means.append(np.mean(fitness_data[i]))
+    plt.title(
+        f"# generations = {config.NUM_GENERATIONS}, population size = {config.NUM_INDIVIDUALS}"
+    )
+    plt.xlabel("generation")
+    plt.ylabel("mean fitness")
 
-    plt.plot(x, fitness_means)
-    plt.savefig(f'examples/ca_experiments/fitness_dynamics_CA_g{config.NUM_GENERATIONS}_p{config.NUM_INDIVIDUALS}')
+    plt.plot(list(range(len(fitness_data))), [np.mean(x) for x in fitness_data])
+    plt.savefig(
+        f"examples/ca_experiments/fitness_dynamics_CA_g{config.NUM_GENERATIONS}_p{config.NUM_INDIVIDUALS}"
+    )
 
-    file_path = 'examples/ca_experiments/last_population.json'
+    file_path = "examples/ca_experiments/last_population.json"
     save_population_to_file(population, file_path)
-
-
 
 
 if __name__ == "__main__":

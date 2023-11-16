@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from itertools import product
 
 import numpy as np
@@ -8,109 +7,107 @@ from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.base import Body
 
 
-@dataclass(init=False)
-class CoordinateOperations:
-    """Transform points in a distribution."""
+def coords_from_bodies(
+    bodies: list[Body], cob_heuristics: bool
+) -> list[NDArray[np.float128]]:
+    """
+    Extract coordinates of modules from a body.
 
-    _coords: list[NDArray[np.float128]]
+    :param bodies: The bodies.
+    :param cob_heuristics: If change of basis heuristic approximation is used.
+    :return: The array of coordinates.
+    """
+    coordinates = _body_to_adjusted_coordinates(bodies)
+    if cob_heuristics:
+        _coordinates_pca_heuristic(coordinates)
+    else:
+        _coordinates_pca_change_basis(coordinates)
+    return coordinates
 
-    def coords_from_bodies(
-        self, bodies: list[Body], cob_heuristics: bool
-    ) -> list[NDArray[np.float128]]:
-        """
-        Extract coordinates of modules from a body.
 
-        :param bodies: The bodies.
-        :param cob_heuristics: If change of basis heuristic approximation is used.
-        :return: The array of coordinates.
-        """
-        self._body_to_adjusted_coordinates(bodies)
-        if cob_heuristics:
-            self._coordinates_pca_heuristic()
-        else:
-            self._coordinates_pca_change_basis()
+def _body_to_adjusted_coordinates(bodies: list[Body]) -> list[NDArray[np.float128]]:
+    """
+    Extract coordinates of modules in a body and adjusts them with the core position.
 
-        try:
-            return self._coords
-        finally:
-            """Ensure new operations are independent from old ones."""
-            del self._coords
+    :param bodies: The body.
+    :return: The coordinates for each body.
+    """
+    coords = [np.empty(shape=0, dtype=np.float128)] * len(bodies)
+    i = 0
+    for body in bodies:
+        body_array, core_position = body.to_grid()
+        body_np_array: NDArray[np.int64] = np.asarray(body_array)
 
-    def _body_to_adjusted_coordinates(self, bodies: list[Body]) -> None:
-        """
-        Extract coordinates of modules in a body and adjusts them with the core position.
+        x, y, z = body_np_array.shape
 
-        :param bodies: The body.
-        """
-        self._coords = [np.empty(shape=0, dtype=np.float128)] * len(bodies)
-        i = 0
-        for body in bodies:
-            body_array, core_position = body.to_grid()
-            body_np_array: NDArray[np.int64] = np.asarray(body_array)
+        elements = []
+        for xe, ye, ze in product(range(x), range(y), range(z)):
+            target = body_np_array[xe, ye, ze]
+            if isinstance(target, Module):
+                elements.append(np.subtract((xe, ye, ze), core_position))
+        coords[i] = np.asarray(elements)
+        i += 1
+    return coords
 
-            x, y, z = body_np_array.shape
 
-            elements = []
-            for xe, ye, ze in product(range(x), range(y), range(z)):
-                target = body_np_array[xe, ye, ze]
-                if isinstance(target, Module):
-                    elements.append(np.subtract((xe, ye, ze), core_position))
-            self._coords[i] = np.asarray(elements)
-            i += 1
+def _coordinates_pca_change_basis(coords: list[NDArray[np.float128]]) -> None:
+    """
+    Transform the coordinate distribution by the magnitude of variance of the respective basis.
 
-    def _coordinates_pca_change_basis(self) -> None:
-        """
-        Transform the coordinate distribution by the magnitude of variance of the respective basis.
+    The detailed steps of the transformation are discussed in the paper.
 
-        The detailed steps of the transformation are discussed in the paper.
-        """
-        i = 0
-        for coordinates in self._coords:
-            if len(coordinates) > 1:
-                covariance_matrix = np.cov(coordinates.T)
-                eigen_values, eigen_vectors = np.linalg.eig(covariance_matrix)
+    :param coords: The coordinates.
+    """
+    i = 0
+    for coordinates in coords:
+        if len(coordinates) > 1:
+            covariance_matrix = np.cov(coordinates.T)
+            eigen_values, eigen_vectors = np.linalg.eig(covariance_matrix)
 
-                srt = np.argsort(eigen_values)[
-                    ::-1
-                ]  # sorting axis by amplitude of variance
-                for j in range(len(srt)):
-                    if srt[j] == j:
-                        continue
-                    candidate = srt[j]
+            srt = np.argsort(eigen_values)[
+                ::-1
+            ]  # sorting axis by amplitude of variance
+            for j in range(len(srt)):
+                if srt[j] == j:
+                    continue
+                candidate = srt[j]
 
-                    # here we start rotating using Rodrigues` rotation formula.
-                    rx, ry, rz = eigen_vectors[candidate] / np.linalg.norm(
-                        eigen_vectors[candidate]
-                    )
-                    k = np.array([[0, -rz, ry], [rz, 0, -rx], [-ry, rx, 0]])
-                    rotation_matrix = np.identity(3) + 2 * np.dot(k, k)
+                # here we start rotating using Rodrigues` rotation formula.
+                rx, ry, rz = eigen_vectors[candidate] / np.linalg.norm(
+                    eigen_vectors[candidate]
+                )
+                k = np.array([[0, -rz, ry], [rz, 0, -rx], [-ry, rx, 0]])
+                rotation_matrix = np.identity(3) + 2 * np.dot(k, k)
 
-                    coordinates = np.dot(coordinates, rotation_matrix.T)
+                coordinates = np.dot(coordinates, rotation_matrix.T)
 
-                    eigen_vectors[[j, candidate]] = eigen_vectors[[candidate, j]]
-                    srt[[j, candidate]] = srt[[candidate, j]]
+                eigen_vectors[[j, candidate]] = eigen_vectors[[candidate, j]]
+                srt[[j, candidate]] = srt[[candidate, j]]
 
-                coordinates = np.linalg.inv(eigen_vectors).dot(coordinates.T)
-                self._coords[i] = coordinates.T
-            i += 1
+            coordinates = np.linalg.inv(eigen_vectors).dot(coordinates.T)
+            coords[i] = coordinates.T
+        i += 1
 
-    def _coordinates_pca_heuristic(self) -> None:
-        """
-        Transform the coordinate distribution by the magnitude of variance of the respective basis.
 
-        The heuristic approximation of the transformation by simply switching axes.
-        """
-        i = 0
-        for coordinates in self._coords:
-            if len(coordinates) > 1:
-                covariance_matrix = np.cov(coordinates.T)
-                eigen_values, _ = np.linalg.eig(covariance_matrix)
-                srt = np.argsort(eigen_values)[::-1]
-                for j in range(len(srt)):
-                    if srt[j] == j:
-                        continue
-                    candidate = srt[j]
-                    coordinates[:, [j, candidate]] = coordinates[:, [candidate, j]]
-                    srt[[j, candidate]] = srt[[candidate, j]]
-                self._coords[i] = coordinates
-            i += 1
+def _coordinates_pca_heuristic(coords: list[NDArray[np.float128]]) -> None:
+    """
+    Transform the coordinate distribution by the magnitude of variance of the respective basis.
+
+    The heuristic approximation of the transformation by simply switching axes.
+
+    :param coords: The coordinates.
+    """
+    i = 0
+    for coordinates in coords:
+        if len(coordinates) > 1:
+            covariance_matrix = np.cov(coordinates.T)
+            eigen_values, _ = np.linalg.eig(covariance_matrix)
+            srt = np.argsort(eigen_values)[::-1]
+            for j in range(len(srt)):
+                if srt[j] == j:
+                    continue
+                candidate = srt[j]
+                coordinates[:, [j, candidate]] = coordinates[:, [candidate, j]]
+                srt[[j, candidate]] = srt[[candidate, j]]
+            coords[i] = coordinates
+        i += 1

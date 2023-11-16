@@ -6,7 +6,7 @@ from numpy.typing import NDArray
 
 from revolve2.modular_robot import ModularRobot
 
-from ._coordinate_operations import CoordinateOperations
+from ._coordinate_operations import coords_from_bodies
 from .calculate_novelty import calculate_novelty
 
 
@@ -49,10 +49,7 @@ class MorphologicalNoveltyMetric:
         instances = len(population)
         bodies = [robot.body for robot in population]
 
-        coord_ops = CoordinateOperations()
-        self._coordinates = coord_ops.coords_from_bodies(
-            bodies, cob_heuristics=cob_heuristic
-        )
+        self._coordinates = coords_from_bodies(bodies, cob_heuristics=cob_heuristic)
 
         self._histograms = np.empty(
             shape=(instances, self._NUM_BINS, self._NUM_BINS), dtype=np.float64
@@ -69,10 +66,7 @@ class MorphologicalNoveltyMetric:
             self._int_histograms, self._int_histograms.shape[0], self._NUM_BINS
         )
         max_novelty = self._novelty_scores.max()
-        try:
-            return [float(score / max_novelty) for score in self._novelty_scores]
-        finally:
-            self.__reset_class()
+        return [float(score / max_novelty) for score in self._novelty_scores]
 
     def _coordinates_to_magnitudes_orientation(self) -> None:
         """Calculate the magnitude and orientation for the coordinates supplied."""
@@ -80,7 +74,7 @@ class MorphologicalNoveltyMetric:
         self._magnitudes = [[0.0]] * instances
         self._orientations = [[(0.0, 0.0)]] * instances
         for i in range(instances):
-            coordinates_amount = len(self._coordinates[i])
+            coordinates_amount = self._coordinates[i].shape[0]
             magnitudes = [0.0] * coordinates_amount
             orientations = [(0.0, 0.0)] * coordinates_amount
             for j in range(coordinates_amount):
@@ -128,12 +122,3 @@ class MorphologicalNoveltyMetric:
             self._int_histograms[i] = histogram + np.reshape(
                 mask, (-1, histogram.shape[0])
             )
-
-    def __reset_class(self) -> None:
-        """Reset the class in order to avoid potential propagation mistakes."""
-        del self._coordinates
-        del self._novelty_scores
-        del self._int_histograms
-        del self._magnitudes
-        del self._orientations
-        del self._histograms

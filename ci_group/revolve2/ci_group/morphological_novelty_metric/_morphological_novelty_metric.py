@@ -8,25 +8,20 @@ from revolve2.modular_robot import ModularRobot
 from ._coordinate_operations import coords_from_bodies
 from .calculate_novelty import calculate_novelty
 
-Orientations = list[list[tuple[float, float]]]
-Magnitudes = list[list[float]]
-
-INT_CASTER: int = 10_000
+_INT_CASTER: int = 10_000
 """Casting floats to INT allows to mitigate floating-point issues in the distribution reshaping. The higher the number, the more presicion you get."""
 
 
 def get_novelty_from_population(
     population: list[ModularRobot], cob_heuristic: bool = False, num_bins: int = 20
-) -> list[float]:
+) -> NDArray[np.float64]:
     """
     Get the morphological novelty score for individuals in a population.
 
     This metric for Morphological Novelty considers robots a distribution in space, which can be reshaped into any other distribution.
     The work that has to be done to reshape distribution 1 to distribution 2 is used for the final novelty calculation.
-
     A detailed description of the Algorithm can be found in:
     Oliver Weissl, and A.E. Eiben. "Morphological-Novelty in Modular Robot Evolution". 2023 IEEE Symposium Series on Computational Intelligence (SSCI)(pp. 1066-1071). IEEE, 2023.
-
 
     :param population: The population of robots.
     :param cob_heuristic: Whether the heuristic approximation for change of basis is used.
@@ -43,18 +38,19 @@ def get_novelty_from_population(
     )
     int_histograms = _normalize_cast_int(histograms)
 
-    novelty_scores = calculate_novelty(
+    novelty_scores: NDArray[np.float64] = calculate_novelty(
         int_histograms, int_histograms.shape[0], num_bins
     )
 
     del int_histograms
     """This avoids future function calls to work on the previous histogram content."""
-    return [score / max(novelty_scores) for score in novelty_scores]
+    novelty_scores / novelty_scores.max()
+    return novelty_scores
 
 
 def _coordinates_to_magnitudes_orientation(
     coordinates: list[NDArray[np.float128]],
-) -> tuple[Magnitudes, Orientations]:
+) -> tuple[list[list[float]], list[list[tuple[float, float]]]]:
     """
     Calculate the magnitude and orientation for the coordinates supplied.
 
@@ -80,7 +76,9 @@ def _coordinates_to_magnitudes_orientation(
 
 
 def _gen_gradient_histogram(
-    orientations: Orientations, magnitudes: Magnitudes, num_bins: int
+    orientations: list[list[tuple[float, float]]],
+    magnitudes: list[list[float]],
+    num_bins: int,
 ) -> NDArray[np.float64]:
     """
     Generate the gradient histograms for the respective histogram index.
@@ -102,7 +100,7 @@ def _gen_gradient_histogram(
 
 def _normalize_cast_int(histograms: NDArray[np.float64]) -> NDArray[np.int64]:
     """
-    Normalize a matrix (array), making its sum  = INT_CASTER.
+    Normalize a matrix (array), making its sum  = _INT_CASTER.
 
     :param histograms: The histograms to cast and normalize.
     :return: The normalized and cast histograms.
@@ -112,11 +110,11 @@ def _normalize_cast_int(histograms: NDArray[np.float64]) -> NDArray[np.int64]:
     instances = histograms.shape[0]
     for i in range(instances):
         histogram = histograms[i].copy()
-        histogram = ((histogram / histogram.sum()) * INT_CASTER).astype(np.int64)
+        histogram = ((histogram / histogram.sum()) * _INT_CASTER).astype(np.int64)
         # Casting the float histograms to int, in order to avoid floating point errors in the reshaping.
 
         error = (
-            INT_CASTER - histogram.sum()
+            _INT_CASTER - histogram.sum()
         )  # Due to the int-casting the histogram sums are marginally smaller than _INT_CASTER.
         mask = np.zeros(shape=histogram.size, dtype=np.int64)
         mask[

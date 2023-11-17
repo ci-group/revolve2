@@ -8,7 +8,7 @@ def test_simulate_single_robot() -> None:
     exp_dir = os.path.join(EXAMPLES_DIR, "simulate_single_robot")
     assert_command_succeeds(
         [
-            "python3",
+            "python",
             os.path.join(exp_dir, "main.py"),
             "-t",
             "1",

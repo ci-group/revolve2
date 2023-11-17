@@ -114,9 +114,6 @@ jobs:
 
   unit_tests:
     runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        tests: ["test_experiment_setup", "test_evaluate_multiple_isolated_robots", "test_simulate_single_robot", "test_evaluate_single_robot", "test_robot_bodybrain_ea_database", "test_robot_brain_cmaes", "test_simple_ea_xor"]
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v2

@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "revolve2-tests"
+version = "1.0.0rc1"
+description = "Revolve2: Everything for defining modular robots."
+authors = ["Aart Stuurman <aartstuurman@hotmail.com>", "Oliver Weissl <oliver.weissl@outlook.com>", "Daniel Engbert"]
+repository = "https://github.com/ci-group/revolve2"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Typing :: Typed",
+    "Topic :: Scientific/Engineering",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+]
+
+[tool.poetry.dependencies]
+pytest="^7.4.2"
+pytest-mock="^3.11.1"
+
+[tool.poetry.extras]
+dev = []

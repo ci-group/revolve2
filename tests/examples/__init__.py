@@ -1,1 +1,1 @@
-"""Unit test for the examples provided."""
+"""Unit tests for the examples provided."""

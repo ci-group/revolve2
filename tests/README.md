@@ -1,14 +1,14 @@
 # Running Unit Tests
 
-````bash
+```bash
 # (in sourced environment)
-pip3 install pytest
+pip install pytest
 
 # run tests (printing names of all tests as it goes)
 pytest -v
 
 # run tests with all output visible (e.g. print statements):
 pytest -s
-````
+```
 
 For more info, see the [pytest docs](https://docs.pytest.org/).

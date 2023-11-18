@@ -1,37 +1,30 @@
 import argparse
-from dataclasses import dataclass
+import json
 
-from typing import List
+from typing import Dict, List
 
 from adv_symmetry.ca_run import run_experiment
+from adv_symmetry.argument_schema import parse_json, Arguments
 
 
-@dataclass
-class Args:
-    num_generations: int
-    num_individuals: int
-
-
-def parse_arguments(args: List[str]) -> Args:
+def parse_arguments(args: List[str]) -> Dict:
     parser = argparse.ArgumentParser(
         prog="adv_symmetry",
         description="The main cli for the Advantages of Symmetry Evolutionary Computing project",
     )
     parser.add_argument(
-        "num_generations", help="The amount of generations to run the GA for", type=int
-    )
-    parser.add_argument(
-        "num_individuals", help="The amount of individuals in each generation", type=int
+        "json", help="The Json to load the input from", type=argparse.FileType("r")
     )
     arguments = parser.parse_args()
-    return Args(arguments.num_generations, arguments.num_individuals)
+
+    return json.load(arguments.json)
 
 
-def run(args: Args) -> None:
+def run(args: Arguments) -> None:
     run_experiment(
         num_generations=args.num_generations, num_individuals=args.num_individuals
     )
 
 
 def main(args: List[str]) -> None:
-    run(parse_arguments(args))
+    run(parse_json(parse_arguments(args)))

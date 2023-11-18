@@ -49,11 +49,13 @@ class LocalRunner(Runner):
     _headless: bool
     _start_paused: bool
     _num_simulators: int
+    _make_it_rain : bool
 
     def __init__(
         self,
         headless: bool = False,
         start_paused: bool = False,
+        make_it_rain: bool = False,
         num_simulators: int = 1,
     ):
         """
@@ -74,6 +76,7 @@ class LocalRunner(Runner):
         self._headless = headless
         self._start_paused = start_paused
         self._num_simulators = num_simulators
+        self._make_it_rain = make_it_rain
 
     @classmethod
     def _run_environment(
@@ -250,11 +253,15 @@ class LocalRunner(Runner):
 
     @staticmethod
     def _make_model(
-        env_descr: Environment, simulation_timestep: float = 0.001
+        self, env_descr: Environment, simulation_timestep: float = 0.001
     ) -> mujoco.MjModel:
         env_mjcf = mjcf.RootElement(model="environment")
 
         env_mjcf.compiler.angle = "radian"
+
+        if self.make_it_rain:
+            env_mjcf.option.density = 1000
+            env_mjcf.option.viscosity = 0.0009
 
         env_mjcf.option.timestep = simulation_timestep
         env_mjcf.option.integrator = "RK4"

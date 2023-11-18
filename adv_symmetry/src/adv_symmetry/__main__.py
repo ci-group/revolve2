@@ -1,4 +1,4 @@
 import sys
-from adv_symmetry.run import run
+from adv_symmetry.run import main
 
-run(sys.argv[1:])
+main(sys.argv[1:])

@@ -20,6 +20,7 @@ def create_batch_single_robot_standard(
     sampling_frequency: float = STANDARD_SAMPLING_FREQUENCY,
     simulation_timestep: float = STANDARD_SIMULATION_TIMESTEP,
     control_frequency: float = STANDARD_CONTROL_FREQUENCY,
+    actor_starting_height: float = 0
 ) -> Batch:
     """
     Create a simulation batch for a single robot from that robot and a terrain using standard parameters.
@@ -39,6 +40,7 @@ def create_batch_single_robot_standard(
         sampling_frequency=sampling_frequency,
         simulation_timestep=simulation_timestep,
         control_frequency=control_frequency,
+        actor_starting_height=actor_starting_height
     )
 
 

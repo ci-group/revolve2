@@ -90,10 +90,11 @@ class LocalRunner(Runner):
         sample_step: float,
         simulation_time: int | None,
         simulation_timestep: float,
+        make_it_rain: bool,
     ) -> EnvironmentResults:
         logging.info(f"Environment {env_index}")
 
-        model = cls._make_model(env_descr, simulation_timestep)
+        model = cls._make_model(env_descr, simulation_timestep, make_it_rain)
 
         data = mujoco.MjData(model)
 
@@ -242,6 +243,7 @@ class LocalRunner(Runner):
                     sample_step,
                     batch.simulation_time,
                     batch.simulation_timestep,
+                    self._make_it_rain
                 )
                 for env_index, env_descr in enumerate(batch.environments)
             ]
@@ -253,13 +255,13 @@ class LocalRunner(Runner):
 
     @staticmethod
     def _make_model(
-        self, env_descr: Environment, simulation_timestep: float = 0.001
+        env_descr: Environment, simulation_timestep: float = 0.001, make_it_rain: bool = False
     ) -> mujoco.MjModel:
         env_mjcf = mjcf.RootElement(model="environment")
 
         env_mjcf.compiler.angle = "radian"
 
-        if self.make_it_rain:
+        if make_it_rain:
             env_mjcf.option.density = 1000
             env_mjcf.option.viscosity = 0.0009
 

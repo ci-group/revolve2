@@ -11,6 +11,7 @@ def create_batch_single_robot(
     sampling_frequency: float,
     simulation_timestep: float,
     control_frequency: float,
+    actor_starting_height: float = 0
 ) -> Batch:
     """
     Create a batch for simulating a single robot.
@@ -24,7 +25,7 @@ def create_batch_single_robot(
     :returns: The created batch.
     """
     actor, controller = robot.make_actor_and_controller()
-    env = create_environment_single_actor(actor, controller, terrain)
+    env = create_environment_single_actor(actor, controller, terrain, actor_starting_height)
 
     batch = Batch(
         simulation_time=simulation_time,

@@ -1,3 +1,4 @@
+import math
 import uuid
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
@@ -333,7 +334,10 @@ def _quaternion_to_euler(quaternion: Quaternion) -> Vector3:
     w, x, y, z = quaternion
 
     roll = atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y))
-    pitch = atan2(sqrt(1 + 2 * (w * y - x * z)), sqrt(1 - 2 * (w * y - x * z)))
+    pitch = (
+        2 * atan2(sqrt(1 + 2 * (w * y - x * z)), sqrt(1 - 2 * (w * y - x * z)))
+        - math.pi / 2
+    )
     yaw = atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
 
     return Vector3([roll, pitch, yaw])

@@ -11,6 +11,9 @@ from .calculate_novelty import calculate_novelty
 _INT_CASTER: int = 10_000
 """Casting floats to INT allows to mitigate floating-point issues in the distribution reshaping. The higher the number, the more presicion you get."""
 
+Orientations = list[list[tuple[float, float]]]
+Magnitudes = list[list[float]]
+
 
 def get_novelty_from_population(
     population: list[ModularRobot], cob_heuristic: bool = False, num_bins: int = 20
@@ -50,7 +53,7 @@ def get_novelty_from_population(
 
 def _coordinates_to_magnitudes_orientation(
     coordinates: list[NDArray[np.float128]],
-) -> tuple[list[list[float]], list[list[tuple[float, float]]]]:
+) -> tuple[Magnitudes, Orientations]:
     """
     Calculate the magnitude and orientation for the coordinates supplied.
 
@@ -76,8 +79,8 @@ def _coordinates_to_magnitudes_orientation(
 
 
 def _gen_gradient_histogram(
-    orientations: list[list[tuple[float, float]]],
-    magnitudes: list[list[float]],
+    orientations: Orientations,
+    magnitudes: Magnitudes,
     num_bins: int,
 ) -> NDArray[np.float64]:
     """

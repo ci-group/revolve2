@@ -46,9 +46,9 @@ class Body(ABC):
             position += Vector3([1, 0, 0])
 
             attachment_point = parent.attachment_points.get(child_index)
+
             if attachment_point is None:
                 raise KeyError("No attachment point found at the specified location.")
-
             position = attachment_point.rotation * position
             position = Vector3.round(position)
 

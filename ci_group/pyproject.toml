@@ -1,12 +1,12 @@
 [build-system]
-requires = ["poetry-core>=1.6.0"]
+requires = ["poetry-core>=1.6.0", "Cython>=3.0.4", "numpy>=1.21.2", "setuptools>=68.2.2"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-ci-group"
 version = "1.0.0rc1"
 description = "Revolve2: Computational Intelligence Group experimentation tools and standards."
-authors = ["Aart Stuurman <aartstuurman@hotmail.com>"]
+authors = ["Aart Stuurman <aartstuurman@hotmail.com>", "Oliver Weissl <oliver.weissl@outlook.com>"]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -20,6 +20,10 @@ classifiers = [
     "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
 ]
 packages = [{ include = "revolve2" }]
+include = [{ path = "revolve2/ci_group/morphological_novelty_metric/calculate_novelty*.*", format = "wheel" }]
+
+[tool.poetry.build]
+script = "revolve2/ci_group/morphological_novelty_metric/_build_cmodule.py"
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
@@ -27,6 +31,9 @@ revolve2-modular-robot-simulation = { path = "../modular_robot_simulation", deve
 noise = "^1.2.2"
 multineat = "^0.12"
 sqlalchemy = "^2.0.0"
+numpy = "^1.21.2"
+Cython = "^3.0.4"
+setuptools = "^68.2.2"
 
 [tool.poetry.extras]
 dev = []

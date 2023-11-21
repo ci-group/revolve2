@@ -1,9 +1,6 @@
-import math
-
-from pyrr import Quaternion, Vector3
+from pyrr import Vector3
 
 from ...body import Module
-from .._color import Color
 from .._right_angles import RightAngles
 from ..base import Core
 from ._attachment_face_core_v2 import AttachmentFaceCoreV2
@@ -14,7 +11,6 @@ class CoreV2(Core):
 
     _BATTERY_MASS = 0.39712  # in kg
     _FRAME_MASS = 1.0644  # in kg
-    _COLOR = Color(255, 50, 50, 255)
 
     _horizontal_offset = 0.029  # The horizontal offset for attachment positions (in m).
     _vertical_offset = 0.032  # The vertical offset for attachment positions (in m).
@@ -35,42 +31,31 @@ class CoreV2(Core):
             num_batteries * self._BATTERY_MASS + self._FRAME_MASS
         )  # adjust if multiple batteries are installed
 
+        super().__init__(
+            rotation=rotation,
+            mass=mass,
+            bounding_box=Vector3([0.15, 0.15, 0.15]),
+            child_offset=Vector3(
+                [0.0, 0.0, 0.0]
+            ),  # We initialize the core with placeholder Attachment Points.
+        )
+
+        """Now we produce the actual attachment points, with the advanced logic behind attachment faces."""
         self._attachment_faces = {
-            self.FRONT: AttachmentFaceCoreV2(
-                Quaternion.from_eulers([0.0, 0.0, 0.0]),
+            side: AttachmentFaceCoreV2(
+                placeholder_point.rotation,
                 self._horizontal_offset,
                 self._vertical_offset,
-            ),
-            self.BACK: AttachmentFaceCoreV2(
-                Quaternion.from_eulers([0.0, 0.0, math.pi]),
-                self._horizontal_offset,
-                self._vertical_offset,
-            ),
-            self.LEFT: AttachmentFaceCoreV2(
-                Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
-                self._horizontal_offset,
-                self._vertical_offset,
-            ),
-            self.RIGHT: AttachmentFaceCoreV2(
-                Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
-                self._horizontal_offset,
-                self._vertical_offset,
-            ),
+            )
+            for side, placeholder_point in self.attachment_points.items()
         }
 
-        attachment_points = {}
+        new_attachment_points = {}
         for index, face in self._attachment_faces.items():
             for idx, point in face.attachment_points.items():
                 new_index = self.index_from_face_and_attachment(index, idx)
-                attachment_points[new_index] = point
-
-        super().__init__(
-            rotation=rotation,
-            color=self._COLOR,
-            mass=mass,
-            bounding_box=Vector3([0.15, 0.15, 0.15]),
-            attachment_points=attachment_points,
-        )
+                new_attachment_points[new_index] = point
+        self._attachment_points = new_attachment_points
 
     @property
     def front(self) -> AttachmentFaceCoreV2:

@@ -1,4 +1,6 @@
-from pyrr import Vector3
+import math
+
+from pyrr import Quaternion, Vector3
 
 from .._attachment_point import AttachmentPoint
 from .._color import Color
@@ -24,22 +26,41 @@ class Core(Module):
     def __init__(
         self,
         rotation: float | RightAngles,
-        color: Color,
         mass: float,
         bounding_box: Vector3,
-        attachment_points: dict[int, AttachmentPoint],
+        child_offset: Vector3,
+        color: Color = Color(255, 50, 50, 255),
     ):
         """
         Initialize this object.
 
         :param rotation: The Modules rotation.
-        :param color: The Modules color.
         :param mass: The Modules mass (in kg).
         :param bounding_box: The bounding box. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
-        :param attachment_points: The attachment points available on a module.
+        :param child_offset: The offset for children to be attached to the attachment points.
+        :param color: The Modules color.
         """
         self._mass = mass
         self._bounding_box = bounding_box
+
+        attachment_points = {
+            self.FRONT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]), offset=child_offset
+            ),
+            self.BACK: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi]),
+                offset=child_offset,
+            ),
+            self.LEFT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
+                offset=child_offset,
+            ),
+            self.RIGHT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
+                offset=child_offset,
+            ),
+        }
+
         super().__init__(rotation, color, attachment_points)
         self._parent = None
         self._parent_child_index = None

@@ -1,4 +1,4 @@
-from pyrr import Vector3
+from pyrr import Quaternion, Vector3
 
 from .._attachment_point import AttachmentPoint
 from .._color import Color
@@ -35,7 +35,6 @@ class ActiveHinge(Module):
     def __init__(
         self,
         rotation: float | RightAngles,
-        color: Color,
         servo1_bounding_box: Vector3,
         servo2_bounding_box: Vector3,
         frame_bounding_box: Vector3,
@@ -53,13 +52,13 @@ class ActiveHinge(Module):
         armature: float,
         pid_gain_p: float,
         pid_gain_d: float,
-        attachment_points: dict[int, AttachmentPoint],
+        child_offset: Vector3,
+        color: Color = Color(255, 255, 255, 255),
     ):
         """
         Initialize this object.
 
         :param rotation: The Modules rotation.
-        :param color: The Modules color.
         :param servo1_bounding_box: The bounding box of servo 1. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
         :param servo2_bounding_box: The bounding box of servo 2. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
         :param frame_bounding_box: The bounding box of the frame. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
@@ -77,7 +76,8 @@ class ActiveHinge(Module):
         :param armature: Armature of the joint. This represents the inertia of the motor itself when nothing is attached.
         :param pid_gain_p: Proportional gain of the pid position controller.
         :param pid_gain_d: Derivative gain of the pid position controller.
-        :param attachment_points: The attachment points available on a module.
+        :param child_offset: The offset of children on the attachment point.
+        :param color: The Modules color.
         """
         self._static_friction = static_friction
         self._dynamic_friction = dynamic_friction
@@ -96,6 +96,14 @@ class ActiveHinge(Module):
         self._armature = armature
         self._pid_gain_p = pid_gain_p
         self._pid_gain_d = pid_gain_d
+
+        attachment_points = {
+            self.ATTACHMENT: AttachmentPoint(
+                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
+                offset=child_offset,
+            ),
+        }
+
         super().__init__(rotation, color, attachment_points)
 
         self._sensor = None

@@ -1,7 +1,5 @@
-from pyrr import Quaternion, Vector3
+from pyrr import Vector3
 
-from .._attachment_point import AttachmentPoint
-from .._color import Color
 from .._right_angles import RightAngles
 from ..base import ActiveHinge
 
@@ -13,24 +11,14 @@ class ActiveHingeV1(ActiveHinge):
     This is a rotary joint.
     """
 
-    _COLOR = Color(255, 255, 255, 255)
-
     def __init__(self, rotation: float | RightAngles):
         """
         Initialize this object.
 
         :param rotation: The Modules rotation.
         """
-        attachment_points = {
-            self.ATTACHMENT: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
-                offset=Vector3([0.0583 / 2 + 0.002, 0.0, 0.0]),
-            ),
-        }
-
         super().__init__(
             rotation=rotation,
-            color=self._COLOR,
             range=1.047197551,  # 60 degrees
             effort=0.948013269,  # motor specs: 9.4 kgfcm at 4.8V or 11 kgfcm at 6.0V -> at 5.0V: 9.6667 * 9.807 / 100
             velocity=6.338968228,  # motor specs: 0.17  at 4.8V or 0.14 s/60deg at 6.0V -> at 5.0V: 1 / 0.1652 * 60 / 360 * 2pi
@@ -48,5 +36,5 @@ class ActiveHingeV1(ActiveHinge):
             armature=0.002,
             pid_gain_p=5.0,
             pid_gain_d=0.05,
-            attachment_points=attachment_points,
+            child_offset=Vector3([0.0583 / 2 + 0.002, 0.0, 0.0]),
         )

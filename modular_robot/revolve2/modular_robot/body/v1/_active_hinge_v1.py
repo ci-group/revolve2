@@ -17,7 +17,6 @@ class ActiveHingeV1(ActiveHinge):
 
         :param rotation: The Modules rotation.
         """
-
         super().__init__(
             rotation=rotation,
             range=1.047197551,  # 60 degrees

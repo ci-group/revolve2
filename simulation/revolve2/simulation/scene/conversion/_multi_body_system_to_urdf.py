@@ -3,6 +3,7 @@ import uuid
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
 from math import atan2, sqrt
+
 from pyrr import Quaternion, Vector3
 
 from .._joint_hinge import JointHinge
@@ -340,4 +341,3 @@ def _quaternion_to_euler(quaternion: Quaternion) -> Vector3:
     yaw = atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
 
     return Vector3([roll, pitch, yaw])
-

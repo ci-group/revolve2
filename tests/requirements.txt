@@ -1,2 +1,3 @@
 pytest~=7.4.2
 pytest-mock==3.11.1
+revolve2-simulation>=1.0.0rc1

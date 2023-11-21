@@ -10,9 +10,9 @@ from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.brain import BrainInstance
 
 from .._config import Config
+from .._hardware_type import HardwareType
 from .._protocol_version import PROTOCOL_VERSION
 from .._uuid_key import UUIDKey
-from ..physical_interfaces import HardwareType
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
 

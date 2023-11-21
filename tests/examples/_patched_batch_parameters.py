@@ -1,6 +1,6 @@
 """Standard simulation functions and parameters patched for unit test."""
-# This type-ignore is required, since the CI does not resolve those stubs correctly.
-from revolve2.simulation.simulator import BatchParameters  # type: ignore
+# This is required, since the CI does not resolve those stubs correctly.
+from revolve2.simulation.simulator import BatchParameters  # mypy: allow-untyped-defs
 
 
 def make_patched_batch_parameters() -> BatchParameters:

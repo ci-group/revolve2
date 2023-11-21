@@ -1,5 +1,6 @@
 """Standard simulation functions and parameters patched for unit test."""
-from revolve2.simulation.simulator import BatchParameters
+# This type-ignore is required, since the CI does not git resolve those native stubs correctly.
+from revolve2.simulation.simulator import BatchParameters  # type: ignore
 
 
 def make_patched_batch_parameters() -> BatchParameters:

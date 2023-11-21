@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
+
 import numpy as np
 from numpy.typing import NDArray
 
-from typing import Protocol, List, TypeVar
+from typing import List, TypeVar
 import random
 
 from revolve2.experimentation.genotypes.protocols import IGenotype
@@ -12,16 +14,18 @@ from revolve2.experimentation.genotypes.protocols import IGenotype
 Genotype = TypeVar("Genotype", bound=IGenotype)
 
 
-class SelectionAlgorithm(Protocol):
+class SelectionAlgorithm(ABC):
     """The bare type of a selection algorithm"""
 
+    @abstractmethod
     def __init__(self, *args, **kwargs) -> None:
-        raise NotImplementedError
+        ...
 
+    @abstractmethod
     def __call__(
         self, children: List[Genotype], scores: List[float], result_size: int
     ) -> List[Genotype]:
-        raise NotImplementedError
+        ...
 
 
 class TournamentSelection(SelectionAlgorithm):

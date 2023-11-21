@@ -5,8 +5,8 @@ from pathlib import Path
 import typed_argparse as tap
 
 from .._config import Config
+from .._hardware_type import HardwareType
 from ..brain_runner import BrainRunner
-from ..physical_interfaces import HardwareType
 
 
 class Args(tap.TypedArgs):
@@ -20,6 +20,10 @@ class Args(tap.TypedArgs):
     dry: bool = tap.arg(help="Skip GPIO output.")
     all: float | None = tap.arg(
         help="Instead of running the brain, set all servos to this angle (radians)."
+    )
+    careful: bool = tap.arg(
+        help="Enable careful mode, which slowly steps the servo to its target, instead of going as fast as possible. This decreases current drawn by the motors, which might be necessary for some robots. This is only available for V2 robots.",
+        default=False,
     )
 
 
@@ -35,7 +39,11 @@ def runner(args: Args) -> None:
         assert isinstance(config, Config)
 
     brain_runner = BrainRunner(
-        hardware_type=args.hardware, config=config, debug=args.debug, dry=args.dry
+        hardware_type=args.hardware,
+        config=config,
+        debug=args.debug,
+        dry=args.dry,
+        careful=args.careful,
     )
 
     try:

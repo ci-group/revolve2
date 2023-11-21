@@ -1,7 +1,8 @@
 import time
 
-from .. import Config
-from ..physical_interfaces import HardwareType, PhysicalInterface, get_interface
+from .._config import Config
+from .._hardware_type import HardwareType
+from ..physical_interfaces import PhysicalInterface, get_interface
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
 
@@ -20,7 +21,12 @@ class BrainRunner:
     _control_interface: ModularRobotControlInterfaceImpl
 
     def __init__(
-        self, hardware_type: HardwareType, config: Config, debug: bool, dry: bool
+        self,
+        hardware_type: HardwareType,
+        config: Config,
+        debug: bool,
+        dry: bool,
+        careful: bool,
     ) -> None:
         """
         Initialize this object.
@@ -29,6 +35,7 @@ class BrainRunner:
         :param config: Configuration of the brain and knowledge of the physical robot.
         :param debug: Whether to print debug information.
         :param dry: If set, control inputs for the robot not be propogated to the hardware.
+        :param careful: Enable careful mode, which slowly steps the servo to its target, instead of going as fast as possible. This decreases current drawn by the motors, which might be necessary for some robots. This is only available for V2 robots.
         """
         self._config = config
 
@@ -37,6 +44,7 @@ class BrainRunner:
             debug=debug,
             dry=dry,
             pins=[pin for pin in config.hinge_mapping.values()],
+            careful=careful,
         )
 
         self._control_interface = ModularRobotControlInterfaceImpl(
@@ -70,15 +78,23 @@ class BrainRunner:
         """Run the brain from the config."""
         control_period = 1 / self._config.control_frequency
 
-        start_time = time.time()
-        last_update_time = start_time
         controller = self._config.modular_robot.brain.make_instance()
 
-        while (current_time := time.time()) - start_time < self._config.run_duration:
-            time.sleep(control_period)
+        start_time = time.time()
+        last_update_time = start_time
 
-            elapsed_time = current_time - last_update_time
-            last_update_time = current_time
+        while (current_time := time.time()) - start_time < self._config.run_duration:
+            next_update_at = last_update_time + control_period
+            if current_time < next_update_at:
+                time.sleep(next_update_at - current_time)
+                last_update_time = next_update_at
+                elapsed_time = control_period
+            else:
+                print(
+                    f"WARNING: Loop is lagging {next_update_at - current_time} seconds behind the set update frequency. Is your control function too slow?"
+                )
+                elapsed_time = last_update_time - current_time
+                last_update_time = current_time
 
             sensor_state = ModularRobotSensorStateImpl()
             controller.control(

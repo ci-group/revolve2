@@ -6,8 +6,7 @@ from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
-from revolve2.modular_robot_physical import Config, UUIDKey
-from revolve2.modular_robot_physical.physical_interfaces import HardwareType
+from revolve2.modular_robot_physical import Config, HardwareType, UUIDKey
 from revolve2.modular_robot_physical.remote import Remote
 
 

@@ -43,5 +43,4 @@ class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
         clamped_inversed = (-1.0 if inverse else 1.0) * min(
             max(target, -active_hinge.range), active_hinge.range
         )
-        print("asdasds")
         self._physical_interface.set_servo_target(pin=pin, target=clamped_inversed)

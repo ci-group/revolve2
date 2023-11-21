@@ -340,3 +340,4 @@ def _quaternion_to_euler(quaternion: Quaternion) -> Vector3:
     )
     yaw = np.arctan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
     return Vector3([roll, pitch, yaw])
+

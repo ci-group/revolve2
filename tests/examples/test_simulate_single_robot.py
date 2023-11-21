@@ -10,7 +10,5 @@ def test_simulate_single_robot() -> None:
         [
             "python",
             os.path.join(exp_dir, "main.py"),
-            "-t",
-            "1",
         ]
     )

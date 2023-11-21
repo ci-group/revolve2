@@ -3,8 +3,8 @@ import sys
 from ..conftest import EXAMPLES_DIR
 
 
-def clear_example_modules_from_cache() -> None:
-    """Clear any module from the sys.modules cache that is part of the examples directory."""
+def clear_exp_modules_from_cache() -> None:
+    """Clear any module from the sys.modules cache that is part of the temporary directory."""
     modules_to_delete = [
         name
         for name, mod in sys.modules.items()

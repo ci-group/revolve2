@@ -3,7 +3,7 @@ import sys
 from unittest.mock import Mock
 
 from ..conftest import EXAMPLES_DIR
-from ._clear_example_modules_from_cache import clear_example_modules_from_cache
+from ._clear_example_modules_from_cache import clear_exp_modules_from_cache
 
 
 def test_robot_bodybrain_ea_database(mocker: Mock, tmpdir: str) -> None:
@@ -15,13 +15,13 @@ def test_robot_bodybrain_ea_database(mocker: Mock, tmpdir: str) -> None:
     :param mocker: The mock object.
     :param tmpdir: Temporary directory for spawning database file.
     """
-    example_dir = os.path.join(EXAMPLES_DIR, "robot_bodybrain_ea_database")
+    exp_dir = os.path.join(EXAMPLES_DIR, "robot_bodybrain_ea_database")
 
     # Clear any previously imported modules from examples directory from cache
-    clear_example_modules_from_cache()
+    clear_exp_modules_from_cache()
 
     # Add examples directory to path, so we can import them without the examples being packages.
-    sys.path.insert(0, example_dir)
+    sys.path.insert(0, exp_dir)
 
     # Override default config to reduce number of generations.
     database_file = os.path.join(tmpdir, "database.sqlite")
@@ -33,9 +33,8 @@ def test_robot_bodybrain_ea_database(mocker: Mock, tmpdir: str) -> None:
 
     # Import the example main and run it.
     try:
+        # This type ignore is required since mypy cant resolve this import."
         import main  # type: ignore
-
-        """This type ignore is required since mypy cant resolve this import."""
 
         main.main()
     finally:

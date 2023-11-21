@@ -30,12 +30,11 @@ class IGenotype(ABC):
         """Get a deeply copied version of the object"""
 
     @abstractmethod
-    def mutate(self) -> Self:
+    def mutate(self, rng: np.random.Generator) -> Self:
         """Get a deeply copied version of the object, with some mutation applied"""
 
-    @classmethod
     @abstractmethod
-    def crossover(cls, _rhs: Self, _lhs: Self, /) -> Self:
+    def crossover(self, rng: np.random.Generator, *__o: Self) -> Self:
         """Perform crossover between two individuals. Return a new copy"""
 
     @classmethod

@@ -14,7 +14,7 @@ from revolve2.modular_robot import (
     MorphologicalMeasures,
 )
 from revolve2.modular_robot import Directions
-from ..protocols import GenotypeInitParams, IGenotype
+from revolve2.experimentation.genotypes.protocols import GenotypeInitParams, IGenotype
 
 
 @dataclass
@@ -83,7 +83,7 @@ class _CAGenotype:
         self.core_position = [i, j]
         self.ca_grid[i][j] = 3
 
-    def mutate(self):
+    def mutate(self, rng: np.random.Generator):
         possible_values = [0.0, 1.0, 2.0]
         new_key = tuple(random.choice(possible_values) for _ in range(4))
         new_value = random.choice(possible_values[1:])
@@ -92,6 +92,14 @@ class _CAGenotype:
         existing_key = random.choice(list(self.rule_set.keys()))
         self.rule_set[new_key] = new_value
         del self.rule_set[existing_key]
+
+    def crossover(self, rng: np.random.Generator, *__o: Self) -> Self:
+        pass
+        # new_dict = rhs.rule_set.copy()
+        # for _ in range(len(new_dict) // 2):
+        #     new_dict.pop(random.randint(0, len(rhs.rule_set)))
+
+        # return {**new_dict, **lhs.rule_set}
 
     def generate_random_genotype(self, n):
         possible_values = [0.0, 1.0, 2.0]

@@ -67,12 +67,31 @@ class LocalSimulator(Simulator):
         if batch.record_settings is not None:
             os.makedirs(batch.record_settings.video_directory, exist_ok=False)
 
-        with concurrent.futures.ProcessPoolExecutor(
-            max_workers=self._num_simulators
-        ) as executor:
-            futures = [
-                executor.submit(
-                    simulate_scene,
+        if self._num_simulators > 1:
+            with concurrent.futures.ProcessPoolExecutor(
+                max_workers=self._num_simulators
+            ) as executor:
+                futures = [
+                    executor.submit(
+                        simulate_scene,
+                        scene_index,
+                        scene,
+                        self._headless,
+                        batch.record_settings,
+                        self._start_paused,
+                        control_step,
+                        sample_step,
+                        batch.parameters.simulation_time,
+                        batch.parameters.simulation_timestep,
+                        self._cast_shadows,
+                        self._fast_sim,
+                    )
+                    for scene_index, scene in enumerate(batch.scenes)
+                ]
+                results = [future.result() for future in futures]
+        else:
+            results = [
+                simulate_scene(
                     scene_index,
                     scene,
                     self._headless,
@@ -87,7 +106,6 @@ class LocalSimulator(Simulator):
                 )
                 for scene_index, scene in enumerate(batch.scenes)
             ]
-            results = [future.result() for future in futures]
 
         logging.info("Finished batch.")
 

@@ -109,7 +109,9 @@ def _normalize_cast_int(histograms: NDArray[np.float64]) -> NDArray[np.int64]:
     instances = histograms.shape[0]
     for i in range(instances):
         histogram = histograms[i].copy()
-        histogram = ((histogram / histogram.sum()) * _INT_CASTER).astype(np.int64)
+        histogram /= histogram.sum()
+        histogram *= _INT_CASTER
+        histogram = histogram.astype(np.int64)
         # Casting the float histograms to int, in order to avoid floating point errors in the reshaping.
 
         error = (

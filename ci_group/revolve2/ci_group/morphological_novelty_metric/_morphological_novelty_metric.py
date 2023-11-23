@@ -93,7 +93,7 @@ def _gen_gradient_histogram(
     """
     bin_size = 360 / num_bins
     instances = len(orientations)
-    histograms = np.empty(shape=(instances, num_bins, num_bins), dtype=np.float64)
+    histograms = np.zeros(shape=(instances, num_bins, num_bins), dtype=np.float64)
     for i in range(instances):
         for orientation, magnitude in zip(orientations[i], magnitudes[i]):
             x, z = int(orientation[0] / bin_size), int(orientation[1] / bin_size)
@@ -108,7 +108,7 @@ def _normalize_cast_int(histograms: NDArray[np.float64]) -> NDArray[np.int64]:
     :param histograms: The histograms to cast and normalize.
     :return: The normalized and cast histograms.
     """
-    int_histograms = np.empty(histograms.shape, dtype=np.int64)
+    int_histograms = np.zeros(histograms.shape, dtype=np.int64)
 
     instances = histograms.shape[0]
     for i in range(instances):

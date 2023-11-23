@@ -88,11 +88,11 @@ jobs:
       - name: Install package
         run: pip install ./$(echo "${{ matrix.package }}[dev]" | sed 's#/revolve2##')
         if: "!startsWith(matrix.package, 'examples/')"
-      - name: Install tests
+      - name: Install tests requirements
         run:
           ./dev_install.sh
-          pip install ./$(echo "${{ matrix.package }}[dev]" | sed 's#/revolve2##')
-        if: "!startsWith(matrix.package, 'tests')"
+          pip install -r ./tests/requirements.txt
+        if: "matrix.package == 'tests'"
       - name: run_mypy
         run: ./codetools/mypy/check.sh ${{ matrix.package }}
 

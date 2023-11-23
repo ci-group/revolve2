@@ -1,9 +1,8 @@
-import math
 import uuid
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
-from math import atan2, sqrt
 
+import numpy as np
 from pyrr import Quaternion, Vector3
 
 from .._joint_hinge import JointHinge
@@ -331,13 +330,13 @@ def _quaternion_to_euler(quaternion: Quaternion) -> Vector3:
     :param quaternion: The quaternion to convert.
     :return: Euler angles in form of a Vector3 (roll, pitch, yaw).
     """
-    w, x, y, z = quaternion
+    x, y, z, w = quaternion
 
-    roll = atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y))
+    roll = np.arctan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y))
     pitch = (
-        2 * atan2(sqrt(1 + 2 * (w * y - x * z)), sqrt(1 - 2 * (w * y - x * z)))
-        - math.pi / 2
+        2
+        * np.arctan2(np.sqrt(1 + 2 * (w * y - x * z)), np.sqrt(1 - 2 * (w * y - x * z)))
+        - np.pi / 2
     )
-    yaw = atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
-
+    yaw = np.arctan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
     return Vector3([roll, pitch, yaw])

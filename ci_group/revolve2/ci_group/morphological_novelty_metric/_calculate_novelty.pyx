@@ -64,14 +64,17 @@ cdef double wasserstein_distance(
 
 @cython.boundscheck(False)
 @cython.wraparound(False)
-cpdef ndarray[double, ndim=1] calculate_novelty(ndarray[long, ndim=3] histograms, int amount_instances, int histogram_size):
+cpdef ndarray[double, ndim=1] calculate_novelty(ndarray[long, ndim=3, mode="c"] histograms, int amount_instances, int histogram_size):
+    cdef ndarray[double, ndim=1, mode="c"] novelty_scores = np.zeros(shape=amount_instances)
     cdef int i, j
-    cdef ndarray[double, ndim=1] novelty_scores = np.zeros(shape=amount_instances)
     cdef long[:,:] supply, capacity
+    cdef ndarray[long, ndim=3, mode="c"] tmp_hist
 
     for i in range(amount_instances-1):
         for j in range(i+1, amount_instances):
-            supply, capacity = histograms[i].copy(), histograms[j].copy()
+            tmp_hist = histograms.copy()
+            supply = tmp_hist[i]
+            capacity = tmp_hist[j]
             score = wasserstein_distance(supply, capacity , histogram_size)
             novelty_scores[i] += score
             novelty_scores[j] += score

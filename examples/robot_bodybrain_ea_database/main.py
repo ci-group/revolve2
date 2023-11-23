@@ -75,17 +75,17 @@ def select_survivors(
     )
 
     return Population(
-        [
+        individuals=[
             Individual(
-                original_population.individuals[i].genotype,
-                original_population.individuals[i].fitness,
+                genotype=original_population.individuals[i].genotype,
+                fitness=original_population.individuals[i].fitness,
             )
             for i in original_survivors
         ]
         + [
             Individual(
-                offspring_population.individuals[i].genotype,
-                offspring_population.individuals[i].fitness,
+                genotype=offspring_population.individuals[i].genotype,
+                fitness=offspring_population.individuals[i].fitness,
             )
             for i in offspring_survivors
         ]

@@ -44,10 +44,6 @@ def get_novelty_from_population(
     novelty_scores: NDArray[np.float64] = calculate_novelty(
         int_histograms, int_histograms.shape[0], num_bins
     )
-
-    del int_histograms
-    """This avoids future function calls to work on the previous histogram content."""
-    novelty_scores / novelty_scores.max()
     return novelty_scores
 
 

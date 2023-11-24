@@ -38,7 +38,6 @@ class MultiBodySystem:
     is_static: bool
     """
     Whether the root rigid body is static.
-
     I.e. its root (the first rigid body) is attached to the world and will not move or rotate.
     """
 
@@ -53,7 +52,6 @@ class MultiBodySystem:
     _half_adjacency_matrix: list[Joint | None] = field(default_factory=list, init=False)
     """
     Adjacency matrix, defining joints between rigid bodies.
-
     The the indices of the list match the following indices in the adjacency matrix:
 
     joints | 0 1 2 3 4

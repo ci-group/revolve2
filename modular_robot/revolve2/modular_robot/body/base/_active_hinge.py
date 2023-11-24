@@ -52,8 +52,7 @@ class ActiveHinge(Module):
         armature: float,
         pid_gain_p: float,
         pid_gain_d: float,
-        child_offset: Vector3,
-        color: Color = Color(255, 255, 255, 255),
+        child_offset: float,
     ):
         """
         Initialize this object.
@@ -77,7 +76,6 @@ class ActiveHinge(Module):
         :param pid_gain_p: Proportional gain of the pid position controller.
         :param pid_gain_d: Derivative gain of the pid position controller.
         :param child_offset: The offset of children on the attachment point.
-        :param color: The Modules color.
         """
         self._static_friction = static_friction
         self._dynamic_friction = dynamic_friction
@@ -99,19 +97,19 @@ class ActiveHinge(Module):
 
         attachment_points = {
             self.ATTACHMENT: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
-                offset=child_offset,
+                offset=Vector3([child_offset, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
             ),
         }
 
-        super().__init__(rotation, color, attachment_points)
+        super().__init__(rotation, Color(255, 255, 255, 255), attachment_points)
 
         self._sensor = None
 
     @property
     def attachment(self) -> Module | None:
         """
-        Get the attachment point of this hinge.
+        Get the module attached to this hinge.
 
         :returns: The attachment points module.
         """

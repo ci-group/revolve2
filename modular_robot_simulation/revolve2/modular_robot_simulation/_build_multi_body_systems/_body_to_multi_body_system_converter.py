@@ -42,7 +42,7 @@ class BodyToMultiBodySystemConverter:
         queue = deque(
             [
                 UnbuiltChild(
-                    module=body.core,
+                    module=body.core_v1,
                     rigid_body=rigid_body,
                     pose=Pose(),
                 )

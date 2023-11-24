@@ -25,19 +25,19 @@ def make_body() -> (
     # Modules can be attached in a rotated fashion.
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
     body = BodyV1()
-    body.core.left = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.left.attachment = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
-    body.core.right = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.right.attachment = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
+    body.core_v1.left = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.left.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
+    body.core_v1.right = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.right.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
 
     """Here we collect all ActiveHinges, to map them later onto the physical robot."""
     active_hinges = (
-        body.core.left,
-        body.core.left.attachment,
-        body.core.right,
-        body.core.right.attachment,
+        body.core_v1.left,
+        body.core_v1.left.attachment,
+        body.core_v1.right,
+        body.core_v1.right.attachment,
     )
     return body, active_hinges
 

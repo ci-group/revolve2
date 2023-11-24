@@ -56,10 +56,10 @@ class CoreBuilder(Builder):
                 child_slot_pose = Pose(
                     position=self._slot_pose.position
                     + self._slot_pose.orientation
-                    * attachment_point.rotation
+                    * attachment_point.orientation
                     * attachment_point.offset,
                     orientation=self._slot_pose.orientation
-                    * attachment_point.rotation
+                    * attachment_point.orientation
                     * Quaternion.from_eulers([child.rotation, 0, 0]),
                 )
 

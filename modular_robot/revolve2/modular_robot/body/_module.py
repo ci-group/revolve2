@@ -119,7 +119,7 @@ class Module:
         ), "Child module already connected to a different slot."
         module._parent = self
         module._parent_child_index = child_index
-        if self.is_free(child_index):
+        if self.is_free(child_index) and self.can_set_child(module, child_index):
             self._children[child_index] = module
         else:
             raise KeyError("Attachment point already populated")

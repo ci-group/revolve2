@@ -21,7 +21,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
     _child_offset: Vector3 = field(
         default_factory=lambda: Vector3([0.15 / 2.0, 0.0, 0.0])
     )
-    _rotation: Quaternion = field(default_factory=lambda: Quaternion())
+    _orientation: Quaternion = field(default_factory=lambda: Quaternion())
 
     """
     Check matrix allows us to determine which attachment points can be filled in the face.
@@ -38,16 +38,16 @@ class AttachmentFaceCoreV2(AttachmentFace):
     """
 
     def __init__(
-        self, rotation: Quaternion, horizontal_offset: float, vertical_offset: float
+        self, orientation: Quaternion, horizontal_offset: float, vertical_offset: float
     ) -> None:
         """
         Initialize n attachment face for the V2 Core.
 
-        :param rotation: The rotation of the face and the attachment points.
+        :param orientation: The rotation of the face and the attachment points.
         :param horizontal_offset: The horizontal offset for module placement.
         :param vertical_offset:  The vertical offset for module placement.
         """
-        self._rotation = rotation
+        self._orientation = orientation
 
         """
         Each CoreV2 Face has 9 Module slots as shown below. 
@@ -67,12 +67,12 @@ class AttachmentFaceCoreV2(AttachmentFace):
             h_o = (i % 3 - 1) * horizontal_offset
             v_o = -(i // 3 - 1) * vertical_offset
 
-            sc: bool = rotation.angle % np.pi == 0
+            sc: bool = orientation.angle % np.pi == 0
             """Switch condition for determining offset. Depending of whether the face is orthogonal to x or y axis, the horizontal offset has to be applied differently."""
             offset = Vector3([(1 - sc) * (-h_o), sc * h_o, v_o])
 
             attachment_point = AttachmentPoint(
-                rotation=rotation, offset=self._child_offset + offset
+                orientation=orientation, offset=self._child_offset + offset
             )
             self.add_attachment_point(i, attachment_point)
 

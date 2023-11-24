@@ -23,8 +23,7 @@ class Brick(Module):
         rotation: float | RightAngles,
         mass: float,
         bounding_box: Vector3,
-        child_offset: Vector3,
-        color: Color = Color(50, 50, 255, 255),
+        child_offset: float,
     ):
         """
         Initialize this object.
@@ -33,29 +32,29 @@ class Brick(Module):
         :param mass: The Modules mass (in kg).
         :param bounding_box: The bounding box. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
         :param child_offset: The offset of the child for each attachment point.
-        :param color: The Modules color.
         """
         attachment_points = {
             self.FRONT: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, 0.0]), offset=child_offset
+                offset=Vector3([child_offset, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
             ),
             self.LEFT: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
-                offset=child_offset,
+                offset=Vector3([child_offset, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
             ),
             self.RIGHT: AttachmentPoint(
-                rotation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
-                offset=child_offset,
+                offset=Vector3([child_offset, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
             ),
         }
         self._mass = mass
         self._bounding_box = bounding_box
-        super().__init__(rotation, color, attachment_points)
+        super().__init__(rotation, Color(50, 50, 255, 255), attachment_points)
 
     @property
     def front(self) -> Module | None:
         """
-        Get the front attachment point of the brick.
+        Get the front module of the brick.
 
         :returns: The attachment points module.
         """
@@ -73,7 +72,7 @@ class Brick(Module):
     @property
     def right(self) -> Module | None:
         """
-        Get right attachment point of the brick.
+        Get right module of the brick.
 
         :returns: The attachment points module.
         """
@@ -91,7 +90,7 @@ class Brick(Module):
     @property
     def left(self) -> Module | None:
         """
-        Get the left attachment point of the brick.
+        Get the left module of the brick.
 
         :returns: The attachment points module.
         """

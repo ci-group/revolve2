@@ -18,8 +18,13 @@ class Body(ABC):
 
     _core: Core
 
-    def __init__(self) -> None:
-        """Initialize this object."""
+    def __init__(self, core: Core) -> None:
+        """
+        Initialize this object.
+
+        :param core: The core of the body.
+        """
+        self._core = core
 
     @classmethod
     def grid_position(cls, module: Module) -> Vector3:
@@ -49,7 +54,7 @@ class Body(ABC):
 
             if attachment_point is None:
                 raise KeyError("No attachment point found at the specified location.")
-            position = attachment_point.rotation * position
+            position = attachment_point.orientation * position
             position = Vector3.round(position)
 
             child_index = parent.parent_child_index
@@ -72,9 +77,9 @@ class Body(ABC):
         :param module_type: The type.
         :return: The list of Modules.
         """
-        return self.__find_recur(self.core, module_type)
+        return self.__find_recur(self.core_v1, module_type)
 
-    def to_grid(self) -> tuple[NDArray[TModuleNP], Vector3]:
+    def to_grid(self) -> tuple[NDArray[TModuleNP], Vector3[np.int_]]:
         """
         Convert the tree structure to a grid.
 
@@ -83,16 +88,16 @@ class Body(ABC):
 
         The grid is indexed depth, width, height, or x, y, z, from the perspective of the core.
 
-        :returns: The created grid with cells set to either a Module or None and a position vector of the core.
+        :returns: The created grid with cells set to either a Module or None and a position vector of the core. The position Vector3 is dtype: int.
         """
         return _GridMaker().make_grid(self)
 
     @property
-    def core(self) -> Core:
+    def core_v1(self) -> Core:
         """
-        Get the core.
+        Get the core of the Body.
 
-        :return: The Core.
+        :return: The core.
         """
         return self._core
 
@@ -103,9 +108,9 @@ class _GridMaker(Generic[TModuleNP]):
     _z: list[int] = []
     _modules: list[Module] = []
 
-    def make_grid(self, body: Body) -> tuple[NDArray[TModuleNP], Vector3]:
+    def make_grid(self, body: Body) -> tuple[NDArray[TModuleNP], Vector3[np.int_]]:
 
-        self._make_grid_recur(body.core, Vector3(), Quaternion())
+        self._make_grid_recur(body.core_v1, Vector3(), Quaternion())
 
         minx, maxx = min(self._x), max(self._x)
         miny, maxy = min(self._y), max(self._y)
@@ -133,7 +138,7 @@ class _GridMaker(Generic[TModuleNP]):
                 assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
                 rotation = (
                     orientation
-                    * attachment_point.rotation
+                    * attachment_point.orientation
                     * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
                 self._make_grid_recur(

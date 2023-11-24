@@ -43,7 +43,11 @@ def develop(
 
     to_explore.put(
         __Module(
-            Vector3([0, 0, 0]), Vector3([0, -1, 0]), Vector3([0, 0, 1]), 0, body.core
+            Vector3([0, 0, 0], dtype=np.int_),
+            Vector3([0, -1, 0], dtype=np.int_),
+            Vector3([0, 0, 1], dtype=np.int_),
+            0,
+            body.core_v1,
         )
     )
     grid[0, 0, 0] = 1
@@ -100,16 +104,17 @@ def __add_child(
 ) -> __Module | None:
     attachment_index, attachment_point = attachment_point_tuple
 
-    forward = __rotate(module.forward, module.up, attachment_point.rotation)
+    forward = __rotate(module.forward, module.up, attachment_point.orientation)
     position = module.position + forward
     chain_length = module.chain_length + 1
 
     # if grid cell is occupied, don't make a child
     # else, set cell as occupied
 
-    if grid[tuple(position)] > 0:
+    grid_pos = np.round(position)
+    if grid[tuple(grid_pos)] > 0:
         return None
-    grid[tuple(position)] += 1
+    grid[grid_pos] += 1
 
     child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
     child_orientation = __make_quaternion_from_index(child_rotation)

@@ -150,7 +150,7 @@ class ActiveHingeBuilder(Builder):
         if child is not None:
             rotation = Quaternion.from_eulers([child.rotation, 0.0, 0.0])
             child_slot_pose = Pose(
-                rotation * attachment_point.offset,
+                attachment_point.offset,
                 rotation,
             )
             tasks.append(

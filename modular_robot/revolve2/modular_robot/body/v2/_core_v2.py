@@ -1,4 +1,6 @@
-from pyrr import Vector3
+import math
+
+from pyrr import Quaternion, Vector3
 
 from ...body import Module
 from .._right_angles import RightAngles
@@ -31,63 +33,74 @@ class CoreV2(Core):
             num_batteries * self._BATTERY_MASS + self._FRAME_MASS
         )  # adjust if multiple batteries are installed
 
+        """Here we produce the actual attachment points, with the advanced logic behind attachment faces."""
+        self._attachment_faces = {
+            self.FRONT: AttachmentFaceCoreV2(
+                horizontal_offset=self._horizontal_offset,
+                vertical_offset=self._vertical_offset,
+                orientation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
+            ),
+            self.BACK: AttachmentFaceCoreV2(
+                horizontal_offset=self._horizontal_offset,
+                vertical_offset=self._vertical_offset,
+                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi]),
+            ),
+            self.RIGHT: AttachmentFaceCoreV2(
+                horizontal_offset=self._horizontal_offset,
+                vertical_offset=self._vertical_offset,
+                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
+            ),
+            self.LEFT: AttachmentFaceCoreV2(
+                horizontal_offset=self._horizontal_offset,
+                vertical_offset=self._vertical_offset,
+                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
+            ),
+        }
+
+        attachment_points = {}
+        for index, face in self._attachment_faces.items():
+            for idx, point in face.attachment_points.items():
+                new_index = self.index_from_face_and_attachment(index, idx)
+                attachment_points[new_index] = point
+
         super().__init__(
             rotation=rotation,
             mass=mass,
             bounding_box=Vector3([0.15, 0.15, 0.15]),
-            child_offset=Vector3(
-                [0.0, 0.0, 0.0]
-            ),  # We initialize the core with placeholder Attachment Points.
+            attachment_points=attachment_points,
         )
 
-        """Now we produce the actual attachment points, with the advanced logic behind attachment faces."""
-        self._attachment_faces = {
-            side: AttachmentFaceCoreV2(
-                placeholder_point.rotation,
-                self._horizontal_offset,
-                self._vertical_offset,
-            )
-            for side, placeholder_point in self.attachment_points.items()
-        }
-
-        new_attachment_points = {}
-        for index, face in self._attachment_faces.items():
-            for idx, point in face.attachment_points.items():
-                new_index = self.index_from_face_and_attachment(index, idx)
-                new_attachment_points[new_index] = point
-        self._attachment_points = new_attachment_points
-
     @property
-    def front(self) -> AttachmentFaceCoreV2:
+    def front_face(self) -> AttachmentFaceCoreV2:
         """
-        Get the module attached to the front of the core.
+        Get the face attached to the front of the core.
 
         :returns: The attached module.
         """
         return self._attachment_faces[self.FRONT]
 
     @property
-    def right(self) -> AttachmentFaceCoreV2:
+    def right_face(self) -> AttachmentFaceCoreV2:
         """
-        Get the module attached to the right of the core.
+        Get the face attached to the right of the core.
 
         :returns: The attached module.
         """
         return self._attachment_faces[self.RIGHT]
 
     @property
-    def back(self) -> AttachmentFaceCoreV2:
+    def back_face(self) -> AttachmentFaceCoreV2:
         """
-        Get the module attached to the back of the core.
+        Get the face attached to the back of the core.
 
         :returns: The attached module.
         """
         return self._attachment_faces[self.BACK]
 
     @property
-    def left(self) -> AttachmentFaceCoreV2:
+    def left_face(self) -> AttachmentFaceCoreV2:
         """
-        Get the module attached to the left of the core.
+        Get the face attached to the left of the core.
 
         :returns: The attached module.
         """
@@ -142,24 +155,6 @@ class CoreV2(Core):
         :return: The attachment faces.
         """
         return self._attachment_faces
-
-    def set_child(self, module: Module, child_index: int) -> None:
-        """
-        Attach a module to a slot.
-
-        :param module: The module to attach.
-        :param child_index: The slot to attach it to.
-        :raises KeyError: If attachment point is already populated.
-        """
-        assert (
-            module._parent is None
-        ), "Child module already connected to a different slot."
-        module._parent = self
-        module._parent_child_index = child_index
-        if self.is_free(child_index) and self.can_set_child(module, child_index):
-            self._children[child_index] = module
-        else:
-            raise KeyError("Attachment point already populated")
 
     def can_set_child(self, module: Module, child_index: int) -> bool:
         """

@@ -23,12 +23,12 @@ def make_body() -> BodyV1:
     # Modules can be attached in a rotated fashion.
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
     body = BodyV1()
-    body.core.left = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.left.attachment = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
-    body.core.right = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.right.attachment = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
+    body.core_v1.left = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.left.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
+    body.core_v1.right = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.right.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
     return body
 
 

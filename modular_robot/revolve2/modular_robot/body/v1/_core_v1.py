@@ -1,5 +1,8 @@
-from pyrr import Vector3
+import math
 
+from pyrr import Quaternion, Vector3
+
+from .._attachment_point import AttachmentPoint
 from .._module import Module
 from .._right_angles import RightAngles
 from ..base import Core
@@ -14,19 +17,36 @@ class CoreV1(Core):
 
         :param rotation: The modules rotation.
         """
-        child_offset = Vector3([0.089 / 2.0, 0.0, 0.0])
+        attachment_points = {
+            self.FRONT: AttachmentPoint(
+                offset=Vector3([0.089 / 2.0, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
+            ),
+            self.BACK: AttachmentPoint(
+                offset=Vector3([0.089 / 2.0, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi]),
+            ),
+            self.LEFT: AttachmentPoint(
+                offset=Vector3([0.089 / 2.0, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
+            ),
+            self.RIGHT: AttachmentPoint(
+                offset=Vector3([0.089 / 2.0, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
+            ),
+        }
 
         super().__init__(
             rotation=rotation,
             bounding_box=Vector3([0.089, 0.089, 0.0603]),
             mass=0.250,
-            child_offset=child_offset,
+            attachment_points=attachment_points,
         )
 
     @property
     def front(self) -> Module | None:
         """
-        Get the front attachment point of the core.
+        Get the front module of the core.
 
         :returns: The attachment points module.
         """
@@ -44,7 +64,7 @@ class CoreV1(Core):
     @property
     def right(self) -> Module | None:
         """
-        Get the right attachment point of the core.
+        Get the right module of the core.
 
         :returns: The attachment points module.
         """
@@ -62,7 +82,7 @@ class CoreV1(Core):
     @property
     def back(self) -> Module | None:
         """
-        Get the back attachment point of the core.
+        Get the back module of the core.
 
         :returns: The attachment points module.
         """
@@ -80,7 +100,7 @@ class CoreV1(Core):
     @property
     def left(self) -> Module | None:
         """
-        Get the left attachment point of the core.
+        Get the left module of the core.
 
         :returns: The attachment points module.
         """

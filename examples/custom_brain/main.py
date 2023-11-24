@@ -25,10 +25,10 @@ def make_body() -> (
     second_left_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
     first_right_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
     second_right_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
-    body.core.left = first_left_active_hinge
+    body.core_v1.left = first_left_active_hinge
     first_left_active_hinge.attachment = second_left_active_hinge
     second_left_active_hinge.attachment = BrickV1(RightAngles.DEG_0)
-    body.core.right = first_right_active_hinge
+    body.core_v1.right = first_right_active_hinge
     first_right_active_hinge.attachment = second_right_active_hinge
     second_right_active_hinge.attachment = BrickV1(RightAngles.DEG_0)
     return (

@@ -63,10 +63,10 @@ class BrickBuilder(Builder):
                 child_slot_pose = Pose(
                     position=brick_center_pose.position
                     + brick_center_pose.orientation
-                    * attachment_point.rotation
+                    * attachment_point.orientation
                     * attachment_point.offset,
                     orientation=brick_center_pose.orientation
-                    * attachment_point.rotation
+                    * attachment_point.orientation
                     * Quaternion.from_eulers([child.rotation, 0, 0]),
                 )
 

@@ -86,7 +86,7 @@ class _CAGenotype:
     def mutate(self, rng: np.random.Generator):
         possible_values = [0.0, 1.0, 2.0]
         new_key = tuple(random.choice(possible_values) for _ in range(4))
-        new_value = random.choice(possible_values[1:])
+        new_value = rng.choice(possible_values[1:])
 
         # Choose an existing key to replace
         existing_key = random.choice(list(self.rule_set.keys()))
@@ -326,9 +326,9 @@ class CAGenotype(IGenotype):
         newitem._ca_type.rule_set = self._ca_type.rule_set.copy()
         return newitem
 
-    def mutate(self) -> Self:
+    def mutate(self, rng: np.random.Generator) -> Self:
         newitem = self.copy()
-        newitem._ca_type.mutate()
+        newitem._ca_type.mutate(rng)
         return newitem
 
     @classmethod

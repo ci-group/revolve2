@@ -43,7 +43,7 @@ class TreeGenotype(IGenotype):
         return node_t(
             (d, cls.random_subtree(childtype, depth - 1, rng))
             for d in node_t.valid_attatchments()
-            if depth != 0
+            if depth >= 0
             if (childtype := rng.choice(cls.VALID_CHILDREN + [None])) is not None
         )
 

@@ -38,8 +38,7 @@ from revolve2.experimentation.genotypes.cellular_automata import (
 )
 
 
-def initialize(num_individuals: int) -> List[CAGenotype]:
-    rng = revolve2.ci_group.rng.make_rng_time_seed()
+def initialize(num_individuals: int, rng) -> List[CAGenotype]:
     # If you run with a set seed, use the following lines instead.
     # SEED = 1234
     # rng = revolve2.ci_group.rng.make_rng(SEED)
@@ -48,7 +47,7 @@ def initialize(num_individuals: int) -> List[CAGenotype]:
     return CAGenotype.random_individuals(params, num_individuals, rng)
 
 
-def run_generation(previous_population: List[CAGenotype], itteration: int):
+def run_generation(previous_population: List[CAGenotype], itteration: int, rng):
     """
     Run all runs of an experiment using the provided parameters.
 
@@ -58,9 +57,7 @@ def run_generation(previous_population: List[CAGenotype], itteration: int):
     current_population = []
 
     for itter, individual in enumerate(previous_population):
-        rng = revolve2.ci_group.rng.make_rng_time_seed()
-
-        g = individual.mutate()
+        g = individual.mutate(rng)
         body = g.develop()
 
         # We choose a 'CPG' brain with random parameters (the exact working will not be explained here).
@@ -134,12 +131,23 @@ def run_experiment(num_generations: int, num_individuals: int) -> None:
     # If logging is not set up, important messages can be missed.
     # We also provide a file name, so the log will be written to both the console and that file.
     setup_logging(file_name="log.txt")
+    rng = np.random.default_rng()
 
     fitness_data = []
-    population = initialize(num_individuals)
+    population = initialize(num_individuals, rng)
+
+    for i, individual in enumerate(population):
+        g = individual.mutate(rng)
+        body = g.develop()
+        brain = BrainCpgNetworkNeighborRandom(rng)
+        robot = ModularRobot(body, brain)
+        try:
+            render_robot(robot, Path() / f"{i}_initial.png")
+        except IndexError:
+            pass
 
     for i in range(num_generations):
-        generation_fitness, population_next = run_generation(population, i)
+        generation_fitness, population_next = run_generation(population, i, rng)
         fitness_data.append([generation_fitness])
         population = survivor_selection(
             generation_fitness.copy(), population_next.copy(), 70
@@ -153,5 +161,15 @@ def run_experiment(num_generations: int, num_individuals: int) -> None:
     plt.plot(list(range(len(fitness_data))), [np.mean(x) for x in fitness_data])
     plt.savefig(Path() / f"fitness_dynamics_CA_g{num_generations}_p{num_individuals}")
 
-    file_path = Path() / "last_population.json"
-    save_population_to_file(population, file_path)
+    for i, individual in enumerate(population):
+        g = individual.mutate(rng)
+        body = g.develop()
+        brain = BrainCpgNetworkNeighborRandom(rng)
+        robot = ModularRobot(body, brain)
+
+        try:
+            render_robot(robot, Path() / f"{i}_final.png")
+        except IndexError:
+            pass
+    # file_path = Path() / "last_population.json"
+    # save_population_to_file(population, file_path)

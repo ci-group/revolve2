@@ -19,7 +19,7 @@ class AttachmentFace:
         allow_repopulation: bool = False,
     ) -> None:
         """
-        Add an attachm<<<<<<< HEADent point to the Face.
+        Add an attachment point to the Face.
 
         :param index: The index of the attachment point.
         :param attachment_point: The attachment point.
@@ -66,6 +66,6 @@ class AttachmentFace:
         :param module: The module.
         :param ignore_conflict: Ignore potential errors when adding attachment_point.
         :raises Exception: If the attachment point causes conflicts.
-        :return : If conflicts occurred.
+        :return: If conflicts occurred.
         """
         pass

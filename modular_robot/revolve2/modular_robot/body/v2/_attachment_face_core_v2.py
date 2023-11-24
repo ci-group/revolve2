@@ -14,9 +14,13 @@ from ..base._attachment_face import AttachmentFace
 class AttachmentFaceCoreV2(AttachmentFace):
     """An AttachmentFace for the V2 robot."""
 
-    _check_matrix: NDArray[np.uint8] = field(default=np.zeros(0, dtype=np.uint8))
+    _check_matrix: NDArray[np.uint8] = field(
+        default_factory=lambda: np.zeros(shape=(3, 3), dtype=np.uint8)
+    )
 
-    _child_offset: Vector3 = field(default_factory=lambda: Vector3())
+    _child_offset: Vector3 = field(
+        default_factory=lambda: Vector3([0.15 / 2.0, 0.0, 0.0])
+    )
     _rotation: Quaternion = field(default_factory=lambda: Quaternion())
 
     """
@@ -44,7 +48,6 @@ class AttachmentFaceCoreV2(AttachmentFace):
         :param vertical_offset:  The vertical offset for module placement.
         """
         self._rotation = rotation
-        self._child_offset = Vector3([0.15 / 2.0, 0.0, 0.0])
 
         """
         Each CoreV2 Face has 9 Module slots as shown below. 
@@ -59,17 +62,15 @@ class AttachmentFaceCoreV2(AttachmentFace):
         |                 |            |                  |
         ---------------------------------------------------
         """
-        self._check_matrix = np.zeros(shape=(3, 3), dtype=np.uint8)
         super().__init__()
         for i in range(9):
             h_o = (i % 3 - 1) * horizontal_offset
             v_o = -(i // 3 - 1) * vertical_offset
 
-            offset = (
-                Vector3([0.0, h_o, v_o])
-                if rotation.angle % np.pi == 0
-                else Vector3([-h_o, 0.0, v_o])
-            )
+            sc: bool = rotation.angle % np.pi == 0
+            """Switch condition for determining offset. Depending of whether the face is orthogonal to x or y axis, the horizontal offset has to be applied differently."""
+            offset = Vector3([(1 - sc) * (-h_o), sc * h_o, v_o])
+
             attachment_point = AttachmentPoint(
                 rotation=rotation, offset=self._child_offset + offset
             )
@@ -84,8 +85,8 @@ class AttachmentFaceCoreV2(AttachmentFace):
         :param index: The index of the attachment point.
         :param module: The module.
         :param ignore_conflict: Ignore potential conflicts when mounting to attachment_point.
-        :raises Exception: If the attachment point causes conflicts.
         :return: Whether conflicts occurred.
+        :raises Exception: If the attachment point causes conflicts.
         """
         check_matrix = self._check_matrix.copy()
         check_matrix[(index - 1) % 3, (index - 1) // 3] += 1

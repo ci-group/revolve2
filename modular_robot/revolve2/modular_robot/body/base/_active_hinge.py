@@ -124,7 +124,7 @@ class ActiveHinge(Module):
 
         :param module: The Module.
         """
-        self._children[self.ATTACHMENT] = module
+        self.set_child(module, self.ATTACHMENT)
 
     @property
     def static_friction(self) -> float:

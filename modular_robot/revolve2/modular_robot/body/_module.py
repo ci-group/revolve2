@@ -155,7 +155,7 @@ class Module:
             for open_node, came_from in open_nodes:
                 attached_modules = [
                     self._children.get(index)
-                    for index, attachment_point in open_node.attachment_points.items()
+                    for index in open_node.attachment_points.keys()
                     if self._children.get(index) is not None
                 ]
                 neighbours = [

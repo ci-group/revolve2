@@ -92,7 +92,7 @@ class Body:
         return _GridMaker().make_grid(self)
 
     @property
-    def core(self) -> Core:
+    def core_v1(self) -> Core:
         """
         Get the core of the Body.
 

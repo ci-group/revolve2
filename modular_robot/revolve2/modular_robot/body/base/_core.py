@@ -1,6 +1,5 @@
+from pyrr import Vector3, Quaternion
 import math
-
-from pyrr import Quaternion, Vector3
 
 from .._attachment_point import AttachmentPoint
 from .._color import Color

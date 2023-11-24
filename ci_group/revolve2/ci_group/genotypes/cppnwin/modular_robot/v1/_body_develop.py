@@ -52,7 +52,7 @@ def develop(
             Vector3([0, -1, 0], dtype=np.int_),
             Vector3([0, 0, 1], dtype=np.int_),
             0,
-            body.core,
+            body.core_v1,
         )
     )
     grid[tuple(core_position)] = 1

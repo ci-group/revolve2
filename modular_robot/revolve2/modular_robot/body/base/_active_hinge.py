@@ -53,7 +53,6 @@ class ActiveHinge(Module):
         pid_gain_p: float,
         pid_gain_d: float,
         child_offset: float,
-
     ):
         """
         Initialize this object.
@@ -110,7 +109,7 @@ class ActiveHinge(Module):
     @property
     def attachment(self) -> Module | None:
         """
-        Get the attachment point of this hinge.
+        Get the module attached to this hinge.
 
         :returns: The attachment points module.
         """

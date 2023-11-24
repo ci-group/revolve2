@@ -14,11 +14,7 @@ class BodyV1(Body):
     @property
     def core_v1(self) -> CoreV1:
         """
-<<<<<<< HEAD
         Get the specific v1 core of the body.
-=======
-        Get the core of the body.
->>>>>>> 60cc945 (feedback)
 
         :return: The v1 core.
         """

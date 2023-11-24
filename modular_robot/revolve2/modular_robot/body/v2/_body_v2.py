@@ -14,8 +14,8 @@ class BodyV2(Body):
     @property
     def core_v2(self) -> CoreV2:
         """
-        Get the core of the body.
+        Get the specific v2 core of the body.
 
-        :return: The core.
+        :return: The v2 core.
         """
         return self._core

@@ -13,9 +13,9 @@ from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 
 @dataclass
 class __Module:
-    position: Vector3
-    forward: Vector3
-    up: Vector3
+    position: Vector3[np.int_]
+    forward: Vector3[np.int_]
+    up: Vector3[np.int_]
     chain_length: int
     module_reference: Module
 

@@ -38,7 +38,7 @@ class MultiBodySystem:
     is_static: bool
     """
     Whether the root rigid body is static.
-    
+
     I.e. its root (the first rigid body) is attached to the world and will not move or rotate.
     """
 
@@ -53,7 +53,7 @@ class MultiBodySystem:
     _half_adjacency_matrix: list[Joint | None] = field(default_factory=list, init=False)
     """
     Adjacency matrix, defining joints between rigid bodies.
-    
+
     The the indices of the list match the following indices in the adjacency matrix:
 
     joints | 0 1 2 3 4
@@ -66,7 +66,7 @@ class MultiBodySystem:
     """
 
     def _half_matrix_index(
-        self, rigid_body1_list_index: int, rigid_body2_list_index: int
+            self, rigid_body1_list_index: int, rigid_body2_list_index: int
     ) -> int:
         assert rigid_body1_list_index != rigid_body2_list_index
         smallest_index = min(rigid_body1_list_index, rigid_body2_list_index)
@@ -84,7 +84,7 @@ class MultiBodySystem:
         :param rigid_body: The rigid body to add.
         """
         assert (
-            UUIDKey(rigid_body) not in self._rigid_body_to_index
+                UUIDKey(rigid_body) not in self._rigid_body_to_index
         ), "Rigid body already part of this multi-body system."
 
         # Extend adjacency matrix
@@ -104,16 +104,16 @@ class MultiBodySystem:
             UUIDKey(joint.rigid_body1)
         )
         assert (
-            maybe_rigid_body_index1 is not None
+                maybe_rigid_body_index1 is not None
         ), "First rigid body is not part of this multi-body system."
         maybe_rigid_body_index2 = self._rigid_body_to_index.get(
             UUIDKey(joint.rigid_body2)
         )
         assert (
-            maybe_rigid_body_index2 is not None
+                maybe_rigid_body_index2 is not None
         ), "Second rigid body is not part of this multi-body system."
         assert (
-            maybe_rigid_body_index1 != maybe_rigid_body_index2
+                maybe_rigid_body_index1 != maybe_rigid_body_index2
         ), "Cannot create a joint between a rigid body and itself."
 
         # Get the index in the adjacency matrix
@@ -122,7 +122,7 @@ class MultiBodySystem:
             maybe_rigid_body_index2,
         )
         assert (
-            self._half_adjacency_matrix[half_matrix_index] is None
+                self._half_adjacency_matrix[half_matrix_index] is None
         ), "A joint already exists between these two rigid bodies."
 
         # Assign the joint in the adjacency matrix
@@ -160,7 +160,7 @@ class MultiBodySystem:
         """
         maybe_index = self._rigid_body_to_index.get(UUIDKey(rigid_body))
         assert (
-            maybe_index is not None
+                maybe_index is not None
         ), "Rigid body is not part of this multi-body system."
 
         half_matrix_indices = [
@@ -207,8 +207,12 @@ class MultiBodySystem:
         # Calculate AABB from the points.
         # This is simply the min and max between the points for every dimension.
         aabb = pyrr.aabb.create_from_points(points)
-        xmin, ymin, zmin = aabb[0]
-        xmax, ymax, zmax = aabb[1]
+        xmin = aabb[0][0]
+        ymin = aabb[0][1]
+        zmin = aabb[0][2]
+        xmax = aabb[1][0]
+        ymax = aabb[1][1]
+        zmax = aabb[1][2]
 
         # Return center and size of the AABB
         return Vector3([xmax + xmin, ymax + ymin, zmax + zmin]) / 2.0, AABB(

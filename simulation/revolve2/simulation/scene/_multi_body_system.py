@@ -66,7 +66,7 @@ class MultiBodySystem:
     """
 
     def _half_matrix_index(
-            self, rigid_body1_list_index: int, rigid_body2_list_index: int
+        self, rigid_body1_list_index: int, rigid_body2_list_index: int
     ) -> int:
         assert rigid_body1_list_index != rigid_body2_list_index
         smallest_index = min(rigid_body1_list_index, rigid_body2_list_index)
@@ -84,7 +84,7 @@ class MultiBodySystem:
         :param rigid_body: The rigid body to add.
         """
         assert (
-                UUIDKey(rigid_body) not in self._rigid_body_to_index
+            UUIDKey(rigid_body) not in self._rigid_body_to_index
         ), "Rigid body already part of this multi-body system."
 
         # Extend adjacency matrix
@@ -104,16 +104,16 @@ class MultiBodySystem:
             UUIDKey(joint.rigid_body1)
         )
         assert (
-                maybe_rigid_body_index1 is not None
+            maybe_rigid_body_index1 is not None
         ), "First rigid body is not part of this multi-body system."
         maybe_rigid_body_index2 = self._rigid_body_to_index.get(
             UUIDKey(joint.rigid_body2)
         )
         assert (
-                maybe_rigid_body_index2 is not None
+            maybe_rigid_body_index2 is not None
         ), "Second rigid body is not part of this multi-body system."
         assert (
-                maybe_rigid_body_index1 != maybe_rigid_body_index2
+            maybe_rigid_body_index1 != maybe_rigid_body_index2
         ), "Cannot create a joint between a rigid body and itself."
 
         # Get the index in the adjacency matrix
@@ -122,7 +122,7 @@ class MultiBodySystem:
             maybe_rigid_body_index2,
         )
         assert (
-                self._half_adjacency_matrix[half_matrix_index] is None
+            self._half_adjacency_matrix[half_matrix_index] is None
         ), "A joint already exists between these two rigid bodies."
 
         # Assign the joint in the adjacency matrix
@@ -160,7 +160,7 @@ class MultiBodySystem:
         """
         maybe_index = self._rigid_body_to_index.get(UUIDKey(rigid_body))
         assert (
-                maybe_index is not None
+            maybe_index is not None
         ), "Rigid body is not part of this multi-body system."
 
         half_matrix_indices = [

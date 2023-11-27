@@ -128,8 +128,8 @@ class Module:
         """
         Check if a child can be set onto a specific index.
 
-        This is for more advanced conflict checks, sucha as big modules that have the possibility to block other, non-related attachment points.
-        By default this returns true, since the basic modules do not block attachment points.
+        This is for more advanced conflict checks, such as big modules that have the possibility to block other attachment points from being populated.
+        By default this returns true, since the basic modules do not block other attachment points.
 
         :param module: The module to set.
         :param child_index: The child index to check.
@@ -162,7 +162,7 @@ class Module:
                     mod
                     for mod in attached_modules + [open_node.parent]
                     if mod is not None
-                    and ((came_from is None) or (mod.uuid is not came_from.uuid))
+                    and (came_from is None or mod.uuid is not came_from.uuid)
                 ]
                 out_neighbours.extend(neighbours)
                 new_open_nodes += list(zip(neighbours, [open_node] * len(neighbours)))

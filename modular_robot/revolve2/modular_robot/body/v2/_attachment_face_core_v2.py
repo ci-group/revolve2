@@ -12,7 +12,7 @@ from ..base._attachment_face import AttachmentFace
 
 @dataclass
 class AttachmentFaceCoreV2(AttachmentFace):
-    """An AttachmentFace for the V2 robot."""
+    """An AttachmentFace for the V2 Core."""
 
     _check_matrix: NDArray[np.uint8] = field(
         default_factory=lambda: np.zeros(shape=(3, 3), dtype=np.uint8)
@@ -33,17 +33,17 @@ class AttachmentFaceCoreV2(AttachmentFace):
                     0   0   0
      
     By default the whole matrix is 0. Once we add a module at location x we adjust the C accordingly. 
-    When adding a new module we want to have a C of 0 in the corresponding position, otherwise the attachment point cant be occupied anymore.
-    Applying a simple 2D convolution allows fast conflict checks.
+    When adding a new module we want to have a C of 0 in the corresponding position, otherwise the attachment point cant be populated anymore.
+    Applying a simple 2D convolution allows for fast conflict checks.
     """
 
     def __init__(
         self, orientation: Quaternion, horizontal_offset: float, vertical_offset: float
     ) -> None:
         """
-        Initialize n attachment face for the V2 Core.
+        Initialize the attachment face for the V2 Core.
 
-        :param orientation: The rotation of the face and the attachment points.
+        :param orientation: The rotation of the face and the attachment points on the module.
         :param horizontal_offset: The horizontal offset for module placement.
         :param vertical_offset:  The vertical offset for module placement.
         """
@@ -67,7 +67,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
             h_o = (i % 3 - 1) * horizontal_offset
             v_o = -(i // 3 - 1) * vertical_offset
 
-            sc: bool = orientation.angle % np.pi == 0
+            sc: bool = np.isclose(orientation.angle % np.pi, 0)
             """Switch condition for determining offset. Depending of whether the face is orthogonal to x or y axis, the horizontal offset has to be applied differently."""
             offset = Vector3([(1 - sc) * (-h_o), sc * h_o, v_o])
 

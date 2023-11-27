@@ -129,11 +129,13 @@ class CoreV2(Core):
         """
         Generate global indices specific for the V2 Core. Formats the new index as such: <face_index>0<point_index>.
 
+        Global index (Front [0], Top-Right [2]) would be: <1>*(0+1)<0><1>*(2+1) -> 10111
+
         :param face_index: The index of the face.
         :param attachment_index: The index of the attachment position.
         :return: The global index.
         """
-        global_index = "1" * face_index + "0" + "1" * attachment_index
+        global_index = ((10**(face_index+1)) * 10**(attachment_index+2) + (10**(attachment_index+1)))/9
         return int(global_index)
 
     @staticmethod
@@ -145,7 +147,7 @@ class CoreV2(Core):
         :return: The face and attachment index.
         """
         head, tail = str(global_index).split("0")
-        return len(head), len(tail)
+        return len(head)-1, len(tail)-1
 
     @property
     def attachment_faces(self) -> dict[int, AttachmentFaceCoreV2]:

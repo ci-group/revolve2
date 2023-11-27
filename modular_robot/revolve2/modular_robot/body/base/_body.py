@@ -1,5 +1,4 @@
 import math
-from abc import ABC
 from typing import Generic, Type, TypeVar
 
 import numpy as np
@@ -13,7 +12,7 @@ TModule = TypeVar("TModule", bound=Module)
 TModuleNP = TypeVar("TModuleNP", bound=np.generic)
 
 
-class Body(ABC):
+class Body:
     """Body of a modular robot."""
 
     _core: Core

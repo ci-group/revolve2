@@ -135,7 +135,10 @@ class CoreV2(Core):
         :param attachment_index: The index of the attachment position.
         :return: The global index.
         """
-        global_index = ((10**(face_index+1)) * 10**(attachment_index+2) + (10**(attachment_index+1)))/9
+        global_index = (
+            (10 ** (face_index + 1)) * 10 ** (attachment_index + 2)
+            + (10 ** (attachment_index + 1))
+        ) / 9
         return int(global_index)
 
     @staticmethod
@@ -147,7 +150,7 @@ class CoreV2(Core):
         :return: The face and attachment index.
         """
         head, tail = str(global_index).split("0")
-        return len(head)-1, len(tail)-1
+        return len(head) - 1, len(tail) - 1
 
     @property
     def attachment_faces(self) -> dict[int, AttachmentFaceCoreV2]:

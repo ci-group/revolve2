@@ -101,7 +101,7 @@ class MorphologicalMeasures(Generic[TModule]):
         :param body: The body to measure.
         """
         self.grid, self.core_grid_position = body.to_grid()
-        self.core = body.core_v1
+        self.core = body.core
         self.is_2d = self.__calculate_is_2d_recur(self.core)
         self.bricks = body.find_modules_of_type(Brick)
         self.active_hinges = body.find_modules_of_type(ActiveHinge)

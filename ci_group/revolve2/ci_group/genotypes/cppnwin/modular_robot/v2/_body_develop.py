@@ -43,7 +43,7 @@ def develop(
 
     to_explore.put(
         __Module(
-            Vector3([0, 0, 0]), Vector3([0, -1, 0]), Vector3([0, 0, 1]), 0, body.core_v1
+            Vector3([0, 0, 0]), Vector3([0, -1, 0]), Vector3([0, 0, 1]), 0, body.core
         )
     )
     grid[0, 0, 0] = 1

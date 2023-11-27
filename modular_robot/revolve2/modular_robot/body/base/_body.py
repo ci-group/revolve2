@@ -77,7 +77,7 @@ class Body(ABC):
         :param module_type: The type.
         :return: The list of Modules.
         """
-        return self.__find_recur(self.core_v1, module_type)
+        return self.__find_recur(self._core, module_type)
 
     def to_grid(self) -> tuple[NDArray[TModuleNP], Vector3[np.int_]]:
         """
@@ -93,7 +93,7 @@ class Body(ABC):
         return _GridMaker().make_grid(self)
 
     @property
-    def core_v1(self) -> Core:
+    def core(self) -> Core:
         """
         Get the core of the Body.
 
@@ -110,7 +110,7 @@ class _GridMaker(Generic[TModuleNP]):
 
     def make_grid(self, body: Body) -> tuple[NDArray[TModuleNP], Vector3[np.int_]]:
 
-        self._make_grid_recur(body.core_v1, Vector3(), Quaternion())
+        self._make_grid_recur(body._core, Vector3(), Quaternion())
 
         minx, maxx = min(self._x), max(self._x)
         miny, maxy = min(self._y), max(self._y)

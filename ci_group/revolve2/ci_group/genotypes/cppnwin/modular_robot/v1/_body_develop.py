@@ -47,7 +47,7 @@ def develop(
             Vector3([0, -1, 0], dtype=np.int_),
             Vector3([0, 0, 1], dtype=np.int_),
             0,
-            body.core_v1,
+            body.core,
         )
     )
     grid[0, 0, 0] = 1

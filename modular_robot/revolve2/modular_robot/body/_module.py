@@ -162,7 +162,7 @@ class Module:
                     mod
                     for mod in attached_modules + [open_node.parent]
                     if mod is not None
-                    and ((came_from is None) or (mod.uuid is not came_from.uuid))
+                    and (came_from is None or mod.uuid is not came_from.uuid)
                 ]
                 out_neighbours.extend(neighbours)
                 new_open_nodes += list(zip(neighbours, [open_node] * len(neighbours)))

@@ -1,12 +1,16 @@
+"""Draw 2D representations of Modular Robots."""
+import os
+import time
+from typing import Any
+
+import cairo
+import numpy as np
+from numpy.typing import NDArray
+from pyrr import Quaternion, Vector3
+
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import Module
-from revolve2.modular_robot.body.base import Body, Core, ActiveHinge, Brick
-import cairo
-import os
-from pyrr import Quaternion, Vector3
-import numpy as np
-import time
-from numpy.typing import NDArray
+from revolve2.modular_robot.body.base import ActiveHinge, Body, Brick, Core
 
 
 def __mk_path() -> str:
@@ -17,7 +21,16 @@ def __mk_path() -> str:
     return path
 
 
-def draw_robots(robots: list[ModularRobot] | list[Body], scale: int = 100, path: str | None = None) -> None:
+def draw_robots(
+    robots: list[ModularRobot] | list[Body], scale: int = 100, path: str | None = None
+) -> None:
+    """
+    Draw multiple robots at once.
+
+    :param robots: The robots.
+    :param scale: The scale for the robots to be drawn.
+    :param path: The path for the output files.
+    """
     if not path:
         path = __mk_path()
 
@@ -25,7 +38,9 @@ def draw_robots(robots: list[ModularRobot] | list[Body], scale: int = 100, path:
         draw_robot(robot, scale, path)
 
 
-def draw_robot(robot: ModularRobot | Body, scale: int = 100, path: str | None = None) -> None:
+def draw_robot(
+    robot: ModularRobot | Body, scale: int = 100, path: str | None = None
+) -> None:
     """
     Draw a 2D representation for a modular robots body.
 
@@ -37,7 +52,8 @@ def draw_robot(robot: ModularRobot | Body, scale: int = 100, path: str | None = 
         path = __mk_path()
 
     body = robot if isinstance(robot, Body) else robot.body
-    body_grid, core_position = body.to_grid()
+    tpl: tuple[NDArray[Any], Vector3[np.int_]] = body.to_grid()
+    body_grid, core_position = tpl
     x, y, _ = body_grid.shape
 
     image = cairo.ImageSurface(cairo.FORMAT_ARGB32, x * scale, y * scale)
@@ -54,21 +70,21 @@ def draw_robot(robot: ModularRobot | Body, scale: int = 100, path: str | None = 
     _save_png(image, path)
 
 
-def _draw_module(module: Module,
-                 position: tuple[int, int],
-                 orientation: Quaternion,
-                 context: cairo.Context,
-                 print_id: bool = False) -> None:
+def _draw_module(
+    module: Module,
+    position: tuple[int, int],
+    orientation: Quaternion,
+    context: cairo.Context,
+    print_id: bool = False,
+) -> None:
     """
     Draw a module onto the canvas.
-
 
     :param module: The module.
     :param position: The position on the canvas.
     :param orientation: The orientation to draw in.
     :param context: The context to draw it on.
     :param print_id: If the modules id should be drawn as well.
-    :return: The context.
     :raises Exception: If the module cant be drawn.
     """
     print(f"drawing {type(module)} onto {position}")
@@ -86,7 +102,9 @@ def _draw_module(module: Module,
         case Brick():
             context.set_source_rgb(0, 0, 1)  # Blue
         case _:
-            raise Exception(f"Module of type {type(module)} has no defined structure for drawing.")
+            raise Exception(
+                f"Module of type {type(module)} has no defined structure for drawing."
+            )
 
     # default operation for every module
     context.fill_preserve()
@@ -103,7 +121,7 @@ def _draw_module(module: Module,
         context.stroke()
 
     for key, child in module.children.items():
-        new_orient = module.attachment_points.get(key).orientation * orientation
+        new_orient = module.attachment_points[key].orientation * orientation
 
         rot = __make_rot_matrix(new_orient.angle)
         offset = np.round(np.dot(rot, np.array([1, 0])))
@@ -128,6 +146,7 @@ def _save_png(image: cairo.ImageSurface, path: str) -> None:
 
 
 def __make_rot_matrix(angle: float) -> NDArray[np.float_]:
-    rot_matrix = np.array([[np.cos(angle), -np.sin(angle)],
-                           [np.sin(angle), np.cos(angle)]])
+    rot_matrix = np.array(
+        [[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]
+    )
     return rot_matrix

@@ -1,5 +1,7 @@
 """Main script for the example."""
 
+import logging
+
 from revolve2.ci_group import fitness_functions, modular_robots_v1, terrains
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
@@ -53,7 +55,7 @@ def main() -> None:
         robot_state_begin, robot_state_end
     )
 
-    print(xy_displacement)
+    logging.info(xy_displacement)
 
 
 if __name__ == "__main__":

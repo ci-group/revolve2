@@ -1,5 +1,7 @@
 """Main script for the example."""
 
+import logging
+
 from pyrr import Vector3
 
 from revolve2.ci_group import fitness_functions, modular_robots_v1, terrains
@@ -62,7 +64,7 @@ def main() -> None:
         for robot in robots
     ]
 
-    print(xy_displacements)
+    logging.info(xy_displacements)
 
 
 if __name__ == "__main__":

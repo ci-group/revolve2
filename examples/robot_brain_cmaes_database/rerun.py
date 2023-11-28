@@ -1,5 +1,7 @@
 """Rerun the best robot between all experiments."""
 
+import logging
+
 import config
 from evaluator import Evaluator
 from genotype import Genotype
@@ -38,8 +40,8 @@ def main() -> None:
 
     parameters = genotype.parameters
 
-    print(f"Best fitness: {fitness}")
-    print(f"Best parameters: {parameters}")
+    logging.info(f"Best fitness: {fitness}")
+    logging.info(f"Best parameters: {parameters}")
 
     # Prepare the body and brain structure
     active_hinges = config.BODY.find_modules_of_type(ActiveHinge)

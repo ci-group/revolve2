@@ -1,5 +1,7 @@
 """Rerun the best robot between all experiments."""
 
+import logging
+
 import config
 from evaluator import Evaluator
 from genotype import Genotype
@@ -34,7 +36,7 @@ def main() -> None:
 
     modular_robot = genotype.develop()
 
-    print(f"Best fitness: {fitness}")
+    logging.info(f"Best fitness: {fitness}")
 
     # Create the evaluator.
     evaluator = Evaluator(headless=False, num_simulators=1)

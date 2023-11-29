@@ -1,3 +1,7 @@
+# Experiment files
+**/log.txt
+*.sqlite
+
 # Visual Studio Code
 .vscode/
 

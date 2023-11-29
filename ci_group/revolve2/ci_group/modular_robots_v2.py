@@ -34,26 +34,27 @@ def gecko_v2() -> BodyV2:
     """
     Sample robot with new HW config.
 
-    all previously designed robots can be translated to the new hardware using Body(new_hardware=True)
-    the position for core-connected modules is optional, by default pos 5 (middle of core)
-
     :returns: the robot
     """
-    attachment_positions = [0, 8, 8, 8]
-    body = BodyV2(attachment_positions)
-    body.core.right = ActiveHingeV2(0.0)
-    body.core.right.attachment = BrickV2(0.0)
+    body = BodyV2()
 
-    body.core.left = ActiveHingeV2(0.0)
-    body.core.left.attachment = BrickV2(0.0)
+    body.core_v2.right_face.bottom = ActiveHingeV2(0.0)
+    body.core_v2.right_face.bottom.attachment = BrickV2(0.0)
 
-    body.core.back = ActiveHingeV2(np.pi / 2.0)
-    body.core.back.attachment = BrickV2(-np.pi / 2.0)
-    body.core.back.attachment.front = ActiveHingeV2(np.pi / 2.0)
-    body.core.back.attachment.front.attachment = BrickV2(-np.pi / 2.0)
-    body.core.back.attachment.front.attachment.left = ActiveHingeV2(0.0)
-    body.core.back.attachment.front.attachment.right = ActiveHingeV2(0.0)
-    body.core.back.attachment.front.attachment.left.attachment = BrickV2(0.0)
-    body.core.back.attachment.front.attachment.right.attachment = BrickV2(0.0)
+    body.core_v2.left_face.bottom = ActiveHingeV2(0.0)
+    body.core_v2.left_face.bottom.attachment = BrickV2(0.0)
+
+    body.core_v2.back_face.bottom = ActiveHingeV2(np.pi / 2.0)
+    body.core_v2.back_face.bottom.attachment = BrickV2(-np.pi / 2.0)
+    body.core_v2.back_face.bottom.attachment.front = ActiveHingeV2(np.pi / 2.0)
+    body.core_v2.back_face.bottom.attachment.front.attachment = BrickV2(-np.pi / 2.0)
+    body.core_v2.back_face.bottom.attachment.front.attachment.left = ActiveHingeV2(0.0)
+    body.core_v2.back_face.bottom.attachment.front.attachment.right = ActiveHingeV2(0.0)
+    body.core_v2.back_face.bottom.attachment.front.attachment.left.attachment = BrickV2(
+        0.0
+    )
+    body.core_v2.back_face.bottom.attachment.front.attachment.right.attachment = (
+        BrickV2(0.0)
+    )
 
     return body

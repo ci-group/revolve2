@@ -39,15 +39,12 @@ class BodyToMultiBodySystemConverter:
         )
         multi_body_system.add_rigid_body(rigid_body)
 
-        queue = deque(
-            [
-                UnbuiltChild(
-                    module=body.core,
-                    rigid_body=rigid_body,
-                    pose=Pose(),
-                )
-            ]
+        unbuilt = UnbuiltChild(
+            module=body.core,
+            rigid_body=rigid_body,
         )
+        unbuilt.make_pose(Vector3())
+        queue = deque([unbuilt])
         while len(queue) > 0:
             builder = get_builder(queue.popleft())
             new_tasks = builder.build(

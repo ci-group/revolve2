@@ -1,12 +1,9 @@
-from revolve2.modular_robot.body.base import ActiveHinge, Brick
-from revolve2.modular_robot.body.v1 import CoreV1
-from revolve2.modular_robot.body.v2 import CoreV2
+from revolve2.modular_robot.body.base import ActiveHinge, Brick, Core
 
 from ._active_hinge_builder import ActiveHingeBuilder
 from ._brick_builder import BrickBuilder
 from ._builder import Builder
-from ._core_v1_builder import CoreV1Builder
-from ._core_v2_builder import CoreV2Builder
+from ._core_builder import CoreBuilder
 from ._unbuilt_child import UnbuiltChild
 
 
@@ -19,14 +16,8 @@ def get_builder(unbuilt_child: UnbuiltChild) -> Builder:
     :raises KeyError: If no Builder available for the Module type.
     """
     match unbuilt_child.module:
-        case CoreV1():
-            return CoreV1Builder(
-                module=unbuilt_child.module,
-                rigid_body=unbuilt_child.rigid_body,
-                slot_pose=unbuilt_child.pose,
-            )
-        case CoreV2():
-            return CoreV2Builder(
+        case Core():
+            return CoreBuilder(
                 module=unbuilt_child.module,
                 rigid_body=unbuilt_child.rigid_body,
                 slot_pose=unbuilt_child.pose,

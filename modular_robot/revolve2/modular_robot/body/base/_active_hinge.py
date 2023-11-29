@@ -1,5 +1,6 @@
-from pyrr import Vector3
+from pyrr import Quaternion, Vector3
 
+from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
@@ -33,9 +34,7 @@ class ActiveHinge(Module):
 
     def __init__(
         self,
-        num_children: int,
         rotation: float | RightAngles,
-        color: Color,
         servo1_bounding_box: Vector3,
         servo2_bounding_box: Vector3,
         frame_bounding_box: Vector3,
@@ -53,13 +52,12 @@ class ActiveHinge(Module):
         armature: float,
         pid_gain_p: float,
         pid_gain_d: float,
+        child_offset: float,
     ):
         """
         Initialize this object.
 
-        :param num_children: The number of children.
         :param rotation: The Modules rotation.
-        :param color: The Modules color.
         :param servo1_bounding_box: The bounding box of servo 1. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
         :param servo2_bounding_box: The bounding box of servo 2. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
         :param frame_bounding_box: The bounding box of the frame. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
@@ -77,6 +75,7 @@ class ActiveHinge(Module):
         :param armature: Armature of the joint. This represents the inertia of the motor itself when nothing is attached.
         :param pid_gain_p: Proportional gain of the pid position controller.
         :param pid_gain_d: Derivative gain of the pid position controller.
+        :param child_offset: The offset of children on the attachment point.
         """
         self._static_friction = static_friction
         self._dynamic_friction = dynamic_friction
@@ -95,7 +94,15 @@ class ActiveHinge(Module):
         self._armature = armature
         self._pid_gain_p = pid_gain_p
         self._pid_gain_d = pid_gain_d
-        super().__init__(num_children, rotation, color)
+
+        attachment_points = {
+            self.ATTACHMENT: AttachmentPoint(
+                offset=Vector3([child_offset, 0.0, 0.0]),
+                orientation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
+            ),
+        }
+
+        super().__init__(rotation, Color(255, 255, 255, 255), attachment_points)
 
         self._sensor = None
 
@@ -106,14 +113,14 @@ class ActiveHinge(Module):
 
         :returns: The attached module.
         """
-        return self.children[self.ATTACHMENT]
+        return self._children.get(self.ATTACHMENT)
 
     @attachment.setter
     def attachment(self, module: Module) -> None:
         """
-        Set the module attached to this hinge.
+        Set a module to the attachment point.
 
-        :param module: The module to attach.
+        :param module: The Module.
         """
         self.set_child(module, self.ATTACHMENT)
 

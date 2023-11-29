@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import uuid
 
+from ._attachment_point import AttachmentPoint
 from ._color import Color
 from ._right_angles import RightAngles
 
@@ -11,7 +12,8 @@ class Module:
 
     _uuid: uuid.UUID
 
-    _children: list[Module | None]
+    _attachment_points: dict[int, AttachmentPoint]
+    _children: dict[int, Module]
     _rotation: float
 
     _parent: Module | None
@@ -31,18 +33,22 @@ class Module:
     _color: Color
 
     def __init__(
-        self, num_children: int, rotation: float | RightAngles, color: Color
+        self,
+        rotation: float | RightAngles,
+        color: Color,
+        attachment_points: dict[int, AttachmentPoint],
     ) -> None:
         """
         Initialize this object.
 
-        :param num_children: The number of children this module can have.
         :param rotation: Orientation of this model relative to its parent.
         :param color: The color of the module.
+        :param attachment_points: The attachment points available on a module.
         """
         self._uuid = uuid.uuid1()
 
-        self._children = [None] * num_children
+        self._attachment_points = attachment_points
+        self._children = {}
 
         self._rotation = rotation if isinstance(rotation, float) else rotation.value
 
@@ -59,18 +65,6 @@ class Module:
         :returns: The uuid.
         """
         return self._uuid
-
-    @property
-    def children(self) -> list[Module | None]:
-        """
-        Get the children of this module.
-
-        Do not alter the returned list.
-        It will break stuff.
-
-        :returns: The list of children.
-        """
-        return self._children
 
     @property
     def rotation(self) -> float:
@@ -103,23 +97,45 @@ class Module:
         """
         return self._parent_child_index
 
+    @property
+    def children(self) -> dict[int, Module]:
+        """
+        Get all children on this module.
+
+        :return: The children and their respective attachment point index.
+        """
+        return self._children
+
     def set_child(self, module: Module, child_index: int) -> None:
         """
         Attach a module to a slot.
 
         :param module: The module to attach.
         :param child_index: The slot to attach it to.
-        :raises RuntimeError: If that slot is already taken by another module.
+        :raises KeyError: If attachment point is already populated.
         """
-        if self.children[child_index] is not None:
-            raise RuntimeError("Slot already has module.")
-        assert self.children[child_index] is None, "Slot already has a module."
         assert (
             module._parent is None
         ), "Child module already connected to a different slot."
         module._parent = self
         module._parent_child_index = child_index
-        self.children[child_index] = module
+        if self.is_free(child_index) and self.can_set_child(module, child_index):
+            self._children[child_index] = module
+        else:
+            raise KeyError("Attachment point already populated")
+
+    def can_set_child(self, module: Module, child_index: int) -> bool:
+        """
+        Check if a child can be set onto a specific index.
+
+        This is for more advanced conflict checks, such as big modules that have the possibility to block other attachment points from being populated.
+        By default this returns true, since the basic modules do not block other attachment points.
+
+        :param module: The module to set.
+        :param child_index: The child index to check.
+        :return: Whether it is possible.
+        """
+        return True
 
     def neighbours(self, within_range: int) -> list[Module]:
         """
@@ -137,16 +153,20 @@ class Module:
         for _ in range(within_range):
             new_open_nodes: list[tuple[Module, Module | None]] = []
             for open_node, came_from in open_nodes:
+                attached_modules = [
+                    self._children.get(index)
+                    for index in open_node.attachment_points.keys()
+                    if self._children.get(index) is not None
+                ]
                 neighbours = [
                     mod
-                    for mod in open_node.children + [open_node.parent]
+                    for mod in attached_modules + [open_node.parent]
                     if mod is not None
                     and (came_from is None or mod.uuid is not came_from.uuid)
                 ]
-                out_neighbours += neighbours
+                out_neighbours.extend(neighbours)
                 new_open_nodes += list(zip(neighbours, [open_node] * len(neighbours)))
             open_nodes = new_open_nodes
-
         return out_neighbours
 
     @property
@@ -157,3 +177,21 @@ class Module:
         :returns: The color.
         """
         return self._color
+
+    @property
+    def attachment_points(self) -> dict[int, AttachmentPoint]:
+        """
+        Get all attachment points of this module.
+
+        :return: The attachment points.
+        """
+        return self._attachment_points
+
+    def is_free(self, index: int) -> bool:
+        """
+        Return if the attachment-point is free.
+
+        :param index: The index to check.
+        :return: The boolean.
+        """
+        return self._children.get(index) is None

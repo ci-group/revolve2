@@ -1,8 +1,4 @@
-import math
-
-from pyrr import Quaternion, Vector3
-
-from revolve2.modular_robot.body.v1 import CoreV1
+from revolve2.modular_robot.body.base import Core
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox
 from revolve2.simulation.scene.geometry.textures import Texture
@@ -13,12 +9,12 @@ from ._convert_color import convert_color
 from ._unbuilt_child import UnbuiltChild
 
 
-class CoreV1Builder(Builder):
+class CoreBuilder(Builder):
     """A Builder for V1 Cores."""
 
-    _module: CoreV1
+    _module: Core
 
-    def __init__(self, module: CoreV1, rigid_body: RigidBody, slot_pose: Pose):
+    def __init__(self, module: Core, rigid_body: RigidBody, slot_pose: Pose):
         """
         Initialize the Core V1 Builder.
 
@@ -52,29 +48,21 @@ class CoreV1Builder(Builder):
         )
 
         tasks = []
-        for child_index, angle in [
-            (self._module.FRONT, 0.0),
-            (self._module.BACK, math.pi),
-            (self._module.LEFT, math.pi / 2.0),
-            (self._module.RIGHT, math.pi / 2.0 * 3),
-        ]:
-            child = self._module.children[child_index]
+        for child_index, attachment_point in self._module.attachment_points.items():
+            child = self._module.children.get(child_index)
             if child is not None:
-                child_slot_pose = Pose(
+                unbuilt = UnbuiltChild(
+                    module=child,
+                    rigid_body=self._rigid_body,
+                )
+                unbuilt.make_pose(
                     position=self._slot_pose.position
                     + self._slot_pose.orientation
-                    * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Vector3([self._module.child_offset, 0.0, 0.0]),
+                    * attachment_point.orientation
+                    * attachment_point.offset,
                     orientation=self._slot_pose.orientation
-                    * Quaternion.from_eulers([0.0, 0.0, angle])
-                    * Quaternion.from_eulers([child.rotation, 0, 0]),
+                    * attachment_point.orientation,
                 )
 
-                tasks.append(
-                    UnbuiltChild(
-                        module=child,
-                        rigid_body=self._rigid_body,
-                        pose=child_slot_pose,
-                    )
-                )
+                tasks.append(unbuilt)
         return tasks

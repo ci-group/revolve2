@@ -1,19 +1,21 @@
-import math
 from dataclasses import dataclass
 from queue import Queue
 from typing import Any
 
 import multineat
+import numpy as np
+from numpy.typing import NDArray
+from pyrr import Quaternion, Vector3
 
-from revolve2.modular_robot.body import Module
-from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2, CoreV2
+from revolve2.modular_robot.body import AttachmentPoint, Module
+from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
 
 
 @dataclass
 class __Module:
-    position: tuple[int, int, int]
-    forward: tuple[int, int, int]
-    up: tuple[int, int, int]
+    position: Vector3[np.int_]
+    forward: Vector3[np.int_]
+    up: Vector3[np.int_]
     chain_length: int
     module_reference: Module
 
@@ -28,7 +30,6 @@ def develop(
 
     :param genotype: The genotype to create the body from.
     :returns: The create body.
-    :raises RuntimeError: In case a module is encountered that is not supported.
     """
     max_parts = 10
 
@@ -36,52 +37,33 @@ def develop(
     genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
-    grid: set[tuple[int, int, int]] = set()
+    grid = np.zeros(shape=(max_parts, max_parts, max_parts), dtype=np.uint8)
 
-    outputs = __evaluate_cppn(body_net, (0, 0, 0), 0)
+    body = BodyV2()
 
-    def __get_position_index(x: float) -> int:
-        return max(1, int(abs(x) * 10 - 1e-3))
-
-    attachment_positions = list(map(__get_position_index, outputs[5:]))
-    body = BodyV2(attachment_positions)
-
-    to_explore.put(__Module((0, 0, 0), (0, -1, 0), (0, 0, 1), 0, body.core))
-    grid.add((0, 0, 0))
+    to_explore.put(
+        __Module(
+            Vector3([0, 0, 0]), Vector3([0, -1, 0]), Vector3([0, 0, 1]), 0, body.core
+        )
+    )
+    grid[0, 0, 0] = 1
     part_count = 1
 
     while not to_explore.empty():
         module = to_explore.get()
 
-        children: list[tuple[int, int]] = []  # child index, rotation
-
-        if isinstance(module.module_reference, CoreV2):
-            children.append((CoreV2.FRONT, 0))
-            children.append((CoreV2.LEFT, 1))
-            children.append((CoreV2.BACK, 2))
-            children.append((CoreV2.RIGHT, 3))
-        elif isinstance(module.module_reference, BrickV2):
-            children.append((BrickV2.FRONT, 0))
-            children.append((BrickV2.LEFT, 1))
-            children.append((BrickV2.RIGHT, 3))
-        elif isinstance(module.module_reference, ActiveHingeV2):
-            children.append((ActiveHingeV2.ATTACHMENT, 0))
-        else:  # Should actually never arrive here but just checking module type to be sure
-            raise RuntimeError()
-
-        for index, rotation in children:
+        for attachment_point_tuple in module.module_reference.attachment_points.items():
             if part_count < max_parts:
-                child = __add_child(body_net, module, index, rotation, grid)
+                child = __add_child(body_net, module, attachment_point_tuple, grid)
                 if child is not None:
                     to_explore.put(child)
                     part_count += 1
-
     return body
 
 
 def __evaluate_cppn(
     body_net: multineat.NeuralNetwork,
-    position: tuple[int, int, int],
+    position: Vector3[np.int_],
     chain_length: int,
 ) -> tuple[Any, int]:
     """
@@ -92,9 +74,11 @@ def __evaluate_cppn(
     :param chain_length: Tree distance of the module from the core.
     :returns: (module type, orientation)
     """
-    body_net.Input(
-        [1.0, position[0], position[1], position[2], chain_length]
-    )  # 1.0 is the bias input
+    x, y, z = position
+    assert isinstance(
+        x, np.int_
+    ), f"Error: The position is not of type int. Type: {type(x)}."
+    body_net.Input([1.0, x, y, z, chain_length])  # 1.0 is the bias input
     body_net.ActivateAllLayers()
     outputs = body_net.Output()
 
@@ -114,28 +98,33 @@ def __evaluate_cppn(
 def __add_child(
     body_net: multineat.NeuralNetwork,
     module: __Module,
-    child_index: int,
-    rotation: int,
-    grid: set[tuple[int, int, int]],
+    attachment_point_tuple: tuple[int, AttachmentPoint],
+    grid: NDArray[np.uint8],
 ) -> __Module | None:
-    forward = __rotate(module.forward, module.up, rotation)
-    position = __add(module.position, forward)
+    attachment_index, attachment_point = attachment_point_tuple
+
+    forward = __rotate(module.forward, module.up, attachment_point.orientation)
+    position = module.position + forward
     chain_length = module.chain_length + 1
 
     # if grid cell is occupied, don't make a child
     # else, set cell as occupied
-    if position in grid:
+    grid_pos = np.round(position)
+    if grid[tuple(grid_pos)] > 0:
         return None
-    else:
-        grid.add(position)
+    grid[grid_pos] += 1
 
-    child_type, orientation = __evaluate_cppn(body_net, position, chain_length)
-    if child_type is None:
+    child_type, child_rotation = __evaluate_cppn(
+        body_net, position + attachment_point.offset, chain_length
+    )
+    child_orientation = __make_quaternion_from_index(child_rotation)
+    if child_type is None or not module.module_reference.can_set_child(
+        child := child_type(child_orientation.angle), attachment_index
+    ):
         return None
-    up = __rotate(module.up, forward, orientation)
 
-    child = child_type(orientation * (math.pi / 2.0))
-    module.module_reference.children[child_index] = child
+    up = __rotate(module.up, forward, child_orientation)
+    module.module_reference.set_child(child, attachment_index)
 
     return __Module(
         position,
@@ -146,59 +135,26 @@ def __add_child(
     )
 
 
-def __add(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
-    return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
-
-
-def __timesscalar(a: tuple[int, int, int], scalar: int) -> tuple[int, int, int]:
-    return (a[0] * scalar, a[1] * scalar, a[2] * scalar)
-
-
-def __cross(a: tuple[int, int, int], b: tuple[int, int, int]) -> tuple[int, int, int]:
-    return (
-        a[1] * b[2] - a[2] * b[1],
-        a[2] * b[0] - a[0] * b[2],
-        a[0] * b[1] - a[1] * b[0],
-    )
-
-
-def __dot(a: tuple[int, int, int], b: tuple[int, int, int]) -> int:
-    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
-
-
-def __rotate(
-    a: tuple[int, int, int], b: tuple[int, int, int], angle: int
-) -> tuple[int, int, int]:
+def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
     Rotates vector a a given angle around b.
 
-    Angle from [0,1,2,3].
-    90 degrees each.
-
     :param a: Vector a.
     :param b: Vector b.
-    :param angle: The angle to rotate.
+    :param rotation: The rotation quaternion.
     :returns: A copy of a, rotated.
     """
-    cosangle: int
-    sinangle: int
-    if angle == 0:
-        cosangle = 1
-        sinangle = 0
-    elif angle == 1:
-        cosangle = 0
-        sinangle = 1
-    elif angle == 2:
-        cosangle = -1
-        sinangle = 0
-    else:
-        cosangle = 0
-        sinangle = -1
+    cosangle = np.cos(rotation.angle)
+    sinangle = np.sin(rotation.angle)
+    x, y, z = (a * cosangle + b.cross(a) * sinangle) + b * (b.dot(a) * (1 - cosangle))
+    return Vector3(np.array([x, y, z], dtype=np.int64))
 
-    return __add(
-        __add(
-            __timesscalar(a, cosangle),
-            __timesscalar(__cross(b, a), sinangle),
-        ),
-        __timesscalar(b, __dot(b, a) * (1 - cosangle)),
-    )
+
+def __make_quaternion_from_index(index: int) -> Quaternion:
+    """
+    Make a quaternion from a rotation index.
+
+    :param index: The index of rotation.
+    :return: The Quaternion.
+    """
+    return Quaternion.from_x_rotation((np.pi / 2) * index)

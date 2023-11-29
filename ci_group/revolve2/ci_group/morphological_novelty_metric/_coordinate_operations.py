@@ -1,7 +1,9 @@
 from itertools import product
+from typing import Any
 
 import numpy as np
 from numpy.typing import NDArray
+from pyrr import Vector3
 
 from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.base import Body
@@ -35,14 +37,13 @@ def _body_to_adjusted_coordinates(bodies: list[Body]) -> list[NDArray[np.float12
     crds = [np.empty(shape=0, dtype=np.float128)] * len(bodies)
     i = 0
     for body in bodies:
-        body_array, core_position = body.to_grid()
-        body_np_array: NDArray[np.int64] = np.asarray(body_array)
-
-        x, y, z = body_np_array.shape
+        tpl: tuple[NDArray[Any], Vector3] = body.to_grid()
+        body_array, core_position = tpl
+        x, y, z = body_array.shape
 
         elements = []
         for xe, ye, ze in product(range(x), range(y), range(z)):
-            target = body_np_array[xe, ye, ze]
+            target = body_array[xe, ye, ze]
             if isinstance(target, Module):
                 elements.append(np.subtract((xe, ye, ze), core_position))
         crds[i] = np.asarray(elements)

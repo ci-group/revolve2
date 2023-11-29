@@ -147,6 +147,6 @@ class _GridMaker(Generic[TModuleNP]):
     def _add(self, position: Vector3, module: Module) -> None:
         self._modules.append(module)
         x, y, z = position
-        self._x.append(round(x))
-        self._y.append(round(y))
-        self._z.append(round(z))
+        self._x.append(int(round(x)))
+        self._y.append(int(round(y)))
+        self._z.append(int(round(z)))

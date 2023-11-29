@@ -1,5 +1,3 @@
-from pyrr import Quaternion
-
 from revolve2.modular_robot.body.base import Core
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox
@@ -53,21 +51,18 @@ class CoreBuilder(Builder):
         for child_index, attachment_point in self._module.attachment_points.items():
             child = self._module.children.get(child_index)
             if child is not None:
-                child_slot_pose = Pose(
+                unbuilt = UnbuiltChild(
+                    module=child,
+                    rigid_body=self._rigid_body,
+                )
+                unbuilt.make_pose(
                     position=self._slot_pose.position
                     + self._slot_pose.orientation
                     * attachment_point.orientation
                     * attachment_point.offset,
                     orientation=self._slot_pose.orientation
-                    * attachment_point.orientation
-                    * Quaternion.from_eulers([child.rotation, 0, 0]),
+                    * attachment_point.orientation,
                 )
 
-                tasks.append(
-                    UnbuiltChild(
-                        module=child,
-                        rigid_body=self._rigid_body,
-                        pose=child_slot_pose,
-                    )
-                )
+                tasks.append(unbuilt)
         return tasks

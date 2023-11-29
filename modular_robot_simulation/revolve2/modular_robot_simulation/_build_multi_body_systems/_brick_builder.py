@@ -1,4 +1,4 @@
-from pyrr import Quaternion, Vector3
+from pyrr import Vector3
 
 from revolve2.modular_robot.body.base import Brick
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
@@ -60,21 +60,17 @@ class BrickBuilder(Builder):
         for child_index, attachment_point in self._module.attachment_points.items():
             child = self._module.children.get(child_index)
             if child is not None:
-                child_slot_pose = Pose(
+                unbuilt = UnbuiltChild(
+                    module=child,
+                    rigid_body=self._rigid_body,
+                )
+                unbuilt.make_pose(
                     position=brick_center_pose.position
                     + brick_center_pose.orientation
                     * attachment_point.orientation
                     * attachment_point.offset,
                     orientation=brick_center_pose.orientation
-                    * attachment_point.orientation
-                    * Quaternion.from_eulers([child.rotation, 0, 0]),
+                    * attachment_point.orientation,
                 )
-
-                tasks.append(
-                    UnbuiltChild(
-                        module=child,
-                        rigid_body=self._rigid_body,
-                        pose=child_slot_pose,
-                    )
-                )
+                tasks.append(unbuilt)
         return tasks

@@ -67,7 +67,7 @@ def develop(
 
 def __evaluate_cppn(
     body_net: multineat.NeuralNetwork,
-    position: Vector3,
+    position: Vector3[np.int_],
     chain_length: int,
 ) -> tuple[Any, int]:
     """
@@ -78,9 +78,11 @@ def __evaluate_cppn(
     :param chain_length: Tree distance of the module from the core.
     :returns: (module type, rotation_index)
     """
-    body_net.Input(
-        [1.0, position[0], position[1], position[2], chain_length]
-    )  # 1.0 is the bias input
+    x, y, z = position
+    assert isinstance(
+        x, np.int_
+    ), f"Error: The position is not of type int. Type: {type(x)}."
+    body_net.Input([1.0, x, y, z, chain_length])  # 1.0 is the bias input
     body_net.ActivateAllLayers()
     outputs = body_net.Output()
 

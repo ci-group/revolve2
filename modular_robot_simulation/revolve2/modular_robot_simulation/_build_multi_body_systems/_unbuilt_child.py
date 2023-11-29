@@ -1,4 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.body import Module
 from revolve2.simulation.scene import Pose, RigidBody
@@ -10,4 +12,19 @@ class UnbuiltChild:
 
     module: Module
     rigid_body: RigidBody
-    pose: Pose
+    pose: Pose = field(init=False)
+
+    def make_pose(
+        self, position: Vector3, orientation: Quaternion = Quaternion()
+    ) -> None:
+        """
+        Make the pose of the unbuilt child.
+
+        :param position: The position argument from the parent.
+        :param orientation: The orientation of the attachment on the parent.
+        """
+        module_rot = Quaternion.from_eulers([self.module.rotation, 0.0, 0.0])
+        self.pose = Pose(
+            position,
+            orientation * module_rot,
+        )

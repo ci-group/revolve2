@@ -31,7 +31,7 @@ class MorphologicalMeasures(Generic[TModule]):
     grid: NDArray[TModule]
     symmetry_grid: NDArray[TModule]
     """Position of the core in 'body_as_grid'."""
-    core_grid_position: Vector3
+    core_grid_position: Vector3[np.int_]
 
     """If the robot is two dimensional, i.e. all module rotations are 0 degrees."""
     is_2d: bool

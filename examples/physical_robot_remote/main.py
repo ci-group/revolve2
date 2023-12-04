@@ -6,7 +6,7 @@ from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
-from revolve2.modular_robot_physical import Config, HardwareType, UUIDKey
+from revolve2.modular_robot_physical import Config, UUIDKey
 from revolve2.modular_robot_physical.remote import Remote
 
 
@@ -91,11 +91,8 @@ def main() -> None:
     The debug flag is turned on. If the remote complains it cannot keep up, turning off debugging might improve performance.
     """
     remote = Remote(
-        hostname="10.15.3.98",
-        username="pi",
-        password="raspberry",
-        hardware_type=HardwareType.v1,
         config=config,
+        hostname="localhost",  # "Set the robot IP here.
         debug=True,
     )
     print("Initializing robot..")

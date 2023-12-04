@@ -14,7 +14,11 @@ class PhysicalInterface(ABC):
         """
 
     @abstractmethod
-    def to_low_power_mode(self) -> None:
+    def enable(self) -> None:
+        """Start the robot."""
+
+    @abstractmethod
+    def disable(self) -> None:
         """
         Set the robot to low power mode.
 

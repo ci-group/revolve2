@@ -14,7 +14,7 @@ Steps to take:
 - Create a config pickle file as shown in `make_config_file.py`.
 - Obtain the IP address of the core. If you are on the same network, we recommend using the `nmap` tool, if available on your system: `sudo nmap -sP <your ip>`. For CI Group people: the core should be connected to ThymioNet.
 - Copy the config file onto the core using `scp <config file path> <user>@<rpi-ip>:~/config.pickle`. The default user and password are `pi` and `raspberry`.
-- SSH to the core using `ssh <user>@r<rpi-ip>`.
+- SSH to the core using `ssh <user>@<rpi-ip>`.
 - Run the robot using the following command: `run_brain --config ~/config.pickle --hardware <hardware type>`, where `hardware type` is either `v1` or `v2`.
 - To get all possible arguments for the previous command, see `run_brain --help`
 

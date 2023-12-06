@@ -81,23 +81,29 @@ class V2PhysicalInterface(PhysicalInterface):
             self._robohat.do_buzzer_beep()
         self._robohat.set_servo_direct_mode(careful)
 
-    def set_servo_target(self, pin: int, target: float) -> None:
+    def set_servo_targets(self, pins: list[int], targets: list[float]) -> None:
         """
-        Set the target for a single Servo.
+        Set the target for multiple servos.
 
-        :param pin: The GPIO pin number.
-        :param target: The target angle.
+        :param pins: The GPIO pin numbers.
+        :param targets: The target angles.
         """
-        if self._debug:
-            print(f"{pin:03d} | {target}")
+        for pin, target in zip(pins, targets):
+            if self._debug:
+                print(f"{pin:03d} | {target}")
 
         if not self._dry:
-            angle = target / (2 * math.pi) * 180 + 90
-            self._robohat.set_servo_single_angle(pin, angle)
+            all_angles = [0.0] * 32
+            angles = [target / (2 * math.pi) * 180 + 90 for target in targets]
+            for pin, angle in zip(pins, angles):
+                all_angles[pin] = angle
+            self._robohat.set_servo_multiple_angles(all_angles)
 
     def enable(self) -> None:
         """Start the robot."""
-        pass
+        if self._debug:
+            print("Waking up servos.")
+        self._robohat.wakeup_servo()
 
     def disable(self) -> None:
         """
@@ -106,7 +112,5 @@ class V2PhysicalInterface(PhysicalInterface):
         This disables all active modules and sensors.
         """
         if self._debug:
-            print(
-                "Turning off all pwm signals for pins that were used by this controller."
-            )
+            print("Putting servos to sleep.")
         self._robohat.put_servo_to_sleep()

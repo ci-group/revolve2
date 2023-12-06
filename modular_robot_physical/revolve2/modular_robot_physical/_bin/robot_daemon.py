@@ -1,5 +1,4 @@
 """Physical modular robot daemon that provides a network interface to use the robot."""
-import asyncio
 
 import typed_argparse as tap
 
@@ -24,9 +23,7 @@ def main_with_args(args: Args) -> None:
 
     :param args: The parsed program arguments.
     """
-    asyncio.run(
-        run_robot_daemon(debug=args.debug, dry=args.dry, hardware_type=args.hardware)
-    )
+    run_robot_daemon(debug=args.debug, dry=args.dry, hardware_type=args.hardware)
 
 
 def main() -> None:

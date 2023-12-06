@@ -7,7 +7,7 @@ from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_physical import Config, UUIDKey
-from revolve2.modular_robot_physical.remote import Remote
+from revolve2.modular_robot_physical.remote import run_remote
 
 
 def make_body() -> (
@@ -39,6 +39,12 @@ def make_body() -> (
         body.core.right.attachment,
     )
     return body, active_hinges
+
+
+def on_prepared() -> None:
+    """Do things when the robot is prepared and ready to start the controller."""
+    print("Done. Press enter to start the brain.")
+    input()
 
 
 def main() -> None:
@@ -90,16 +96,13 @@ def main() -> None:
     Make sure to target the correct hardware type and fill in the correct IP and credentials.
     The debug flag is turned on. If the remote complains it cannot keep up, turning off debugging might improve performance.
     """
-    remote = Remote(
-        config=config,
-        hostname="localhost",  # "Set the robot IP here.
-        debug=True,
-    )
     print("Initializing robot..")
-    remote.prepare()
-    print("Done. Press enter to start the brain.")
-    input()
-    remote.run()
+    run_remote(
+        config=config,
+        hostname="localhost",
+        debug=True,
+        on_prepared=on_prepared,  # "Set the robot IP here.
+    )
 
 
 if __name__ == "__main__":

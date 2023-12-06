@@ -32,7 +32,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
             print("client disconnected.")
         self._physical_interface.disable()
 
-    def setup(
+    async def setup(
         self,
         setupargs: robot_daemon_protocol_capnp.Setupargs,
         _context: Any,
@@ -50,7 +50,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
             versionOk=(setupargs.version == PROTOCOL_VERSION)
         )
 
-    def control(
+    async def control(
         self,
         commands: robot_daemon_protocol_capnp.ControlCommandsReader,
         _context: Any,
@@ -63,12 +63,12 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         if self._debug:
             print("control")
 
-        for pin_control in commands.pins:
-            self._physical_interface.set_servo_target(
-                pin=pin_control.pin, target=pin_control.target
-            )
+        self._physical_interface.set_servo_targets(
+            [pin_control.pin for pin_control in commands.pins],
+            [pin_control.target for pin_control in commands.pins],
+        )
 
-    def readSensors(
+    async def readSensors(
         self,
         _context: Any,
     ) -> robot_daemon_protocol_capnp.SensorReadings:
@@ -100,9 +100,9 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         if self._debug:
             print("control_and_read_sensors")
 
-        for pin_control in commands.pins:
-            self._physical_interface.set_servo_target(
-                pin=pin_control.pin, target=pin_control.target
-            )
+        self._physical_interface.set_servo_targets(
+            [pin_control.pin for pin_control in commands.pins],
+            [pin_control.target for pin_control in commands.pins],
+        )
 
         return robot_daemon_protocol_capnp.SensorReadings()

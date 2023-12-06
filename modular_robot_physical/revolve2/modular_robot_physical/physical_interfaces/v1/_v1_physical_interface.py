@@ -64,14 +64,15 @@ class V1PhysicalInterface(PhysicalInterface):
         if self._debug:
             print(f"Using PWM frequency {self._PWM_FREQUENCY}Hz")
 
-    def set_servo_target(self, pin: int, target: float) -> None:
+    def set_servo_targets(self, pins: list[int], targets: list[float]) -> None:
         """
-        Set the target for a single Servo.
+        Set the target for multiple servos.
 
-        :param pin: The GPIO pin number.
-        :param target: The target angle.
+        :param pins: The GPIO pin numbers.
+        :param targets: The target angles.
         """
-        self._targets[pin] = target
+        for pin, target in zip(pins, targets):
+            self._targets[pin] = target
 
     def _update_loop(self) -> None:
         while self._enabled:
@@ -98,6 +99,7 @@ class V1PhysicalInterface(PhysicalInterface):
                     angle = (
                         self._CENTER + target / (1.0 / 3.0 * math.pi) * self._ANGLE60
                     )
+                    print(angle)
                     self._gpio.set_PWM_dutycycle(pin, angle)
 
             time.sleep(1 / 60)
@@ -107,6 +109,13 @@ class V1PhysicalInterface(PhysicalInterface):
         if self._enabled:
             print("Already enabled.")
             return
+
+        if not self._dry:
+            assert self._gpio is not None
+            for pin in self._PINS:
+                self._gpio.set_PWM_dutycycle(pin, self._CENTER)
+                print(f"setting {pin}..")
+                time.sleep(0.5)
 
         self._enabled = True
         self._update_loop_thread = threading.Thread(target=self._update_loop)

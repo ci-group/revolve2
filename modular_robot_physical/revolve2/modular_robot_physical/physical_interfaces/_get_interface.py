@@ -7,7 +7,7 @@ def get_interface(
     debug: bool,
     dry: bool,
     careful: bool = True,
-    careful_stepsize: float = 1.0,
+    careful_stepsize: float = 0.1,
 ) -> PhysicalInterface:
     """
     Get the interface for the given hardware type.

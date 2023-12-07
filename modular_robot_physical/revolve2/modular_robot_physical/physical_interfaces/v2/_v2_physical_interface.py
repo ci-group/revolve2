@@ -79,7 +79,7 @@ class V2PhysicalInterface(PhysicalInterface):
             )
             self._robohat.init(servoboard_1_datas_list, servoboard_2_datas_list)
             self._robohat.do_buzzer_beep()
-            self._robohat.set_servo_direct_mode(careful)
+            self._robohat.set_servo_direct_mode(not careful)
 
     def set_servo_targets(self, pins: list[int], targets: list[float]) -> None:
         """

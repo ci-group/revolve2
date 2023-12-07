@@ -103,7 +103,8 @@ class V2PhysicalInterface(PhysicalInterface):
         """Start the robot."""
         if self._debug:
             print("Waking up servos.")
-        self._robohat.wakeup_servo()
+        if not self._dry:
+            self._robohat.wakeup_servo()
 
     def disable(self) -> None:
         """
@@ -113,4 +114,5 @@ class V2PhysicalInterface(PhysicalInterface):
         """
         if self._debug:
             print("Putting servos to sleep.")
-        self._robohat.put_servo_to_sleep()
+        if not self._dry:
+            self._robohat.put_servo_to_sleep()

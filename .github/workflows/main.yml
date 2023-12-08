@@ -12,7 +12,7 @@ jobs:
       - id: set-packages
         run: echo packages=$(jq -R -s -c 'split("\n")[:-1]' < ./packages.txt) >> $GITHUB_OUTPUT
 
-  list-build_packages: # List only actual Revolve2 packages from packages.txt
+  list-build-packages: # List only actual Revolve2 packages from packages.txt
     runs-on: ubuntu-20.04
     outputs:
       build_packages: ${{ steps.set-build_packages.outputs.build_packages }}
@@ -151,12 +151,12 @@ jobs:
   #       run: pytest -v
 
   build_wheels:
-    needs: list-build_packages
+    needs: list-build-packages
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        package: ${{ fromJson(needs.list-build_packages.outputs.build_packages) }}
+        package: ${{ fromJson(needs.list-build-packages.outputs.build_packages) }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -172,12 +172,12 @@ jobs:
           path: ./dist/**/*.whl
 
   build_wheels_platformdependent:
-    needs: list-build_packages
+    needs: list-build-packages
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-2022, macos-12, ubuntu-22.04]
-        package: ${{ fromJson(needs.list-build_packages_platformdependent.outputs.build_packages_platformdependent) }}
+        package: ${{ fromJson(needs.list-build-packages.outputs.build_packages_platformdependent) }}
     steps:
       - uses: actions/checkout@v3
         with:

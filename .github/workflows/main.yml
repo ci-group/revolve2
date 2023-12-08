@@ -135,3 +135,29 @@ jobs:
         run: ./dev_install.sh
       - name: run pytest
         run: pytest -v
+
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022, macos-12,ubuntu-22.04]
+        package: ${{ fromJson(needs.list-packages.outputs.packages) }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - uses: actions/setup-python@v3
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.16.2
+      - name: Build wheels
+        run: python -m cibuildwheel --output-dir dist
+        env:
+          CIBW_BUILD: cp310-* cp311-*
+          CIBW_ARCHS_WINDOWS: AMD64
+          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_ARCHS_LINUX: x86_64
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ./dist/*.whl

@@ -15,7 +15,7 @@ jobs:
   list-buildpackages: # List only actual Revolve2 packages from packages.txt
     runs-on: ubuntu-20.04
     outputs:
-      buildpackages: ${{ steps.set-packages.outputs.buildpackages }}
+      buildpackages: ${{ steps.set-buildpackages.outputs.buildpackages }}
     steps:
       - uses: actions/checkout@v4
       - id: set-buildpackages

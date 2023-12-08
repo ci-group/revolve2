@@ -177,7 +177,7 @@ jobs:
     strategy:
       matrix:
         os: [windows-2022, macos-12, ubuntu-22.04]
-        package: ${{ fromJson(needs.list-build_packages.outputs.build_packages_platformdependent) }}
+        package: ${{ fromJson(needs.list-build_packages_platformdependent.outputs.build_packages_platformdependent) }}
     steps:
       - uses: actions/checkout@v3
         with:

@@ -16,12 +16,14 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       build_packages: ${{ steps.set-build_packages.outputs.build_packages }}
-      build_packages_platformdependent: ${{ steps.set-build_packages.outputs.build_packages_platformdependent }}
+      build_packages_platformdependent: ${{ steps.set-build_packages_platformdependent.outputs.build_packages_platformdependent }}
     steps:
       - uses: actions/checkout@v4
       - id: set-build_packages
         run: 
           echo build_packages="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests")) | map(select(. | startswith("ci_group") | not))' < ./packages.txt)" >> $GITHUB_OUTPUT
+      - id: set-build_packages_platformdependent
+        run: 
           echo build_packages_platformdependent="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("ci_group")))' < ./packages.txt)" >> $GITHUB_OUTPUT
 
   # dev_install:

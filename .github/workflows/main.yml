@@ -16,10 +16,13 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       build-packages: ${{ steps.set-build-packages.outputs.build-packages }}
+      build-packages-platformdependent: ${{ steps.set-build-packages.outputs.build-packages-platformdependent }}
     steps:
       - uses: actions/checkout@v4
       - id: set-build-packages
-        run: echo build-packages="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests"))' < ./packages.txt)" >> $GITHUB_OUTPUT
+        run: 
+          echo build-packages="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests")) | map(select(. | startswith("ci_group") | not))' < ./packages.txt)" >> $GITHUB_OUTPUT
+          echo build-packages-platformdependent="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("ci_group")))' < ./packages.txt)" >> $GITHUB_OUTPUT
 
   # dev_install:
   #   runs-on: ubuntu-20.04
@@ -150,7 +153,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04] #[windows-2022, macos-12,ubuntu-22.04]
+        os: [ubuntu-22.04]
         package: ${{ fromJson(needs.list-build-packages.outputs.build-packages) }}
     steps:
       - uses: actions/checkout@v3
@@ -159,17 +162,34 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: 3.11
+      - name: Build wheels
+        run: pip wheel --no-deps ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') -w dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ./dist/**/*.whl
+
+  build_wheels-platformdependent:
+    needs: list-build-packages
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022, macos-12, ubuntu-22.04]
+        package: ${{ fromJson(needs.list-build-packages.outputs.build-packages-platformdependent) }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+      - uses: actions/setup-python@v3
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
       - name: Build wheels
-        run: pip wheel --no-deps ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') -w dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
-      # - name: Build wheels
-      #   run: python -m cibuildwheel ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') --output-dir dist
-      #   env:
-      #     CIBW_BUILD: cp310-* cp311-*
-      #     CIBW_ARCHS_WINDOWS: AMD64
-      #     CIBW_ARCHS_MACOS: x86_64 arm64
-      #     CIBW_ARCHS_LINUX: x86_64
+        run: python -m cibuildwheel ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') --output-dir dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
+        env:
+          CIBW_BUILD: cp310-* cp311-*
+          CIBW_ARCHS_WINDOWS: AMD64
+          CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_ARCHS_LINUX: x86_64
       - uses: actions/upload-artifact@v3
         with:
           name: dist

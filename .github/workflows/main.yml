@@ -162,7 +162,7 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
       - name: Build wheels
-        run: pip wheel ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') -w dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
+        run: pip wheel --no-deps ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') -w dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
       # - name: Build wheels
       #   run: python -m cibuildwheel ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') --output-dir dist
       #   env:

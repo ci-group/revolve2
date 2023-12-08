@@ -12,14 +12,14 @@ jobs:
       - id: set-packages
         run: echo packages=$(jq -R -s -c 'split("\n")[:-1]' < ./packages.txt) >> $GITHUB_OUTPUT
 
-  list-buildpackages: # List only actual Revolve2 packages from packages.txt
+  list-build-packages: # List only actual Revolve2 packages from packages.txt
     runs-on: ubuntu-20.04
     outputs:
-      buildpackages: ${{ steps.set-buildpackages.outputs.buildpackages }}
+      build-packages: ${{ steps.set-build-packages.outputs.build-packages }}
     steps:
       - uses: actions/checkout@v4
-      - id: set-buildpackages
-        run: echo buildpackages="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests"))' < ./packages.txt)" >> $GITHUB_OUTPUT
+      - id: set-build-packages
+        run: echo build-packages="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests"))' < ./packages.txt)" >> $GITHUB_OUTPUT
 
   # dev_install:
   #   runs-on: ubuntu-20.04
@@ -146,12 +146,12 @@ jobs:
   #       run: pytest -v
 
   build_wheels:
-    needs: list-buildpackages
+    needs: list-build-packages
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-22.04] #[windows-2022, macos-12,ubuntu-22.04]
-        package: ${{ fromJson(needs.list-buildpackages.outputs.buildpackages) }}
+        package: ${{ fromJson(needs.list-build-packages.outputs.build-packages) }}
     steps:
       - uses: actions/checkout@v3
         with:

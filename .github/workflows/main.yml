@@ -12,6 +12,15 @@ jobs:
       - id: set-packages
         run: echo packages=$(jq -R -s -c 'split("\n")[:-1]' < ./packages.txt) >> $GITHUB_OUTPUT
 
+  list-build-packages:
+    runs-on: ubuntu-20.04
+    outputs:
+      packages: ${{ steps.set-packages.outputs.packages }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-packages
+        run: echo packages=$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests"))' < ./packages.txt) >> $GITHUB_OUTPUT
+
   # dev_install:
   #   runs-on: ubuntu-20.04
   #   strategy:
@@ -137,12 +146,12 @@ jobs:
   #       run: pytest -v
 
   build_wheels:
-    needs: list-packages
+    needs: list-build-packages
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-2022, macos-12,ubuntu-22.04]
-        package: ${{ fromJson(needs.list-packages.outputs.packages) }}
+        package: ${{ fromJson(needs.list-build-packages.outputs.packages) }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -157,7 +166,7 @@ jobs:
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_MACOS: x86_64 arm64
           CIBW_ARCHS_LINUX: x86_64
-        if: "(!startsWith(matrix.package, 'examples/') && matrix.package != 'tests')"
+        #if: "(!startsWith(matrix.package, 'examples/') && matrix.package != 'tests')"
       - uses: actions/upload-artifact@v3
         with:
           name: dist

@@ -15,11 +15,11 @@ jobs:
   list-build-packages: # List only actual Revolve2 packages from packages.txt
     runs-on: ubuntu-20.04
     outputs:
-      packages: ${{ steps.set-packages.outputs.build-packages }}
+      packages: ${{ steps.set-packages.outputs.buildpackages }}
     steps:
       - uses: actions/checkout@v4
       - id: set-packages
-        run: echo build-packages=$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests"))' < ./packages.txt) >> $GITHUB_OUTPUT
+        run: echo buildpackages=$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests"))' < ./packages.txt) >> $GITHUB_OUTPUT
 
   # dev_install:
   #   runs-on: ubuntu-20.04
@@ -151,7 +151,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04] #[windows-2022, macos-12,ubuntu-22.04]
-        package: ${{ fromJson(needs.list-build-packages.outputs.build-packages) }}
+        package: ${{ fromJson(needs.list-build-packages.outputs.buildpackages) }}
     steps:
       - uses: actions/checkout@v3
         with:

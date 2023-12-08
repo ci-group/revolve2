@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: set-packages
-        run: echo packages=$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests"))' < ./packages.txt) >> $GITHUB_OUTPUT
+        run: echo build-packages=$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests"))' < ./packages.txt) >> $GITHUB_OUTPUT
 
   # dev_install:
   #   runs-on: ubuntu-20.04

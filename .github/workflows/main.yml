@@ -202,7 +202,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-22.04
-    needs: [build_wheels_platform_independent, build_wheels_platform_dependent]
+    needs: [read-project-info, build_wheels_platform_independent, build_wheels_platform_dependent]
     strategy:
       matrix:
         package: ${{ fromJson(needs.read-project-info.outputs.all_packages) }}
@@ -217,7 +217,7 @@ jobs:
           name: dist
           path: dist/${{ matrix.package }}
       - name: Generate name for package
-        # Prepend 'revolve2', replace '/' with '-' and remove '/simulators'
+        # Prepend 'revolve2-', replace '/' with '-' and remove '/simulators'
         run: echo "PACKAGE_URL=https://pypi.org/p/revolve2-$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"" >> $GITHUB_ENV
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

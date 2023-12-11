@@ -156,10 +156,9 @@ jobs:
 
   build_wheels_platform_independent:
     needs: read-project-info
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        os: [ubuntu-22.04]
         package: ${{ fromJson(needs.read-project-info.outputs.platform_independent_packages) }}
     steps:
       - uses: actions/checkout@v4
@@ -200,3 +199,23 @@ jobs:
         with:
           name: dist
           path: ./dist/**/*.whl
+
+  publish:
+    environment:
+      name: publish
+    runs-on: ubuntu-22.04
+    needs: [build_wheels_platform_independent, build_wheels_platform_dependent]
+    environment:
+      name: publish
+      url: https://pypi.org/p/revolve2
+    permissions:
+      id-token: write
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

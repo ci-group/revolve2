@@ -218,6 +218,6 @@ jobs:
           path: dist/${{ matrix.package }}
       - name: Generate name for package
         # Prepend 'revolve2-', replace '/' with '-' and remove '/simulators'
-        run: echo "PACKAGE_URL=https://pypi.org/p/revolve2-$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"" >> $GITHUB_ENV
+        run: echo "PACKAGE_URL=https://pypi.org/p/revolve2-$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

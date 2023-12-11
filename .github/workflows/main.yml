@@ -205,7 +205,7 @@ jobs:
     needs: [read-project-info, build_wheels_platform_independent, build_wheels_platform_dependent]
     strategy:
       matrix:
-        package: ${{ fromJson(needs.read-project-info.outputs.platform_independent_packages) }} # all_packages
+        package: ${{ fromJson(needs.read-project-info.outputs.all_packages) }}
     environment:
       name: publish
     permissions:

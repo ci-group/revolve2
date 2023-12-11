@@ -203,9 +203,12 @@ jobs:
   publish:
     runs-on: ubuntu-22.04
     needs: [build_wheels_platform_independent, build_wheels_platform_dependent]
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.read-project-info.outputs.all_packages) }}
     environment:
       name: publish
-      url: https://pypi.org/p/revolve2
+      url: https://pypi.org/p/revolve2-${{ matrix.package.replace('_', '-').replace('simulators/', '') }}
     permissions:
       id-token: write
     steps:
@@ -213,7 +216,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist
-          path: dist
-
+          path: dist/${{ matrix.package }}
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1

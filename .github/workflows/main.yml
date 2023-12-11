@@ -3,28 +3,32 @@ name: ci
 on: [push, pull_request]
 
 jobs:
-  list-packages: # List everything in packages.txt
+  read-project-info:
     runs-on: ubuntu-20.04
     outputs:
-      packages: ${{ steps.set-packages.outputs.packages }}
+      platform_dependent_packages: ${{ steps.set-platform-dependent-packages.outputs.platform_dependent_packages }}
+      platform_independent_packages: ${{ steps.set-platform-independent-packages.outputs.platform_independent_packages }}
+      all_packages: ${{ steps.set-all-packages.outputs.all_packages }}
+      tests: ${{ steps.set-tests.outputs.tests }}
+      tests-dir: ${{ steps.set-tests-dir.outputs.tests_dir }}
+      examples-dir: ${{ steps.set-examples-dir.outputs.examples_dir }}
+      revolve2-namespace: ${{ steps.set-revolve2-namespace.outputs.revolve2_namespace }}
     steps:
       - uses: actions/checkout@v4
-      - id: set-packages
-        run: echo packages=$(jq -R -s -c 'split("\n")[:-1]' < ./packages.txt) >> $GITHUB_OUTPUT
-
-  list-build-packages: # List only actual Revolve2 packages from packages.txt
-    runs-on: ubuntu-20.04
-    outputs:
-      build_packages: ${{ steps.set-build_packages.outputs.build_packages }}
-      build_packages_platformdependent: ${{ steps.set-build_packages_platformdependent.outputs.build_packages_platformdependent }}
-    steps:
-      - uses: actions/checkout@v4
-      - id: set-build_packages
-        run: 
-          echo build_packages="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("examples/") | not)) | map(select(. != "tests")) | map(select(. | startswith("ci_group") | not))' < ./packages.txt)" >> $GITHUB_OUTPUT
-      - id: set-build_packages_platformdependent
-        run: 
-          echo build_packages_platformdependent="$(jq -R -s -c 'split("\n")[:-1] | map(select(. | startswith("ci_group")))' < ./packages.txt)" >> $GITHUB_OUTPUT
+      - id: set-platform-dependent-packages
+        run: echo platform_dependent_packages=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['platform_dependent_packages'])") >> $GITHUB_OUTPUT
+      - id: set-platform-independent-packages
+        run: echo platform_independent_packages=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['platform_independent_packages'])") >> $GITHUB_OUTPUT
+      - id: set-all-packages
+        run: echo all_packages=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['platform_dependent_packages'] + yaml.safe_load(open('project.yml'))['platform_independent_packages'])") >> $GITHUB_OUTPUT
+      - id: set-tests
+        run: echo tests=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['tests'])") >> $GITHUB_OUTPUT
+      - id: set-tests-dir
+        run: echo tests_dir=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['tests-dir'])") >> $GITHUB_OUTPUT
+      - id: set-examples-dir
+        run: echo examples_dir=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['examples-dir'])") >> $GITHUB_OUTPUT
+      - id: set-revolve2-namespace
+        run: echo revolve2_namespace=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['revolve2-namespace'])") >> $GITHUB_OUTPUT
 
   # dev_install:
   #   runs-on: ubuntu-20.04
@@ -150,13 +154,13 @@ jobs:
   #     - name: run pytest
   #       run: pytest -v
 
-  build_wheels:
-    needs: list-build-packages
+  build_wheels_platform_independent:
+    needs: read-project-info
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-22.04]
-        package: ${{ fromJson(needs.list-build-packages.outputs.build_packages) }}
+        package: ${{ fromJson(needs.read-project-info.outputs.platform_independent_packages) }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -164,20 +168,20 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: 3.11
-      - name: Build wheels
-        run: pip wheel --no-deps ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') -w dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
-      - uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: ./dist/**/*.whl
+      # - name: Build wheels
+      #   run: pip wheel --no-deps ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') -w dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: dist
+      #     path: ./dist/**/*.whl
 
-  build_wheels_platformdependent:
-    needs: list-build-packages
+  build_wheels_platform_dependent:
+    needs: read-project-info
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [windows-2022, macos-12, ubuntu-22.04]
-        package: ${{ fromJson(needs.list-build-packages.outputs.build_packages_platformdependent) }}
+        package: ${{ fromJson(needs.read-project-info.outputs.platform_dependent_packages) }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -185,14 +189,14 @@ jobs:
       - uses: actions/setup-python@v3
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
-      - name: Build wheels
-        run: python -m cibuildwheel ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') --output-dir dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
-        env:
-          CIBW_BUILD: cp310-* cp311-*
-          CIBW_ARCHS_WINDOWS: AMD64
-          CIBW_ARCHS_MACOS: x86_64 arm64
-          CIBW_ARCHS_LINUX: x86_64
-      - uses: actions/upload-artifact@v3
-        with:
-          name: dist
-          path: ./dist/**/*.whl
+      # - name: Build wheels
+      #   run: python -m cibuildwheel ./$(echo "${{ matrix.package }}" | sed 's#/revolve2##') --output-dir dist/$(echo "${{ matrix.package }}" | sed 's#/revolve2##')
+      #   env:
+      #     CIBW_BUILD: cp310-* cp311-*
+      #     CIBW_ARCHS_WINDOWS: AMD64
+      #     CIBW_ARCHS_MACOS: x86_64 arm64
+      #     CIBW_ARCHS_LINUX: x86_64
+      # - uses: actions/upload-artifact@v3
+      #   with:
+      #     name: dist
+      #     path: ./dist/**/*.whl

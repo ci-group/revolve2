@@ -9,7 +9,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-ci-group"
-version = "1.0.0rc1"
+version = "1.0.0rc1-test"
 description = "Revolve2: Computational Intelligence Group experimentation tools and standards."
 readme = "../README.md"
 authors = [
@@ -38,7 +38,7 @@ script = "revolve2/ci_group/morphological_novelty_metric/_build_cmodule.py"
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-revolve2-modular-robot-simulation = { path = "../modular_robot_simulation", develop = true }
+revolve2-modular-robot-simulation = "1.0.0rc1-test"
 noise = "^1.2.2"
 multineat = "^0.12"
 sqlalchemy = "^2.0.0"

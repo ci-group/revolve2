@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-modular-robot-simulation"
-version = "1.0.0rc1"
+version = "1.0.0rc1-test"
 description = "Revolve2: Functionality to define scenes with modular robots in a terrain and simulate them."
 readme = "../README.md"
 authors = ["Aart Stuurman <aartstuurman@hotmail.com>"]
@@ -24,8 +24,8 @@ packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-revolve2-modular-robot = { path = "../modular_robot", develop = true }
-revolve2-simulation = { path = "../simulation", develop = true }
+revolve2-modular-robot = "1.0.0rc1-test"
+revolve2-simulation = "1.0.0rc1-test"
 
 [tool.poetry.extras]
 dev = []

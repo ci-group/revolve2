@@ -11,7 +11,7 @@ copyright = (
     "Computational Intelligence Group, Vrije Universiteit Amsterdam & Contributors"
 )
 author = "Computational Intelligence Group, Vrije Universiteit Amsterdam & Contributors"
-release = "1.0.0rc1"
+release = "1.0.0rc1-test"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

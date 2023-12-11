@@ -169,7 +169,7 @@ jobs:
         with:
           python-version: 3.11
       - name: Build wheels
-        run: pip wheel --no-deps ./${{ matrix.package }}/revolve2 -w ./dist/${{ matrix.package }}
+        run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
       - uses: actions/upload-artifact@v3
         with:
           name: dist
@@ -190,7 +190,7 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
       - name: Build wheels
-        run: python -m cibuildwheel ./${{ matrix.package }}/revolve2 --output-dir ./dist/${{ matrix.package }}
+        run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
         env:
           CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_WINDOWS: AMD64

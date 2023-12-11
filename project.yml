@@ -1,4 +1,5 @@
-# This is custom config file that defines the directory names of all packages and examples.
+# This is custom config file that defines some project wide things such as the names of packages.
+# Primarily used by the CI.
 platform_independent_packages:
   - experimentation
   - modular_robot

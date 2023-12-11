@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-mujoco-simulator"
-version = "1.0.0rc2"
+version = "1.0.0rc1"
 description = "Revolve2: MuJoCo simulator."
 readme = "../../README.md"
 authors = ["Aart Stuurman <aartstuurman@hotmail.com>"]
@@ -24,7 +24,7 @@ packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-revolve2-simulation = "1.0.0rc2"
+revolve2-simulation = "1.0.0rc1"
 mujoco-python-viewer = "^0.1.3"
 mujoco = "^2.2.0"
 dm-control = "^1.0.3"

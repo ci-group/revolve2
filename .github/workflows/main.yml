@@ -192,13 +192,13 @@ jobs:
         run: python -m pip install cibuildwheel==2.16.2
       - name: Build wheels
         run: |
-          if (${{ matrix.os }} == "macos-12")
-          {
+          if (${{ matrix.os }} == "macos-12") {
             GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=true GRPC_PYTHON_BUILD_SYSTEM_ZLIB=true python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
+            ;
           }
-          else
-          {
+          else {
             python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
+            ;
           }
 
         env:

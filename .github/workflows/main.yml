@@ -199,7 +199,7 @@ jobs:
           CIBW_ARCHS_LINUX: x86_64
       - name: Build wheels for Mac
         if: "startsWith(matrix.os, 'macos')"
-        run: GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=true python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
+        run: GRPC_PYTHON_BUILD_SYSTEM_CYTHON=true python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
         env:
           CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_MACOS: x86_64 arm64

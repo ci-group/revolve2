@@ -191,8 +191,9 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
       - name: Build wheels
-        run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }} -CIBW_BUILD_VERBOSITY=1
+        run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
         env:
+          CIBW_BUILD_VERBOSITY_MACOS: 1
           CMAKE_OSX_DEPLOYMENT_TARGET: 11.0
           CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_WINDOWS: AMD64

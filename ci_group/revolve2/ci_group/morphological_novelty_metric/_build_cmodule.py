@@ -13,9 +13,6 @@ def build() -> None:
 
     :raises OSError: If the users OS is not Windows or UNIX-based.
     """
-    if "arm" in os.uname()[4]:
-        logging.warning("This module is not built automatically for arm64.")
-        return
     directory_path = os.path.dirname(os.path.abspath(__file__))
 
     source = join(directory_path, "_calculate_novelty.pyx")
@@ -29,6 +26,10 @@ def build() -> None:
                 "-UNDEBUG",
             ]
         case "posix":  # UNIX-based systems
+            if "arm" in os.uname()[4]:
+                logging.warning("This module is not built automatically for arm64.")
+                return
+
             extra_compile_args = [
                 "-O3",
                 # Uncomment when cython is fixing memory view. Track the issue: https://github.com/cython/cython/issues/3172

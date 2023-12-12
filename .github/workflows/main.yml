@@ -193,7 +193,6 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
         env:
-          MACOSX_DEPLOYMENT_TARGET: 12.*
           CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_LINUX: x86_64

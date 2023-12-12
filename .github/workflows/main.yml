@@ -193,6 +193,7 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
         env:
+          CIBW_BUILD_VERBOSITY: 1
           CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_LINUX: x86_64

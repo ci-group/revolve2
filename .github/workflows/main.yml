@@ -194,7 +194,7 @@ jobs:
         run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
         env:
           CIBW_BUILD_VERBOSITY_MACOS: 1
-          CMAKE_OSX_DEPLOYMENT_TARGET: 11.0
+          CMAKE_OSX_DEPLOYMENT_TARGET: 12.*
           CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_LINUX: x86_64

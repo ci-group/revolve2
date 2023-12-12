@@ -32,7 +32,6 @@ def build() -> None:
                 #"-Wno-unreachable-code-fallthrough",
                 #"-Wno-deprecated-declarations",
                 #"-Wno-parentheses-equality",
-                "-CMAKE_OSX_DEPLOYMENT_TARGET=11.0"
                 "-ffast-math",
                 "-UNDEBUG",
             ]

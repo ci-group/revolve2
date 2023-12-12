@@ -27,6 +27,11 @@ def build() -> None:
         case "posix":  # UNIX-based systems
             extra_compile_args = [
                 "-O3",
+                # Uncomment when cython is fixing memory view. Track the issue: https://github.com/cython/cython/issues/3172
+                #"-Werror",
+                #"-Wno-unreachable-code-fallthrough",
+                #"-Wno-deprecated-declarations",
+                #"-Wno-parentheses-equality",
                 "-ffast-math",
                 "-UNDEBUG",
             ]

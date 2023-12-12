@@ -26,10 +26,6 @@ def build() -> None:
                 "-UNDEBUG",
             ]
         case "posix":  # UNIX-based systems
-            if "arm" in os.uname()[4]:
-                logging.warning("This module is not built automatically for arm64.")
-                return
-
             extra_compile_args = [
                 "-O3",
                 # Uncomment when cython is fixing memory view. Track the issue: https://github.com/cython/cython/issues/3172

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["poetry-core>=1.6.0", "Cython>=3.0.4", "numpy>=1.21.2", "setuptools>=68.2.2"]
+requires = ["poetry-core>=1.6.0", "Cython>=3.0.6", "numpy>=1.21.2", "setuptools>=68.2.2"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
@@ -22,6 +22,8 @@ classifiers = [
 packages = [{ include = "revolve2" }]
 include = [{ path = "revolve2/ci_group/morphological_novelty_metric/calculate_novelty*.*", format = "wheel" }]
 
+[tool.poetry.build]
+script = "revolve2/ci_group/morphological_novelty_metric/_build_cmodule.py"
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
@@ -30,7 +32,7 @@ noise = "^1.2.2"
 multineat = "^0.12"
 sqlalchemy = "^2.0.0"
 numpy = "^1.21.2"
-Cython = "^3.0.4"
+Cython = "^3.0.6"
 setuptools = "^68.2.2"
 
 [tool.poetry.extras]

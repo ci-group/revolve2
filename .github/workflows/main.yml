@@ -191,18 +191,12 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
       - name: Build wheels
-        if: "!startsWith(matrix.os, 'macos')"
         run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
         env:
           CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_WINDOWS: AMD64
-          CIBW_ARCHS_LINUX: x86_64
-      - name: Build wheels for Mac
-        if: "startsWith(matrix.os, 'macos')"
-        run: GRPC_PYTHON_BUILD_SYSTEM_CYTHON=true python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
-        env:
-          CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_MACOS: x86_64 arm64
+          CIBW_ARCHS_LINUX: x86_64
       - uses: actions/upload-artifact@v3
         with:
           name: dist

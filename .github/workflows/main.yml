@@ -30,59 +30,33 @@ jobs:
       - id: set-revolve2-namespace
         run: echo revolve2_namespace=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['revolve2-namespace'])") >> $GITHUB_OUTPUT
 
-  # dev_install:
-  #   runs-on: ubuntu-20.04
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10", "3.11"]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install_revolve2
-  #       run: ./dev_install.sh
-
-  # student_install:
-  #   runs-on: ubuntu-20.04
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10", "3.11"]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install_revolve2
-  #       run: ./student_install.sh
-
-  # check_format:
-  #   runs-on: ubuntu-20.04
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10", "3.11"]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install_tools
-  #       run: pip install -r ./codetools/requirements.txt
-  #     - name: black
-  #       run: ./codetools/black/check.sh
-  #     - name: isort
-  #       run: ./codetools/isort/check.sh
-  #     - name: pydocstyle
-  #       run: ./codetools/pydocstyle/check.sh
-  #     - name: darglint
-  #       run: ./codetools/darglint/check.sh
-  #     - name: pyflakes
-  #       run: ./codetools/pyflakes/check.sh
-  #     - name: sort-all
-  #       run: |
-  #         ./codetools/sort_all/fix.sh
-  #         [[ -z $(git status -s) ]]
-  #         git checkout -- .
+  check_format:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install_tools
+        run: pip install -r ./codetools/requirements.txt
+      - name: black
+        run: ./codetools/black/check.sh
+      - name: isort
+        run: ./codetools/isort/check.sh
+      - name: pydocstyle
+        run: ./codetools/pydocstyle/check.sh
+      - name: darglint
+        run: ./codetools/darglint/check.sh
+      - name: pyflakes
+        run: ./codetools/pyflakes/check.sh
+      - name: sort-all
+        run: |
+          ./codetools/sort_all/fix.sh
+          [[ -z $(git status -s) ]]
+          git checkout -- .
 
   # mypy:
   #   needs: list-packages
@@ -114,45 +88,45 @@ jobs:
   #     - name: run_mypy
   #       run: ./codetools/mypy/check.sh ${{ matrix.package }}
 
-  # docs:
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: 3.11
-  #     - name: install_revolve2
-  #       run: ./dev_install.sh
-  #     - name: setup_graphviz
-  #       uses: ts-graphviz/setup-graphviz@v1
-  #     - name: sphinx
-  #       run: make -C docs html
-  #     - name: deploy
-  #       if: ${{ github.ref == 'refs/heads/master' }}
-  #       uses: JamesIves/github-pages-deploy-action@v4.2.2
-  #       with:
-  #         branch: gh-pages
-  #         folder: docs/build/html
-  #         clean-exclude: .nojekyll
+  docs:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
+      - name: install_revolve2
+        run: ./dev_install.sh
+      - name: setup_graphviz
+        uses: ts-graphviz/setup-graphviz@v1
+      - name: sphinx
+        run: make -C docs html
+      - name: deploy
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: JamesIves/github-pages-deploy-action@v4.2.2
+        with:
+          branch: gh-pages
+          folder: docs/build/html
+          clean-exclude: .nojekyll
 
-  # unit_tests:
-  #   runs-on: ubuntu-20.04
-  #   strategy:
-  #     matrix:
-  #       python-version: [ "3.10", "3.11" ]
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install virtual display
-  #       run: |
-  #         bash .github/workflows/install_display.sh
-  #         echo "DISPLAY=:0" >> $GITHUB_ENV
-  #     - name: install_revolve2
-  #       run: ./dev_install.sh
-  #     - name: run pytest
-  #       run: pytest -v
+  unit_tests:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        python-version: [ "3.10", "3.11" ]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install virtual display
+        run: |
+          bash .github/workflows/install_display.sh
+          echo "DISPLAY=:0" >> $GITHUB_ENV
+      - name: install_revolve2
+        run: ./dev_install.sh
+      - name: run pytest
+        run: pytest -v
 
   build_wheels_platform_independent:
     needs: read-project-info
@@ -202,6 +176,7 @@ jobs:
 
   publish:
     runs-on: ubuntu-22.04
+    if: startsWith(github.ref, 'refs/tags/')
     needs: [read-project-info, build_wheels_platform_independent, build_wheels_platform_dependent]
     strategy:
       matrix:

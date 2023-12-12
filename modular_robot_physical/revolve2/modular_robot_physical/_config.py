@@ -21,7 +21,7 @@ class Config:
     run_duration: int
     """Duration to run the brain for in seconds."""
     control_frequency: int
-    """Frequency at which to call the brain control functions in seconds. There currently is a bug where if you set the control frequency to (around) 10 or smaller the program might hang. This is most likely a big in pycapnp and once pycapnp v2 is released this is probably resolved."""
+    """Frequency at which to call the brain control functions in seconds."""
     inverse_servos: dict[int, bool] = field(default_factory=dict)
     """
     If a servo is mounted in the wrong direction on the body one can fix it by inversing the action.

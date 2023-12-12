@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")"
 
-packages=$(tr '\n' ' ' < ../../packages.txt)
+packages=$(../read_project_parts.sh)
 
 cd ../..
 

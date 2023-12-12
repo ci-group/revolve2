@@ -76,7 +76,7 @@ def main() -> None:
     """
     A configuration consists of the follow parameters:
     - modular_robot: The ModularRobot object, exactly as you would use it in simulation.
-    - hinge_mapping: This maps active hinges to GPIO pins on the physical modular robot core. TODO in the next version we will add a guide to the documentation on how to create a modular robot body. For now, ask the CI Group lab.
+    - hinge_mapping: This maps active hinges to GPIO pins on the physical modular robot core.
     - run_duration: How long to run the robot for in seconds.
     - control_frequency: Frequency at which to call the brain control functions in seconds. If you also ran the robot in simulation, this must match your setting there.
     - initial_hinge_positions: Initial positions for the active hinges. In Revolve2 the simulator defaults to 0.0.

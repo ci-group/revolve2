@@ -124,6 +124,7 @@ class _GridMaker(Generic[TModuleNP]):
         for x, y, z, module in zip(self._x, self._y, self._z, self._modules):
             grid[x - minx, y - miny, z - minz] = module
 
+        return grid, Vector3([-minx, -miny, -minz])
 
     def _make_grid_recur(
         self, module: Module, position: Vector3, orientation: Quaternion

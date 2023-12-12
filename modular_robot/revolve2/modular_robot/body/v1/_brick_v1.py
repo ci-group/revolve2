@@ -1,4 +1,5 @@
 from pyrr import Vector3
+
 from .._right_angles import RightAngles
 from ..base import Brick
 
@@ -16,5 +17,5 @@ class BrickV1(Brick):
             rotation=rotation,
             bounding_box=Vector3([0.06288625, 0.06288625, 0.0603]),
             mass=0.030,
-            child_offset=0.06288625 / 2.0
+            child_offset=0.06288625 / 2.0,
         )

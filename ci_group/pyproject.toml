@@ -22,8 +22,6 @@ classifiers = [
 packages = [{ include = "revolve2" }]
 include = [{ path = "revolve2/ci_group/morphological_novelty_metric/calculate_novelty*.*", format = "wheel" }]
 
-[tool.poetry.build]
-script = "revolve2/ci_group/morphological_novelty_metric/_build_cmodule.py"
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"

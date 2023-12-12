@@ -134,7 +134,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-2022, ubuntu-22.04] #macos-12, ubuntu-22.04]
+        os: [windows-2022, ubuntu-22.04, macos-12]
         package: ${{ fromJson(needs.read-project-info.outputs.platform_dependent_packages) }}
     steps:
       - uses: actions/checkout@v4

@@ -67,7 +67,7 @@ class Brick(Module):
 
         :param module: The Module.
         """
-        self.set_child(module, self.FRONT)
+        self._attachment_points[self.FRONT].module = module
 
     @property
     def right(self) -> Module | None:
@@ -85,7 +85,7 @@ class Brick(Module):
 
         :param module: The Module.
         """
-        self.set_child(module, self.RIGHT)
+        self._attachment_points[self.RIGHT].module = module
 
     @property
     def left(self) -> Module | None:
@@ -103,7 +103,7 @@ class Brick(Module):
 
         :param module: The Module.
         """
-        self.set_child(module, self.LEFT)
+        self._attachment_points[self.LEFT].module = module
 
     @property
     def mass(self) -> float:

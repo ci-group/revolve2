@@ -73,6 +73,7 @@ class CoreV2(Core):
         """
         Get the face attached to the front of the core.
 
+
         :returns: The attached module.
         """
         return self._attachment_faces[self.FRONT]

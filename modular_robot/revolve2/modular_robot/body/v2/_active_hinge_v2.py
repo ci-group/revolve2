@@ -1,4 +1,4 @@
-from pyrr import Quaternion, Vector3
+from pyrr import Vector3
 
 from .._right_angles import RightAngles
 from ..base import ActiveHinge

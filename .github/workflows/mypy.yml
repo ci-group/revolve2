@@ -1,0 +1,45 @@
+name: mypy
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        required: true
+        type: string
+      dir_type: # "example", "tests", "package"
+        required: true
+        type: string
+
+jobs:
+  mypy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: install_tools
+        run: pip install -r ./codetools/mypy/requirements.txt
+
+      # example
+      - name: Install and run for example
+        run:
+          ./dev_install.sh
+          pip install -r ./${{ matrix.package }}/requirements.txt
+          ./codetools/mypy/check.sh ./examples/${{ matrix.directory }}
+        if: ${{ inputs.dir_type == "example" }}
+
+      # tests
+      - name: Install and run for tests
+        run:
+          ./dev_install.sh
+          pip install -r ./tests/requirements.txt
+          ./codetools/mypy/check.sh ./tests
+        if: ${{ inputs.dir_type == "tests" }}
+
+      # package
+      - name: Install and run for package
+        run:
+          pip install ./${{ matrix.directory }}
+          ./codetools/mypy/check.sh ./${{ matrix.directory }}/revolve2
+        if: ${{ inputs.dir_type == "package" }}

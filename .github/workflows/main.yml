@@ -58,35 +58,16 @@ jobs:
           [[ -z $(git status -s) ]]
           git checkout -- .
 
-  # mypy:
-  #   needs: list-packages
-  #   strategy:
-  #     matrix:
-  #       python-version: ["3.10", "3.11"]
-  #       package: ${{ fromJson(needs.list-packages.outputs.packages) }}
-  #   runs-on: ubuntu-20.04
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: actions/setup-python@v3
-  #       with:
-  #         python-version: ${{ matrix.python-version }}
-  #     - name: install_tools
-  #       run: pip install -r ./codetools/mypy/requirements.txt
-  #     - name: Install example requirements
-  #       run:
-  #         ./dev_install.sh
-  #         pip install -r ./${{ matrix.package }}/requirements.txt
-  #       if: startsWith(matrix.package, 'examples/')
-  #     - name: Install tests requirements
-  #       run:
-  #         ./dev_install.sh
-  #         pip install -r ./tests/requirements.txt
-  #       if: "matrix.package == 'tests'"
-  #     - name: Install package
-  #       run: pip install ./$(echo "${{ matrix.package }}[dev]" | sed 's#/revolve2##')
-  #       if: "(!startsWith(matrix.package, 'examples/') && matrix.package != 'tests')"
-  #     - name: run_mypy
-  #       run: ./codetools/mypy/check.sh ${{ matrix.package }}
+  mypy-examples:
+    needs: read-project-info
+    strategy:
+      matrix:
+        python-version: [ "3.10", "3.11" ]
+        example: ${{ fromJson(needs.read-project-info.outputs.examples) }}
+    uses: ./mypy.yml
+    with:
+      directory: 
+      dir_type: ${{ matrix.example }}
 
   docs:
     runs-on: ubuntu-20.04

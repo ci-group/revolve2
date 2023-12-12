@@ -71,6 +71,9 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
 
             sudo apt install -y git libssl-dev libbz2-dev libncurses5-dev libncursesw5-dev libreadline-dev libsqlite3-dev libffi-dev liblzma-dev
 
+        If an `404 error` appears in this step, you most likely are on a old RPi OS.
+        To check your os version you can run :code:`cat /etc/os-release`. It should be version :code:`12 Bookworm`.
+
     #. Install pyenv: :code:`curl https://pyenv.run | bash`
     #. Add :code:`pyenv` to bash:
 

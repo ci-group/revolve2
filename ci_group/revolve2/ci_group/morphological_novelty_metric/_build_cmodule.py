@@ -27,11 +27,6 @@ def build() -> None:
         case "posix":  # UNIX-based systems
             extra_compile_args = [
                 "-O3",
-                # Uncomment this once Cython fixed their c-code generation.
-                # "-Werror",
-                # "-Wno-unreachable-code-fallthrough",
-                # "-Wno-deprecated-declarations",
-                # "-Wno-parentheses-equality",
                 "-ffast-math",
                 "-UNDEBUG",
             ]

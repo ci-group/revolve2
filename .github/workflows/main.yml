@@ -191,12 +191,12 @@ jobs:
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
       - name: Build wheels
-        with:
-          cond: "matrix.os == 'macos-12'"
-          if_true:
-            run: GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=true GRPC_PYTHON_BUILD_SYSTEM_ZLIB=true python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
-          if_false:
-            run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
+        run: |
+          if [ ${{ matrix.os }} == "macos-12" ]; then
+            GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=true GRPC_PYTHON_BUILD_SYSTEM_ZLIB=true python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
+          else
+            python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
+          fi
         env:
           CIBW_BUILD: cp310-* cp311-*
           CIBW_ARCHS_WINDOWS: AMD64

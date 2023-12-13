@@ -87,7 +87,6 @@ def _draw_module(
     :param print_id: If the modules id should be drawn as well.
     :raises Exception: If the module cant be drawn.
     """
-    print(f"drawing {type(module)} onto {position}")
     x, y = position
     context.rectangle(x, y, 1, 1)  # draw module object
 
@@ -95,9 +94,8 @@ def _draw_module(
         case Core():
             context.set_source_rgb(255, 255, 0)  # Yellow
         case ActiveHinge():
-            rotation = module.rotation
             context.set_source_rgb(1, 0, 0)  # Red
-            if rotation == 0:
+            if module.rotation == 0:
                 context.set_source_rgb(1.0, 0.4, 0.4)  # Flesh Color
         case Brick():
             context.set_source_rgb(0, 0, 1)  # Blue
@@ -108,9 +106,9 @@ def _draw_module(
 
     # default operation for every module
     context.fill_preserve()
-    context.set_source_rgb(0, 0, 0)
     context.set_line_width(0.01)
     context.stroke()
+    context.set_source_rgb(0, 0, 0)
 
     if print_id:
         # print module id onto canvas
@@ -121,18 +119,25 @@ def _draw_module(
         context.stroke()
 
     for key, child in module.children.items():
-        new_orient = module.attachment_points[key].orientation * orientation
+        mapo = module.attachment_points[key].orientation
+        x, y = __get_offset(initial_orientation=orientation.angle, angle=mapo.angle)
 
-        rot = __make_rot_matrix(new_orient.angle)
-        offset = np.round(np.dot(rot, np.array([1, 0])))
-        new_pos = position[0] + offset[0], position[1] + offset[1]
-
+        new_pos = position[0] + x, position[1] + y
+        print(f"origin: {position}", new_pos, type(child))
         _draw_module(
             module=child,
             position=new_pos,
             context=context,
-            orientation=new_orient,
+            orientation=mapo * orientation,
         )
+
+
+def __get_offset(initial_orientation: float, angle: float) -> tuple[int, int]:
+    pointx, pointy = np.cos(initial_orientation), np.sin(initial_orientation)
+
+    x = np.cos(angle) * pointx - np.sin(angle) * pointy
+    y = np.sin(angle) * pointx + np.cos(angle) * pointy
+    return round(x), round(y)
 
 
 def _save_png(image: cairo.ImageSurface, path: str) -> None:
@@ -143,10 +148,3 @@ def _save_png(image: cairo.ImageSurface, path: str) -> None:
     :param path: The path to save the image to.
     """
     image.write_to_png(f"{path}/robot_2d_{str(hash(image))}.png")
-
-
-def __make_rot_matrix(angle: float) -> NDArray[np.float_]:
-    rot_matrix = np.array(
-        [[np.cos(angle), -np.sin(angle)], [np.sin(angle), np.cos(angle)]]
-    )
-    return rot_matrix

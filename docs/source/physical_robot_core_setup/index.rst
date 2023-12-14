@@ -2,15 +2,15 @@
 Setting up a new modular robot core
 ===================================
 This tutorial is for researchers who want to set up a new modular robot core.
-The following tutorial does not touch the matter of building a complete robot, it just covers the setup for the **core**.
-If you simply want to know how to use a pre-installed physical robot, check the examples. This is most likely the case if you are a student.
+First check if someone else has already arranged this for you, for example a research lab manager. If so, you should probably look at :ref:`how to create a physical modular robot <creating_a_physical_robot/index:Creating a physical robot>`.
+If you simply want to know how to use a pre-installed physical robot, check the example :ref:`physical_robot_remote <getting_started/index:Step 2: Play with the examples>`.
 
 Version 1 (V1) and version 2 (V2) of the hardware exists. For anyone outside of the CI Group, V1 is not available; please look at the V2 modular robot.
 
 ----------------------------------
 Preparation + Install the Hardware
 ----------------------------------
-Instructions about the assembly of robots can be found in the *how-to-build-a-modular-robot-guide* (TODO will add this guide soon) .
+Instructions about the assembly of robots can be found :ref:`here <creating_a_physical_robot/index:Creating a physical robot>`.
 Firstly make sure to have all the materials necessary to build the physical robot.
 
 For any type of hardware, there are some required items:

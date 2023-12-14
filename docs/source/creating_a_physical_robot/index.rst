@@ -56,7 +56,8 @@ Modules are connect by bolting them together. See the photo above as an example.
 Note that when connecting to the core nuts are not required as thread is embedded in the core.
 Route the wires from the active hinges into the core and plug them in as displayed on the photo.
 Make sure the ground (dark) wire is oriented correctly.
-Note the number of the pin you attach your active hinges to. These will be used later when controlling the brains.
+Note the numbers of the pins you attach your active hinges to. These will be used later when controlling the robot.
+
 Try to connect the active hinges to pins that are far apart. Neirby pins run on the same power management system which can be a problem when hinges draw too much power leading to a power failure and stuttering movement.
 
 .. image:: ./active_hinge_to_core.png

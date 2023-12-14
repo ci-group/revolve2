@@ -54,7 +54,12 @@ Assembling a modular robot
 
 Modules are connect by bolting them together. See the photo above as an example.
 Note that when connecting to the core nuts are not required as thread is embedded in the core.
-Route the wire from the active hinges into the core, so it can be plugged in later.
+Route the wires from the active hinges into the core and plug them in as displayed on the photo.
+Make sure the ground (dark) wire is oriented correctly.
+
+.. image:: ./active_hinge_to_core.png
+  :width: 45%
+  :alt: How to connect an active hinge to the core
 
 ----------------------------------
 3D printing and assembling modules

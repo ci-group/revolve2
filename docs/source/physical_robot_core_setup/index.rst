@@ -108,7 +108,7 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
             [Install]
             WantedBy=multi-user.target
 
-    #. Here, the :code:`Nice=-10` line sets a high priority for the daemon (lower values are higher priority, with -20 being the highest priority). The :code:`-l` option in the :code:`ExecStart` line tells :code:`pigpiod` to only listen on the localhost interface. The :code:`-n localhost` option ensures that robot-daemon only runs if it can connect to localhost (preventing certain failure cases).
+    #. Here, the :code:`Nice=-10` line sets a high priority for the daemon (lower values are higher priority, with -20 being the highest priority). The :code:`-l` option in the :code:`ExecStart` line tells :code:`robot-daemon` to only listen on the localhost interface. The :code:`-n localhost` option ensures that robot-daemon only runs if it can connect to localhost (preventing certain failure cases).
     #. Enable and start the service: :code:`sudo systemctl daemon-reload` & :code:`sudo systemctl enable robot-daemon` & :code:`sudo systemctl start robot-daemon`.
     #. Check if it is running properly using: :code:`sudo systemctl status robot-daemon`
 

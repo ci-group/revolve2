@@ -37,7 +37,7 @@ def get_interface(
 
                 return V2PhysicalInterface(debug=debug, dry=dry, careful=careful)
             case _:
-                raise NotImplementedError()
+                raise NotImplementedError("Hardware type not supported.")
     except ModuleNotFoundError as e:
         raise ModuleNotFoundError(
             f"Could not import physical interface, did you install the required extras? Error: {e}"

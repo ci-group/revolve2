@@ -142,37 +142,38 @@ class _URDFConverter:
         for geometry_index, geometry in enumerate(rigid_body.geometries):
             name = f"{rigid_body_name}_geom{geometry_index}"
 
-            if isinstance(geometry, GeometryBox):
-                self.geometries_and_names.append((geometry, name))
-                self._add_geometry_box(
-                    link=link,
-                    name=name,
-                    geometry=geometry,
-                    link_pose=link_pose,
-                    rigid_body=rigid_body,
-                )
-            elif isinstance(geometry, GeometryPlane):
-                if parent_rigid_body is not None:
-                    raise ValueError(
-                        "Plane geometry can only be included in the root rigid body."
+            match geometry:
+                case GeometryBox():
+                    self.geometries_and_names.append((geometry, name))
+                    self._add_geometry_box(
+                        link=link,
+                        name=name,
+                        geometry=geometry,
+                        link_pose=link_pose,
+                        rigid_body=rigid_body,
                     )
-                if not self.multi_body_system.is_static:
-                    raise ValueError(
-                        "Plane geometry can only be included in static multi-body systems."
-                    )
-                self.planes.append(geometry)
-            elif isinstance(geometry, GeometryHeightmap):
-                if parent_rigid_body is not None:
-                    raise ValueError(
-                        "Heightmap geometry can only be included in the root rigid body."
-                    )
-                if not self.multi_body_system.is_static:
-                    raise ValueError(
-                        "Heightmap geometry can only be included in static multi-body systems."
-                    )
-                self.heightmaps.append(geometry)
-            else:
-                raise ValueError("Geometry not yet supported.")
+                case GeometryPlane():
+                    if parent_rigid_body is not None:
+                        raise ValueError(
+                            "Plane geometry can only be included in the root rigid body."
+                        )
+                    if not self.multi_body_system.is_static:
+                        raise ValueError(
+                            "Plane geometry can only be included in static multi-body systems."
+                        )
+                    self.planes.append(geometry)
+                case GeometryHeightmap():
+                    if parent_rigid_body is not None:
+                        raise ValueError(
+                            "Heightmap geometry can only be included in the root rigid body."
+                        )
+                    if not self.multi_body_system.is_static:
+                        raise ValueError(
+                            "Heightmap geometry can only be included in static multi-body systems."
+                        )
+                    self.heightmaps.append(geometry)
+                case _:
+                    raise ValueError("Geometry not yet supported.")
 
         for joint_index, joint in enumerate(
             self.multi_body_system.get_joints_for_rigid_body(rigid_body)

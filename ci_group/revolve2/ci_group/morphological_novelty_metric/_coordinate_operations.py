@@ -11,7 +11,7 @@ from revolve2.modular_robot.body.base import Body
 
 def coords_from_bodies(
     bodies: list[Body], cob_heuristics: bool
-) -> list[NDArray[np.float128]]:
+) -> list[NDArray[np.float64]]:
     """
     Extract coordinates of modules from a body.
 
@@ -27,14 +27,14 @@ def coords_from_bodies(
     return crds
 
 
-def _body_to_adjusted_coordinates(bodies: list[Body]) -> list[NDArray[np.float128]]:
+def _body_to_adjusted_coordinates(bodies: list[Body]) -> list[NDArray[np.float64]]:
     """
     Extract coordinates of modules in a body and adjusts them with the core position.
 
     :param bodies: The body.
     :return: The coordinates for each body.
     """
-    crds = [np.empty(shape=0, dtype=np.float128)] * len(bodies)
+    crds = [np.empty(shape=0, dtype=np.float64)] * len(bodies)
     i = 0
     for body in bodies:
         tpl: tuple[NDArray[Any], Vector3] = body.to_grid()
@@ -51,7 +51,7 @@ def _body_to_adjusted_coordinates(bodies: list[Body]) -> list[NDArray[np.float12
     return crds
 
 
-def _coordinates_pca_change_basis(crds: list[NDArray[np.float128]]) -> None:
+def _coordinates_pca_change_basis(crds: list[NDArray[np.float64]]) -> None:
     """
     Transform the coordinate distribution by the magnitude of variance of the respective basis.
 
@@ -90,7 +90,7 @@ def _coordinates_pca_change_basis(crds: list[NDArray[np.float128]]) -> None:
         i += 1
 
 
-def _coordinates_pca_heuristic(crds: list[NDArray[np.float128]]) -> None:
+def _coordinates_pca_heuristic(crds: list[NDArray[np.float64]]) -> None:
     """
     Transform the coordinate distribution by the magnitude of variance of the respective basis.
 

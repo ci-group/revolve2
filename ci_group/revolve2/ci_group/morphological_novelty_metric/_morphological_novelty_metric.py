@@ -48,7 +48,7 @@ def get_novelty_from_population(
 
 
 def _coordinates_to_magnitudes_orientation(
-    coordinates: list[NDArray[np.float128]],
+    coordinates: list[NDArray[np.float64]],
 ) -> tuple[Magnitudes, Orientations]:
     """
     Calculate the magnitude and orientation for the coordinates supplied.

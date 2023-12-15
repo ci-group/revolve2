@@ -13,7 +13,7 @@ Preparing the hardware
 For both V1 and V2 the following items are required:
 
 * A housing that will contain the rest of the core hardware. Models to print the core housing can be found on the following git repo: `<https://github.com/ci-group/revolve-models>`_.
-* A Raspberry Pi (RPi). For V2, this must be a RPi 4.
+* A Raspberry Pi (RPi). For V2, this must be a RPi 4 (or newer, but check for compatibility).
 * A HAT (hardware attached on top), as described in the following hardware specific sections.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

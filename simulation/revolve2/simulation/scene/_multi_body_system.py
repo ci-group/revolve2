@@ -194,37 +194,21 @@ class MultiBodySystem:
                         "AABB calculation currently only supports GeometryBox."
                     )
 
-                for x_sign in [1, -1]:
-                    for y_sign in [1, -1]:
-                        for z_sign in [1, -1]:
-                            points.append(
-                                rigid_body.initial_pose.position
-                                + rigid_body.initial_pose.orientation
-                                * (
-                                    geometry.pose.position
-                                    + geometry.pose.orientation
-                                    * (
-                                        Vector3(
-                                            [
-                                                x_sign * geometry.aabb.size.x,
-                                                y_sign * geometry.aabb.size.y,
-                                                z_sign * geometry.aabb.size.z,
-                                            ]
-                                        )
-                                        / 2.0
-                                    )
-                                )
-                            )
+                for sign in [0.5, -0.5]:
+                    points.append(
+                        rigid_body.initial_pose.position
+                        + rigid_body.initial_pose.orientation
+                        * (
+                            geometry.pose.position
+                            + geometry.pose.orientation * (geometry.aabb.size * sign)
+                        )
+                    )
 
         # Calculate AABB from the points.
         # This is simply the min and max between the points for every dimension.
         aabb = pyrr.aabb.create_from_points(points)
-        xmin = aabb[0][0]
-        ymin = aabb[0][1]
-        zmin = aabb[0][2]
-        xmax = aabb[1][0]
-        ymax = aabb[1][1]
-        zmax = aabb[1][2]
+        xmin, ymin, zmin = aabb[0]
+        xmax, ymax, zmax = aabb[1]
 
         # Return center and size of the AABB
         return Vector3([xmax + xmin, ymax + ymin, zmax + zmin]) / 2.0, AABB(

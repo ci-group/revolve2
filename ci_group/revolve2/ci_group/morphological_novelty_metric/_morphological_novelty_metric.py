@@ -109,7 +109,9 @@ def _normalize_cast_int(histograms: NDArray[np.float64]) -> NDArray[np.int64]:
     instances = histograms.shape[0]
     for i in range(instances):
         histogram = histograms[i].copy()
-        if histogram.sum() > 0.0:  # If a body only has a core, but no other modules the histogram will be empty.
+        if (
+            histogram.sum() > 0.0
+        ):  # If a body only has a core, but no other modules the histogram will be empty.
             histogram /= histogram.sum()
         histogram *= _INT_CASTER
         histogram = histogram.astype(np.int64)

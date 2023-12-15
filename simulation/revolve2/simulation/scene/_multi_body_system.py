@@ -199,9 +199,8 @@ class MultiBodySystem:
                         rigid_body.initial_pose.position
                         + rigid_body.initial_pose.orientation
                         * (
-                                geometry.pose.position
-                                + geometry.pose.orientation
-                                * (geometry.aabb.size * sign)
+                            geometry.pose.position
+                            + geometry.pose.orientation * (geometry.aabb.size * sign)
                         )
                     )
 

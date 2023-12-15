@@ -13,7 +13,7 @@ from ..geometry import Geometry, GeometryBox, GeometryHeightmap, GeometryPlane
 
 
 def multi_body_system_to_urdf(
-        multi_body_system: MultiBodySystem, name: str
+    multi_body_system: MultiBodySystem, name: str
 ) -> tuple[
     str,
     list[GeometryPlane],
@@ -50,7 +50,7 @@ class _URDFConverter:
     heightmaps: list[GeometryHeightmap]
 
     def build(
-            self, multi_body_system: MultiBodySystem, name: str
+        self, multi_body_system: MultiBodySystem, name: str
     ) -> tuple[
         str,
         list[GeometryPlane],
@@ -70,10 +70,10 @@ class _URDFConverter:
         urdf = xml.Element("robot", {"name": name})
 
         for element in self._make_links_xml_elements(
-                multi_body_system.root,
-                multi_body_system.root.initial_pose,
-                f"{name}_root",
-                parent_rigid_body=None,
+            multi_body_system.root,
+            multi_body_system.root.initial_pose,
+            f"{name}_root",
+            parent_rigid_body=None,
         ):
             urdf.append(element)
 
@@ -88,11 +88,11 @@ class _URDFConverter:
         )
 
     def _make_links_xml_elements(
-            self,
-            rigid_body: RigidBody,
-            link_pose: Pose,
-            rigid_body_name: str,
-            parent_rigid_body: RigidBody | None,
+        self,
+        rigid_body: RigidBody,
+        link_pose: Pose,
+        rigid_body_name: str,
+        parent_rigid_body: RigidBody | None,
     ) -> list[xml.Element]:
         if rigid_body.uuid in self.visited_rigid_bodies:
             raise ValueError("Multi-body system is cyclic.")
@@ -104,9 +104,9 @@ class _URDFConverter:
         elements.append(link)
 
         com_xyz = link_pose.orientation.inverse * (
-                rigid_body.initial_pose.position
-                - link_pose.position
-                + rigid_body.initial_pose.orientation * rigid_body.center_of_mass()
+            rigid_body.initial_pose.position
+            - link_pose.position
+            + rigid_body.initial_pose.orientation * rigid_body.center_of_mass()
         )
         com_rpy = _quaternion_to_euler(
             link_pose.orientation.inverse * rigid_body.initial_pose.orientation
@@ -176,12 +176,12 @@ class _URDFConverter:
                     raise ValueError("Geometry not yet supported.")
 
         for joint_index, joint in enumerate(
-                self.multi_body_system.get_joints_for_rigid_body(rigid_body)
+            self.multi_body_system.get_joints_for_rigid_body(rigid_body)
         ):
             # Make sure we don't go back up the joint we came from.
             if parent_rigid_body is not None and (
-                    joint.rigid_body1.uuid == parent_rigid_body.uuid
-                    or joint.rigid_body2.uuid == parent_rigid_body.uuid
+                joint.rigid_body1.uuid == parent_rigid_body.uuid
+                or joint.rigid_body2.uuid == parent_rigid_body.uuid
             ):
                 continue
 
@@ -214,7 +214,7 @@ class _URDFConverter:
                 },
             )
             xyz = link_pose.orientation.inverse * (
-                    joint.pose.position - link_pose.position
+                joint.pose.position - link_pose.position
             )
             rpy = _quaternion_to_euler(
                 link_pose.orientation.inverse * joint.pose.orientation
@@ -249,12 +249,12 @@ class _URDFConverter:
         return elements
 
     def _add_geometry_box(
-            self,
-            link: xml.Element,
-            name: str,
-            geometry: GeometryBox,
-            link_pose: Pose,
-            rigid_body: RigidBody,
+        self,
+        link: xml.Element,
+        name: str,
+        geometry: GeometryBox,
+        link_pose: Pose,
+        rigid_body: RigidBody,
     ) -> None:
         el = xml.SubElement(link, "collision", {"name": name})
         geometry_xml = xml.SubElement(el, "geometry")
@@ -266,9 +266,9 @@ class _URDFConverter:
             },
         )
         xyz = link_pose.orientation.inverse * (
-                rigid_body.initial_pose.position
-                - link_pose.position
-                + rigid_body.initial_pose.orientation * geometry.pose.position
+            rigid_body.initial_pose.position
+            - link_pose.position
+            + rigid_body.initial_pose.orientation * geometry.pose.position
         )
         rpy = _quaternion_to_euler(
             link_pose.orientation.inverse
@@ -285,12 +285,12 @@ class _URDFConverter:
         )
 
     def _add_geometry_plane(
-            self,
-            link: xml.Element,
-            name: str,
-            geometry: GeometryPlane,
-            link_pose: Pose,
-            rigid_body: RigidBody,
+        self,
+        link: xml.Element,
+        name: str,
+        geometry: GeometryPlane,
+        link_pose: Pose,
+        rigid_body: RigidBody,
     ) -> None:
         PLANE_BOX_HEIGHT = 0.1
 
@@ -302,10 +302,10 @@ class _URDFConverter:
             {"size": f"{geometry.size.x} {geometry.size.y} {PLANE_BOX_HEIGHT}"},
         )
         xyz = link_pose.orientation.inverse * (
-                rigid_body.initial_pose.position
-                - link_pose.position
-                + rigid_body.initial_pose.orientation
-                * (geometry.pose.position + Vector3([0.0, 0.0, -PLANE_BOX_HEIGHT / 2.0]))
+            rigid_body.initial_pose.position
+            - link_pose.position
+            + rigid_body.initial_pose.orientation
+            * (geometry.pose.position + Vector3([0.0, 0.0, -PLANE_BOX_HEIGHT / 2.0]))
         )
         rpy = _quaternion_to_euler(
             link_pose.orientation.inverse
@@ -335,9 +335,9 @@ def _quaternion_to_euler(quaternion: Quaternion) -> Vector3:
 
     roll = np.arctan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y))
     pitch = (
-            2
-            * np.arctan2(np.sqrt(1 + 2 * (w * y - x * z)), np.sqrt(1 - 2 * (w * y - x * z)))
-            - np.pi / 2
+        2
+        * np.arctan2(np.sqrt(1 + 2 * (w * y - x * z)), np.sqrt(1 - 2 * (w * y - x * z)))
+        - np.pi / 2
     )
     yaw = np.arctan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
     return Vector3([roll, pitch, yaw])

@@ -2,21 +2,18 @@
 Setting up a new modular robot core
 ===================================
 This tutorial is for researchers who want to set up a new modular robot core.
-The following tutorial does not touch the matter of building a complete robot, it just covers the setup for the **core**.
-If you simply want to know how to use a pre-installed physical robot, check the examples. This is most likely the case if you are a student.
+First check if someone else has already arranged this for you, for example a research lab manager. If so, you should probably look at :ref:`how to create a physical modular robot <creating_a_physical_robot/index:Creating a physical robot>`.
+Also, if you simply want to know how to use a pre-installed physical robot, check the example :ref:`physical_robot_remote <getting_started/index:Step 2: Play with the examples>`.
 
 Version 1 (V1) and version 2 (V2) of the hardware exists. For anyone outside of the CI Group, V1 is not available; please look at the V2 modular robot.
 
-----------------------------------
-Preparation + Install the Hardware
-----------------------------------
-Instructions about the assembly of robots can be found in the *how-to-build-a-modular-robot-guide* (TODO will add this guide soon) .
-Firstly make sure to have all the materials necessary to build the physical robot.
-
-For any type of hardware, there are some required items:
+----------------------
+Preparing the hardware
+----------------------
+For both V1 and V2 the following items are required:
 
 * A housing that will contain the rest of the core hardware. Models to print the core housing can be found on the following git repo: `<https://github.com/ci-group/revolve-models>`_.
-* A Raspberry Pi (RPi). For V2, this must be a RPi 4.
+* A Raspberry Pi (RPi). For V2, this must be a RPi 4 (or newer, but check for compatibility).
 * A HAT (hardware attached on top), as described in the following hardware specific sections.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -24,13 +21,8 @@ Hardware setup for a V1 Robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 **V1 is only available to CI Group.**
 
-
-For the V1 Robot some specific Hardware is required:
-
-* It is required to use a V1 HAT, available in the CI Group lab.
-* A V1 specific battery, available in the CI Group lab.
-
-Attach the HAT onto the RPi and put them into the housing.
+* Obtain and attach a V1 HAT, available in the CI Group lab.
+* Obtain a V1 specific battery, available in the CI Group lab.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Hardware setup for a V2 Robot
@@ -41,11 +33,10 @@ For instructions on  how to set up the hardware of a V2 core, refer to `<https:/
 Setting up the RPi
 ------------------
 This step is the same for all types of hardware.
-To set up the RPi follow the steps below carefully.
 
-#. Flash the SD card with the RPi OS (previously Raspbian). Some Important notes:
+#. Flash the SD card with Raspberry Pi OS (previously Raspbian). Some Important notes:
 
-    * If you are required to pick a username and password, it is recommended to pick :code:`pi` and :code:`raspberry` for easier access. These are the defaults for most RPi installations.
+    * If you are required to pick a username and password, it is recommended to pick :code:`pi` and :code:`raspberry`. These are the defaults for most RPi installations.
     * Reminder for CI Group people: if you select a keyboard layout, pick `English(US)`. It can always be changed using the `raspi-config` tool on the RPi.
     * When setting up the Wi-Fi connection, select your Country. (CI-Group Wi-Fi: *ThymioNet*)
 
@@ -56,7 +47,7 @@ To set up the RPi follow the steps below carefully.
 
         * Hint: SSH is not enabled by default. The simplest way to enable it is using the :code:`raspi-config`.
 
-    * If you want to SSH and don't know the IP of the RPi, you can use: :code:`sudo nmap -sP <your ip>` to find all clients on your network.
+    * If you want to SSH and don't know the IP of the RPi, you can use :code:`sudo nmap -sP <your ip>` on your machine to find all clients on your network.
 
 ---------------------------
 Install Revolve2 on the RPi
@@ -95,7 +86,31 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
     * V1: :code:`pip install "revolve2-modular_robot_physical[botv1] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
     * V2: :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
 
-#. Test if Revolve2 is properly installed: :code:`run_brain --help`
+#. Set up the Revolve2 physical robot daemon:
+    #. Create a systemd service file: :code:`sudo nano /etc/systemd/system/robot-daemon.service`
+    #. Add the following content to the file (note: fill in the missing information):
+
+        .. code-block:: bash
+
+            ini
+            [Unit]
+            Description=Revolve2 physical robot daemon
+            After=network-online.target <add this for v1 robots as well: 'pigpiod.service'>
+
+            [Service]
+            Type=simple
+            ExecStart=/home/<your username>/.pyenv/versions/global_env/bin/python /home/<your username>/.pyenv/versions/global_env/bin/robot-daemon --hardware <here you type either 'v1' or 'v2'>
+            ExecStop=/bin/kill -15 $MAINPID
+            Nice=-10
+            Restart=on-failure
+            RestartSec=10
+
+            [Install]
+            WantedBy=multi-user.target
+
+    #. Here, the :code:`Nice=-10` line sets a high priority for the daemon (lower values are higher priority, with -20 being the highest priority). The :code:`-l` option in the :code:`ExecStart` line tells :code:`robot-daemon` to only listen on the localhost interface. The :code:`-n localhost` option ensures that robot-daemon only runs if it can connect to localhost (preventing certain failure cases).
+    #. Enable and start the service: :code:`sudo systemctl daemon-reload` & :code:`sudo systemctl enable robot-daemon` & :code:`sudo systemctl start robot-daemon`.
+    #. Check if it is running properly using: :code:`sudo systemctl status robot-daemon`
 
 ^^^^^^^^^^^^^^^^^^^
 V1 Additional Steps
@@ -127,8 +142,5 @@ If you use V1 hardware setup requires additional steps:
             [Install]
             WantedBy=multi-user.target
 
-    #. Here, the :code:`Nice=-10` line sets a high priority for the daemon (lower values are higher priority, with -20 being the highest priority). The :code:`-l` option in the :code:`ExecStart` line tells :code:`pigpiod` to only listen on the localhost interface. The :code:`-n localhost` option ensures that pigpiod only runs if it can connect to localhost (preventing certain failure cases).
+    #. These settings are identical to the settings for the robot-daemon.
     #. Enable and start the service: :code:`sudo systemctl daemon-reload` & :code:`sudo systemctl enable pigpiod` & :code:`sudo systemctl start pigpiod`.
-    #. Check if it is running properly using: :code:`sudo systemctl status pigpiod`
-
-    * That's it! Now :code:`pigpiod` will run at startup with a high priority. If you need to adjust the priority later, you can edit the :code:`Nice` value in the service file and restart the service.

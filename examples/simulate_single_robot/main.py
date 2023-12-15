@@ -10,6 +10,8 @@ from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
+from revolve2.ci_group.modular_robots_v2 import gecko_v2
+
 
 def make_body() -> BodyV1:
     """
@@ -41,7 +43,7 @@ def main() -> None:
     rng = make_rng_time_seed()
 
     # Create a body for the robot.
-    body = make_body()
+    body = gecko_v2()
     # Create a brain for the robot.
     # We choose a 'CPG' brain with random parameters (the exact working will not be explained here).
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)

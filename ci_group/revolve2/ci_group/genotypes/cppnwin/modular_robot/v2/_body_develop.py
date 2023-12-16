@@ -41,11 +41,18 @@ def develop(
 
     body = BodyV2()
 
-    to_explore.put(
-        __Module(
-            Vector3([0, 0, 0]), Vector3([0, -1, 0]), Vector3([0, 0, 1]), 0, body.core
+    v2_core = body.core_v2
+
+    for attachment_face in v2_core.attachment_faces.values():
+        to_explore.put(
+            __Module(
+                Vector3([0, 0, 0]),
+                Vector3([0, -1, 0]),
+                Vector3([0, 0, 1]),
+                0,
+                attachment_face,
+            )
         )
-    )
     grid[0, 0, 0] = 1
     part_count = 1
 
@@ -114,9 +121,8 @@ def __add_child(
         return None
     grid[grid_pos] += 1
 
-    child_type, child_rotation = __evaluate_cppn(
-        body_net, position + attachment_point.offset, chain_length
-    )
+    new_pos = np.array(np.round(position + attachment_point.offset), dtype=np.int64)
+    child_type, child_rotation = __evaluate_cppn(body_net, new_pos, chain_length)
     child_orientation = __make_quaternion_from_index(child_rotation)
     if child_type is None or not module.module_reference.can_set_child(
         child := child_type(child_orientation.angle), attachment_index

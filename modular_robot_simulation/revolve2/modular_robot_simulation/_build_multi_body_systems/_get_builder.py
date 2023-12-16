@@ -1,6 +1,7 @@
-from revolve2.modular_robot.body.base import ActiveHinge, Brick, Core
+from revolve2.modular_robot.body.base import ActiveHinge, AttachmentFace, Brick, Core
 
 from ._active_hinge_builder import ActiveHingeBuilder
+from ._attachment_face_builder import AttachmentFaceBuilder
 from ._brick_builder import BrickBuilder
 from ._builder import Builder
 from ._core_builder import CoreBuilder
@@ -30,6 +31,12 @@ def get_builder(unbuilt_child: UnbuiltChild) -> Builder:
             )
         case ActiveHinge():
             return ActiveHingeBuilder(
+                module=unbuilt_child.module,
+                rigid_body=unbuilt_child.rigid_body,
+                slot_pose=unbuilt_child.pose,
+            )
+        case AttachmentFace():
+            return AttachmentFaceBuilder(
                 module=unbuilt_child.module,
                 rigid_body=unbuilt_child.rigid_body,
                 slot_pose=unbuilt_child.pose,

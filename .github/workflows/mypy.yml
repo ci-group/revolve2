@@ -21,4 +21,4 @@ jobs:
       - name: Install dev_requirements.txt
         run: pip install -r ./requirements_dev.txt
       - name: Run mypy
-        run: ./codetools/mypy/check.sh ./examples/${{ inputs.directory }}
+        run: ./codetools/mypy/check.sh ./${{ inputs.directory }}

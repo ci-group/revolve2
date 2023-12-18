@@ -1,5 +1,5 @@
 """Physical modular robot remote control."""
 
-from ._remote import Remote
+from ._remote import run_remote
 
-__all__ = ["Remote"]
+__all__ = ["run_remote"]

@@ -5,16 +5,22 @@ class PhysicalInterface(ABC):
     """Abstract implementation for interfacing with hardware."""
 
     @abstractmethod
-    def set_servo_target(self, pin: int, target: float) -> None:
+    def set_servo_targets(self, pins: list[int], targets: list[float]) -> None:
         """
-        Set the target for a single Servo.
+        Set the target for multiple servos.
 
-        :param pin: The GPIO pin number.
-        :param target: The target angle.
+        This can be a fairly slow operation.
+
+        :param pins: The GPIO pin numbers.
+        :param targets: The target angles.
         """
 
     @abstractmethod
-    def to_low_power_mode(self) -> None:
+    def enable(self) -> None:
+        """Start the robot."""
+
+    @abstractmethod
+    def disable(self) -> None:
         """
         Set the robot to low power mode.
 

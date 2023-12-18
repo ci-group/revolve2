@@ -30,14 +30,12 @@ class V2PhysicalInterface(PhysicalInterface):
 
     _robohat: Robohat
 
-    def __init__(self, debug: bool, dry: bool, pins: list[int], careful: bool) -> None:
+    def __init__(self, debug: bool, dry: bool) -> None:
         """
         Initialize this object.
 
         :param debug: If debugging messages are activated.
         :param dry: If servo outputs are not propagated to the physical servos.
-        :param pins: The GPIO pins that will be used.
-        :param careful: Enable careful mode, which slowly steps the servo to its target, instead of going as fast as possible. This decreases current drawn by the motors, which might be necessary for some robots.
         """
         # Parameters for servo angle calculation.
         # These might be runtime parameters coming from some config in the future, so defining them in the init for now.
@@ -68,7 +66,7 @@ class V2PhysicalInterface(PhysicalInterface):
                 _formula_a=INITIAL_VOLT_TO_ANGLE_FORMULA_A,
                 _formula_b=INITIAL_VOLT_TO_ANGLE_FORMULA_B,
             )
-            for i in range(16)
+            for i in range(16, 32)
         ]
 
         self._debug = debug
@@ -80,30 +78,42 @@ class V2PhysicalInterface(PhysicalInterface):
             )
             self._robohat.init(servoboard_1_datas_list, servoboard_2_datas_list)
             self._robohat.do_buzzer_beep()
-        self._robohat.set_servo_direct_mode(careful)
+            self._robohat.set_servo_direct_mode(_mode=True)
 
-    def set_servo_target(self, pin: int, target: float) -> None:
+    def set_servo_targets(self, pins: list[int], targets: list[float]) -> None:
         """
-        Set the target for a single Servo.
+        Set the target for multiple servos.
 
-        :param pin: The GPIO pin number.
-        :param target: The target angle.
+        This can be a fairly slow operation.
+
+        :param pins: The GPIO pin numbers.
+        :param targets: The target angles.
         """
-        if self._debug:
-            print(f"{pin:03d} | {target}")
+        for pin, target in zip(pins, targets):
+            if self._debug:
+                print(f"{pin:03d} | {target}")
 
         if not self._dry:
-            angle = target / (2 * math.pi) * 180 + 90
-            self._robohat.set_servo_single_angle(pin, angle)
+            all_angles = [90.0] * 32
+            angles = [90.0 + target / (2.0 * math.pi) * 360.0 for target in targets]
+            for pin, angle in zip(pins, angles):
+                all_angles[pin] = angle
+            self._robohat.set_servo_multiple_angles(all_angles)
 
-    def to_low_power_mode(self) -> None:
+    def enable(self) -> None:
+        """Start the robot."""
+        if self._debug:
+            print("Waking up servos.")
+        if not self._dry:
+            self._robohat.wakeup_servo()
+
+    def disable(self) -> None:
         """
         Set the robot to low power mode.
 
         This disables all active modules and sensors.
         """
         if self._debug:
-            print(
-                "Turning off all pwm signals for pins that were used by this controller."
-            )
-        self._robohat.put_servo_to_sleep()
+            print("Putting servos to sleep.")
+        if not self._dry:
+            self._robohat.put_servo_to_sleep()

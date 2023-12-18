@@ -107,7 +107,7 @@ jobs:
         with:
           python-version: 3.11
       - name: install_revolve2
-        run: pip install -r ./dev_requirements.txt
+        run: pip install -r ./requirements_dev.txt
       - name: setup_graphviz
         uses: ts-graphviz/setup-graphviz@v1
       - name: sphinx
@@ -135,7 +135,7 @@ jobs:
           bash .github/workflows/install_display.sh
           echo "DISPLAY=:0" >> $GITHUB_ENV
       - name: install_revolve2
-        run: pip install -r ./dev_requirements.txt
+        run: pip install -r ./requirements_dev.txt
       - name: run pytest
         run: pytest -v
 

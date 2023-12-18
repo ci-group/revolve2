@@ -30,13 +30,12 @@ class V2PhysicalInterface(PhysicalInterface):
 
     _robohat: Robohat
 
-    def __init__(self, debug: bool, dry: bool, careful: bool) -> None:
+    def __init__(self, debug: bool, dry: bool) -> None:
         """
         Initialize this object.
 
         :param debug: If debugging messages are activated.
         :param dry: If servo outputs are not propagated to the physical servos.
-        :param careful: Enable careful mode, which slowly steps the servo to its target, instead of going as fast as possible. This decreases current drawn by the motors, which might be necessary for some robots.
         """
         # Parameters for servo angle calculation.
         # These might be runtime parameters coming from some config in the future, so defining them in the init for now.
@@ -79,11 +78,13 @@ class V2PhysicalInterface(PhysicalInterface):
             )
             self._robohat.init(servoboard_1_datas_list, servoboard_2_datas_list)
             self._robohat.do_buzzer_beep()
-            self._robohat.set_servo_direct_mode(not careful)
+            self._robohat.set_servo_direct_mode(_mode=True)
 
     def set_servo_targets(self, pins: list[int], targets: list[float]) -> None:
         """
         Set the target for multiple servos.
+
+        This can be a fairly slow operation.
 
         :param pins: The GPIO pin numbers.
         :param targets: The target angles.

@@ -1,3 +1,5 @@
+import threading
+import time
 from typing import Any
 
 from .._protocol_version import PROTOCOL_VERSION
@@ -10,6 +12,12 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
     _debug: bool
     _physical_interface: PhysicalInterface
+
+    _enabled: bool
+    _update_loop_thread: threading.Thread
+    _targets: dict[int, float]  # pin -> target
+    _targets_lock: threading.Lock
+    # TODO slow mode
 
     def __init__(self, debug: bool, physical_interface: PhysicalInterface) -> None:
         """
@@ -26,10 +34,45 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
         self._physical_interface.enable()
 
+        self._targets = {}
+        self._targets_lock = threading.Lock()
+
+        self._enabled = True
+        self._update_loop_thread = threading.Thread(target=self._update_loop)
+        self._update_loop_thread.start()
+
+    def _update_loop(self) -> None:
+        while self._enabled:
+            pins = []
+            targets = []
+
+            # copy out of the set.
+            # that is fast, setting the actual targets is slow.
+            # lock for as short as possible.
+            with self._targets_lock:
+                for pin, target in self._targets.items():
+                    pins.append(pin)
+                    targets.append(target)
+
+            self._physical_interface.set_servo_targets(pins, targets)
+
+            time.sleep(1 / 60)
+
+    def _queue_servo_targets(self, pins: list[int], targets: list[float]) -> None:
+        with self._targets_lock:
+            for pin, target in zip(pins, targets):
+                self._targets[pin] = target
+
     def cleanup(self) -> None:
         """Stop the server and sets everything to low power."""
         if self._debug:
             print("client disconnected.")
+
+        if self._debug:
+            print("stopping background thread.")
+        self._enabled = False
+        self._update_loop_thread.join()
+
         self._physical_interface.disable()
 
     async def setup(
@@ -63,7 +106,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         if self._debug:
             print("control")
 
-        self._physical_interface.set_servo_targets(
+        self._queue_servo_targets(
             [pin_control.pin for pin_control in commands.pins],
             [pin_control.target for pin_control in commands.pins],
         )
@@ -100,7 +143,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         if self._debug:
             print("control_and_read_sensors")
 
-        self._physical_interface.set_servo_targets(
+        self._queue_servo_targets(
             [pin_control.pin for pin_control in commands.pins],
             [pin_control.target for pin_control in commands.pins],
         )

@@ -9,6 +9,8 @@ class PhysicalInterface(ABC):
         """
         Set the target for multiple servos.
 
+        This can be a fairly slow operation.
+
         :param pins: The GPIO pin numbers.
         :param targets: The target angles.
         """

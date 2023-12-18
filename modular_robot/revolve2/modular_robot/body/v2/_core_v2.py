@@ -18,9 +18,9 @@ class CoreV2(Core):
     _attachment_faces: dict[int, AttachmentFaceCoreV2]
 
     def __init__(
-            self,
-            rotation: float | RightAngles,
-            num_batteries: int = 1,
+        self,
+        rotation: float | RightAngles,
+        num_batteries: int = 1,
     ):
         """
         Initialize this object.
@@ -29,7 +29,7 @@ class CoreV2(Core):
         :param num_batteries: The amount of batteries in the robot.
         """
         mass = (
-                num_batteries * self._BATTERY_MASS + self._FRAME_MASS
+            num_batteries * self._BATTERY_MASS + self._FRAME_MASS
         )  # adjust if multiple batteries are installed
 
         """Here we produce the attachment faces, with the advanced logic behind conflict checking."""

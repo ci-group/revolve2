@@ -1,5 +1,6 @@
 """Main script for the example."""
 from revolve2.ci_group import terrains
+from revolve2.ci_group.modular_robots_v2 import gecko_v2
 from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
@@ -9,8 +10,6 @@ from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco_simulator import LocalSimulator
-
-from revolve2.ci_group.modular_robots_v2 import gecko_v2
 
 
 def make_body() -> BodyV1:

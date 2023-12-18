@@ -38,7 +38,6 @@ class AttachmentFaceCoreV2(AttachmentFace):
         :param face_rotation: The rotation of the face and the attachment points on the module.
         :param horizontal_offset: The horizontal offset for module placement.
         :param vertical_offset:  The vertical offset for module placement.
-        :param parent_rotation: The parents rotation.
         """
         self._child_offset = Vector3([0.15 / 2.0, 0.0, 0.0])
         self._check_matrix = np.zeros(shape=(3, 3), dtype=np.uint8)
@@ -87,7 +86,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
         check_matrix[(child_index - 1) % 3, (child_index - 1) // 3] += 1
         conv_check = np.zeros(shape=(2, 2), dtype=np.uint8)
         for i, j in product(range(2), repeat=2):
-            conv_check[i, j] = np.sum(check_matrix[i: i + 1, j: j + 1])
+            conv_check[i, j] = np.sum(check_matrix[i : i + 1, j : j + 1])
 
         if np.max(conv_check) > 1:  # Conflict detected.
             return False

@@ -1,71 +1,29 @@
-from abc import abstractmethod
-from dataclasses import dataclass, field
-
 from .._attachment_point import AttachmentPoint
+from .._color import Color
 from .._module import Module
+from .._right_angles import RightAngles
 
 
-@dataclass
-class AttachmentFace:
-    """Collect AttachmentPoints on a modules face."""
+class AttachmentFace(Module):
+    """
+    Collect AttachmentPoints on a modules face.
 
-    _attachment_points: dict[int, AttachmentPoint] = field(default_factory=lambda: {})
-    _mounted_modules: dict[int, Module] = field(default_factory=lambda: {})
+    This face can be thought of as a pseudo-module which usually does not have a body on its own.
+    """
 
-    def add_attachment_point(
+    def __init__(
         self,
-        index: int,
-        attachment_point: AttachmentPoint,
-        allow_repopulation: bool = False,
+        rotation: float | RightAngles,
+        attachment_points: dict[int, AttachmentPoint],
     ) -> None:
         """
-        Add an attachment point to the Face.
+        Initialize this object.
 
-        :param index: The index of the attachment point.
-        :param attachment_point: The attachment point.
-        :param allow_repopulation: If setting a new attachment point onto a previously existing one is allowed.
+        :param rotation: Orientation of this model relative to its parent.
+        :param attachment_points: The attachment points available on a module.
         """
-        if not allow_repopulation:
-            assert self._attachment_points.get(index) is None, "Index is already used."
-
-        self._attachment_points[index] = attachment_point
-
-    def mount_module(
-        self, index: int, module: Module, ignore_conflict: bool = False
-    ) -> bool:
-        """
-        Mount a Module onto a attachment point.
-
-        :param index: The index of the attachment point.
-        :param module: The module.
-        :param ignore_conflict: Ignore potential errors when mounting to attachment_point.
-        :return: If successful or not.
-        """
-        if not self._check_for_conflict(index, module, ignore_conflict):
-            self._mounted_modules[index] = module
-            return True
-        return False
-
-    @property
-    def attachment_points(self) -> dict[int, AttachmentPoint]:
-        """
-        Get the attachment points.
-
-        :return: The attachment points.
-        """
-        return self._attachment_points
-
-    @abstractmethod
-    def _check_for_conflict(
-        self, index: int, module: Module, ignore_conflict: bool
-    ) -> bool:
-        """
-        Check for conflicts when adding a new attachment point.
-
-        :param index: The index of the attachment point.
-        :param module: The module.
-        :param ignore_conflict: Ignore potential errors when adding attachment_point.
-        :raises Exception: If the attachment point causes conflicts.
-        :return: If conflicts occurred.
-        """
-        pass
+        super().__init__(
+            rotation=rotation,
+            attachment_points=attachment_points,
+            color=Color(255, 255, 255, 255),
+        )

@@ -1,8 +1,7 @@
 import math
 
-from pyrr import Quaternion, Vector3
+from pyrr import Vector3
 
-from ...body import Module
 from .._right_angles import RightAngles
 from ..base import Core
 from ._attachment_face_core_v2 import AttachmentFaceCoreV2
@@ -33,42 +32,41 @@ class CoreV2(Core):
             num_batteries * self._BATTERY_MASS + self._FRAME_MASS
         )  # adjust if multiple batteries are installed
 
-        """Here we produce the actual attachment points, with the advanced logic behind attachment faces."""
+        """Here we produce the attachment faces, with the advanced logic behind conflict checking."""
         self._attachment_faces = {
             self.FRONT: AttachmentFaceCoreV2(
                 horizontal_offset=self._horizontal_offset,
                 vertical_offset=self._vertical_offset,
-                orientation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
+                face_rotation=0.0,
             ),
             self.BACK: AttachmentFaceCoreV2(
                 horizontal_offset=self._horizontal_offset,
                 vertical_offset=self._vertical_offset,
-                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi]),
+                face_rotation=math.pi,
             ),
             self.RIGHT: AttachmentFaceCoreV2(
                 horizontal_offset=self._horizontal_offset,
                 vertical_offset=self._vertical_offset,
-                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0]),
+                face_rotation=math.pi / 2.0,
             ),
             self.LEFT: AttachmentFaceCoreV2(
                 horizontal_offset=self._horizontal_offset,
                 vertical_offset=self._vertical_offset,
-                orientation=Quaternion.from_eulers([0.0, 0.0, math.pi / 2.0 * 3]),
+                face_rotation=math.pi / 2.0 * 3,
             ),
         }
-
-        attachment_points = {}
-        for index, face in self._attachment_faces.items():
-            for idx, point in face.attachment_points.items():
-                new_index = self.index_from_face_and_attachment(index, idx)
-                attachment_points[new_index] = point
-
         super().__init__(
             rotation=rotation,
             mass=mass,
             bounding_box=Vector3([0.15, 0.15, 0.15]),
-            attachment_points=attachment_points,
+            child_offset=0.0,
         )
+
+        """Now we set the attachment faces as the children of the V2 Core."""
+        self.front = self.attachment_faces[self.FRONT]
+        self.back = self.attachment_faces[self.BACK]
+        self.right = self.attachment_faces[self.RIGHT]
+        self.left = self.attachment_faces[self.LEFT]
 
     @property
     def front_face(self) -> AttachmentFaceCoreV2:
@@ -124,34 +122,6 @@ class CoreV2(Core):
         """
         return self._vertical_offset
 
-    @staticmethod
-    def index_from_face_and_attachment(face_index: int, attachment_index: int) -> int:
-        """
-        Generate global indices specific for the V2 Core. Formats the new index as such: <face_index>0<point_index>.
-
-        Global index (Front [0], Top-Right [2]) would be: <1>*(0+1)<0><1>*(2+1) -> 10111
-
-        :param face_index: The index of the face.
-        :param attachment_index: The index of the attachment position.
-        :return: The global index.
-        """
-        global_index = (
-            (10 ** (face_index + 1)) * 10 ** (attachment_index + 2)
-            + (10 ** (attachment_index + 1))
-        ) / 9
-        return int(global_index)
-
-    @staticmethod
-    def face_and_attachment_from_index(global_index: int) -> tuple[int, int]:
-        """
-        Get face and attachment indices from global index.
-
-        :param global_index: The global index.
-        :return: The face and attachment index.
-        """
-        head, tail = str(global_index).split("0")
-        return len(head) - 1, len(tail) - 1
-
     @property
     def attachment_faces(self) -> dict[int, AttachmentFaceCoreV2]:
         """
@@ -160,16 +130,3 @@ class CoreV2(Core):
         :return: The attachment faces.
         """
         return self._attachment_faces
-
-    def can_set_child(self, module: Module, child_index: int) -> bool:
-        """
-        Check if attaching child is allowed or has conflicts.
-
-        :param module: The module to set.
-        :param child_index: The childs global index.
-        :return: Whether it is legal.
-        """
-        face_index, attachment_index = self.face_and_attachment_from_index(child_index)
-        return self._attachment_faces[face_index].mount_module(
-            attachment_index, module, ignore_conflict=True
-        )

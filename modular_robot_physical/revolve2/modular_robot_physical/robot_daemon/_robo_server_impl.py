@@ -67,7 +67,8 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
                     targets.append(desired_target)
                 else:
                     targets.append(
-                        min(
+                        maybe_current_target
+                        + min(
                             max(
                                 (desired_target - maybe_current_target),
                                 -self._CAREFUL_STEP,

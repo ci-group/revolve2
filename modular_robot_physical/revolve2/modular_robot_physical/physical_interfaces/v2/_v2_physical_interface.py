@@ -66,7 +66,7 @@ class V2PhysicalInterface(PhysicalInterface):
                 _formula_a=INITIAL_VOLT_TO_ANGLE_FORMULA_A,
                 _formula_b=INITIAL_VOLT_TO_ANGLE_FORMULA_B,
             )
-            for i in range(16)
+            for i in range(16, 32)
         ]
 
         self._debug = debug
@@ -94,8 +94,8 @@ class V2PhysicalInterface(PhysicalInterface):
                 print(f"{pin:03d} | {target}")
 
         if not self._dry:
-            all_angles = [0.0] * 32
-            angles = [target / (2 * math.pi) * 180 + 90 for target in targets]
+            all_angles = [90.0] * 32
+            angles = [90.0 + target / (2.0 * math.pi) * 360.0 for target in targets]
             for pin, angle in zip(pins, angles):
                 all_angles[pin] = angle
             self._robohat.set_servo_multiple_angles(all_angles)

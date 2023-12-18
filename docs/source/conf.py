@@ -6,6 +6,8 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import yaml
+
 project = "Revolve2"
 copyright = (
     "Computational Intelligence Group, Vrije Universiteit Amsterdam & Contributors"
@@ -27,13 +29,16 @@ add_module_names = False
 
 # -- Autoapi extension -------------------------------------------------------
 
-with open("../../packages.txt", "r") as f:
-    autoapi_dirs = [line.strip() for line in f.readlines()]
-    autoapi_dirs = [
-        f"../../{package}"
-        for package in autoapi_dirs
-        if not package.startswith("examples/")
+with open("../../project.yml") as file:
+    data = yaml.safe_load(file)
+    namespace = data["revolve2-namespace"]
+    platform_dependent = [
+        f"../../{pkg}/{namespace}" for pkg in data["platform_dependent_packages"]
     ]
+    platform_independent = [
+        f"../../{pkg}/{namespace}" for pkg in data["platform_independent_packages"]
+    ]
+    autoapi_dirs = platform_dependent + platform_independent
 
 autoapi_options = [
     "members",

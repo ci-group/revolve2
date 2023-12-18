@@ -1,0 +1,31 @@
+# This is custom config file that defines some project wide things such as the names of packages.
+# Primarily used by the CI.
+platform_independent_packages:
+  - experimentation
+  - modular_robot
+  - modular_robot_physical
+  - modular_robot_simulation
+  - simulation
+  - simulators/mujoco_simulator
+platform_dependent_packages:
+  - ci_group
+examples:
+  - brain_with_feedback
+  - custom_brain
+  - custom_terrain
+  - evaluate_multiple_interacting_robots
+  - evaluate_multiple_isolated_robots
+  - evaluate_single_robot
+  - experiment_setup
+  - physical_robot_remote
+  - robot_bodybrain_ea
+  - robot_bodybrain_ea_database
+  - robot_brain_cmaes
+  - robot_brain_cmaes_database
+  - run_physical_robot_manually
+  - simple_ea_xor
+  - simple_ea_xor_database
+  - simulate_single_robot
+tests-dir: tests
+examples-dir: examples
+revolve2-namespace: revolve2

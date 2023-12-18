@@ -1,3 +1,4 @@
+pyyaml
 -r pyflakes/requirements.txt
 -r mypy/requirements.txt
 -r sort_all/requirements.txt

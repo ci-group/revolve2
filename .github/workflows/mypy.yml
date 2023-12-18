@@ -1,0 +1,54 @@
+name: mypy
+
+on:
+  workflow_call:
+    inputs:
+      directory:
+        required: true
+        type: string
+      dir_type: # "example", "tests", "package"
+        required: true
+        type: string
+      python_version:
+        required: true
+        type: string
+      examples_dir:
+        required: true
+        type: string
+      revolve2_namespace:
+        required: true
+        type: string
+
+jobs:
+  mypy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
+        with:
+          python-version: ${{ inputs.python_version }}
+      - name: install_tools
+        run: pip install -r ./codetools/mypy/requirements.txt
+
+      # example
+      - name: Install and run for example
+        run: |
+          pip install -r ./dev_requirements.txt
+          pip install -r ./${{ inputs.examples_dir }}/${{ inputs.directory }}/requirements.txt
+          ./codetools/mypy/check.sh ./examples/${{ inputs.directory }}
+        if: inputs.dir_type == 'example'
+
+      # tests
+      - name: Install and run for tests
+        run: |
+          pip install -r ./dev_requirements.txt
+          pip install -r ./${{ inputs.directory }}/requirements.txt
+          ./codetools/mypy/check.sh ./${{ inputs.directory }}
+        if: inputs.dir_type == 'tests'
+
+      # package
+      - name: Install and run for package
+        run: |
+          pip install ./${{ inputs.directory }}
+          ./codetools/mypy/check.sh ./${{ inputs.directory }}/${{ inputs.revolve2_namespace }}
+        if: inputs.dir_type == 'package'

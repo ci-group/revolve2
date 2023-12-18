@@ -1,3 +1,5 @@
+# Installs all Revolve2 packages in editable mode as well as development tools and their requirements.
+
 -e ci_group[dev]
 -e simulators/mujoco_simulator[dev]
 -e experimentation[dev]

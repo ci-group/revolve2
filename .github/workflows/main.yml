@@ -66,11 +66,8 @@ jobs:
         example: ${{ fromJson(needs.read-project-info.outputs.examples) }}
     uses: ./.github/workflows/mypy.yml
     with:
-      directory: ${{ matrix.example }}
-      dir_type: example
+      directory: ./${{ needs.read-project-info.outputs.examples_dir }}/${{ matrix.example }}
       python_version: ${{ matrix.python-version }}
-      examples_dir: ${{ needs.read-project-info.outputs.examples_dir }}
-      revolve2_namespace: ${{ needs.read-project-info.outputs.revolve2_namespace }}
 
   mypy-tests:
     needs: read-project-info
@@ -79,11 +76,8 @@ jobs:
         python-version: [ "3.10", "3.11" ]
     uses: ./.github/workflows/mypy.yml
     with:
-      directory: ${{ needs.read-project-info.outputs.tests_dir }}
-      dir_type: tests
+      directory: ./${{ needs.read-project-info.outputs.tests_dir }}
       python_version: ${{ matrix.python-version }}
-      examples_dir: ${{ needs.read-project-info.outputs.examples_dir }}
-      revolve2_namespace: ${{ needs.read-project-info.outputs.revolve2_namespace }}
 
   mypy-packages:
     needs: read-project-info
@@ -93,11 +87,8 @@ jobs:
         package: ${{ fromJson(needs.read-project-info.outputs.all_packages) }}
     uses: ./.github/workflows/mypy.yml
     with:
-      directory: ${{ matrix.package }}
-      dir_type: package
+      directory: ./${{ matrix.package }}/${{ needs.read-project-info.outputs.revolve2_namespace }}
       python_version: ${{ matrix.python-version }}
-      examples_dir: ${{ needs.read-project-info.outputs.examples_dir }}
-      revolve2_namespace: ${{ needs.read-project-info.outputs.revolve2_namespace }}
 
   docs:
     runs-on: ubuntu-20.04

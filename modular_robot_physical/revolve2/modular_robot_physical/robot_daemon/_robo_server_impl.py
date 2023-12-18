@@ -10,14 +10,16 @@ from ..robot_daemon_api import robot_daemon_protocol_capnp
 class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ignore
     """Implements the Cap'n Proto interface."""
 
+    _CAREFUL_STEP = 0.1
+
     _debug: bool
     _physical_interface: PhysicalInterface
 
     _enabled: bool
     _update_loop_thread: threading.Thread
     _targets: dict[int, float]  # pin -> target
+    _current_targets: dict[int, float]  # pin -> target
     _targets_lock: threading.Lock
-    # TODO slow mode
 
     def __init__(self, debug: bool, physical_interface: PhysicalInterface) -> None:
         """
@@ -35,6 +37,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         self._physical_interface.enable()
 
         self._targets = {}
+        self._current_targets = {}
         self._targets_lock = threading.Lock()
 
         self._enabled = True
@@ -43,16 +46,37 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
     def _update_loop(self) -> None:
         while self._enabled:
-            pins = []
-            targets = []
+            desired_pins = []
+            desired_targets = []
 
             # copy out of the set.
             # that is fast, setting the actual targets is slow.
             # lock for as short as possible.
             with self._targets_lock:
                 for pin, target in self._targets.items():
-                    pins.append(pin)
-                    targets.append(target)
+                    desired_pins.append(pin)
+                    desired_targets.append(target)
+
+            pins: list[int] = []
+            targets: list[float] = []
+            for desired_pin, desired_target in zip(desired_pins, desired_targets):
+                pins.append(desired_pin)
+
+                maybe_current_target = self._current_targets.get(desired_pin)
+                if maybe_current_target is None:
+                    targets.append(desired_target)
+                else:
+                    targets.append(
+                        min(
+                            max(
+                                (desired_target - maybe_current_target),
+                                -self._CAREFUL_STEP,
+                            ),
+                            self._CAREFUL_STEP,
+                        )
+                    )
+            for pin, target in zip(pins, targets):
+                self._current_targets[pin] = target
 
             self._physical_interface.set_servo_targets(pins, targets)
 

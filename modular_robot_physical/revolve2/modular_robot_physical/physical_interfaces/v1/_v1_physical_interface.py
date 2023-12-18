@@ -67,7 +67,7 @@ class V1PhysicalInterface(PhysicalInterface):
             for pin in self._PINS:
                 self._gpio.set_PWM_dutycycle(pin, self._CENTER)
                 print(f"setting {pin}..")
-                time.sleep(0.5)
+                time.sleep(0.1)
 
     def disable(self) -> None:
         """

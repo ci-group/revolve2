@@ -3,40 +3,32 @@ name: ci
 on: [push, pull_request]
 
 jobs:
-  list-packages:
+  read-project-info:
     runs-on: ubuntu-20.04
     outputs:
-      packages: ${{ steps.set-packages.outputs.packages }}
+      platform_dependent_packages: ${{ steps.set-platform-dependent-packages.outputs.platform_dependent_packages }}
+      platform_independent_packages: ${{ steps.set-platform-independent-packages.outputs.platform_independent_packages }}
+      all_packages: ${{ steps.set-all-packages.outputs.all_packages }}
+      tests_dir: ${{ steps.set-tests-dir.outputs.tests_dir }}
+      examples_dir: ${{ steps.set-examples-dir.outputs.examples_dir }}
+      examples: ${{ steps.set-examples.outputs.examples }}
+      revolve2_namespace: ${{ steps.set-revolve2-namespace.outputs.revolve2_namespace }}
     steps:
       - uses: actions/checkout@v4
-      - id: set-packages
-        run: echo packages=$(jq -R -s -c 'split("\n")[:-1]' < ./packages.txt) >> $GITHUB_OUTPUT
-
-  dev_install:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: install_revolve2
-        run: ./dev_install.sh
-
-  student_install:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.11"]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: install_revolve2
-        run: ./student_install.sh
+      - id: set-platform-dependent-packages
+        run: echo platform_dependent_packages=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['platform_dependent_packages'])") >> $GITHUB_OUTPUT
+      - id: set-platform-independent-packages
+        run: echo platform_independent_packages=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['platform_independent_packages'])") >> $GITHUB_OUTPUT
+      - id: set-all-packages
+        run: echo all_packages=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['platform_dependent_packages'] + yaml.safe_load(open('project.yml'))['platform_independent_packages'])") >> $GITHUB_OUTPUT
+      - id: set-tests-dir
+        run: echo tests_dir=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['tests-dir'])") >> $GITHUB_OUTPUT
+      - id: set-examples-dir
+        run: echo examples_dir=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['examples-dir'])") >> $GITHUB_OUTPUT
+      - id: set-examples
+        run: echo examples=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['examples'])") >> $GITHUB_OUTPUT
+      - id: set-revolve2-namespace
+        run: echo revolve2_namespace=$(python3 -c "import yaml;print(yaml.safe_load(open('project.yml'))['revolve2-namespace'])") >> $GITHUB_OUTPUT
 
   check_format:
     runs-on: ubuntu-20.04
@@ -66,35 +58,29 @@ jobs:
           [[ -z $(git status -s) ]]
           git checkout -- .
 
-  mypy:
-    needs: list-packages
+  mypy-examples:
+    needs: read-project-info
     strategy:
       matrix:
-        python-version: ["3.10", "3.11"]
-        package: ${{ fromJson(needs.list-packages.outputs.packages) }}
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: install_tools
-        run: pip install -r ./codetools/mypy/requirements.txt
-      - name: Install example requirements
-        run:
-          ./dev_install.sh
-          pip install -r ./${{ matrix.package }}/requirements.txt
-        if: startsWith(matrix.package, 'examples/')
-      - name: Install tests requirements
-        run:
-          ./dev_install.sh
-          pip install -r ./tests/requirements.txt
-        if: "matrix.package == 'tests'"
-      - name: Install package
-        run: pip install ./$(echo "${{ matrix.package }}[dev]" | sed 's#/revolve2##')
-        if: "(!startsWith(matrix.package, 'examples/') && matrix.package != 'tests')"
-      - name: run_mypy
-        run: ./codetools/mypy/check.sh ${{ matrix.package }}
+        example: ${{ fromJson(needs.read-project-info.outputs.examples) }}
+    uses: ./.github/workflows/mypy.yml
+    with:
+      directory: ./${{ needs.read-project-info.outputs.examples_dir }}/${{ matrix.example }}
+
+  mypy-tests:
+    needs: read-project-info
+    uses: ./.github/workflows/mypy.yml
+    with:
+      directory: ./${{ needs.read-project-info.outputs.tests_dir }}
+
+  mypy-packages:
+    needs: read-project-info
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.read-project-info.outputs.all_packages) }}
+    uses: ./.github/workflows/mypy.yml
+    with:
+      directory: ./${{ matrix.package }}/${{ needs.read-project-info.outputs.revolve2_namespace }}
 
   docs:
     runs-on: ubuntu-20.04
@@ -104,7 +90,7 @@ jobs:
         with:
           python-version: 3.11
       - name: install_revolve2
-        run: ./dev_install.sh
+        run: pip install -r ./requirements_dev.txt
       - name: setup_graphviz
         uses: ts-graphviz/setup-graphviz@v1
       - name: sphinx
@@ -123,8 +109,8 @@ jobs:
       matrix:
         python-version: [ "3.10", "3.11" ]
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
       - name: install virtual display
@@ -132,6 +118,77 @@ jobs:
           bash .github/workflows/install_display.sh
           echo "DISPLAY=:0" >> $GITHUB_ENV
       - name: install_revolve2
-        run: ./dev_install.sh
+        run: pip install -r ./requirements_dev.txt
       - name: run pytest
         run: pytest -v
+
+  build_wheels_platform_independent:
+    needs: read-project-info
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.read-project-info.outputs.platform_independent_packages) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - uses: actions/setup-python@v3
+        with:
+          python-version: 3.11
+      - name: Build wheels
+        run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ./dist/**/*.whl
+
+  build_wheels_platform_dependent:
+    needs: read-project-info
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2022, ubuntu-22.04, macos-12]
+        package: ${{ fromJson(needs.read-project-info.outputs.platform_dependent_packages) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      - uses: actions/setup-python@v3
+      - name: Install cibuildwheel
+        run: python -m pip install cibuildwheel==2.16.2
+      - name: Build wheels
+        run: python -m cibuildwheel ./${{ matrix.package }} --output-dir ./dist/${{ matrix.package }}
+        env:
+          CIBW_BUILD: cp310-* cp311-*
+          CIBW_ARCHS_WINDOWS: AMD64
+          CIBW_ARCHS_MACOS: universal2
+          CIBW_ARCHS_LINUX: x86_64
+      - uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: ./dist/**/*.whl
+
+  publish:
+    runs-on: ubuntu-22.04
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [read-project-info, build_wheels_platform_independent, build_wheels_platform_dependent]
+    strategy:
+      matrix:
+        package: ${{ fromJson(needs.read-project-info.outputs.all_packages) }}
+    environment:
+      name: publish
+    permissions:
+      id-token: write
+    steps:
+      - name: Download dist artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: dist
+      - name: Generate name for package
+        # Prepend 'revolve2-', replace '/' with '-' and remove '/simulators'
+        run: echo "PACKAGE_URL=https://pypi.org/p/revolve2-$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/${{ matrix.package }}

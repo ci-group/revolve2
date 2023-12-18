@@ -1,0 +1,12 @@
+# Installs all Revolve2 packages in editable mode as well as all example requirements.
+
+-e ci_group[dev]
+-e simulators/mujoco_simulator[dev]
+-e experimentation[dev]
+-e modular_robot_simulation[dev]
+-e modular_robot_physical[dev]
+-e modular_robot[dev]
+-e simulation[dev]
+-r ./examples/robot_bodybrain_ea_database/requirements.txt
+-r ./examples/robot_brain_cmaes_database/requirements.txt
+-r ./examples/simple_ea_xor_database/requirements.txt

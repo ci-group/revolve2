@@ -1,4 +1,3 @@
-from dataclasses import dataclass, field
 from itertools import product
 
 import numpy as np
@@ -10,18 +9,11 @@ from .._attachment_point import AttachmentPoint
 from ..base._attachment_face import AttachmentFace
 
 
-@dataclass
 class AttachmentFaceCoreV2(AttachmentFace):
     """An AttachmentFace for the V2 Core."""
 
-    _check_matrix: NDArray[np.uint8] = field(
-        default_factory=lambda: np.zeros(shape=(3, 3), dtype=np.uint8)
-    )
-
-    _child_offset: Vector3 = field(
-        default_factory=lambda: Vector3([0.15 / 2.0, 0.0, 0.0])
-    )
-    _orientation: Quaternion = field(default_factory=lambda: Quaternion())
+    _check_matrix: NDArray[np.uint8]
+    _child_offset: Vector3
 
     """
     Check matrix allows us to determine which attachment points can be filled in the face.
@@ -38,16 +30,17 @@ class AttachmentFaceCoreV2(AttachmentFace):
     """
 
     def __init__(
-        self, orientation: Quaternion, horizontal_offset: float, vertical_offset: float
+        self, face_rotation: float, horizontal_offset: float, vertical_offset: float
     ) -> None:
         """
         Initialize the attachment face for the V2 Core.
 
-        :param orientation: The rotation of the face and the attachment points on the module.
+        :param face_rotation: The rotation of the face and the attachment points on the module.
         :param horizontal_offset: The horizontal offset for module placement.
         :param vertical_offset:  The vertical offset for module placement.
         """
-        self._orientation = orientation
+        self._child_offset = Vector3([0.15 / 2.0, 0.0, 0.0])
+        self._check_matrix = np.zeros(shape=(3, 3), dtype=np.uint8)
 
         """
         Each CoreV2 Face has 9 Module slots as shown below. 
@@ -62,44 +55,43 @@ class AttachmentFaceCoreV2(AttachmentFace):
         |                 |            |                  |
         ---------------------------------------------------
         """
-        super().__init__()
+        attachment_points = {}
+        rot = Quaternion.from_eulers([0.0, 0.0, face_rotation])
         for i in range(9):
             h_o = (i % 3 - 1) * horizontal_offset
             v_o = -(i // 3 - 1) * vertical_offset
 
-            sc: bool = np.isclose(orientation.angle % np.pi, 0)
-            """Switch condition for determining offset. Depending of whether the face is orthogonal to x or y axis, the horizontal offset has to be applied differently."""
-            offset = Vector3([(1 - sc) * (-h_o), sc * h_o, v_o])
+            offset = rot * Vector3([0.0, h_o, v_o])
 
-            attachment_point = AttachmentPoint(
-                orientation=orientation, offset=self._child_offset + offset
+            attachment_points[i] = AttachmentPoint(
+                orientation=rot, offset=self._child_offset + offset
             )
-            self.add_attachment_point(i, attachment_point)
+        super().__init__(rotation=0.0, attachment_points=attachment_points)
 
-    def _check_for_conflict(
-        self, index: int, module: Module, ignore_conflict: bool
+    def can_set_child(
+        self,
+        module: Module,
+        child_index: int,
     ) -> bool:
         """
         Check for conflicts when adding a new attachment point.
 
-        :param index: The index of the attachment point.
+        Note that if there is no conflict in the check this function assumes that the slot is being populated and adjusts the check-matrix as such.
+
         :param module: The module.
-        :param ignore_conflict: Ignore potential conflicts when mounting to attachment_point.
+        :param child_index: The index of the attachment point.
         :return: Whether conflicts occurred.
-        :raises Exception: If the attachment point causes conflicts.
         """
         check_matrix = self._check_matrix.copy()
-        check_matrix[(index - 1) % 3, (index - 1) // 3] += 1
+        check_matrix[(child_index - 1) % 3, (child_index - 1) // 3] += 1
         conv_check = np.zeros(shape=(2, 2), dtype=np.uint8)
         for i, j in product(range(2), repeat=2):
             conv_check[i, j] = np.sum(check_matrix[i : i + 1, j : j + 1])
 
         if np.max(conv_check) > 1:  # Conflict detected.
-            if ignore_conflict:
-                return True
-            raise Exception("CONFLICT: Module can`t be attached at the AttachmentPoint")
+            return False
         self._check_matrix = check_matrix
-        return False
+        return True
 
     @property
     def top_left(self) -> Module | None:
@@ -108,7 +100,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(0)
+        return self.children.get(0)
 
     @top_left.setter
     def top_left(self, module: Module) -> None:
@@ -117,7 +109,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(0, module)
+        self.set_child(module, 0)
 
     @property
     def top(self) -> Module | None:
@@ -126,7 +118,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(1)
+        return self.children.get(1)
 
     @top.setter
     def top(self, module: Module) -> None:
@@ -135,7 +127,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(1, module)
+        self.set_child(module, 1)
 
     @property
     def top_right(self) -> Module | None:
@@ -144,7 +136,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(2)
+        return self.children.get(2)
 
     @top_right.setter
     def top_right(self, module: Module) -> None:
@@ -153,7 +145,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(2, module)
+        self.set_child(module, 2)
 
     @property
     def middle_left(self) -> Module | None:
@@ -162,7 +154,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(3)
+        return self.children.get(3)
 
     @middle_left.setter
     def middle_left(self, module: Module) -> None:
@@ -171,7 +163,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(3, module)
+        self.set_child(module, 3)
 
     @property
     def middle(self) -> Module | None:
@@ -180,7 +172,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(4)
+        return self.children.get(4)
 
     @middle.setter
     def middle(self, module: Module) -> None:
@@ -189,7 +181,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(4, module)
+        self.set_child(module, 4)
 
     @property
     def middle_right(self) -> Module | None:
@@ -198,7 +190,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(5)
+        return self.children.get(5)
 
     @middle_right.setter
     def middle_right(self, module: Module) -> None:
@@ -207,7 +199,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(5, module)
+        self.set_child(module, 5)
 
     @property
     def bottom_left(self) -> Module | None:
@@ -216,7 +208,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(6)
+        return self.children.get(6)
 
     @bottom_left.setter
     def bottom_left(self, module: Module) -> None:
@@ -225,7 +217,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(6, module)
+        self.set_child(module, 6)
 
     @property
     def bottom(self) -> Module | None:
@@ -234,7 +226,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(7)
+        return self.children.get(7)
 
     @bottom.setter
     def bottom(self, module: Module) -> None:
@@ -243,7 +235,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(7, module)
+        self.set_child(module, 7)
 
     @property
     def bottom_right(self) -> Module | None:
@@ -252,7 +244,7 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :return: The attachment points module.
         """
-        return self._mounted_modules.get(8)
+        return self.children.get(8)
 
     @bottom_right.setter
     def bottom_right(self, module: Module) -> None:
@@ -261,4 +253,4 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
         :param module: The module.
         """
-        self.mount_module(8, module)
+        self.set_child(module, 8)

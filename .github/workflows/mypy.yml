@@ -33,7 +33,7 @@ jobs:
       # example
       - name: Install and run for example
         run: |
-          pip install -r ./dev_requirements.txt
+          pip install -r ./requirements_dev.txt
           pip install -r ./${{ inputs.examples_dir }}/${{ inputs.directory }}/requirements.txt
           ./codetools/mypy/check.sh ./examples/${{ inputs.directory }}
         if: inputs.dir_type == 'example'
@@ -41,7 +41,7 @@ jobs:
       # tests
       - name: Install and run for tests
         run: |
-          pip install -r ./dev_requirements.txt
+          pip install -r ./requirements_dev.txt
           pip install -r ./${{ inputs.directory }}/requirements.txt
           ./codetools/mypy/check.sh ./${{ inputs.directory }}
         if: inputs.dir_type == 'tests'

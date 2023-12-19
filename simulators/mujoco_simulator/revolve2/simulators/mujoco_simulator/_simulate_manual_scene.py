@@ -2,23 +2,20 @@
 import logging
 
 import mujoco
-from custom_viewer import CustomMujocoViewer
 
 from revolve2.ci_group.simulation import (
     STANDARD_CONTROL_FREQUENCY,
     STANDARD_SIMULATION_TIMESTEP,
 )
 from revolve2.simulation.scene import Scene
-from revolve2.simulators.mujoco_simulator._control_interface_impl import (
-    ControlInterfaceImpl,
-)
-from revolve2.simulators.mujoco_simulator._scene_to_model import scene_to_model
-from revolve2.simulators.mujoco_simulator._simulation_state_impl import (
-    SimulationStateImpl,
-)
+
+from ._control_interface_impl import ControlInterfaceImpl
+from ._custom_mujoco_viewer import CustomMujocoViewer
+from ._scene_to_model import scene_to_model
+from ._simulation_state_impl import SimulationStateImpl
 
 
-def simulate_scene_iteratively(
+def simulate_manual_scene(
     scene: Scene,
 ) -> None:
     """

@@ -9,8 +9,6 @@ import mujoco_viewer
 import numpy as np
 import yaml
 
-MUJOCO_VERSION = tuple(map(int, mujoco.__version__.split(".")))
-
 
 class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
     """
@@ -26,6 +24,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
     _wire_frame: bool
     _time_per_render: float
     _loop_count: int
+    _mujoco_version: tuple[int, int, int]
 
     _viewer_mode: str
     _position: int
@@ -54,6 +53,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         self._position = 0
         self._paused = start_paused
         self._render_every_frame = render_every_frame
+        self._mujoco_version = tuple(map(int, mujoco.__version__.split(".")))
         super().__init__(
             model,
             data,
@@ -158,7 +158,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
 
         self._add_overlay(bottomleft, "FPS", "%d%s" % (1 / self._time_per_render, ""))
 
-        if MUJOCO_VERSION >= (3, 0, 0):
+        if self._mujoco_version >= (3, 0, 0):
             self._add_overlay(
                 bottomleft, "Max solver iters", str(max(self.data.solver_niter) + 1)
             )

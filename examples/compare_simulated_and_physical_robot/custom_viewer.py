@@ -9,6 +9,8 @@ from typing import Any
 
 
 class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
+    """Custom Viewer Object that allows for additional keyboard inputs."""
+
     _position: int = 0
     def _create_overlay(self) -> None:
         """ Create a Custom Overlay."""
@@ -17,7 +19,14 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
         bottomleft = mujoco.mjtGridPos.mjGRID_BOTTOMLEFT
         bottomright = mujoco.mjtGridPos.mjGRID_BOTTOMRIGHT
 
-        def add_overlay(gridpos, text1, text2):
+        def add_overlay(gridpos: int, text1: str, text2: str) -> None:
+            """
+            This function allows to add overlays.
+
+            :param gridpos: The position on the grid.
+            :param text1: Some text.
+            :param text2: Additional text.
+            """
             if gridpos not in self._overlay:
                 self._overlay[gridpos] = ["", ""]
             self._overlay[gridpos][0] += text1 + "\n"
@@ -163,6 +172,11 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
         return
 
     def render(self) -> int | None:
+        """
+        Rendering our scene.
+
+        :return: A cycle position if applicable.
+        """
         if self.render_mode == 'offscreen':
             raise NotImplementedError(
                 "Use 'read_pixels()' for 'offscreen' mode.")
@@ -173,10 +187,9 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
             self.close()
             return
 
-        # mjv_updateScene, mjr_render, mjr_overlay
-        def update():
-            # fill overlay items
-            self._create_overlay()
+        def update() -> None:
+            """Updating the render."""
+            self._create_overlay()  # fill overlay items
 
             render_start = time.time()
 
@@ -259,5 +272,6 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
         self.apply_perturbations()
         return self._position
 
-    def increment_position(self):
+    def increment_position(self) -> None:
+        """Increment our cycle position."""
         self._position = (self._position + 1) % 5

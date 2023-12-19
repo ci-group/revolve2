@@ -32,18 +32,17 @@ def simulate_scene_iteratively(
     viewer._render_every_frame = False  # Private but functionality is not exposed and for now it breaks nothing.
 
     # Compute forward dynamics without actually stepping forward in time.
-    # This updates the data so we can read out the initial state.
     mujoco.mj_forward(model, data)
 
     control_interface = ControlInterfaceImpl(
         data=data, abstraction_to_mujoco_mapping=mapping
     )
-    prev_position = 0
-    positions = [0.0, 0.5, 1.0, -0.5, -1.0]
-    target, current = 0.0,  0.0
+
+    """Here we set our values for cycling different positions."""
+    prev_position = 0.0  # This is the initial idle position for all hinges.
+    positions = [0.0, 0.5, 1.0, -0.5, -1.0]  # Those are the possible cycle positions we want.
+    target, current = 0.0,  0.0  # Here we can check whether we are currently on the correct position.
     try:
-        logging.info(f"To iterate over states press 'K'")
-        logging.info(f"To stop the simulation do Ctrl-C")
         while True:
             simulation_state = SimulationStateImpl(
                 data=data, abstraction_to_mujoco_mapping=mapping
@@ -51,9 +50,11 @@ def simulate_scene_iteratively(
             scene.handler.handle(simulation_state, control_interface, STANDARD_CONTROL_FREQUENCY)
             # step simulation
             if target != current:
-                step = 0.01 if target > current else -0.01
+                """If we are not on the target we adjust our hinges accordingly."""
+                step = 0.0025 if target > current else -0.0025
                 for hinge in mapping.hinge_joint.keys():
                     control_interface.set_joint_hinge_position_target(hinge.value, current + step)
+                current += step
 
             mujoco.mj_step(model, data)
 
@@ -63,6 +64,7 @@ def simulate_scene_iteratively(
                 target = positions[prev_position]
 
     except KeyboardInterrupt:
+        """If we press ctrl-C this script will end with the finally clause."""
         pass
     finally:
         viewer.close()

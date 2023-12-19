@@ -6,4 +6,3 @@ If hinges in the simulation behave exactly the opposite as on the physical robot
 You learn:
 - How to validate the physical robot with simulations.
 - How to use inverting functionality for quick fixes.
-- 

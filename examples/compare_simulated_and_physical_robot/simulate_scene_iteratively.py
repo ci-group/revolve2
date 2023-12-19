@@ -8,6 +8,7 @@ from revolve2.simulators.mujoco_simulator._simulation_state_impl import Simulati
 
 from custom_viewer import CustomMujocoViewer
 from revolve2.ci_group.simulation import STANDARD_SIMULATION_TIMESTEP, STANDARD_CONTROL_FREQUENCY
+from revolve2.modular_robot.body.base import ActiveHinge
 
 
 def simulate_scene_iteratively(
@@ -37,22 +38,30 @@ def simulate_scene_iteratively(
     control_interface = ControlInterfaceImpl(
         data=data, abstraction_to_mujoco_mapping=mapping
     )
+    prev_position = 0
+    positions = [0.0, 0.5, 1.0, -0.5, -1.0]
+    target, current = 0.0,  0.0
     try:
         logging.info(f"To iterate over states press 'K'")
         logging.info(f"To stop the simulation do Ctrl-C")
         while True:
-            # TODO: make control
             simulation_state = SimulationStateImpl(
                 data=data, abstraction_to_mujoco_mapping=mapping
             )
-            #control_interface.set_joint_hinge_position_target()
             scene.handler.handle(simulation_state, control_interface, STANDARD_CONTROL_FREQUENCY)
             # step simulation
+            if target != current:
+                step = 0.01 if target > current else -0.01
+                for hinge in mapping.hinge_joint.keys():
+                    control_interface.set_joint_hinge_position_target(hinge.value, current + step)
+
             mujoco.mj_step(model, data)
 
+            position = viewer.render()
+            if prev_position != position:
+                prev_position = position
+                target = positions[prev_position]
 
-            # render if not headless. also render when recording and if it time for a new video frame.
-            viewer.render()
     except KeyboardInterrupt:
         pass
     finally:

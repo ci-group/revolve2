@@ -4,6 +4,7 @@ import yaml
 import mujoco_viewer
 import mujoco
 import numpy as np
+import time
 from typing import Any
 
 
@@ -62,6 +63,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
             add_overlay(topleft, "Cap[t]ure frame", "")
         add_overlay(topleft, "Iterate position", "[k]")
 
+
         add_overlay(
             bottomleft, "FPS", "%d%s" %
             (1 / self._time_per_render, ""))
@@ -73,7 +75,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
                 round(
                     self.data.time / self.model.opt.timestep)))
         add_overlay(bottomleft, "timestep", "%.5f" % self.model.opt.timestep)
-        add_overlay(bottomleft, "position", str(self._position))
+        add_overlay(bottomleft, "position", str(self._position+1))
 
     def _key_callback(self, window: Any, key: Any, scancode: Any, action: Any, mods: Any) -> None:
         """
@@ -159,3 +161,103 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
             print("Quitting.")
             glfw.set_window_should_close(self.window, True)
         return
+
+    def render(self) -> int | None:
+        if self.render_mode == 'offscreen':
+            raise NotImplementedError(
+                "Use 'read_pixels()' for 'offscreen' mode.")
+        if not self.is_alive:
+            raise Exception(
+                "GLFW window does not exist but you tried to render.")
+        if glfw.window_should_close(self.window):
+            self.close()
+            return
+
+        # mjv_updateScene, mjr_render, mjr_overlay
+        def update():
+            # fill overlay items
+            self._create_overlay()
+
+            render_start = time.time()
+
+            width, height = glfw.get_framebuffer_size(self.window)
+            self.viewport.width, self.viewport.height = width, height
+
+            with self._gui_lock:
+                # update scene
+                mujoco.mjv_updateScene(
+                    self.model,
+                    self.data,
+                    self.vopt,
+                    self.pert,
+                    self.cam,
+                    mujoco.mjtCatBit.mjCAT_ALL.value,
+                    self.scn)
+                # marker items
+                for marker in self._markers:
+                    self._add_marker_to_scene(marker)
+                # render
+                mujoco.mjr_render(self.viewport, self.scn, self.ctx)
+                # overlay items
+                for gridpos, [t1, t2] in self._overlay.items():
+                    menu_positions = [mujoco.mjtGridPos.mjGRID_TOPLEFT,
+                                      mujoco.mjtGridPos.mjGRID_BOTTOMLEFT]
+                    if gridpos in menu_positions and self._hide_menus:
+                        continue
+
+                    mujoco.mjr_overlay(
+                        mujoco.mjtFontScale.mjFONTSCALE_150,
+                        gridpos,
+                        self.viewport,
+                        t1,
+                        t2,
+                        self.ctx)
+
+                # handle figures
+                if not self._hide_graph:
+                    for idx, fig in enumerate(self.figs):
+                        width_adjustment = width % 4
+                        x = int(3 * width / 4) + width_adjustment
+                        y = idx * int(height / 4)
+                        viewport = mujoco.MjrRect(
+                            x, y, int(width / 4), int(height / 4))
+
+                        has_lines = len([i for i in fig.linename if i != b''])
+                        if has_lines:
+                            mujoco.mjr_figure(viewport, fig, self.ctx)
+
+                glfw.swap_buffers(self.window)
+            glfw.poll_events()
+            self._time_per_render = 0.9 * self._time_per_render + \
+                0.1 * (time.time() - render_start)
+
+            # clear overlay
+            self._overlay.clear()
+
+        if self._paused:
+            while self._paused:
+                update()
+                if glfw.window_should_close(self.window):
+                    self.close()
+                    break
+                if self._advance_by_one_step:
+                    self._advance_by_one_step = False
+                    break
+        else:
+            self._loop_count += self.model.opt.timestep / \
+                (self._time_per_render * self._run_speed)
+            if self._render_every_frame:
+                self._loop_count = 1
+            while self._loop_count > 0:
+                update()
+                self._loop_count -= 1
+
+        # clear markers
+        self._markers[:] = []
+
+        # apply perturbation (should this come before mj_step?)
+        self.apply_perturbations()
+        return self._position
+
+    def increment_position(self):
+        self._position = (self._position + 1) % 5

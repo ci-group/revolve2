@@ -55,9 +55,9 @@ def simulate_scene(
         viewer = CustomMujocoViewer(
             model,
             data,
+            start_paused=start_paused,
+            render_every_frame=False,
         )
-        viewer._render_every_frame = False  # Private but functionality is not exposed and for now it breaks nothing.
-        viewer._paused = start_paused
 
     if record_settings is not None:
         video_step = 1 / record_settings.fps

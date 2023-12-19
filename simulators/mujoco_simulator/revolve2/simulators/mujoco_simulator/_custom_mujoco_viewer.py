@@ -31,7 +31,12 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
     _position: int
 
     def __init__(
-        self, model: mujoco.MjModel, data: mujoco.MjData, mode: str = "classic"
+        self,
+        model: mujoco.MjModel,
+        data: mujoco.MjData,
+        start_paused: bool = False,
+        render_every_frame: bool = True,
+        mode: str = "classic",
     ):
         """
         Initialize the Viewer.
@@ -41,10 +46,14 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
 
         :param model: The mujoco models.
         :param data: The mujoco data.
+        :param start_paused: If the simulation starts paused or not.
+        :param render_every_frame: If every frame is rendered or not.
         :param mode: The mode of the viewer (classic, manual).
         """
         self._viewer_mode = mode
         self._position = 0
+        self._paused = start_paused
+        self._render_every_frame = render_every_frame
         super().__init__(
             model,
             data,

@@ -5,7 +5,6 @@ import cv2
 import mujoco
 import numpy as np
 import numpy.typing as npt
-from mujoco_viewer import MujocoViewer
 
 from revolve2.simulation.scene import Scene, SimulationState
 from revolve2.simulation.simulator import RecordSettings
@@ -28,7 +27,6 @@ def simulate_scene(
     simulation_timestep: float,
     cast_shadows: bool,
     fast_sim: bool,
-    viewer_type: str | None,
 ) -> list[SimulationState]:
     """
     Simulate a scene.
@@ -44,9 +42,7 @@ def simulate_scene(
     :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
     :param cast_shadows: If shadows are cast.
     :param fast_sim: If fancy rendering is disabled.
-    :param viewer_type: What viewer should be taken to render [classic, custom, None].
     :returns: The results of simulation. The number of returned states depends on `sample_step`.
-    :raises ValueError: If no correct viewer is declared.
     """
     logging.info(f"Simulating scene {scene_id}")
 
@@ -56,15 +52,7 @@ def simulate_scene(
     data = mujoco.MjData(model)
 
     if not headless or record_settings is not None:
-        match viewer_type:
-            case "classic":
-                viewer_class = MujocoViewer
-            case "custom":
-                viewer_class = CustomMujocoViewer
-            case _:
-                raise ValueError(f"No Viewer declared for option: {viewer_type}")
-
-        viewer = viewer_class(
+        viewer = CustomMujocoViewer(
             model,
             data,
         )

@@ -17,7 +17,6 @@ class LocalSimulator(Simulator):
     _num_simulators: int
     _cast_shadows: bool
     _fast_sim: bool
-    _viewer_type: str
     _manual_control: bool
 
     def __init__(
@@ -27,7 +26,6 @@ class LocalSimulator(Simulator):
         num_simulators: int = 1,
         cast_shadows: bool = False,
         fast_sim: bool = False,
-        viewer_type: str = "classic",
         manual_control: bool = False,
     ):
         """
@@ -38,7 +36,6 @@ class LocalSimulator(Simulator):
         :param num_simulators: The number of simulators to deploy in parallel. They will take one core each but will share space on the main python thread for calculating control.
         :param cast_shadows: Whether shadows are cast in the simulation.
         :param fast_sim: Whether more complex rendering prohibited.
-        :param viewer_type: The type of viewer used for the simulation, if not headless.
         :param manual_control: Whether the simulation should be controlled manually.
         """
         assert (
@@ -54,7 +51,6 @@ class LocalSimulator(Simulator):
         self._num_simulators = num_simulators
         self._cast_shadows = cast_shadows
         self._fast_sim = fast_sim
-        self._viewer_type = viewer_type
         self._manual_control = manual_control
 
     def simulate_batch(self, batch: Batch) -> list[list[SimulationState]]:
@@ -102,7 +98,6 @@ class LocalSimulator(Simulator):
                         batch.parameters.simulation_timestep,
                         self._cast_shadows,
                         self._fast_sim,
-                        self._viewer_type,
                     )
                     for scene_index, scene in enumerate(batch.scenes)
                 ]
@@ -121,7 +116,6 @@ class LocalSimulator(Simulator):
                     batch.parameters.simulation_timestep,
                     self._cast_shadows,
                     self._fast_sim,
-                    self._viewer_type,
                 )
                 for scene_index, scene in enumerate(batch.scenes)
             ]

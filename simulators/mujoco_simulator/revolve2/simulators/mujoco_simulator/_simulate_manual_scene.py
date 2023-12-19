@@ -32,6 +32,7 @@ def simulate_manual_scene(
     viewer = CustomMujocoViewer(
         model,
         data,
+        mode="manual",
     )
     viewer._render_every_frame = (
         False  # Private but functionality is not exposed and for now it breaks nothing.

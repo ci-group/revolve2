@@ -1,27 +1,42 @@
-import glfw
-import imageio
-import yaml
-import mujoco_viewer
-import mujoco
-import numpy as np
+"""A custom viewer for mujoco with additional features."""
 import time
 from typing import Any
 
+import glfw
+import imageio
+import mujoco
+import mujoco_viewer
+import numpy as np
+import yaml
 
-class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
-    """Custom Viewer Object that allows for additional keyboard inputs."""
+
+class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
+    """
+    Custom Viewer Object that allows for additional keyboard inputs.
+
+    We need the type ignore since the mujoco_viewer library is not typed properly and therefor the MujocoViewer class cant be resolved.
+    """
+
+    _convex_hull_rendering: bool
+    _transparent: bool
+    _paused: bool
+    _hide_graph: bool
+    _wire_frame: bool
+    _time_per_render: float
+    _loop_count: int
 
     _position: int = 0
+
     def _create_overlay(self) -> None:
-        """ Create a Custom Overlay."""
+        """Create a Custom Overlay."""
         topleft = mujoco.mjtGridPos.mjGRID_TOPLEFT
-        topright = mujoco.mjtGridPos.mjGRID_TOPRIGHT
+        # topright = mujoco.mjtGridPos.mjGRID_TOPRIGHT
         bottomleft = mujoco.mjtGridPos.mjGRID_BOTTOMLEFT
-        bottomright = mujoco.mjtGridPos.mjGRID_BOTTOMRIGHT
+        # bottomright = mujoco.mjtGridPos.mjGRID_BOTTOMRIGHT
 
         def add_overlay(gridpos: int, text1: str, text2: str) -> None:
             """
-            This function allows to add overlays.
+            Add overlays.
 
             :param gridpos: The position on the grid.
             :param text1: Some text.
@@ -33,17 +48,12 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
             self._overlay[gridpos][1] += text2 + "\n"
 
         add_overlay(
-            topleft, "Switch camera (#cams = %d)" %
-            (self.model.ncam + 1), "[Tab] (camera ID = %d)" %
-            self.cam.fixedcamid)
-        add_overlay(
             topleft,
-            "T[r]ansparent",
-            "On" if self._transparent else "Off")
-        add_overlay(
-            topleft,
-            "[W]ireframe",
-            "On" if self._wire_frame else "Off")
+            "Switch camera (#cams = %d)" % (self.model.ncam + 1),
+            "[Tab] (camera ID = %d)" % self.cam.fixedcamid,
+        )
+        add_overlay(topleft, "T[r]ansparent", "On" if self._transparent else "Off")
+        add_overlay(topleft, "[W]ireframe", "On" if self._wire_frame else "Off")
         add_overlay(
             topleft,
             "Con[V]ex Hull Rendering",
@@ -54,16 +64,15 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
                 add_overlay(topleft, "Stop", "[Space]")
             else:
                 add_overlay(topleft, "Start", "[Space]")
-                add_overlay(
-                    topleft,
-                    "Advance simulation by one step",
-                    "[right arrow]")
-        add_overlay(topleft, "Toggle geomgroup visibility (0-5)",
-                    ",".join(["On" if g else "Off" for g in self.vopt.geomgroup]))
+                add_overlay(topleft, "Advance simulation by one step", "[right arrow]")
         add_overlay(
             topleft,
-            "Referenc[e] frames",
-            mujoco.mjtFrame(self.vopt.frame).name)
+            "Toggle geomgroup visibility (0-5)",
+            ",".join(["On" if g else "Off" for g in self.vopt.geomgroup]),
+        )
+        add_overlay(
+            topleft, "Referenc[e] frames", mujoco.mjtFrame(self.vopt.frame).name
+        )
         add_overlay(topleft, "[H]ide Menus", "")
         if self._image_idx > 0:
             fname = self._image_path % (self._image_idx - 1)
@@ -72,23 +81,20 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
             add_overlay(topleft, "Cap[t]ure frame", "")
         add_overlay(topleft, "Iterate position", "[k]")
 
-
+        add_overlay(bottomleft, "FPS", "%d%s" % (1 / self._time_per_render, ""))
+        add_overlay(bottomleft, "Solver iterations", str(self.data.solver_iter + 1))
         add_overlay(
-            bottomleft, "FPS", "%d%s" %
-            (1 / self._time_per_render, ""))
-        add_overlay(
-            bottomleft, "Solver iterations", str(
-                self.data.solver_iter + 1))
-        add_overlay(
-            bottomleft, "Step", str(
-                round(
-                    self.data.time / self.model.opt.timestep)))
+            bottomleft, "Step", str(round(self.data.time / self.model.opt.timestep))
+        )
         add_overlay(bottomleft, "timestep", "%.5f" % self.model.opt.timestep)
-        add_overlay(bottomleft, "position", str(self._position+1))
+        add_overlay(bottomleft, "position", str(self._position + 1))
 
-    def _key_callback(self, window: Any, key: Any, scancode: Any, action: Any, mods: Any) -> None:
+    def _key_callback(
+        self, window: Any, key: Any, scancode: Any, action: Any, mods: Any
+    ) -> None:
         """
         Add custom Key Callback.
+
         Don't change parameters unless you know what you are doing.
 
         :param window: The window.
@@ -117,9 +123,13 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
         # Capture screenshot
         elif key == glfw.KEY_T:
             img = np.zeros(
-                (glfw.get_framebuffer_size(
-                    self.window)[1], glfw.get_framebuffer_size(
-                    self.window)[0], 3), dtype=np.uint8)
+                (
+                    glfw.get_framebuffer_size(self.window)[1],
+                    glfw.get_framebuffer_size(self.window)[0],
+                    3,
+                ),
+                dtype=np.uint8,
+            )
             mujoco.mjr_readPixels(img, None, self.viewport, self.ctx)
             imageio.imwrite(self._image_path % self._image_idx, np.flipud(img))
             self._image_idx += 1
@@ -146,7 +156,14 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
         elif key == glfw.KEY_K:
             self.increment_position()
         # Geom group visibility
-        elif key in (glfw.KEY_0, glfw.KEY_1, glfw.KEY_2, glfw.KEY_3, glfw.KEY_4, glfw.KEY_5):
+        elif key in (
+            glfw.KEY_0,
+            glfw.KEY_1,
+            glfw.KEY_2,
+            glfw.KEY_3,
+            glfw.KEY_4,
+            glfw.KEY_5,
+        ):
             self.vopt.geomgroup[key - glfw.KEY_0] ^= 1
         elif key == glfw.KEY_S and mods == glfw.MOD_CONTROL:
             cam_config = {
@@ -156,7 +173,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
                 "lookat": self.cam.lookat.tolist(),
                 "distance": self.cam.distance,
                 "azimuth": self.cam.azimuth,
-                "elevation": self.cam.elevation
+                "elevation": self.cam.elevation,
             }
             try:
                 with open(self.CONFIG_PATH, "w") as f:
@@ -173,22 +190,22 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
 
     def render(self) -> int | None:
         """
-        Rendering our scene.
+        Render tje scene.
 
         :return: A cycle position if applicable.
+        :raises Exception: If GLFW window does not exist.
+        :raises NotImplementedError: If offscreen mode is targeted.
         """
-        if self.render_mode == 'offscreen':
-            raise NotImplementedError(
-                "Use 'read_pixels()' for 'offscreen' mode.")
+        if self.render_mode == "offscreen":
+            raise NotImplementedError("Use 'read_pixels()' for 'offscreen' mode.")
         if not self.is_alive:
-            raise Exception(
-                "GLFW window does not exist but you tried to render.")
+            raise Exception("GLFW window does not exist but you tried to render.")
         if glfw.window_should_close(self.window):
             self.close()
-            return
+            return None
 
         def update() -> None:
-            """Updating the render."""
+            """Update the render."""
             self._create_overlay()  # fill overlay items
 
             render_start = time.time()
@@ -205,7 +222,8 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
                     self.pert,
                     self.cam,
                     mujoco.mjtCatBit.mjCAT_ALL.value,
-                    self.scn)
+                    self.scn,
+                )
                 # marker items
                 for marker in self._markers:
                     self._add_marker_to_scene(marker)
@@ -213,8 +231,10 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
                 mujoco.mjr_render(self.viewport, self.scn, self.ctx)
                 # overlay items
                 for gridpos, [t1, t2] in self._overlay.items():
-                    menu_positions = [mujoco.mjtGridPos.mjGRID_TOPLEFT,
-                                      mujoco.mjtGridPos.mjGRID_BOTTOMLEFT]
+                    menu_positions = [
+                        mujoco.mjtGridPos.mjGRID_TOPLEFT,
+                        mujoco.mjtGridPos.mjGRID_BOTTOMLEFT,
+                    ]
                     if gridpos in menu_positions and self._hide_menus:
                         continue
 
@@ -224,7 +244,8 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
                         self.viewport,
                         t1,
                         t2,
-                        self.ctx)
+                        self.ctx,
+                    )
 
                 # handle figures
                 if not self._hide_graph:
@@ -232,17 +253,17 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
                         width_adjustment = width % 4
                         x = int(3 * width / 4) + width_adjustment
                         y = idx * int(height / 4)
-                        viewport = mujoco.MjrRect(
-                            x, y, int(width / 4), int(height / 4))
+                        viewport = mujoco.MjrRect(x, y, int(width / 4), int(height / 4))
 
-                        has_lines = len([i for i in fig.linename if i != b''])
+                        has_lines = len([i for i in fig.linename if i != b""])
                         if has_lines:
                             mujoco.mjr_figure(viewport, fig, self.ctx)
 
                 glfw.swap_buffers(self.window)
             glfw.poll_events()
-            self._time_per_render = 0.9 * self._time_per_render + \
-                0.1 * (time.time() - render_start)
+            self._time_per_render = 0.9 * self._time_per_render + 0.1 * (
+                time.time() - render_start
+            )
 
             # clear overlay
             self._overlay.clear()
@@ -257,8 +278,9 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):
                     self._advance_by_one_step = False
                     break
         else:
-            self._loop_count += self.model.opt.timestep / \
-                (self._time_per_render * self._run_speed)
+            self._loop_count += self.model.opt.timestep / (
+                self._time_per_render * self._run_speed
+            )
             if self._render_every_frame:
                 self._loop_count = 1
             while self._loop_count > 0:

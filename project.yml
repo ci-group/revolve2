@@ -13,6 +13,7 @@ examples:
   - brain_with_feedback
   - custom_brain
   - custom_terrain
+  - compare_simulated_and_physical_robot
   - evaluate_multiple_interacting_robots
   - evaluate_multiple_isolated_robots
   - evaluate_single_robot

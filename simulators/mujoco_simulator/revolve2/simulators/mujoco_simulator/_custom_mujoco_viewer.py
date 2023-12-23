@@ -24,7 +24,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
     _wire_frame: bool
     _time_per_render: float
     _loop_count: int
-    _mujoco_version: tuple[int, int, int]
+    _mujoco_version: tuple[int, ...]
 
     _viewer_mode: str
     _position: int

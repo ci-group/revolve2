@@ -1,5 +1,6 @@
 """A custom viewer for mujoco with additional features."""
 import time
+from enum import Enum
 from typing import Any
 
 import glfw
@@ -8,6 +9,18 @@ import mujoco
 import mujoco_viewer
 import numpy as np
 import yaml
+
+
+class CustomMujocoViewerMode(Enum):
+    """
+    Enumerate different viewer modes for the CustomMujocoViewer.
+
+    - CLASSIC mode gives an informative interface for regular simulations.
+    - MANUAL mode gives a cut down interface, specific for targeting robot movement manually.
+    """
+
+    CLASSIC = "classic"
+    MANUAL = "manual"
 
 
 class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
@@ -26,7 +39,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
     _loop_count: int
     _mujoco_version: tuple[int, ...]
 
-    _viewer_mode: str
+    _viewer_mode: CustomMujocoViewerMode
     _position: int
 
     def __init__(
@@ -35,13 +48,10 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         data: mujoco.MjData,
         start_paused: bool = False,
         render_every_frame: bool = True,
-        mode: str = "classic",
+        mode: CustomMujocoViewerMode = CustomMujocoViewerMode.CLASSIC,
     ):
         """
         Initialize the Viewer.
-
-        - "classic" mode gives an informative interface for regular simulations.
-        - "manual" mode gives a cut down interface, specific for targeting robot movement manually.
 
         :param model: The mujoco models.
         :param data: The mujoco data.
@@ -84,7 +94,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         bottomleft = mujoco.mjtGridPos.mjGRID_BOTTOMLEFT
         # bottomright = mujoco.mjtGridPos.mjGRID_BOTTOMRIGHT
 
-        match self._viewer_mode:
+        match self._viewer_mode.value:
             case "manual":
                 self._add_overlay(topleft, "Iterate position", "[k]")
                 self._add_overlay(bottomleft, "position", str(self._position + 1))
@@ -103,7 +113,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
                     topleft, "Center of [M]ass", "On" if self._com else "Off"
                 )
             case _:
-                print("Didnt reach anything with mode: " + self._viewer_mode)
+                print("Didnt reach anything with mode: " + self._viewer_mode.value)
 
         """These are default overlays, only change if you know what you are doing."""
         if self._render_every_frame:
@@ -305,7 +315,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
 
         # apply perturbation (should this come before mj_step?)
         self.apply_perturbations()
-        if self._viewer_mode == "manual":
+        if self._viewer_mode.value == "manual":
             return self._position
         return None
 

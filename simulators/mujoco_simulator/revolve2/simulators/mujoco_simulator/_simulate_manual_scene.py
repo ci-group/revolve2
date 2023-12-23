@@ -10,7 +10,7 @@ from revolve2.ci_group.simulation import (
 from revolve2.simulation.scene import Scene
 
 from ._control_interface_impl import ControlInterfaceImpl
-from ._custom_mujoco_viewer import CustomMujocoViewer
+from ._custom_mujoco_viewer import CustomMujocoViewer, CustomMujocoViewerMode
 from ._scene_to_model import scene_to_model
 from ._simulation_state_impl import SimulationStateImpl
 
@@ -32,7 +32,7 @@ def simulate_manual_scene(
     viewer = CustomMujocoViewer(
         model,
         data,
-        mode="manual",
+        mode=CustomMujocoViewerMode.MANUAL,
     )
     viewer._render_every_frame = (
         False  # Private but functionality is not exposed and for now it breaks nothing.

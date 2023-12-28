@@ -96,7 +96,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
 
         match self._viewer_mode.value:
             case "manual":
-                self._add_overlay(topleft, "Iterate position", "[k]")
+                self._add_overlay(topleft, "Iterate position", "[K]")
                 self._add_overlay(bottomleft, "position", str(self._position + 1))
             case "classic":
                 self._add_overlay(

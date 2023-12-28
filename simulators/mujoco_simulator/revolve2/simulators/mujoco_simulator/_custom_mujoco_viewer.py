@@ -1,5 +1,4 @@
 """A custom viewer for mujoco with additional features."""
-import time
 from enum import Enum
 from typing import Any
 
@@ -205,111 +204,14 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
 
     def render(self) -> int | None:
         """
-        Render tje scene.
+        Render the scene.
 
         :return: A cycle position if applicable.
-        :raises Exception: If GLFW window does not exist.
-        :raises NotImplementedError: If offscreen mode is targeted.
         """
-        if self.render_mode == "offscreen":
-            raise NotImplementedError("Use 'read_pixels()' for 'offscreen' mode.")
-        if not self.is_alive:
-            raise Exception("GLFW window does not exist but you tried to render.")
-        if glfw.window_should_close(self.window):
-            self.close()
-            return None
-
-        if self._paused:
-            while self._paused:
-                self._update()
-                if glfw.window_should_close(self.window):
-                    self.close()
-                    break
-                if self._advance_by_one_step:
-                    self._advance_by_one_step = False
-                    break
-        else:
-            self._loop_count += self.model.opt.timestep / (
-                self._time_per_render * self._run_speed
-            )
-            if self._render_every_frame:
-                self._loop_count = 1
-            while self._loop_count > 0:
-                self._update()
-                self._loop_count -= 1
-
-        # clear markers
-        self._markers[:] = []
-
-        # apply perturbation (should this come before mj_step?)
-        self.apply_perturbations()
+        super().render()
         if self._viewer_mode.value == "manual":
             return self._position
         return None
-
-    def _update(self) -> None:
-        """Update the render."""
-        self._create_overlay()  # fill overlay items
-
-        render_start = time.time()
-
-        width, height = glfw.get_framebuffer_size(self.window)
-        self.viewport.width, self.viewport.height = width, height
-
-        with self._gui_lock:
-            # update scene
-            mujoco.mjv_updateScene(
-                self.model,
-                self.data,
-                self.vopt,
-                self.pert,
-                self.cam,
-                mujoco.mjtCatBit.mjCAT_ALL.value,
-                self.scn,
-            )
-            # marker items
-            for marker in self._markers:
-                self._add_marker_to_scene(marker)
-            # render
-            mujoco.mjr_render(self.viewport, self.scn, self.ctx)
-            # overlay items
-            for gridpos, [t1, t2] in self._overlay.items():
-                menu_positions = [
-                    mujoco.mjtGridPos.mjGRID_TOPLEFT,
-                    mujoco.mjtGridPos.mjGRID_BOTTOMLEFT,
-                ]
-                if gridpos in menu_positions and self._hide_menus:
-                    continue
-
-                mujoco.mjr_overlay(
-                    mujoco.mjtFontScale.mjFONTSCALE_150,
-                    gridpos,
-                    self.viewport,
-                    t1,
-                    t2,
-                    self.ctx,
-                )
-
-            # handle figures
-            if not self._hide_graph:
-                for idx, fig in enumerate(self.figs):
-                    width_adjustment = width % 4
-                    x = int(3 * width / 4) + width_adjustment
-                    y = idx * int(height / 4)
-                    viewport = mujoco.MjrRect(x, y, int(width / 4), int(height / 4))
-
-                    has_lines = len([i for i in fig.linename if i != b""])
-                    if has_lines:
-                        mujoco.mjr_figure(viewport, fig, self.ctx)
-
-            glfw.swap_buffers(self.window)
-        glfw.poll_events()
-        self._time_per_render = 0.9 * self._time_per_render + 0.1 * (
-            time.time() - render_start
-        )
-
-        # clear overlay
-        self._overlay.clear()
 
     def _increment_position(self) -> None:
         """Increment our cycle position."""

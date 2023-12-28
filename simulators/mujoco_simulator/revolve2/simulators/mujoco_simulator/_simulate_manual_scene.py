@@ -70,7 +70,12 @@ def simulate_manual_scene(
             )
             # step simulation
             if target != current:
-                """If we are not on the target we adjust our hinges accordingly."""
+                """
+                If we are not on the target we adjust our hinges accordingly.
+
+                The stepsize of 0.0025 allows us to approximate the real robots movement better.
+                If the simulated hinges are forced to the target location directly with big angles, the simulation detects instabilities and wont render, therefore we choose smaller steps.
+                """
                 step = 0.0025 if target > current else -0.0025
                 for hinge in mapping.hinge_joint.keys():
                     control_interface.set_joint_hinge_position_target(

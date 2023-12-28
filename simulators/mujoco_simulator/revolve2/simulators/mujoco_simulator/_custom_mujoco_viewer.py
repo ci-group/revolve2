@@ -4,11 +4,8 @@ from enum import Enum
 from typing import Any
 
 import glfw
-import imageio
 import mujoco
 import mujoco_viewer
-import numpy as np
-import yaml
 
 
 class CustomMujocoViewerMode(Enum):
@@ -40,6 +37,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
     _mujoco_version: tuple[int, ...]
 
     _viewer_mode: CustomMujocoViewerMode
+    _advance_by_one_step: bool
     _position: int
 
     def __init__(
@@ -188,90 +186,20 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         """
         Add custom Key Callback.
 
-        Don't change parameters unless you know what you are doing.
-
         :param window: The window.
         :param key: The key pressed.
         :param scancode: The Scancode.
         :param action: The Action.
         :param mods: The Mods.
         """
+        super()._key_callback(window, key, scancode, action, mods)
         if action != glfw.RELEASE:
             if key == glfw.KEY_LEFT_ALT:
                 self._hide_menus = False
         else:
             match key:
-                case glfw.KEY_TAB:  # Switch cameras
-                    self.cam.fixedcamid += 1
-                    self.cam.type = mujoco.mjtCamera.mjCAMERA_FIXED
-                    if self.cam.fixedcamid >= self.model.ncam:
-                        self.cam.fixedcamid = -1
-                        self.cam.type = mujoco.mjtCamera.mjCAMERA_FREE
-                case glfw.KEY_SPACE:  # Pause simulation
-                    if self._paused is not None:
-                        self._paused = not self._paused
-                case glfw.KEY_RIGHT:  # Advances simulation by one step.
-                    if self._paused is not None:
-                        self._advance_by_one_step = True
-                case glfw.KEY_T:  # Capture screenshot
-                    img = np.zeros(
-                        (
-                            glfw.get_framebuffer_size(self.window)[1],
-                            glfw.get_framebuffer_size(self.window)[0],
-                            3,
-                        ),
-                        dtype=np.uint8,
-                    )
-                    mujoco.mjr_readPixels(img, None, self.viewport, self.ctx)
-                    imageio.imwrite(self._image_path % self._image_idx, np.flipud(img))
-                    self._image_idx += 1
-                case glfw.KEY_R:  # Make transparent
-                    self._transparent = not self._transparent
-                    self.model.geom_rgba[:, 3] /= (
-                        5.0 if self._transparent else self.model.geom_rgba[:, 3] * 5.0
-                    )
-                case glfw.KEY_G:  # Toggle Graph overlay
-                    self._hide_graph = not self._hide_graph
-                case glfw.KEY_V:  # Convex-Hull rendering
-                    self._convex_hull_rendering = not self._convex_hull_rendering
-                    self.vopt.flags[
-                        mujoco.mjtVisFlag.mjVIS_CONVEXHULL
-                    ] = self._convex_hull_rendering
-                case glfw.KEY_W:  # Wireframe Rendering
-                    self._wire_frame = not self._wire_frame
-                    self.scn.flags[mujoco.mjtRndFlag.mjRND_WIREFRAME] = self._wire_frame
                 case glfw.KEY_K:  # Increment cycle position
                     self._increment_position()
-                case (
-                    glfw.KEY_0,
-                    glfw.KEY_1,
-                    glfw.KEY_2,
-                    glfw.KEY_3,
-                    glfw.KEY_4,
-                    glfw.KEY_5,
-                ):  # Geom group visibility
-                    self.vopt.geomgroup[key - glfw.KEY_0] ^= 1
-                case glfw.KEY_S:
-                    if mods == glfw.MOD_CONTROL:
-                        cam_config = {
-                            "type": self.cam.type,
-                            "fixedcamid": self.cam.fixedcamid,
-                            "trackbodyid": self.cam.trackbodyid,
-                            "lookat": self.cam.lookat.tolist(),
-                            "distance": self.cam.distance,
-                            "azimuth": self.cam.azimuth,
-                            "elevation": self.cam.elevation,
-                        }
-                        try:
-                            with open(self.CONFIG_PATH, "w") as f:
-                                yaml.dump(cam_config, f)
-                            print("Camera config saved at {}".format(self.CONFIG_PATH))
-                        except Exception as e:
-                            print(e)
-                case glfw.KEY_ESCAPE:  # Quit
-                    print("Pressed ESC")
-                    print("Quitting.")
-                    glfw.set_window_should_close(self.window, True)
                 case _:
                     pass
 

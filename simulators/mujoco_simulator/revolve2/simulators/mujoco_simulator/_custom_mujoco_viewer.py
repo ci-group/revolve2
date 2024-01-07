@@ -44,7 +44,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         model: mujoco.MjModel,
         data: mujoco.MjData,
         start_paused: bool = False,
-        render_every_frame: bool = True,
+        render_every_frame: bool = False,
         mode: CustomMujocoViewerMode = CustomMujocoViewerMode.CLASSIC,
     ):
         """

@@ -1,4 +1,4 @@
-"""Draw 2D representations of Modular Robots."""
+"""Draw 2D representations of Modular Robots. Based on Karine Miras` Method."""
 import os
 import time
 from typing import Any
@@ -6,12 +6,11 @@ from typing import Any
 import cairo
 import numpy as np
 from numpy.typing import NDArray
-from pyrr import Quaternion, Vector3
+from pyrr import Vector3
 
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.base import ActiveHinge, Body, Brick, Core
-
 
 def __mk_path() -> str:
     path = f"planar_robot_representations_{time.time()}"
@@ -26,6 +25,10 @@ def draw_robots(
 ) -> None:
     """
     Draw multiple robots at once.
+
+    How to use:
+     >>> robots: list[revolve2.modular_robot.ModularRobot] | list[revolve2.modular_robot.body.base.Body]
+     >>> draw_robots(robots, path="<your desired path to save the image to>")
 
     :param robots: The robots.
     :param scale: The scale for the robots to be drawn.
@@ -43,6 +46,10 @@ def draw_robot(
 ) -> None:
     """
     Draw a 2D representation for a modular robots body.
+
+    How to use:
+     >>> robot: revolve2.modular_robot.ModularRobot | revolve2.modular_robot.body.base.Body
+     >>> draw_robot(robot, path="<your desired path to save the image to>")
 
     :param robot: Supply the robot as a ModularRobot object, or the body directly as a Body object.
     :param scale: Allows to set the size of the drawing.
@@ -64,7 +71,8 @@ def draw_robot(
     _draw_module(
         module=body.core,
         position=(cx, cy),
-        orientation=Quaternion(),
+        previous_position=(cx, cy),
+        orientation=_make_rot_mat(0),
         context=context,
     )
     _save_png(image, path)
@@ -72,9 +80,10 @@ def draw_robot(
 
 def _draw_module(
     module: Module,
-    position: tuple[int, int],
-    orientation: Quaternion,
-    context: cairo.Context,
+    position: tuple[int, int],gi
+    previous_position: tuple[int, int],
+    orientation: NDArray[np.int_],
+    context: "cairo.Context[cairo.ImageSurface]",
     print_id: bool = False,
 ) -> None:
     """
@@ -82,6 +91,7 @@ def _draw_module(
 
     :param module: The module.
     :param position: The position on the canvas.
+    :param previous_position: The position of the previous module.
     :param orientation: The orientation to draw in.
     :param context: The context to draw it on.
     :param print_id: If the modules id should be drawn as well.
@@ -110,34 +120,64 @@ def _draw_module(
     context.stroke()
     context.set_source_rgb(0, 0, 0)
 
+    if module.parent is not None:
+        # draw the connection to the parent module
+        x_offset, y_offset = (
+            previous_position[0] - position[0],
+            previous_position[1] - position[1],
+        )
+
+        circ_x = (
+            x + 0.5
+            if x_offset == 0
+            else x + (x_offset if x_offset > 0 else abs(x_offset) - 1)
+        )
+        circ_y = (
+            y + 0.5
+            if y_offset == 0
+            else y + (y_offset if y_offset > 0 else abs(y_offset) - 1)
+        )
+
+        context.arc(circ_x, circ_y, 0.1, 0, np.pi * 2)
+        context.fill_preserve()
+        context.stroke()
+
     if print_id:
         # print module id onto canvas
         context.set_font_size(0.3)
         context.move_to(x, y + 0.4)
-        context.set_source_rgb(0, 0, 0)
         context.show_text(str(module.uuid))
         context.stroke()
 
     for key, child in module.children.items():
-        mapo = module.attachment_points[key].orientation
-        x, y = __get_offset(initial_orientation=orientation.angle, angle=mapo.angle)
+        angle = module.attachment_points[key].orientation.angle
+        mapo = _make_rot_mat(angle)
+        target_orientation = orientation @ mapo
+
+        x, y = target_orientation.dot(np.array([1, 0]))
 
         new_pos = position[0] + x, position[1] + y
-        print(f"origin: {position}", new_pos, type(child))
         _draw_module(
             module=child,
             position=new_pos,
+            previous_position=position,
             context=context,
-            orientation=mapo * orientation,
+            orientation=target_orientation,
         )
 
 
-def __get_offset(initial_orientation: float, angle: float) -> tuple[int, int]:
-    pointx, pointy = np.cos(initial_orientation), np.sin(initial_orientation)
+def _make_rot_mat(theta: float) -> NDArray[np.int_]:
+    """
+    Make a rotation matrix from angle in 2D.
 
-    x = np.cos(angle) * pointx - np.sin(angle) * pointy
-    y = np.sin(angle) * pointx + np.cos(angle) * pointy
-    return round(x), round(y)
+    This function casts angles to iterations of 90°, since we plot on a grid.
+
+    :param theta: The angle.
+    :return: The matrix.
+    """
+    c, s = int(round(np.cos(theta))), int(round(np.sin(theta)))
+    rotation = np.array(((c, -s), (s, c)))
+    return rotation
 
 
 def _save_png(image: cairo.ImageSurface, path: str) -> None:

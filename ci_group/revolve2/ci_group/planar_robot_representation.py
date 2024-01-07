@@ -80,7 +80,7 @@ def draw_robot(
 
 def _draw_module(
     module: Module,
-    position: tuple[int, int],gi
+    position: tuple[int, int],
     previous_position: tuple[int, int],
     orientation: NDArray[np.int_],
     context: "cairo.Context[cairo.ImageSurface]",

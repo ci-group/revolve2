@@ -21,7 +21,7 @@ class __Module:
 
 
 def develop(
-    genotype: multineat.Genome,
+        genotype: multineat.Genome,
 ) -> BodyV1:
     """
     Develop a CPPNWIN genotype into a modular robot body.
@@ -37,20 +37,21 @@ def develop(
     genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
-    grid = np.zeros(shape=(max_parts, max_parts, max_parts), dtype=np.uint8)
+    grid = np.zeros(shape=(max_parts*2+1, max_parts*2+1, max_parts*2+1), dtype=np.uint8)
 
     body = BodyV1()
 
+    core_position = Vector3([max_parts+1, max_parts+1, max_parts+1], dtype=np.int_)
     to_explore.put(
         __Module(
-            Vector3([0, 0, 0], dtype=np.int_),
+            core_position,
             Vector3([0, -1, 0], dtype=np.int_),
             Vector3([0, 0, 1], dtype=np.int_),
             0,
             body.core,
         )
     )
-    grid[0, 0, 0] = 1
+    grid[tuple(core_position)] = 1
     part_count = 1
 
     while not to_explore.empty():
@@ -66,9 +67,9 @@ def develop(
 
 
 def __evaluate_cppn(
-    body_net: multineat.NeuralNetwork,
-    position: Vector3[np.int_],
-    chain_length: int,
+        body_net: multineat.NeuralNetwork,
+        position: Vector3[np.int_],
+        chain_length: int,
 ) -> tuple[Any, int]:
     """
     Get module type and orientation from a multineat CPPN network.
@@ -87,44 +88,40 @@ def __evaluate_cppn(
     outputs = body_net.Output()
 
     # get module type from output probabilities
-    type_probs = [outputs[0], outputs[1], outputs[2]]
+    type_probs = list(outputs[:3])
     types = [None, BrickV1, ActiveHingeV1]
     module_type = types[type_probs.index(min(type_probs))]
 
     # get rotation from output probabilities
-    rotation_probs = [outputs[3], outputs[4]]
+    rotation_probs = list(outputs[3:5])
     rotation_index = rotation_probs.index(min(rotation_probs))
 
     return module_type, rotation_index
 
 
 def __add_child(
-    body_net: multineat.NeuralNetwork,
-    module: __Module,
-    attachment_point_tuple: tuple[int, AttachmentPoint],
-    grid: NDArray[np.uint8],
+        body_net: multineat.NeuralNetwork,
+        module: __Module,
+        attachment_point_tuple: tuple[int, AttachmentPoint],
+        grid: NDArray[np.uint8],
 ) -> __Module | None:
     attachment_index, attachment_point = attachment_point_tuple
 
     forward = __rotate(module.forward, module.up, attachment_point.orientation)
-    position = module.position + forward
+    position = __vec3_int(module.position + forward)
     chain_length = module.chain_length + 1
 
     # if grid cell is occupied, don't make a child
-    # else, set cell as occupied
-
-    grid_pos = np.round(position)
-    if grid[tuple(grid_pos)] > 0:
+    if grid[tuple(position)] > 0:
         return None
-    grid[grid_pos] += 1
+    grid[tuple(position)] += 1
 
     child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
-    child_orientation = __make_quaternion_from_index(child_rotation)
     if child_type is None:
         return None
-    up = __rotate(module.up, forward, child_orientation)
-
-    child = child_type(child_orientation.angle)
+    angle = child_rotation * (np.pi / 2.0)
+    up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
+    child = child_type(angle)
     module.module_reference.set_child(child, attachment_index)
 
     return __Module(
@@ -136,26 +133,30 @@ def __add_child(
     )
 
 
-def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
+def __rotate(
+        a: Vector3, b: Vector3, rotation: Quaternion
+) -> Vector3:
     """
     Rotates vector a a given angle around b.
 
     :param a: Vector a.
     :param b: Vector b.
-    :param rotation: The rotation Quaternion.
+    :param rotation: The quaternion for rotation.
     :returns: A copy of a, rotated.
     """
-    cosangle = np.cos(rotation.angle)
-    sinangle = np.sin(rotation.angle)
-    x, y, z = (a * cosangle + b.cross(a) * sinangle) + b * (b.dot(a) * (1 - cosangle))
-    return Vector3(np.array([x, y, z], dtype=np.int64))
+    cosangle: int = int(round(np.cos(rotation.angle)))
+    sinangle: int = int(round(np.sin(rotation.angle)))
+
+    vec: Vector3 = a * cosangle + sinangle * b.cross(a) + (1 - cosangle) * b.dot(a) * b
+    return vec
 
 
-def __make_quaternion_from_index(index: int) -> Quaternion:
+def __vec3_int(vector: Vector3) -> Vector3[np.int_]:
     """
-    Make a quaternion from a rotation index.
+    Cast a Vector3 object to an integer only Vector3.
 
-    :param index: The index for rotation.
-    :return: The Quaternion.
+    :param vector: The vector.
+    :return: The integer vector.
     """
-    return Quaternion.from_x_rotation((np.pi / 2) * index)
+    x, y, z = map(lambda v: int(round(v)), vector)
+    return Vector3([x, y, z], dtype=np.int64)

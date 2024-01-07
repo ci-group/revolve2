@@ -13,7 +13,6 @@ class CoreV1(Core):
 
         :param rotation: The modules' rotation.
         """
-
         super().__init__(
             rotation=rotation,
             bounding_box=Vector3([0.089, 0.089, 0.0603]),

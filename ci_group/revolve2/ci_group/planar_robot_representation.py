@@ -12,6 +12,7 @@ from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.base import ActiveHinge, Body, Brick, Core
 
+
 def __mk_path() -> str:
     path = f"planar_robot_representations_{time.time()}"
     print(f"Saving images to: {path}")

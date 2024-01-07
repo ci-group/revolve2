@@ -37,12 +37,16 @@ def develop(
     genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
-    grid = np.zeros(shape=(max_parts*2+1, max_parts*2+1, max_parts*2+1), dtype=np.uint8)
+    grid = np.zeros(
+        shape=(max_parts * 2 + 1, max_parts * 2 + 1, max_parts * 2 + 1), dtype=np.uint8
+    )
 
     body = BodyV2()
 
     v2_core = body.core_v2
-    core_position = Vector3([max_parts+1, max_parts+1, max_parts+1], dtype=np.int_)
+    core_position = Vector3(
+        [max_parts + 1, max_parts + 1, max_parts + 1], dtype=np.int_
+    )
     grid[tuple(core_position)] = 1
     part_count = 1
 
@@ -70,9 +74,9 @@ def develop(
 
 
 def __evaluate_cppn(
-        body_net: multineat.NeuralNetwork,
-        position: Vector3[np.int_],
-        chain_length: int,
+    body_net: multineat.NeuralNetwork,
+    position: Vector3[np.int_],
+    chain_length: int,
 ) -> tuple[Any, int]:
     """
     Get module type and orientation from a multineat CPPN network.
@@ -116,7 +120,6 @@ def __add_child(
 
     # if grid cell is occupied, don't make a child
     # else, set cell as occupied
-    grid_pos = np.round(position)
     if grid[tuple(position)] > 0:
         return None
     grid[tuple(position)] += 1
@@ -125,7 +128,9 @@ def __add_child(
     child_type, child_rotation = __evaluate_cppn(body_net, new_pos, chain_length)
     angle = child_rotation * (np.pi / 2.0)
     child = child_type(angle)
-    if child_type is None or not module.module_reference.can_set_child(child, attachment_index):
+    if child_type is None or not module.module_reference.can_set_child(
+        child, attachment_index
+    ):
         return None
 
     up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
@@ -140,9 +145,7 @@ def __add_child(
     )
 
 
-def __rotate(
-        a: Vector3, b: Vector3, rotation: Quaternion
-) -> Vector3:
+def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
     Rotates vector a a given angle around b.
 
@@ -154,7 +157,9 @@ def __rotate(
     cos_angle: int = int(round(np.cos(rotation.angle)))
     sin_angle: int = int(round(np.sin(rotation.angle)))
 
-    vec: Vector3 = a * cos_angle + sin_angle * b.cross(a) + (1 - cos_angle) * b.dot(a) * b
+    vec: Vector3 = (
+        a * cos_angle + sin_angle * b.cross(a) + (1 - cos_angle) * b.dot(a) * b
+    )
     return vec
 
 
@@ -167,4 +172,3 @@ def __vec3_int(vector: Vector3) -> Vector3[np.int_]:
     """
     x, y, z = map(lambda v: int(round(v)), vector)
     return Vector3([x, y, z], dtype=np.int64)
-

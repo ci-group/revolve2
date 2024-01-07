@@ -1,8 +1,8 @@
 import uuid
+import warnings
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
 
-import warnings
 import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
 

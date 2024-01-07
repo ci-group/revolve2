@@ -21,7 +21,7 @@ class __Module:
 
 
 def develop(
-        genotype: multineat.Genome,
+    genotype: multineat.Genome,
 ) -> BodyV1:
     """
     Develop a CPPNWIN genotype into a modular robot body.
@@ -37,11 +37,15 @@ def develop(
     genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
-    grid = np.zeros(shape=(max_parts*2+1, max_parts*2+1, max_parts*2+1), dtype=np.uint8)
+    grid = np.zeros(
+        shape=(max_parts * 2 + 1, max_parts * 2 + 1, max_parts * 2 + 1), dtype=np.uint8
+    )
 
     body = BodyV1()
 
-    core_position = Vector3([max_parts+1, max_parts+1, max_parts+1], dtype=np.int_)
+    core_position = Vector3(
+        [max_parts + 1, max_parts + 1, max_parts + 1], dtype=np.int_
+    )
     to_explore.put(
         __Module(
             core_position,
@@ -67,9 +71,9 @@ def develop(
 
 
 def __evaluate_cppn(
-        body_net: multineat.NeuralNetwork,
-        position: Vector3[np.int_],
-        chain_length: int,
+    body_net: multineat.NeuralNetwork,
+    position: Vector3[np.int_],
+    chain_length: int,
 ) -> tuple[Any, int]:
     """
     Get module type and orientation from a multineat CPPN network.
@@ -100,10 +104,10 @@ def __evaluate_cppn(
 
 
 def __add_child(
-        body_net: multineat.NeuralNetwork,
-        module: __Module,
-        attachment_point_tuple: tuple[int, AttachmentPoint],
-        grid: NDArray[np.uint8],
+    body_net: multineat.NeuralNetwork,
+    module: __Module,
+    attachment_point_tuple: tuple[int, AttachmentPoint],
+    grid: NDArray[np.uint8],
 ) -> __Module | None:
     attachment_index, attachment_point = attachment_point_tuple
 
@@ -133,9 +137,7 @@ def __add_child(
     )
 
 
-def __rotate(
-        a: Vector3, b: Vector3, rotation: Quaternion
-) -> Vector3:
+def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
     Rotates vector a a given angle around b.
 

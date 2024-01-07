@@ -207,12 +207,8 @@ class MultiBodySystem:
         # Calculate AABB from the points.
         # This is simply the min and max between the points for every dimension.
         aabb = pyrr.aabb.create_from_points(points)
-        xmin = aabb[0][0]
-        ymin = aabb[0][1]
-        zmin = aabb[0][2]
-        xmax = aabb[1][0]
-        ymax = aabb[1][1]
-        zmax = aabb[1][2]
+        xmin, ymin, zmin = aabb[0]
+        xmax, ymax, zmax = aabb[1]
 
         # Return center and size of the AABB
         return Vector3([xmax + xmin, ymax + ymin, zmax + zmin]) / 2.0, AABB(

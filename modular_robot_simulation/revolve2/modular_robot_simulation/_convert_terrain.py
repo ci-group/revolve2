@@ -1,11 +1,11 @@
 from revolve2.simulation.scene import MultiBodySystem, Pose, RigidBody
 
-from ._terrain import Terrain
+from .._terrain import Terrain
 
 
 def convert_terrain(terrain: Terrain) -> MultiBodySystem:
     """
-    Convert a terrain to a multi-body system.
+    Convert a terrain to a multi-body system.    :return:
 
     :param terrain: The terrain to convert.
     :returns: The created multi-body system.

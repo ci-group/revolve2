@@ -34,9 +34,6 @@ def simulate_manual_scene(
         data,
         mode=CustomMujocoViewerMode.MANUAL,
     )
-    viewer._render_every_frame = (
-        False  # Private but functionality is not exposed and for now it breaks nothing.
-    )
 
     # Compute forward dynamics without actually stepping forward in time.
     mujoco.mj_forward(model, data)

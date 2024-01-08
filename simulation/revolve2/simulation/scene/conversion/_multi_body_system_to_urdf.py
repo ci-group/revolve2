@@ -1,8 +1,9 @@
 import uuid
+import warnings
 import xml.dom.minidom as minidom
 import xml.etree.ElementTree as xml
 
-import numpy as np
+import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
 
 from .._joint_hinge import JointHinge
@@ -323,21 +324,12 @@ class _URDFConverter:
 
 
 def _quaternion_to_euler(quaternion: Quaternion) -> Vector3:
-    """
-    Convert a Quaternion to euler angles.
+    with warnings.catch_warnings():
+        warnings.simplefilter(
+            "ignore", UserWarning
+        )  # ignore gimbal lock warning. it is irrelevant for us.
+        euler = scipy.spatial.transform.Rotation.from_quat(
+            [quaternion.x, quaternion.y, quaternion.z, quaternion.w]
+        ).as_euler("xyz")
 
-    If you want to see the maths behind this check the following page: https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles .
-
-    :param quaternion: The quaternion to convert.
-    :return: Euler angles in form of a Vector3 (roll, pitch, yaw).
-    """
-    x, y, z, w = quaternion
-
-    roll = np.arctan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y))
-    pitch = (
-        2
-        * np.arctan2(np.sqrt(1 + 2 * (w * y - x * z)), np.sqrt(1 - 2 * (w * y - x * z)))
-        - np.pi / 2
-    )
-    yaw = np.arctan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
-    return Vector3([roll, pitch, yaw])
+    return Vector3(euler)

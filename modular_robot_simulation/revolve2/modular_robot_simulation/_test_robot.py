@@ -11,9 +11,7 @@ from ._terrain import Terrain
 
 
 def test_robot(
-    robot: ModularRobot | Body,
-    terrain: Terrain,
-    simulator: Simulator
+    robot: ModularRobot | Body, terrain: Terrain, simulator: Simulator
 ) -> None:
     """
     Test a robot with a manual brain.

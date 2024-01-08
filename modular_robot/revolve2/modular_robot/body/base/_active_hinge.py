@@ -111,7 +111,7 @@ class ActiveHinge(Module):
         """
         Get the module attached to this hinge.
 
-        :returns: The attached module.
+        :returns: The attachment points module.
         """
         return self._children.get(self.ATTACHMENT)
 

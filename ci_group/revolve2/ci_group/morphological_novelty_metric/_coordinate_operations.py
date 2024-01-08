@@ -51,23 +51,22 @@ def _body_to_adjusted_coordinates(bodies: list[Body]) -> list[NDArray[np.float64
     return crds
 
 
-def _coordinates_pca_change_basis(crds: list[NDArray[np.float64]]) -> None:
+def _coordinates_pca_change_basis(coordinates: list[NDArray[np.float64]]) -> None:
     """
     Transform the coordinate distribution by the magnitude of variance of the respective basis.
 
     The detailed steps of the transformation are discussed in the paper.
 
-    :param crds: The coordinates.
+    :param coordinates: The coordinates.
     """
     i = 0
-    for target_coords in crds:
-        if len(target_coords) > 1:
-            covariance_matrix = np.cov(target_coords.T)
+    for target_coordinates in coordinates:
+        if len(target_coordinates) > 1:
+            covariance_matrix = np.cov(target_coordinates.T)
             eigen_values, eigen_vectors = np.linalg.eig(covariance_matrix)
 
-            srt = np.argsort(eigen_values)[
-                ::-1
-            ]  # sorting axis by amplitude of variance
+            # sorting axis by amplitude of variance
+            srt = np.argsort(eigen_values)[::-1]
             for j in range(len(srt)):
                 if srt[j] == j:
                     continue
@@ -80,13 +79,13 @@ def _coordinates_pca_change_basis(crds: list[NDArray[np.float64]]) -> None:
                 k = np.array([[0, -rz, ry], [rz, 0, -rx], [-ry, rx, 0]])
                 rotation_matrix = np.identity(3) + 2 * np.dot(k, k)
 
-                target_coords = np.dot(target_coords, rotation_matrix.T)
+                target_coordinates = np.dot(target_coordinates, rotation_matrix.T)
 
                 eigen_vectors[[j, candidate]] = eigen_vectors[[candidate, j]]
                 srt[[j, candidate]] = srt[[candidate, j]]
 
-            coordinates = np.linalg.inv(eigen_vectors).dot(target_coords.T)
-            crds[i] = coordinates.T
+            final_coordinates = np.linalg.inv(eigen_vectors).dot(target_coordinates.T)
+            coordinates[i] = final_coordinates.T
         i += 1
 
 

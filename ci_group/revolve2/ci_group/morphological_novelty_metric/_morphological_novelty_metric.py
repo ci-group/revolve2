@@ -109,23 +109,25 @@ def _normalize_cast_int(histograms: NDArray[np.float64]) -> NDArray[np.int64]:
     instances = histograms.shape[0]
     for i in range(instances):
         histogram = histograms[i].copy()
-        if (
-            histogram.sum() > 0.0
-        ):  # If a body only has a core, but no other modules the histogram will be empty.
-            histogram /= histogram.sum()
-        histogram *= _INT_CASTER
-        histogram = histogram.astype(np.int64)
-        # Casting the float histograms to int, in order to avoid floating point errors in the reshaping.
 
-        error = (
-            _INT_CASTER - histogram.sum()
-        )  # Due to the int-casting the histogram sums are marginally smaller than _INT_CASTER.
+        if histogram.sum() > 0.0:
+            histogram /= histogram.sum()
+        else:
+            # If a body only has a core, but no other modules the histogram will be empty.
+            histogram += 1 / histogram.size
+
+        histogram *= _INT_CASTER
+        # Casting the float histograms to int, in order to avoid floating point errors in the reshaping.
+        histogram = histogram.astype(np.int64)
+
+        # Due to the int-casting the histogram sums are marginally smaller than _INT_CASTER.
+        error = _INT_CASTER - histogram.sum()
         mask = np.zeros(shape=histogram.size, dtype=np.int64)
-        mask[
-            :error
-        ] += 1  # each histogram must sum up to _INT_CASTER. Therefore, a mask is applied.
+
+        # each histogram must sum up to _INT_CASTER. Therefore, a mask is applied.
+        mask[:error] += 1
         np.random.seed(42)  # forces shuffles into reproducible patterns
-        np.random.shuffle(mask)  # shuffling the mask to avoid bias in the histogram
+        np.random.shuffle(mask)  # shuffling the mask to minimize bias in the histogram
         int_histograms[i] = histogram + np.reshape(mask, (-1, histogram.shape[0]))
 
     return int_histograms

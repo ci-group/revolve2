@@ -28,6 +28,7 @@ packages = [{ include = "revolve2" }]
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
 pyrr = "^0.10.3"
+scipy = "^1.7.1"
 
 [tool.poetry.extras]
 dev = []

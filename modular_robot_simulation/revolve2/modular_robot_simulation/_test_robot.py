@@ -1,8 +1,7 @@
 from revolve2.ci_group.simulation import make_standard_batch_parameters
-from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body.base import Body
-from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
+from revolve2.modular_robot.brain.dummy import BrainDummy
 from revolve2.modular_robot_simulation import ModularRobotScene
 from revolve2.simulation.simulator import Simulator
 
@@ -21,9 +20,8 @@ def test_robot(
     :param simulator: The simulator.
     """
     if isinstance(robot, Body):
-        rng = make_rng_time_seed()
         body = robot
-        brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
+        brain = BrainDummy()
         robot = ModularRobot(body=body, brain=brain)
 
     batch_parameters = make_standard_batch_parameters()

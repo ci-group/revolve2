@@ -1,16 +1,18 @@
-from revolve2.ci_group.simulation import make_standard_batch_parameters
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body.base import Body
 from revolve2.modular_robot.brain.dummy import BrainDummy
-from revolve2.modular_robot_simulation import ModularRobotScene
-from revolve2.simulation.simulator import Simulator
+from revolve2.simulation.simulator import BatchParameters, Simulator
 
+from ._modular_robot_scene import ModularRobotScene
 from ._simulate_scenes import simulate_scenes
 from ._terrain import Terrain
 
 
 def test_robot(
-    robot: ModularRobot | Body, terrain: Terrain, simulator: Simulator
+    robot: ModularRobot | Body,
+    terrain: Terrain,
+    simulator: Simulator,
+    batch_parameters: BatchParameters,
 ) -> None:
     """
     Test a robot with a manual brain.
@@ -18,13 +20,12 @@ def test_robot(
     :param robot: The ModularRobot or Body instance.
     :param terrain: The terrain to test on.
     :param simulator: The simulator.
+    :param batch_parameters: The batch parameters.
     """
     if isinstance(robot, Body):
         body = robot
         brain = BrainDummy()
         robot = ModularRobot(body=body, brain=brain)
-
-    batch_parameters = make_standard_batch_parameters()
 
     scene = ModularRobotScene(terrain=terrain)
     scene.add_robot(robot)

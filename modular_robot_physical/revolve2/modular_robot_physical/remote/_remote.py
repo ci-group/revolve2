@@ -114,7 +114,11 @@ async def _run_remote_impl(
             "Press Ctrl-C to exit. type a value between -1 and 1 to manually set the target for each active hinge."
         )
         while True:
-            target = float(input())
+            try:
+                target = float(input())
+            except ValueError:
+                print("Invalid target.")
+                continue
             if target < -1 or target > 1:
                 print("Invalid target.")
                 continue

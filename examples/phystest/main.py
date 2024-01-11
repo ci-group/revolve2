@@ -53,7 +53,10 @@ def main() -> None:
         UUIDKey(hinge_4): 31,
     }
     test_physical_robot(
-        body=body, hostname="localhost", inverse_servos={}, hinge_mapping=hinge_mapping
+        robot=body,
+        hostname="localhost",  # "Set the robot IP here.
+        inverse_servos={},
+        hinge_mapping=hinge_mapping,
     )
 
 

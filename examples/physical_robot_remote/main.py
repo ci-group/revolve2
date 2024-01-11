@@ -3,7 +3,7 @@
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import RightAngles
-from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.body.base import ActiveHinge, ActiveHingeSensor
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_physical import Config, UUIDKey
@@ -25,10 +25,14 @@ def make_body() -> (
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
     body = BodyV1()
     body.core_v1.left = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.left.sensor = ActiveHingeSensor()
     body.core_v1.left.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.left.attachment.sensor = ActiveHingeSensor()
     body.core_v1.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
     body.core_v1.right = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.right.sensor = ActiveHingeSensor()
     body.core_v1.right.attachment = ActiveHingeV1(RightAngles.DEG_0)
+    body.core_v1.right.attachment.sensor = ActiveHingeSensor()
     body.core_v1.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
 
     """Here we collect all ActiveHinges, to map them later onto the physical robot."""
@@ -67,10 +71,10 @@ def main() -> None:
     """
     hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {
-        UUIDKey(hinge_1): 21,
-        UUIDKey(hinge_2): 26,
-        UUIDKey(hinge_3): 20,
-        UUIDKey(hinge_4): 21,
+        UUIDKey(hinge_1): 0,
+        UUIDKey(hinge_2): 15,
+        UUIDKey(hinge_3): 16,
+        UUIDKey(hinge_4): 31,
     }
 
     """
@@ -85,7 +89,7 @@ def main() -> None:
     config = Config(
         modular_robot=robot,
         hinge_mapping=hinge_mapping,
-        run_duration=30,
+        run_duration=3000,
         control_frequency=20,
         initial_hinge_positions={UUIDKey(active_hinge): 0.0 for active_hinge in hinges},
         inverse_servos={},

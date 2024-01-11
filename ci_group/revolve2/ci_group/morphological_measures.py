@@ -251,7 +251,6 @@ class MorphologicalMeasures(Generic[TModule]):
     def __calculate_yz_symmetry(self) -> float:
         num_along_plane = 0
         num_symmetrical = 0
-        print(self.symmetry_grid.shape)
         for x, y, z in product(
             range(1, (self.bounding_box_depth - 1) // 2),
             range(self.bounding_box_width),

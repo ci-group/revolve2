@@ -22,7 +22,6 @@ examples:
   - robot_bodybrain_ea_database
   - robot_brain_cmaes
   - robot_brain_cmaes_database
-  - run_physical_robot_manually
   - simple_ea_xor
   - simple_ea_xor_database
   - simulate_single_robot

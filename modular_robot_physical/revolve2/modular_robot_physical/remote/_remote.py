@@ -170,6 +170,8 @@ async def _run_remote_impl(
                 print(
                     f"WARNING: Loop is lagging {next_update_at - current_time} seconds behind the set update frequency. Is your control function too slow?"
                 )
+                elapsed_time = last_update_time - current_time
+                last_update_time = current_time
 
             # Get targets from brain
             control_interface = ModularRobotControlInterfaceImpl()

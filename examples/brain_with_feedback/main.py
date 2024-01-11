@@ -3,7 +3,7 @@
 import logging
 
 from revolve2.ci_group import modular_robots_v1, terrains
-from revolve2.ci_group.simulation_functions import make_standard_batch_parameters
+from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot import ModularRobot, ModularRobotControlInterface
 from revolve2.modular_robot.body.base import ActiveHinge, ActiveHingeSensor

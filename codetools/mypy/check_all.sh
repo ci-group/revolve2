@@ -6,5 +6,5 @@ cd "$(dirname "$0")"
 
 while read -r package; do
     echo "$package:"
-    mypy --config-file ./mypy.ini "../../$package" --no-incremental
+    mypy --config-file ./mypy.ini "../../$package"
 done < <(../read_project_parts.sh)

@@ -5,8 +5,8 @@ from revolve2.modular_robot.sensor_state import (
 )
 
 
-class ModularRobotSensorStateImpl(ModularRobotSensorState):
-    """Implementation of ModularRobotSensorState."""
+class ModularRobotSensorStateImplV1(ModularRobotSensorState):
+    """Implementation of ModularRobotSensorState for v1 robots."""
 
     def get_active_hinge_sensor_state(
         self, sensor: ActiveHingeSensor
@@ -15,8 +15,6 @@ class ModularRobotSensorStateImpl(ModularRobotSensorState):
         Get sensor states for Hinges.
 
         :param sensor: The sensor to query.
-        :returns: The Sensor State.
         :raises NotImplementedError: Always.
         """
-        raise NotImplementedError()
-        return ActiveHingeSensorState()
+        raise NotImplementedError("V1 hardware does not support sensor reading.")

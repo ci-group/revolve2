@@ -1,5 +1,6 @@
 import math
 import time
+from typing import Sequence
 
 import pigpio
 
@@ -66,7 +67,8 @@ class V1PhysicalInterface(PhysicalInterface):
             assert self._gpio is not None
             for pin in self._PINS:
                 self._gpio.set_PWM_dutycycle(pin, self._CENTER)
-                print(f"setting {pin}..")
+                if self._debug:
+                    print(f"setting {pin}..")
                 time.sleep(0.1)
 
     def disable(self) -> None:
@@ -82,3 +84,20 @@ class V1PhysicalInterface(PhysicalInterface):
 
             for pin in self._PINS:
                 self._gpio.set_PWM_dutycycle(pin, 0)
+
+    def get_battery_level(self) -> float:
+        """
+        Get the battery level.
+
+        :raises NotImplementedError: If getting the battery level is not supported on this hardware.
+        """
+        raise NotImplementedError("Getting battery level not supported on v1 harware.")
+
+    def get_multiple_servo_positions(self, pins: Sequence[int]) -> list[float]:
+        """
+        Get the current position of multiple servos.
+
+        :param pins: The GPIO pin numbers.
+        :raises NotImplementedError: If getting the servo position is not supported on this hardware.
+        """
+        raise NotImplementedError("Getting servo position not supported on v1 harware.")

@@ -99,9 +99,9 @@ def main() -> None:
     print("Initializing robot..")
     run_remote(
         config=config,
-        hostname="localhost",
+        hostname="localhost",  # "Set the robot IP here.
         debug=True,
-        on_prepared=on_prepared,  # "Set the robot IP here.
+        on_prepared=on_prepared,
     )
 
 

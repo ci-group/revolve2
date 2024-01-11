@@ -16,18 +16,21 @@ class _Program:
     _dry: bool
 
     _has_client: bool
+    _hardware_type: HardwareType
     _physical_interface: PhysicalInterface
 
-    def __init__(self, debug: bool, dry: bool) -> None:
+    def __init__(self, debug: bool, dry: bool, hardware_type: HardwareType) -> None:
         """
         Initialize this object.
 
         :param debug: Enable debug messages.
         :param dry: Run in dry mode, not writing/reading hardware.
+        :param hardware_type: The type of hardware this runs on.
         """
         self._debug = debug
         self._dry = dry
         self._has_client = False
+        self._hardware_type = hardware_type
 
     async def _new_connection(self, stream: Any) -> None:
         """
@@ -45,21 +48,19 @@ class _Program:
             self._has_client = True
 
             impl = RoboServerImpl(
-                debug=self._debug, physical_interface=self._physical_interface
+                debug=self._debug,
+                hardware_type=self._hardware_type,
+                physical_interface=self._physical_interface,
             )
             await capnp.TwoPartyServer(stream, bootstrap=impl).on_disconnect()
             impl.cleanup()
 
             self._has_client = False
 
-    async def run(self, hardware_type: HardwareType) -> None:
-        """
-        Run the program.
-
-        :param hardware_type: The type of hardware this runs on.
-        """
+    async def run(self) -> None:
+        """Run the program."""
         self._physical_interface = get_interface(
-            hardware_type=hardware_type, debug=self._debug, dry=self._dry
+            hardware_type=self._hardware_type, debug=self._debug, dry=self._dry
         )
 
         server = await capnp.AsyncIoStream.create_server(
@@ -78,5 +79,5 @@ def run_robot_daemon(debug: bool, dry: bool, hardware_type: HardwareType) -> Non
     :param hardware_type: The type of hardware this runs on.
     """
     asyncio.run(
-        capnp.run(_Program(debug=debug, dry=dry).run(hardware_type=hardware_type))
+        capnp.run(_Program(debug=debug, dry=dry, hardware_type=hardware_type).run())
     )

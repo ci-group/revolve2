@@ -5,14 +5,17 @@ from typing import Callable
 import capnp
 
 from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.sensor_state import ModularRobotSensorState
 
 from .._config import Config
+from .._hardware_type import HardwareType
 from .._protocol_version import PROTOCOL_VERSION
 from .._standard_port import STANDARD_PORT
 from .._uuid_key import UUIDKey
 from ..robot_daemon_api import robot_daemon_protocol_capnp
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
-from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
+from ._modular_robot_sensor_state_impl_v1 import ModularRobotSensorStateImplV1
+from ._modular_robot_sensor_state_impl_v2 import ModularRobotSensorStateImplV2
 
 
 def _active_hinge_targets_to_pin_controls(
@@ -41,6 +44,13 @@ async def _run_remote_impl(
     port: int,
     debug: bool,
 ) -> None:
+    active_hinge_sensor_to_pin = {
+        UUIDKey(key.value.sensor): pin
+        for key, pin in config.hinge_mapping.items()
+        if key.value.sensor
+        if not None
+    }
+
     # Make controller
     controller = config.modular_robot.brain.make_instance()
 
@@ -57,11 +67,20 @@ async def _run_remote_impl(
     # Setup the robot and check protocol version
     setup_response: robot_daemon_protocol_capnp.SetupResponse = (
         await service.setup(
-            robot_daemon_protocol_capnp.Setupargs(version=PROTOCOL_VERSION)
+            robot_daemon_protocol_capnp.SetupArgs(
+                version=PROTOCOL_VERSION, activePins=[x for x in range(32)]
+            )
         )
     ).response
     if not setup_response.versionOk:
         raise RuntimeError("Protocol version does not match for robot.")
+    match setup_response.hardwareType:
+        case "v1":
+            hardware_type = HardwareType.v1
+        case "v2":
+            hardware_type = HardwareType.v2
+        case _:
+            raise NotImplementedError()
 
     # Set hinges to initial positions.
     pin_controls = _active_hinge_targets_to_pin_controls(
@@ -71,9 +90,20 @@ async def _run_remote_impl(
             for active_hinge in config.hinge_mapping
         ],
     )
-    await service.control(
-        robot_daemon_protocol_capnp.ControlCommands(pins=pin_controls)
-    )
+    match hardware_type:
+        case HardwareType.v1:
+            await service.control(
+                robot_daemon_protocol_capnp.ControlArgs(setPins=pin_controls)
+            )
+        case HardwareType.v2:
+            sensor_readings: robot_daemon_protocol_capnp.SensorReadings = (
+                await service.controlAndReadSensors(
+                    robot_daemon_protocol_capnp.ControlAndReadSensorsArgs(
+                        setPins=pin_controls, readPins=[]
+                    )
+                )
+            ).response
+            print(f"Battery level is at {sensor_readings.battery*100.0}%.")
 
     # Fire prepared callback
     on_prepared()
@@ -84,11 +114,35 @@ async def _run_remote_impl(
     start_time = time.time()
     last_update_time = start_time
 
+    battery_print_timer = 0.0
+
+    sensor_state: ModularRobotSensorState
+
+    # Get initial sensor state
+    match hardware_type:
+        case HardwareType.v1:
+            sensor_state = ModularRobotSensorStateImplV1()
+        case HardwareType.v2:
+            pins = [pin for pin in active_hinge_sensor_to_pin.values()]
+            sensor_readings = (
+                await service.readSensors(
+                    robot_daemon_protocol_capnp.ReadSensorsArgs(readPins=pins)
+                )
+            ).response
+            sensor_state = ModularRobotSensorStateImplV2(
+                hinge_sensor_mapping=active_hinge_sensor_to_pin,
+                positions={
+                    pin: position for pin, position in zip(pins, sensor_readings.pins)
+                },
+            )
+        case _:
+            raise NotImplementedError("Hardware type not supported.")
+
     while (current_time := time.time()) - start_time < config.run_duration:
         # Sleep until next control update
         next_update_at = last_update_time + control_period
         if current_time < next_update_at:
-            time.sleep(next_update_at - current_time)
+            await asyncio.sleep(next_update_at - current_time)
             last_update_time = next_update_at
             elapsed_time = control_period
         else:
@@ -100,20 +154,47 @@ async def _run_remote_impl(
 
         # Get targets from brain
         control_interface = ModularRobotControlInterfaceImpl()
-        sensor_state = ModularRobotSensorStateImpl()
         controller.control(
             elapsed_time,
             sensor_state=sensor_state,
             control_interface=control_interface,
         )
 
+        # Increase the timer for the battery value message
+        battery_print_timer += elapsed_time
+
         # Reading sensors will come in a later update.
         pin_controls = _active_hinge_targets_to_pin_controls(
             config, control_interface._set_active_hinges
         )
-        await service.control(
-            robot_daemon_protocol_capnp.ControlCommands(pins=pin_controls)
-        )
+        match hardware_type:
+            case HardwareType.v1:
+                await service.control(
+                    robot_daemon_protocol_capnp.ControlArgs(setPins=pin_controls)
+                )
+                sensor_state = ModularRobotSensorStateImplV1()
+            case HardwareType.v2:
+                pins = [pin for pin in active_hinge_sensor_to_pin.values()]
+                sensor_readings = (
+                    await service.controlAndReadSensors(
+                        robot_daemon_protocol_capnp.ControlAndReadSensorsArgs(
+                            setPins=pin_controls, readPins=pins
+                        )
+                    )
+                ).response
+                sensor_state = ModularRobotSensorStateImplV2(
+                    hinge_sensor_mapping=active_hinge_sensor_to_pin,
+                    positions={
+                        pin: position
+                        for pin, position in zip(pins, sensor_readings.pins)
+                    },
+                )
+
+                if battery_print_timer > 5.0:
+                    print(f"Battery level is at {sensor_readings.battery*100.0}%.")
+                    battery_print_timer = 0.0
+            case _:
+                raise NotImplementedError("Hardware type not supported.")
 
 
 def run_remote(

@@ -1,4 +1,5 @@
 import math
+from typing import Sequence
 
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
@@ -98,7 +99,7 @@ class V2PhysicalInterface(PhysicalInterface):
             angles = [90.0 + target / (2.0 * math.pi) * 360.0 for target in targets]
             for pin, angle in zip(pins, angles):
                 all_angles[pin] = angle
-            self._robohat.set_servo_multiple_angles(all_angles)
+            self._robohat.update_servo_data_direct(all_angles)
 
     def enable(self) -> None:
         """Start the robot."""
@@ -117,3 +118,21 @@ class V2PhysicalInterface(PhysicalInterface):
             print("Putting servos to sleep.")
         if not self._dry:
             self._robohat.put_servo_to_sleep()
+
+    def get_battery_level(self) -> float:
+        """
+        Get the battery level.
+
+        :returns: The battery level as a number between 0.0 and 1.0.
+        """
+        return self._robohat.get_battery_percentage_capacity() / 100.0
+
+    def get_multiple_servo_positions(self, pins: Sequence[int]) -> list[float]:
+        """
+        Get the current position of multiple servos.
+
+        :param pins: The GPIO pin numbers.
+        :returns: The current positions.
+        """
+        angles = self._robohat.get_servo_multiple_angles()
+        return [(angles[pin] - 90) / 360.0 * math.pi * 2.0 for pin in pins]

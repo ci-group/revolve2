@@ -10,7 +10,7 @@ from ._unbuilt_child import UnbuiltChild
 
 
 class CoreBuilder(Builder):
-    """A Builder for V1 Cores."""
+    """A Builder for Cores."""
 
     _module: Core
 

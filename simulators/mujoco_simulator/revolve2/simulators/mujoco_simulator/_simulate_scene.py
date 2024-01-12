@@ -3,7 +3,6 @@ import math
 
 import cv2
 import mujoco
-import mujoco_viewer
 import numpy as np
 import numpy.typing as npt
 
@@ -11,6 +10,7 @@ from revolve2.simulation.scene import Scene, SimulationState
 from revolve2.simulation.simulator import RecordSettings
 
 from ._control_interface_impl import ControlInterfaceImpl
+from ._custom_mujoco_viewer import CustomMujocoViewer
 from ._scene_to_model import scene_to_model
 from ._simulation_state_impl import SimulationStateImpl
 
@@ -52,12 +52,12 @@ def simulate_scene(
     data = mujoco.MjData(model)
 
     if not headless or record_settings is not None:
-        viewer = mujoco_viewer.MujocoViewer(
+        viewer = CustomMujocoViewer(
             model,
             data,
+            start_paused=start_paused,
+            render_every_frame=False,
         )
-        viewer._render_every_frame = False  # Private but functionality is not exposed and for now it breaks nothing.
-        viewer._paused = start_paused
 
     if record_settings is not None:
         video_step = 1 / record_settings.fps

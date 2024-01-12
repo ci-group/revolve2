@@ -8,13 +8,11 @@ from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 def main() -> None:
     """Run the simulation part of the example."""
-    """
-    Here we define the Modular Robot we want to test.
-    You can use either a ModularRobot instance or a Body instance.
-    """
+    # Here we define the Modular Robot we want to test.
+    # You can use either a ModularRobot instance or a Body instance.
     body = gecko_v2()
 
-    """Now we test our simulated robot, to validate our physical robot."""
+    # Now we test our simulated robot, to validate our physical robot.
     simulator = LocalSimulator(manual_control=True)
     batch_parameters = make_standard_batch_parameters()
     test_robot(

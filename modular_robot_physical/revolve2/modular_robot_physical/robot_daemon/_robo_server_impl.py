@@ -84,16 +84,21 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
                 if maybe_current_target is None:
                     targets.append(desired_target)
                 else:
-                    targets.append(
-                        maybe_current_target
-                        + min(
-                            max(
-                                (desired_target - maybe_current_target),
-                                -self._CAREFUL_STEP,
-                            ),
-                            self._CAREFUL_STEP,
-                        )
-                    )
+                    match self._hardware_type:
+                        case HardwareType.v1:
+                            targets.append(
+                                maybe_current_target
+                                + min(
+                                    max(
+                                        (desired_target - maybe_current_target),
+                                        -self._CAREFUL_STEP,
+                                    ),
+                                    self._CAREFUL_STEP,
+                                )
+                            )
+                        case HardwareType.v2:  # careful mode disabled for v2. enable when running into power failures.
+                            targets.append(desired_target)
+
             for pin, target in zip(pins, targets):
                 self._current_targets[pin] = target
 

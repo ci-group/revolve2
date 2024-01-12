@@ -29,7 +29,7 @@ class BodyToMultiBodySystemConverter:
         :returns: The created multi-body system, and a mapping from body to multi-body system.
         """
         multi_body_system = MultiBodySystem(pose=pose, is_static=False)
-        mapping = BodyToMultiBodySystemMapping()
+        mapping = BodyToMultiBodySystemMapping(multi_body_system)
 
         rigid_body = RigidBody(
             initial_pose=Pose(),

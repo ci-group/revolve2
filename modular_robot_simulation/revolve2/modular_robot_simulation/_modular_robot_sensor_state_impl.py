@@ -1,12 +1,14 @@
-from revolve2.modular_robot.body.base import ActiveHingeSensor
+from revolve2.modular_robot.body.base import ActiveHingeSensor, IMUSensor
 from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
+    IMUSensorState,
     ModularRobotSensorState,
 )
 from revolve2.simulation.scene import SimulationState, UUIDKey
 
 from ._active_hinge_sensor_state_impl import ActiveHingeSensorStateImpl
 from ._build_multi_body_systems import BodyToMultiBodySystemMapping
+from ._imu_sensor_state_impl import IMUSensorStateImpl
 
 
 class ModularRobotSensorStateImpl(ModularRobotSensorState):
@@ -45,4 +47,16 @@ class ModularRobotSensorStateImpl(ModularRobotSensorState):
 
         return ActiveHingeSensorStateImpl(
             simulation_state=self._simulation_state, hinge_joint=maybe_joint
+        )
+
+    def get_imu_sensor_state(self, sensor: IMUSensor) -> IMUSensorState:
+        """
+        Get the state of the provided IMU sensor.
+
+        :param sensor: The sensor.
+        :returns: The state.
+        """
+        return IMUSensorStateImpl(
+            simulation_state=self._simulation_state,
+            multi_body_system=self._body_to_multi_body_system_mapping.multi_body_system,
         )

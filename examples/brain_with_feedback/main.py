@@ -6,7 +6,7 @@ from revolve2.ci_group import modular_robots_v1, terrains
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot import ModularRobot, ModularRobotControlInterface
-from revolve2.modular_robot.body.base import ActiveHinge, ActiveHingeSensor
+from revolve2.modular_robot.body.base import ActiveHinge, ActiveHingeSensor, IMUSensor
 from revolve2.modular_robot.brain import Brain, BrainInstance
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
@@ -17,17 +17,17 @@ class ANNBrainInstance(BrainInstance):
     """ANN brain instance."""
 
     active_hinges: list[ActiveHinge]
+    imu_sensor: IMUSensor
 
-    def __init__(
-        self,
-        active_hinges: list[ActiveHinge],
-    ) -> None:
+    def __init__(self, active_hinges: list[ActiveHinge], imu_sensor: IMUSensor) -> None:
         """
         Initialize the Object.
 
         :param active_hinges: The active hinges to control.
+        :param imu_sensor: The IMU sensor.
         """
         self.active_hinges = active_hinges
+        self.imu_sensor = imu_sensor
 
     def control(
         self,
@@ -59,6 +59,10 @@ class ANNBrainInstance(BrainInstance):
         ]
         logging.info(current_positions)
 
+        # Get the imu state
+        imu_state = sensor_state.get_imu_sensor_state(self.imu_sensor)
+        logging.info(imu_state.orientation)
+
         # Here you can implement your controller.
         # The current controller does nothing except for always settings the joint positions to 0.5.
         for active_hinge, sensor in zip(self.active_hinges, sensors):
@@ -70,17 +74,17 @@ class ANNBrain(Brain):
     """The ANN brain."""
 
     active_hinges: list[ActiveHinge]
+    imu_sensor: IMUSensor
 
-    def __init__(
-        self,
-        active_hinges: list[ActiveHinge],
-    ) -> None:
+    def __init__(self, active_hinges: list[ActiveHinge], imu_sensor: IMUSensor) -> None:
         """
         Initialize the Object.
 
         :param active_hinges: The active hinges to control.
+        :param imu_sensor: The IMU sensor.
         """
         self.active_hinges = active_hinges
+        self.imu_sensor = imu_sensor
 
     def make_instance(self) -> BrainInstance:
         """
@@ -89,7 +93,7 @@ class ANNBrain(Brain):
         :returns: The created instance.
         """
         return ANNBrainInstance(
-            active_hinges=self.active_hinges,
+            active_hinges=self.active_hinges, imu_sensor=self.imu_sensor
         )
 
 
@@ -106,11 +110,11 @@ def main() -> None:
     for active_hinge in active_hinges:
         active_hinge.sensor = ActiveHingeSensor()
 
+    body.core._imu_sensor = IMUSensor()
+
     # Create a brain for the robot.
     active_hinges = body.find_modules_of_type(ActiveHinge)
-    brain = ANNBrain(
-        active_hinges=active_hinges,
-    )
+    brain = ANNBrain(active_hinges=active_hinges, imu_sensor=body.core._imu_sensor)
 
     # Combine the body and brain into a modular robot.
     robot = ModularRobot(body, brain)

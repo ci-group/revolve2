@@ -6,7 +6,7 @@ class IMUSensorState(ABC):
 
     @property
     @abstractmethod
-    def specific_forace(self) -> float:
+    def specific_force(self) -> float:
         """
         Get the measured specific force.
 

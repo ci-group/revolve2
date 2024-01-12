@@ -12,7 +12,7 @@ def steady_state(
     old_fitnesses: list[Fitness],
     new_genotypes: list[Genotype],
     new_fitnesses: list[Fitness],
-    selection_fun: Callable[
+    selection_function: Callable[
         [int, list[Genotype], list[Fitness]], npt.NDArray[np.float_]
     ],
 ) -> tuple[list[int], list[int]]:
@@ -23,7 +23,7 @@ def steady_state(
     :param old_fitnesses: Fitnesses of the individuals in the parent population.
     :param new_genotypes: Genotypes of the individuals from the offspring.
     :param new_fitnesses: Fitnesses of the individuals from the offspring.
-    :param selection_fun: Function that selects n individuals from a population based on their genotype and fitness. (n, genotypes, fitnesses) -> indices
+    :param selection_function: Function that selects n individuals from a population based on their genotype and fitness. (n, genotypes, fitnesses) -> indices
     :returns: (indices of selected individuals from parent population, indices of selected individuals from offspring).
     """
     assert len(old_genotypes) == len(old_fitnesses)
@@ -31,7 +31,7 @@ def steady_state(
 
     population_size = len(old_genotypes)
 
-    selection = selection_fun(
+    selection = selection_function(
         population_size, old_genotypes + new_genotypes, old_fitnesses + new_fitnesses
     )
 

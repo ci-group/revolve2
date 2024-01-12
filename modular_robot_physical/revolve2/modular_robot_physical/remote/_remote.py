@@ -43,6 +43,7 @@ async def _run_remote_impl(
     on_prepared: Callable[[], None],
     port: int,
     debug: bool,
+    manual_mode: bool,
 ) -> None:
     active_hinge_sensor_to_pin = {
         UUIDKey(key.value.sensor): pin
@@ -108,78 +109,48 @@ async def _run_remote_impl(
     # Fire prepared callback
     on_prepared()
 
-    # Run the controller
-    control_period = 1 / config.control_frequency
-
-    start_time = time.time()
-    last_update_time = start_time
-
-    battery_print_timer = 0.0
-
-    sensor_state: ModularRobotSensorState
-
-    # Get initial sensor state
-    match hardware_type:
-        case HardwareType.v1:
-            sensor_state = ModularRobotSensorStateImplV1()
-        case HardwareType.v2:
-            pins = [pin for pin in active_hinge_sensor_to_pin.values()]
-            sensor_readings = (
-                await service.readSensors(
-                    robot_daemon_protocol_capnp.ReadSensorsArgs(readPins=pins)
-                )
-            ).response
-            sensor_state = ModularRobotSensorStateImplV2(
-                hinge_sensor_mapping=active_hinge_sensor_to_pin,
-                positions={
-                    pin: position for pin, position in zip(pins, sensor_readings.pins)
-                },
-            )
-        case _:
-            raise NotImplementedError("Hardware type not supported.")
-
-    while (current_time := time.time()) - start_time < config.run_duration:
-        # Sleep until next control update
-        next_update_at = last_update_time + control_period
-        if current_time < next_update_at:
-            await asyncio.sleep(next_update_at - current_time)
-            last_update_time = next_update_at
-            elapsed_time = control_period
-        else:
-            print(
-                f"WARNING: Loop is lagging {next_update_at - current_time} seconds behind the set update frequency. Is your control function too slow?"
-            )
-            elapsed_time = last_update_time - current_time
-            last_update_time = current_time
-
-        # Get targets from brain
-        control_interface = ModularRobotControlInterfaceImpl()
-        controller.control(
-            elapsed_time,
-            sensor_state=sensor_state,
-            control_interface=control_interface,
+    if manual_mode:
+        print(
+            "Press Ctrl-C to exit. type a value between -1 and 1 to manually set the target for each active hinge."
         )
+        while True:
+            try:
+                target = float(input())
+            except ValueError:
+                print("Invalid target.")
+                continue
+            if target < -1 or target > 1:
+                print("Invalid target.")
+                continue
+            pin_controls = _active_hinge_targets_to_pin_controls(
+                config,
+                [(active_hinge, target) for active_hinge in config.hinge_mapping],
+            )
 
-        # Increase the timer for the battery value message
-        battery_print_timer += elapsed_time
+            await service.control(
+                robot_daemon_protocol_capnp.ControlArgs(setPins=pin_controls)
+            )
 
-        # Reading sensors will come in a later update.
-        pin_controls = _active_hinge_targets_to_pin_controls(
-            config, control_interface._set_active_hinges
-        )
+    else:
+        # Run the controller
+        control_period = 1 / config.control_frequency
+
+        start_time = time.time()
+        last_update_time = start_time
+
+        battery_print_timer = 0.0
+
+        sensor_state: ModularRobotSensorState
+
+        # Get initial sensor state
         match hardware_type:
             case HardwareType.v1:
-                await service.control(
-                    robot_daemon_protocol_capnp.ControlArgs(setPins=pin_controls)
-                )
                 sensor_state = ModularRobotSensorStateImplV1()
             case HardwareType.v2:
                 pins = [pin for pin in active_hinge_sensor_to_pin.values()]
                 sensor_readings = (
-                    await service.controlAndReadSensors(
-                        robot_daemon_protocol_capnp.ControlAndReadSensorsArgs(
-                            setPins=pin_controls, readPins=pins
-                        )
+                    await service.readSensors(
+                        robot_daemon_protocol_capnp.ReadSensorsArgs(readPins=pins)
                     )
                 ).response
                 sensor_state = ModularRobotSensorStateImplV2(
@@ -189,12 +160,66 @@ async def _run_remote_impl(
                         for pin, position in zip(pins, sensor_readings.pins)
                     },
                 )
-
-                if battery_print_timer > 5.0:
-                    print(f"Battery level is at {sensor_readings.battery*100.0}%.")
-                    battery_print_timer = 0.0
             case _:
                 raise NotImplementedError("Hardware type not supported.")
+
+        while (current_time := time.time()) - start_time < config.run_duration:
+            # Sleep until next control update
+            next_update_at = last_update_time + control_period
+            if current_time < next_update_at:
+                await asyncio.sleep(next_update_at - current_time)
+                last_update_time = next_update_at
+                elapsed_time = control_period
+            else:
+                print(
+                    f"WARNING: Loop is lagging {next_update_at - current_time} seconds behind the set update frequency. Is your control function too slow?"
+                )
+                elapsed_time = last_update_time - current_time
+                last_update_time = current_time
+
+            # Get targets from brain
+            control_interface = ModularRobotControlInterfaceImpl()
+            controller.control(
+                elapsed_time,
+                sensor_state=sensor_state,
+                control_interface=control_interface,
+            )
+
+            # Increase the timer for the battery value message
+            battery_print_timer += elapsed_time
+
+            # Reading sensors will come in a later update.
+            pin_controls = _active_hinge_targets_to_pin_controls(
+                config, control_interface._set_active_hinges
+            )
+            match hardware_type:
+                case HardwareType.v1:
+                    await service.control(
+                        robot_daemon_protocol_capnp.ControlArgs(setPins=pin_controls)
+                    )
+                    sensor_state = ModularRobotSensorStateImplV1()
+                case HardwareType.v2:
+                    pins = [pin for pin in active_hinge_sensor_to_pin.values()]
+                    sensor_readings = (
+                        await service.controlAndReadSensors(
+                            robot_daemon_protocol_capnp.ControlAndReadSensorsArgs(
+                                setPins=pin_controls, readPins=pins
+                            )
+                        )
+                    ).response
+                    sensor_state = ModularRobotSensorStateImplV2(
+                        hinge_sensor_mapping=active_hinge_sensor_to_pin,
+                        positions={
+                            pin: position
+                            for pin, position in zip(pins, sensor_readings.pins)
+                        },
+                    )
+
+                    if battery_print_timer > 5.0:
+                        print(f"Battery level is at {sensor_readings.battery*100.0}%.")
+                        battery_print_timer = 0.0
+                case _:
+                    raise NotImplementedError("Hardware type not supported.")
 
 
 def run_remote(
@@ -203,6 +228,7 @@ def run_remote(
     on_prepared: Callable[[], None] = lambda: None,
     port: int = STANDARD_PORT,
     debug: bool = False,
+    manual_mode: bool = False,
 ) -> None:
     """
     Control a robot remotely, running the controller on your local machine.
@@ -212,6 +238,7 @@ def run_remote(
     :param on_prepared: Callback for when everything is prepared, ready to run the actual controller. You can use this for timing when the actual controller starts.
     :param port: Port the robot daemon uses.
     :param debug: Enable debug messages.
+    :param manual_mode: Enable manual controls for the robot, ignoring the brain.
     """
     asyncio.run(
         capnp.run(
@@ -221,6 +248,7 @@ def run_remote(
                 on_prepared=on_prepared,
                 port=port,
                 debug=debug,
+                manual_mode=manual_mode,
             )
         )
     )

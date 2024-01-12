@@ -42,7 +42,7 @@ def make_body() -> (
 
 
 def main() -> None:
-    """Main entry of the script."""
+    """Run the main entry of the script."""
     body, hinges = make_body()
     hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {

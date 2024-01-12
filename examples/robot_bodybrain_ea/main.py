@@ -20,7 +20,7 @@ def select_parents(
     rng: np.random.Generator,
     population: list[Individual],
     offspring_size: int,
-) -> npt.NDArray[np.float_]:
+) -> npt.NDArray[np.int_]:
     """
     Select pairs of parents using a tournament.
 
@@ -32,10 +32,12 @@ def select_parents(
     return np.array(
         [
             selection.multiple_unique(
-                2,
-                [individual.genotype for individual in population],
-                [individual.fitness for individual in population],
-                lambda _, fitnesses: selection.tournament(rng, fitnesses, k=1),
+                selection_size=2,
+                population=[individual.genotype for individual in population],
+                fitnesses=[individual.fitness for individual in population],
+                selection_function=lambda _, fitnesses: selection.tournament(
+                    rng=rng, fitnesses=fitnesses, k=1
+                ),
             )
             for _ in range(offspring_size)
         ],
@@ -56,15 +58,17 @@ def select_survivors(
     :returns: A newly created population.
     """
     original_survivors, offspring_survivors = population_management.steady_state(
-        [i.genotype for i in original_population],
-        [i.fitness for i in original_population],
-        [i.genotype for i in offspring_population],
-        [i.fitness for i in offspring_population],
-        lambda n, genotypes, fitnesses: selection.multiple_unique(
-            n,
-            genotypes,
-            fitnesses,
-            lambda _, fitnesses: selection.tournament(rng, fitnesses, k=2),
+        old_genotypes=[i.genotype for i in original_population],
+        old_fitnesses=[i.fitness for i in original_population],
+        new_genotypes=[i.genotype for i in offspring_population],
+        new_fitnesses=[i.fitness for i in offspring_population],
+        selection_function=lambda n, genotypes, fitnesses: selection.multiple_unique(
+            selection_size=n,
+            population=genotypes,
+            fitnesses=fitnesses,
+            selection_function=lambda _, fitnesses: selection.tournament(
+                rng=rng, fitnesses=fitnesses, k=2
+            ),
         ),
     )
 

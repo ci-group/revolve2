@@ -29,14 +29,17 @@ class BodyToMultiBodySystemConverter:
         :returns: The created multi-body system, and a mapping from body to multi-body system.
         """
         multi_body_system = MultiBodySystem(pose=pose, is_static=False)
-        mapping = BodyToMultiBodySystemMapping(multi_body_system)
 
         rigid_body = RigidBody(
             initial_pose=Pose(),
             static_friction=self._STATIC_FRICTION,
             dynamic_friction=self._DYNAMIC_FRICTION,
             geometries=[],
+            imu_sensor=Vector3([0.0, 0.0, 0.0]),
         )
+
+        mapping = BodyToMultiBodySystemMapping(rigid_body, multi_body_system)
+
         multi_body_system.add_rigid_body(rigid_body)
 
         unbuilt = UnbuiltChild(

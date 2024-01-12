@@ -88,3 +88,21 @@ class SimulationStateImpl(SimulationState):
         """
         joint_mujoco = self._abstraction_to_mujoco_mapping.hinge_joint[UUIDKey(joint)]
         return float(self._qpos[joint_mujoco.id])
+
+    def get_rigid_body_imu_specific_force(self, rigid_body: RigidBody) -> Vector3:
+        """
+        Get the specific force measured by the rigid body's IMU.
+
+        :param rigid_body: The rigid body that has the IMU.
+        :returns: The specific force.
+        """
+        raise NotImplementedError()
+
+    def get_rigid_body_imu_angular_rate(self, rigid_body: RigidBody) -> Vector3:
+        """
+        Get the angular rate measured by the rigid body's IMU.
+
+        :param rigid_body: The rigid body that has the IMU.
+        :returns: The angular rate.
+        """
+        raise NotImplementedError()

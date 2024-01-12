@@ -4,6 +4,7 @@ from ._joint_hinge import JointHinge
 from ._multi_body_system import MultiBodySystem
 from ._pose import Pose
 from ._rigid_body import RigidBody
+from pyrr import Vector3
 
 
 class SimulationState(ABC):
@@ -43,4 +44,22 @@ class SimulationState(ABC):
 
         :param joint: The joint to get the rotational position for.
         :returns: The rotational position.
+        """
+
+    @abstractmethod
+    def get_rigid_body_imu_specific_force(self, rigid_body: RigidBody) -> Vector3:
+        """
+        Get the specific force measured by the rigid body's IMU.
+
+        :param rigid_body: The rigid body that has the IMU.
+        :returns: The specific force.
+        """
+
+    @abstractmethod
+    def get_rigid_body_imu_angular_rate(self, rigid_body: RigidBody) -> Vector3:
+        """
+        Get the angular rate measured by the rigid body's IMU.
+
+        :param rigid_body: The rigid body that has the IMU.
+        :returns: The angular rate.
         """

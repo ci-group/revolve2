@@ -6,7 +6,7 @@ import numpy as np
 import numpy.typing as npt
 
 from revolve2.ci_group import fitness_functions, terrains
-from revolve2.ci_group.simulation import make_standard_batch_parameters
+from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body.base import ActiveHinge, Body
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkStatic, CpgNetworkStructure

@@ -5,6 +5,7 @@ import os
 from revolve2.simulation.scene import SimulationState
 from revolve2.simulation.simulator import Batch, Simulator
 
+from ._simulate_manual_scene import simulate_manual_scene
 from ._simulate_scene import simulate_scene
 
 
@@ -16,6 +17,7 @@ class LocalSimulator(Simulator):
     _num_simulators: int
     _cast_shadows: bool
     _fast_sim: bool
+    _manual_control: bool
 
     def __init__(
         self,
@@ -24,6 +26,7 @@ class LocalSimulator(Simulator):
         num_simulators: int = 1,
         cast_shadows: bool = False,
         fast_sim: bool = False,
+        manual_control: bool = False,
     ):
         """
         Initialize this object.
@@ -33,6 +36,7 @@ class LocalSimulator(Simulator):
         :param num_simulators: The number of simulators to deploy in parallel. They will take one core each but will share space on the main python thread for calculating control.
         :param cast_shadows: Whether shadows are cast in the simulation.
         :param fast_sim: Whether more complex rendering prohibited.
+        :param manual_control: Whether the simulation should be controlled manually.
         """
         assert (
             headless or num_simulators == 1
@@ -47,6 +51,7 @@ class LocalSimulator(Simulator):
         self._num_simulators = num_simulators
         self._cast_shadows = cast_shadows
         self._fast_sim = fast_sim
+        self._manual_control = manual_control
 
     def simulate_batch(self, batch: Batch) -> list[list[SimulationState]]:
         """
@@ -54,6 +59,7 @@ class LocalSimulator(Simulator):
 
         :param batch: The batch to run.
         :returns: List of simulation states in ascending order of time.
+        :raises Exception: If manual control is selected, but headless is enabled.
         """
         logging.info("Starting simulation batch with MuJoCo.")
 
@@ -66,6 +72,13 @@ class LocalSimulator(Simulator):
 
         if batch.record_settings is not None:
             os.makedirs(batch.record_settings.video_directory, exist_ok=False)
+
+        if self._manual_control:
+            if self._headless:
+                raise Exception("Manual control only works with rendered simulations.")
+            for scene in batch.scenes:
+                simulate_manual_scene(scene=scene)
+            return [[]]
 
         if self._num_simulators > 1:
             with concurrent.futures.ProcessPoolExecutor(

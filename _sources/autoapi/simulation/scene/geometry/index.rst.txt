@@ -9,6 +9,15 @@
 
 
 
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   textures/index.rst
+
+
 Package Contents
 ----------------
 
@@ -46,10 +55,10 @@ Classes
       This the absolute mass, irrespective of the size of the bounding box.
 
 
-   .. py:attribute:: color
-      :type: simulation.scene._color.Color
+   .. py:attribute:: texture
+      :type: simulation.scene.geometry.textures.Texture
 
-      Color when rendering this geometry.
+      Texture when rendering this geometry.
 
 
 
@@ -100,8 +109,8 @@ Classes
 
       
 
-   .. py:attribute:: color
-      :type: simulation.scene._color.Color
+   .. py:attribute:: texture
+      :type: simulation.scene.geometry.textures.Texture
 
       
 
@@ -121,8 +130,8 @@ Classes
 
       
 
-   .. py:attribute:: color
-      :type: simulation.scene._color.Color
+   .. py:attribute:: texture
+      :type: simulation.scene.geometry.textures.Texture
 
       
 

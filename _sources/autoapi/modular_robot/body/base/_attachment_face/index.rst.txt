@@ -1,0 +1,34 @@
+:orphan:
+
+:py:mod:`_attachment_face`
+==================================================
+
+.. py:module:: modular_robot.body.base._attachment_face
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.base._attachment_face.AttachmentFace
+
+
+
+
+.. py:class:: AttachmentFace(rotation: float | modular_robot.body._right_angles.RightAngles, attachment_points: dict[int, modular_robot.body._attachment_point.AttachmentPoint])
+
+
+   Bases: :py:obj:`modular_robot.body._module.Module`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.base._attachment_face.AttachmentFace
+      :parts: 1
+
+   Collect AttachmentPoints on a modules face.
+
+   This face can be thought of as a pseudo-module which usually does not have a body on its own.
+
+

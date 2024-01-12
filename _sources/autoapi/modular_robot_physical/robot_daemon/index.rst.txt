@@ -1,0 +1,33 @@
+:py:mod:`robot_daemon`
+=============================================
+
+.. py:module:: modular_robot_physical.robot_daemon
+
+.. autoapi-nested-parse::
+
+   Daemon with TCP API to control the robot.
+
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.robot_daemon.run_robot_daemon
+
+
+
+.. py:function:: run_robot_daemon(debug: bool, dry: bool, hardware_type: modular_robot_physical._hardware_type.HardwareType) -> None
+
+   Run the server.
+
+   :param debug: Enable debug messages.
+   :param dry: Run in dry mode, not writing/reading hardware.
+   :param hardware_type: The type of hardware this runs on.
+
+

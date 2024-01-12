@@ -1,0 +1,31 @@
+:orphan:
+
+:py:mod:`_test_physical_robot`
+============================================================
+
+.. py:module:: modular_robot_physical.remote._test_physical_robot
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.remote._test_physical_robot.test_physical_robot
+
+
+
+.. py:function:: test_physical_robot(robot: revolve2.modular_robot.ModularRobot | revolve2.modular_robot.body.base.Body, hostname: str, hinge_mapping: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], int], inverse_servos: dict[int, bool]) -> None
+
+   Remotely connect to a physical robot and provide manual controls to test it.
+
+   :param robot: Body of the robot.
+   :param hostname: Hostname of the robot.
+   :param hinge_mapping: map each active hinge object to a specific Servo with its ID (int).
+   :param inverse_servos: If a servo is mounted in the wrong direction on the body one can fix it by inversing the action. inverse_servos allows you to inverse specific servos with their gpio number as key.
+
+

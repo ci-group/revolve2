@@ -1,0 +1,5 @@
+<map id="inheritance8e51352c45" name="inheritance8e51352c45">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" title="The state of an active hinge sensor." alt="" coords="125,5,304,31"/>
+<area shape="rect" id="node3" href="#modular_robot_physical.remote._active_hinge_sensor_state_impl.ActiveHingeSensorStateImpl" target="_top" title="ActiveHingeSensorState implementation for physical robots." alt="" coords="352,5,560,31"/>
+</map>

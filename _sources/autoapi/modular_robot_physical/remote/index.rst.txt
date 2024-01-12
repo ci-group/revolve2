@@ -1,0 +1,47 @@
+:py:mod:`remote`
+=======================================
+
+.. py:module:: modular_robot_physical.remote
+
+.. autoapi-nested-parse::
+
+   Physical modular robot remote control.
+
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.remote.run_remote
+   modular_robot_physical.remote.test_physical_robot
+
+
+
+.. py:function:: run_remote(config: modular_robot_physical._config.Config, hostname: str, on_prepared: Callable[[], None] = lambda: None, port: int = STANDARD_PORT, debug: bool = False, manual_mode: bool = False) -> None
+
+   Control a robot remotely, running the controller on your local machine.
+
+   :param config: The robot configuration.
+   :param hostname: Hostname or IP of the robot.
+   :param on_prepared: Callback for when everything is prepared, ready to run the actual controller. You can use this for timing when the actual controller starts.
+   :param port: Port the robot daemon uses.
+   :param debug: Enable debug messages.
+   :param manual_mode: Enable manual controls for the robot, ignoring the brain.
+
+
+.. py:function:: test_physical_robot(robot: revolve2.modular_robot.ModularRobot | revolve2.modular_robot.body.base.Body, hostname: str, hinge_mapping: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], int], inverse_servos: dict[int, bool]) -> None
+
+   Remotely connect to a physical robot and provide manual controls to test it.
+
+   :param robot: Body of the robot.
+   :param hostname: Hostname of the robot.
+   :param hinge_mapping: map each active hinge object to a specific Servo with its ID (int).
+   :param inverse_servos: If a servo is mounted in the wrong direction on the body one can fix it by inversing the action. inverse_servos allows you to inverse specific servos with their gpio number as key.
+
+

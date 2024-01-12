@@ -1,0 +1,39 @@
+:orphan:
+
+:py:mod:`_brain_dummy`
+================================================
+
+.. py:module:: modular_robot.brain.dummy._brain_dummy
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.brain.dummy._brain_dummy.BrainDummy
+
+
+
+
+.. py:class:: BrainDummy
+
+
+   Bases: :py:obj:`modular_robot.brain._brain.Brain`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.dummy._brain_dummy.BrainDummy
+      :parts: 1
+
+   A brain that does nothing.
+
+   .. py:method:: make_instance() -> modular_robot.brain._brain_instance.BrainInstance
+
+      Create an instance of this brain.
+
+      :returns: The created instance.
+
+
+

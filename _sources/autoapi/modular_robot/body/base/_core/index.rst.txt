@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: Core(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+.. py:class:: Core(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -28,38 +28,6 @@ Classes
       :parts: 1
 
    The core module of a modular robot.
-
-   .. py:property:: front
-      :type: modular_robot.body._module.Module | None
-
-      Get the module attached to the front of the core.
-
-      :returns: The attached module.
-
-
-   .. py:property:: right
-      :type: modular_robot.body._module.Module | None
-
-      Get the module attached to the right of the core.
-
-      :returns: The attached module.
-
-
-   .. py:property:: back
-      :type: modular_robot.body._module.Module | None
-
-      Get the module attached to the back of the core.
-
-      :returns: The attached module.
-
-
-   .. py:property:: left
-      :type: modular_robot.body._module.Module | None
-
-      Get the module attached to the left of the core.
-
-      :returns: The attached module.
-
 
    .. py:property:: mass
       :type: float
@@ -78,12 +46,36 @@ Classes
       :return: Vector3 with sizes of bbox in x,y,z dimension (m).
 
 
-   .. py:property:: child_offset
-      :type: float
+   .. py:property:: front
+      :type: modular_robot.body._module.Module | None
 
-      Get the child offset (in m).
+      Get the front module of the core.
 
-      :return: The value.
+      :returns: The attachment points module.
+
+
+   .. py:property:: right
+      :type: modular_robot.body._module.Module | None
+
+      Get the right module of the core.
+
+      :returns: The attachment points module.
+
+
+   .. py:property:: back
+      :type: modular_robot.body._module.Module | None
+
+      Get the back module of the core.
+
+      :returns: The attachment points module.
+
+
+   .. py:property:: left
+      :type: modular_robot.body._module.Module | None
+
+      Get the left module of the core.
+
+      :returns: The attachment points module.
 
 
    .. py:attribute:: FRONT

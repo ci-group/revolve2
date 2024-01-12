@@ -1,0 +1,93 @@
+:orphan:
+
+:py:mod:`_texture`
+=====================================================
+
+.. py:module:: simulation.scene.geometry.textures._texture
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry.textures._texture.Texture
+
+
+
+
+.. py:class:: Texture
+
+
+   An abstract texture for geometric models.
+
+   .. py:attribute:: reference
+      :type: simulation.scene.geometry.textures._texture_reference.TextureReference | None
+
+      Reference the specific type of texture. If no reference is given, the base_color will be used on the Object.
+
+
+   .. py:attribute:: base_color
+      :type: simulation.scene._color.Color
+
+      Determines the base color of a material and its alpha value.
+
+
+   .. py:attribute:: primary_color
+      :type: simulation.scene._color.Color
+
+      Determines the primary color of the texture.
+
+
+   .. py:attribute:: secondary_color
+      :type: simulation.scene._color.Color
+
+      facilitates more complex textures that use two colors.
+
+
+   .. py:attribute:: map_type
+      :type: simulation.scene.geometry.textures._map_type.MapType
+
+      Represents how the texture is mapped to an object.
+
+
+   .. py:attribute:: repeat
+      :type: tuple[int, int]
+
+      Allows you to set how often a texture should be repeated across the x and y axis (Only for 2d maps).
+
+
+   .. py:attribute:: size
+      :type: tuple[int, int]
+
+      Allows to set the size of a texture. The higher the size, the higher the resolution
+
+
+   .. py:attribute:: specular
+      :type: float
+
+      Specular ranges between [0, 1].
+
+
+   .. py:attribute:: shininess
+      :type: float
+
+      Shininess ranges between [0, 1].
+
+
+   .. py:attribute:: reflectance
+      :type: float
+
+      Reflectance ranges between [0, 1].
+
+
+   .. py:attribute:: emission
+      :type: float
+
+      Allows Objects to emit light [0, inf).
+
+
+

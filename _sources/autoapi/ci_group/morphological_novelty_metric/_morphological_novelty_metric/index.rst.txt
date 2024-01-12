@@ -1,0 +1,53 @@
+:orphan:
+
+:py:mod:`_morphological_novelty_metric`
+=============================================================================
+
+.. py:module:: ci_group.morphological_novelty_metric._morphological_novelty_metric
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   ci_group.morphological_novelty_metric._morphological_novelty_metric.get_novelty_from_population
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ci_group.morphological_novelty_metric._morphological_novelty_metric.Orientations
+   ci_group.morphological_novelty_metric._morphological_novelty_metric.Magnitudes
+
+
+.. py:data:: Orientations
+
+   
+
+.. py:data:: Magnitudes
+
+   
+
+.. py:function:: get_novelty_from_population(population: list[revolve2.modular_robot.ModularRobot], cob_heuristic: bool = False, num_bins: int = 20) -> numpy.typing.NDArray[numpy.float64]
+
+   Get the morphological novelty score for individuals in a population.
+
+   This metric for Morphological Novelty considers robots a distribution in space, which can be reshaped into any other distribution.
+   The work that has to be done to reshape distribution 1 to distribution 2 is used for the final novelty calculation.
+   A detailed description of the Algorithm can be found in:
+   Oliver Weissl, and A.E. Eiben. "Morphological-Novelty in Modular Robot Evolution". 2023 IEEE Symposium Series on Computational Intelligence (SSCI)(pp. 1066-1071). IEEE, 2023.
+
+   :param population: The population of robots.
+   :param cob_heuristic: Whether the heuristic approximation for change of basis is used.
+   :param num_bins: The amount of bins in the histogram. Increasing this allows for more detail, but risks sparseness, while lower values generalize more.
+   :return: The novelty scores.
+
+

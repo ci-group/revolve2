@@ -16,6 +16,7 @@ Subpackages
    :maxdepth: 3
 
    genotypes/index.rst
+   morphological_novelty_metric/index.rst
 
 
 Submodules
@@ -28,7 +29,8 @@ Submodules
    modular_robots_v1/index.rst
    modular_robots_v2/index.rst
    morphological_measures/index.rst
-   simulation/index.rst
+   planar_robot_representation/index.rst
+   simulation_parameters/index.rst
    terrains/index.rst
 
 

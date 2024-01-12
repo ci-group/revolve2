@@ -303,11 +303,16 @@ Attributes
    .. py:attribute:: grid
       :type: numpy.typing.NDArray[TModule]
 
+      
+
+   .. py:attribute:: symmetry_grid
+      :type: numpy.typing.NDArray[TModule]
+
       Position of the core in 'body_as_grid'.
 
 
    .. py:attribute:: core_grid_position
-      :type: tuple[int, int, int]
+      :type: pyrr.Vector3[numpy.int_]
 
       If the robot is two dimensional, i.e. all module rotations are 0 degrees.
 

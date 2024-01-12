@@ -16,6 +16,7 @@ Subpackages
    :maxdepth: 3
 
    v1/index.rst
+   v2/index.rst
 
 
 Package Contents
@@ -26,32 +27,29 @@ Classes
 
 .. autoapisummary::
 
-   modular_robot_physical.physical_interfaces.PhysicalControlInterface
    modular_robot_physical.physical_interfaces.PhysicalInterface
-   modular_robot_physical.physical_interfaces.PhysicalSensorState
 
 
 
+Functions
+~~~~~~~~~
 
-.. py:class:: PhysicalControlInterface(debug: bool, dry: bool, hinge_mapping: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], int], inverse_pin: dict[int, bool])
+.. autoapisummary::
+
+   modular_robot_physical.physical_interfaces.get_interface
 
 
-   Bases: :py:obj:`revolve2.modular_robot.ModularRobotControlInterface`
 
-   .. autoapi-inheritance-diagram:: modular_robot_physical.physical_interfaces.PhysicalControlInterface
-      :parts: 1
+.. py:function:: get_interface(hardware_type: modular_robot_physical._hardware_type.HardwareType, debug: bool, dry: bool) -> modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface
 
-   A base interface for physical robot control.
+   Get the interface for the given hardware type.
 
-   .. py:method:: set_active_hinge_target(active_hinge: revolve2.modular_robot.body.base.ActiveHinge, target: float) -> None
-
-      Set the position target for an active hinge.
-
-      Target is clamped within the active hinges range.
-
-      :param active_hinge: The active hinge to set the target for.
-      :param target: The target to set.
-
+   :param hardware_type: The type of hardware.
+   :param debug: If debugging messages are activated.
+   :param dry: If servo outputs are not propagated to the physical servos.:
+   :returns: The interface.
+   :raises NotImplementedError: If the hardware type is not supported or if careful is enabled and not supported for the hardware type.
+   :raises ModuleNotFoundError: If some required package are not installed.
 
 
 .. py:class:: PhysicalInterface
@@ -64,47 +62,48 @@ Classes
 
    Abstract implementation for interfacing with hardware.
 
-   .. py:property:: control_interface
-      :type: modular_robot_physical.physical_interfaces._physical_control_interface.PhysicalControlInterface
+   .. py:method:: set_servo_targets(pins: list[int], targets: list[float]) -> None
       :abstractmethod:
 
-      Get the control interface.
+      Set the target for multiple servos.
 
-      :returns: The control interface.
+      This can be a fairly slow operation.
+
+      :param pins: The GPIO pin numbers.
+      :param targets: The target angles.
 
 
-   .. py:method:: read_sensor_state() -> modular_robot_physical.physical_interfaces._physical_sensor_state.PhysicalSensorState
+   .. py:method:: enable() -> None
       :abstractmethod:
 
-      Read the current sensor state.
-
-      :returns: The sensor state.
+      Start the robot.
 
 
-   .. py:method:: shutdown() -> None
+   .. py:method:: disable() -> None
       :abstractmethod:
 
-      Shutdown the interface.
+      Set the robot to low power mode.
+
+      This disables all active modules and sensors.
 
 
-
-.. py:class:: PhysicalSensorState
-
-
-   Bases: :py:obj:`revolve2.modular_robot.sensor_state.ModularRobotSensorState`
-
-   .. autoapi-inheritance-diagram:: modular_robot_physical.physical_interfaces.PhysicalSensorState
-      :parts: 1
-
-   A Class for using physical sensors.
-
-   .. py:method:: get_active_hinge_sensor_state(sensor: revolve2.modular_robot.body.base.ActiveHingeSensor) -> revolve2.modular_robot.sensor_state.ActiveHingeSensorState
+   .. py:method:: get_battery_level() -> float
       :abstractmethod:
 
-      Get sensor states for Hinges.
+      Get the battery level.
 
-      :param sensor: The sensor to query.
-      :return: The Sensor State.
+      :returns: The battery level as a number between 0.0 and 1.0.
+      :raises NotImplementedError: If getting the battery level is not supported on this hardware.
+
+
+   .. py:method:: get_multiple_servo_positions(pins: Sequence[int]) -> list[float]
+      :abstractmethod:
+
+      Get the current position of multiple servos.
+
+      :param pins: The GPIO pin numbers.
+      :returns: The current positions.
+      :raises NotImplementedError: If getting the servo position is not supported on this hardware.
 
 
 

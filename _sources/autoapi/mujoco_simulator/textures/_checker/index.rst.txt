@@ -1,0 +1,52 @@
+:orphan:
+
+:py:mod:`_checker`
+============================================
+
+.. py:module:: mujoco_simulator.textures._checker
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator.textures._checker.Checker
+
+
+
+
+.. py:class:: Checker
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.geometry.textures.Texture`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.textures._checker.Checker
+      :parts: 1
+
+   A checker texture for geometric models.
+
+   .. py:attribute:: reference
+      :type: revolve2.simulation.scene.geometry.textures.TextureReference
+
+      
+
+   .. py:attribute:: repeat
+      :type: tuple[int, int]
+
+      
+
+   .. py:attribute:: primary_color
+      :type: revolve2.simulation.scene.Color
+
+      
+
+   .. py:attribute:: secondary_color
+      :type: revolve2.simulation.scene.Color
+
+      
+
+

@@ -19,6 +19,7 @@ Classes
 
    modular_robot.body.base.ActiveHinge
    modular_robot.body.base.ActiveHingeSensor
+   modular_robot.body.base.AttachmentFace
    modular_robot.body.base.Body
    modular_robot.body.base.Brick
    modular_robot.body.base.Core
@@ -26,7 +27,7 @@ Classes
 
 
 
-.. py:class:: ActiveHinge(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, servo1_bounding_box: pyrr.Vector3, servo2_bounding_box: pyrr.Vector3, frame_bounding_box: pyrr.Vector3, frame_offset: float, servo_offset: float, frame_mass: float, servo1_mass: float, servo2_mass: float, joint_offset: float, static_friction: float, dynamic_friction: float, range: float, effort: float, velocity: float, armature: float, pid_gain_p: float, pid_gain_d: float)
+.. py:class:: ActiveHinge(rotation: float | modular_robot.body._right_angles.RightAngles, servo1_bounding_box: pyrr.Vector3, servo2_bounding_box: pyrr.Vector3, frame_bounding_box: pyrr.Vector3, frame_offset: float, servo_offset: float, frame_mass: float, servo1_mass: float, servo2_mass: float, joint_offset: float, static_friction: float, dynamic_friction: float, range: float, effort: float, velocity: float, armature: float, pid_gain_p: float, pid_gain_d: float, child_offset: float)
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -41,7 +42,7 @@ Classes
 
       Get the module attached to this hinge.
 
-      :returns: The attached module.
+      :returns: The attachment points module.
 
 
    .. py:property:: static_friction
@@ -213,22 +214,34 @@ Classes
 
 
 
-.. py:class:: Body
+.. py:class:: AttachmentFace(rotation: float | modular_robot.body._right_angles.RightAngles, attachment_points: dict[int, modular_robot.body._attachment_point.AttachmentPoint])
 
 
-   Bases: :py:obj:`abc.ABC`
+   Bases: :py:obj:`modular_robot.body._module.Module`
 
-   .. autoapi-inheritance-diagram:: modular_robot.body.base.Body
+   .. autoapi-inheritance-diagram:: modular_robot.body.base.AttachmentFace
       :parts: 1
+
+   Collect AttachmentPoints on a modules face.
+
+   This face can be thought of as a pseudo-module which usually does not have a body on its own.
+
+
+.. py:class:: Body(core: modular_robot.body.base._core.Core)
+
 
    Body of a modular robot.
 
-   .. py:attribute:: core
+   .. py:property:: core
       :type: modular_robot.body.base._core.Core
 
-      
+      Get the core of the Body.
+
+      :return: The core.
+
 
    .. py:method:: grid_position(module: modular_robot.body._module.Module) -> pyrr.Vector3
+      :classmethod:
 
       Calculate the position of this module in a 3d grid with the core as center.
 
@@ -237,7 +250,7 @@ Classes
 
       :param module: The module to calculate the position for.
       :returns: The calculated position.
-      :raises NotImplementedError: In case a module is encountered that is not supported.
+      :raises KeyError: In case an attachment point is not found.
 
 
    .. py:method:: find_modules_of_type(module_type: Type[TModule]) -> list[TModule]
@@ -248,8 +261,7 @@ Classes
       :return: The list of Modules.
 
 
-   .. py:method:: to_grid() -> tuple[list[list[list[modular_robot.body._module.Module | None]]], tuple[int, int, int]]
-      :abstractmethod:
+   .. py:method:: to_grid() -> tuple[numpy.typing.NDArray[TModuleNP], pyrr.Vector3[numpy.int_]]
 
       Convert the tree structure to a grid.
 
@@ -258,12 +270,11 @@ Classes
 
       The grid is indexed depth, width, height, or x, y, z, from the perspective of the core.
 
-      :returns: The created grid with cells set to either a Module or None and a tuple representing the position of the core.
-      :raises NotImplementedError: In case a module is encountered that is not supported.
+      :returns: The created grid with cells set to either a Module or None and a position vector of the core. The position Vector3 is dtype: int.
 
 
 
-.. py:class:: Brick(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+.. py:class:: Brick(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -276,25 +287,25 @@ Classes
    .. py:property:: front
       :type: modular_robot.body._module.Module | None
 
-      Get the module attached to the front of the brick.
+      Get the front module of the brick.
 
-      :returns: The attached module.
+      :returns: The attachment points module.
 
 
    .. py:property:: right
       :type: modular_robot.body._module.Module | None
 
-      Get the module attached to the right of the brick.
+      Get right module of the brick.
 
-      :returns: The attached module.
+      :returns: The attachment points module.
 
 
    .. py:property:: left
       :type: modular_robot.body._module.Module | None
 
-      Get the module attached to the left of the brick.
+      Get the left module of the brick.
 
-      :returns: The attached module.
+      :returns: The attachment points module.
 
 
    .. py:property:: mass
@@ -314,14 +325,6 @@ Classes
       :return: Vector3 with sizes of bbox in x,y,z dimension (in m).
 
 
-   .. py:property:: child_offset
-      :type: float
-
-      Get the child offset (in m).
-
-      :return: The value.
-
-
    .. py:attribute:: FRONT
       :value: 0
 
@@ -338,7 +341,7 @@ Classes
       
 
 
-.. py:class:: Core(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+.. py:class:: Core(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -347,38 +350,6 @@ Classes
       :parts: 1
 
    The core module of a modular robot.
-
-   .. py:property:: front
-      :type: modular_robot.body._module.Module | None
-
-      Get the module attached to the front of the core.
-
-      :returns: The attached module.
-
-
-   .. py:property:: right
-      :type: modular_robot.body._module.Module | None
-
-      Get the module attached to the right of the core.
-
-      :returns: The attached module.
-
-
-   .. py:property:: back
-      :type: modular_robot.body._module.Module | None
-
-      Get the module attached to the back of the core.
-
-      :returns: The attached module.
-
-
-   .. py:property:: left
-      :type: modular_robot.body._module.Module | None
-
-      Get the module attached to the left of the core.
-
-      :returns: The attached module.
-
 
    .. py:property:: mass
       :type: float
@@ -397,12 +368,36 @@ Classes
       :return: Vector3 with sizes of bbox in x,y,z dimension (m).
 
 
-   .. py:property:: child_offset
-      :type: float
+   .. py:property:: front
+      :type: modular_robot.body._module.Module | None
 
-      Get the child offset (in m).
+      Get the front module of the core.
 
-      :return: The value.
+      :returns: The attachment points module.
+
+
+   .. py:property:: right
+      :type: modular_robot.body._module.Module | None
+
+      Get the right module of the core.
+
+      :returns: The attachment points module.
+
+
+   .. py:property:: back
+      :type: modular_robot.body._module.Module | None
+
+      Get the back module of the core.
+
+      :returns: The attachment points module.
+
+
+   .. py:property:: left
+      :type: modular_robot.body._module.Module | None
+
+      Get the left module of the core.
+
+      :returns: The attachment points module.
 
 
    .. py:attribute:: FRONT

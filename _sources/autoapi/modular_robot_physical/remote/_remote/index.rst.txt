@@ -1,0 +1,33 @@
+:orphan:
+
+:py:mod:`_remote`
+===============================================
+
+.. py:module:: modular_robot_physical.remote._remote
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.remote._remote.run_remote
+
+
+
+.. py:function:: run_remote(config: modular_robot_physical._config.Config, hostname: str, on_prepared: Callable[[], None] = lambda: None, port: int = STANDARD_PORT, debug: bool = False, manual_mode: bool = False) -> None
+
+   Control a robot remotely, running the controller on your local machine.
+
+   :param config: The robot configuration.
+   :param hostname: Hostname or IP of the robot.
+   :param on_prepared: Callback for when everything is prepared, ready to run the actual controller. You can use this for timing when the actual controller starts.
+   :param port: Port the robot daemon uses.
+   :param debug: Enable debug messages.
+   :param manual_mode: Enable manual controls for the robot, ignoring the brain.
+
+

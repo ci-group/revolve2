@@ -19,6 +19,6 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   run_brain/index.rst
+   robot_daemon/index.rst
 
 

@@ -1,6 +1,0 @@
-<map id="inheritance585d5f784d" name="inheritance585d5f784d">
-<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,72,29"/>
-<area shape="rect" id="node2" title="Interface for controlling modular robots." alt="" coords="117,5,320,29"/>
-<area shape="rect" id="node3" href="../../_physical_control_interface/index.html#modular_robot_physical.physical_interfaces._physical_control_interface.PhysicalControlInterface" target="_top" title="A base interface for physical robot control." alt="" coords="365,5,534,29"/>
-<area shape="rect" id="node4" href="#modular_robot_physical.physical_interfaces.v1._v1_physical_control_interface.V1PhysicalControlInterface" target="_top" title="Implements PhysicalControlInterface for v1 hardware." alt="" coords="578,5,763,29"/>
-</map>

@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: BodyV2(attachment_positions: list[int] = [0] * 4)
+.. py:class:: BodyV2
 
 
    Bases: :py:obj:`modular_robot.body.base._body.Body`
@@ -29,19 +29,12 @@ Classes
 
    Body of a V1 modular robot.
 
-   .. py:method:: to_grid() -> tuple[list[list[list[modular_robot.body._module.Module | None]]], tuple[int, int, int]]
+   .. py:property:: core_v2
+      :type: modular_robot.body.v2._core_v2.CoreV2
 
-      Convert the tree structure to a grid.
+      Get the specific v2 core of the body.
 
-      The distance between all modules is assumed to be one grid cell.
-      All module angles must be multiples of 90 degrees.
-
-      The grid is indexed depth, width, height, or x, y, z, from the perspective of the core.
-
-      :returns: The created grid with cells set to either a Module or None and a tuple representing the position of the core.
-      :raises NotImplementedError: In case a module is encountered that is not supported.
-
-      # noqa: DAR402 NotImplementedError
+      :return: The v2 core.
 
 
 

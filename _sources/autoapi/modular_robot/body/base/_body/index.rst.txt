@@ -25,28 +25,32 @@ Attributes
 .. autoapisummary::
 
    modular_robot.body.base._body.TModule
+   modular_robot.body.base._body.TModuleNP
 
 
 .. py:data:: TModule
 
    
 
-.. py:class:: Body
+.. py:data:: TModuleNP
 
+   
 
-   Bases: :py:obj:`abc.ABC`
+.. py:class:: Body(core: modular_robot.body.base._core.Core)
 
-   .. autoapi-inheritance-diagram:: modular_robot.body.base._body.Body
-      :parts: 1
 
    Body of a modular robot.
 
-   .. py:attribute:: core
+   .. py:property:: core
       :type: modular_robot.body.base._core.Core
 
-      
+      Get the core of the Body.
+
+      :return: The core.
+
 
    .. py:method:: grid_position(module: modular_robot.body._module.Module) -> pyrr.Vector3
+      :classmethod:
 
       Calculate the position of this module in a 3d grid with the core as center.
 
@@ -55,7 +59,7 @@ Attributes
 
       :param module: The module to calculate the position for.
       :returns: The calculated position.
-      :raises NotImplementedError: In case a module is encountered that is not supported.
+      :raises KeyError: In case an attachment point is not found.
 
 
    .. py:method:: find_modules_of_type(module_type: Type[TModule]) -> list[TModule]
@@ -66,8 +70,7 @@ Attributes
       :return: The list of Modules.
 
 
-   .. py:method:: to_grid() -> tuple[list[list[list[modular_robot.body._module.Module | None]]], tuple[int, int, int]]
-      :abstractmethod:
+   .. py:method:: to_grid() -> tuple[numpy.typing.NDArray[TModuleNP], pyrr.Vector3[numpy.int_]]
 
       Convert the tree structure to a grid.
 
@@ -76,8 +79,7 @@ Attributes
 
       The grid is indexed depth, width, height, or x, y, z, from the perspective of the core.
 
-      :returns: The created grid with cells set to either a Module or None and a tuple representing the position of the core.
-      :raises NotImplementedError: In case a module is encountered that is not supported.
+      :returns: The created grid with cells set to either a Module or None and a position vector of the core. The position Vector3 is dtype: int.
 
 
 

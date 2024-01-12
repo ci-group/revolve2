@@ -27,6 +27,5 @@ Functions
 
    :param genotype: The genotype to create the body from.
    :returns: The created body.
-   :raises RuntimeError: In case a module is encountered that is not supported.
 
 

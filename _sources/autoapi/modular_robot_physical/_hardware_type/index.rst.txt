@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_hardware_type`
+===============================================
+
+.. py:module:: modular_robot_physical._hardware_type
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical._hardware_type.HardwareType
+
+
+
+
+.. py:class:: HardwareType(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical._hardware_type.HardwareType
+      :parts: 1
+
+   The types of hardware.
+
+   .. py:attribute:: v1
+
+      
+
+   .. py:attribute:: v2
+
+      
+
+

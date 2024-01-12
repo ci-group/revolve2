@@ -9,6 +9,15 @@
 
 
 
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   textures/index.rst
+
+
 Package Contents
 ----------------
 
@@ -22,7 +31,7 @@ Classes
 
 
 
-.. py:class:: LocalSimulator(headless: bool = False, start_paused: bool = False, num_simulators: int = 1)
+.. py:class:: LocalSimulator(headless: bool = False, start_paused: bool = False, num_simulators: int = 1, cast_shadows: bool = False, fast_sim: bool = False, manual_control: bool = False)
 
 
    Bases: :py:obj:`revolve2.simulation.simulator.Simulator`
@@ -38,6 +47,7 @@ Classes
 
       :param batch: The batch to run.
       :returns: List of simulation states in ascending order of time.
+      :raises Exception: If manual control is selected, but headless is enabled.
 
 
 

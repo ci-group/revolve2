@@ -1,0 +1,41 @@
+:orphan:
+
+:py:mod:`_attachment_face_builder`
+=====================================================================================
+
+.. py:module:: modular_robot_simulation._build_multi_body_systems._attachment_face_builder
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._build_multi_body_systems._attachment_face_builder.AttachmentFaceBuilder
+
+
+
+
+.. py:class:: AttachmentFaceBuilder(module: revolve2.modular_robot.body.base.AttachmentFace, rigid_body: revolve2.simulation.scene.RigidBody, slot_pose: revolve2.simulation.scene.Pose)
+
+
+   Bases: :py:obj:`modular_robot_simulation._build_multi_body_systems._builder.Builder`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._build_multi_body_systems._attachment_face_builder.AttachmentFaceBuilder
+      :parts: 1
+
+   A Builder for Attachment Faces.
+
+   .. py:method:: build(multi_body_system: revolve2.simulation.scene.MultiBodySystem, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping) -> list[modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild]
+
+      Build a module onto the Robot.
+
+      :param multi_body_system: The multi body system of the robot.
+      :param body_to_multi_body_system_mapping: A mapping from body to multi-body system
+      :return: The next children to be built.
+
+
+

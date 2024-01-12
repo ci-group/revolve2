@@ -1,0 +1,63 @@
+:orphan:
+
+:py:mod:`_texture_reference`
+===============================================================
+
+.. py:module:: simulation.scene.geometry.textures._texture_reference
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry.textures._texture_reference.TextureReference
+
+
+
+
+.. py:class:: TextureReference
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry.textures._texture_reference.TextureReference
+      :parts: 1
+
+   Reference texture information for the simulators.
+
+   .. py:attribute:: builtin
+      :type: str | None
+
+      Allows to reference builtin textures of the targeted simulator.
+
+
+   .. py:attribute:: file
+      :type: str | None
+
+      The source file of the specified texture, if custom.
+
+
+   .. py:attribute:: content_type
+      :type: str | None
+
+      The type of the source file. The supported types depend on the simulator used. Please check the simulators documentation for supported filetypes.
+
+
+   .. py:attribute:: gridlayout
+      :type: str | None
+
+      Specify the layout of the texture to be mapped onto an object. This depends on the simulator used. Please check the simulators documentation for supported grid layouts.
+
+
+   .. py:method:: __post_init__() -> None
+
+      Check for potential conflicts due to missing arguments.
+
+      :raises NotImplementedError: If not sufficient arguments are given.
+
+
+

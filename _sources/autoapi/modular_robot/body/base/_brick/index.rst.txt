@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: Brick(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+.. py:class:: Brick(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -32,25 +32,25 @@ Classes
    .. py:property:: front
       :type: modular_robot.body._module.Module | None
 
-      Get the module attached to the front of the brick.
+      Get the front module of the brick.
 
-      :returns: The attached module.
+      :returns: The attachment points module.
 
 
    .. py:property:: right
       :type: modular_robot.body._module.Module | None
 
-      Get the module attached to the right of the brick.
+      Get right module of the brick.
 
-      :returns: The attached module.
+      :returns: The attachment points module.
 
 
    .. py:property:: left
       :type: modular_robot.body._module.Module | None
 
-      Get the module attached to the left of the brick.
+      Get the left module of the brick.
 
-      :returns: The attached module.
+      :returns: The attachment points module.
 
 
    .. py:property:: mass
@@ -68,14 +68,6 @@ Classes
 
       Sizes are total length, not half length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (in m).
-
-
-   .. py:property:: child_offset
-      :type: float
-
-      Get the child offset (in m).
-
-      :return: The value.
 
 
    .. py:attribute:: FRONT

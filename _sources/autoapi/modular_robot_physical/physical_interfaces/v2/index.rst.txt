@@ -1,0 +1,72 @@
+:py:mod:`v2`
+=======================================================
+
+.. py:module:: modular_robot_physical.physical_interfaces.v2
+
+.. autoapi-nested-parse::
+
+   V2 physical interface implementation.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.physical_interfaces.v2.V2PhysicalInterface
+
+
+
+
+.. py:class:: V2PhysicalInterface(debug: bool, dry: bool)
+
+
+   Bases: :py:obj:`modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical.physical_interfaces.v2.V2PhysicalInterface
+      :parts: 1
+
+   Implementation of PhysicalInterface for V2 modular robots.
+
+   .. py:method:: set_servo_targets(pins: list[int], targets: list[float]) -> None
+
+      Set the target for multiple servos.
+
+      This can be a fairly slow operation.
+
+      :param pins: The GPIO pin numbers.
+      :param targets: The target angles.
+
+
+   .. py:method:: enable() -> None
+
+      Start the robot.
+
+
+   .. py:method:: disable() -> None
+
+      Set the robot to low power mode.
+
+      This disables all active modules and sensors.
+
+
+   .. py:method:: get_battery_level() -> float
+
+      Get the battery level.
+
+      :returns: The battery level as a number between 0.0 and 1.0.
+
+
+   .. py:method:: get_multiple_servo_positions(pins: Sequence[int]) -> list[float]
+
+      Get the current position of multiple servos.
+
+      :param pins: The GPIO pin numbers.
+      :returns: The current positions.
+
+
+

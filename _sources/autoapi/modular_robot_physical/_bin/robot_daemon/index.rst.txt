@@ -1,0 +1,71 @@
+:py:mod:`robot_daemon`
+==================================================
+
+.. py:module:: modular_robot_physical._bin.robot_daemon
+
+.. autoapi-nested-parse::
+
+   Physical modular robot daemon that provides a network interface to use the robot.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical._bin.robot_daemon.Args
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical._bin.robot_daemon.main_with_args
+   modular_robot_physical._bin.robot_daemon.main
+
+
+
+.. py:class:: Args
+
+
+   Bases: :py:obj:`typed_argparse.TypedArgs`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical._bin.robot_daemon.Args
+      :parts: 1
+
+   Arguments for the program.
+
+   .. py:attribute:: debug
+      :type: bool
+
+      
+
+   .. py:attribute:: hardware
+      :type: modular_robot_physical._hardware_type.HardwareType
+
+      
+
+   .. py:attribute:: dry
+      :type: bool
+
+      
+
+
+.. py:function:: main_with_args(args: Args) -> None
+
+   Run the program from the point were arguments were parsed.
+
+   :param args: The parsed program arguments.
+
+
+.. py:function:: main() -> None
+
+   Run the script.
+
+

@@ -16,6 +16,9 @@ Subpackages
    :maxdepth: 3
 
    physical_interfaces/index.rst
+   remote/index.rst
+   robot_daemon/index.rst
+   robot_daemon_api/index.rst
 
 
 Package Contents
@@ -26,7 +29,6 @@ Classes
 
 .. autoapisummary::
 
-   modular_robot_physical.BrainRunner
    modular_robot_physical.Config
    modular_robot_physical.HardwareType
    modular_robot_physical.UUIDKey
@@ -34,34 +36,13 @@ Classes
 
 
 
-.. py:class:: BrainRunner(hardware_type: modular_robot_physical._harware_type.HardwareType, config: modular_robot_physical._config.Config, debug: bool, dry: bool)
+Attributes
+~~~~~~~~~~
 
+.. autoapisummary::
 
-   Interfaces with hardware to run brains or manually control the robot.
-
-   .. py:method:: set_all_active_hinges(target: float) -> None
-
-      Set all servos to the specified target.
-
-      :param target: The target in radians.
-
-
-   .. py:method:: set_active_hinges_initial_positions() -> None
-
-      Set all servos to their initial positions.
-
-
-   .. py:method:: run_brain() -> None
-
-      Run the brain from the config.
-
-
-   .. py:method:: shutdown() -> None
-
-      Gracefully shut down the hardware, moving to a low power state.
-
-      This does not shut down the CPU, just the servos and such.
-
+   modular_robot_physical.PROTOCOL_VERSION
+   modular_robot_physical.STANDARD_PORT
 
 
 .. py:class:: Config
@@ -96,7 +77,7 @@ Classes
    .. py:attribute:: control_frequency
       :type: int
 
-      Frequency at which to call the brain control functions in seconds.
+      Frequency at which to call the brain control functions in seconds. There currently is a bug where if you set the control frequency to (around) 10 or smaller the program might hang. This is most likely a big in pycapnp and once pycapnp v2 is released this is probably resolved.
 
 
    .. py:attribute:: inverse_servos
@@ -121,6 +102,20 @@ Classes
 
       
 
+   .. py:attribute:: v2
+
+      
+
+
+.. py:data:: PROTOCOL_VERSION
+   :value: '1.0.0'
+
+   
+
+.. py:data:: STANDARD_PORT
+   :value: 20812
+
+   
 
 .. py:class:: UUIDKey(value: _T)
 

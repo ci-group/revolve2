@@ -53,4 +53,11 @@ Classes
       :returns: The list.
 
 
+   .. py:method:: to_normalized_rgb_list() -> list[float]
+
+      Convert to rgb list where each value is between 0 and 1.
+
+      :returns: The list.
+
+
 

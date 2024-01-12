@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: Module(num_children: int, rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color)
+.. py:class:: Module(rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, attachment_points: dict[int, modular_robot.body._attachment_point.AttachmentPoint])
 
 
    Base class for a module for modular robots.
@@ -30,17 +30,6 @@ Classes
       Get the uuid.
 
       :returns: The uuid.
-
-
-   .. py:property:: children
-      :type: list[Module | None]
-
-      Get the children of this module.
-
-      Do not alter the returned list.
-      It will break stuff.
-
-      :returns: The list of children.
 
 
    .. py:property:: rotation
@@ -71,6 +60,14 @@ Classes
       :returns: The index of this module in the parent modules child list, or None if this module has not yet been added to a body.
 
 
+   .. py:property:: children
+      :type: dict[int, Module]
+
+      Get all children on this module.
+
+      :return: The children and their respective attachment point index.
+
+
    .. py:property:: color
       :type: modular_robot.body._color.Color
 
@@ -79,13 +76,33 @@ Classes
       :returns: The color.
 
 
+   .. py:property:: attachment_points
+      :type: dict[int, modular_robot.body._attachment_point.AttachmentPoint]
+
+      Get all attachment points of this module.
+
+      :return: The attachment points.
+
+
    .. py:method:: set_child(module: Module, child_index: int) -> None
 
       Attach a module to a slot.
 
       :param module: The module to attach.
       :param child_index: The slot to attach it to.
-      :raises RuntimeError: If that slot is already taken by another module.
+      :raises KeyError: If attachment point is already populated.
+
+
+   .. py:method:: can_set_child(module: Module, child_index: int) -> bool
+
+      Check if a child can be set onto a specific index.
+
+      This is for more advanced conflict checks, such as big modules that have the possibility to block other attachment points from being populated.
+      By default this returns true, since the basic modules do not block other attachment points.
+
+      :param module: The module to set.
+      :param child_index: The child index to check.
+      :return: Whether it is possible.
 
 
    .. py:method:: neighbours(within_range: int) -> list[Module]
@@ -94,6 +111,14 @@ Classes
 
       :param within_range: The range in which modules are considered a neighbour. Minimum is 1.
       :returns: The neighbouring modules.
+
+
+   .. py:method:: is_free(index: int) -> bool
+
+      Return if the attachment-point is free.
+
+      :param index: The index to check.
+      :return: The boolean.
 
 
 

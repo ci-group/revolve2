@@ -51,7 +51,7 @@ Classes
    .. py:attribute:: control_frequency
       :type: int
 
-      Frequency at which to call the brain control functions in seconds.
+      Frequency at which to call the brain control functions in seconds. There currently is a bug where if you set the control frequency to (around) 10 or smaller the program might hang. This is most likely a big in pycapnp and once pycapnp v2 is released this is probably resolved.
 
 
    .. py:attribute:: inverse_servos

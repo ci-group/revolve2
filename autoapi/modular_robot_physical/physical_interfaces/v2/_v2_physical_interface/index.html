@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>_v2_physical_interface &mdash; Revolve2 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../../_static/graphviz.css" type="text/css" />
+    <link rel="shortcut icon" href="../../../../../_static/favicon.png"/>
+  <!--[if lt IE 9]>
+    <script src="../../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+        <script src="../../../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            Revolve2
+              <img src="../../../../../_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../getting_started/index.html">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../getting_started/index.html#step-1-installation">Step 1: Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../getting_started/index.html#step-2-play-with-the-examples">Step 2: Play with the examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../installation/index.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation/index.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation/index.html#create-a-virtual-environment">Create a virtual environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation/index.html#download-the-source">Download the source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation/index.html#common-issues">Common issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation/index.html#install-packages">Install packages</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../installation/index.html#editable-mode">Editable Mode</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../introduction_to_modular_robots/index.html">Introduction to modular robots</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction_to_modular_robots/index.html#modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../introduction_to_modular_robots/index.html#sensors">Sensors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../creating_a_physical_robot/index.html">Creating a physical robot</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../creating_a_physical_robot/index.html#required-parts">Required parts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../creating_a_physical_robot/index.html#the-core-module">The core module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../creating_a_physical_robot/index.html#brick-and-active-hinge-modules">Brick and active hinge modules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../creating_a_physical_robot/index.html#bolts-for-attaching-modules">Bolts for attaching modules</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../creating_a_physical_robot/index.html#assembling-a-modular-robot">Assembling a modular robot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../creating_a_physical_robot/index.html#d-printing-and-assembling-modules">3D printing and assembling modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../creating_a_physical_robot/index.html#using-your-physical-robot">Using your physical robot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../physical_robot_core_setup/index.html">Physical Robot Core Setup</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../physical_robot_core_setup/index.html#preparing-the-hardware">Preparing the hardware</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../physical_robot_core_setup/index.html#hardware-setup-for-a-v1-robot">Hardware setup for a V1 Robot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../physical_robot_core_setup/index.html#hardware-setup-for-a-v2-robot">Hardware setup for a V2 Robot</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../physical_robot_core_setup/index.html#setting-up-the-rpi">Setting up the RPi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../physical_robot_core_setup/index.html#install-revolve2-on-the-rpi">Install Revolve2 on the RPi</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../../physical_robot_core_setup/index.html#v1-additional-steps">V1 Additional Steps</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../contributing_guide/index.html">Contributing guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../contributing_guide/index.html#publishing-your-contribution">Publishing your contribution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../contributing_guide/index.html#developer-installation">Developer installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../contributing_guide/index.html#continuous-integration">Continuous integration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../contributing_guide/index.html#code-tools">Code tools</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../contributing_guide/index.html#documentation">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../../contributing_guide/index.html#version-control">Version control</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../index.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../ci_group/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/fitness_functions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fitness_functions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/modular_robots_v1/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v1</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/modular_robots_v2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robots_v2</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/morphological_measures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_measures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/planar_robot_representation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">planar_robot_representation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/simulation_parameters/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation_parameters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/terrains/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">terrains</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../experimentation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../experimentation/index.html#submodules">Submodules</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../experimentation/logging/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">logging</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../experimentation/rng/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">rng</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../modular_robot/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../modular_robot/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../modular_robot/body/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">body</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../modular_robot/brain/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">brain</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../modular_robot/sensor_state/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensor_state</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../modular_robot/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../modular_robot/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_physical</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">physical_interfaces</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../remote/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">remote</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../robot_daemon/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">robot_daemon</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../robot_daemon_api/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">robot_daemon_api</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../index.html#classes">Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../index.html#attributes">Attributes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../modular_robot_simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../modular_robot_simulation/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../modular_robot_simulation/index.html#classes">Classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../modular_robot_simulation/index.html#functions">Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../simulation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../simulation/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../simulation/scene/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scene</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../simulation/simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulator</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/index.html#classes">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">Revolve2</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="xref py py-mod docutils literal notranslate"><span class="pre">_v2_physical_interface</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-modular_robot_physical.physical_interfaces.v2._v2_physical_interface">
+<span id="v2-physical-interface"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">_v2_physical_interface</span></code><a class="headerlink" href="#module-modular_robot_physical.physical_interfaces.v2._v2_physical_interface" title="Link to this heading"></a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface" title="modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">V2PhysicalInterface</span></code></a></p></td>
+<td><p>Implementation of PhysicalInterface for V2 modular robots.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">V2PhysicalInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../../_physical_interface/index.html#modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface" title="modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface</span></code></a></p>
+<div class="graphviz"><img src="../../../../../_images/inheritance-3e0654208354daf6a54fec66e51f6e2bc518fd70.png" alt="Inheritance diagram of modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface" usemap="#inheritance290a9375d7" class="inheritance graphviz" /></div>
+<map id="inheritance290a9375d7" name="inheritance290a9375d7">
+<area shape="rect" id="node2" href="../../_physical_interface/index.html#modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface" target="_top" title="Abstract implementation for interfacing with hardware." alt="" coords="125,5,260,31"/>
+<area shape="rect" id="node3" href="#modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface" target="_top" title="Implementation of PhysicalInterface for V2 modular robots." alt="" coords="308,5,459,31"/>
+</map><p>Implementation of PhysicalInterface for V2 modular robots.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.set_servo_targets">
+<span class="sig-name descname"><span class="pre">set_servo_targets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">targets</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.set_servo_targets" title="Link to this definition"></a></dt>
+<dd><p>Set the target for multiple servos.</p>
+<p>This can be a fairly slow operation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pins</strong> – The GPIO pin numbers.</p></li>
+<li><p><strong>targets</strong> – The target angles.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.enable">
+<span class="sig-name descname"><span class="pre">enable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.enable" title="Link to this definition"></a></dt>
+<dd><p>Start the robot.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.disable">
+<span class="sig-name descname"><span class="pre">disable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.disable" title="Link to this definition"></a></dt>
+<dd><p>Set the robot to low power mode.</p>
+<p>This disables all active modules and sensors.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.get_battery_level">
+<span class="sig-name descname"><span class="pre">get_battery_level</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.get_battery_level" title="Link to this definition"></a></dt>
+<dd><p>Get the battery level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The battery level as a number between 0.0 and 1.0.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.get_multiple_servo_positions">
+<span class="sig-name descname"><span class="pre">get_multiple_servo_positions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pins</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_physical.physical_interfaces.v2._v2_physical_interface.V2PhysicalInterface.get_multiple_servo_positions" title="Link to this definition"></a></dt>
+<dd><p>Get the current position of multiple servos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pins</strong> – The GPIO pin numbers.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The current positions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Computational Intelligence Group, Vrije Universiteit Amsterdam &amp; Contributors.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

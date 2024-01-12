@@ -34,8 +34,8 @@ Classes
 
       
 
-   .. py:attribute:: color
-      :type: simulation.scene._color.Color
+   .. py:attribute:: texture
+      :type: simulation.scene.geometry.textures.Texture
 
       
 

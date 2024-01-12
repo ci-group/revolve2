@@ -1,0 +1,42 @@
+:orphan:
+
+:py:mod:`_flat`
+=========================================
+
+.. py:module:: mujoco_simulator.textures._flat
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator.textures._flat.Flat
+
+
+
+
+.. py:class:: Flat
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.geometry.textures.Texture`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.textures._flat.Flat
+      :parts: 1
+
+   A flat texture for geometric models.
+
+   .. py:attribute:: reference
+      :type: revolve2.simulation.scene.geometry.textures.TextureReference
+
+      
+
+   .. py:attribute:: primary_color
+      :type: revolve2.simulation.scene.Color
+
+      
+
+

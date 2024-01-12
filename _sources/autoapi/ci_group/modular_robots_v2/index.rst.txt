@@ -44,9 +44,6 @@ Functions
 
    Sample robot with new HW config.
 
-   all previously designed robots can be translated to the new hardware using Body(new_hardware=True)
-   the position for core-connected modules is optional, by default pos 5 (middle of core)
-
    :returns: the robot
 
 

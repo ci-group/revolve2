@@ -1,0 +1,51 @@
+:orphan:
+
+:py:mod:`_map_type`
+======================================================
+
+.. py:module:: simulation.scene.geometry.textures._map_type
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry.textures._map_type.MapType
+
+
+
+
+.. py:class:: MapType(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry.textures._map_type.MapType
+      :parts: 1
+
+   Enumerate different map types for textures.
+
+   - "MAP2D": Maps the texture to a 2d surface.
+   - "CUBE": Wraps the texture around a cube object.
+   - "SKYBOX": Like "cube" but maps onto the inside of an object.
+
+   .. py:attribute:: MAP2D
+      :value: '2d'
+
+      
+
+   .. py:attribute:: CUBE
+      :value: 'cube'
+
+      
+
+   .. py:attribute:: SKYBOX
+      :value: 'skybox'
+
+      
+
+

@@ -1,0 +1,43 @@
+:orphan:
+
+:py:mod:`_brain_dummy_instance`
+=========================================================
+
+.. py:module:: modular_robot.brain.dummy._brain_dummy_instance
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.brain.dummy._brain_dummy_instance.BrainDummyInstance
+
+
+
+
+.. py:class:: BrainDummyInstance
+
+
+   Bases: :py:obj:`modular_robot.brain._brain_instance.BrainInstance`
+
+   .. autoapi-inheritance-diagram:: modular_robot.brain.dummy._brain_dummy_instance.BrainDummyInstance
+      :parts: 1
+
+   A brain that does nothing.
+
+   .. py:method:: control(dt: float, sensor_state: modular_robot.sensor_state._modular_robot_sensor_state.ModularRobotSensorState, control_interface: modular_robot._modular_robot_control_interface.ModularRobotControlInterface) -> None
+
+      Control the modular robot.
+
+      Sets the active hinge targets to the values in the state array as defined by the mapping provided in the constructor.
+
+      :param dt: Elapsed seconds since last call to this function.
+      :param sensor_state: Interface for reading the current sensor state.
+      :param control_interface: Interface for controlling the robot.
+
+
+

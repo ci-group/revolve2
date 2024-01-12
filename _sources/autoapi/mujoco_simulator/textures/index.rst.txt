@@ -1,0 +1,104 @@
+:py:mod:`textures`
+===================================
+
+.. py:module:: mujoco_simulator.textures
+
+.. autoapi-nested-parse::
+
+   Mujoco specific Textures.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator.textures.Checker
+   mujoco_simulator.textures.Flat
+   mujoco_simulator.textures.Gradient
+
+
+
+
+.. py:class:: Checker
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.geometry.textures.Texture`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.textures.Checker
+      :parts: 1
+
+   A checker texture for geometric models.
+
+   .. py:attribute:: reference
+      :type: revolve2.simulation.scene.geometry.textures.TextureReference
+
+      
+
+   .. py:attribute:: repeat
+      :type: tuple[int, int]
+
+      
+
+   .. py:attribute:: primary_color
+      :type: revolve2.simulation.scene.Color
+
+      
+
+   .. py:attribute:: secondary_color
+      :type: revolve2.simulation.scene.Color
+
+      
+
+
+.. py:class:: Flat
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.geometry.textures.Texture`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.textures.Flat
+      :parts: 1
+
+   A flat texture for geometric models.
+
+   .. py:attribute:: reference
+      :type: revolve2.simulation.scene.geometry.textures.TextureReference
+
+      
+
+   .. py:attribute:: primary_color
+      :type: revolve2.simulation.scene.Color
+
+      
+
+
+.. py:class:: Gradient
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.geometry.textures.Texture`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.textures.Gradient
+      :parts: 1
+
+   A color gradient spanning over geometric models.
+
+   .. py:attribute:: reference
+      :type: revolve2.simulation.scene.geometry.textures.TextureReference
+
+      
+
+   .. py:attribute:: primary_color
+      :type: revolve2.simulation.scene.Color
+
+      
+
+   .. py:attribute:: secondary_color
+      :type: revolve2.simulation.scene.Color
+
+      
+
+

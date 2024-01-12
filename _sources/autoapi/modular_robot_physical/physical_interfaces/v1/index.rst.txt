@@ -5,7 +5,7 @@
 
 .. autoapi-nested-parse::
 
-   Interfaces to v1 hardware.
+   V1 physical interface implementation.
 
 
 
@@ -22,7 +22,7 @@ Classes
 
 
 
-.. py:class:: V1PhysicalInterface(debug: bool, dry: bool, hinge_mapping: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.base.ActiveHinge], int], inverse_pin: dict[int, bool])
+.. py:class:: V1PhysicalInterface(debug: bool, dry: bool)
 
 
    Bases: :py:obj:`modular_robot_physical.physical_interfaces._physical_interface.PhysicalInterface`
@@ -30,26 +30,45 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot_physical.physical_interfaces.v1.V1PhysicalInterface
       :parts: 1
 
-   Implements PhysicalSensorStateReader for v1 hardware.
+   Implementation of PhysicalInterface for V1 modular robots.
 
-   .. py:property:: control_interface
-      :type: modular_robot_physical.physical_interfaces._physical_control_interface.PhysicalControlInterface
+   .. py:method:: set_servo_targets(pins: list[int], targets: list[float]) -> None
 
-      Get the control interface.
+      Set the target for multiple servos.
 
-      :returns: The control interface.
+      This can be a fairly slow operation.
 
-
-   .. py:method:: read_sensor_state() -> modular_robot_physical.physical_interfaces._physical_sensor_state.PhysicalSensorState
-
-      Read the current sensor state.
-
-      :returns: The sensor state.
+      :param pins: The GPIO pin numbers.
+      :param targets: The target angles.
 
 
-   .. py:method:: shutdown() -> None
+   .. py:method:: enable() -> None
 
-      Shutdown the interface.
+      Start the robot.
+
+
+   .. py:method:: disable() -> None
+
+      Set the robot to low power mode.
+
+      This disables all active modules and sensors.
+
+
+   .. py:method:: get_battery_level() -> float
+      :abstractmethod:
+
+      Get the battery level.
+
+      :raises NotImplementedError: If getting the battery level is not supported on this hardware.
+
+
+   .. py:method:: get_multiple_servo_positions(pins: Sequence[int]) -> list[float]
+      :abstractmethod:
+
+      Get the current position of multiple servos.
+
+      :param pins: The GPIO pin numbers.
+      :raises NotImplementedError: If getting the servo position is not supported on this hardware.
 
 
 

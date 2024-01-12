@@ -1,6 +1,0 @@
-<map id="inheritance67fff0a3fb" name="inheritance67fff0a3fb">
-<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
-<area shape="rect" id="node2" title="The state of modular robot&#39;s sensors." alt="" coords="125,5,316,31"/>
-<area shape="rect" id="node3" href="../../_physical_sensor_state/index.html#modular_robot_physical.physical_interfaces._physical_sensor_state.PhysicalSensorState" target="_top" title="A Class for using physical sensors." alt="" coords="364,5,519,31"/>
-<area shape="rect" id="node4" href="#modular_robot_physical.physical_interfaces.v1._v1_physical_sensor_state.V1PhysicalSensorState" target="_top" title="Implements PhysicalSensorState for v1 harware." alt="" coords="567,5,737,31"/>
-</map>

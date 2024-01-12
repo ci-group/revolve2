@@ -1,0 +1,112 @@
+:py:mod:`robot_daemon_protocol_capnp`
+=============================================================================
+
+.. py:module:: modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp
+
+.. autoapi-nested-parse::
+
+   This is an automatically generated stub for `robot_daemon_protocol.capnp`.
+
+   This file was manually edited to contain the RoboServer interface.
+
+
+
+Module Contents
+---------------
+
+.. py:data:: here
+
+   
+
+.. py:data:: module_file
+
+   
+
+.. py:data:: SetupArgs
+
+   
+
+.. py:data:: SetupArgsBuilder
+
+   
+
+.. py:data:: SetupaArgsReader
+
+   
+
+.. py:data:: SetupResponse
+
+   
+
+.. py:data:: SetupResponseBuilder
+
+   
+
+.. py:data:: SetupResponseReader
+
+   
+
+.. py:data:: PinControl
+
+   
+
+.. py:data:: PinControlBuilder
+
+   
+
+.. py:data:: PinControlReader
+
+   
+
+.. py:data:: ControlArgs
+
+   
+
+.. py:data:: ControlArgsBuilder
+
+   
+
+.. py:data:: ControlArgsReader
+
+   
+
+.. py:data:: ReadSensorsArgs
+
+   
+
+.. py:data:: ReadSensorsArgsBuilder
+
+   
+
+.. py:data:: ReadSensorsArgsReader
+
+   
+
+.. py:data:: ControlAndReadSensorsArgs
+
+   
+
+.. py:data:: ControlAndReadSensorsArgsBuilder
+
+   
+
+.. py:data:: ControlAndReadSensorsArgsReader
+
+   
+
+.. py:data:: SensorReadings
+
+   
+
+.. py:data:: SensorReadingsBuilder
+
+   
+
+.. py:data:: SensorReadingsReader
+
+   
+
+.. py:data:: RoboServer
+
+   
+

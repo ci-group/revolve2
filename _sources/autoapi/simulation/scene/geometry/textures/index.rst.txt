@@ -1,0 +1,170 @@
+:py:mod:`textures`
+============================================
+
+.. py:module:: simulation.scene.geometry.textures
+
+.. autoapi-nested-parse::
+
+   Standard resources for textures in simulation.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry.textures.MapType
+   simulation.scene.geometry.textures.Texture
+   simulation.scene.geometry.textures.TextureReference
+
+
+
+
+.. py:class:: MapType(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry.textures.MapType
+      :parts: 1
+
+   Enumerate different map types for textures.
+
+   - "MAP2D": Maps the texture to a 2d surface.
+   - "CUBE": Wraps the texture around a cube object.
+   - "SKYBOX": Like "cube" but maps onto the inside of an object.
+
+   .. py:attribute:: MAP2D
+      :value: '2d'
+
+      
+
+   .. py:attribute:: CUBE
+      :value: 'cube'
+
+      
+
+   .. py:attribute:: SKYBOX
+      :value: 'skybox'
+
+      
+
+
+.. py:class:: Texture
+
+
+   An abstract texture for geometric models.
+
+   .. py:attribute:: reference
+      :type: simulation.scene.geometry.textures._texture_reference.TextureReference | None
+
+      Reference the specific type of texture. If no reference is given, the base_color will be used on the Object.
+
+
+   .. py:attribute:: base_color
+      :type: simulation.scene._color.Color
+
+      Determines the base color of a material and its alpha value.
+
+
+   .. py:attribute:: primary_color
+      :type: simulation.scene._color.Color
+
+      Determines the primary color of the texture.
+
+
+   .. py:attribute:: secondary_color
+      :type: simulation.scene._color.Color
+
+      facilitates more complex textures that use two colors.
+
+
+   .. py:attribute:: map_type
+      :type: simulation.scene.geometry.textures._map_type.MapType
+
+      Represents how the texture is mapped to an object.
+
+
+   .. py:attribute:: repeat
+      :type: tuple[int, int]
+
+      Allows you to set how often a texture should be repeated across the x and y axis (Only for 2d maps).
+
+
+   .. py:attribute:: size
+      :type: tuple[int, int]
+
+      Allows to set the size of a texture. The higher the size, the higher the resolution
+
+
+   .. py:attribute:: specular
+      :type: float
+
+      Specular ranges between [0, 1].
+
+
+   .. py:attribute:: shininess
+      :type: float
+
+      Shininess ranges between [0, 1].
+
+
+   .. py:attribute:: reflectance
+      :type: float
+
+      Reflectance ranges between [0, 1].
+
+
+   .. py:attribute:: emission
+      :type: float
+
+      Allows Objects to emit light [0, inf).
+
+
+
+.. py:class:: TextureReference
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry.textures.TextureReference
+      :parts: 1
+
+   Reference texture information for the simulators.
+
+   .. py:attribute:: builtin
+      :type: str | None
+
+      Allows to reference builtin textures of the targeted simulator.
+
+
+   .. py:attribute:: file
+      :type: str | None
+
+      The source file of the specified texture, if custom.
+
+
+   .. py:attribute:: content_type
+      :type: str | None
+
+      The type of the source file. The supported types depend on the simulator used. Please check the simulators documentation for supported filetypes.
+
+
+   .. py:attribute:: gridlayout
+      :type: str | None
+
+      Specify the layout of the texture to be mapped onto an object. This depends on the simulator used. Please check the simulators documentation for supported grid layouts.
+
+
+   .. py:method:: __post_init__() -> None
+
+      Check for potential conflicts due to missing arguments.
+
+      :raises NotImplementedError: If not sufficient arguments are given.
+
+
+

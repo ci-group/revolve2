@@ -16,6 +16,7 @@ Subpackages
    :maxdepth: 3
 
    cpg/index.rst
+   dummy/index.rst
 
 
 Package Contents

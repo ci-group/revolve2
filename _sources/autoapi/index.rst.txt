@@ -9,9 +9,9 @@ This page contains auto-generated API reference documentation [#f1]_.
    /autoapi/ci_group/index
    /autoapi/experimentation/index
    /autoapi/modular_robot/index
+   /autoapi/modular_robot_physical/index
    /autoapi/modular_robot_simulation/index
    /autoapi/simulation/index
    /autoapi/mujoco_simulator/index
-   /autoapi/modular_robot_physical/index
 
 .. [#f1] Created with `sphinx-autoapi <https://github.com/readthedocs/sphinx-autoapi>`_

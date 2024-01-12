@@ -19,6 +19,7 @@ Functions
 .. autoapisummary::
 
    experimentation.optimization.ea.selection.multiple_unique
+   experimentation.optimization.ea.selection.pareto_frontier
    experimentation.optimization.ea.selection.topn
    experimentation.optimization.ea.selection.tournament
 
@@ -33,6 +34,18 @@ Functions
    :param fitnesses: Fitnesses of the population.
    :param selection_function: Function that select a single individual from a population. ([TIndividual], [TFitness]) -> index.
    :returns: Indices of the selected individuals.
+
+
+.. py:function:: pareto_frontier(frontier_values: list[list[TValues]], frontier_order: list[bool], to_take: int) -> list[int]
+
+   Return individuals based on their respective frontier values and their domination order.
+
+   For mor information on the pareto frontier check: https://en.wikipedia.org/wiki/Pareto_front.
+
+   :param frontier_values: Lists of values that are used for the frontier. The order of the list represents the importance of a value in descending order. These values need to be numeric.
+   :param frontier_order: List of orders for the values used in frontier selection. True = ascending, False = descending.
+   :param to_take: The amount of individuals to return from the frontier.
+   :returns: The index of the individuals that were selected. Returned in descending order, wrt. frontier values and domination order (Best is first).
 
 
 .. py:function:: topn(n: int, genotypes: list[Genotype], fitnesses: list[Fitness]) -> list[int]

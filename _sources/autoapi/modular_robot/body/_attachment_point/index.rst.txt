@@ -1,0 +1,39 @@
+:orphan:
+
+:py:mod:`_attachment_point`
+==============================================
+
+.. py:module:: modular_robot.body._attachment_point
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body._attachment_point.AttachmentPoint
+
+
+
+
+.. py:class:: AttachmentPoint
+
+
+   An attachment point on the parent module for the child.
+
+   .. py:attribute:: orientation
+      :type: pyrr.Quaternion
+
+      The orientation of the attachment point on the module.
+
+
+   .. py:attribute:: offset
+      :type: pyrr.Vector3
+
+      The offset for the attachment point, with respect to the center of the module.
+
+
+

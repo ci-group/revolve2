@@ -1,0 +1,16 @@
+:orphan:
+
+:py:mod:`_protocol_version`
+==================================================
+
+.. py:module:: modular_robot_physical._protocol_version
+
+
+Module Contents
+---------------
+
+.. py:data:: PROTOCOL_VERSION
+   :value: '1.0.0'
+
+   
+

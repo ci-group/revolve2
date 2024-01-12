@@ -1,0 +1,5 @@
+<map id="inheritancef68c087cd8" name="inheritancef68c087cd8">
+<area shape="rect" id="node1" href="../../base/_attachment_face/index.html#modular_robot.body.base._attachment_face.AttachmentFace" target="_top" title="Collect AttachmentPoints on a modules face." alt="" coords="125,5,252,31"/>
+<area shape="rect" id="node3" href="#modular_robot.body.v2._attachment_face_core_v2.AttachmentFaceCoreV2" target="_top" title="An AttachmentFace for the V2 Core." alt="" coords="300,5,475,31"/>
+<area shape="rect" id="node2" href="../../_module/index.html#modular_robot.body._module.Module" target="_top" title="Base class for a module for modular robots." alt="" coords="5,5,77,31"/>
+</map>

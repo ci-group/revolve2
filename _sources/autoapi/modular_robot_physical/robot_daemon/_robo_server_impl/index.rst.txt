@@ -1,0 +1,76 @@
+:orphan:
+
+:py:mod:`_robo_server_impl`
+===============================================================
+
+.. py:module:: modular_robot_physical.robot_daemon._robo_server_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl
+
+
+
+
+.. py:class:: RoboServerImpl(debug: bool, hardware_type: modular_robot_physical._hardware_type.HardwareType, physical_interface: modular_robot_physical.physical_interfaces.PhysicalInterface)
+
+
+   Bases: :py:obj:`modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.RoboServer.Server`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl
+      :parts: 1
+
+   Implements the Cap'n Proto interface.
+
+   .. py:method:: cleanup() -> None
+
+      Stop the server and sets everything to low power.
+
+
+   .. py:method:: setup(args: modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.SetupArgs, _context: Any) -> modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.SetupResponse
+      :async:
+
+      Handle a setup command.
+
+      :param args: Arguments to the setup process.
+      :returns: Whether the setup was successful.
+
+
+   .. py:method:: control(args: modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.ControlArgsReader, _context: Any) -> None
+      :async:
+
+      Handle control commands.
+
+      :param args: Args to the function.
+
+
+   .. py:method:: readSensors(args: modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.ReadSensorsArgsReader, _context: Any) -> modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.SensorReadings
+      :async:
+
+      Handle readSensors.
+
+      Stub that currently does reads nothing.
+
+      :param args: Args to the function.
+      :returns: The readings.
+
+
+   .. py:method:: controlAndReadSensors(args: modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.ControlAndReadSensorsArgsReader, _context: Any) -> modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.SensorReadings
+      :async:
+
+      Handle controlAndReadSensors.
+
+      Currently reads nothing.
+
+      :param args: Args to the function.
+      :returns: The readings.
+
+
+

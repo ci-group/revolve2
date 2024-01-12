@@ -30,6 +30,7 @@ Functions
 .. autoapisummary::
 
    modular_robot_simulation.simulate_scenes
+   modular_robot_simulation.test_robot
 
 
 
@@ -133,5 +134,15 @@ Functions
 
       The static geometry that defines the terrain.
 
+
+
+.. py:function:: test_robot(robot: revolve2.modular_robot.ModularRobot | revolve2.modular_robot.body.base.Body, terrain: modular_robot_simulation._terrain.Terrain, simulator: revolve2.simulation.simulator.Simulator, batch_parameters: revolve2.simulation.simulator.BatchParameters) -> None
+
+   Test a robot with a manual brain.
+
+   :param robot: The ModularRobot or Body instance.
+   :param terrain: The terrain to test on.
+   :param simulator: The simulator.
+   :param batch_parameters: The batch parameters.
 
 

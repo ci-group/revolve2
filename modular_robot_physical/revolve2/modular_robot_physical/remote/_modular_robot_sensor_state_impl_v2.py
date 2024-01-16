@@ -1,6 +1,7 @@
-from revolve2.modular_robot.body.base import ActiveHingeSensor
+from revolve2.modular_robot.body.base import ActiveHingeSensor, CameraSensor
 from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
+    CameraSensorState,
     ModularRobotSensorState,
 )
 
@@ -40,3 +41,12 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         return ActiveHingeSensorStateImpl(
             self._positions[self._hinge_sensor_mapping[UUIDKey(sensor)]]
         )
+
+    def get_camera_sensor_state(self, sensor: CameraSensor) -> CameraSensorState:
+        """
+        Get the state of the provided camera sensor.
+
+        :param sensor: The sensor.
+        :raises NotImplementedError: It is not implemented.
+        """
+        raise NotImplementedError("No camera sensor defined for V2 Robot.")

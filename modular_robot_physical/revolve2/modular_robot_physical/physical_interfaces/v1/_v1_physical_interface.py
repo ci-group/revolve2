@@ -2,7 +2,10 @@ import math
 import time
 from typing import Sequence
 
+import numpy as np
 import pigpio
+from numpy.typing import NDArray
+from picamera2 import Picamera2
 
 from .._physical_interface import PhysicalInterface
 
@@ -19,6 +22,7 @@ class V1PhysicalInterface(PhysicalInterface):
     _dry: bool
 
     _gpio: pigpio.pi | None
+    _camera: Picamera2 | None
 
     def __init__(self, debug: bool, dry: bool) -> None:
         """
@@ -30,6 +34,12 @@ class V1PhysicalInterface(PhysicalInterface):
         """
         self._debug = debug
         self._dry = dry
+
+        try:
+            _camera = Picamera2()
+            _camera.start()
+        except RuntimeError:
+            _camera = None
 
         if not self._dry:
             self._gpio = pigpio.pi()
@@ -101,3 +111,15 @@ class V1PhysicalInterface(PhysicalInterface):
         :raises NotImplementedError: If getting the servo position is not supported on this hardware.
         """
         raise NotImplementedError("Getting servo position not supported on v1 harware.")
+
+    def get_image(self) -> NDArray[np.int_]:
+        """
+        Get the current image of the camera.
+
+        :return: The image.
+        :raises ValueError: If getting the camera is not connected.
+        """
+        if self._camera is None:
+            raise ValueError("There is no camera connected.")
+        image: NDArray[np.int_] = self._camera.capture_array()
+        return image

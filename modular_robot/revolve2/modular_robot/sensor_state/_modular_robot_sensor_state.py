@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 
-from ..body.base._active_hinge_sensor import ActiveHingeSensor
+from ..body.base import ActiveHingeSensor, CameraSensor
 from ._active_hinge_sensor_state import ActiveHingeSensorState
+from ._camera_sensor_state import CameraSensorState
 
 
 class ModularRobotSensorState(ABC):
@@ -16,4 +17,13 @@ class ModularRobotSensorState(ABC):
 
         :param sensor: The sensor.
         :returns: The state.
+        """
+
+    @abstractmethod
+    def get_camera_sensor_state(self, sensor: CameraSensor) -> CameraSensorState:
+        """
+        Get the state of the provided camera sensor.
+
+        :param sensor: The sensor.
+        :return: The state.
         """

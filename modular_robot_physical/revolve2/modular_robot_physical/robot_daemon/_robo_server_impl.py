@@ -2,6 +2,9 @@ import threading
 import time
 from typing import Any, Sequence
 
+import numpy as np
+from numpy.typing import NDArray
+
 from .._hardware_type import HardwareType
 from .._protocol_version import PROTOCOL_VERSION
 from ..physical_interfaces import PhysicalInterface
@@ -25,6 +28,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
     _targets: dict[int, float]  # pin -> target
     _current_targets: dict[int, float]  # pin -> target
+    _current_image: NDArray[np.int_]
 
     _measured_hinge_positions: dict[int, float]  # pin -> position
     _battery: float
@@ -104,19 +108,25 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
             self._physical_interface.set_servo_targets(pins, targets)
 
-            # Read measured hinge positions
-            if self._hardware_type is not HardwareType.v1:
-                hinge_positions = self._physical_interface.get_multiple_servo_positions(
-                    self._active_pins
-                )
-
-                with self._lock:
-                    for pin, position in zip(self._active_pins, hinge_positions):
-                        self._measured_hinge_positions[pin] = position
-
-                battery = self._physical_interface.get_battery_level()
-                with self._lock:
-                    self._battery = battery
+            # Measure sensors
+            match self._hardware_type:
+                case HardwareType.v1:
+                    image = self._physical_interface.get_image()
+                    with self._lock:
+                        self._current_image = image
+                case HardwareType.v2:
+                    hinge_positions = (
+                        self._physical_interface.get_multiple_servo_positions(
+                            self._active_pins
+                        )
+                    )
+                    battery = self._physical_interface.get_battery_level()
+                    with self._lock:
+                        for pin, position in zip(self._active_pins, hinge_positions):
+                            self._measured_hinge_positions[pin] = position
+                        self._battery = battery
+                case _:
+                    pass
 
             time.sleep(1 / 60)
 
@@ -251,3 +261,12 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         return robot_daemon_protocol_capnp.SensorReadings(
             pins=pins_readings, battery=battery
         )
+
+    @property
+    def current_image(self) -> NDArray[np.int_]:
+        """
+        Get the current image.
+
+        :return: The image.
+        """
+        return self._current_image

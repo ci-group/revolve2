@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Sequence
 
+import numpy as np
+from numpy.typing import NDArray
+
 
 class PhysicalInterface(ABC):
     """Abstract implementation for interfacing with hardware."""
@@ -46,3 +49,12 @@ class PhysicalInterface(ABC):
         :returns: The current positions.
         :raises NotImplementedError: If getting the servo position is not supported on this hardware.
         """
+
+    @abstractmethod
+    def get_image(self) -> NDArray[np.int_]:
+        """
+        Get the current image of the camera.
+
+        :raises NotImplementedError: If getting the servo position is not supported on this hardware.
+        """
+        raise NotImplementedError("Getting servo position not supported on v1 harware.")

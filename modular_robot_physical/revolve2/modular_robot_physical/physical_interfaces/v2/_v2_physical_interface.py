@@ -1,6 +1,8 @@
 import math
 from typing import Sequence
 
+import numpy as np
+from numpy.typing import NDArray
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
@@ -99,7 +101,7 @@ class V2PhysicalInterface(PhysicalInterface):
             angles = [90.0 + target / (2.0 * math.pi) * 360.0 for target in targets]
             for pin, angle in zip(pins, angles):
                 all_angles[pin] = angle
-            self._robohat.update_servo_data_direct(all_angles)
+            self._robohat.update_servo_data_direct(all_angles)  # type: ignore
 
     def enable(self) -> None:
         """Start the robot."""
@@ -136,3 +138,11 @@ class V2PhysicalInterface(PhysicalInterface):
         """
         angles = self._robohat.get_servo_multiple_angles()
         return [(angles[pin] - 90) / 360.0 * math.pi * 2.0 for pin in pins]
+
+    def get_image(self) -> NDArray[np.int_]:
+        """
+        Get the current image of the camera.
+
+        :raises NotImplementedError: If getting the servo position is not supported on this hardware.
+        """
+        raise NotImplementedError("Getting servo position not supported on v1 harware.")

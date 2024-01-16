@@ -8,6 +8,7 @@ def get_body_states_single_robot(
     body: Body, environment_results: EnvironmentResults
 ) -> tuple[BodyState, BodyState]:
     """
+
     Get the first and last body state of a robot from a simulation simulating only a single robot.
 
     :param body: The body of the robot.

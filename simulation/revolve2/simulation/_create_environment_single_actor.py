@@ -8,7 +8,7 @@ from .running import Environment, PosedActor
 
 
 def create_environment_single_actor(
-    actor: Actor, controller: ActorController, terrain: Terrain, actor_starting_height: float = 0
+    actor: Actor, controller: ActorController, terrain: Terrain
 ) -> Environment:
     """
     Create an environment for simulating a single actor.
@@ -16,15 +16,10 @@ def create_environment_single_actor(
     :param actor: The actor to simulate.
     :param controller: The controller for the actor.
     :param terrain: The terrain to simulate the actor in.
-    :param actor_starting_height: If you want to adjust the z axis of actor when it spawns
     :returns: The created environment.
     """
-
     bounding_box = actor.calc_aabb()
-    if actor_starting_height == 0:
-        z_axis = bounding_box.size.z / 2.0 - bounding_box.offset.z
-    else:
-        z_axis = actor_starting_height
+
     env = Environment(EnvironmentActorController(controller))
     env.static_geometries.extend(terrain.static_geometry)
     env.actors.append(
@@ -34,7 +29,7 @@ def create_environment_single_actor(
                 [
                     0.0,
                     0.0,
-                    z_axis,
+                    bounding_box.size.z / 2.0 - bounding_box.offset.z,
                 ]
             ),
             Quaternion(),

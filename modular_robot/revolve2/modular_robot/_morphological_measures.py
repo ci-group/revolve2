@@ -209,12 +209,15 @@ class MorphologicalMeasures:
         for x in range(self.bounding_box_depth):
             for z in range(self.bounding_box_height):
                 for y in range(1, (self.bounding_box_width - 1) // 2 + 1):
-                    if self.body_as_grid[x][self.core_grid_position[1] + y][
+                    #print(f'x={x}, core_pos[1] + y={self.core_grid_position[1] + y}, z={z}')
+                    #print('bounding_box_width = ', self.bounding_box_width)
+                    #print((self.bounding_box_width - 1) // 2 + 1)
+                    if self.body_as_grid[x][self.core_grid_position[1] + y - 2][
                         z
                     ] is not None and type(
-                        self.body_as_grid[x][self.core_grid_position[1] + y][z]
+                        self.body_as_grid[x][self.core_grid_position[1] + y - 2][z]
                     ) == type(
-                        self.body_as_grid[x][self.core_grid_position[1] - y][z]
+                        self.body_as_grid[x][self.core_grid_position[1] - y - 2][z]
                     ):
                         num_symmetrical += 2
 
@@ -234,12 +237,12 @@ class MorphologicalMeasures:
         for y in range(self.bounding_box_width):
             for z in range(self.bounding_box_height):
                 for x in range(1, (self.bounding_box_depth - 1) // 2 + 1):
-                    if self.body_as_grid[self.core_grid_position[0] + x][y][
+                    if self.body_as_grid[self.core_grid_position[0] + x - 2][y][
                         z
                     ] is not None and type(
-                        self.body_as_grid[self.core_grid_position[0] + x][y][z]
+                        self.body_as_grid[self.core_grid_position[0] + x - 2][y][z]
                     ) == type(
-                        self.body_as_grid[self.core_grid_position[0] - x][y][z]
+                        self.body_as_grid[self.core_grid_position[0] - x - 2][y][z]
                     ):
                         num_symmetrical += 2
 

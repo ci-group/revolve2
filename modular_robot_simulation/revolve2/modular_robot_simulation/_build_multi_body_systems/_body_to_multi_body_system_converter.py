@@ -30,7 +30,7 @@ class BodyToMultiBodySystemConverter:
         """
         multi_body_system = MultiBodySystem(pose=pose, is_static=False)
 
-        core_imu = IMUSensor(position=Vector3([0.0, 0.0, 0.0]))
+        core_imu = IMUSensor(pose=Pose(position=Vector3([0.0, 0.0, 0.0])))
 
         rigid_body = RigidBody(
             initial_pose=Pose(),

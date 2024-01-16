@@ -2,6 +2,7 @@ import uuid
 from dataclasses import dataclass, field
 
 from pyrr import Vector3
+from ._pose import Pose
 
 
 @dataclass
@@ -23,4 +24,4 @@ class IMUSensor:
         """
         return self._uuid
 
-    position: Vector3
+    pose: Pose

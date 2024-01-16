@@ -6,6 +6,7 @@ import xml.etree.ElementTree as xml
 import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
 
+from .._rigid_body import RigidBody
 from .._joint_hinge import JointHinge
 from .._multi_body_system import MultiBodySystem
 from .._pose import Pose
@@ -21,6 +22,7 @@ def multi_body_system_to_urdf(
     list[GeometryHeightmap],
     list[tuple[JointHinge, str]],
     list[tuple[Geometry, str]],
+    list[tuple[RigidBody], str],
 ]:
     """
     Convert a multi-body system to URDF.
@@ -33,7 +35,7 @@ def multi_body_system_to_urdf(
 
     :param multi_body_system: The multi-body system to convert.
     :param name: The name to using in the URDF. It will be a prefix for every name in the model.
-    :returns: A urdf string, plane geometries, heightmap geometries, joints and their names in the urdf, geometries and their names in the urdf
+    :returns: A urdf string, plane geometries, heightmap geometries, joints and their names in the urdf, geometries and their names in the urdf, rigid bodies and their names in the urdf.
     :raises ValueError: In case the graph is cyclic.
 
     # noqa: DAR402 ValueError
@@ -47,6 +49,7 @@ class _URDFConverter:
     visited_rigid_bodies: set[uuid.UUID]  # their indices
     joints_and_names: list[tuple[JointHinge, str]]
     geometries_and_names: list[tuple[Geometry, str]]
+    rigid_bodies_and_names: list[tuple[RigidBody], str]
     planes: list[GeometryPlane]
     heightmaps: list[GeometryHeightmap]
 
@@ -58,6 +61,7 @@ class _URDFConverter:
         list[GeometryHeightmap],
         list[tuple[JointHinge, str]],
         list[tuple[Geometry, str]],
+        list[tuple[RigidBody], str],
     ]:
         assert multi_body_system.has_root()
 
@@ -65,6 +69,7 @@ class _URDFConverter:
         self.visited_rigid_bodies = set()
         self.joints_and_names = []
         self.geometries_and_names = []
+        self.rigid_bodies_and_names = []
         self.planes = []
         self.heightmaps = []
 
@@ -73,7 +78,7 @@ class _URDFConverter:
         for element in self._make_links_xml_elements(
             multi_body_system.root,
             multi_body_system.root.initial_pose,
-            f"{name}_root",
+            f"{name}",
             parent_rigid_body=None,
         ):
             urdf.append(element)
@@ -86,6 +91,7 @@ class _URDFConverter:
             self.heightmaps,
             self.joints_and_names,
             self.geometries_and_names,
+            self.rigid_bodies_and_names,
         )
 
     def _make_links_xml_elements(
@@ -103,6 +109,7 @@ class _URDFConverter:
 
         link = xml.Element("link", {"name": rigid_body_name})
         elements.append(link)
+        self.rigid_bodies_and_names.append((rigid_body, rigid_body_name))
 
         com_xyz = link_pose.orientation.inverse * (
             rigid_body.initial_pose.position

@@ -1,0 +1,26 @@
+import uuid
+from dataclasses import dataclass, field
+
+from pyrr import Vector3
+
+
+@dataclass
+class IMUSensor:
+    """
+    An inertial measurement unit.
+
+    Reports specific force(closely related to acceleration), angular rate(closely related to angularvelocity), and orientation.
+    """
+
+    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
+
+    @property
+    def uuid(self) -> uuid.UUID:
+        """
+        Get the uuid.
+
+        :returns: The uuid.
+        """
+        return self._uuid
+
+    position: Vector3

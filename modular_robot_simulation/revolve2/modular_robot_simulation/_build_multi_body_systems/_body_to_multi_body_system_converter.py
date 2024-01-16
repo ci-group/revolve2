@@ -4,7 +4,7 @@ from collections import deque
 from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.body.base import Body
-from revolve2.simulation.scene import MultiBodySystem, Pose, RigidBody
+from revolve2.simulation.scene import IMUSensor, MultiBodySystem, Pose, RigidBody
 
 from ._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
 from ._get_builder import get_builder
@@ -30,15 +30,19 @@ class BodyToMultiBodySystemConverter:
         """
         multi_body_system = MultiBodySystem(pose=pose, is_static=False)
 
+        core_imu = IMUSensor(position=Vector3([0.0, 0.0, 0.0]))
+
         rigid_body = RigidBody(
             initial_pose=Pose(),
             static_friction=self._STATIC_FRICTION,
             dynamic_friction=self._DYNAMIC_FRICTION,
             geometries=[],
-            imu_sensor=Vector3([0.0, 0.0, 0.0]),
+            imu_sensors=[core_imu],
         )
 
-        mapping = BodyToMultiBodySystemMapping(rigid_body, multi_body_system)
+        mapping = BodyToMultiBodySystemMapping(
+            core_imu=core_imu, multi_body_system=multi_body_system
+        )
 
         multi_body_system.add_rigid_body(rigid_body)
 

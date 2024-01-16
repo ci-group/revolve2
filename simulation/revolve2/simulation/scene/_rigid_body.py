@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 
 from pyrr import Matrix33, Quaternion, Vector3
 
+from ._imu_sensor import IMUSensor
 from ._pose import Pose
 from .geometry import Geometry, GeometryBox
 
@@ -38,12 +39,8 @@ class RigidBody:
     geometries: list[Geometry]
     """Geometries describing the shape of the body."""
 
-    imu_sensor: None | Vector3
-    """
-    None if there is no IMU sensor attached.
-
-    If not none, it is the position of the imu sensor in the rigid body's frame of reference.
-    """
+    imu_sensors: list[IMUSensor]
+    """The IMU sensors attached to this rigid body."""
 
     def mass(self) -> float:
         """Get mass of the rigid body.

@@ -4,6 +4,7 @@ import numpy.typing as npt
 from pyrr import Quaternion, Vector3
 
 from revolve2.simulation.scene import (
+    IMUSensor,
     JointHinge,
     MultiBodySystem,
     Pose,
@@ -89,20 +90,20 @@ class SimulationStateImpl(SimulationState):
         joint_mujoco = self._abstraction_to_mujoco_mapping.hinge_joint[UUIDKey(joint)]
         return float(self._qpos[joint_mujoco.id])
 
-    def get_rigid_body_imu_specific_force(self, rigid_body: RigidBody) -> Vector3:
+    def get_imu_specific_force(self, imu_sensor: IMUSensor) -> Vector3:
         """
-        Get the specific force measured by the rigid body's IMU.
+        Get the specific force measured an IMU.
 
-        :param rigid_body: The rigid body that has the IMU.
+        :param imu_sensor: The IMU.
         :returns: The specific force.
         """
         raise NotImplementedError()
 
-    def get_rigid_body_imu_angular_rate(self, rigid_body: RigidBody) -> Vector3:
+    def get_imu_angular_rate(self, imu_sensor: IMUSensor) -> Vector3:
         """
-        Get the angular rate measured by the rigid body's IMU.
+        Get the angular rate measured by am IMU.
 
-        :param rigid_body: The rigid body that has the IMU.
+        :param imu_sensor: The IMU.
         :returns: The angular rate.
         """
         raise NotImplementedError()

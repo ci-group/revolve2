@@ -103,7 +103,7 @@ class ActiveHingeBuilder(Builder):
             static_friction=self._module.static_friction,
             dynamic_friction=self._module.dynamic_friction,
             geometries=[],
-            imu_sensor=None,
+            imu_sensors=[],
         )
         multi_body_system.add_rigid_body(next_rigid_body)
 

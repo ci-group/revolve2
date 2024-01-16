@@ -1,7 +1,7 @@
-from pyrr import Quaternion
+from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.sensor_state import IMUSensorState
-from revolve2.simulation.scene import MultiBodySystem, SimulationState, RigidBody
+from revolve2.simulation.scene import IMUSensor, MultiBodySystem, SimulationState
 
 
 class IMUSensorStateImpl(IMUSensorState):
@@ -9,44 +9,42 @@ class IMUSensorStateImpl(IMUSensorState):
 
     _simulation_state: SimulationState
     _multi_body_system: MultiBodySystem
-    _rigid_body: RigidBody
+    _core_imu: IMUSensor
 
     def __init__(
         self,
         simulation_state: SimulationState,
         multi_body_system: MultiBodySystem,
-        rigid_body: RigidBody,
+        core_imu: IMUSensor,
     ) -> None:
         """
         Initialize this object.
 
         :param simulation_state: The state of the simulation.
         :param multi_body_system: The multi body system this imu is attached to.
-        :param rigid_body: The rigid body the imu is attached to.
+        :param core_imu: The imu attached to the core.
         """
         self._simulation_state = simulation_state
         self._multi_body_system = multi_body_system
-        self._rigid_body = rigid_body
+        self._core_imu = core_imu
 
     @property
-    def specific_force(self) -> float:
+    def specific_force(self) -> Vector3:
         """
         Get the measured specific force.
 
         :returns: The measured specific force.
         """
-        return self._simulation_state.get_rigid_body_imu_specific_force(
-            self._rigid_body
-        )
+        return self._simulation_state.get_imu_specific_force(self._core_imu)
 
     @property
-    def angular_rate(self) -> float:
+    def angular_rate(self) -> Vector3:
         """
         Get the measured angular rate.
 
         :returns: The measured angular rate.
         """
-        return self._simulation_state.get_rigid_body_imu_angular_rate(self._rigid_body)
+        return self._simulation_state.get_imu_angular_rate(self._core_imu)
 
     @property
     def orientation(self) -> Quaternion:

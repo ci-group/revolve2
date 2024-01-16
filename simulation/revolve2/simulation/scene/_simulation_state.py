@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 
+from pyrr import Vector3
+
+from ._imu_sensor import IMUSensor
 from ._joint_hinge import JointHinge
 from ._multi_body_system import MultiBodySystem
 from ._pose import Pose
 from ._rigid_body import RigidBody
-from pyrr import Vector3
 
 
 class SimulationState(ABC):
@@ -47,19 +49,19 @@ class SimulationState(ABC):
         """
 
     @abstractmethod
-    def get_rigid_body_imu_specific_force(self, rigid_body: RigidBody) -> Vector3:
+    def get_imu_specific_force(self, imu_sensor: IMUSensor) -> Vector3:
         """
-        Get the specific force measured by the rigid body's IMU.
+        Get the specific force measured an IMU.
 
-        :param rigid_body: The rigid body that has the IMU.
+        :param imu_sensor: The IMU.
         :returns: The specific force.
         """
 
     @abstractmethod
-    def get_rigid_body_imu_angular_rate(self, rigid_body: RigidBody) -> Vector3:
+    def get_imu_angular_rate(self, imu_sensor: IMUSensor) -> Vector3:
         """
-        Get the angular rate measured by the rigid body's IMU.
+        Get the angular rate measured by am IMU.
 
-        :param rigid_body: The rigid body that has the IMU.
+        :param imu_sensor: The IMU.
         :returns: The angular rate.
         """

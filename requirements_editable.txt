@@ -4,7 +4,7 @@
 -e simulators/mujoco_simulator[dev]
 -e experimentation[dev]
 -e modular_robot_simulation[dev]
--e modular_robot_physical[dev]
+-e modular_robot_physical[remote]
 -e modular_robot[dev]
 -e simulation[dev]
 -r ./examples/robot_bodybrain_ea_database/requirements.txt

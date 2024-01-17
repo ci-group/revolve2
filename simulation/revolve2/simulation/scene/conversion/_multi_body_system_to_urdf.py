@@ -6,7 +6,6 @@ import xml.etree.ElementTree as xml
 import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
 
-from .._rigid_body import RigidBody
 from .._joint_hinge import JointHinge
 from .._multi_body_system import MultiBodySystem
 from .._pose import Pose
@@ -22,7 +21,7 @@ def multi_body_system_to_urdf(
     list[GeometryHeightmap],
     list[tuple[JointHinge, str]],
     list[tuple[Geometry, str]],
-    list[tuple[RigidBody], str],
+    list[tuple[RigidBody, str]],
 ]:
     """
     Convert a multi-body system to URDF.
@@ -49,7 +48,7 @@ class _URDFConverter:
     visited_rigid_bodies: set[uuid.UUID]  # their indices
     joints_and_names: list[tuple[JointHinge, str]]
     geometries_and_names: list[tuple[Geometry, str]]
-    rigid_bodies_and_names: list[tuple[RigidBody], str]
+    rigid_bodies_and_names: list[tuple[RigidBody, str]]
     planes: list[GeometryPlane]
     heightmaps: list[GeometryHeightmap]
 
@@ -61,7 +60,7 @@ class _URDFConverter:
         list[GeometryHeightmap],
         list[tuple[JointHinge, str]],
         list[tuple[Geometry, str]],
-        list[tuple[RigidBody], str],
+        list[tuple[RigidBody, str]],
     ]:
         assert multi_body_system.has_root()
 

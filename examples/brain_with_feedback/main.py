@@ -61,9 +61,9 @@ class ANNBrainInstance(BrainInstance):
 
         # Get the imu state
         imu_state = sensor_state.get_imu_sensor_state(self.imu_sensor)
-        logging.info(imu_state.orientation)
-        logging.info(imu_state.angular_rate)
-        logging.info(imu_state.specific_force)
+        logging.info(f"orientation: {imu_state.orientation}")
+        logging.info(f"angular rate: {imu_state.angular_rate}")
+        logging.info(f"specific force: {imu_state.specific_force}")
 
         # Here you can implement your controller.
         # The current controller does nothing except for always settings the joint positions to 0.5.

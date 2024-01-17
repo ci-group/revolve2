@@ -22,6 +22,7 @@ class SimulationStateImpl(SimulationState):
     _xpos: npt.NDArray[np.float_]
     _xquat: npt.NDArray[np.float_]
     _qpos: npt.NDArray[np.float_]
+    _sensordata: npt.NDArray[np.float_]
     _abstraction_to_mujoco_mapping: AbstractionToMujocoMapping
 
     def __init__(
@@ -41,6 +42,7 @@ class SimulationStateImpl(SimulationState):
         self._xpos = data.xpos.copy()
         self._xquat = data.xquat.copy()
         self._qpos = data.qpos.copy()
+        self._sensordata = data.sensordata.copy()
         self._abstraction_to_mujoco_mapping = abstraction_to_mujoco_mapping
 
     def get_rigid_body_relative_pose(self, rigid_body: RigidBody) -> Pose:
@@ -97,7 +99,11 @@ class SimulationStateImpl(SimulationState):
         :param imu_sensor: The IMU.
         :returns: The specific force.
         """
-        raise NotImplementedError()
+        accelerometer_id = self._abstraction_to_mujoco_mapping.imu_sensor[
+            UUIDKey(imu_sensor)
+        ].accelerometer_id
+        specific_force = self._sensordata[accelerometer_id : accelerometer_id + 3]
+        return Vector3(specific_force)
 
     def get_imu_angular_rate(self, imu_sensor: IMUSensor) -> Vector3:
         """
@@ -106,4 +112,8 @@ class SimulationStateImpl(SimulationState):
         :param imu_sensor: The IMU.
         :returns: The angular rate.
         """
-        raise NotImplementedError()
+        gyro_id = self._abstraction_to_mujoco_mapping.imu_sensor[
+            UUIDKey(imu_sensor)
+        ].gyro_id
+        angular_rate = self._sensordata[gyro_id : gyro_id + 3]
+        return Vector3(angular_rate)

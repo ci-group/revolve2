@@ -28,6 +28,7 @@ from revolve2.simulation.scene.geometry import Geometry, GeometryHeightmap
 
 from ._abstraction_to_mujoco_mapping import (
     AbstractionToMujocoMapping,
+    IMUSensorMujoco,
     JointHingeMujoco,
     MultiBodySystemMujoco,
 )
@@ -75,6 +76,7 @@ def scene_to_model(
         )
     ]
     all_joints_and_names = [c[3] for c in conversions]
+    all_rigid_bodies_and_names = [c[5] for c in conversions]
 
     heightmaps: list[GeometryHeightmap] = []
 
@@ -191,12 +193,14 @@ def scene_to_model(
                             imu.pose.orientation.w,
                         ],
                     )
+                    gyro_name = f"imu_gyro_{name}_{imu_i}"
                     multi_body_system_mjcf.sensor.add(
-                        "gyro", name=f"imu_gyro_{name}_{imu_i}", site=site_name
+                        "gyro", name=gyro_name, site=site_name
                     )
+                    accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
                     multi_body_system_mjcf.sensor.add(
                         "accelerometer",
-                        name=f"imu_accelerometer_{name}_{imu_i}",
+                        name=accelerometer_name,
                         site=site_name,
                     )
 
@@ -324,6 +328,19 @@ def scene_to_model(
         mapping.multi_body_system[UUIDKey(multi_body_system)] = MultiBodySystemMujoco(
             id=model.body(f"mbs{mbs_i}/").id
         )
+
+    # Create IMU map
+    for mbs_i, rigid_bodies_and_names in enumerate(all_rigid_bodies_and_names):
+        for rigid_body, name in rigid_bodies_and_names:
+            for imu_i, imu in enumerate(rigid_body.imu_sensors):
+                gyro_name = f"imu_gyro_{name}_{imu_i}"
+                accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
+                mapping.imu_sensor[UUIDKey(imu)] = IMUSensorMujoco(
+                    gyro_id=model.sensor(f"mbs{mbs_i}/{gyro_name}").id,
+                    accelerometer_id=model.sensor(
+                        f"mbs{mbs_i}/{accelerometer_name}"
+                    ).id,
+                )
 
     return (model, mapping)
 

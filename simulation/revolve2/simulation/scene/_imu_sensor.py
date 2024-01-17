@@ -1,7 +1,6 @@
 import uuid
 from dataclasses import dataclass, field
 
-from pyrr import Vector3
 from ._pose import Pose
 
 

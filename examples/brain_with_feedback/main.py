@@ -57,7 +57,7 @@ class ANNBrainInstance(BrainInstance):
             sensor_state.get_active_hinge_sensor_state(sensor).position
             for sensor in sensors
         ]
-        logging.info(current_positions)
+        logging.info(f"current positions: {current_positions}")
 
         # Get the imu state
         imu_state = sensor_state.get_imu_sensor_state(self.imu_sensor)

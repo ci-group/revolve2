@@ -36,12 +36,6 @@ class V1PhysicalInterface(PhysicalInterface):
         self._debug = debug
         self._dry = dry
 
-        try:
-            _camera = Picamera2()
-            _camera.start()
-        except RuntimeError:
-            _camera = None
-
         if not self._dry:
             self._gpio = pigpio.pi()
             if not self._gpio.connected:

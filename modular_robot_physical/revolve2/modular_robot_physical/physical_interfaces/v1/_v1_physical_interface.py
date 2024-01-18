@@ -6,7 +6,6 @@ import os
 import numpy as np
 import pigpio
 from numpy.typing import NDArray
-from picamera2 import Picamera2
 from tempfile import NamedTemporaryFile
 from PIL import Image
 

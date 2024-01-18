@@ -33,9 +33,18 @@ struct ControlAndReadSensorsArgs {
   readPins @1 :List(Int32);
 }
 
+struct Vector3 {
+  x: @0 :Float32;
+  y: @0 :Float32;
+  z: @0 :Float32;
+}
+
 struct SensorReadings {
   pins @0 :List(Float32);
   battery @1 :Float32;
+  imu_orientation @2 :Vector3;
+  imu_specific_force @3 :Vector3;
+  imu_angular_rate @4 :Vector3;
 }
 
 interface RoboServer {

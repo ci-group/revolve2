@@ -248,6 +248,14 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
             battery = self._physical_interface.get_battery_level()
 
+            imu_orientation = self._physical_interface.get_imu_orientation()
+            imu_specific_force = self._physical_interface.get_imu_specific_force()
+            imu_angular_rate = self._physical_interface.get_imu_angular_rate()
+
         return robot_daemon_protocol_capnp.SensorReadings(
-            pins=pins_readings, battery=battery
+            pins=pins_readings,
+            battery=battery,
+            imu_orientation=imu_orientation,
+            imu_specific_force=imu_specific_force,
+            imu_angular_rate=imu_angular_rate,
         )

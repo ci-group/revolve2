@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Sequence
+from pyrr import Vector3
 
 
 class PhysicalInterface(ABC):
@@ -45,4 +46,31 @@ class PhysicalInterface(ABC):
         :param pins: The GPIO pin numbers.
         :returns: The current positions.
         :raises NotImplementedError: If getting the servo position is not supported on this hardware.
+        """
+
+    @abstractmethod
+    def get_imu_angular_rate(self) -> Vector3:
+        """
+        Get the angular rate from the IMU.
+
+        :returns: The angular rate.
+        :raises NotImplementedError: If the IMU is not supported on this hardware.
+        """
+
+    @abstractmethod
+    def get_imu_orientation(self) -> Vector3:
+        """
+        Get the orientation from the IMU.
+
+        :returns: The orientation.
+        :raises NotImplementedError: If the IMU is not supported on this hardware.
+        """
+
+    @abstractmethod
+    def get_imu_specific_force(self) -> Vector3:
+        """
+        Get the specific force from the IMU.
+
+        :returns: The specific force.
+        :raises NotImplementedError: If the IMU is not supported on this hardware.
         """

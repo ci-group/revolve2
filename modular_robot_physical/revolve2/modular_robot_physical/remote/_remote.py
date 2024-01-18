@@ -155,7 +155,7 @@ async def _run_remote_impl(
                 ).response
                 sensor_state = ModularRobotSensorStateImplV2(
                     hinge_sensor_mapping=active_hinge_sensor_to_pin,
-                    positions={
+                    hinge_positions={
                         pin: position
                         for pin, position in zip(pins, sensor_readings.pins)
                     },
@@ -209,7 +209,7 @@ async def _run_remote_impl(
                     ).response
                     sensor_state = ModularRobotSensorStateImplV2(
                         hinge_sensor_mapping=active_hinge_sensor_to_pin,
-                        positions={
+                        hinge_positions={
                             pin: position
                             for pin, position in zip(pins, sensor_readings.pins)
                         },

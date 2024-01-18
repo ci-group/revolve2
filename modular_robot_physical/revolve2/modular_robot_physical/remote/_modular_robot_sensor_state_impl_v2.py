@@ -13,21 +13,23 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
     """Implementation of ModularRobotSensorState for v2 robots."""
 
     _hinge_sensor_mapping: dict[UUIDKey[ActiveHingeSensor], int]
-    _positions: dict[int, float]
+    _hinge_positions: dict[int, float]
+
+    # _imu_orientations:
 
     def __init__(
         self,
         hinge_sensor_mapping: dict[UUIDKey[ActiveHingeSensor], int],
-        positions: dict[int, float],
+        hinge_positions: dict[int, float],
     ) -> None:
         """
         Initialize this object.
 
         :param hinge_sensor_mapping: Mapping from active hinge sensors to pin ids.
-        :param positions: Position of hinges accessed by pin id.
+        :param hinge_positions: Position of hinges accessed by pin id.
         """
         self._hinge_sensor_mapping = hinge_sensor_mapping
-        self._positions = positions
+        self._hinge_positions = hinge_positions
 
     def get_active_hinge_sensor_state(
         self, sensor: ActiveHingeSensor
@@ -39,7 +41,7 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         :returns: The Sensor State.
         """
         return ActiveHingeSensorStateImpl(
-            self._positions[self._hinge_sensor_mapping[UUIDKey(sensor)]]
+            self._hinge_positions[self._hinge_sensor_mapping[UUIDKey(sensor)]]
         )
 
     def get_imu_sensor_state(self, sensor: IMUSensor) -> IMUSensorState:

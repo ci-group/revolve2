@@ -255,7 +255,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         return robot_daemon_protocol_capnp.SensorReadings(
             pins=pins_readings,
             battery=battery,
-            imu_orientation=imu_orientation,
-            imu_specific_force=imu_specific_force,
-            imu_angular_rate=imu_angular_rate,
+            imuOrientation=imu_orientation,
+            imuSpecificForce=imu_specific_force,
+            imuAngularRate=imu_angular_rate,
         )

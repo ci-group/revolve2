@@ -1,11 +1,11 @@
 import math
 from typing import Sequence
 
+from pyrr import Vector3
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
 from robohatlib.Robohat import Robohat
-from pyrr import Vector3
 
 from .._physical_interface import PhysicalInterface
 
@@ -143,6 +143,7 @@ class V2PhysicalInterface(PhysicalInterface):
         Get the angular rate from the IMU.
 
         :returns: The angular rate.
+        :raises RuntimeError: When imu could not be read.
         """
         gyro = self._robohat.get_imu_gyro()
         if gyro is None:
@@ -154,6 +155,7 @@ class V2PhysicalInterface(PhysicalInterface):
         Get the orientation from the IMU.
 
         :returns: The orientation.
+        :raises RuntimeError: When imu could not be read.
         """
         orientation = self._robohat.get_imu_magnetic_fields()
         if orientation is None:
@@ -165,6 +167,7 @@ class V2PhysicalInterface(PhysicalInterface):
         Get the specific force from the IMU.
 
         :returns: The specific force.
+        :raises RuntimeError: When imu could not be read.
         """
         accel = self._robohat.get_imu_acceleration()
         if accel is None:

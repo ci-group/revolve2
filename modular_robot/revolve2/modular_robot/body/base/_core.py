@@ -6,6 +6,7 @@ from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
+from ._imu_sensor import IMUSensor
 
 
 class Core(Module):
@@ -22,6 +23,8 @@ class Core(Module):
     This is the last assigned id to a module.
     See `_get_new_module_id` on what this is used for.
     """
+
+    _imu_sensor: IMUSensor | None
 
     def __init__(
         self,

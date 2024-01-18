@@ -1,6 +1,7 @@
-from revolve2.modular_robot.body.base import ActiveHingeSensor
+from revolve2.modular_robot.body.base import ActiveHingeSensor, IMUSensor
 from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
+    IMUSensorState,
     ModularRobotSensorState,
 )
 
@@ -40,3 +41,12 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         return ActiveHingeSensorStateImpl(
             self._positions[self._hinge_sensor_mapping[UUIDKey(sensor)]]
         )
+
+    def get_imu_sensor_state(self, sensor: IMUSensor) -> IMUSensorState:
+        """
+        Get the state of the provided IMU sensor.
+
+        :param sensor: The sensor.
+        :raises NotImplementedError: Always.
+        """
+        raise NotImplementedError()

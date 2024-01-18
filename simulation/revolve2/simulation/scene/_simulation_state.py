@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
 
+from pyrr import Vector3
+
+from ._imu_sensor import IMUSensor
 from ._joint_hinge import JointHinge
 from ._multi_body_system import MultiBodySystem
 from ._pose import Pose
@@ -43,4 +46,22 @@ class SimulationState(ABC):
 
         :param joint: The joint to get the rotational position for.
         :returns: The rotational position.
+        """
+
+    @abstractmethod
+    def get_imu_specific_force(self, imu_sensor: IMUSensor) -> Vector3:
+        """
+        Get the specific force measured an IMU.
+
+        :param imu_sensor: The IMU.
+        :returns: The specific force.
+        """
+
+    @abstractmethod
+    def get_imu_angular_rate(self, imu_sensor: IMUSensor) -> Vector3:
+        """
+        Get the angular rate measured by am IMU.
+
+        :param imu_sensor: The IMU.
+        :returns: The angular rate.
         """

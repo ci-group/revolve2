@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 
 from pyrr import Matrix33, Quaternion, Vector3
 
+from ._imu_sensor import IMUSensor
 from ._pose import Pose
 from .geometry import Geometry, GeometryBox
 
@@ -37,6 +38,9 @@ class RigidBody:
 
     geometries: list[Geometry]
     """Geometries describing the shape of the body."""
+
+    imu_sensors: list[IMUSensor]
+    """The IMU sensors attached to this rigid body."""
 
     def mass(self) -> float:
         """Get mass of the rigid body.

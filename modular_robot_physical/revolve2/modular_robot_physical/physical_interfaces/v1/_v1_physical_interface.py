@@ -1,11 +1,14 @@
 import math
 import time
 from typing import Sequence
+import os
 
 import numpy as np
 import pigpio
 from numpy.typing import NDArray
 from picamera2 import Picamera2
+from tempfile import NamedTemporaryFile
+from PIL import Image
 
 from .._physical_interface import PhysicalInterface
 
@@ -22,7 +25,6 @@ class V1PhysicalInterface(PhysicalInterface):
     _dry: bool
 
     _gpio: pigpio.pi | None
-    _camera: Picamera2 | None
 
     def __init__(self, debug: bool, dry: bool) -> None:
         """
@@ -119,7 +121,10 @@ class V1PhysicalInterface(PhysicalInterface):
         :return: The image.
         :raises ValueError: If getting the camera is not connected.
         """
-        if self._camera is None:
-            raise ValueError("There is no camera connected.")
-        image: NDArray[np.int_] = self._camera.capture_array()
+        tmp_file = NamedTemporaryFile(suffix=".jpeg")
+        file_name = tmp_file.name
+        os.system(f"cmd / c 'rpicam-jpeg -o {file_name} --width 400 --height 400'")
+        pil_image = Image.open(file_name)
+        os.remove(file_name)
+        image: NDArray[np.int_] = np.asarray(pil_image)
         return image

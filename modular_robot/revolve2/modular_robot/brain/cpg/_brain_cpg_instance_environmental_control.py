@@ -3,6 +3,11 @@ from ..._modular_robot_control_interface import ModularRobotControlInterface
 from ...sensor_state import ModularRobotSensorState
 from ...body.base import CameraSensor
 import numpy as np
+from tempfile import NamedTemporaryFile
+from PIL import Image
+import os
+from numpy.typing import NDArray
+
 
 
 class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
@@ -27,7 +32,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         """
         # Integrate ODE to obtain new state.
         self._state = self._rk45(self._state, self._weight_matrix, dt)
-        image = sensor_state.get_camera_sensor_state(CameraSensor()).image  # TODO: make this proper
+        image = self.__get_image()
 
         image = np.flip(image)  # flip the image because its axis are inverted
 
@@ -48,3 +53,13 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
             control_interface.set_active_hinge_target(
                 active_hinge, (float(self._state[state_index]) * active_hinge.range) * g
             )
+
+
+    def __get_image(self):
+        tmp_file = NamedTemporaryFile(suffix=".jpeg")
+        file_name = tmp_file.name
+        os.system(f"cmd / c 'rpicam-jpeg -o {file_name} --width 400 --height 400'")
+        pil_image = Image.open(file_name)
+        os.remove(file_name)
+        image: NDArray[np.int_] = np.asarray(pil_image)
+        return image

@@ -60,7 +60,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
 
 
     @staticmethod
-    def __get_image(self):
+    def __get_image():
         with NamedTemporaryFile(suffix=".jpeg") as tmp_file:
             file_name = tmp_file.name
             call(f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400", shell=True)

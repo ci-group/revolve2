@@ -38,8 +38,8 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         image = np.flip(image)  # flip the image because its axis are inverted
 
         # we use color filters to find the next target point
-        red_filter = image[:, :, 1] > 100
-        green_filter = image[:, :, 0] < 100
+        red_filter = image[:, :, 0] > 100
+        green_filter = image[:, :, 1] < 100
         blue_filter = image[:, :, 2] < 100
         coordinates = np.where(green_filter & red_filter & blue_filter)
         x_pos = 0
@@ -47,8 +47,9 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
             x_pos = np.mean(coordinates[1])
         picture_width = image.shape[1]
         theta = (picture_width - x_pos) - (picture_width / 2)
+        print("theta: ", theta)
         g = (((picture_width/2) - abs(theta)) / (picture_width / 2)) ** self._n
-        print(g)
+        print("g: ", g)
 
         # Set active hinge targets to match newly calculated state.
         for state_index, active_hinge in self._output_mapping:

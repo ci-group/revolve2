@@ -1,7 +1,8 @@
-from revolve2.modular_robot.body.base import ActiveHingeSensor
+from revolve2.modular_robot.body.base import ActiveHingeSensor, CameraSensor
 from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
     ModularRobotSensorState,
+    CameraSensorState,
 )
 from revolve2.simulation.scene import SimulationState, UUIDKey
 
@@ -46,3 +47,6 @@ class ModularRobotSensorStateImpl(ModularRobotSensorState):
         return ActiveHingeSensorStateImpl(
             simulation_state=self._simulation_state, hinge_joint=maybe_joint
         )
+
+    def get_camera_sensor_state(self, sensor: CameraSensor) -> CameraSensorState:
+        raise NotImplementedError("Not implemented")

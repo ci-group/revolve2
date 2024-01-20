@@ -1,6 +1,8 @@
-from ._brain_cpg_network_static import BrainCpgNetworkStatic
 from .._brain_instance import BrainInstance
-from ._brain_cpg_instance_environmental_control import BrainCpgInstanceEnvironmentalControl
+from ._brain_cpg_instance_environmental_control import (
+    BrainCpgInstanceEnvironmentalControl,
+)
+from ._brain_cpg_network_static import BrainCpgNetworkStatic
 
 
 class BrainCpgNSEnvironmentalControl(BrainCpgNetworkStatic):

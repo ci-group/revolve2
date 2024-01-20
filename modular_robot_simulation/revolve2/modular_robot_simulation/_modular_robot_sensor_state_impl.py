@@ -1,8 +1,8 @@
 from revolve2.modular_robot.body.base import ActiveHingeSensor, CameraSensor
 from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
-    ModularRobotSensorState,
     CameraSensorState,
+    ModularRobotSensorState,
 )
 from revolve2.simulation.scene import SimulationState, UUIDKey
 

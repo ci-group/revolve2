@@ -1,12 +1,12 @@
 import math
 import time
-from typing import Sequence
 from subprocess import call
+from tempfile import NamedTemporaryFile
+from typing import Sequence
 
 import numpy as np
 import pigpio
 from numpy.typing import NDArray
-from tempfile import NamedTemporaryFile
 from PIL import Image
 
 from .._physical_interface import PhysicalInterface
@@ -116,7 +116,10 @@ class V1PhysicalInterface(PhysicalInterface):
         """
         with NamedTemporaryFile(suffix=".jpeg") as tmp_file:
             file_name = tmp_file.name
-            call(f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400", shell=True)
+            call(
+                f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400",
+                shell=True,
+            )
             pil_image = Image.open(file_name)
         image: NDArray[np.int_] = np.asarray(pil_image)
         return image

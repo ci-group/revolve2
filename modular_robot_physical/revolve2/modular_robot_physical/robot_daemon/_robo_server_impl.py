@@ -110,7 +110,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
             # Measure sensors
             match self._hardware_type:
-                #case HardwareType.v1:
+                # case HardwareType.v1:
                 #    image = self._physical_interface.get_image()
                 #    with self._lock:
                 #        self._current_image = image
@@ -215,10 +215,9 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
         return self._get_sensor_readings(args.readPins)
 
-
     async def getImage(
-            self,
-            _context: Any,
+        self,
+        _context: Any,
     ) -> robot_daemon_protocol_capnp.Image:
         """
         Return the current image.
@@ -272,5 +271,3 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         return robot_daemon_protocol_capnp.SensorReadings(
             pins=pins_readings, battery=battery
         )
-
-

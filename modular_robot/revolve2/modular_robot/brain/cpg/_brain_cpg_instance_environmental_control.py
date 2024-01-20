@@ -1,11 +1,13 @@
-from ._brain_cpg_instance import BrainCpgInstance
+from subprocess import call
+from tempfile import NamedTemporaryFile
+
+import numpy as np
+from numpy.typing import NDArray
+from PIL import Image
+
 from ..._modular_robot_control_interface import ModularRobotControlInterface
 from ...sensor_state import ModularRobotSensorState
-import numpy as np
-from tempfile import NamedTemporaryFile
-from PIL import Image
-from subprocess import call
-from numpy.typing import NDArray
+from ._brain_cpg_instance import BrainCpgInstance
 
 
 class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
@@ -14,10 +16,10 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
     _n: int = 6
 
     def control(
-            self,
-            dt: float,
-            sensor_state: ModularRobotSensorState,
-            control_interface: ModularRobotControlInterface,
+        self,
+        dt: float,
+        sensor_state: ModularRobotSensorState,
+        control_interface: ModularRobotControlInterface,
     ) -> None:
         """
         Control the modular robot.
@@ -44,26 +46,29 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         picture_width = image.shape[1]
         theta = (picture_width - x_pos) - (picture_width / 2)
         print("theta: ", theta)
-        g = (((picture_width/2) - abs(theta)) / (picture_width / 2)) ** self._n
+        g = (((picture_width / 2) - abs(theta)) / (picture_width / 2)) ** self._n
         print("g: ", g)
 
         # Set active hinge targets to match newly calculated state.
         for i, (state_index, active_hinge) in enumerate(self._output_mapping):
             if 7 > i > 3 and g >= 0:
                 control_interface.set_active_hinge_target(
-                    active_hinge, float((float(self._state[state_index]) * active_hinge.range) * g)
+                    active_hinge,
+                    float((float(self._state[state_index]) * active_hinge.range) * g),
                 )
             else:  # Center axis joints are not affected
                 control_interface.set_active_hinge_target(
                     active_hinge, (float(self._state[state_index]) * active_hinge.range)
                 )
 
-
     @staticmethod
     def __get_image():
         with NamedTemporaryFile(suffix=".jpeg") as tmp_file:
             file_name = tmp_file.name
-            call(f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400", shell=True)
+            call(
+                f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400",
+                shell=True,
+            )
             pil_image = Image.open(file_name)
         image: NDArray[np.int_] = np.asarray(pil_image)
         return image

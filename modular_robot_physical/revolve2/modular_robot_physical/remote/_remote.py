@@ -146,7 +146,6 @@ async def _run_remote_impl(
         match hardware_type:
             case HardwareType.v1:
                 sensor_state = ModularRobotSensorStateImplV1(image=None)
-
             case HardwareType.v2:
                 pins = [pin for pin in active_hinge_sensor_to_pin.values()]
                 sensor_readings = (

@@ -16,7 +16,7 @@ struct SetupResponse {
 }
 
 struct Image {
-    data @ :List(List(List(Float32)));
+    data @0 :List(List(List(Float32)));
 }
 
 struct PinControl {

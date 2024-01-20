@@ -43,7 +43,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         blue_filter = image[:, :, 2] < 100
         coordinates = np.where(green_filter & red_filter & blue_filter)
         x_pos = 0
-        if coordinates[1].shape[0] > 0:
+        if coordinates[0].shape[0] > 0:
             x_pos = np.mean(coordinates[0])
         picture_width = image.shape[1]
         theta = (picture_width - x_pos) - (picture_width / 2)
@@ -61,6 +61,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
                 control_interface.set_active_hinge_target(
                     active_hinge, (float(self._state[state_index]) * active_hinge.range)
                 )
+        print("state: ", self._state)
 
     def __get_image(self):
         with NamedTemporaryFile(suffix=".jpeg") as tmp_file:

@@ -48,6 +48,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         picture_width = image.shape[1]
         theta = (picture_width - x_pos) - (picture_width / 2)
         g = (((picture_width/2) - abs(theta)) / (picture_width / 2)) ** self._n
+        print(g)
 
         # Set active hinge targets to match newly calculated state.
         for state_index, active_hinge in self._output_mapping:
@@ -56,11 +57,11 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
             )
 
 
+
     def __get_image(self):
-        tmp_file = NamedTemporaryFile(suffix=".jpeg")
-        file_name = tmp_file.name
-        call(f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400", shell=True)
-        pil_image = Image.open(file_name)
-        os.remove(file_name)
+        with NamedTemporaryFile(suffix=".jpeg") as tmp_file:
+            file_name = tmp_file.name
+            call(f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400", shell=True)
+            pil_image = Image.open(file_name)
         image: NDArray[np.int_] = np.asarray(pil_image)
         return image

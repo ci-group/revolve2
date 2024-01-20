@@ -196,6 +196,7 @@ async def _run_remote_impl(
             pin_controls = _active_hinge_targets_to_pin_controls(
                 config, control_interface._set_active_hinges
             )
+            print("controls: ", pin_controls)
             match hardware_type:
                 case HardwareType.v1:
                     await service.control(

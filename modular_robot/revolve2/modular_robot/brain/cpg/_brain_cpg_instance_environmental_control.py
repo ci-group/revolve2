@@ -1,20 +1,17 @@
 from ._brain_cpg_instance import BrainCpgInstance
 from ..._modular_robot_control_interface import ModularRobotControlInterface
 from ...sensor_state import ModularRobotSensorState
-from ...body.base import CameraSensor
 import numpy as np
 from tempfile import NamedTemporaryFile
 from PIL import Image
 from subprocess import call
-import os
 from numpy.typing import NDArray
-
 
 
 class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
     """A Brain instance for the environmental controlled cpg."""
 
-    _n: int = 5
+    _n: int = 6
 
     def control(
             self,
@@ -42,9 +39,8 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         green_filter = image[:, :, 1] < 100
         blue_filter = image[:, :, 2] < 100
         coordinates = np.where(green_filter & red_filter & blue_filter)
-        x_pos = 0
-        if coordinates[0].shape[0] > 0:
-            x_pos = np.mean(coordinates[0])
+        x_pos = np.mean(coordinates[0])
+
         picture_width = image.shape[1]
         theta = (picture_width - x_pos) - (picture_width / 2)
         print("theta: ", theta)
@@ -61,8 +57,9 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
                 control_interface.set_active_hinge_target(
                     active_hinge, (float(self._state[state_index]) * active_hinge.range)
                 )
-        print("state: ", self._state)
 
+
+    @staticmethod
     def __get_image(self):
         with NamedTemporaryFile(suffix=".jpeg") as tmp_file:
             file_name = tmp_file.name

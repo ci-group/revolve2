@@ -52,7 +52,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         # Set active hinge targets to match newly calculated state.
         for state_index, active_hinge in self._output_mapping:
             control_interface.set_active_hinge_target(
-                active_hinge, (float(self._state[state_index]) * active_hinge.range) * g
+                active_hinge, float((float(self._state[state_index]) * active_hinge.range) * g)
             )
 
 

@@ -44,7 +44,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         coordinates = np.where(green_filter & red_filter & blue_filter)
         x_pos = 0
         if coordinates[1].shape[0] > 0:
-            x_pos = np.mean(coordinates[1])
+            x_pos = np.mean(coordinates[0])
         picture_width = image.shape[1]
         theta = (picture_width - x_pos) - (picture_width / 2)
         print("theta: ", theta)
@@ -52,10 +52,15 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         print("g: ", g)
 
         # Set active hinge targets to match newly calculated state.
-        for state_index, active_hinge in self._output_mapping:
-            control_interface.set_active_hinge_target(
-                active_hinge, float((float(self._state[state_index]) * active_hinge.range) * g)
-            )
+        for i, state_index, active_hinge in enumerate(self._output_mapping):
+            if 7 > i > 3 and g >= 0:
+                control_interface.set_active_hinge_target(
+                    active_hinge, float((float(self._state[state_index]) * active_hinge.range) * g)
+                )
+            else:  # Center axis joints are not affected
+                control_interface.set_active_hinge_target(
+                    active_hinge, (float(self._state[state_index]) * active_hinge.range)
+                )
 
 
 

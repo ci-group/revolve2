@@ -38,10 +38,10 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         image = np.flip(image)  # flip the image because its axis are inverted
 
         # we use color filters to find the next target point
-        green_filter = image[:, :, 1] < 100
-        red_filter = image[:, :, 0] > 100
-        blu_filter = image[:, :, 2] < 100
-        coordinates = np.where(green_filter & red_filter & blu_filter)
+        red_filter = image[:, :, 1] > 100
+        green_filter = image[:, :, 0] < 100
+        blue_filter = image[:, :, 2] < 100
+        coordinates = np.where(green_filter & red_filter & blue_filter)
         x_pos = 0
         if coordinates[1].shape[0] > 0:
             x_pos = np.mean(coordinates[1])

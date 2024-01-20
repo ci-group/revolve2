@@ -15,6 +15,10 @@ struct SetupResponse {
   hardwareType @1 :HardwareType;
 }
 
+struct Image {
+    data @ :List(List(List(Float32)));
+}
+
 struct PinControl {
   pin @0 :UInt8;
   target @1 :Float32;

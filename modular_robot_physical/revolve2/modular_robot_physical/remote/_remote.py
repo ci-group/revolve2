@@ -145,9 +145,6 @@ async def _run_remote_impl(
         # Get initial sensor state
         match hardware_type:
             case HardwareType.v1:
-                await service.control(
-                    robot_daemon_protocol_capnp.ControlArgs(setPins=pin_controls)
-                )
                 sensor_state = ModularRobotSensorStateImplV1(image=None)
 
             case HardwareType.v2:
@@ -196,7 +193,6 @@ async def _run_remote_impl(
             pin_controls = _active_hinge_targets_to_pin_controls(
                 config, control_interface._set_active_hinges
             )
-            print("controls: ", pin_controls)
             match hardware_type:
                 case HardwareType.v1:
                     await service.control(

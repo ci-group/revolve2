@@ -28,7 +28,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
     _targets: dict[int, float]  # pin -> target
     _current_targets: dict[int, float]  # pin -> target
-    _current_image: NDArray[np.int_]
+    _current_image: NDArray[np.float_]
 
     _measured_hinge_positions: dict[int, float]  # pin -> position
     _battery: float
@@ -110,10 +110,10 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
             # Measure sensors
             match self._hardware_type:
-                case HardwareType.v1:
-                    image = self._physical_interface.get_image()
-                    with self._lock:
-                        self._current_image = image
+                #case HardwareType.v1:
+                #    image = self._physical_interface.get_image()
+                #    with self._lock:
+                #        self._current_image = image
                 case HardwareType.v2:
                     hinge_positions = (
                         self._physical_interface.get_multiple_servo_positions(
@@ -215,6 +215,18 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
         return self._get_sensor_readings(args.readPins)
 
+
+    async def getImage(
+            self,
+            _context: Any,
+    ) -> robot_daemon_protocol_capnp.Image:
+        """
+        Return the current image.
+
+        :return: the Image.
+        """
+        return self._current_image
+
     async def controlAndReadSensors(
         self,
         args: robot_daemon_protocol_capnp.ControlAndReadSensorsArgsReader,
@@ -255,18 +267,10 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
                 if value is None:
                     value = 0.0
                 pins_readings.append(value)
-
             battery = self._physical_interface.get_battery_level()
 
         return robot_daemon_protocol_capnp.SensorReadings(
             pins=pins_readings, battery=battery
         )
 
-    @property
-    def current_image(self) -> NDArray[np.int_]:
-        """
-        Get the current image.
 
-        :return: The image.
-        """
-        return self._current_image

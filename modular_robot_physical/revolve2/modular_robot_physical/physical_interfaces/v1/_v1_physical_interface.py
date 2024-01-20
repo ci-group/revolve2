@@ -1,7 +1,7 @@
 import math
 import time
 from typing import Sequence
-import os
+from subprocess import call
 
 import numpy as np
 import pigpio
@@ -114,10 +114,9 @@ class V1PhysicalInterface(PhysicalInterface):
         :return: The image.
         :raises ValueError: If getting the camera is not connected.
         """
-        tmp_file = NamedTemporaryFile(suffix=".jpeg")
-        file_name = tmp_file.name
-        os.system(f"cmd / c 'rpicam-jpeg -o {file_name} --width 400 --height 400'")
-        pil_image = Image.open(file_name)
-        os.remove(file_name)
+        with NamedTemporaryFile(suffix=".jpeg") as tmp_file:
+            file_name = tmp_file.name
+            call(f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400", shell=True)
+            pil_image = Image.open(file_name)
         image: NDArray[np.int_] = np.asarray(pil_image)
         return image

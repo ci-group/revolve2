@@ -148,7 +148,7 @@ async def _run_remote_impl(
                 await service.control(
                     robot_daemon_protocol_capnp.ControlArgs(setPins=pin_controls)
                 )
-                sensor_state = ModularRobotSensorStateImplV1(None)
+                sensor_state = ModularRobotSensorStateImplV1(image=None)
 
             case HardwareType.v2:
                 pins = [pin for pin in active_hinge_sensor_to_pin.values()]
@@ -201,7 +201,7 @@ async def _run_remote_impl(
                     await service.control(
                         robot_daemon_protocol_capnp.ControlArgs(setPins=pin_controls)
                     )
-                    sensor_state = ModularRobotSensorStateImplV1()
+                    sensor_state = ModularRobotSensorStateImplV1(image=None)
                 case HardwareType.v2:
                     pins = [pin for pin in active_hinge_sensor_to_pin.values()]
                     sensor_readings = (

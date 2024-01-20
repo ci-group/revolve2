@@ -14,7 +14,7 @@ from numpy.typing import NDArray
 class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
     """A Brain instance for the environmental controlled cpg."""
 
-    _n: int = 7
+    _n: int = 5
 
     def control(
             self,
@@ -52,7 +52,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
         print("g: ", g)
 
         # Set active hinge targets to match newly calculated state.
-        for i, state_index, active_hinge in enumerate(self._output_mapping):
+        for i, (state_index, active_hinge) in enumerate(self._output_mapping):
             if 7 > i > 3 and g >= 0:
                 control_interface.set_active_hinge_target(
                     active_hinge, float((float(self._state[state_index]) * active_hinge.range) * g)
@@ -61,8 +61,6 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
                 control_interface.set_active_hinge_target(
                     active_hinge, (float(self._state[state_index]) * active_hinge.range)
                 )
-
-
 
     def __get_image(self):
         with NamedTemporaryFile(suffix=".jpeg") as tmp_file:

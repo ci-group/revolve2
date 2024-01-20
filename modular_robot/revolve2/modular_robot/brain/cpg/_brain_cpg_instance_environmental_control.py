@@ -5,6 +5,7 @@ from ...body.base import CameraSensor
 import numpy as np
 from tempfile import NamedTemporaryFile
 from PIL import Image
+from subprocess import call
 import os
 from numpy.typing import NDArray
 
@@ -58,7 +59,7 @@ class BrainCpgInstanceEnvironmentalControl(BrainCpgInstance):
     def __get_image(self):
         tmp_file = NamedTemporaryFile(suffix=".jpeg")
         file_name = tmp_file.name
-        os.system(f"cmd / c 'rpicam-jpeg -o {file_name} --width 400 --height 400'")
+        call(f"rpicam-jpeg -n -t 10 -o {file_name} --width 400 --height 400", shell=True)
         pil_image = Image.open(file_name)
         os.remove(file_name)
         image: NDArray[np.int_] = np.asarray(pil_image)

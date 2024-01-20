@@ -14,9 +14,9 @@ from ._camera_sensor_state_impl import CameraSensorStateImpl
 class ModularRobotSensorStateImplV1(ModularRobotSensorState):
     """Implementation of ModularRobotSensorState for v1 robots."""
 
-    _image: NDArray[np.int_]
+    _image: NDArray[np.int_] | None
 
-    def __init__(self, image: NDArray[np.int_]) -> None:
+    def __init__(self, image: NDArray[np.int_] | None) -> None:
         """
         Initialize this object.
 

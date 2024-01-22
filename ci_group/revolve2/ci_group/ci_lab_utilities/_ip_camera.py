@@ -24,9 +24,6 @@ class IPCamera:
 
     _d_q: queue.Queue[cv2.typing.MatLike]  # Display queue
     _r_q: queue.Queue[cv2.typing.MatLike]  # Record queue
-    _out: cv2.VideoWriter  # Video Writer
-    _image_dimensions: tuple[int, int]
-    _fps: int
 
     """Threads for camera functionality."""
     _recieve_thread: threading.Thread
@@ -35,7 +32,10 @@ class IPCamera:
 
     _camera_location: str  # Location (address) of the camera
     _is_running: bool  # Allows to break threads
+    _image_dimensions: tuple[int, int]
+    _fps: int
 
+    """Maps for undistorting the camera."""
     _map1: cv2.typing.MatLike
     _map2: cv2.typing.MatLike
 
@@ -122,7 +122,7 @@ class IPCamera:
 
     def _record(self) -> None:
         """Record the data from the camera."""
-        self._out = cv2.VideoWriter(
+        out = cv2.VideoWriter(
             self._recording_path,
             cv2.VideoWriter.fourcc(*"mp4v"),
             self._fps,
@@ -131,22 +131,22 @@ class IPCamera:
         print("Recording in progress.")
         while self._is_running:
             if not self._r_q.empty():
-                self._out.write(self._r_q.get())
+                out.write(self._r_q.get())
         else:
             print(f"Saving video to: {self._recording_path}")
-            self._out.release()
+            out.release()
 
     def _dump_record(self) -> None:
         """Dump record queue if not used."""
         while self._is_running:
             if not self._r_q.empty():
-                _ = self._r_q.get()
+                self._r_q.get()
 
     def _dump_display(self) -> None:
         """Dump display queue if not used."""
         while self._is_running:
             if not self._d_q.empty():
-                _ = self._d_q.get()
+                self._d_q.get()
 
     def _unfish(self, image: cv2.typing.MatLike) -> cv2.typing.MatLike:
         """

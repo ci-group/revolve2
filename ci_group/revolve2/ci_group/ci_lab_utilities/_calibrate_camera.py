@@ -23,25 +23,29 @@ def calibrate_camera(
         + cv2.fisheye.CALIB_FIX_SKEW
     )
 
-    objp = np.zeros((1, checkerboard_size[0] * checkerboard_size[1], 3), np.float32)
-    objp[0, :, :2] = np.mgrid[
+    object_point = np.zeros(
+        (1, checkerboard_size[0] * checkerboard_size[1], 3), np.float32
+    )
+    object_point[0, :, :2] = np.mgrid[
         0 : checkerboard_size[0], 0 : checkerboard_size[1]
     ].T.reshape(-1, 2)
 
-    _img_shape = None
+    _image_shape = None
 
     object_points = []  # 3d point in real world space
     image_points = []  # 2d points in image plane
 
     for image_path in calibration_images_paths:
         image = cv2.imread(image_path)
-        if _img_shape is None:
-            _img_shape = image.shape[:2]
+        if _image_shape is None:
+            _image_shape = image.shape[:2]
         else:
-            assert _img_shape == image.shape[:2], "All images must share the same size."
+            assert (
+                _image_shape == image.shape[:2]
+            ), "All images must share the same size."
 
         # Detect checkerboard
-        ret, corners = cv2.findChessboardCorners(
+        returned, corners = cv2.findChessboardCorners(
             image,
             checkerboard_size,
             None,
@@ -49,8 +53,8 @@ def calibrate_camera(
             + cv2.CALIB_CB_FAST_CHECK
             + cv2.CALIB_CB_NORMALIZE_IMAGE,
         )
-        if ret:
-            object_points.append(objp)
+        if returned:
+            object_points.append(object_point)
             cv2.cornerSubPix(image, corners, (3, 3), (-1, -1), subpix_criteria)
             image_points.append(corners)
 
@@ -62,19 +66,18 @@ def calibrate_camera(
     translation_vectors = [
         np.zeros((1, 1, 3), dtype=np.float64) for i in range(len(object_points))
     ]
-    rms, _, _, _, _ = cv2.fisheye.calibrate(
+
+    # cv2 operations on numpy objects are in-place -> therefore we do not need to extract the return output.
+    _ = cv2.fisheye.calibrate(
         object_points,
         image_points,
-        image.shape[::-1],
-        camera_matrix,
-        distortion_coefficients,
-        rotation_vectors,
-        translation_vectors,
-        calibration_flags,
-        (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 1e-6),
+        image_size=image.shape[::-1],
+        K=camera_matrix,
+        D=distortion_coefficients,
+        rvecs=rotation_vectors,
+        tvecs=translation_vectors,
+        flags=calibration_flags,
+        criteria=(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 1e-6),
     )
-    print("Found " + str(len(object_points)) + " valid images for calibration")
-    print("dimensions =" + str(image.shape[:2][::-1]))
-    print("Camera Matrix =np.array(" + str(camera_matrix.tolist()) + ")")
-    print("Distortion Coefficients = " + str(distortion_coefficients.tolist()) + ")")
+    print(f"Found {len(object_points)} valid images for calibration")
     return image.shape[:2][::-1], camera_matrix, distortion_coefficients

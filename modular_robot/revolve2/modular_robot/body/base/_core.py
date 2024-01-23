@@ -24,7 +24,7 @@ class Core(Module):
     See `_get_new_module_id` on what this is used for.
     """
 
-    _imu_sensor: IMUSensor | None
+    imu_sensor: IMUSensor | None
 
     def __init__(
         self,

@@ -5,7 +5,7 @@ from revolve2.ci_group.simulation_parameters import make_standard_batch_paramete
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot import ModularRobot, ModularRobotControlInterface
 from revolve2.modular_robot.body import RightAngles
-from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
+from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
 from revolve2.modular_robot.brain import Brain, BrainInstance
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
@@ -13,24 +13,24 @@ from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 
 def make_body() -> (
-    tuple[BodyV1, ActiveHingeV1, ActiveHingeV1, ActiveHingeV1, ActiveHingeV1]
+    tuple[BodyV2, ActiveHingeV2, ActiveHingeV2, ActiveHingeV2, ActiveHingeV2]
 ):
     """
     Create a body for the robot.
 
     :returns: The created body and references to each hinge: first_left_active_hinge, second_left_active_hinge, first_right_active_hinge, second_right_active_hinge.
     """
-    body = BodyV1()
-    first_left_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
-    second_left_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
-    first_right_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
-    second_right_active_hinge = ActiveHingeV1(RightAngles.DEG_0)
-    body.core_v1.left = first_left_active_hinge
+    body = BodyV2()
+    first_left_active_hinge = ActiveHingeV2(RightAngles.DEG_0)
+    second_left_active_hinge = ActiveHingeV2(RightAngles.DEG_0)
+    first_right_active_hinge = ActiveHingeV2(RightAngles.DEG_0)
+    second_right_active_hinge = ActiveHingeV2(RightAngles.DEG_0)
+    body.core_v2.left_face.bottom = first_left_active_hinge
     first_left_active_hinge.attachment = second_left_active_hinge
-    second_left_active_hinge.attachment = BrickV1(RightAngles.DEG_0)
-    body.core_v1.right = first_right_active_hinge
+    second_left_active_hinge.attachment = BrickV2(RightAngles.DEG_0)
+    body.core_v2.right_face.bottom = first_right_active_hinge
     first_right_active_hinge.attachment = second_right_active_hinge
-    second_right_active_hinge.attachment = BrickV1(RightAngles.DEG_0)
+    second_right_active_hinge.attachment = BrickV2(RightAngles.DEG_0)
     return (
         body,
         first_left_active_hinge,
@@ -47,17 +47,17 @@ class CustomBrainInstance(BrainInstance):
     Created by the `CustomBrain` class.
     """
 
-    first_left_active_hinge: ActiveHingeV1
-    second_left_active_hinge: ActiveHingeV1
-    first_right_active_hinge: ActiveHingeV1
-    second_right_active_hinge: ActiveHingeV1
+    first_left_active_hinge: ActiveHingeV2
+    second_left_active_hinge: ActiveHingeV2
+    first_right_active_hinge: ActiveHingeV2
+    second_right_active_hinge: ActiveHingeV2
 
     def __init__(
         self,
-        first_left_active_hinge: ActiveHingeV1,
-        second_left_active_hinge: ActiveHingeV1,
-        first_right_active_hinge: ActiveHingeV1,
-        second_right_active_hinge: ActiveHingeV1,
+        first_left_active_hinge: ActiveHingeV2,
+        second_left_active_hinge: ActiveHingeV2,
+        first_right_active_hinge: ActiveHingeV2,
+        second_right_active_hinge: ActiveHingeV2,
     ) -> None:
         """
         Initialize the Object.
@@ -85,10 +85,10 @@ class CustomBrainInstance(BrainInstance):
         :param sensor_state: Interface for reading the current sensor state.
         :param control_interface: Interface for controlling the robot.
         """
-        control_interface.set_active_hinge_target(self.first_left_active_hinge, 1.0)
+        control_interface.set_active_hinge_target(self.first_left_active_hinge, 2.0)
         control_interface.set_active_hinge_target(self.second_left_active_hinge, 0.0)
         control_interface.set_active_hinge_target(self.first_right_active_hinge, 0.0)
-        control_interface.set_active_hinge_target(self.second_right_active_hinge, -1.0)
+        control_interface.set_active_hinge_target(self.second_right_active_hinge, -2.0)
 
 
 class CustomBrain(Brain):
@@ -99,17 +99,17 @@ class CustomBrain(Brain):
     A brain has a function `make_instance`, which creates the actual object that controls a robot.
     """
 
-    first_left_active_hinge: ActiveHingeV1
-    second_left_active_hinge: ActiveHingeV1
-    first_right_active_hinge: ActiveHingeV1
-    second_right_active_hinge: ActiveHingeV1
+    first_left_active_hinge: ActiveHingeV2
+    second_left_active_hinge: ActiveHingeV2
+    first_right_active_hinge: ActiveHingeV2
+    second_right_active_hinge: ActiveHingeV2
 
     def __init__(
         self,
-        first_left_active_hinge: ActiveHingeV1,
-        second_left_active_hinge: ActiveHingeV1,
-        first_right_active_hinge: ActiveHingeV1,
-        second_right_active_hinge: ActiveHingeV1,
+        first_left_active_hinge: ActiveHingeV2,
+        second_left_active_hinge: ActiveHingeV2,
+        first_right_active_hinge: ActiveHingeV2,
+        second_right_active_hinge: ActiveHingeV2,
     ) -> None:
         """
         Initialize the Object.

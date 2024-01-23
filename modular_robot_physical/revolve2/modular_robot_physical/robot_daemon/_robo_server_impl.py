@@ -6,6 +6,7 @@ from .._hardware_type import HardwareType
 from .._protocol_version import PROTOCOL_VERSION
 from ..physical_interfaces import PhysicalInterface
 from ..robot_daemon_api import robot_daemon_protocol_capnp
+from pyrr import Vector3
 
 
 class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ignore
@@ -255,7 +256,11 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         return robot_daemon_protocol_capnp.SensorReadings(
             pins=pins_readings,
             battery=battery,
-            imuOrientation=imu_orientation,
-            imuSpecificForce=imu_specific_force,
-            imuAngularRate=imu_angular_rate,
+            imuOrientation=self._vector3_to_capnp(imu_orientation),
+            imuSpecificForce=self._vector3_to_capnp(imu_specific_force),
+            imuAngularRate=self._vector3_to_capnp(imu_angular_rate),
         )
+
+    @staticmethod
+    def _vector3_to_capnp(vector: Vector3) -> Vector3:
+        return robot_daemon_protocol_capnp.Vector3(x=vector.x, y=vector.y, z=vector.z)

@@ -45,12 +45,12 @@ def make_body() -> (
 def main() -> None:
     """Run the main entry of the script."""
     body, hinges = make_body()
-    hinge_2, hinge_2, hinge_3, hinge_4 = hinges
+    hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {
         UUIDKey(hinge_2): 0,
-        UUIDKey(hinge_2): 25,
-        UUIDKey(hinge_3): 26,
-        UUIDKey(hinge_4): 32,
+        UUIDKey(hinge_2): 15,
+        UUIDKey(hinge_3): 16,
+        UUIDKey(hinge_4): 31,
     }
     test_physical_robot(
         robot=body,

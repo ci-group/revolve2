@@ -263,4 +263,6 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
     @staticmethod
     def _vector3_to_capnp(vector: Vector3) -> Vector3:
-        return robot_daemon_protocol_capnp.Vector3(x=vector.x, y=vector.y, z=vector.z)
+        return robot_daemon_protocol_capnp.Vector3(
+            x=float(vector.x), y=float(vector.y), z=float(vector.z)
+        )

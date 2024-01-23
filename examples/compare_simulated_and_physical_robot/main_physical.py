@@ -47,7 +47,7 @@ def main() -> None:
     body, hinges = make_body()
     hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {
-        UUIDKey(hinge_2): 0,
+        UUIDKey(hinge_1): 0,
         UUIDKey(hinge_2): 15,
         UUIDKey(hinge_3): 16,
         UUIDKey(hinge_4): 31,

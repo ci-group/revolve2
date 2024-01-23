@@ -8,12 +8,12 @@ import multineat
 import numpy as np
 
 from revolve2.ci_group.genotypes.cppnwin.modular_robot import BrainGenotypeCpg
-from revolve2.ci_group.genotypes.cppnwin.modular_robot.v1 import BodyGenotypeV1
+from revolve2.ci_group.genotypes.cppnwin.modular_robot.v2 import BodyGenotypeV2
 from revolve2.modular_robot import ModularRobot
 
 
 @dataclass
-class Genotype(BodyGenotypeV1, BrainGenotypeCpg):
+class Genotype(BodyGenotypeV2, BrainGenotypeCpg):
     """A genotype for a body and brain using CPPN."""
 
     @classmethod

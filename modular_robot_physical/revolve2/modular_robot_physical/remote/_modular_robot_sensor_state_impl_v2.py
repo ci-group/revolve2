@@ -7,6 +7,7 @@ from revolve2.modular_robot.sensor_state import (
 
 from .._uuid_key import UUIDKey
 from ._active_hinge_sensor_state_impl import ActiveHingeSensorStateImpl
+from ._imu_sensor_state_impl import IMUSensorStateImpl
 
 
 class ModularRobotSensorStateImplV2(ModularRobotSensorState):
@@ -15,12 +16,13 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
     _hinge_sensor_mapping: dict[UUIDKey[ActiveHingeSensor], int]
     _hinge_positions: dict[int, float]
 
-    # _imu_orientations:
+    _imu_sensor_states: dict[UUIDKey[IMUSensor], IMUSensorStateImpl]
 
     def __init__(
         self,
         hinge_sensor_mapping: dict[UUIDKey[ActiveHingeSensor], int],
         hinge_positions: dict[int, float],
+        imu_sensor_states: dict[UUIDKey[IMUSensor], IMUSensorStateImpl],
     ) -> None:
         """
         Initialize this object.
@@ -30,6 +32,7 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         """
         self._hinge_sensor_mapping = hinge_sensor_mapping
         self._hinge_positions = hinge_positions
+        self._imu_sensor_states = imu_sensor_states
 
     def get_active_hinge_sensor_state(
         self, sensor: ActiveHingeSensor
@@ -51,4 +54,9 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         :param sensor: The sensor.
         :raises NotImplementedError: Always.
         """
-        raise NotImplementedError()
+        state = self._imu_sensor_states.get(UUIDKey(sensor))
+        if state is None:
+            raise ValueError(
+                "State for IMU sensor not found. Does it exist in the robot definition?"
+            )
+        return state

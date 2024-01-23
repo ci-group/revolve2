@@ -16,6 +16,8 @@ from ..robot_daemon_api import robot_daemon_protocol_capnp
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl_v1 import ModularRobotSensorStateImplV1
 from ._modular_robot_sensor_state_impl_v2 import ModularRobotSensorStateImplV2
+from ._imu_sensor_state_impl import IMUSensorStateImpl
+from pyrr import Vector3
 
 
 def _active_hinge_targets_to_pin_controls(
@@ -153,12 +155,25 @@ async def _run_remote_impl(
                         robot_daemon_protocol_capnp.ReadSensorsArgs(readPins=pins)
                     )
                 ).response
+                if config.modular_robot.body.core.imu_sensor is None:
+                    imu_sensor_states = {}
+                else:
+                    imu_sensor_states = {
+                        UUIDKey(
+                            config.modular_robot.body.core.imu_sensor
+                        ): IMUSensorStateImpl(
+                            capnp_to_vector3(sensor_readings.imuSpecificForce),
+                            capnp_to_vector3(sensor_readings.imuAngularRate),
+                            capnp_to_vector3(sensor_readings.imuOrientation),
+                        )
+                    }
                 sensor_state = ModularRobotSensorStateImplV2(
                     hinge_sensor_mapping=active_hinge_sensor_to_pin,
                     hinge_positions={
                         pin: position
                         for pin, position in zip(pins, sensor_readings.pins)
                     },
+                    imu_sensor_states=imu_sensor_states,
                 )
             case _:
                 raise NotImplementedError("Hardware type not supported.")
@@ -207,12 +222,25 @@ async def _run_remote_impl(
                             )
                         )
                     ).response
+                    if config.modular_robot.body.core.imu_sensor is None:
+                        imu_sensor_states = {}
+                    else:
+                        imu_sensor_states = {
+                            UUIDKey(
+                                config.modular_robot.body.core.imu_sensor
+                            ): IMUSensorStateImpl(
+                                capnp_to_vector3(sensor_readings.imuSpecificForce),
+                                capnp_to_vector3(sensor_readings.imuAngularRate),
+                                capnp_to_vector3(sensor_readings.imuOrientation),
+                            )
+                        }
                     sensor_state = ModularRobotSensorStateImplV2(
                         hinge_sensor_mapping=active_hinge_sensor_to_pin,
                         hinge_positions={
                             pin: position
                             for pin, position in zip(pins, sensor_readings.pins)
                         },
+                        imu_sensor_states=imu_sensor_states,
                     )
 
                     if battery_print_timer > 5.0:
@@ -220,6 +248,10 @@ async def _run_remote_impl(
                         battery_print_timer = 0.0
                 case _:
                     raise NotImplementedError("Hardware type not supported.")
+
+
+def capnp_to_vector3(vector: robot_daemon_protocol_capnp.Vector3) -> Vector3:
+    return Vector3([vector.x, vector.y, vector.z])
 
 
 def run_remote(

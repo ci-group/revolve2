@@ -112,11 +112,11 @@ def main() -> None:
     for active_hinge in active_hinges:
         active_hinge.sensor = ActiveHingeSensor()
 
-    body.core._imu_sensor = IMUSensor()
+    body.core.imu_sensor = IMUSensor()
 
     # Create a brain for the robot.
     active_hinges = body.find_modules_of_type(ActiveHinge)
-    brain = ANNBrain(active_hinges=active_hinges, imu_sensor=body.core._imu_sensor)
+    brain = ANNBrain(active_hinges=active_hinges, imu_sensor=body.core.imu_sensor)
 
     # Combine the body and brain into a modular robot.
     robot = ModularRobot(body, brain)

@@ -1,5 +1,6 @@
-from revolve2.modular_robot.sensor_state import IMUSensorState
 from pyrr import Vector3
+
+from revolve2.modular_robot.sensor_state import IMUSensorState
 
 
 class IMUSensorStateImpl(IMUSensorState):
@@ -12,6 +13,13 @@ class IMUSensorStateImpl(IMUSensorState):
     def __init__(
         self, specific_force: Vector3, angular_rate: Vector3, orientation: Vector3
     ) -> None:
+        """
+        Initialize this object.
+
+        :param specific_force: Speicfic force.
+        :param angular_rate: Angular rate.
+        :param orientation: Orientation.
+        """
         self._specific_force = specific_force
         self._angular_rate = angular_rate
         self._orientation = orientation

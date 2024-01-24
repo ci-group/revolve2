@@ -3,6 +3,7 @@ import time
 from typing import Callable
 
 import capnp
+from pyrr import Vector3
 
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
@@ -13,11 +14,10 @@ from .._protocol_version import PROTOCOL_VERSION
 from .._standard_port import STANDARD_PORT
 from .._uuid_key import UUIDKey
 from ..robot_daemon_api import robot_daemon_protocol_capnp
+from ._imu_sensor_state_impl import IMUSensorStateImpl
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl_v1 import ModularRobotSensorStateImplV1
 from ._modular_robot_sensor_state_impl_v2 import ModularRobotSensorStateImplV2
-from ._imu_sensor_state_impl import IMUSensorStateImpl
-from pyrr import Vector3
 
 
 def _active_hinge_targets_to_pin_controls(
@@ -162,9 +162,9 @@ async def _run_remote_impl(
                         UUIDKey(
                             config.modular_robot.body.core.imu_sensor
                         ): IMUSensorStateImpl(
-                            capnp_to_vector3(sensor_readings.imuSpecificForce),
-                            capnp_to_vector3(sensor_readings.imuAngularRate),
-                            capnp_to_vector3(sensor_readings.imuOrientation),
+                            _capnp_to_vector3(sensor_readings.imuSpecificForce),
+                            _capnp_to_vector3(sensor_readings.imuAngularRate),
+                            _capnp_to_vector3(sensor_readings.imuOrientation),
                         )
                     }
                 sensor_state = ModularRobotSensorStateImplV2(
@@ -229,9 +229,9 @@ async def _run_remote_impl(
                             UUIDKey(
                                 config.modular_robot.body.core.imu_sensor
                             ): IMUSensorStateImpl(
-                                capnp_to_vector3(sensor_readings.imuSpecificForce),
-                                capnp_to_vector3(sensor_readings.imuAngularRate),
-                                capnp_to_vector3(sensor_readings.imuOrientation),
+                                _capnp_to_vector3(sensor_readings.imuSpecificForce),
+                                _capnp_to_vector3(sensor_readings.imuAngularRate),
+                                _capnp_to_vector3(sensor_readings.imuOrientation),
                             )
                         }
                     sensor_state = ModularRobotSensorStateImplV2(
@@ -250,7 +250,7 @@ async def _run_remote_impl(
                     raise NotImplementedError("Hardware type not supported.")
 
 
-def capnp_to_vector3(vector: robot_daemon_protocol_capnp.Vector3) -> Vector3:
+def _capnp_to_vector3(vector: robot_daemon_protocol_capnp.Vector3) -> Vector3:
     return Vector3([vector.x, vector.y, vector.z])
 
 

@@ -2,11 +2,12 @@ import threading
 import time
 from typing import Any, Sequence
 
+from pyrr import Vector3
+
 from .._hardware_type import HardwareType
 from .._protocol_version import PROTOCOL_VERSION
 from ..physical_interfaces import PhysicalInterface
 from ..robot_daemon_api import robot_daemon_protocol_capnp
-from pyrr import Vector3
 
 
 class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ignore

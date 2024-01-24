@@ -29,6 +29,7 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
 
         :param hinge_sensor_mapping: Mapping from active hinge sensors to pin ids.
         :param hinge_positions: Position of hinges accessed by pin id.
+        :param imu_sensor_states: State of the IMU sensors.
         """
         self._hinge_sensor_mapping = hinge_sensor_mapping
         self._hinge_positions = hinge_positions
@@ -52,7 +53,8 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         Get the state of the provided IMU sensor.
 
         :param sensor: The sensor.
-        :raises NotImplementedError: Always.
+        :raises ValueError: If IMU sensors is not part of the robot.
+        :returns: The state.
         """
         state = self._imu_sensor_states.get(UUIDKey(sensor))
         if state is None:

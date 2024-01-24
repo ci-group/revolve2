@@ -45,6 +45,8 @@ sqlalchemy = "^2.0.0"
 numpy = "^1.21.2"
 Cython = "^3.0.4"
 setuptools = "^68.2.2"
+opencv-contrib-python = "^4.9.0.80"
+opencv-python = "^4.9.0.80"
 
 [tool.poetry.extras]
 dev = []

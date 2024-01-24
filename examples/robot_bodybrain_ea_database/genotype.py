@@ -7,12 +7,12 @@ import numpy as np
 from base import Base
 
 from revolve2.ci_group.genotypes.cppnwin.modular_robot import BrainGenotypeCpgOrm
-from revolve2.ci_group.genotypes.cppnwin.modular_robot.v1 import BodyGenotypeOrmV1
+from revolve2.ci_group.genotypes.cppnwin.modular_robot.v2 import BodyGenotypeOrmV2
 from revolve2.experimentation.database import HasId
 from revolve2.modular_robot import ModularRobot
 
 
-class Genotype(Base, HasId, BodyGenotypeOrmV1, BrainGenotypeCpgOrm):
+class Genotype(Base, HasId, BodyGenotypeOrmV2, BrainGenotypeCpgOrm):
     """SQLAlchemy model for a genotype for a modular robot body and brain."""
 
     __tablename__ = "genotype"

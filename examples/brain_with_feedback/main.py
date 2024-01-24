@@ -2,7 +2,7 @@
 
 import logging
 
-from revolve2.ci_group import modular_robots_v1, terrains
+from revolve2.ci_group import modular_robots_v2, terrains
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot import ModularRobot, ModularRobotControlInterface
@@ -105,7 +105,7 @@ def main() -> None:
     setup_logging()
 
     # Create a body for the robot.
-    body = modular_robots_v1.gecko_v1()
+    body = modular_robots_v2.gecko_v2()
 
     # Add sensors to each active hinge that measure the current angle of the hinge.
     active_hinges = body.find_modules_of_type(ActiveHinge)

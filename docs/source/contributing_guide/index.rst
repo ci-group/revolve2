@@ -13,8 +13,8 @@ The first time you make a contribution to a Revolve2 package your PR should add 
 Developer installation
 ----------------------
 The normal installation guide applies. You should definitely use :ref:`editable mode<installation/index:Editable Mode>`.
-The ``dev_install.sh`` script installs all Revolve2 packages in editable mode, as well as required packages for developer tools.
-If you want to uninstall all Revolve2 packages, you can use ``./uninstall_revolve2star.sh``, which uninstall all packages like ``revolve2*``.
+Using the ``requirements_dev.txt`` allows you to quickly install all packages in editable mode, by executing: ``pip install -r requirements_dev.txt``.
+If you want to uninstall all Revolve2 packages, you can use ``./uninstall.sh``, which uninstall all packages like ``revolve2*``.
 
 ----------------------
 Continuous integration

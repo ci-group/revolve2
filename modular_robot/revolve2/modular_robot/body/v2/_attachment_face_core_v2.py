@@ -62,7 +62,11 @@ class AttachmentFaceCoreV2(AttachmentFace):
             v_o = -(i // 3 - 1) * vertical_offset
 
             h_o = h_o if int(rot.angle / np.pi) % 2 == 0 else -h_o
-            offset = Vector3([0.0, h_o, v_o]) if np.isclose(rot.angle % np.pi, 0) else Vector3([h_o, 0.0, v_o])
+            offset = (
+                Vector3([0.0, h_o, v_o])
+                if np.isclose(rot.angle % np.pi, 0)
+                else Vector3([h_o, 0.0, v_o])
+            )
             offset = rot * offset
 
             attachment_points[i] = AttachmentPoint(

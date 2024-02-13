@@ -31,7 +31,7 @@ def develop(
     :param genotype: The genotype to create the body from.
     :returns: The create body.
     """
-    max_parts = 10
+    max_parts = 20
 
     body_net = multineat.NeuralNetwork()
     genotype.BuildPhenotype(body_net)

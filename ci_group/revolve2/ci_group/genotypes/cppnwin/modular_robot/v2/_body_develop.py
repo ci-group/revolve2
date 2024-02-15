@@ -137,25 +137,24 @@ def __add_child(
     """
     attachment_index, attachment_point = attachment_point_tuple
     forward = __rotate(module.forward, module.up, attachment_point.orientation)
-    offset = __rotate(
+    buffer = __rotate(
         Vector3([1, 1, 1], dtype=np.int_), module.up, attachment_point.orientation
-    )
+    )  # This is used for bounds checking in the grid.
 
     match module.module_reference.parent:
         case AttachmentFaceCoreV2():
             """If we are on an AttachmentFace we employ special offsets to the grid positions."""
             voxel_size = 0  # The attachment face has no voxel size itself.
-            v_offset = __rotate(
-                Vector3([int(attachment_index / 3) * 2, 0, 0], dtype=np.int_),
+            offset = __rotate(
+                Vector3(
+                    [int(attachment_index / 3) * 2, 0, 2 * (attachment_index % 3)],
+                    dtype=np.int_,
+                ),
                 module.up,
                 attachment_point.orientation,
             )
-            h_offset = Vector3([0, 0, 2 * (attachment_index % 3)], dtype=np.int_)
             position = __vec3_int(
-                module.position
-                + forward * module.parent_voxel_size
-                + h_offset
-                + v_offset
+                module.position + forward * module.parent_voxel_size + offset
             )
         case _:
             voxel_size = 4
@@ -164,11 +163,10 @@ def __add_child(
 
     # get the bbox for the module`s voxel. (Voxel size is set to 4)
     x, y, z = position
-    xb, yb, zb = __vec3_int(position + forward * 4 + offset)
+    xb, yb, zb = __vec3_int(position + forward * 4 + buffer)
     # if grid cell is occupied, don't make a child
     if np.sum(grid[x:xb, y:yb, z:zb]) > 0:
         return None
-
     child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
 
     """We check whether the CPPN wants to place a child or if the module can accept a child at the corresponding attachment_index."""

@@ -118,11 +118,12 @@ def __add_child(
     # if grid cell is occupied, don't make a child
     if grid[tuple(position)] > 0:
         return None
-    grid[tuple(position)] += 1
 
     child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
     if child_type is None:
         return None
+
+    grid[tuple(position)] += 1
     angle = child_rotation * (np.pi / 2.0)
     up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
     child = child_type(angle)

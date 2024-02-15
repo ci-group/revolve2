@@ -8,7 +8,12 @@ from numpy.typing import NDArray
 from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.body import AttachmentPoint, Module
-from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
+from revolve2.modular_robot.body.v2 import (
+    ActiveHingeV2,
+    AttachmentFaceCoreV2,
+    BodyV2,
+    BrickV2,
+)
 
 
 @dataclass
@@ -18,6 +23,7 @@ class __Module:
     up: Vector3[np.int_]
     chain_length: int
     module_reference: Module
+    parent_voxel_size: int
 
 
 def develop(
@@ -38,26 +44,34 @@ def develop(
 
     to_explore: Queue[__Module] = Queue()
     grid = np.zeros(
-        shape=(max_parts * 2 + 1, max_parts * 2 + 1, max_parts * 2 + 1), dtype=np.uint8
+        shape=(
+            (max_parts * 2 + 1) * 8,
+            (max_parts * 2 + 1) * 8,
+            (max_parts * 2 + 1) * 8,
+        ),
+        dtype=np.uint8,
     )
 
     body = BodyV2()
 
     v2_core = body.core_v2
     core_position = Vector3(
-        [max_parts + 1, max_parts + 1, max_parts + 1], dtype=np.int_
+        [max_parts * 16, max_parts * 16, max_parts * 16], dtype=np.int_
     )
-    grid[tuple(core_position)] = 1
+    x, y, z = core_position
+
+    grid[x : x + 9, y : y + 9, z : z + 9] = 1
     part_count = 1
 
     for attachment_face in v2_core.attachment_faces.values():
         to_explore.put(
             __Module(
-                core_position,
-                Vector3([0, -1, 0]),
-                Vector3([0, 0, 1]),
-                0,
-                attachment_face,
+                position=core_position,
+                forward=Vector3([0, -1, 0]),
+                up=Vector3([0, 0, 1]),
+                chain_length=0,
+                module_reference=attachment_face,
+                parent_voxel_size=8,
             )
         )
 
@@ -112,36 +126,62 @@ def __add_child(
     attachment_point_tuple: tuple[int, AttachmentPoint],
     grid: NDArray[np.uint8],
 ) -> __Module | None:
-    attachment_index, attachment_point = attachment_point_tuple
+    """
+    Add a potential child to the modular robot.
 
+    :param body_net: The CPPN network for evaluation of position.
+    :param module: The previous module and parameters.
+    :param attachment_point_tuple: The attachment point data for the child.
+    :param grid: The grid for collision checking.
+    :return: A new module or nothing if now child is added.
+    """
+    attachment_index, attachment_point = attachment_point_tuple
     forward = __rotate(module.forward, module.up, attachment_point.orientation)
-    position = __vec3_int(module.position + forward)
+    offset = __rotate(
+        Vector3([1, 1, 1], dtype=np.int_), module.up, attachment_point.orientation
+    )
+
+    match module.module_reference.parent:
+        case AttachmentFaceCoreV2():
+            """If we are on an AttachmentFace we employ special offsets to the grid positions."""
+            voxel_size = 0  # The attachment face has no voxel size itself.
+            v_offset = __rotate(
+                Vector3([int(attachment_index / 3) * 2, 0, 0], dtype=np.int_),
+                module.up,
+                attachment_point.orientation,
+            )
+            h_offset = Vector3([0, 0, 2 * (attachment_index % 3)], dtype=np.int_)
+            position = __vec3_int(
+                module.position
+                + forward * module.parent_voxel_size
+                + h_offset
+                + v_offset
+            )
+        case _:
+            voxel_size = 4
+            position = __vec3_int(module.position + forward * module.parent_voxel_size)
     chain_length = module.chain_length + 1
 
+    # get the bbox for the module`s voxel. (Voxel size is set to 4)
+    x, y, z = position
+    xb, yb, zb = __vec3_int(position + forward * 4 + offset)
     # if grid cell is occupied, don't make a child
-    # else, set cell as occupied
-    if grid[tuple(position)] > 0:
+    if np.sum(grid[x:xb, y:yb, z:zb]) > 0:
         return None
-    grid[tuple(position)] += 1
 
-    new_pos = np.array(np.round(position + attachment_point.offset), dtype=np.int64)
-    child_type, child_rotation = __evaluate_cppn(body_net, new_pos, chain_length)
-    angle = child_rotation * (np.pi / 2.0)
-    if child_type is None or not module.module_reference.can_set_child(
-        child := child_type(angle), attachment_index
-    ):
+    child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
+
+    """We check whether the CPPN wants to place a child or if the module can accept a child at the corresponding attachment_index."""
+    if child_type is None or not module.module_reference.is_free(attachment_index):
         return None
+    angle = child_rotation * (np.pi / 2.0)
+    child = child_type(angle)
+    grid[x:xb, y:yb, z:zb] += 1
 
     up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
     module.module_reference.set_child(child, attachment_index)
 
-    return __Module(
-        position,
-        forward,
-        up,
-        chain_length,
-        child,
-    )
+    return __Module(position, forward, up, chain_length, child, voxel_size)
 
 
 def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:

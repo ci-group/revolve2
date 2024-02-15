@@ -119,23 +119,10 @@ class Module:
         ), "Child module already connected to a different slot."
         module._parent = self
         module._parent_child_index = child_index
-        if self.is_free(child_index) and self.can_set_child(module, child_index):
+        if self.is_free(child_index):
             self._children[child_index] = module
         else:
             raise KeyError("Attachment point already populated")
-
-    def can_set_child(self, module: Module, child_index: int) -> bool:
-        """
-        Check if a child can be set onto a specific index.
-
-        This is for more advanced conflict checks, such as big modules that have the possibility to block other attachment points from being populated.
-        By default this returns true, since the basic modules do not block other attachment points.
-
-        :param module: The module to set.
-        :param child_index: The child index to check.
-        :return: Whether it is possible.
-        """
-        return True
 
     def neighbours(self, within_range: int) -> list[Module]:
         """

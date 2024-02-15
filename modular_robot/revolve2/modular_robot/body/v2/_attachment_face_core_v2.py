@@ -74,30 +74,40 @@ class AttachmentFaceCoreV2(AttachmentFace):
             )
         super().__init__(rotation=0.0, attachment_points=attachment_points)
 
-    def can_set_child(
-        self,
-        module: Module,
-        child_index: int,
-    ) -> bool:
+    def set_child(self, module: Module, child_index: int) -> None:
         """
-        Check for conflicts when adding a new attachment point.
+        Attach a module to a slot.
 
-        Note that if there is no conflict in the check this function assumes that the slot is being populated and adjusts the check-matrix as such.
+        :param module: The module to attach.
+        :param child_index: The slot to attach it to.
+        :raises KeyError: If attachment point is already populated.
+        """
+        assert (
+            module._parent is None
+        ), "Child module already connected to a different slot."
+        module._parent = self
+        module._parent_child_index = child_index
+        if self.is_free(child_index):
+            self._children[child_index] = module
+            self._check_matrix[child_index % 3, int(child_index / 3)] += 1
+        else:
+            raise KeyError("Attachment point already populated")
 
-        :param module: The module.
-        :param child_index: The index of the attachment point.
-        :return: Whether conflicts occurred.
+    def is_free(self, index: int) -> bool:
+        """
+        Return if the attachment-point is free.
+
+        :param index: The index to check.
+        :return: The boolean.
         """
         check_matrix = self._check_matrix.copy()
-        check_matrix[(child_index - 1) % 3, (child_index - 1) // 3] += 1
+        check_matrix[index % 3, int(index / 3)] += 1
         conv_check = np.zeros(shape=(2, 2), dtype=np.uint8)
         for i, j in product(range(2), repeat=2):
-            conv_check[i, j] = np.sum(check_matrix[i : i + 1, j : j + 1])
-
+            conv_check[i, j] = np.sum(check_matrix[i : i + 2, j : j + 2])
         if np.max(conv_check) > 1:  # Conflict detected.
             return False
-        self._check_matrix = check_matrix
-        return True
+        return self._children.get(index) is None
 
     @property
     def top_left(self) -> Module | None:

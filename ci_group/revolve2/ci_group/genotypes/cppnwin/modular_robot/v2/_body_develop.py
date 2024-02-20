@@ -6,7 +6,8 @@ import multineat
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Quaternion, Vector3
-from itertools import product
+import pickle
+import time
 
 from revolve2.modular_robot.body import AttachmentPoint, Module
 from revolve2.modular_robot.body.v2 import (
@@ -17,8 +18,10 @@ from revolve2.modular_robot.body.v2 import (
 )
 
 
-class __Voxel:
-    _coordinates: NDArray[np.int_]
+class _Voxel:
+    _size: int
+    _aabb: tuple[Vector3[np.int_], Vector3[np.int_]]
+    _attachment_point: dict[float, Vector3[np.int_]]
 
     def __init__(self, size: int) -> None:
         """
@@ -26,14 +29,27 @@ class __Voxel:
 
         :param size: The voxels size.
         """
-        self._coordinates = np.array([(x, y, z) for x, y, z in product(range(size), repeat=3)])
+        self._size = size
+        self._aabb = (Vector3([0, 0, 0]), Vector3([size, size, size]))
+        self._attachment_point = {i: Vector3([size if i > 1 else 0, 0 if i % 3 == 0 else size, 0]) for i in range(4)}
 
     def __add__(self, other: 'Vector3') -> None:
-        self._coordinates = np.apply_along_axis(lambda x: x + other, 0, self._coordinates.T).T
+        self._aabb = tuple([elem + other for elem in self._aabb])
+
+    def rotate(self, axis: Vector3, angle: Quaternion) -> None:
+        self._aabb = tuple([_rotate(elem, axis, angle) for elem in self._aabb])
+        self._attachment_point = {i: _rotate(vec, axis, angle) for i, vec in self._attachment_point.items()}
+
+    def get_attachment_point(self, angle: float) -> Vector3:
+        return self._attachment_point[np.rint(angle/np.pi*2)]
 
     @property
-    def coordinates(self) -> NDArray[np.int_]:
-        return self._coordinates
+    def aabb(self) -> tuple[Vector3[np.int_], Vector3[np.int_]]:
+        return self._aabb
+
+    @property
+    def size(self) -> int:
+        return self._size
 
 
 @dataclass
@@ -43,7 +59,7 @@ class __Module:
     up: Vector3[np.int_]
     chain_length: int
     module_reference: Module
-    parent_voxel_size: int
+    parent_voxel: _Voxel
 
 
 def develop(
@@ -58,18 +74,24 @@ def develop(
     :returns: The create body.
     """
     max_parts = 40
+    """
+    TODO: Robot forward is [0, -1, 0]
+     -> Make Voxels initialize with the same forward direction
+     -> Make Voxels rotate accoringly and update AttachmentPoints
+     -> Stack Voxels in correct order
+    """
 
     body_net = multineat.NeuralNetwork()
     genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
 
-    core_voxel_size = 8
+    core_voxel = _Voxel(8)
     grid = np.zeros(
         shape=(
-            (max_parts * 2 + 1) * core_voxel_size,
-            (max_parts * 2 + 1) * core_voxel_size,
-            (max_parts * 2 + 1) * core_voxel_size,
+            (max_parts * 2 + 1) * core_voxel.size,
+            (max_parts * 2 + 1) * core_voxel.size,
+            (max_parts * 2 + 1) * core_voxel.size,
         ),
         dtype=np.uint8,
     )
@@ -78,16 +100,14 @@ def develop(
 
     v2_core = body.core_v2
     core_position = Vector3(
-        [max_parts * core_voxel_size * 2, max_parts * core_voxel_size * 2, max_parts * core_voxel_size * 2],
+        [max_parts * core_voxel.size, max_parts * core_voxel.size, max_parts * core_voxel.size],
         dtype=np.int_
     )
-    x, y, z = core_position
+    core_voxel + core_position
+    (xo, yo, zo), (xt, yt, zt) = core_voxel.aabb
 
-    # TODO: make voxels objects that shold be built.
-
-    grid[x: x + 9, y: y + 9, z: z + 9] = 1
+    grid[xo: xt+1, yo:yt+1, zo:zt+1] = 1
     part_count = 1
-
     for attachment_face in v2_core.attachment_faces.values():
         to_explore.put(
             __Module(
@@ -96,19 +116,21 @@ def develop(
                 up=Vector3([0, 0, 1]),
                 chain_length=0,
                 module_reference=attachment_face,
-                parent_voxel_size=8,
+                parent_voxel=core_voxel,
             )
         )
 
-    while not to_explore.empty():
+    while not to_explore.empty() and part_count < max_parts:
         module = to_explore.get()
 
         for attachment_point_tuple in module.module_reference.attachment_points.items():
-            if part_count < max_parts:
-                child = __add_child(body_net, module, attachment_point_tuple, grid)
-                if child is not None:
-                    to_explore.put(child)
-                    part_count += 1
+            child = __add_child(body_net, module, attachment_point_tuple, grid)
+            if child is not None:
+                to_explore.put(child)
+                part_count += 1
+
+    with open(f"{time.time()}.pickle", "wb") as file:
+        pickle.dump(grid, file)
     return body
 
 
@@ -161,36 +183,23 @@ def __add_child(
     :return: A new module or nothing if now child is added.
     """
     attachment_index, attachment_point = attachment_point_tuple
-    forward = __rotate(module.forward, module.up, attachment_point.orientation)
-    buffer = __rotate(
-        Vector3([1, 1, 1], dtype=np.int_), module.up, attachment_point.orientation
-    )  # This is used for bounds checking in the grid.
-
+    forward = _rotate(module.forward, module.up, attachment_point.orientation)
+    parent_offset = module.parent_voxel.get_attachment_point(attachment_point.orientation.angle)
     match module.module_reference.parent:
         case AttachmentFaceCoreV2():
             """If we are on an AttachmentFace we employ special offsets to the grid positions."""
-            voxel_size = 0  # The attachment face has no voxel size itself.
-            offset = __rotate(
-                Vector3(
-                    [2 * int(attachment_index / 3), 0, 2 * (attachment_index % 3)],
-                    dtype=np.int_,
-                ),
-                module.up,
-                attachment_point.orientation,
-            )
-            position = __vec3_int(
-                module.position + forward * module.parent_voxel_size + offset
-            )
+            offset = _rotate(Vector3([(attachment_index % 3)*2, 0, 4-(attachment_index // 3) * 2]), module.up, attachment_point.orientation)
+            position = __vec3_int(module.position + parent_offset + offset)
         case _:
-            voxel_size = 4
-            position = __vec3_int(module.position + forward * module.parent_voxel_size)
+            position = __vec3_int(module.position + parent_offset)
+    voxel = _Voxel(4)
+    voxel.rotate(module.up, attachment_point.orientation)
+    voxel + position
     chain_length = module.chain_length + 1
 
-    # get the bbox for the module`s voxel. (Voxel size is set to 4)
-    x, y, z = position
-    xb, yb, zb = __vec3_int(position + forward * 4 + buffer)
     # if grid cell is occupied, don't make a child
-    if np.sum(grid[x:xb, y:yb, z:zb]) > 0:
+    (xo, yo, zo), (xt, yt, zt) = voxel.aabb
+    if np.sum(grid[xo: xt+1, yo:yt+1, zo:zt+1]) > 0:
         return None
     child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
 
@@ -199,15 +208,14 @@ def __add_child(
         return None
     angle = child_rotation * (np.pi / 2.0)
     child = child_type(angle)
-    grid[x:xb, y:yb, z:zb] += 1
+    grid[xo: xt+1, yo:yt+1, zo:zt+1] += 1
 
-    up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
+    up = _rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
     module.module_reference.set_child(child, attachment_index)
+    return __Module(position, forward, up, chain_length, child, voxel)
 
-    return __Module(position, forward, up, chain_length, child, voxel_size)
 
-
-def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
+def _rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
     Rotates vector a a given angle around b.
 

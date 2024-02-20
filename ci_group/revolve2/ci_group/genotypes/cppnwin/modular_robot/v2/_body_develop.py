@@ -6,6 +6,7 @@ import multineat
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Quaternion, Vector3
+from itertools import product
 
 from revolve2.modular_robot.body import AttachmentPoint, Module
 from revolve2.modular_robot.body.v2 import (
@@ -14,6 +15,25 @@ from revolve2.modular_robot.body.v2 import (
     BodyV2,
     BrickV2,
 )
+
+
+class __Voxel:
+    _coordinates: NDArray[np.int_]
+
+    def __init__(self, size: int) -> None:
+        """
+        Initialize the Voxel.
+
+        :param size: The voxels size.
+        """
+        self._coordinates = np.array([(x, y, z) for x, y, z in product(range(size), repeat=3)])
+
+    def __add__(self, other: 'Vector3') -> None:
+        self._coordinates = np.apply_along_axis(lambda x: x + other, 0, self._coordinates.T).T
+
+    @property
+    def coordinates(self) -> NDArray[np.int_]:
+        return self._coordinates
 
 
 @dataclass
@@ -27,7 +47,7 @@ class __Module:
 
 
 def develop(
-    genotype: multineat.Genome,
+        genotype: multineat.Genome,
 ) -> BodyV2:
     """
     Develop a CPPNWIN genotype into a modular robot body.
@@ -37,17 +57,19 @@ def develop(
     :param genotype: The genotype to create the body from.
     :returns: The create body.
     """
-    max_parts = 20
+    max_parts = 40
 
     body_net = multineat.NeuralNetwork()
     genotype.BuildPhenotype(body_net)
 
     to_explore: Queue[__Module] = Queue()
+
+    core_voxel_size = 8
     grid = np.zeros(
         shape=(
-            (max_parts * 2 + 1) * 8,
-            (max_parts * 2 + 1) * 8,
-            (max_parts * 2 + 1) * 8,
+            (max_parts * 2 + 1) * core_voxel_size,
+            (max_parts * 2 + 1) * core_voxel_size,
+            (max_parts * 2 + 1) * core_voxel_size,
         ),
         dtype=np.uint8,
     )
@@ -56,11 +78,14 @@ def develop(
 
     v2_core = body.core_v2
     core_position = Vector3(
-        [max_parts * 16, max_parts * 16, max_parts * 16], dtype=np.int_
+        [max_parts * core_voxel_size * 2, max_parts * core_voxel_size * 2, max_parts * core_voxel_size * 2],
+        dtype=np.int_
     )
     x, y, z = core_position
 
-    grid[x : x + 9, y : y + 9, z : z + 9] = 1
+    # TODO: make voxels objects that shold be built.
+
+    grid[x: x + 9, y: y + 9, z: z + 9] = 1
     part_count = 1
 
     for attachment_face in v2_core.attachment_faces.values():
@@ -88,9 +113,9 @@ def develop(
 
 
 def __evaluate_cppn(
-    body_net: multineat.NeuralNetwork,
-    position: Vector3[np.int_],
-    chain_length: int,
+        body_net: multineat.NeuralNetwork,
+        position: Vector3[np.int_],
+        chain_length: int,
 ) -> tuple[Any, int]:
     """
     Get module type and orientation from a multineat CPPN network.
@@ -121,10 +146,10 @@ def __evaluate_cppn(
 
 
 def __add_child(
-    body_net: multineat.NeuralNetwork,
-    module: __Module,
-    attachment_point_tuple: tuple[int, AttachmentPoint],
-    grid: NDArray[np.uint8],
+        body_net: multineat.NeuralNetwork,
+        module: __Module,
+        attachment_point_tuple: tuple[int, AttachmentPoint],
+        grid: NDArray[np.uint8],
 ) -> __Module | None:
     """
     Add a potential child to the modular robot.
@@ -147,7 +172,7 @@ def __add_child(
             voxel_size = 0  # The attachment face has no voxel size itself.
             offset = __rotate(
                 Vector3(
-                    [int(attachment_index / 3) * 2, 0, 2 * (attachment_index % 3)],
+                    [2 * int(attachment_index / 3), 0, 2 * (attachment_index % 3)],
                     dtype=np.int_,
                 ),
                 module.up,
@@ -195,7 +220,7 @@ def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     sin_angle: int = int(round(np.sin(rotation.angle)))
 
     vec: Vector3 = (
-        a * cos_angle + sin_angle * b.cross(a) + (1 - cos_angle) * b.dot(a) * b
+            a * cos_angle + sin_angle * b.cross(a) + (1 - cos_angle) * b.dot(a) * b
     )
     return vec
 

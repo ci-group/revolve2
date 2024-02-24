@@ -1,4 +1,7 @@
+import pickle
+import time
 from dataclasses import dataclass
+from itertools import product
 from queue import Queue
 from typing import Any
 
@@ -6,8 +9,6 @@ import multineat
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Quaternion, Vector3
-import pickle
-import time
 
 from revolve2.modular_robot.body import AttachmentPoint, Module
 from revolve2.modular_robot.body.v2 import (
@@ -20,7 +21,7 @@ from revolve2.modular_robot.body.v2 import (
 
 class _Voxel:
     _size: int
-    _aabb: tuple[Vector3[np.int_], Vector3[np.int_]]
+    _coordinates: NDArray[np.int_]
     _attachment_point: dict[float, Vector3[np.int_]]
 
     def __init__(self, size: int) -> None:
@@ -30,22 +31,33 @@ class _Voxel:
         :param size: The voxels size.
         """
         self._size = size
-        self._aabb = (Vector3([0, 0, 0]), Vector3([size, size, size]))
-        self._attachment_point = {i: Vector3([size if i > 1 else 0, 0 if i % 3 == 0 else size, 0]) for i in range(4)}
+        self._coordinates = np.array(
+            [(x, y, z) for x, y, z in product(range(size), repeat=3)]
+        )
+        self._attachment_point = {
+            i: Vector3([size if i > 1 else 0, 0 if i % 3 == 0 else size, 0])
+            for i in range(4)
+        }
 
-    def __add__(self, other: 'Vector3') -> None:
-        self._aabb = tuple([elem + other for elem in self._aabb])
+    def __add__(self, other: "Vector3") -> None:
+        self._coordinates = np.apply_along_axis(
+            lambda x: x + other, 1, self._coordinates
+        )
 
     def rotate(self, axis: Vector3, angle: Quaternion) -> None:
-        self._aabb = tuple([_rotate(elem, axis, angle) for elem in self._aabb])
-        self._attachment_point = {i: _rotate(vec, axis, angle) for i, vec in self._attachment_point.items()}
+        self._coordinates = np.apply_along_axis(
+            lambda x: _rotate(x, axis, angle), 1, self._coordinates
+        )
+        self._attachment_point = {
+            i: _rotate(vec, axis, angle) for i, vec in self._attachment_point.items()
+        }
 
     def get_attachment_point(self, angle: float) -> Vector3:
-        return self._attachment_point[np.rint(angle/np.pi*2)]
+        return self._attachment_point[np.rint(angle / np.pi * 2)]
 
     @property
-    def aabb(self) -> tuple[Vector3[np.int_], Vector3[np.int_]]:
-        return self._aabb
+    def coordinates(self) -> NDArray[np.int_]:
+        return self._coordinates
 
     @property
     def size(self) -> int:
@@ -63,7 +75,7 @@ class __Module:
 
 
 def develop(
-        genotype: multineat.Genome,
+    genotype: multineat.Genome,
 ) -> BodyV2:
     """
     Develop a CPPNWIN genotype into a modular robot body.
@@ -79,6 +91,7 @@ def develop(
      -> Make Voxels initialize with the same forward direction
      -> Make Voxels rotate accoringly and update AttachmentPoints
      -> Stack Voxels in correct order
+     -> NP slicing is exclusive with upper bound -> make robust bound adjustment
     """
 
     body_net = multineat.NeuralNetwork()
@@ -100,13 +113,16 @@ def develop(
 
     v2_core = body.core_v2
     core_position = Vector3(
-        [max_parts * core_voxel.size, max_parts * core_voxel.size, max_parts * core_voxel.size],
-        dtype=np.int_
+        [
+            max_parts * core_voxel.size,
+            max_parts * core_voxel.size,
+            max_parts * core_voxel.size,
+        ],
+        dtype=np.int_,
     )
     core_voxel + core_position
-    (xo, yo, zo), (xt, yt, zt) = core_voxel.aabb
 
-    grid[xo: xt+1, yo:yt+1, zo:zt+1] = 1
+    grid[tuple(core_voxel.coordinates.T)] = 1
     part_count = 1
     for attachment_face in v2_core.attachment_faces.values():
         to_explore.put(
@@ -135,9 +151,9 @@ def develop(
 
 
 def __evaluate_cppn(
-        body_net: multineat.NeuralNetwork,
-        position: Vector3[np.int_],
-        chain_length: int,
+    body_net: multineat.NeuralNetwork,
+    position: Vector3[np.int_],
+    chain_length: int,
 ) -> tuple[Any, int]:
     """
     Get module type and orientation from a multineat CPPN network.
@@ -168,10 +184,10 @@ def __evaluate_cppn(
 
 
 def __add_child(
-        body_net: multineat.NeuralNetwork,
-        module: __Module,
-        attachment_point_tuple: tuple[int, AttachmentPoint],
-        grid: NDArray[np.uint8],
+    body_net: multineat.NeuralNetwork,
+    module: __Module,
+    attachment_point_tuple: tuple[int, AttachmentPoint],
+    grid: NDArray[np.uint8],
 ) -> __Module | None:
     """
     Add a potential child to the modular robot.
@@ -184,11 +200,19 @@ def __add_child(
     """
     attachment_index, attachment_point = attachment_point_tuple
     forward = _rotate(module.forward, module.up, attachment_point.orientation)
-    parent_offset = module.parent_voxel.get_attachment_point(attachment_point.orientation.angle)
+    parent_offset = module.parent_voxel.get_attachment_point(
+        attachment_point.orientation.angle
+    )
     match module.module_reference.parent:
         case AttachmentFaceCoreV2():
             """If we are on an AttachmentFace we employ special offsets to the grid positions."""
-            offset = _rotate(Vector3([(attachment_index % 3)*2, 0, 4-(attachment_index // 3) * 2]), module.up, attachment_point.orientation)
+            offset = _rotate(
+                Vector3(
+                    [(attachment_index % 3) * 2, 0, 4 - (attachment_index // 3) * 2]
+                ),
+                module.up,
+                attachment_point.orientation,
+            )
             position = __vec3_int(module.position + parent_offset + offset)
         case _:
             position = __vec3_int(module.position + parent_offset)
@@ -198,8 +222,8 @@ def __add_child(
     chain_length = module.chain_length + 1
 
     # if grid cell is occupied, don't make a child
-    (xo, yo, zo), (xt, yt, zt) = voxel.aabb
-    if np.sum(grid[xo: xt+1, yo:yt+1, zo:zt+1]) > 0:
+    coordinates = tuple(voxel.coordinates.T)
+    if np.sum(grid[coordinates]) > 0:
         return None
     child_type, child_rotation = __evaluate_cppn(body_net, position, chain_length)
 
@@ -208,7 +232,7 @@ def __add_child(
         return None
     angle = child_rotation * (np.pi / 2.0)
     child = child_type(angle)
-    grid[xo: xt+1, yo:yt+1, zo:zt+1] += 1
+    grid[coordinates] += 1
 
     up = _rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
     module.module_reference.set_child(child, attachment_index)
@@ -228,7 +252,7 @@ def _rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     sin_angle: int = int(round(np.sin(rotation.angle)))
 
     vec: Vector3 = (
-            a * cos_angle + sin_angle * b.cross(a) + (1 - cos_angle) * b.dot(a) * b
+        a * cos_angle + sin_angle * b.cross(a) + (1 - cos_angle) * b.dot(a) * b
     )
     return vec
 

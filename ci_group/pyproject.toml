@@ -9,12 +9,12 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-ci-group"
-version = "1.0.1"
+version = "1.0.2"
 description = "Revolve2: Computational Intelligence Group experimentation tools and standards."
 readme = "../README.md"
 authors = [
     "Aart Stuurman <aartstuurman@hotmail.com>",
-    "Oliver Weissl <oliver.weissl@outlook.com>",
+    "Oliver Weissl <o.weissl@vu.nl>",
 ]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [

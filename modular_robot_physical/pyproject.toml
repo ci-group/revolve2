@@ -4,12 +4,12 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-modular-robot-physical"
-version = "1.0.1"
+version = "1.0.2"
 description = "Revolve2: Everything for physical modular robot control. This package is intended to be installed on the modular robot hardware."
 readme = "../README.md"
 authors = [
     "Aart Stuurman <aartstuurman@hotmail.com>",
-    "Oliver Weissl <oliver.weissl@outlook.com>",
+    "Oliver Weissl <o.weissl@vu.nl>",
 ]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [

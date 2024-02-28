@@ -9,12 +9,12 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-ci-group"
-version = "1.0.1"
+version = "1.0.2"
 description = "Revolve2: Computational Intelligence Group experimentation tools and standards."
 readme = "../README.md"
 authors = [
     "Aart Stuurman <aartstuurman@hotmail.com>",
-    "Oliver Weissl <oliver.weissl@outlook.com>",
+    "Oliver Weissl <o.weissl@vu.nl>",
 ]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [
@@ -38,7 +38,7 @@ script = "revolve2/ci_group/morphological_novelty_metric/_build_cmodule.py"
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-revolve2-modular-robot-simulation = "1.0.1"
+revolve2-modular-robot-simulation = "1.0.2"
 noise = "^1.2.2"
 multineat = "^0.12"
 sqlalchemy = "^2.0.0"

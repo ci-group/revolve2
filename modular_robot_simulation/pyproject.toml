@@ -27,8 +27,8 @@ packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-revolve2-modular-robot = "1.0.1"
-revolve2-simulation = "1.0.1"
+revolve2-modular-robot = "1.0.2"
+revolve2-simulation = "1.0.2"
 
 [tool.poetry.extras]
 dev = []

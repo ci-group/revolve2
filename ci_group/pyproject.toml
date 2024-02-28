@@ -38,7 +38,7 @@ script = "revolve2/ci_group/morphological_novelty_metric/_build_cmodule.py"
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-revolve2-modular-robot-simulation = "1.0.1"
+revolve2-modular-robot-simulation = "1.0.2"
 noise = "^1.2.2"
 multineat = "^0.12"
 sqlalchemy = "^2.0.0"

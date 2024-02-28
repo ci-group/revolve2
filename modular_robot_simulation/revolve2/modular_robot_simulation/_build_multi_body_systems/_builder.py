@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 from revolve2.simulation.scene import MultiBodySystem
 
-from .._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
-from .._unbuilt_child import UnbuiltChild
+from ._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
+from ._unbuilt_child import UnbuiltChild
 
 
 class Builder(ABC):

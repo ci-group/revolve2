@@ -12,10 +12,10 @@ from revolve2.simulation.scene import (
 from revolve2.simulation.scene.geometry import GeometryBox
 from revolve2.simulation.scene.geometry.textures import Texture
 
-from .._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
-from .._convert_color import convert_color
-from .._unbuilt_child import UnbuiltChild
+from ._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
 from ._builder import Builder
+from ._convert_color import convert_color
+from ._unbuilt_child import UnbuiltChild
 
 
 class ActiveHingeBuilder(Builder):

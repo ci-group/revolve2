@@ -1,13 +1,18 @@
-from revolve2.modular_robot.body.base import ActiveHingeSensor, IMUSensor
+from revolve2.modular_robot.body.sensors import (
+    ActiveHingeSensor,
+    CameraSensor,
+    IMUSensor,
+)
 from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
+    CameraSensorState,
     IMUSensorState,
     ModularRobotSensorState,
 )
 from revolve2.simulation.scene import SimulationState, UUIDKey
 
+from .._build_multi_body_systems import BodyToMultiBodySystemMapping
 from ._active_hinge_sensor_state_impl import ActiveHingeSensorStateImpl
-from ._build_multi_body_systems import BodyToMultiBodySystemMapping
 from ._imu_sensor_state_impl import IMUSensorStateImpl
 
 
@@ -61,3 +66,12 @@ class ModularRobotSensorStateImpl(ModularRobotSensorState):
             multi_body_system=self._body_to_multi_body_system_mapping.multi_body_system,
             core_imu=self._body_to_multi_body_system_mapping.core_imu,
         )
+
+    def get_camera_sensor_state(self, sensor: CameraSensor) -> CameraSensorState:
+        """
+        Get the state of the camera sensor.
+
+        :param sensor: The sensor.
+        :raises NotImplementedError: It is not implemented.
+        """
+        raise NotImplementedError("Camera not yet defined for simulation")

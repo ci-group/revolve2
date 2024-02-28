@@ -1,7 +1,8 @@
 from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.sensor_state import IMUSensorState
-from revolve2.simulation.scene import IMUSensor, MultiBodySystem, SimulationState
+from revolve2.simulation.scene import MultiBodySystem, SimulationState
+from revolve2.simulation.scene.sensors import IMUSensor
 
 
 class IMUSensorStateImpl(IMUSensorState):

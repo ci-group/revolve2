@@ -19,7 +19,7 @@ class MorphologicalMeasures(Generic[TModule]):
     Only works for robot with only right angle module rotations (90 degrees).
     Some measures only work for 2d robots, which is noted in their docstring.
 
-    Some measures are based on the following paper:
+    The measures are based on the following paper:
     Miras, K., Haasdijk, E., Glette, K., Eiben, A.E. (2018).
     Search Space Analysis of Evolvable Robot Morphologies.
     In: Sim, K., Kaufmann, P. (eds) Applications of Evolutionary Computation.

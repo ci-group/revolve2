@@ -1,9 +1,7 @@
 from dataclasses import dataclass, field
 
-from revolve2.modular_robot.body.base import ActiveHinge
-from revolve2.modular_robot.body.sensors import ActiveHingeSensor
-from revolve2.simulation.scene import JointHinge, MultiBodySystem, UUIDKey
-from revolve2.simulation.scene.sensors import IMUSensor
+from revolve2.modular_robot.body.base import ActiveHinge, ActiveHingeSensor
+from revolve2.simulation.scene import IMUSensor, JointHinge, MultiBodySystem, UUIDKey
 
 
 @dataclass(eq=False)

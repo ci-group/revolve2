@@ -4,6 +4,7 @@ import numpy.typing as npt
 from pyrr import Quaternion, Vector3
 
 from revolve2.simulation.scene import (
+    IMUSensor,
     JointHinge,
     MultiBodySystem,
     Pose,
@@ -11,7 +12,6 @@ from revolve2.simulation.scene import (
     SimulationState,
     UUIDKey,
 )
-from revolve2.simulation.scene.sensors import IMUSensor
 
 from ._abstraction_to_mujoco_mapping import AbstractionToMujocoMapping
 

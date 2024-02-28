@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 from pyrr import Vector3
 
+from ._imu_sensor import IMUSensor
 from ._joint_hinge import JointHinge
 from ._multi_body_system import MultiBodySystem
 from ._pose import Pose
 from ._rigid_body import RigidBody
-from .sensors import IMUSensor
 
 
 class SimulationState(ABC):

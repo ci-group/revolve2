@@ -6,7 +6,7 @@ from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
-from ..sensors import IMUSensor
+from ._imu_sensor import IMUSensor
 
 
 class Core(Module):

@@ -1,10 +1,9 @@
 import uuid
-from abc import ABC
 from dataclasses import dataclass, field
 
 
 @dataclass
-class Sensor(ABC):
+class IMUSensor:
     """
     An inertial measurement unit.
 

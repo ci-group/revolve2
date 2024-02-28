@@ -4,7 +4,7 @@ from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
-from ..sensors import ActiveHingeSensor
+from ._active_hinge_sensor import ActiveHingeSensor
 
 
 class ActiveHinge(Module):

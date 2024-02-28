@@ -3,7 +3,6 @@
 from ._aabb import AABB
 from ._color import Color
 from ._control_interface import ControlInterface
-from ._imu_sensor import IMUSensor
 from ._joint import Joint
 from ._joint_fixed import JointFixed
 from ._joint_hinge import JointHinge
@@ -19,7 +18,6 @@ __all__ = [
     "AABB",
     "Color",
     "ControlInterface",
-    "IMUSensor",
     "Joint",
     "JointFixed",
     "JointHinge",

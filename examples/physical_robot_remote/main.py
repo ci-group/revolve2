@@ -4,14 +4,14 @@ from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
-from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
+from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_physical import Config, UUIDKey
 from revolve2.modular_robot_physical.remote import run_remote
 
 
 def make_body() -> (
-    tuple[BodyV1, tuple[ActiveHinge, ActiveHinge, ActiveHinge, ActiveHinge]]
+    tuple[BodyV2, tuple[ActiveHinge, ActiveHinge, ActiveHinge, ActiveHinge]]
 ):
     """
     Create a body for the robot.
@@ -23,20 +23,20 @@ def make_body() -> (
     # From here, other modular can be attached.
     # Modules can be attached in a rotated fashion.
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
-    body = BodyV1()
-    body.core_v1.left = ActiveHingeV1(RightAngles.DEG_0)
-    body.core_v1.left.attachment = ActiveHingeV1(RightAngles.DEG_0)
-    body.core_v1.left.attachment.attachment = BrickV1(RightAngles.DEG_0)
-    body.core_v1.right = ActiveHingeV1(RightAngles.DEG_0)
-    body.core_v1.right.attachment = ActiveHingeV1(RightAngles.DEG_0)
-    body.core_v1.right.attachment.attachment = BrickV1(RightAngles.DEG_0)
+    body = BodyV2()
+    body.core_v2.left_face.bottom = ActiveHingeV2(RightAngles.DEG_0)
+    body.core_v2.left_face.bottom.attachment = ActiveHingeV2(RightAngles.DEG_0)
+    body.core_v2.left_face.bottom.attachment.attachment = BrickV2(RightAngles.DEG_0)
+    body.core_v2.right_face.bottom = ActiveHingeV2(RightAngles.DEG_0)
+    body.core_v2.right_face.bottom.attachment = ActiveHingeV2(RightAngles.DEG_0)
+    body.core_v2.right_face.bottom.attachment.attachment = BrickV2(RightAngles.DEG_0)
 
     """Here we collect all ActiveHinges, to map them later onto the physical robot."""
     active_hinges = (
-        body.core_v1.left,
-        body.core_v1.left.attachment,
-        body.core_v1.right,
-        body.core_v1.right.attachment,
+        body.core_v2.left_face.bottom,
+        body.core_v2.left_face.bottom.attachment,
+        body.core_v2.right_face.bottom,
+        body.core_v2.right_face.bottom.attachment,
     )
     return body, active_hinges
 

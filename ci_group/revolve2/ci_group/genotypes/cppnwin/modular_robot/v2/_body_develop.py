@@ -31,7 +31,7 @@ def develop(
     :param genotype: The genotype to create the body from.
     :returns: The create body.
     """
-    max_parts = 10
+    max_parts = 20
 
     body_net = multineat.NeuralNetwork()
     genotype.BuildPhenotype(body_net)
@@ -127,9 +127,8 @@ def __add_child(
     new_pos = np.array(np.round(position + attachment_point.offset), dtype=np.int64)
     child_type, child_rotation = __evaluate_cppn(body_net, new_pos, chain_length)
     angle = child_rotation * (np.pi / 2.0)
-    child = child_type(angle)
     if child_type is None or not module.module_reference.can_set_child(
-        child, attachment_index
+        child := child_type(angle), attachment_index
     ):
         return None
 

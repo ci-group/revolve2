@@ -16,6 +16,7 @@ def convert_terrain(terrain: Terrain) -> MultiBodySystem:
         static_friction=1.0,
         dynamic_friction=1.0,
         geometries=[],
+        imu_sensors=[],
     )  # We use these friction values but in the future they should be set through the terrain description.
     multi_body_system.add_rigid_body(rigid_body)
 

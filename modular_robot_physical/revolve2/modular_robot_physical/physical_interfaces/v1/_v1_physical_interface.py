@@ -3,6 +3,7 @@ import time
 from typing import Sequence
 
 import pigpio
+from pyrr import Vector3
 
 from .._physical_interface import PhysicalInterface
 
@@ -101,3 +102,27 @@ class V1PhysicalInterface(PhysicalInterface):
         :raises NotImplementedError: If getting the servo position is not supported on this hardware.
         """
         raise NotImplementedError("Getting servo position not supported on v1 harware.")
+
+    def get_imu_angular_rate(self) -> Vector3:
+        """
+        Get the angular rate from the IMU.
+
+        :raises NotImplementedError: Always.
+        """
+        raise NotImplementedError()
+
+    def get_imu_orientation(self) -> Vector3:
+        """
+        Get the orientation from the IMU.
+
+        :raises NotImplementedError: Always.
+        """
+        raise NotImplementedError()
+
+    def get_imu_specific_force(self) -> Vector3:
+        """
+        Get the specific force from the IMU.
+
+        :raises NotImplementedError: Always.
+        """
+        raise NotImplementedError()

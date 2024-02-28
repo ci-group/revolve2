@@ -28,6 +28,7 @@ from revolve2.simulation.scene.geometry import Geometry, GeometryHeightmap
 
 from ._abstraction_to_mujoco_mapping import (
     AbstractionToMujocoMapping,
+    IMUSensorMujoco,
     JointHingeMujoco,
     MultiBodySystemMujoco,
 )
@@ -74,21 +75,22 @@ def scene_to_model(
             scene.multi_body_systems
         )
     ]
-    all_joints_and_names = [v for _, _, _, v, _ in conversions]
+    all_joints_and_names = [c[3] for c in conversions]
+    all_rigid_bodies_and_names = [c[5] for c in conversions]
 
     heightmaps: list[GeometryHeightmap] = []
 
-    for multi_body_system, (
-        urdf,
-        plane_geometries,
-        heightmap_geometries,
-        joints_and_names,
-        geoms_and_names,
-    ) in zip(
-        scene.multi_body_systems,
-        conversions,
-        strict=True,
-    ):
+    for mbs_i, (
+        multi_body_system,
+        (
+            urdf,
+            plane_geometries,
+            heightmap_geometries,
+            joints_and_names,
+            geoms_and_names,
+            rigid_bodies_and_names,
+        ),
+    ) in enumerate(zip(scene.multi_body_systems, conversions, strict=True)):
         multi_body_system_model = mujoco.MjModel.from_xml_string(urdf)
 
         # MuJoCo can only save to a file, not directly to string,
@@ -164,6 +166,43 @@ def scene_to_model(
                 joint=multi_body_system_mjcf.find(namespace="joint", identifier=name),
                 name=f"actuator_velocity_{name}",
             )
+
+        # Add IMUs
+        for rigid_body, name in rigid_bodies_and_names:
+            if len(rigid_body.imu_sensors) > 0:
+                if name == f"mbs{mbs_i}":
+                    rigid_body_mjcf = multi_body_system_mjcf.worldbody
+                else:
+                    rigid_body_mjcf = multi_body_system_mjcf.find(
+                        namespace="body", identifier=name
+                    )
+                for imu_i, imu in enumerate(rigid_body.imu_sensors):
+                    site_name = f"{name}_site_imu_{imu_i}"
+                    rigid_body_mjcf.add(
+                        "site",
+                        name=site_name,
+                        pos=[
+                            imu.pose.position.x,
+                            imu.pose.position.y,
+                            imu.pose.position.z,
+                        ],
+                        quat=[
+                            imu.pose.orientation.x,
+                            imu.pose.orientation.y,
+                            imu.pose.orientation.z,
+                            imu.pose.orientation.w,
+                        ],
+                    )
+                    gyro_name = f"imu_gyro_{name}_{imu_i}"
+                    multi_body_system_mjcf.sensor.add(
+                        "gyro", name=gyro_name, site=site_name
+                    )
+                    accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
+                    multi_body_system_mjcf.sensor.add(
+                        "accelerometer",
+                        name=accelerometer_name,
+                        site=site_name,
+                    )
 
         # Add plane geometries
         i_plane = 0
@@ -289,6 +328,19 @@ def scene_to_model(
         mapping.multi_body_system[UUIDKey(multi_body_system)] = MultiBodySystemMujoco(
             id=model.body(f"mbs{mbs_i}/").id
         )
+
+    # Create IMU map
+    for mbs_i, rigid_bodies_and_names in enumerate(all_rigid_bodies_and_names):
+        for rigid_body, name in rigid_bodies_and_names:
+            for imu_i, imu in enumerate(rigid_body.imu_sensors):
+                gyro_name = f"imu_gyro_{name}_{imu_i}"
+                accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
+                mapping.imu_sensor[UUIDKey(imu)] = IMUSensorMujoco(
+                    gyro_id=model.sensor(f"mbs{mbs_i}/{gyro_name}").id,
+                    accelerometer_id=model.sensor(
+                        f"mbs{mbs_i}/{accelerometer_name}"
+                    ).id,
+                )
 
     return (model, mapping)
 

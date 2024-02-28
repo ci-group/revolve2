@@ -1,0 +1,56 @@
+:orphan:
+
+:py:mod:`_imu_sensor_state_impl`
+============================================================================
+
+.. py:module:: modular_robot_simulation._sensor_state_impl._imu_sensor_state_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._sensor_state_impl._imu_sensor_state_impl.IMUSensorStateImpl
+
+
+
+
+.. py:class:: IMUSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem, core_imu: revolve2.simulation.scene.sensors.IMUSensor)
+
+
+   Bases: :py:obj:`revolve2.modular_robot.sensor_state.IMUSensorState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._sensor_state_impl._imu_sensor_state_impl.IMUSensorStateImpl
+      :parts: 1
+
+   Implements the  IMU sensor state.
+
+   .. py:property:: specific_force
+      :type: pyrr.Vector3
+
+      Get the measured specific force.
+
+      :returns: The measured specific force.
+
+
+   .. py:property:: angular_rate
+      :type: pyrr.Vector3
+
+      Get the measured angular rate.
+
+      :returns: The measured angular rate.
+
+
+   .. py:property:: orientation
+      :type: pyrr.Quaternion
+
+      Get the measured orientation.
+
+      :returns: The measured position.
+
+
+

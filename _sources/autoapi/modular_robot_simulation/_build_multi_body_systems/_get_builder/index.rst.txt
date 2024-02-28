@@ -19,7 +19,7 @@ Functions
 
 
 
-.. py:function:: get_builder(unbuilt_child: modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild) -> modular_robot_simulation._build_multi_body_systems._builder.Builder
+.. py:function:: get_builder(unbuilt_child: modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild) -> modular_robot_simulation._build_multi_body_systems._builders.Builder
 
    Get and initialize the corresponding Builder for the module.
 

@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
@@ -226,7 +227,7 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModularRobotSensorStateImplV2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hinge_sensor_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../_uuid_key/index.html#modular_robot_physical._uuid_key.UUIDKey" title="modular_robot_physical._uuid_key.UUIDKey"><span class="pre">modular_robot_physical._uuid_key.UUIDKey</span></a><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.base.ActiveHingeSensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">positions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModularRobotSensorStateImplV2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hinge_sensor_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../_uuid_key/index.html#modular_robot_physical._uuid_key.UUIDKey" title="modular_robot_physical._uuid_key.UUIDKey"><span class="pre">modular_robot_physical._uuid_key.UUIDKey</span></a><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.sensors.ActiveHingeSensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hinge_positions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_sensor_states</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../_uuid_key/index.html#modular_robot_physical._uuid_key.UUIDKey" title="modular_robot_physical._uuid_key.UUIDKey"><span class="pre">modular_robot_physical._uuid_key.UUIDKey</span></a><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.sensors.IMUSensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../_imu_sensor_state_impl/index.html#modular_robot_physical.remote._imu_sensor_state_impl.IMUSensorStateImpl" title="modular_robot_physical.remote._imu_sensor_state_impl.IMUSensorStateImpl"><span class="pre">modular_robot_physical.remote._imu_sensor_state_impl.IMUSensorStateImpl</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">revolve2.modular_robot.sensor_state.ModularRobotSensorState</span></code></p>
 <div class="graphviz"><img src="../../../../_images/inheritance-df9c11dbaf25117601539bfd882e6795f1152741.png" alt="Inheritance diagram of modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2" usemap="#inheritance2874f1b7e1" class="inheritance graphviz" /></div>
 <map id="inheritance2874f1b7e1" name="inheritance2874f1b7e1">
@@ -234,7 +235,7 @@
 </map><p>Implementation of ModularRobotSensorState for v2 robots.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2.get_active_hinge_sensor_state">
-<span class="sig-name descname"><span class="pre">get_active_hinge_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.base.ActiveHingeSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.sensor_state.ActiveHingeSensorState</span></span></span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2.get_active_hinge_sensor_state" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">get_active_hinge_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.ActiveHingeSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.sensor_state.ActiveHingeSensorState</span></span></span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2.get_active_hinge_sensor_state" title="Link to this definition"></a></dt>
 <dd><p>Get sensor states for Hinges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -242,6 +243,37 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The Sensor State.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2.get_imu_sensor_state">
+<span class="sig-name descname"><span class="pre">get_imu_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.IMUSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.sensor_state.IMUSensorState</span></span></span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2.get_imu_sensor_state" title="Link to this definition"></a></dt>
+<dd><p>Get the state of the provided IMU sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sensor</strong> – The sensor.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If IMU sensors is not part of the robot.</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2.get_camera_sensor_state">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_camera_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.CameraSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.sensor_state.CameraSensorState</span></span></span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v2.ModularRobotSensorStateImplV2.get_camera_sensor_state" title="Link to this definition"></a></dt>
+<dd><p>Get the state of the provided camera sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sensor</strong> – The sensor.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Always.</p>
 </dd>
 </dl>
 </dd></dl>

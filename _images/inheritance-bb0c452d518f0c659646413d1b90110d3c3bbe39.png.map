@@ -1,0 +1,5 @@
+<map id="inheritancec3c6b17dd4" name="inheritancec3c6b17dd4">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node3" href="_sensor/index.html#simulation.scene.sensors._sensor.Sensor" target="_top" title="An inertial measurement unit." alt="" coords="125,5,197,31"/>
+<area shape="rect" id="node2" href="_imu_sensor/index.html#simulation.scene.sensors._imu_sensor.IMUSensor" target="_top" title="An inertial measurement unit." alt="" coords="245,5,337,31"/>
+</map>

@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
@@ -290,6 +291,34 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The rotational position.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mujoco_simulator._simulation_state_impl.SimulationStateImpl.get_imu_specific_force">
+<span class="sig-name descname"><span class="pre">get_imu_specific_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imu_sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.sensors.IMUSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.Vector3</span></span></span><a class="headerlink" href="#mujoco_simulator._simulation_state_impl.SimulationStateImpl.get_imu_specific_force" title="Link to this definition"></a></dt>
+<dd><p>Get the specific force measured an IMU.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>imu_sensor</strong> – The IMU.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The specific force.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mujoco_simulator._simulation_state_impl.SimulationStateImpl.get_imu_angular_rate">
+<span class="sig-name descname"><span class="pre">get_imu_angular_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imu_sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.sensors.IMUSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.Vector3</span></span></span><a class="headerlink" href="#mujoco_simulator._simulation_state_impl.SimulationStateImpl.get_imu_angular_rate" title="Link to this definition"></a></dt>
+<dd><p>Get the angular rate measured by am IMU.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>imu_sensor</strong> – The IMU.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The angular rate.</p>
 </dd>
 </dl>
 </dd></dl>

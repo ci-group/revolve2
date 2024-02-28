@@ -1,0 +1,82 @@
+:py:mod:`sensors`
+==================================
+
+.. py:module:: simulation.scene.sensors
+
+.. autoapi-nested-parse::
+
+   Sensor classes for the simulators.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.sensors.CameraSensor
+   simulation.scene.sensors.IMUSensor
+   simulation.scene.sensors.Sensor
+
+
+
+
+.. py:class:: CameraSensor
+
+
+   Bases: :py:obj:`simulation.scene.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.sensors.CameraSensor
+      :parts: 1
+
+   Camera sensor.
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the geometry, relative to its parent rigid body.
+
+
+
+.. py:class:: IMUSensor
+
+
+   Bases: :py:obj:`simulation.scene.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.sensors.IMUSensor
+      :parts: 1
+
+   An inertial measurement unit.
+
+   Reports specific force(closely related to acceleration), angular rate(closely related to angularvelocity), and orientation.
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      
+
+
+.. py:class:: Sensor
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.sensors.Sensor
+      :parts: 1
+
+   An inertial measurement unit.
+
+   Reports specific force(closely related to acceleration), angular rate(closely related to angularvelocity), and orientation.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+

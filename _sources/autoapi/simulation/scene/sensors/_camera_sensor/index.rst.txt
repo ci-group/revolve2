@@ -1,0 +1,38 @@
+:orphan:
+
+:py:mod:`_camera_sensor`
+=================================================
+
+.. py:module:: simulation.scene.sensors._camera_sensor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.sensors._camera_sensor.CameraSensor
+
+
+
+
+.. py:class:: CameraSensor
+
+
+   Bases: :py:obj:`simulation.scene.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.sensors._camera_sensor.CameraSensor
+      :parts: 1
+
+   Camera sensor.
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      Pose of the geometry, relative to its parent rigid body.
+
+
+

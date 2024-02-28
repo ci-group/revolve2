@@ -29,12 +29,30 @@ Classes
 
    Implementation of ModularRobotSensorState for v1 robots.
 
-   .. py:method:: get_active_hinge_sensor_state(sensor: revolve2.modular_robot.body.base.ActiveHingeSensor) -> revolve2.modular_robot.sensor_state.ActiveHingeSensorState
+   .. py:method:: get_active_hinge_sensor_state(sensor: revolve2.modular_robot.body.sensors.ActiveHingeSensor) -> revolve2.modular_robot.sensor_state.ActiveHingeSensorState
       :abstractmethod:
 
       Get sensor states for Hinges.
 
       :param sensor: The sensor to query.
+      :raises NotImplementedError: Always.
+
+
+   .. py:method:: get_imu_sensor_state(sensor: revolve2.modular_robot.body.sensors.IMUSensor) -> revolve2.modular_robot.sensor_state.IMUSensorState
+      :abstractmethod:
+
+      Get the state of the provided IMU sensor.
+
+      :param sensor: The sensor.
+      :raises NotImplementedError: Always.
+
+
+   .. py:method:: get_camera_sensor_state(sensor: revolve2.modular_robot.body.sensors.CameraSensor) -> revolve2.modular_robot.sensor_state.CameraSensorState
+      :abstractmethod:
+
+      Get the state of the provided camera sensor.
+
+      :param sensor: The sensor.
       :raises NotImplementedError: Always.
 
 

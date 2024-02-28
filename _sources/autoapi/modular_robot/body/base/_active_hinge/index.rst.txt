@@ -179,7 +179,7 @@ Classes
 
 
    .. py:property:: sensor
-      :type: modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor | None
+      :type: modular_robot.body.sensors.ActiveHingeSensor | None
 
       Get the sensor.
 

@@ -58,6 +58,12 @@ Classes
       Geometries describing the shape of the body.
 
 
+   .. py:attribute:: imu_sensors
+      :type: list[simulation.scene.sensors.IMUSensor]
+
+      The IMU sensors attached to this rigid body.
+
+
    .. py:method:: mass() -> float
 
       Get mass of the rigid body.

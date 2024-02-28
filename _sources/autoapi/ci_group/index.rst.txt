@@ -15,6 +15,7 @@ Subpackages
    :titlesonly:
    :maxdepth: 3
 
+   ci_lab_utilities/index.rst
    genotypes/index.rst
    morphological_novelty_metric/index.rst
 

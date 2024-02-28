@@ -1,0 +1,91 @@
+:py:mod:`sensors`
+====================================
+
+.. py:module:: modular_robot.body.sensors
+
+.. autoapi-nested-parse::
+
+   Base Sensors for Modular Robots.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.sensors.ActiveHingeSensor
+   modular_robot.body.sensors.CameraSensor
+   modular_robot.body.sensors.IMUSensor
+   modular_robot.body.sensors.Sensor
+
+
+
+
+.. py:class:: ActiveHingeSensor
+
+
+   Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.sensors.ActiveHingeSensor
+      :parts: 1
+
+   A sensors for an active hinge that measures its angle.
+
+
+.. py:class:: CameraSensor
+
+
+   Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.sensors.CameraSensor
+      :parts: 1
+
+   A camera for the Modular Robot.
+
+   .. py:attribute:: position
+      :type: pyrr.Vector3
+
+      
+
+   .. py:attribute:: camera_size
+      :type: revolve2.simulation.scene.vector2.Vector2
+
+      
+
+
+.. py:class:: IMUSensor
+
+
+   Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.sensors.IMUSensor
+      :parts: 1
+
+   An inertial measurement unit.
+
+   Reports specific force(closely related to acceleration), angular rate(closely related to angular velocity), and orientation.
+
+
+.. py:class:: Sensor
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.sensors.Sensor
+      :parts: 1
+
+   An abstract Sensor Class.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid of the sensor.
+
+      :return: The uuid.
+
+
+

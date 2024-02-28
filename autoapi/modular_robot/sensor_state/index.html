@@ -102,6 +102,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
@@ -227,6 +228,12 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.sensor_state.ActiveHingeSensorState" title="modular_robot.sensor_state.ActiveHingeSensorState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActiveHingeSensorState</span></code></a></p></td>
 <td><p>The state of an active hinge sensor.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#modular_robot.sensor_state.CameraSensorState" title="modular_robot.sensor_state.CameraSensorState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CameraSensorState</span></code></a></p></td>
+<td><p>The state of a camera sensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.sensor_state.IMUSensorState" title="modular_robot.sensor_state.IMUSensorState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IMUSensorState</span></code></a></p></td>
+<td><p>The state of an IMU sensor.</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modular_robot.sensor_state.ModularRobotSensorState" title="modular_robot.sensor_state.ModularRobotSensorState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModularRobotSensorState</span></code></a></p></td>
 <td><p>The state of modular robot's sensors.</p></td>
 </tr>
@@ -254,6 +261,70 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="modular_robot.sensor_state.CameraSensorState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CameraSensorState</span></span><a class="headerlink" href="#modular_robot.sensor_state.CameraSensorState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<div class="graphviz"><img src="../../../_images/inheritance-3e11c106cce531e98d368cc44843423daccc22b3.png" alt="Inheritance diagram of modular_robot.sensor_state.CameraSensorState" usemap="#inheritance7866d90359" class="inheritance graphviz" /></div>
+<map id="inheritance7866d90359" name="inheritance7866d90359">
+<area shape="rect" id="node2" href="_camera_sensor_state/index.html#modular_robot.sensor_state._camera_sensor_state.CameraSensorState" target="_top" title="The state of a camera sensor." alt="" coords="125,5,276,31"/>
+</map><p>The state of a camera sensor.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="modular_robot.sensor_state.CameraSensorState.image">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#modular_robot.sensor_state.CameraSensorState.image" title="Link to this definition"></a></dt>
+<dd><p>Get the current image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modular_robot.sensor_state.IMUSensorState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IMUSensorState</span></span><a class="headerlink" href="#modular_robot.sensor_state.IMUSensorState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<div class="graphviz"><img src="../../../_images/inheritance-040fc897ddcfbf78462a8ad66ee0651d20f3a141.png" alt="Inheritance diagram of modular_robot.sensor_state.IMUSensorState" usemap="#inheritance371937a538" class="inheritance graphviz" /></div>
+<map id="inheritance371937a538" name="inheritance371937a538">
+<area shape="rect" id="node2" href="_imu_sensor_state/index.html#modular_robot.sensor_state._imu_sensor_state.IMUSensorState" target="_top" title="The state of an IMU sensor." alt="" coords="125,5,252,31"/>
+</map><p>The state of an IMU sensor.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="modular_robot.sensor_state.IMUSensorState.specific_force">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">specific_force</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.sensor_state.IMUSensorState.specific_force" title="Link to this definition"></a></dt>
+<dd><p>Get the measured specific force.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The measured specific force.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="modular_robot.sensor_state.IMUSensorState.angular_rate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">angular_rate</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.sensor_state.IMUSensorState.angular_rate" title="Link to this definition"></a></dt>
+<dd><p>Get the measured angular rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The measured angular rate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="modular_robot.sensor_state.IMUSensorState.orientation">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.sensor_state.IMUSensorState.orientation" title="Link to this definition"></a></dt>
+<dd><p>Get the measured orientation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The measured orientation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="modular_robot.sensor_state.ModularRobotSensorState">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModularRobotSensorState</span></span><a class="headerlink" href="#modular_robot.sensor_state.ModularRobotSensorState" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
@@ -263,8 +334,36 @@
 </map><p>The state of modular robot’s sensors.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot.sensor_state.ModularRobotSensorState.get_active_hinge_sensor_state">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_active_hinge_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../body/base/_active_hinge_sensor/index.html#modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor" title="modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor"><span class="pre">modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="_active_hinge_sensor_state/index.html#modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState" title="modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState"><span class="pre">modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState</span></a></span></span><a class="headerlink" href="#modular_robot.sensor_state.ModularRobotSensorState.get_active_hinge_sensor_state" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_active_hinge_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../body/sensors/index.html#modular_robot.body.sensors.ActiveHingeSensor" title="modular_robot.body.sensors.ActiveHingeSensor"><span class="pre">modular_robot.body.sensors.ActiveHingeSensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="_active_hinge_sensor_state/index.html#modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState" title="modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState"><span class="pre">modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState</span></a></span></span><a class="headerlink" href="#modular_robot.sensor_state.ModularRobotSensorState.get_active_hinge_sensor_state" title="Link to this definition"></a></dt>
 <dd><p>Get the state of the provided active hinge sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sensor</strong> – The sensor.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot.sensor_state.ModularRobotSensorState.get_imu_sensor_state">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_imu_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../body/sensors/index.html#modular_robot.body.sensors.IMUSensor" title="modular_robot.body.sensors.IMUSensor"><span class="pre">modular_robot.body.sensors.IMUSensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="_imu_sensor_state/index.html#modular_robot.sensor_state._imu_sensor_state.IMUSensorState" title="modular_robot.sensor_state._imu_sensor_state.IMUSensorState"><span class="pre">modular_robot.sensor_state._imu_sensor_state.IMUSensorState</span></a></span></span><a class="headerlink" href="#modular_robot.sensor_state.ModularRobotSensorState.get_imu_sensor_state" title="Link to this definition"></a></dt>
+<dd><p>Get the state of the provided IMU sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sensor</strong> – The sensor.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot.sensor_state.ModularRobotSensorState.get_camera_sensor_state">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_camera_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../body/sensors/index.html#modular_robot.body.sensors.CameraSensor" title="modular_robot.body.sensors.CameraSensor"><span class="pre">modular_robot.body.sensors.CameraSensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="_camera_sensor_state/index.html#modular_robot.sensor_state._camera_sensor_state.CameraSensorState" title="modular_robot.sensor_state._camera_sensor_state.CameraSensorState"><span class="pre">modular_robot.sensor_state._camera_sensor_state.CameraSensorState</span></a></span></span><a class="headerlink" href="#modular_robot.sensor_state.ModularRobotSensorState.get_camera_sensor_state" title="Link to this definition"></a></dt>
+<dd><p>Get the state of the provided camera sensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sensor</strong> – The sensor.</p>

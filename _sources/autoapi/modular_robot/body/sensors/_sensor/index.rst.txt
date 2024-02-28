@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_sensor`
+============================================
+
+.. py:module:: modular_robot.body.sensors._sensor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.sensors._sensor.Sensor
+
+
+
+
+.. py:class:: Sensor
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.sensors._sensor.Sensor
+      :parts: 1
+
+   An abstract Sensor Class.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid of the sensor.
+
+      :return: The uuid.
+
+
+

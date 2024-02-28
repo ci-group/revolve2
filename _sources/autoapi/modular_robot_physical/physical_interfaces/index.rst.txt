@@ -106,4 +106,31 @@ Functions
       :raises NotImplementedError: If getting the servo position is not supported on this hardware.
 
 
+   .. py:method:: get_imu_angular_rate() -> pyrr.Vector3
+      :abstractmethod:
+
+      Get the angular rate from the IMU.
+
+      :returns: The angular rate.
+      :raises NotImplementedError: If the IMU is not supported on this hardware.
+
+
+   .. py:method:: get_imu_orientation() -> pyrr.Vector3
+      :abstractmethod:
+
+      Get the orientation from the IMU.
+
+      :returns: The orientation.
+      :raises NotImplementedError: If the IMU is not supported on this hardware.
+
+
+   .. py:method:: get_imu_specific_force() -> pyrr.Vector3
+      :abstractmethod:
+
+      Get the specific force from the IMU.
+
+      :returns: The specific force.
+      :raises NotImplementedError: If the IMU is not supported on this hardware.
+
+
 

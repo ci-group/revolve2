@@ -18,6 +18,8 @@ Classes
 .. autoapisummary::
 
    modular_robot.sensor_state.ActiveHingeSensorState
+   modular_robot.sensor_state.CameraSensorState
+   modular_robot.sensor_state.IMUSensorState
    modular_robot.sensor_state.ModularRobotSensorState
 
 
@@ -43,6 +45,64 @@ Classes
 
 
 
+.. py:class:: CameraSensorState
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.sensor_state.CameraSensorState
+      :parts: 1
+
+   The state of a camera sensor.
+
+   .. py:property:: image
+      :type: numpy.typing.NDArray[numpy.float_]
+      :abstractmethod:
+
+      Get the current image.
+
+      :returns: The image.
+
+
+
+.. py:class:: IMUSensorState
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: modular_robot.sensor_state.IMUSensorState
+      :parts: 1
+
+   The state of an IMU sensor.
+
+   .. py:property:: specific_force
+      :type: pyrr.Vector3
+      :abstractmethod:
+
+      Get the measured specific force.
+
+      :returns: The measured specific force.
+
+
+   .. py:property:: angular_rate
+      :type: pyrr.Vector3
+      :abstractmethod:
+
+      Get the measured angular rate.
+
+      :returns: The measured angular rate.
+
+
+   .. py:property:: orientation
+      :type: pyrr.Vector3
+      :abstractmethod:
+
+      Get the measured orientation.
+
+      :returns: The measured orientation.
+
+
+
 .. py:class:: ModularRobotSensorState
 
 
@@ -53,10 +113,28 @@ Classes
 
    The state of modular robot's sensors.
 
-   .. py:method:: get_active_hinge_sensor_state(sensor: modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor) -> modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState
+   .. py:method:: get_active_hinge_sensor_state(sensor: modular_robot.body.sensors.ActiveHingeSensor) -> modular_robot.sensor_state._active_hinge_sensor_state.ActiveHingeSensorState
       :abstractmethod:
 
       Get the state of the provided active hinge sensor.
+
+      :param sensor: The sensor.
+      :returns: The state.
+
+
+   .. py:method:: get_imu_sensor_state(sensor: modular_robot.body.sensors.IMUSensor) -> modular_robot.sensor_state._imu_sensor_state.IMUSensorState
+      :abstractmethod:
+
+      Get the state of the provided IMU sensor.
+
+      :param sensor: The sensor.
+      :returns: The state.
+
+
+   .. py:method:: get_camera_sensor_state(sensor: modular_robot.body.sensors.CameraSensor) -> modular_robot.sensor_state._camera_sensor_state.CameraSensorState
+      :abstractmethod:
+
+      Get the state of the provided camera sensor.
 
       :param sensor: The sensor.
       :returns: The state.

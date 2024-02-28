@@ -1,0 +1,34 @@
+:orphan:
+
+:py:mod:`_imu_sensor`
+================================================
+
+.. py:module:: modular_robot.body.sensors._imu_sensor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.sensors._imu_sensor.IMUSensor
+
+
+
+
+.. py:class:: IMUSensor
+
+
+   Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.sensors._imu_sensor.IMUSensor
+      :parts: 1
+
+   An inertial measurement unit.
+
+   Reports specific force(closely related to acceleration), angular rate(closely related to angular velocity), and orientation.
+
+

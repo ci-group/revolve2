@@ -16,6 +16,7 @@ Subpackages
    :maxdepth: 3
 
    base/index.rst
+   sensors/index.rst
    v1/index.rst
    v2/index.rst
 

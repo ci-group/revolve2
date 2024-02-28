@@ -1,0 +1,5 @@
+<map id="inheritanceb42c1b347b" name="inheritanceb42c1b347b">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node3" href="_sensor/index.html#modular_robot.body.sensors._sensor.Sensor" target="_top" title="An abstract Sensor Class." alt="" coords="125,5,197,31"/>
+<area shape="rect" id="node2" href="_imu_sensor/index.html#modular_robot.body.sensors._imu_sensor.IMUSensor" target="_top" title="An inertial measurement unit." alt="" coords="245,5,337,31"/>
+</map>

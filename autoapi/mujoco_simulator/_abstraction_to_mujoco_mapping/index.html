@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../index.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
@@ -225,7 +226,10 @@
 <tr class="row-even"><td><p><a class="reference internal" href="#mujoco_simulator._abstraction_to_mujoco_mapping.MultiBodySystemMujoco" title="mujoco_simulator._abstraction_to_mujoco_mapping.MultiBodySystemMujoco"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiBodySystemMujoco</span></code></a></p></td>
 <td><p>Information about a MuJoCo body.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping" title="mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractionToMujocoMapping</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco" title="mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IMUSensorMujoco</span></code></a></p></td>
+<td><p>Information about a MuJoCo IMU sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping" title="mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AbstractionToMujocoMapping</span></code></a></p></td>
 <td><p>Data to interpret a MuJoCo model using the simulation abstraction.</p></td>
 </tr>
 </tbody>
@@ -263,6 +267,22 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IMUSensorMujoco</span></span><a class="headerlink" href="#mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco" title="Link to this definition"></a></dt>
+<dd><p>Information about a MuJoCo IMU sensor.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco.gyro_id">
+<span class="sig-name descname"><span class="pre">gyro_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco.gyro_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco.accelerometer_id">
+<span class="sig-name descname"><span class="pre">accelerometer_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco.accelerometer_id" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AbstractionToMujocoMapping</span></span><a class="headerlink" href="#mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping" title="Link to this definition"></a></dt>
 <dd><p>Data to interpret a MuJoCo model using the simulation abstraction.</p>
@@ -274,6 +294,11 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping.multi_body_system">
 <span class="sig-name descname"><span class="pre">multi_body_system</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.MultiBodySystem</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#mujoco_simulator._abstraction_to_mujoco_mapping.MultiBodySystemMujoco" title="mujoco_simulator._abstraction_to_mujoco_mapping.MultiBodySystemMujoco"><span class="pre">MultiBodySystemMujoco</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping.multi_body_system" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping.imu_sensor">
+<span class="sig-name descname"><span class="pre">imu_sensor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.sensors.IMUSensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco" title="mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco"><span class="pre">IMUSensorMujoco</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping.imu_sensor" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

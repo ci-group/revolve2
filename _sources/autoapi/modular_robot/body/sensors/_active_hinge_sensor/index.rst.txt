@@ -1,0 +1,32 @@
+:orphan:
+
+:py:mod:`_active_hinge_sensor`
+=========================================================
+
+.. py:module:: modular_robot.body.sensors._active_hinge_sensor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.sensors._active_hinge_sensor.ActiveHingeSensor
+
+
+
+
+.. py:class:: ActiveHingeSensor
+
+
+   Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.sensors._active_hinge_sensor.ActiveHingeSensor
+      :parts: 1
+
+   A sensors for an active hinge that measures its angle.
+
+

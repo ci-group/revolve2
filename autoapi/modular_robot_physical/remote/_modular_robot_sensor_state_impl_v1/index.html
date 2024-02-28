@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
@@ -234,11 +235,39 @@
 </map><p>Implementation of ModularRobotSensorState for v1 robots.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot_physical.remote._modular_robot_sensor_state_impl_v1.ModularRobotSensorStateImplV1.get_active_hinge_sensor_state">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_active_hinge_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.base.ActiveHingeSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.sensor_state.ActiveHingeSensorState</span></span></span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v1.ModularRobotSensorStateImplV1.get_active_hinge_sensor_state" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_active_hinge_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.ActiveHingeSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.sensor_state.ActiveHingeSensorState</span></span></span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v1.ModularRobotSensorStateImplV1.get_active_hinge_sensor_state" title="Link to this definition"></a></dt>
 <dd><p>Get sensor states for Hinges.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>sensor</strong> – The sensor to query.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Always.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.remote._modular_robot_sensor_state_impl_v1.ModularRobotSensorStateImplV1.get_imu_sensor_state">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_imu_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.IMUSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.sensor_state.IMUSensorState</span></span></span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v1.ModularRobotSensorStateImplV1.get_imu_sensor_state" title="Link to this definition"></a></dt>
+<dd><p>Get the state of the provided IMU sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sensor</strong> – The sensor.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Always.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.remote._modular_robot_sensor_state_impl_v1.ModularRobotSensorStateImplV1.get_camera_sensor_state">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_camera_sensor_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.CameraSensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.modular_robot.sensor_state.CameraSensorState</span></span></span><a class="headerlink" href="#modular_robot_physical.remote._modular_robot_sensor_state_impl_v1.ModularRobotSensorStateImplV1.get_camera_sensor_state" title="Link to this definition"></a></dt>
+<dd><p>Get the state of the provided camera sensor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sensor</strong> – The sensor.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>NotImplementedError</strong> – Always.</p>

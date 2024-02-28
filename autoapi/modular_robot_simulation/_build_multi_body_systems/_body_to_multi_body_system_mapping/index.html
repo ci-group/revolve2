@@ -100,6 +100,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../index.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
@@ -229,13 +230,23 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BodyToMultiBodySystemMapping</span></span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping" title="Link to this definition"></a></dt>
 <dd><p>Mappings from bodies to multi-body system objects.</p>
 <dl class="py attribute">
+<dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.core_imu">
+<span class="sig-name descname"><span class="pre">core_imu</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">revolve2.simulation.scene.sensors.IMUSensor</span></em><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.core_imu" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.multi_body_system">
+<span class="sig-name descname"><span class="pre">multi_body_system</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></em><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.multi_body_system" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.active_hinge_to_joint_hinge">
 <span class="sig-name descname"><span class="pre">active_hinge_to_joint_hinge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.base.ActiveHinge</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">revolve2.simulation.scene.JointHinge</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.active_hinge_to_joint_hinge" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.active_hinge_sensor_to_joint_hinge">
-<span class="sig-name descname"><span class="pre">active_hinge_sensor_to_joint_hinge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.base.ActiveHingeSensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">revolve2.simulation.scene.JointHinge</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.active_hinge_sensor_to_joint_hinge" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">active_hinge_sensor_to_joint_hinge</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.sensors.ActiveHingeSensor</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">revolve2.simulation.scene.JointHinge</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping.active_hinge_sensor_to_joint_hinge" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>

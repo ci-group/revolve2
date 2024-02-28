@@ -102,6 +102,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../../ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
@@ -227,6 +228,7 @@
 <li class="toctree-l2"><a class="reference internal" href="geometry/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="sensors/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensors</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="vector2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vector2</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="vector2/vector2/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vector2</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="vector2/vector2aux/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">vector2aux</span></code></a></li>
@@ -639,6 +641,12 @@ Only box geometries are currently supported.</p>
 <dd><p>Geometries describing the shape of the body.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.scene.RigidBody.imu_sensors">
+<span class="sig-name descname"><span class="pre">imu_sensors</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sensors/index.html#simulation.scene.sensors.IMUSensor" title="simulation.scene.sensors.IMUSensor"><span class="pre">simulation.scene.sensors.IMUSensor</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#simulation.scene.RigidBody.imu_sensors" title="Link to this definition"></a></dt>
+<dd><p>The IMU sensors attached to this rigid body.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="simulation.scene.RigidBody.mass">
 <span class="sig-name descname"><span class="pre">mass</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="headerlink" href="#simulation.scene.RigidBody.mass" title="Link to this definition"></a></dt>
@@ -798,6 +806,34 @@ Only box geometries are currently supported.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The rotational position.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.SimulationState.get_imu_specific_force">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_imu_specific_force</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imu_sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sensors/index.html#simulation.scene.sensors.IMUSensor" title="simulation.scene.sensors.IMUSensor"><span class="pre">simulation.scene.sensors.IMUSensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.Vector3</span></span></span><a class="headerlink" href="#simulation.scene.SimulationState.get_imu_specific_force" title="Link to this definition"></a></dt>
+<dd><p>Get the specific force measured an IMU.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>imu_sensor</strong> – The IMU.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The specific force.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene.SimulationState.get_imu_angular_rate">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_imu_angular_rate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imu_sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sensors/index.html#simulation.scene.sensors.IMUSensor" title="simulation.scene.sensors.IMUSensor"><span class="pre">simulation.scene.sensors.IMUSensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pyrr.Vector3</span></span></span><a class="headerlink" href="#simulation.scene.SimulationState.get_imu_angular_rate" title="Link to this definition"></a></dt>
+<dd><p>Get the angular rate measured by am IMU.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>imu_sensor</strong> – The IMU.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The angular rate.</p>
 </dd>
 </dl>
 </dd></dl>

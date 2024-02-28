@@ -65,4 +65,22 @@ Classes
       :returns: The rotational position.
 
 
+   .. py:method:: get_imu_specific_force(imu_sensor: simulation.scene.sensors.IMUSensor) -> pyrr.Vector3
+      :abstractmethod:
+
+      Get the specific force measured an IMU.
+
+      :param imu_sensor: The IMU.
+      :returns: The specific force.
+
+
+   .. py:method:: get_imu_angular_rate(imu_sensor: simulation.scene.sensors.IMUSensor) -> pyrr.Vector3
+      :abstractmethod:
+
+      Get the angular rate measured by am IMU.
+
+      :param imu_sensor: The IMU.
+      :returns: The angular rate.
+
+
 

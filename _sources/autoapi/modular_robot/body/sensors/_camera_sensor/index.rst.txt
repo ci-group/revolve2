@@ -1,0 +1,42 @@
+:orphan:
+
+:py:mod:`_camera_sensor`
+===================================================
+
+.. py:module:: modular_robot.body.sensors._camera_sensor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot.body.sensors._camera_sensor.CameraSensor
+
+
+
+
+.. py:class:: CameraSensor
+
+
+   Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: modular_robot.body.sensors._camera_sensor.CameraSensor
+      :parts: 1
+
+   A camera for the Modular Robot.
+
+   .. py:attribute:: position
+      :type: pyrr.Vector3
+
+      
+
+   .. py:attribute:: camera_size
+      :type: revolve2.simulation.scene.vector2.Vector2
+
+      
+
+

@@ -18,7 +18,6 @@ Classes
 .. autoapisummary::
 
    modular_robot.body.base.ActiveHinge
-   modular_robot.body.base.ActiveHingeSensor
    modular_robot.body.base.AttachmentFace
    modular_robot.body.base.Body
    modular_robot.body.base.Brick
@@ -187,7 +186,7 @@ Classes
 
 
    .. py:property:: sensor
-      :type: modular_robot.body.base._active_hinge_sensor.ActiveHingeSensor | None
+      :type: modular_robot.body.sensors.ActiveHingeSensor | None
 
       Get the sensor.
 
@@ -198,20 +197,6 @@ Classes
       :value: 0
 
       
-
-
-.. py:class:: ActiveHingeSensor
-
-
-   A sensor for an active hinge that measures its angle.
-
-   .. py:property:: uuid
-      :type: uuid.UUID
-
-      Get the uuid.
-
-      :returns: The uuid.
-
 
 
 .. py:class:: AttachmentFace(rotation: float | modular_robot.body._right_angles.RightAngles, attachment_points: dict[int, modular_robot.body._attachment_point.AttachmentPoint])
@@ -417,6 +402,11 @@ Classes
 
    .. py:attribute:: LEFT
       :value: 3
+
+      
+
+   .. py:attribute:: imu_sensor
+      :type: modular_robot.body.sensors.IMUSensor | None
 
       
 

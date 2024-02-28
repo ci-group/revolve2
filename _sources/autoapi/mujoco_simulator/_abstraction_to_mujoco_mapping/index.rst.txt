@@ -16,6 +16,7 @@ Classes
 
    mujoco_simulator._abstraction_to_mujoco_mapping.JointHingeMujoco
    mujoco_simulator._abstraction_to_mujoco_mapping.MultiBodySystemMujoco
+   mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco
    mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping
 
 
@@ -53,6 +54,22 @@ Classes
       
 
 
+.. py:class:: IMUSensorMujoco
+
+
+   Information about a MuJoCo IMU sensor.
+
+   .. py:attribute:: gyro_id
+      :type: int
+
+      
+
+   .. py:attribute:: accelerometer_id
+      :type: int
+
+      
+
+
 .. py:class:: AbstractionToMujocoMapping
 
 
@@ -65,6 +82,11 @@ Classes
 
    .. py:attribute:: multi_body_system
       :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.simulation.scene.MultiBodySystem], MultiBodySystemMujoco]
+
+      
+
+   .. py:attribute:: imu_sensor
+      :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.simulation.scene.sensors.IMUSensor], IMUSensorMujoco]
 
       
 

@@ -98,4 +98,9 @@ Classes
 
       
 
+   .. py:attribute:: imu_sensor
+      :type: modular_robot.body.sensors.IMUSensor | None
+
+      
+
 

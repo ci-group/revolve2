@@ -30,7 +30,7 @@ Module Contents
 
    
 
-.. py:data:: SetupaArgsReader
+.. py:data:: SetupArgsReader
 
    
 
@@ -91,6 +91,18 @@ Module Contents
    
 
 .. py:data:: ControlAndReadSensorsArgsReader
+
+   
+
+.. py:data:: Vector3
+
+   
+
+.. py:data:: Vector3Builder
+
+   
+
+.. py:data:: Vector3Reader
 
    
 

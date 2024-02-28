@@ -102,6 +102,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../autoapi/index.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../autoapi/ci_group/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_group</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../autoapi/ci_group/index.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../autoapi/ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
@@ -224,8 +225,8 @@ The first time you make a contribution to a Revolve2 package your PR should add 
 <section id="developer-installation">
 <h2>Developer installation<a class="headerlink" href="#developer-installation" title="Link to this heading"></a></h2>
 <p>The normal installation guide applies. You should definitely use <a class="reference internal" href="../installation/index.html#editable-mode"><span class="std std-ref">editable mode</span></a>.
-The <code class="docutils literal notranslate"><span class="pre">dev_install.sh</span></code> script installs all Revolve2 packages in editable mode, as well as required packages for developer tools.
-If you want to uninstall all Revolve2 packages, you can use <code class="docutils literal notranslate"><span class="pre">./uninstall_revolve2star.sh</span></code>, which uninstall all packages like <code class="docutils literal notranslate"><span class="pre">revolve2*</span></code>.</p>
+Using the <code class="docutils literal notranslate"><span class="pre">requirements_dev.txt</span></code> allows you to quickly install all packages in editable mode, by executing: <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements_dev.txt</span></code>.
+If you want to uninstall all Revolve2 packages, you can use <code class="docutils literal notranslate"><span class="pre">./uninstall.sh</span></code>, which uninstall all packages like <code class="docutils literal notranslate"><span class="pre">revolve2*</span></code>.</p>
 </section>
 <section id="continuous-integration">
 <h2>Continuous integration<a class="headerlink" href="#continuous-integration" title="Link to this heading"></a></h2>

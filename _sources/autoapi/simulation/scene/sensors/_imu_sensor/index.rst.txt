@@ -1,0 +1,39 @@
+:orphan:
+
+:py:mod:`_imu_sensor`
+==============================================
+
+.. py:module:: simulation.scene.sensors._imu_sensor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.sensors._imu_sensor.IMUSensor
+
+
+
+
+.. py:class:: IMUSensor
+
+
+   Bases: :py:obj:`simulation.scene.sensors._sensor.Sensor`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.sensors._imu_sensor.IMUSensor
+      :parts: 1
+
+   An inertial measurement unit.
+
+   Reports specific force(closely related to acceleration), angular rate(closely related to angularvelocity), and orientation.
+
+   .. py:attribute:: pose
+      :type: simulation.scene._pose.Pose
+
+      
+
+

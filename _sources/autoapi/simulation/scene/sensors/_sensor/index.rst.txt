@@ -1,0 +1,42 @@
+:orphan:
+
+:py:mod:`_sensor`
+==========================================
+
+.. py:module:: simulation.scene.sensors._sensor
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.sensors._sensor.Sensor
+
+
+
+
+.. py:class:: Sensor
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.sensors._sensor.Sensor
+      :parts: 1
+
+   An inertial measurement unit.
+
+   Reports specific force(closely related to acceleration), angular rate(closely related to angularvelocity), and orientation.
+
+   .. py:property:: uuid
+      :type: uuid.UUID
+
+      Get the uuid.
+
+      :returns: The uuid.
+
+
+

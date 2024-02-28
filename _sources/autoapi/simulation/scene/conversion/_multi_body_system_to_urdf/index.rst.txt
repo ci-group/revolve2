@@ -19,7 +19,7 @@ Functions
 
 
 
-.. py:function:: multi_body_system_to_urdf(multi_body_system: simulation.scene._multi_body_system.MultiBodySystem, name: str) -> tuple[str, list[simulation.scene.geometry.GeometryPlane], list[simulation.scene.geometry.GeometryHeightmap], list[tuple[simulation.scene._joint_hinge.JointHinge, str]], list[tuple[simulation.scene.geometry.Geometry, str]]]
+.. py:function:: multi_body_system_to_urdf(multi_body_system: simulation.scene._multi_body_system.MultiBodySystem, name: str) -> tuple[str, list[simulation.scene.geometry.GeometryPlane], list[simulation.scene.geometry.GeometryHeightmap], list[tuple[simulation.scene._joint_hinge.JointHinge, str]], list[tuple[simulation.scene.geometry.Geometry, str]], list[tuple[simulation.scene._rigid_body.RigidBody, str]]]
 
    Convert a multi-body system to URDF.
 
@@ -31,7 +31,7 @@ Functions
 
    :param multi_body_system: The multi-body system to convert.
    :param name: The name to using in the URDF. It will be a prefix for every name in the model.
-   :returns: A urdf string, plane geometries, heightmap geometries, joints and their names in the urdf, geometries and their names in the urdf
+   :returns: A urdf string, plane geometries, heightmap geometries, joints and their names in the urdf, geometries and their names in the urdf, rigid bodies and their names in the urdf.
    :raises ValueError: In case the graph is cyclic.
 
    # noqa: DAR402 ValueError

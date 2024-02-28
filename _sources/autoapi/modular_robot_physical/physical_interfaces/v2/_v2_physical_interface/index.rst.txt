@@ -66,4 +66,28 @@ Classes
       :returns: The current positions.
 
 
+   .. py:method:: get_imu_angular_rate() -> pyrr.Vector3
+
+      Get the angular rate from the IMU.
+
+      :returns: The angular rate.
+      :raises RuntimeError: When imu could not be read.
+
+
+   .. py:method:: get_imu_orientation() -> pyrr.Vector3
+
+      Get the orientation from the IMU.
+
+      :returns: The orientation.
+      :raises RuntimeError: When imu could not be read.
+
+
+   .. py:method:: get_imu_specific_force() -> pyrr.Vector3
+
+      Get the specific force from the IMU.
+
+      :returns: The specific force.
+      :raises RuntimeError: When imu could not be read.
+
+
 

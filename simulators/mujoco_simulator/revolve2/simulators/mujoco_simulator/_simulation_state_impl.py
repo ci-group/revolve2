@@ -4,7 +4,6 @@ import numpy.typing as npt
 from pyrr import Quaternion, Vector3
 
 from revolve2.simulation.scene import (
-    IMUSensor,
     JointHinge,
     MultiBodySystem,
     Pose,

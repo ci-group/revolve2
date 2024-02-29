@@ -4,7 +4,6 @@ from ._attachment_face import AttachmentFace
 from ._body import Body
 from ._brick import Brick
 from ._core import Core
-from ._imu_sensor import IMUSensor
 
 __all__ = [
     "ActiveHinge",
@@ -12,5 +11,4 @@ __all__ = [
     "Body",
     "Brick",
     "Core",
-    "IMUSensor",
 ]

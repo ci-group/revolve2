@@ -5,14 +5,64 @@ from pyrr import Matrix33, Quaternion, Vector3
 
 from ._pose import Pose
 from .geometry import Geometry, GeometryBox
-from .sensors import IMUSensor
+from .sensors import CameraSensor, IMUSensor, Sensor
+
+
+@dataclass
+class _AttachedSensors:
+    imu_sensors: list[IMUSensor] = field(default_factory=list)
+    camera_sensors: list[CameraSensor] = field(default_factory=list)
+
+    def add_sensor(self, sensor: Sensor) -> None:
+        """
+        Add sensor to the AttachedSensors object.
+
+        :param sensor: The sensor
+        :raises ValueError: If the sensor type is unknown.
+        """
+        match sensor:
+            case IMUSensor():
+                self.imu_sensors.append(sensor)
+            case CameraSensor():
+                self.camera_sensors.append(sensor)
+            case _:
+                raise ValueError(
+                    f"Sensor of type: {type(sensor)} is not defined for _rigid_body._AttachedSensors"
+                )
 
 
 @dataclass(kw_only=True)
 class RigidBody:
     """A collection of geometries and physics parameters."""
 
-    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
+    _uuid: uuid.UUID
+    initial_pose: Pose
+    static_friction: float
+    dynamic_friction: float
+    geometries: list[Geometry]
+    sensors: _AttachedSensors
+
+    def __init__(
+        self,
+        initial_pose: Pose,
+        static_friction: float,
+        dynamic_friction: float,
+        geometries: list[Geometry],
+    ) -> None:
+        """
+        Initialize the rigid body object.
+
+        :param initial_pose: The Initial pose of the rigid body. Relative to its parent multi-body system.
+        :param static_friction: Static friction of the body.
+        :param dynamic_friction: Dynamic friction of the body.
+        :param geometries: Geometries describing the shape of the body.
+        """
+        self._uuid = uuid.uuid1()
+        self.initial_pose = initial_pose
+        self.static_friction = static_friction
+        self.dynamic_friction = dynamic_friction
+        self.geometries = geometries
+        self.sensors = _AttachedSensors()
 
     @property
     def uuid(self) -> uuid.UUID:
@@ -22,25 +72,6 @@ class RigidBody:
         :returns: The uuid.
         """
         return self._uuid
-
-    initial_pose: Pose
-    """
-    Initial pose of the rigid body.
-    
-    Relative to its parent multi-body system.
-    """
-
-    static_friction: float
-    """Static friction of the body."""
-
-    dynamic_friction: float
-    """Dynamic friction of the body."""
-
-    geometries: list[Geometry]
-    """Geometries describing the shape of the body."""
-
-    imu_sensors: list[IMUSensor]
-    """The IMU sensors attached to this rigid body."""
 
     def mass(self) -> float:
         """Get mass of the rigid body.

@@ -130,17 +130,8 @@ def scene_to_model(
         multi_body_system_mjcf.statistic.center = None
         multi_body_system_mjcf.statistic.meansize = None
         attachment_frame = env_mjcf.attach(multi_body_system_mjcf)
-        attachment_frame.pos = [
-            multi_body_system.pose.position.x,
-            multi_body_system.pose.position.y,
-            multi_body_system.pose.position.z,
-        ]
-        attachment_frame.quat = [
-            multi_body_system.pose.orientation.x,
-            multi_body_system.pose.orientation.y,
-            multi_body_system.pose.orientation.z,
-            multi_body_system.pose.orientation.w,
-        ]
+        attachment_frame.pos = [*multi_body_system.pose.position]
+        attachment_frame.quat = [*multi_body_system.pose.orientation]
         if not multi_body_system.is_static:
             attachment_frame.add("freejoint")
 
@@ -169,29 +160,20 @@ def scene_to_model(
 
         # Add IMUs
         for rigid_body, name in rigid_bodies_and_names:
-            if len(rigid_body.imu_sensors) > 0:
+            if len(rigid_body.sensors.imu_sensors) > 0:
                 if name == f"mbs{mbs_i}":
                     rigid_body_mjcf = multi_body_system_mjcf.worldbody
                 else:
                     rigid_body_mjcf = multi_body_system_mjcf.find(
                         namespace="body", identifier=name
                     )
-                for imu_i, imu in enumerate(rigid_body.imu_sensors):
+                for imu_i, imu in enumerate(rigid_body.sensors.imu_sensors):
                     site_name = f"{name}_site_imu_{imu_i}"
                     rigid_body_mjcf.add(
                         "site",
                         name=site_name,
-                        pos=[
-                            imu.pose.position.x,
-                            imu.pose.position.y,
-                            imu.pose.position.z,
-                        ],
-                        quat=[
-                            imu.pose.orientation.x,
-                            imu.pose.orientation.y,
-                            imu.pose.orientation.z,
-                            imu.pose.orientation.w,
-                        ],
+                        pos=[*imu.pose.position],
+                        quat=[*imu.pose.orientation],
                     )
                     gyro_name = f"imu_gyro_{name}_{imu_i}"
                     multi_body_system_mjcf.sensor.add(
@@ -220,17 +202,8 @@ def scene_to_model(
             env_mjcf.worldbody.add(
                 "geom",
                 type="plane",
-                pos=[
-                    plane.pose.position.x,
-                    plane.pose.position.y,
-                    plane.pose.position.z,
-                ],
-                quat=[
-                    plane.pose.orientation.x,
-                    plane.pose.orientation.y,
-                    plane.pose.orientation.z,
-                    plane.pose.orientation.w,
-                ],
+                pos=[*plane.pose.position],
+                quat=[*plane.pose.orientation],
                 size=[plane.size.x / 2.0, plane.size.y / 2.0, 1.0],
                 **plane_kwargs,
             )
@@ -245,9 +218,7 @@ def scene_to_model(
                 nrow=len(heightmap.heights),
                 ncol=len(heightmap.heights[0]),
                 size=[
-                    heightmap.size.x,
-                    heightmap.size.y,
-                    heightmap.size.z,
+                    *heightmap.size,
                     heightmap.base_thickness,
                 ],
             )
@@ -266,17 +237,8 @@ def scene_to_model(
                 "geom",
                 type="hfield",
                 hfield=f"hfield_{i_heightmap}",
-                pos=[
-                    heightmap.pose.position.x,
-                    heightmap.pose.position.y,
-                    heightmap.pose.position.z,
-                ],
-                quat=[
-                    heightmap.pose.orientation.x,
-                    heightmap.pose.orientation.y,
-                    heightmap.pose.orientation.z,
-                    heightmap.pose.orientation.w,
-                ],
+                pos=[*heightmap.pose.position],
+                quat=[*heightmap.pose.orientation],
                 **hm_kwargs,
             )
 
@@ -332,7 +294,7 @@ def scene_to_model(
     # Create IMU map
     for mbs_i, rigid_bodies_and_names in enumerate(all_rigid_bodies_and_names):
         for rigid_body, name in rigid_bodies_and_names:
-            for imu_i, imu in enumerate(rigid_body.imu_sensors):
+            for imu_i, imu in enumerate(rigid_body.sensors.imu_sensors):
                 gyro_name = f"imu_gyro_{name}_{imu_i}"
                 accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
                 mapping.imu_sensor[UUIDKey(imu)] = IMUSensorMujoco(

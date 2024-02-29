@@ -16,18 +16,18 @@ class IMUSensorStateImpl(IMUSensorState):
         self,
         simulation_state: SimulationState,
         multi_body_system: MultiBodySystem,
-        core_imu: IMUSensor,
+        imu: IMUSensor,
     ) -> None:
         """
         Initialize this object.
 
         :param simulation_state: The state of the simulation.
         :param multi_body_system: The multi body system this imu is attached to.
-        :param core_imu: The imu attached to the core.
+        :param imu: The imu attached to the core.
         """
         self._simulation_state = simulation_state
         self._multi_body_system = multi_body_system
-        self._core_imu = core_imu
+        self._imu = imu
 
     @property
     def specific_force(self) -> Vector3:
@@ -36,7 +36,7 @@ class IMUSensorStateImpl(IMUSensorState):
 
         :returns: The measured specific force.
         """
-        return self._simulation_state.get_imu_specific_force(self._core_imu)
+        return self._simulation_state.get_imu_specific_force(self._imu)
 
     @property
     def angular_rate(self) -> Vector3:
@@ -45,7 +45,7 @@ class IMUSensorStateImpl(IMUSensorState):
 
         :returns: The measured angular rate.
         """
-        return self._simulation_state.get_imu_angular_rate(self._core_imu)
+        return self._simulation_state.get_imu_angular_rate(self._imu)
 
     @property
     def orientation(self) -> Quaternion:

@@ -26,4 +26,5 @@ class AttachmentFace(Module):
             rotation=rotation,
             attachment_points=attachment_points,
             color=Color(255, 255, 255, 255),
+            sensors=[],
         )

@@ -61,10 +61,15 @@ class ModularRobotSensorStateImpl(ModularRobotSensorState):
         :param sensor: The sensor.
         :returns: The state.
         """
+        maybe_imu = self._body_to_multi_body_system_mapping.imu_to_sim_imu.get(
+            UUIDKey(sensor)
+        )
+        assert maybe_imu is not None, "IMU not in scene."
+
         return IMUSensorStateImpl(
             simulation_state=self._simulation_state,
             multi_body_system=self._body_to_multi_body_system_mapping.multi_body_system,
-            core_imu=self._body_to_multi_body_system_mapping.core_imu,
+            imu=maybe_imu,
         )
 
     def get_camera_sensor_state(self, sensor: CameraSensor) -> CameraSensorState:

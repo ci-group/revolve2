@@ -48,9 +48,9 @@ async def _run_remote_impl(
     manual_mode: bool,
 ) -> None:
     active_hinge_sensor_to_pin = {
-        UUIDKey(key.value.sensor): pin
+        UUIDKey(key.value.sensors.active_hinge_sensor): pin
         for key, pin in config.hinge_mapping.items()
-        if key.value.sensor
+        if key.value.sensors.active_hinge_sensor is not None
         if not None
     }
 
@@ -155,12 +155,12 @@ async def _run_remote_impl(
                         robot_daemon_protocol_capnp.ReadSensorsArgs(readPins=pins)
                     )
                 ).response
-                if config.modular_robot.body.core.imu_sensor is None:
+                if config.modular_robot.body.core.sensors.imu_sensor is None:
                     imu_sensor_states = {}
                 else:
                     imu_sensor_states = {
                         UUIDKey(
-                            config.modular_robot.body.core.imu_sensor
+                            config.modular_robot.body.core.sensors.imu_sensor
                         ): IMUSensorStateImpl(
                             _capnp_to_vector3(sensor_readings.imuSpecificForce),
                             _capnp_to_vector3(sensor_readings.imuAngularRate),
@@ -222,12 +222,12 @@ async def _run_remote_impl(
                             )
                         )
                     ).response
-                    if config.modular_robot.body.core.imu_sensor is None:
+                    if config.modular_robot.body.core.sensors.imu_sensor is None:
                         imu_sensor_states = {}
                     else:
                         imu_sensor_states = {
                             UUIDKey(
-                                config.modular_robot.body.core.imu_sensor
+                                config.modular_robot.body.core.sensors.imu_sensor
                             ): IMUSensorStateImpl(
                                 _capnp_to_vector3(sensor_readings.imuSpecificForce),
                                 _capnp_to_vector3(sensor_readings.imuAngularRate),

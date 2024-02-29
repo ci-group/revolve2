@@ -3,7 +3,7 @@ import numpy.typing as npt
 
 from ..._modular_robot_control_interface import ModularRobotControlInterface
 from ...body.base import ActiveHinge
-from ...sensor_state._modular_robot_sensor_state import ModularRobotSensorState
+from ...sensor_state import ModularRobotSensorState
 from .._brain_instance import BrainInstance
 
 

@@ -4,7 +4,6 @@ from pyrr import Vector3
 
 from .._right_angles import RightAngles
 from ..base import Core
-from ..sensors import IMUSensor
 from ._attachment_face_core_v2 import AttachmentFaceCoreV2
 
 

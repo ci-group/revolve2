@@ -5,6 +5,61 @@ import uuid
 from ._attachment_point import AttachmentPoint
 from ._color import Color
 from ._right_angles import RightAngles
+from .sensors import ActiveHingeSensor, CameraSensor, IMUSensor, Sensor
+
+
+class _AttachedSensors:
+    """A class that contains all the attached Sensors of a Module."""
+
+    _camera_sensor: CameraSensor | None
+    _active_hinge_sensor: ActiveHingeSensor | None
+    _imu_sensor: IMUSensor | None
+
+    def __init__(self) -> None:
+        """Initialize the AttachedSensors."""
+        self._camera_sensor = None
+        self._imu_sensor = None
+        self._active_hinge_sensor = None
+
+    def add_sensor(self, sensor: Sensor) -> None:
+        """
+        Add a sensor to the attached Sensors of the module.
+
+        :param sensor: The sensor.
+        :raises KeyError: If something went wrong with attaching.
+        """
+        match sensor:
+            case CameraSensor():
+                if self._camera_sensor is None:
+                    self._camera_sensor = sensor
+                else:
+                    raise KeyError("Camera sensor already populated")
+            case IMUSensor():
+                if self._imu_sensor is None:
+                    self._imu_sensor = sensor
+                else:
+                    raise KeyError("IMU sensor already populated")
+            case ActiveHingeSensor():
+                if self._active_hinge_sensor is None:
+                    self._active_hinge_sensor = sensor
+                else:
+                    raise KeyError("ActiveHinge sensor already populated")
+            case _:
+                raise KeyError(
+                    f"Sensor of type {type(sensor)} is not defined in _module._AttachedSensors."
+                )
+
+    @property
+    def imu_sensor(self) -> IMUSensor | None:
+        return self._imu_sensor
+
+    @property
+    def active_hinge_sensor(self) -> ActiveHingeSensor | None:
+        return self._active_hinge_sensor
+
+    @property
+    def camera_sensor(self) -> CameraSensor | None:
+        return self._camera_sensor
 
 
 class Module:
@@ -29,7 +84,7 @@ class Module:
     
     None if this module has not yet been added to a body.
     """
-
+    _sensors: _AttachedSensors
     _color: Color
 
     def __init__(
@@ -37,6 +92,7 @@ class Module:
         rotation: float | RightAngles,
         color: Color,
         attachment_points: dict[int, AttachmentPoint],
+        sensors: list[Sensor],
     ) -> None:
         """
         Initialize this object.
@@ -44,7 +100,12 @@ class Module:
         :param rotation: Orientation of this model relative to its parent.
         :param color: The color of the module.
         :param attachment_points: The attachment points available on a module.
+        :param sensors: The sensors associated with the module.
         """
+        self._sensors = _AttachedSensors()
+        for sensor in sensors:
+            self._sensors.add_sensor(sensor)
+
         self._uuid = uuid.uuid1()
 
         self._attachment_points = attachment_points
@@ -195,3 +256,20 @@ class Module:
         :return: The boolean.
         """
         return self._children.get(index) is None
+
+    @property
+    def sensors(self) -> _AttachedSensors:
+        """
+        Get the sensors.
+
+        :return: The value.
+        """
+        return self._sensors
+
+    def add_sensor(self, sensor: Sensor) -> None:
+        """
+        Add a sensor to the module.
+
+        :param sensor: The sensor.
+        """
+        self._sensors.add_sensor(sensor)

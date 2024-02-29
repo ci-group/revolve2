@@ -12,8 +12,8 @@ class Sensor(ABC):
     @property
     def uuid(self) -> uuid.UUID:
         """
-        Get the uuid of the sensor.
+        Get the uuid.
 
-        :return: The uuid.
+        :returns: The uuid.
         """
         return self._uuid

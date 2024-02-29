@@ -10,6 +10,7 @@ from ._patched_batch_parameters import make_patched_batch_parameters
 def test_brain_with_feedback(mocker: Mock) -> None:
     """
     Test brain_with_feedback example can complete.
+
     :param mocker: The mock object.
     """
     exp_dir = os.path.join(EXAMPLES_DIR, "brain_with_feedback")

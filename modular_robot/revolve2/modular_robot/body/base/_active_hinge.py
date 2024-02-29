@@ -4,7 +4,7 @@ from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
-from ..sensors import ActiveHingeSensor
+from ..sensors import Sensor
 
 
 class ActiveHinge(Module):
@@ -30,7 +30,6 @@ class ActiveHinge(Module):
     _armature: float
     _pid_gain_p: float
     _pid_gain_d: float
-    _sensor: ActiveHingeSensor | None
 
     def __init__(
         self,
@@ -53,6 +52,7 @@ class ActiveHinge(Module):
         pid_gain_p: float,
         pid_gain_d: float,
         child_offset: float,
+        sensors: list[Sensor] = [],
     ):
         """
         Initialize this object.
@@ -76,6 +76,7 @@ class ActiveHinge(Module):
         :param pid_gain_p: Proportional gain of the pid position controller.
         :param pid_gain_d: Derivative gain of the pid position controller.
         :param child_offset: The offset of children on the attachment point.
+        :param sensors: The sensors associated with this module.
         """
         self._static_friction = static_friction
         self._dynamic_friction = dynamic_friction
@@ -102,9 +103,9 @@ class ActiveHinge(Module):
             ),
         }
 
-        super().__init__(rotation, Color(255, 255, 255, 255), attachment_points)
-
-        self._sensor = None
+        super().__init__(
+            rotation, Color(255, 255, 255, 255), attachment_points, sensors
+        )
 
     @property
     def attachment(self) -> Module | None:
@@ -281,18 +282,3 @@ class ActiveHinge(Module):
         :return: The value.
         """
         return self._pid_gain_d
-
-    @property
-    def sensor(self) -> ActiveHingeSensor | None:
-        """
-        Get the sensor.
-
-        :return: The value.
-        """
-        return self._sensor
-
-    @sensor.setter
-    def sensor(self, sensor: ActiveHingeSensor) -> None:
-        if self._sensor is not None:
-            raise RuntimeError("Sensor has already been set.")
-        self._sensor = sensor

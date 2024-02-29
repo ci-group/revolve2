@@ -32,8 +32,8 @@ class ModularRobotSensorState(ABC):
     @abstractmethod
     def get_camera_sensor_state(self, sensor: CameraSensor) -> CameraSensorState:
         """
-        Get the state of the provided camera sensor.
+        Get the state of the camera sensor.
 
-        :param sensor: The sensor.
-        :returns: The state.
+        :param sensor: The camera.
+        :return: The state.
         """

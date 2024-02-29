@@ -1,7 +1,6 @@
 import math
 from typing import Sequence
 
-from pyrr import Vector3
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
@@ -137,39 +136,3 @@ class V2PhysicalInterface(PhysicalInterface):
         """
         angles = self._robohat.get_servo_multiple_angles()
         return [(angles[pin] - 90) / 360.0 * math.pi * 2.0 for pin in pins]
-
-    def get_imu_angular_rate(self) -> Vector3:
-        """
-        Get the angular rate from the IMU.
-
-        :returns: The angular rate.
-        :raises RuntimeError: When imu could not be read.
-        """
-        gyro = self._robohat.get_imu_gyro()
-        if gyro is None:
-            raise RuntimeError("Could not get IMU gyro reading!")
-        return Vector3(gyro)
-
-    def get_imu_orientation(self) -> Vector3:
-        """
-        Get the orientation from the IMU.
-
-        :returns: The orientation.
-        :raises RuntimeError: When imu could not be read.
-        """
-        orientation = self._robohat.get_imu_magnetic_fields()
-        if orientation is None:
-            raise RuntimeError("Could not get IMU magnetic fields reading!")
-        return Vector3(orientation)
-
-    def get_imu_specific_force(self) -> Vector3:
-        """
-        Get the specific force from the IMU.
-
-        :returns: The specific force.
-        :raises RuntimeError: When imu could not be read.
-        """
-        accel = self._robohat.get_imu_acceleration()
-        if accel is None:
-            raise RuntimeError("Could not get IMU acceleration reading!")
-        return Vector3(accel)

@@ -1,10 +1,7 @@
-"""Sensor state implementations for the simulations."""
+"""Implementations of the Senor-States for the simulation."""
+
 from ._active_hinge_sensor_state_impl import ActiveHingeSensorStateImpl
 from ._imu_sensor_state_impl import IMUSensorStateImpl
-from ._modular_robot_sensor_state_impl import ModularRobotSensorStateImpl
+from ._camera_sensor_state_impl import CameraSensorStateImpl
 
-__all__ = [
-    "ActiveHingeSensorStateImpl",
-    "IMUSensorStateImpl",
-    "ModularRobotSensorStateImpl",
-]
+__all__ = ["ActiveHingeSensorStateImpl", "IMUSensorStateImpl", "CameraSensorStateImpl"]

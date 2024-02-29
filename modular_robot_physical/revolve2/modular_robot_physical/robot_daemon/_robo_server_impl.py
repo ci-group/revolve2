@@ -2,8 +2,6 @@ import threading
 import time
 from typing import Any, Sequence
 
-from pyrr import Vector3
-
 from .._hardware_type import HardwareType
 from .._protocol_version import PROTOCOL_VERSION
 from ..physical_interfaces import PhysicalInterface
@@ -250,20 +248,6 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
 
             battery = self._physical_interface.get_battery_level()
 
-            imu_orientation = self._physical_interface.get_imu_orientation()
-            imu_specific_force = self._physical_interface.get_imu_specific_force()
-            imu_angular_rate = self._physical_interface.get_imu_angular_rate()
-
         return robot_daemon_protocol_capnp.SensorReadings(
-            pins=pins_readings,
-            battery=battery,
-            imuOrientation=self._vector3_to_capnp(imu_orientation),
-            imuSpecificForce=self._vector3_to_capnp(imu_specific_force),
-            imuAngularRate=self._vector3_to_capnp(imu_angular_rate),
-        )
-
-    @staticmethod
-    def _vector3_to_capnp(vector: Vector3) -> Vector3:
-        return robot_daemon_protocol_capnp.Vector3(
-            x=float(vector.x), y=float(vector.y), z=float(vector.z)
+            pins=pins_readings, battery=battery
         )

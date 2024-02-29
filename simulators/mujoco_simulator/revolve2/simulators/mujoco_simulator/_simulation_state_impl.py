@@ -1,6 +1,7 @@
 import mujoco
 import numpy as np
 import numpy.typing as npt
+from numpy._typing import NDArray
 from pyrr import Quaternion, Vector3
 
 from revolve2.simulation.scene import (
@@ -11,7 +12,7 @@ from revolve2.simulation.scene import (
     SimulationState,
     UUIDKey,
 )
-from revolve2.simulation.scene.sensors import IMUSensor
+from revolve2.simulation.scene.sensors import CameraSensor, IMUSensor
 
 from ._abstraction_to_mujoco_mapping import AbstractionToMujocoMapping
 
@@ -117,3 +118,16 @@ class SimulationStateImpl(SimulationState):
         ].gyro_id
         angular_rate = self._sensordata[gyro_id : gyro_id + 3]
         return Vector3(angular_rate)
+
+    def get_camera_view(self, camera_sensor: CameraSensor) -> NDArray[np.float_]:
+        """
+        Get the current view of the camera.
+
+        :param camera_sensor: The camera.
+        :return: The image (RGB).
+        """
+        camera_id = self._abstraction_to_mujoco_mapping.camera_sensor[
+            UUIDKey(camera_sensor)
+        ].camera_id
+        image = self._sensordata[camera_id : camera_id + 1]
+        return image

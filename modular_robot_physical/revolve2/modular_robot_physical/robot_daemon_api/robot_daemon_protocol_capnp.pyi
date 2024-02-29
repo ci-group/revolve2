@@ -251,58 +251,10 @@ class ControlAndReadSensorsArgsBuilder(ControlAndReadSensorsArgs):
     @staticmethod
     def write_packed(file: BufferedWriter) -> None: ...
 
-class Vector3:
-    x: float
-    y: float
-    z: float
-    def __init__(self, x: float, y: float, z: float) -> None: ...
-    @staticmethod
-    @contextmanager
-    def from_bytes(
-        data: bytes,
-        traversal_limit_in_words: int | None = ...,
-        nesting_limit: int | None = ...,
-    ) -> Iterator[Vector3Reader]: ...
-    @staticmethod
-    def from_bytes_packed(
-        data: bytes,
-        traversal_limit_in_words: int | None = ...,
-        nesting_limit: int | None = ...,
-    ) -> Vector3Reader: ...
-    @staticmethod
-    def new_message() -> Vector3Builder: ...
-    def to_dict(self) -> dict[Any, Any]: ...
-
-class Vector3Reader(Vector3):
-    def as_builder(self) -> Vector3Builder: ...
-
-class Vector3Builder(Vector3):
-    @staticmethod
-    def from_dict(dictionary: dict[Any, Any]) -> Vector3Builder: ...
-    def copy(self) -> Vector3Builder: ...
-    def to_bytes(self) -> bytes: ...
-    def to_bytes_packed(self) -> bytes: ...
-    def to_segments(self) -> list[bytes]: ...
-    def as_reader(self) -> Vector3Reader: ...
-    @staticmethod
-    def write(file: BufferedWriter) -> None: ...
-    @staticmethod
-    def write_packed(file: BufferedWriter) -> None: ...
-
 class SensorReadings:
     pins: Sequence[float]
     battery: float
-    imuOrientation: Vector3 | Vector3Builder | Vector3Reader
-    imuSpecificForce: Vector3 | Vector3Builder | Vector3Reader
-    imuAngularRate: Vector3 | Vector3Builder | Vector3Reader
-    def __init__(
-        self,
-        pins: Sequence[float],
-        battery: float,
-        imuOrientation: Vector3 | Vector3Builder | Vector3Reader,
-        imuSpecificForce: Vector3 | Vector3Builder | Vector3Reader,
-        imuAngularRate: Vector3 | Vector3Builder | Vector3Reader,
-    ) -> None: ...
+    def __init__(self, pins: Sequence[float], battery: float) -> None: ...
     @staticmethod
     @contextmanager
     def from_bytes(

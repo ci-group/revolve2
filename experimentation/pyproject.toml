@@ -4,13 +4,10 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-experimentation"
-version = "1.0.2"
+version = "1.0.1"
 description = "Revolve2: Tools for experimentation."
 readme = "../README.md"
-authors = [
-    "Aart Stuurman <aartstuurman@hotmail.com>",
-    "Oliver Weissl <o.weissl@vu.nl>",
-]
+authors = ["Aart Stuurman <aartstuurman@hotmail.com>"]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [
     "Development Status :: 4 - Beta",

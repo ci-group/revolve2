@@ -12,33 +12,27 @@ from revolve2.modular_robot.sensor_state import (
 
 from .._uuid_key import UUIDKey
 from ._active_hinge_sensor_state_impl import ActiveHingeSensorStateImpl
-from ._imu_sensor_state_impl import IMUSensorStateImpl
 
 
 class ModularRobotSensorStateImplV2(ModularRobotSensorState):
     """Implementation of ModularRobotSensorState for v2 robots."""
 
     _hinge_sensor_mapping: dict[UUIDKey[ActiveHingeSensor], int]
-    _hinge_positions: dict[int, float]
-
-    _imu_sensor_states: dict[UUIDKey[IMUSensor], IMUSensorStateImpl]
+    _positions: dict[int, float]
 
     def __init__(
         self,
         hinge_sensor_mapping: dict[UUIDKey[ActiveHingeSensor], int],
-        hinge_positions: dict[int, float],
-        imu_sensor_states: dict[UUIDKey[IMUSensor], IMUSensorStateImpl],
+        positions: dict[int, float],
     ) -> None:
         """
         Initialize this object.
 
         :param hinge_sensor_mapping: Mapping from active hinge sensors to pin ids.
-        :param hinge_positions: Position of hinges accessed by pin id.
-        :param imu_sensor_states: State of the IMU sensors.
+        :param positions: Position of hinges accessed by pin id.
         """
         self._hinge_sensor_mapping = hinge_sensor_mapping
-        self._hinge_positions = hinge_positions
-        self._imu_sensor_states = imu_sensor_states
+        self._positions = positions
 
     def get_active_hinge_sensor_state(
         self, sensor: ActiveHingeSensor
@@ -50,7 +44,7 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         :returns: The Sensor State.
         """
         return ActiveHingeSensorStateImpl(
-            self._hinge_positions[self._hinge_sensor_mapping[UUIDKey(sensor)]]
+            self._positions[self._hinge_sensor_mapping[UUIDKey(sensor)]]
         )
 
     def get_imu_sensor_state(self, sensor: IMUSensor) -> IMUSensorState:
@@ -58,21 +52,15 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         Get the state of the provided IMU sensor.
 
         :param sensor: The sensor.
-        :raises ValueError: If IMU sensors is not part of the robot.
-        :returns: The state.
+        :raises NotImplementedError: Always.
         """
-        state = self._imu_sensor_states.get(UUIDKey(sensor))
-        if state is None:
-            raise ValueError(
-                "State for IMU sensor not found. Does it exist in the robot definition?"
-            )
-        return state
+        raise NotImplementedError()
 
     def get_camera_sensor_state(self, sensor: CameraSensor) -> CameraSensorState:
         """
-        Get the state of the provided camera sensor.
+        Get the state of the camera sensor.
 
-        :param sensor: The sensor.
+        :param sensor: The camera.
         :raises NotImplementedError: Always.
         """
         raise NotImplementedError()

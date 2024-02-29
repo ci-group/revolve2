@@ -1,14 +1,12 @@
 from abc import ABC, abstractmethod
 
-from pyrr import Vector3
-
 
 class IMUSensorState(ABC):
     """The state of an IMU sensor."""
 
     @property
     @abstractmethod
-    def specific_force(self) -> Vector3:
+    def specific_force(self) -> float:
         """
         Get the measured specific force.
 
@@ -17,7 +15,7 @@ class IMUSensorState(ABC):
 
     @property
     @abstractmethod
-    def angular_rate(self) -> Vector3:
+    def angular_rate(self) -> float:
         """
         Get the measured angular rate.
 
@@ -26,7 +24,7 @@ class IMUSensorState(ABC):
 
     @property
     @abstractmethod
-    def orientation(self) -> Vector3:
+    def orientation(self) -> float:
         """
         Get the measured orientation.
 

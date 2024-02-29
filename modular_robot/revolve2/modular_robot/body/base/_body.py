@@ -127,7 +127,7 @@ class _GridMaker(Generic[TModuleNP]):
         return grid, Vector3([-minx, -miny, -minz])
 
     def _make_grid_recur(
-        self, module: Module, position: Vector3, orientation: Quaternion
+            self, module: Module, position: Vector3, orientation: Quaternion
     ) -> None:
         self._add(position, module)
 
@@ -136,9 +136,9 @@ class _GridMaker(Generic[TModuleNP]):
             if child is not None:
                 assert np.isclose(child.rotation % (math.pi / 2.0), 0.0)
                 rotation = (
-                    orientation
-                    * attachment_point.orientation
-                    * Quaternion.from_eulers([child.rotation, 0, 0])
+                        orientation
+                        * attachment_point.orientation
+                        * Quaternion.from_eulers([child.rotation, 0, 0])
                 )
                 self._make_grid_recur(
                     child, position + rotation * Vector3([1.0, 0.0, 0.0]), rotation

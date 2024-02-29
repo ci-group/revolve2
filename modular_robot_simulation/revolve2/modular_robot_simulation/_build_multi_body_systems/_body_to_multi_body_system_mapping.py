@@ -10,7 +10,6 @@ from revolve2.simulation.scene.sensors import IMUSensor
 class BodyToMultiBodySystemMapping:
     """Mappings from bodies to multi-body system objects."""
 
-    core_imu: IMUSensor
     multi_body_system: MultiBodySystem
     active_hinge_to_joint_hinge: dict[UUIDKey[ActiveHinge], JointHinge] = field(
         init=False, default_factory=dict

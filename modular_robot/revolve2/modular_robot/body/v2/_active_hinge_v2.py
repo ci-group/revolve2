@@ -2,6 +2,7 @@ from pyrr import Vector3
 
 from .._right_angles import RightAngles
 from ..base import ActiveHinge
+from ..sensors import ActiveHingeSensor
 
 
 class ActiveHingeV2(ActiveHinge):
@@ -37,4 +38,5 @@ class ActiveHingeV2(ActiveHinge):
             pid_gain_p=5.0,
             pid_gain_d=0.05,
             child_offset=0.0583 / 2 + 0.002,
+            sensors=[ActiveHingeSensor()],
         )

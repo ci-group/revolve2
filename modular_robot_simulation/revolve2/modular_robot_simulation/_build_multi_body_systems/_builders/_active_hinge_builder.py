@@ -103,7 +103,7 @@ class ActiveHingeBuilder(Builder):
             static_friction=self._module.static_friction,
             dynamic_friction=self._module.dynamic_friction,
             geometries=[],
-            imu_sensors=[],
+            sensors=[],
         )
         multi_body_system.add_rigid_body(next_rigid_body)
 
@@ -123,9 +123,9 @@ class ActiveHingeBuilder(Builder):
         body_to_multi_body_system_mapping.active_hinge_to_joint_hinge[
             UUIDKey(self._module)
         ] = joint
-        if self._module.sensor is not None:
+        if self._module.sensors.active_hinge_sensor is not None:
             body_to_multi_body_system_mapping.active_hinge_sensor_to_joint_hinge[
-                UUIDKey(self._module.sensor)
+                UUIDKey(self._module.sensors.active_hinge_sensor)
             ] = joint
 
         next_rigid_body.geometries.append(

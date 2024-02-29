@@ -14,6 +14,6 @@ class CameraSensor(Sensor):
 
     position: Vector3  # The position of the camera on the parent module.
     camera_size: Vector2 = field(
-        init=False, default_factory=Vector2([200, 200])
+        init=False, default_factory = lambda: Vector2([200, 200])
     )  # The size of the image produced by the camera (w x h).
     _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)

@@ -6,7 +6,7 @@ from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
-from ..sensors import IMUSensor
+from ..sensors import Sensor
 
 
 class Core(Module):
@@ -24,14 +24,13 @@ class Core(Module):
     See `_get_new_module_id` on what this is used for.
     """
 
-    imu_sensor: IMUSensor | None
-
     def __init__(
         self,
         rotation: float | RightAngles,
         mass: float,
         bounding_box: Vector3,
         child_offset: float,
+        sensors: list[Sensor] = [],
     ):
         """
         Initialize this object.
@@ -40,6 +39,7 @@ class Core(Module):
         :param mass: The Modules mass (in kg).
         :param bounding_box: The bounding box. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
         :param child_offset: The offset for the children.
+        :param sensors: The sensors of the module.
         """
         self._mass = mass
         self._bounding_box = bounding_box
@@ -63,7 +63,7 @@ class Core(Module):
             ),
         }
 
-        super().__init__(rotation, Color(255, 50, 50, 255), attachment_points)
+        super().__init__(rotation, Color(255, 50, 50, 255), attachment_points, sensors)
         self._parent = None
         self._parent_child_index = None
 

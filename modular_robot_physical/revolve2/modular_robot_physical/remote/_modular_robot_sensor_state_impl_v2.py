@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from revolve2.modular_robot.body.sensors import (
     ActiveHingeSensor,
     CameraSensor,
@@ -6,6 +7,11 @@ from revolve2.modular_robot.body.sensors import (
 from revolve2.modular_robot.sensor_state import (
     ActiveHingeSensorState,
     CameraSensorState,
+=======
+from revolve2.modular_robot.body.base import ActiveHingeSensor, IMUSensor
+from revolve2.modular_robot.sensor_state import (
+    ActiveHingeSensorState,
+>>>>>>> 01eafff6 (420 imu sensor simulation (#427))
     IMUSensorState,
     ModularRobotSensorState,
 )
@@ -58,6 +64,7 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         Get the state of the provided IMU sensor.
 
         :param sensor: The sensor.
+<<<<<<< HEAD
         :raises ValueError: If IMU sensors is not part of the robot.
         :returns: The state.
         """
@@ -73,6 +80,8 @@ class ModularRobotSensorStateImplV2(ModularRobotSensorState):
         Get the state of the provided camera sensor.
 
         :param sensor: The sensor.
+=======
+>>>>>>> 01eafff6 (420 imu sensor simulation (#427))
         :raises NotImplementedError: Always.
         """
         raise NotImplementedError()

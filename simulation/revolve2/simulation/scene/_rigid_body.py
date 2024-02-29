@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 
 from pyrr import Matrix33, Quaternion, Vector3
 
+from ._imu_sensor import IMUSensor
 from ._pose import Pose
 from .geometry import Geometry, GeometryBox
 from .sensors import IMUSensor

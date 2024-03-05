@@ -22,15 +22,11 @@ def make_body() -> (
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
     body = BodyV2()
     body.core_v2.left_face.bottom = ActiveHingeV2(RightAngles.DEG_0)
-    body.core_v2.left_face.bottom.add_sensor(ActiveHingeSensor())
     body.core_v2.left_face.bottom.attachment = ActiveHingeV2(RightAngles.DEG_0)
-    body.core_v2.left_face.bottom.attachment.add_sensor(ActiveHingeSensor())
     body.core_v2.left_face.bottom.attachment.attachment = BrickV2(RightAngles.DEG_0)
 
     body.core_v2.right_face.bottom = ActiveHingeV2(RightAngles.DEG_0)
-    body.core_v2.right_face.bottom.add_sensor(ActiveHingeSensor())
     body.core_v2.right_face.bottom.attachment = ActiveHingeV2(RightAngles.DEG_0)
-    body.core_v2.right_face.bottom.attachment.add_sensor(ActiveHingeSensor())
     body.core_v2.right_face.bottom.attachment.attachment = BrickV2(RightAngles.DEG_0)
 
     """Here we collect all ActiveHinges, to map them later onto the physical robot."""

@@ -22,9 +22,13 @@ except Exception as e:
     print("Failed to fix absl logging bug", e)
     pass
 
-from revolve2.simulation.scene import Scene, UUIDKey
+from revolve2.simulation.scene import JointHinge, RigidBody, Scene, UUIDKey
 from revolve2.simulation.scene.conversion import multi_body_system_to_urdf
-from revolve2.simulation.scene.geometry import Geometry, GeometryHeightmap
+from revolve2.simulation.scene.geometry import (
+    Geometry,
+    GeometryHeightmap,
+    GeometryPlane,
+)
 
 from ._abstraction_to_mujoco_mapping import (
     AbstractionToMujocoMapping,
@@ -78,8 +82,6 @@ def scene_to_model(
     all_joints_and_names = [c[3] for c in conversions]
     all_rigid_bodies_and_names = [c[5] for c in conversions]
 
-    heightmaps: list[GeometryHeightmap] = []
-
     for mbs_i, (
         multi_body_system,
         (
@@ -126,6 +128,7 @@ def scene_to_model(
         # The following few are set automatically during the urdf conversion,
         # but make no sense when we combine multiple URDFs.
         # So, we remote them and have mujoco calculate them for us.
+        heightmaps: list[GeometryHeightmap] = []
         multi_body_system_mjcf.statistic.extent = None
         multi_body_system_mjcf.statistic.center = None
         multi_body_system_mjcf.statistic.meansize = None
@@ -136,114 +139,17 @@ def scene_to_model(
             attachment_frame.add("freejoint")
 
         # Add actuation to joints
-        for joint, name in joints_and_names:
-            # Add rotor inertia to joints. This value is arbitrarily chosen and appears stable enough.
-            # Fine-tuning the armature value might be needed later.
-            multi_body_system_mjcf.find(
-                namespace="joint", identifier=name
-            ).armature = joint.armature
-            multi_body_system_mjcf.actuator.add(
-                "position",
-                kp=joint.pid_gain_p,
-                joint=multi_body_system_mjcf.find(
-                    namespace="joint",
-                    identifier=name,
-                ),
-                name=f"actuator_position_{name}",
-            )
-            multi_body_system_mjcf.actuator.add(
-                "velocity",
-                kv=joint.pid_gain_d,
-                joint=multi_body_system_mjcf.find(namespace="joint", identifier=name),
-                name=f"actuator_velocity_{name}",
-            )
+        _add_joint_actuators(joints_and_names, multi_body_system_mjcf)
 
-        # Add IMUs
-        for rigid_body, name in rigid_bodies_and_names:
-            if len(rigid_body.sensors.imu_sensors) > 0:
-                if name == f"mbs{mbs_i}":
-                    rigid_body_mjcf = multi_body_system_mjcf.worldbody
-                else:
-                    rigid_body_mjcf = multi_body_system_mjcf.find(
-                        namespace="body", identifier=name
-                    )
-                for imu_i, imu in enumerate(rigid_body.sensors.imu_sensors):
-                    site_name = f"{name}_site_imu_{imu_i}"
-                    rigid_body_mjcf.add(
-                        "site",
-                        name=site_name,
-                        pos=[*imu.pose.position],
-                        quat=[*imu.pose.orientation],
-                    )
-                    gyro_name = f"imu_gyro_{name}_{imu_i}"
-                    multi_body_system_mjcf.sensor.add(
-                        "gyro", name=gyro_name, site=site_name
-                    )
-                    accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
-                    multi_body_system_mjcf.sensor.add(
-                        "accelerometer",
-                        name=accelerometer_name,
-                        site=site_name,
-                    )
+        # Add Sensors
+        _add_sensors(rigid_bodies_and_names, mbs_i, multi_body_system_mjcf)
 
         # Add plane geometries
-        i_plane = 0
-        for plane in plane_geometries:
-            name = f"heightmap_{i_plane}"
-            plane_kwargs: dict[str, Any] = {}
-            if fast_sim:
-                plane_kwargs[
-                    "rgba"
-                ] = plane.texture.primary_color.to_normalized_rgba_list()
-            else:
-                plane_kwargs["material"] = f"{name}_material"
-                __make_material(env_mjcf, name=name, element=plane)
-
-            env_mjcf.worldbody.add(
-                "geom",
-                type="plane",
-                pos=[*plane.pose.position],
-                quat=[*plane.pose.orientation],
-                size=[plane.size.x / 2.0, plane.size.y / 2.0, 1.0],
-                **plane_kwargs,
-            )
-            i_plane += 1
+        _add_planes(plane_geometries, fast_sim, env_mjcf)
 
         # Add heightmap geometries
-        i_heightmap = 0
-        for heightmap in heightmap_geometries:
-            env_mjcf.asset.add(
-                "hfield",
-                name=f"hfield_{i_heightmap}",
-                nrow=len(heightmap.heights),
-                ncol=len(heightmap.heights[0]),
-                size=[
-                    *heightmap.size,
-                    heightmap.base_thickness,
-                ],
-            )
-
-            name = f"heightmap_{i_heightmap}"
-            hm_kwargs: dict[str, Any] = {}
-            if fast_sim:
-                hm_kwargs[
-                    "rgba"
-                ] = heightmap.texture.primary_color.to_normalized_rgba_list()
-            else:
-                hm_kwargs["material"] = f"{name}_material"
-                __make_material(env_mjcf, name=name, element=heightmap)
-
-            env_mjcf.worldbody.add(
-                "geom",
-                type="hfield",
-                hfield=f"hfield_{i_heightmap}",
-                pos=[*heightmap.pose.position],
-                quat=[*heightmap.pose.orientation],
-                **hm_kwargs,
-            )
-
-            heightmaps.append(heightmap)
-            i_heightmap += 1
+        hmps = _add_heightmaps(heightmap_geometries, fast_sim, env_mjcf)
+        heightmaps.extend(hmps)
 
         # Set colors of geometries
         for geom, name in geoms_and_names:
@@ -305,6 +211,175 @@ def scene_to_model(
                 )
 
     return (model, mapping)
+
+
+def _add_planes(
+    plane_geometries: list[GeometryPlane], fast_sim: bool, env_mjcf: mjcf.RootElement
+) -> None:
+    """
+    Add plane objects to the mujoco simulation.
+
+    :param plane_geometries: The plane geometries.
+    :param fast_sim: Whether fast sim is used.
+    :param env_mjcf: The mujoco environment to simulate.
+    """
+    i_plane = 0
+    for plane in plane_geometries:
+        name = f"heightmap_{i_plane}"
+        plane_kwargs: dict[str, Any] = {}
+        if fast_sim:
+            plane_kwargs["rgba"] = plane.texture.primary_color.to_normalized_rgba_list()
+        else:
+            plane_kwargs["material"] = f"{name}_material"
+            __make_material(env_mjcf, name=name, element=plane)
+
+        env_mjcf.worldbody.add(
+            "geom",
+            type="plane",
+            pos=[*plane.pose.position],
+            quat=[*plane.pose.orientation],
+            size=[plane.size.x / 2.0, plane.size.y / 2.0, 1.0],
+            **plane_kwargs,
+        )
+        i_plane += 1
+
+
+def _add_heightmaps(
+    heightmap_geometries: list[GeometryHeightmap],
+    fast_sim: bool,
+    env_mjcf: mjcf.RootElement,
+) -> list[GeometryHeightmap]:
+    """
+    Add heightmap geometries to the model.
+
+    :param heightmap_geometries: The heightmap geometries.
+    :param fast_sim: If fast sim is used.
+    :param env_mjcf: The mujoco root object.
+    :return: A list of heightmap geometries.
+    """
+    heightmaps: list[GeometryHeightmap] = []
+
+    i_heightmap = 0
+    for heightmap in heightmap_geometries:
+        env_mjcf.asset.add(
+            "hfield",
+            name=f"hfield_{i_heightmap}",
+            nrow=len(heightmap.heights),
+            ncol=len(heightmap.heights[0]),
+            size=[
+                *heightmap.size,
+                heightmap.base_thickness,
+            ],
+        )
+
+        name = f"heightmap_{i_heightmap}"
+        hm_kwargs: dict[str, Any] = {}
+        if fast_sim:
+            hm_kwargs[
+                "rgba"
+            ] = heightmap.texture.primary_color.to_normalized_rgba_list()
+        else:
+            hm_kwargs["material"] = f"{name}_material"
+            __make_material(env_mjcf, name=name, element=heightmap)
+
+        env_mjcf.worldbody.add(
+            "geom",
+            type="hfield",
+            hfield=f"hfield_{i_heightmap}",
+            pos=[*heightmap.pose.position],
+            quat=[*heightmap.pose.orientation],
+            **hm_kwargs,
+        )
+
+        heightmaps.append(heightmap)
+        i_heightmap += 1
+    return heightmaps
+
+
+def _add_sensors(
+    rigid_bodies_and_names: list[tuple[RigidBody, str]],
+    mbs_i: int,
+    multi_body_system_mjcf: mjcf.RootElement,
+) -> None:
+    """
+    Add sensors to the model.
+
+    :param rigid_bodies_and_names: The rigid bodies and names.
+    :param mbs_i: The current index of the multi body system.
+    :param multi_body_system_mjcf: The MBS in mujoco format.
+    """
+    for rigid_body, name in rigid_bodies_and_names:
+        if name == f"mbs{mbs_i}":
+            rigid_body_mjcf = multi_body_system_mjcf.worldbody
+        else:
+            rigid_body_mjcf = multi_body_system_mjcf.find(
+                namespace="body", identifier=name
+            )
+
+        """Here we add the IMU Sensors."""
+        for imu_i, imu in enumerate(rigid_body.sensors.imu_sensors):
+            site_name = f"{name}_site_imu_{imu_i}"
+            rigid_body_mjcf.add(
+                "site",
+                name=site_name,
+                pos=[*imu.pose.position],
+                quat=[*imu.pose.orientation],
+            )
+            gyro_name = f"imu_gyro_{name}_{imu_i}"
+            multi_body_system_mjcf.sensor.add("gyro", name=gyro_name, site=site_name)
+            accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
+            multi_body_system_mjcf.sensor.add(
+                "accelerometer",
+                name=accelerometer_name,
+                site=site_name,
+            )
+
+        """Here we add camera Sensors."""
+        for camera_i, camera in enumerate(rigid_body.sensors.camera_sensors):
+            site_name = f"{name}_site_camera_{camera_i}"
+            rigid_body_mjcf.add(
+                "site",
+                name=site_name,
+                pos=[*camera.pose.position],
+                quat=[*camera.pose.orientation],
+            )
+            camera_name = f"camera_{name}_{camera_i}"
+            multi_body_system_mjcf.sensor.add(
+                "camera", name=camera_name, site=site_name
+            )
+
+
+def _add_joint_actuators(
+    joints_and_names: list[tuple[JointHinge, str]],
+    multi_body_system_mjcf: mjcf.RootElement,
+) -> None:
+    """
+    Add actuation to the joints.
+
+    :param joints_and_names: The joints.
+    :param multi_body_system_mjcf: The multi body system.
+    """
+    for joint, name in joints_and_names:
+        # Add rotor inertia to joints. This value is arbitrarily chosen and appears stable enough.
+        # Fine-tuning the armature value might be needed later.
+        multi_body_system_mjcf.find(
+            namespace="joint", identifier=name
+        ).armature = joint.armature
+        multi_body_system_mjcf.actuator.add(
+            "position",
+            kp=joint.pid_gain_p,
+            joint=multi_body_system_mjcf.find(
+                namespace="joint",
+                identifier=name,
+            ),
+            name=f"actuator_position_{name}",
+        )
+        multi_body_system_mjcf.actuator.add(
+            "velocity",
+            kv=joint.pid_gain_d,
+            joint=multi_body_system_mjcf.find(namespace="joint", identifier=name),
+            name=f"actuator_velocity_{name}",
+        )
 
 
 def __make_material(env: mjcf.RootElement, name: str, element: Geometry) -> None:

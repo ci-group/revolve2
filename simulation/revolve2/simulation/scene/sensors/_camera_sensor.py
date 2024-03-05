@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .._pose import Pose
 from ._sensor import Sensor
@@ -10,3 +10,4 @@ class CameraSensor(Sensor):
 
     pose: Pose
     """Pose of the geometry, relative to its parent rigid body."""
+    type: str = field(default="camera")

@@ -2,6 +2,8 @@
 
 import logging
 
+from pyrr import Vector3
+
 from revolve2.ci_group import modular_robots_v2, terrains
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
@@ -109,7 +111,7 @@ def main() -> None:
     body = modular_robots_v2.gecko_v2()
 
     # Add IMU Sensor to the core.
-    body.core.add_sensor(imu := IMUSensor())
+    body.core.add_sensor(imu := IMUSensor(position=Vector3([0.075, 0.075, 0.14])))
 
     # Create a brain for the robot.
     active_hinges = body.find_modules_of_type(ActiveHinge)

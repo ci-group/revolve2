@@ -122,10 +122,6 @@ class ActiveHingeBuilder(Builder):
         body_to_multi_body_system_mapping.active_hinge_to_joint_hinge[
             UUIDKey(self._module)
         ] = joint
-        if self._module.sensors.active_hinge_sensor is not None:
-            body_to_multi_body_system_mapping.active_hinge_sensor_to_joint_hinge[
-                UUIDKey(self._module.sensors.active_hinge_sensor)
-            ] = joint
 
         next_rigid_body.geometries.append(
             GeometryBox(
@@ -147,9 +143,13 @@ class ActiveHingeBuilder(Builder):
         tasks = []
         attachment_point = self._module.attachment_points[self._module.ATTACHMENT]
         child = self._module.children.get(self._module.ATTACHMENT)
+
+        for sensor in self._module.sensors.get_all_sensors():
+            tasks.append(UnbuiltChild(child_object=sensor, rigid_body=next_rigid_body))
+
         if child is not None:
             unbuilt = UnbuiltChild(
-                module=child,
+                child_object=child,
                 rigid_body=next_rigid_body,
             )
             unbuilt.make_pose(attachment_point.offset)

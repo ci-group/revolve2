@@ -49,6 +49,17 @@ class _AttachedSensors:
                     f"Sensor of type {type(sensor)} is not defined in _module._AttachedSensors."
                 )
 
+    def get_all_sensors(self) -> list[Sensor]:
+        """
+        Get all sensors attached to the Module.
+
+        Sensors that are None will not be included in the list.
+
+        :return: The sensors.
+        """
+        sensors = [self._active_hinge_sensor, self._imu_sensor, self._camera_sensor]
+        return [s for s in sensors if s is not None]
+
     @property
     def imu_sensor(self) -> IMUSensor | None:
         return self._imu_sensor

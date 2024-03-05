@@ -42,7 +42,7 @@ class BodyToMultiBodySystemConverter:
         multi_body_system.add_rigid_body(rigid_body)
 
         unbuilt = UnbuiltChild(
-            module=body.core,
+            child_object=body.core,
             rigid_body=rigid_body,
         )
         unbuilt.make_pose(Vector3())

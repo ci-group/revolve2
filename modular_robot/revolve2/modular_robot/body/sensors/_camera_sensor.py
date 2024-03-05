@@ -1,6 +1,3 @@
-import uuid
-from dataclasses import dataclass, field
-
 from pyrr import Vector3
 
 from revolve2.simulation.scene.vector2 import Vector2
@@ -8,12 +5,43 @@ from revolve2.simulation.scene.vector2 import Vector2
 from ._sensor import Sensor
 
 
-@dataclass
 class CameraSensor(Sensor):
     """A camera for the Modular Robot."""
 
-    position: Vector3  # The position of the camera on the parent module.
-    camera_size: Vector2 = field(
-        init=False, default_factory=lambda: Vector2([200, 200])
-    )  # The size of the image produced by the camera (w x h).
-    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
+    _position: Vector3
+    _camera_size: Vector2
+
+    def initialize(
+        self,
+        position: Vector3,
+        rotation: float = 0.0,
+        camera_size: Vector2 = Vector2([200, 200]),
+    ) -> None:
+        """
+        Initialize the Camera Sensor.
+
+        :param position: The position of the camera.
+        :param camera_size: The size of the camera image.
+        :param rotation: The rotation of the camera.
+        """
+        super().__init__(rotation)
+        self._position = position
+        self._camera_size = camera_size
+
+    @property
+    def position(self) -> Vector3:
+        """
+        Get the position of the camera.
+
+        :return: The position.
+        """
+        return self._position
+
+    @property
+    def camera_size(self) -> Vector2:
+        """
+        Get the size of the camera.
+
+        :return: The camera size.
+        """
+        return self._camera_size

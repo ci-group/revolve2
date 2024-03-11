@@ -50,6 +50,7 @@ def simulate_scene(
         scene, simulation_timestep, cast_shadows=cast_shadows, fast_sim=fast_sim
     )
     data = mujoco.MjData(model)
+    print(model.camera)
 
     if not headless or record_settings is not None:
         viewer = CustomMujocoViewer(

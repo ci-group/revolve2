@@ -344,8 +344,8 @@ def _add_sensors(
                 quat=[*camera.pose.orientation],
             )
             camera_name = f"camera_{name}_{camera_i}"
-            multi_body_system_mjcf.sensor.add(
-                "camera", name=camera_name, site=site_name
+            multi_body_system_mjcf.add(
+                "camera",name=camera_name,mode="fixed", site=site_name, xyaxes="0 -1 0 0 0 1"
             )
 
 

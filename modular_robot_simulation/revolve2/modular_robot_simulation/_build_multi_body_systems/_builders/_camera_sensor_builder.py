@@ -9,7 +9,7 @@ from .._unbuilt_child import UnbuiltChild
 from ._builder import Builder
 
 
-class ActiveHingeSensorBuilder(Builder):
+class CameraSensorBuilder(Builder):
     """A Builder for Cores."""
 
     _sensor: CameraSensor

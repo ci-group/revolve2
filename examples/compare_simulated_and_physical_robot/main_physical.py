@@ -1,7 +1,6 @@
 """Manually control a physical robot to test if it works as expected."""
 from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
-from revolve2.modular_robot.body.sensors import ActiveHingeSensor
 from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
 from revolve2.modular_robot_physical import UUIDKey
 from revolve2.modular_robot_physical.remote import test_physical_robot

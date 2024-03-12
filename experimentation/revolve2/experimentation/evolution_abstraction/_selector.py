@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-Population = Any  # An alias for Any to make it easier for people to understand.
+TPopulation = Any  # An alias for Any to make it easier for people to understand.
 KWArgs = dict[str, Any]
 
 
@@ -10,8 +10,8 @@ class Selector(ABC):
 
     @abstractmethod
     def select(
-        self, population: Population, **kwargs: Any
-    ) -> tuple[Population, KWArgs]:
+        self, population: TPopulation, **kwargs: Any
+    ) -> tuple[TPopulation, KWArgs]:
         """
         Select individuals from a population.
 

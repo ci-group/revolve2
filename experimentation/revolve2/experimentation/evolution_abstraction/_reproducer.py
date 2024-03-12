@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-Population = Any  # An alias for Any to make it easier for people to understand.
+TPopulation = Any  # An alias for Any to make it easier for people to understand.
 
 
 class Reproducer(ABC):
     """A Reproducer object that enables the reproduction of individuals in an evolutionary process."""
 
     @abstractmethod
-    def reproduce(self, population: Population, **kwargs: Any) -> Population:
+    def reproduce(self, population: TPopulation, **kwargs: Any) -> TPopulation:
         """
         Make Individuals Reproduce.
 

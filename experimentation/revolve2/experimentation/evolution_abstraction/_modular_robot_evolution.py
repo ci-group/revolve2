@@ -5,7 +5,7 @@ from ._learner import Learner
 from ._reproducer import Reproducer
 from ._selector import Selector
 
-Population = Any  # An alias for Any to make it easier for people to understand.
+TPopulation = Any  # An alias for Any to make it easier for people to understand.
 
 
 class ModularRobotEvolution:
@@ -40,18 +40,21 @@ class ModularRobotEvolution:
         self._learner = learner
         self._reproducer = reproducer
 
-    def step(self, population: Population, **kwargs: Any) -> Population:
-        r"""
+    def step(self, population: TPopulation, **kwargs: Any) -> TPopulation:
+        """
         Step the current evolution by one iteration.
 
         This implementation follows the following schedule:
-            [Parent Selection] ------> [Reproduction]
-                   ^                        |
-                   |                        |
-                   |                       \/
-            [Survivor Selection] <--- [Evaluation of Children]
-        The schedule can be easily adapted and reorganized for your needs.
 
+            [Parent Selection] ---------> [Reproduction]
+
+                   ^                             |
+                   |                             |
+                   |                             ⌄
+
+            [Survivor Selection] <----- [Evaluation of Children]
+
+        The schedule can be easily adapted and reorganized for your needs.
 
         :param population: The current population.
         :param kwargs: Additional keyword arguments to use in the step.

@@ -65,7 +65,7 @@ class ParentSelector(Selector):
                         individual.fitness for individual in population.individuals
                     ],
                     selection_function=lambda _, fitnesses: selection.tournament(
-                        rng=self.rng, fitnesses=fitnesses, k=1
+                        rng=self.rng, fitnesses=fitnesses, k=2
                     ),
                 )
                 for _ in range(self.offspring_size)

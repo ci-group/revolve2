@@ -24,14 +24,14 @@ class CameraSensorStateImpl(CameraSensorState):
 
         :param simulation_state: The state of the simulation.
         :param multi_body_system: The multi body system this imu is attached to.
-        :param camera: The camera sensor..
+        :param camera: The camera sensor.
         """
         self._simulation_state = simulation_state
         self._multi_body_system = multi_body_system
         self._camera = camera
 
     @property
-    def image(self) -> NDArray[np.float_]:
+    def image(self) -> NDArray[np.uint8]:
         """
         Get the current image.
 

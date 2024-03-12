@@ -13,6 +13,7 @@ from revolve2.simulation.scene import SimulationState, UUIDKey
 
 from .._build_multi_body_systems import BodyToMultiBodySystemMapping
 from ._active_hinge_sensor_state_impl import ActiveHingeSensorStateImpl
+from ._camera_sensor_state_impl import CameraSensorStateImpl
 from ._imu_sensor_state_impl import IMUSensorStateImpl
 
 
@@ -58,20 +59,34 @@ class ModularRobotSensorStateImpl(ModularRobotSensorState):
         """
         Get the state of the provided IMU sensor.
 
-        :param sensor: The sensor.
-        :returns: The state.
+        :param sensor: The IMU sensor.
+        :returns: The IMU sensor state.
         """
+        maybe_imu = self._body_to_multi_body_system_mapping.imu_to_sim_imu.get(
+            UUIDKey(sensor)
+        )
+        assert maybe_imu is not None, "IMU not in scene."
+
         return IMUSensorStateImpl(
             simulation_state=self._simulation_state,
             multi_body_system=self._body_to_multi_body_system_mapping.multi_body_system,
-            core_imu=self._body_to_multi_body_system_mapping.core_imu,
+            imu=maybe_imu,
         )
 
     def get_camera_sensor_state(self, sensor: CameraSensor) -> CameraSensorState:
         """
         Get the state of the camera sensor.
 
-        :param sensor: The sensor.
-        :raises NotImplementedError: It is not implemented.
+        :param sensor: The camera sensor.
+        :returns: The camera sensor state.
         """
-        raise NotImplementedError("Camera not yet defined for simulation")
+        maybe_camera = self._body_to_multi_body_system_mapping.camera_to_sim_camera.get(
+            UUIDKey(sensor)
+        )
+        assert maybe_camera is not None, "Camera not in scene."
+
+        return CameraSensorStateImpl(
+            simulation_state=self._simulation_state,
+            multi_body_system=self._body_to_multi_body_system_mapping.multi_body_system,
+            camera=maybe_camera,
+        )

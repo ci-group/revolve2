@@ -1,7 +1,6 @@
 """Manually control a physical robot to test if it works as expected."""
 from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
-from revolve2.modular_robot.body.sensors import ActiveHingeSensor
 from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
 from revolve2.modular_robot_physical import UUIDKey
 from revolve2.modular_robot_physical.remote import test_physical_robot
@@ -22,15 +21,11 @@ def make_body() -> (
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
     body = BodyV2()
     body.core_v2.left_face.bottom = ActiveHingeV2(RightAngles.DEG_0)
-    body.core_v2.left_face.bottom.sensor = ActiveHingeSensor()
     body.core_v2.left_face.bottom.attachment = ActiveHingeV2(RightAngles.DEG_0)
-    body.core_v2.left_face.bottom.attachment.sensor = ActiveHingeSensor()
     body.core_v2.left_face.bottom.attachment.attachment = BrickV2(RightAngles.DEG_0)
 
     body.core_v2.right_face.bottom = ActiveHingeV2(RightAngles.DEG_0)
-    body.core_v2.right_face.bottom.sensor = ActiveHingeSensor()
     body.core_v2.right_face.bottom.attachment = ActiveHingeV2(RightAngles.DEG_0)
-    body.core_v2.right_face.bottom.attachment.sensor = ActiveHingeSensor()
     body.core_v2.right_face.bottom.attachment.attachment = BrickV2(RightAngles.DEG_0)
 
     """Here we collect all ActiveHinges, to map them later onto the physical robot."""

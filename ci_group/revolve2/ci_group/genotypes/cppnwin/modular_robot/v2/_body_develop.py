@@ -122,7 +122,6 @@ def __add_child(
     # else, set cell as occupied
     if grid[tuple(position)] > 0:
         return None
-    grid[tuple(position)] += 1
 
     new_pos = np.array(np.round(position + attachment_point.offset), dtype=np.int64)
     child_type, child_rotation = __evaluate_cppn(body_net, new_pos, chain_length)
@@ -131,7 +130,7 @@ def __add_child(
         child := child_type(angle), attachment_index
     ):
         return None
-
+    grid[tuple(position)] += 1
     up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
     module.module_reference.set_child(child, attachment_index)
 

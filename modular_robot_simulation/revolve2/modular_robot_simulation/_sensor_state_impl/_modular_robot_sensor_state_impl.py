@@ -12,8 +12,8 @@ from revolve2.modular_robot.sensor_state import (
 from revolve2.simulation.scene import SimulationState, UUIDKey
 
 from .._build_multi_body_systems import BodyToMultiBodySystemMapping
-from . import CameraSensorStateImpl
 from ._active_hinge_sensor_state_impl import ActiveHingeSensorStateImpl
+from ._camera_sensor_state_impl import CameraSensorStateImpl
 from ._imu_sensor_state_impl import IMUSensorStateImpl
 
 

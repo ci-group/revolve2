@@ -45,7 +45,7 @@ def simulate_scene(
     :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
     :param cast_shadows: If shadows are cast.
     :param fast_sim: If fancy rendering is disabled.
-    :param render_backend: The backend to be used for rendering.
+    :param render_backend: The backend to be used for rendering (EGL by default and switches to GLFW if no cameras are on the robot).
     :returns: The results of simulation. The number of returned states depends on `sample_step`.
     """
     logging.info(f"Simulating scene {scene_id}")
@@ -53,6 +53,10 @@ def simulate_scene(
     model, mapping = scene_to_model(
         scene, simulation_timestep, cast_shadows=cast_shadows, fast_sim=fast_sim
     )
+
+    """If we dont have cameras and the backend is not set we go to the default GLFW."""
+    if len(mapping.camera_sensor.values()) == 0:
+        render_backend = RenderBackend.GLFW
     data = mujoco.MjData(model)
 
     if not headless or record_settings is not None:

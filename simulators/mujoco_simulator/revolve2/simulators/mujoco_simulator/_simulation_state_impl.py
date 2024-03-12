@@ -24,11 +24,13 @@ class SimulationStateImpl(SimulationState):
     _qpos: npt.NDArray[np.float_]
     _sensordata: npt.NDArray[np.float_]
     _abstraction_to_mujoco_mapping: AbstractionToMujocoMapping
+    _camera_views: dict[int, npt.NDArray[np.uint8]]
 
     def __init__(
         self,
         data: mujoco.MjData,
         abstraction_to_mujoco_mapping: AbstractionToMujocoMapping,
+        camera_views: dict[int, npt.NDArray[np.uint8]],
     ) -> None:
         """
         Initialize this object.
@@ -38,12 +40,14 @@ class SimulationStateImpl(SimulationState):
 
         :param data: The data to copy from.
         :param abstraction_to_mujoco_mapping: A mapping between simulation abstraction and mujoco.
+        :param camera_views: The camera views.
         """
         self._xpos = data.xpos.copy()
         self._xquat = data.xquat.copy()
         self._qpos = data.qpos.copy()
         self._sensordata = data.sensordata.copy()
         self._abstraction_to_mujoco_mapping = abstraction_to_mujoco_mapping
+        self._camera_views = camera_views
 
     def get_rigid_body_relative_pose(self, rigid_body: RigidBody) -> Pose:
         """
@@ -118,7 +122,7 @@ class SimulationStateImpl(SimulationState):
         angular_rate = self._sensordata[gyro_id : gyro_id + 3]
         return Vector3(angular_rate)
 
-    def get_camera_view(self, camera_sensor: CameraSensor) -> npt.NDArray[np.float_]:
+    def get_camera_view(self, camera_sensor: CameraSensor) -> npt.NDArray[np.uint8]:
         """
         Get the current view of the camera.
 
@@ -128,5 +132,5 @@ class SimulationStateImpl(SimulationState):
         camera_id = self._abstraction_to_mujoco_mapping.camera_sensor[
             UUIDKey(camera_sensor)
         ].camera_id
-        image = self._sensordata[camera_id : camera_id + 1]
+        image = self._camera_views[camera_id]
         return image

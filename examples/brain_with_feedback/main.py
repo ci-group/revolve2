@@ -9,7 +9,7 @@ from revolve2.ci_group.simulation_parameters import make_standard_batch_paramete
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot import ModularRobot, ModularRobotControlInterface
 from revolve2.modular_robot.body.base import ActiveHinge
-from revolve2.modular_robot.body.sensors import IMUSensor, CameraSensor
+from revolve2.modular_robot.body.sensors import IMUSensor
 from revolve2.modular_robot.brain import Brain, BrainInstance
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
@@ -22,7 +22,11 @@ class ANNBrainInstance(BrainInstance):
     active_hinges: list[ActiveHinge]
     imu_sensor: IMUSensor
 
-    def __init__(self, active_hinges: list[ActiveHinge], imu_sensor: IMUSensor) -> None:
+    def __init__(
+        self,
+        active_hinges: list[ActiveHinge],
+        imu_sensor: IMUSensor,
+    ) -> None:
         """
         Initialize the Object.
 
@@ -81,7 +85,11 @@ class ANNBrain(Brain):
     active_hinges: list[ActiveHinge]
     imu_sensor: IMUSensor
 
-    def __init__(self, active_hinges: list[ActiveHinge], imu_sensor: IMUSensor) -> None:
+    def __init__(
+        self,
+        active_hinges: list[ActiveHinge],
+        imu_sensor: IMUSensor,
+    ) -> None:
         """
         Initialize the Object.
 
@@ -98,7 +106,8 @@ class ANNBrain(Brain):
         :returns: The created instance.
         """
         return ANNBrainInstance(
-            active_hinges=self.active_hinges, imu_sensor=self.imu_sensor
+            active_hinges=self.active_hinges,
+            imu_sensor=self.imu_sensor,
         )
 
 
@@ -112,7 +121,6 @@ def main() -> None:
 
     # Add IMU Sensor to the core.
     body.core.add_sensor(imu := IMUSensor(position=Vector3([0.075, 0.075, 0.14])))
-    body.core.add_sensor(CameraSensor(position=Vector3([0.075, 0.075, 0.155]), rotation=0.0))
 
     # Create a brain for the robot.
     active_hinges = body.find_modules_of_type(ActiveHinge)

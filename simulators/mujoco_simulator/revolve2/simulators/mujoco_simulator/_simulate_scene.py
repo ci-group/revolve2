@@ -11,6 +11,8 @@ from revolve2.simulation.simulator import RecordSettings
 
 from ._control_interface_impl import ControlInterfaceImpl
 from ._custom_mujoco_viewer import CustomMujocoViewer
+from ._open_gl_vision import OpenGLVision
+from ._render_backend import RenderBackend
 from ._scene_to_model import scene_to_model
 from ._simulation_state_impl import SimulationStateImpl
 
@@ -27,6 +29,7 @@ def simulate_scene(
     simulation_timestep: float,
     cast_shadows: bool,
     fast_sim: bool,
+    render_backend: RenderBackend = RenderBackend.EGL,
 ) -> list[SimulationState]:
     """
     Simulate a scene.
@@ -42,6 +45,7 @@ def simulate_scene(
     :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
     :param cast_shadows: If shadows are cast.
     :param fast_sim: If fancy rendering is disabled.
+    :param render_backend: The backend to be used for rendering.
     :returns: The results of simulation. The number of returned states depends on `sample_step`.
     """
     logging.info(f"Simulating scene {scene_id}")
@@ -50,15 +54,21 @@ def simulate_scene(
         scene, simulation_timestep, cast_shadows=cast_shadows, fast_sim=fast_sim
     )
     data = mujoco.MjData(model)
-    print(model.camera)
 
     if not headless or record_settings is not None:
         viewer = CustomMujocoViewer(
             model,
             data,
+            backend=render_backend,
             start_paused=start_paused,
             render_every_frame=False,
         )
+    camera_viewers = {
+        camera.camera_id: OpenGLVision(
+            model=model, camera=camera, headless=headless, open_gl_lib=render_backend
+        )
+        for camera in mapping.camera_sensor.values()
+    }
 
     if record_settings is not None:
         video_step = 1 / record_settings.fps
@@ -83,11 +93,17 @@ def simulate_scene(
     # Compute forward dynamics without actually stepping forward in time.
     # This updates the data so we can read out the initial state.
     mujoco.mj_forward(model, data)
+    images = {
+        camera_id: camera_viewer.process(model, data)
+        for camera_id, camera_viewer in camera_viewers.items()
+    }
 
     # Sample initial state.
     if sample_step is not None:
         simulation_states.append(
-            SimulationStateImpl(data=data, abstraction_to_mujoco_mapping=mapping)
+            SimulationStateImpl(
+                data=data, abstraction_to_mujoco_mapping=mapping, camera_views=images
+            )
         )
 
     control_interface = ControlInterfaceImpl(
@@ -96,12 +112,13 @@ def simulate_scene(
     while (time := data.time) < (
         float("inf") if simulation_time is None else simulation_time
     ):
+
         # do control if it is time
         if time >= last_control_time + control_step:
             last_control_time = math.floor(time / control_step) * control_step
 
             simulation_state = SimulationStateImpl(
-                data=data, abstraction_to_mujoco_mapping=mapping
+                data=data, abstraction_to_mujoco_mapping=mapping, camera_views=images
             )
             scene.handler.handle(simulation_state, control_interface, control_step)
 
@@ -111,12 +128,18 @@ def simulate_scene(
                 last_sample_time = int(time / sample_step) * sample_step
                 simulation_states.append(
                     SimulationStateImpl(
-                        data=data, abstraction_to_mujoco_mapping=mapping
+                        data=data,
+                        abstraction_to_mujoco_mapping=mapping,
+                        camera_views=images,
                     )
                 )
 
         # step simulation
         mujoco.mj_step(model, data)
+        images = {
+            camera_id: camera_viewer.process(model, data)
+            for camera_id, camera_viewer in camera_viewers.items()
+        }
 
         # render if not headless. also render when recording and if it time for a new video frame.
         if not headless or (
@@ -152,7 +175,9 @@ def simulate_scene(
     # Sample one final time.
     if sample_step is not None:
         simulation_states.append(
-            SimulationStateImpl(data=data, abstraction_to_mujoco_mapping=mapping)
+            SimulationStateImpl(
+                data=data, abstraction_to_mujoco_mapping=mapping, camera_views=images
+            )
         )
 
     logging.info(f"Scene {scene_id} done.")

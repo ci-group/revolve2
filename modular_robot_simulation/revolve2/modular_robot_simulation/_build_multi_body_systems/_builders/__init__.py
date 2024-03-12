@@ -5,9 +5,9 @@ from ._active_hinge_sensor_builder import ActiveHingeSensorBuilder
 from ._attachment_face_builder import AttachmentFaceBuilder
 from ._brick_builder import BrickBuilder
 from ._builder import Builder
+from ._camera_sensor_builder import CameraSensorBuilder
 from ._core_builder import CoreBuilder
 from ._imu_sensor_builder import IMUSensorBuilder
-from ._camera_sensor_builder import CameraSensorBuilder
 
 __all__ = [
     "ActiveHingeBuilder",
@@ -15,7 +15,7 @@ __all__ = [
     "AttachmentFaceBuilder",
     "BrickBuilder",
     "Builder",
+    "CameraSensorBuilder",
     "CoreBuilder",
     "IMUSensorBuilder",
-    "CameraSensorBuilder",
 ]

@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 
 from revolve2.simulation.scene import JointHinge, MultiBodySystem, UUIDKey
 from revolve2.simulation.scene.sensors import CameraSensor, IMUSensor
+from revolve2.simulation.scene.vector2 import Vector2
 
 
 @dataclass
@@ -33,6 +34,7 @@ class CameraSensorMujoco:
     """Information about a MuJoCo camera sensor."""
 
     camera_id: int
+    camera_size: Vector2
 
 
 @dataclass(eq=False)

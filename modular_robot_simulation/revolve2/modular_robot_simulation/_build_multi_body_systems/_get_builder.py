@@ -1,5 +1,9 @@
 from revolve2.modular_robot.body.base import ActiveHinge, AttachmentFace, Brick, Core
-from revolve2.modular_robot.body.sensors import ActiveHingeSensor, IMUSensor, CameraSensor
+from revolve2.modular_robot.body.sensors import (
+    ActiveHingeSensor,
+    CameraSensor,
+    IMUSensor,
+)
 
 from ._builders import (
     ActiveHingeBuilder,
@@ -7,9 +11,9 @@ from ._builders import (
     AttachmentFaceBuilder,
     BrickBuilder,
     Builder,
+    CameraSensorBuilder,
     CoreBuilder,
     IMUSensorBuilder,
-    CameraSensorBuilder,
 )
 from ._unbuilt_child import UnbuiltChild
 

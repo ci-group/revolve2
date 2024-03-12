@@ -40,7 +40,7 @@ class CameraSensorBuilder(Builder):
         :return: The next children to be built.
         """
         pose = copy.deepcopy(self._pose)
-        sensor = CameraSim(pose)
+        sensor = CameraSim(pose, self._sensor.camera_size)
 
         body_to_multi_body_system_mapping.camera_to_sim_camera[
             UUIDKey(self._sensor)

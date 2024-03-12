@@ -86,7 +86,7 @@ class LocalSimulator(Simulator):
             ) as executor:
                 futures = [
                     executor.submit(
-                        simulate_scene,
+                        simulate_scene,  # This is the function to call, followed by the parameters of the function
                         scene_index,
                         scene,
                         self._headless,
@@ -105,7 +105,7 @@ class LocalSimulator(Simulator):
         else:
             results = [
                 simulate_scene(
-                    scene_index,
+                    scene_index,  # This is the function to call, followed by the parameters of the function
                     scene,
                     self._headless,
                     batch.record_settings,

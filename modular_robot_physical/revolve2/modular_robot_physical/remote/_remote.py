@@ -51,7 +51,6 @@ async def _run_remote_impl(
         UUIDKey(key.value.sensors.active_hinge_sensor): pin
         for key, pin in config.hinge_mapping.items()
         if key.value.sensors.active_hinge_sensor is not None
-        if not None
     }
 
     # Make controller

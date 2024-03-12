@@ -57,7 +57,7 @@ class ANNBrainInstance(BrainInstance):
         ]
         assert len(sensors) == len(
             self.active_hinges
-        ), "One of the active hinges does not have a sensors set."
+        ), "One of the active hinges does not have a sensor set."
 
         # Get the current angular positions of the active hinges
         current_positions = [

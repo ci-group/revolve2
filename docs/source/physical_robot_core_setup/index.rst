@@ -48,6 +48,10 @@ This step is the same for all types of hardware.
         * Hint: SSH is not enabled by default. The simplest way to enable it is using the :code:`raspi-config`.
 
     * If you want to SSH and don't know the IP of the RPi, you can use :code:`sudo nmap -sP <your ip>` on your machine to find all clients on your network.
+    * **For V2 robots:** You can establish a serial connection with the AUX input on the hat. To do so, connect the robohat with your device using a cable. Then use the following command to access the robohat: :code:`sudo screen <port to connect> 115200`.
+
+        * For linux users, the port is usually: :code:`/dev/ttyUSB0`.
+        * For mac users the port is usually: :code:`/dev/cu.usbserial`.
 
 ---------------------------
 Install Revolve2 on the RPi

@@ -2,12 +2,14 @@
 
 import logging
 
+from pyrr import Vector3
+
 from revolve2.ci_group import modular_robots_v2, terrains
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot import ModularRobot, ModularRobotControlInterface
 from revolve2.modular_robot.body.base import ActiveHinge
-from revolve2.modular_robot.body.sensors import ActiveHingeSensor, IMUSensor
+from revolve2.modular_robot.body.sensors import IMUSensor
 from revolve2.modular_robot.brain import Brain, BrainInstance
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
@@ -20,7 +22,11 @@ class ANNBrainInstance(BrainInstance):
     active_hinges: list[ActiveHinge]
     imu_sensor: IMUSensor
 
-    def __init__(self, active_hinges: list[ActiveHinge], imu_sensor: IMUSensor) -> None:
+    def __init__(
+        self,
+        active_hinges: list[ActiveHinge],
+        imu_sensor: IMUSensor,
+    ) -> None:
         """
         Initialize the Object.
 
@@ -45,9 +51,9 @@ class ANNBrainInstance(BrainInstance):
         """
         # Get the sensors from the active hinges
         sensors = [
-            active_hinge.sensor
+            active_hinge.sensors.active_hinge_sensor
             for active_hinge in self.active_hinges
-            if active_hinge.sensor is not None
+            if active_hinge.sensors.active_hinge_sensor is not None
         ]
         assert len(sensors) == len(
             self.active_hinges
@@ -79,7 +85,11 @@ class ANNBrain(Brain):
     active_hinges: list[ActiveHinge]
     imu_sensor: IMUSensor
 
-    def __init__(self, active_hinges: list[ActiveHinge], imu_sensor: IMUSensor) -> None:
+    def __init__(
+        self,
+        active_hinges: list[ActiveHinge],
+        imu_sensor: IMUSensor,
+    ) -> None:
         """
         Initialize the Object.
 
@@ -96,7 +106,8 @@ class ANNBrain(Brain):
         :returns: The created instance.
         """
         return ANNBrainInstance(
-            active_hinges=self.active_hinges, imu_sensor=self.imu_sensor
+            active_hinges=self.active_hinges,
+            imu_sensor=self.imu_sensor,
         )
 
 
@@ -108,16 +119,12 @@ def main() -> None:
     # Create a body for the robot.
     body = modular_robots_v2.gecko_v2()
 
-    # Add sensors to each active hinge that measure the current angle of the hinge.
-    active_hinges = body.find_modules_of_type(ActiveHinge)
-    for active_hinge in active_hinges:
-        active_hinge.sensor = ActiveHingeSensor()
-
-    body.core.imu_sensor = IMUSensor()
+    # Add IMU Sensor to the core.
+    body.core.add_sensor(imu := IMUSensor(position=Vector3([0.075, 0.075, 0.14])))
 
     # Create a brain for the robot.
     active_hinges = body.find_modules_of_type(ActiveHinge)
-    brain = ANNBrain(active_hinges=active_hinges, imu_sensor=body.core.imu_sensor)
+    brain = ANNBrain(active_hinges=active_hinges, imu_sensor=imu)
 
     # Combine the body and brain into a modular robot.
     robot = ModularRobot(body, brain)

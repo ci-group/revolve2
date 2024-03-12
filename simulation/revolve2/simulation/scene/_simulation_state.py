@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
 
+import numpy as np
+from numpy.typing import NDArray
 from pyrr import Vector3
 
 from ._joint_hinge import JointHinge
 from ._multi_body_system import MultiBodySystem
 from ._pose import Pose
 from ._rigid_body import RigidBody
-from .sensors import IMUSensor
+from .sensors import CameraSensor, IMUSensor
 
 
 class SimulationState(ABC):
@@ -64,4 +66,13 @@ class SimulationState(ABC):
 
         :param imu_sensor: The IMU.
         :returns: The angular rate.
+        """
+
+    @abstractmethod
+    def get_camera_view(self, camera_sensor: CameraSensor) -> NDArray[np.uint8]:
+        """
+        Get the camera view.
+
+        :param camera_sensor: The camera.
+        :return: The view.
         """

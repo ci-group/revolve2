@@ -40,7 +40,7 @@ class AttachmentFaceBuilder(Builder):
             child = self._module.children.get(child_index)
             if child is not None:
                 unbuilt = UnbuiltChild(
-                    module=child,
+                    child_object=child,
                     rigid_body=self._rigid_body,
                 )
                 unbuilt.make_pose(

@@ -6,6 +6,8 @@ import glfw
 import mujoco
 import mujoco_viewer
 
+from ._render_backend import RenderBackend
+
 
 class CustomMujocoViewerMode(Enum):
     """
@@ -43,6 +45,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         self,
         model: mujoco.MjModel,
         data: mujoco.MjData,
+        backend: RenderBackend,
         start_paused: bool = False,
         render_every_frame: bool = False,
         mode: CustomMujocoViewerMode = CustomMujocoViewerMode.CLASSIC,
@@ -52,10 +55,19 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
 
         :param model: The mujoco models.
         :param data: The mujoco data.
+        :param backend: The backend for rendering.
         :param start_paused: If the simulation starts paused or not.
         :param render_every_frame: If every frame is rendered or not.
         :param mode: The mode of the viewer (classic, manual).
         """
+        match backend:
+            case RenderBackend.EGL:
+                glfw.window_hint(glfw.CONTEXT_CREATION_API, glfw.EGL_CONTEXT_API)
+            case RenderBackend.OSMESA:
+                glfw.window_hint(glfw.CONTEXT_CREATION_API, glfw.OSMESA_CONTEXT_API)
+            case _:  # By default, we are using GLFW.
+                pass
+
         super().__init__(
             model,
             data,
@@ -65,6 +77,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
             height=None,
             hide_menus=False,
         )
+
         self._viewer_mode = mode
         self._position = 0
         self._paused = start_paused

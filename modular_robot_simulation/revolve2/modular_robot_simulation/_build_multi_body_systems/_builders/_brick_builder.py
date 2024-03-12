@@ -57,11 +57,14 @@ class BrickBuilder(Builder):
         )
 
         tasks = []
+        for sensor in self._module.sensors.get_all_sensors():
+            tasks.append(UnbuiltChild(child_object=sensor, rigid_body=self._rigid_body))
+
         for child_index, attachment_point in self._module.attachment_points.items():
             child = self._module.children.get(child_index)
             if child is not None:
                 unbuilt = UnbuiltChild(
-                    module=child,
+                    child_object=child,
                     rigid_body=self._rigid_body,
                 )
                 unbuilt.make_pose(

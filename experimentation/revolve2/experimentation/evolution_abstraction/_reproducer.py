@@ -1,17 +1,18 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar
+from typing import Any
 
-TPopulation = TypeVar('TPopulation')
+Population = Any  # An alias for Any to make it easier for people to understand.
 
 
 class Reproducer(ABC):
     """A Reproducer object that enables the reproduction of individuals in an evolutionary process."""
 
     @abstractmethod
-    def reproduce(self, population: TPopulation) -> TPopulation:
+    def reproduce(self, population: Population, **kwargs: Any) -> Population:
         """
         Make Individuals Reproduce.
 
         :param population: The population.
+        :param kwargs: Additional arguments.
         :return: The children.
         """

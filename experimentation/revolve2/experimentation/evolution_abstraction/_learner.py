@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar
+from typing import Any
 
-TPopulation = TypeVar('TPopulation')
+Population = Any  # An alias for Any to make it easier for people to understand.
 
 
 class Learner(ABC):
     """A Learner object that enables learning for individuals in an evolutionary process."""
 
     @abstractmethod
-    def learn(self, population: TPopulation) -> TPopulation:
+    def learn(self, population: Population) -> Population:
         """
         Make Individuals from a population learn.
 

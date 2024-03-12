@@ -1,8 +1,10 @@
 """Evaluator class."""
 
+from genotype import Genotype
+
 from revolve2.ci_group import fitness_functions, terrains
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
-from revolve2.modular_robot import ModularRobot
+from revolve2.experimentation.evolution_abstraction import Evaluator as Eval
 from revolve2.modular_robot_simulation import (
     ModularRobotScene,
     Terrain,
@@ -11,7 +13,7 @@ from revolve2.modular_robot_simulation import (
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 
-class Evaluator:
+class Evaluator(Eval):
     """Provides evaluation of robots."""
 
     _simulator: LocalSimulator
@@ -35,16 +37,17 @@ class Evaluator:
 
     def evaluate(
         self,
-        robots: list[ModularRobot],
+        population: list[Genotype],
     ) -> list[float]:
         """
         Evaluate multiple robots.
 
         Fitness is the distance traveled on the xy plane.
 
-        :param robots: The robots to simulate.
+        :param population: The robots to simulate.
         :returns: Fitnesses of the robots.
         """
+        robots = [genotype.develop() for genotype in population]
         # Create the scenes.
         scenes = []
         for robot in robots:

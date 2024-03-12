@@ -2,6 +2,7 @@
 
 import logging
 import pickle
+from typing import Any
 
 import config
 import multineat
@@ -11,80 +12,166 @@ from evaluator import Evaluator
 from genotype import Genotype
 from individual import Individual
 
+from revolve2.experimentation.evolution_abstraction import (
+    ModularRobotEvolution,
+    Reproducer,
+    Selector,
+)
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
 from revolve2.experimentation.rng import make_rng_time_seed
 
 
-def select_parents(
-    rng: np.random.Generator,
-    population: list[Individual],
-    offspring_size: int,
-) -> npt.NDArray[np.int_]:
-    """
-    Select pairs of parents using a tournament.
+class ParentSelector(Selector):
+    """Selector class for parent selection."""
 
-    :param rng: Random number generator.
-    :param population: The population to select from.
-    :param offspring_size: The number of parent pairs to select.
-    :returns: Pairs of indices of selected parents. offspring_size x 2 ints.
-    """
-    return np.array(
-        [
-            selection.multiple_unique(
-                selection_size=2,
-                population=[individual.genotype for individual in population],
-                fitnesses=[individual.fitness for individual in population],
-                selection_function=lambda _, fitnesses: selection.tournament(
-                    rng=rng, fitnesses=fitnesses, k=1
-                ),
+    rng: np.random.Generator
+    offspring_size: int
+
+    def __init__(self, offspring_size: int, rng: np.random.Generator) -> None:
+        """
+        Initialize the parent selector.
+
+        :param offspring_size: The offspring size.
+        :param rng: The rng generator.
+        """
+        self.offspring_size = offspring_size
+        self.rng = rng
+
+    def select(
+        self, population: list[Individual], **kwargs: Any
+    ) -> tuple[npt.NDArray[np.int_], dict[str, list[Individual]]]:
+        """
+        Select the parents.
+
+        :param population: The population of robots.
+        :param kwargs: Other parameters.
+        :return: The parent pairs.
+        """
+        return np.array(
+            [
+                selection.multiple_unique(
+                    selection_size=2,
+                    population=[individual.genotype for individual in population],
+                    fitnesses=[individual.fitness for individual in population],
+                    selection_function=lambda _, fitnesses: selection.tournament(
+                        rng=self.rng, fitnesses=fitnesses, k=1
+                    ),
+                )
+                for _ in range(self.offspring_size)
+            ],
+        ), {"parent_population": population}
+
+
+class SurvivorSelector(Selector):
+    """Selector class for survivor selection."""
+
+    rng: np.random.Generator
+
+    def __init__(self, rng: np.random.Generator) -> None:
+        """
+        Initialize the parent selector.
+
+        :param rng: The rng generator.
+        """
+        self.rng = rng
+
+    def select(
+        self, population: list[Individual], **kwargs: Any
+    ) -> tuple[list[Individual], dict[str, Any]]:
+        """
+        Select survivors using a tournament.
+
+        :param population: The population the parents come from.
+        :param kwargs: The offspring, with key 'offspring_population'.
+        :returns: A newly created population.
+        :raises ValueError: If the population is empty.
+        """
+        offspring = kwargs.get("children")
+        offspring_fitness = kwargs.get("child_task_performance")
+        if offspring is None or offspring_fitness is None:
+            raise ValueError(
+                "No offspring was passed with positional argument 'children' and / or 'child_task_performance'."
             )
-            for _ in range(offspring_size)
-        ],
-    )
 
-
-def select_survivors(
-    rng: np.random.Generator,
-    original_population: list[Individual],
-    offspring_population: list[Individual],
-) -> list[Individual]:
-    """
-    Select survivors using a tournament.
-
-    :param rng: Random number generator.
-    :param original_population: The population the parents come from.
-    :param offspring_population: The offspring.
-    :returns: A newly created population.
-    """
-    original_survivors, offspring_survivors = population_management.steady_state(
-        old_genotypes=[i.genotype for i in original_population],
-        old_fitnesses=[i.fitness for i in original_population],
-        new_genotypes=[i.genotype for i in offspring_population],
-        new_fitnesses=[i.fitness for i in offspring_population],
-        selection_function=lambda n, genotypes, fitnesses: selection.multiple_unique(
-            selection_size=n,
-            population=genotypes,
-            fitnesses=fitnesses,
-            selection_function=lambda _, fitnesses: selection.tournament(
-                rng=rng, fitnesses=fitnesses, k=2
+        original_survivors, offspring_survivors = population_management.steady_state(
+            old_genotypes=[i.genotype for i in population],
+            old_fitnesses=[i.fitness for i in population],
+            new_genotypes=offspring,
+            new_fitnesses=offspring_fitness,
+            selection_function=lambda n, genotypes, fitnesses: selection.multiple_unique(
+                selection_size=n,
+                population=genotypes,
+                fitnesses=fitnesses,
+                selection_function=lambda _, fitnesses: selection.tournament(
+                    rng=self.rng, fitnesses=fitnesses, k=2
+                ),
             ),
-        ),
-    )
+        )
 
-    return [
-        Individual(
-            original_population[i].genotype,
-            original_population[i].fitness,
-        )
-        for i in original_survivors
-    ] + [
-        Individual(
-            offspring_population[i].genotype,
-            offspring_population[i].fitness,
-        )
-        for i in offspring_survivors
-    ]
+        return [
+            Individual(
+                population[i].genotype,
+                population[i].fitness,
+            )
+            for i in original_survivors
+        ] + [
+            Individual(
+                offspring[i],
+                offspring_fitness[i],
+            )
+            for i in offspring_survivors
+        ], {}
+
+
+class CrossoverReproducer(Reproducer):
+    """A simple crossover reproducer using multineat."""
+
+    rng: np.random.Generator
+    innov_db_body: multineat.InnovationDatabase
+    innov_db_brain: multineat.InnovationDatabase
+
+    def __init__(
+        self,
+        rng: np.random.Generator,
+        innov_db_body: multineat.InnovationDatabase,
+        innov_db_brain: multineat.InnovationDatabase,
+    ):
+        """
+        Initialize the reproducer.
+
+        :param rng: The ranfom generator.
+        :param innov_db_body: The innovation database for the body.
+        :param innov_db_brain: The innovation database for the brain.
+        """
+        self.rng = rng
+        self.innov_db_body = innov_db_body
+        self.innov_db_brain = innov_db_brain
+
+    def reproduce(
+        self, population: npt.NDArray[np.int_], **kwargs: Any
+    ) -> list[Genotype]:
+        """
+        Reproduce the population by crossover.
+
+        :param population: The parent pairs.
+        :param kwargs: Additional keyword arguments.
+        :return: The genotypes of the children.
+        :raises ValueError: If the parent population is not passed as a kwarg `parent_population`.
+        """
+        parent_population: list[Individual] | None = kwargs.get("parent_population")
+        if parent_population is None:
+            raise ValueError("No parent population given.")
+
+        offspring_genotypes = [
+            Genotype.crossover(
+                parent_population[parent1_i].genotype,
+                parent_population[parent2_i].genotype,
+                self.rng,
+            ).mutate(self.innov_db_body, self.innov_db_brain, self.rng)
+            for parent1_i, parent2_i in population
+        ]
+        return offspring_genotypes
 
 
 def find_best_robot(
@@ -98,7 +185,7 @@ def find_best_robot(
     :returns: The best individual.
     """
     return max(
-        population + [] if current_best is None else [current_best],
+        population + [] if current_best is None else [current_best] + population,
         key=lambda x: x.fitness,
     )
 
@@ -111,16 +198,36 @@ def main() -> None:
     # Set up the random number generator.
     rng = make_rng_time_seed()
 
-    # Intialize the evaluator that will be used to evaluate robots.
-    evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS)
-
     # CPPN innovation databases.
     # If you don't understand CPPN, just know that a single database is shared in the whole evolutionary process.
     # One for body, and one for brain.
     innov_db_body = multineat.InnovationDatabase()
     innov_db_brain = multineat.InnovationDatabase()
 
-    # Create an initial population.
+    """
+    Here we initialize the components used for the evolutionary process.
+
+    - evaluator: Allows us to evaluate a population of modular robots.
+    - parent_selector: Allows us to select parents from a population of modular robots.
+    - survivor_selector: Allows us to select survivors from a population.
+    - crossover_reproducer: Allows us to generate offspring from parents.
+    - modular_robot_evolution: The evolutionary process as a object that can be iterated.
+    """
+    evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS)
+    parent_selector = ParentSelector(offspring_size=config.OFFSPRING_SIZE, rng=rng)
+    survivor_selector = SurvivorSelector(rng=rng)
+    crossover_reproducer = CrossoverReproducer(
+        rng=rng, innov_db_body=innov_db_body, innov_db_brain=innov_db_brain
+    )
+
+    modular_robot_evolution = ModularRobotEvolution(
+        parent_selection=parent_selector,
+        survivor_selection=survivor_selector,
+        evaluator=evaluator,
+        reproducer=crossover_reproducer,
+    )
+
+    # Create an initial population as we cant start from nothing.
     logging.info("Generating initial population.")
     initial_genotypes = [
         Genotype.random(
@@ -133,9 +240,7 @@ def main() -> None:
 
     # Evaluate the initial population.
     logging.info("Evaluating initial population.")
-    initial_fitnesses = evaluator.evaluate(
-        [genotype.develop() for genotype in initial_genotypes]
-    )
+    initial_fitnesses = evaluator.evaluate(initial_genotypes)
 
     # Create a population of individuals, combining genotype with fitness.
     population = [
@@ -154,34 +259,8 @@ def main() -> None:
     while generation_index < config.NUM_GENERATIONS:
         logging.info(f"Generation {generation_index + 1} / {config.NUM_GENERATIONS}.")
 
-        # Create offspring.
-        parents = select_parents(rng, population, config.OFFSPRING_SIZE)
-        offspring_genotypes = [
-            Genotype.crossover(
-                population[parent1_i].genotype,
-                population[parent2_i].genotype,
-                rng,
-            ).mutate(innov_db_body, innov_db_brain, rng)
-            for parent1_i, parent2_i in parents
-        ]
-
-        # Evaluate the offspring.
-        offspring_fitnesses = evaluator.evaluate(
-            [genotype.develop() for genotype in offspring_genotypes]
-        )
-
-        # Make an intermediate offspring population.
-        offspring_population = [
-            Individual(genotype, fitness)
-            for genotype, fitness in zip(offspring_genotypes, offspring_fitnesses)
-        ]
-
-        # Create the next population by selecting survivors.
-        population = select_survivors(
-            rng,
-            population,
-            offspring_population,
-        )
+        # Step the evolution forward.
+        population = modular_robot_evolution.step(population)
 
         # Find the new best robot
         best_robot = find_best_robot(best_robot, population)

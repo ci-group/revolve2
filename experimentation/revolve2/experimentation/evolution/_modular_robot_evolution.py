@@ -1,14 +1,13 @@
 from typing import Any
 
-from ._evaluator import Evaluator
-from ._learner import Learner
-from ._reproducer import Reproducer
-from ._selector import Selector
+from .abstract_elements import Evaluator, Evolution, Learner, Reproducer, Selector
 
-TPopulation = Any  # An alias for Any to make it easier for people to understand.
+TPopulation = (
+    Any  # An alias for Any signifying that a population can vary depending on use-case.
+)
 
 
-class ModularRobotEvolution:
+class ModularRobotEvolution(Evolution):
     """An object to encapsulate the general functionality of an evolutionary process for modular robots."""
 
     _parent_selection: Selector

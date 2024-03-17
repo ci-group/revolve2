@@ -12,11 +12,8 @@ from evaluator import Evaluator
 from genotype import Genotype
 from individual import Individual
 
-from revolve2.experimentation.evolution_abstraction import (
-    ModularRobotEvolution,
-    Reproducer,
-    Selector,
-)
+from revolve2.experimentation.evolution import ModularRobotEvolution
+from revolve2.experimentation.evolution.abstract_elements import Reproducer, Selector
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
 from revolve2.experimentation.rng import make_rng_time_seed

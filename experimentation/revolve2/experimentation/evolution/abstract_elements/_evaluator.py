@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Any
 
-TPopulation = Any  # An alias for Any to make it easier for people to understand.
+TPopulation = (
+    Any  # An alias for Any signifying that a population can vary depending on use-case.
+)
 
 
 class Evaluator(ABC):

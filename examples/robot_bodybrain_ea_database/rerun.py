@@ -34,15 +34,13 @@ def main() -> None:
         genotype = row[0]
         fitness = row[1]
 
-    modular_robot = genotype.develop()
-
     logging.info(f"Best fitness: {fitness}")
 
     # Create the evaluator.
     evaluator = Evaluator(headless=False, num_simulators=1)
 
     # Show the robot.
-    evaluator.evaluate([modular_robot])
+    evaluator.evaluate([genotype])
 
 
 if __name__ == "__main__":

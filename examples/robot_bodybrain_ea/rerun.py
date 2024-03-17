@@ -18,7 +18,6 @@ def main() -> None:
     setup_logging()
 
     individual: Individual = pickle.loads(PICKLED_GENOTYPE)
-    robot = individual.genotype.develop()
 
     logging.info(f"Fitness from pickle: {individual.fitness}")
 
@@ -26,7 +25,7 @@ def main() -> None:
         headless=False,
         num_simulators=1,
     )
-    fitness = evaluator.evaluate([robot])[0]
+    fitness = evaluator.evaluate([individual.genotype])[0]
     logging.info(f"Rerun fitness: {fitness}")
 
 

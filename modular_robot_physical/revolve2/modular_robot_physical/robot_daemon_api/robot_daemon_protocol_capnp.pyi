@@ -1,19 +1,9 @@
-"""
-This is an automatically generated stub for `robot_daemon_protocol.capnp`.
-
-This file was manually edited to work better with the code tools.
-
-Added __init__ functions
-Made `dict` into `dict[Any,Any]`
-Formatted file with black
-RoboServer
-"""
-
+"""This is an automatically generated stub for `robot_daemon_protocol.capnp`."""
 from __future__ import annotations
 
 from contextlib import contextmanager
 from io import BufferedWriter
-from typing import Any, Iterator, Literal, Sequence
+from typing import Any, Iterator, Literal, Sequence, overload
 
 class SetupArgs:
     version: str
@@ -98,6 +88,7 @@ class SetupResponseBuilder(SetupResponse):
 class PinControl:
     pin: int
     target: float
+
     def __init__(self, pin: int, target: float) -> None: ...
     @staticmethod
     @contextmanager
@@ -134,6 +125,7 @@ class PinControlBuilder(PinControl):
 
 class ControlArgs:
     setPins: Sequence[PinControl | PinControlBuilder | PinControlReader]
+
     def __init__(
         self, setPins: Sequence[PinControl | PinControlBuilder | PinControlReader]
     ) -> None: ...
@@ -174,6 +166,7 @@ class ControlArgsBuilder(ControlArgs):
 
 class ReadSensorsArgs:
     readPins: Sequence[int]
+
     def __init__(self, readPins: Sequence[int]) -> None: ...
     @staticmethod
     @contextmanager
@@ -211,6 +204,7 @@ class ReadSensorsArgsBuilder(ReadSensorsArgs):
 class ControlAndReadSensorsArgs:
     setPins: Sequence[PinControl | PinControlBuilder | PinControlReader]
     readPins: Sequence[int]
+
     def __init__(
         self,
         setPins: Sequence[PinControl | PinControlBuilder | PinControlReader],
@@ -255,6 +249,7 @@ class Vector3:
     x: float
     y: float
     z: float
+
     def __init__(self, x: float, y: float, z: float) -> None: ...
     @staticmethod
     @contextmanager
@@ -289,12 +284,53 @@ class Vector3Builder(Vector3):
     @staticmethod
     def write_packed(file: BufferedWriter) -> None: ...
 
+class Image:
+    r: list[int]
+    g: list[int]
+    b: list[int]
+
+    def __init__(self, r: list[int], g: list[int], b: list[int]) -> None: ...
+    @staticmethod
+    @contextmanager
+    def from_bytes(
+        data: bytes,
+        traversal_limit_in_words: int | None = ...,
+        nesting_limit: int | None = ...,
+    ) -> Iterator[ImageReader]: ...
+    @staticmethod
+    def from_bytes_packed(
+        data: bytes,
+        traversal_limit_in_words: int | None = ...,
+        nesting_limit: int | None = ...,
+    ) -> ImageReader: ...
+    @staticmethod
+    def new_message() -> ImageBuilder: ...
+    def to_dict(self) -> dict[Any, Any]: ...
+
+class ImageReader(Image):
+    def as_builder(self) -> ImageBuilder: ...
+
+class ImageBuilder(Image):
+    @staticmethod
+    def from_dict(dictionary: dict[Any, Any]) -> ImageBuilder: ...
+    def copy(self) -> ImageBuilder: ...
+    def to_bytes(self) -> bytes: ...
+    def to_bytes_packed(self) -> bytes: ...
+    def to_segments(self) -> list[bytes]: ...
+    def as_reader(self) -> ImageReader: ...
+    @staticmethod
+    def write(file: BufferedWriter) -> None: ...
+    @staticmethod
+    def write_packed(file: BufferedWriter) -> None: ...
+
 class SensorReadings:
     pins: Sequence[float]
     battery: float
     imuOrientation: Vector3 | Vector3Builder | Vector3Reader
     imuSpecificForce: Vector3 | Vector3Builder | Vector3Reader
     imuAngularRate: Vector3 | Vector3Builder | Vector3Reader
+    cameraView: Image | ImageBuilder | ImageReader
+
     def __init__(
         self,
         pins: Sequence[float],
@@ -302,6 +338,7 @@ class SensorReadings:
         imuOrientation: Vector3 | Vector3Builder | Vector3Reader,
         imuSpecificForce: Vector3 | Vector3Builder | Vector3Reader,
         imuAngularRate: Vector3 | Vector3Builder | Vector3Reader,
+        cameraView: Image | ImageBuilder | ImageReader,
     ) -> None: ...
     @staticmethod
     @contextmanager
@@ -321,9 +358,17 @@ class SensorReadings:
     def to_dict(self) -> dict[Any, Any]: ...
 
 class SensorReadingsReader(SensorReadings):
+    imuOrientation: Vector3Reader
+    imuSpecificForce: Vector3Reader
+    imuAngularRate: Vector3Reader
+    cameraView: ImageReader
     def as_builder(self) -> SensorReadingsBuilder: ...
 
 class SensorReadingsBuilder(SensorReadings):
+    imuOrientation: Vector3 | Vector3Builder | Vector3Reader
+    imuSpecificForce: Vector3 | Vector3Builder | Vector3Reader
+    imuAngularRate: Vector3 | Vector3Builder | Vector3Reader
+    cameraView: Image | ImageBuilder | ImageReader
     @staticmethod
     def from_dict(dictionary: dict[Any, Any]) -> SensorReadingsBuilder: ...
     def copy(self) -> SensorReadingsBuilder: ...

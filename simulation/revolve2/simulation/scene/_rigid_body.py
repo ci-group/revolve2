@@ -123,7 +123,7 @@ class RigidBody:
                     local_inertia = self._calculate_sphere_inertia(geometry)
                 case _:
                     raise ValueError(
-                        "Geometries with non-zero mass other than box not yet supported."
+                        f"Geometries with non-zero mass of type {type(geometry)} are not supported yet."
                     )
 
             translation = Matrix33()

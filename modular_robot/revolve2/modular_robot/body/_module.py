@@ -251,6 +251,15 @@ class Module:
         """
         return self._color
 
+    @color.setter
+    def color(self, color: Color) -> None:
+        """
+        Set the color of a module.
+
+        :param color: The color
+        """
+        self._color = color
+
     @property
     def attachment_points(self) -> dict[int, AttachmentPoint]:
         """

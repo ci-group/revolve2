@@ -1,6 +1,8 @@
 import math
 from typing import Sequence
 
+import numpy as np
+from numpy.typing import NDArray
 from pyrr import Vector3
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
@@ -173,3 +175,11 @@ class V2PhysicalInterface(PhysicalInterface):
         if accel is None:
             raise RuntimeError("Could not get IMU acceleration reading!")
         return Vector3(accel)
+
+    def get_camera_view(self) -> NDArray[np.uint8]:
+        """
+        Get the current view from the camera.
+
+        :raises NotImplementedError: If the Camera is not supported on this hardware.
+        """
+        raise NotImplementedError()

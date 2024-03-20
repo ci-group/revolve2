@@ -79,14 +79,14 @@ def __evaluate_cppn(
     body_net: multineat.NeuralNetwork,
     position: Vector3[np.int_],
     chain_length: int,
-) -> tuple[Any, int]:
+) -> tuple[Any, float]:
     """
     Get module type and orientation from a multineat CPPN network.
 
     :param body_net: The CPPN network.
     :param position: Position of the module.
     :param chain_length: Tree distance of the module from the core.
-    :returns: (module type, rotation_index)
+    :returns: (module type, angle)
     """
     x, y, z = position
     assert isinstance(
@@ -96,16 +96,19 @@ def __evaluate_cppn(
     body_net.ActivateAllLayers()
     outputs = body_net.Output()
 
-    # get module type from output probabilities
-    type_probs = list(outputs[:3])
+    """We select the module type for the current position using the first output of the CPPN network."""
     types = [None, BrickV2, ActiveHingeV2]
-    module_type = types[type_probs.index(min(type_probs))]
+    target_idx = max(0, int(len(types) * outputs[0] - 1e-6))
+    module_type = types[target_idx]
 
-    # get rotation from output probabilities
-    rotation_probs = list(outputs[3:5])
-    rotation_index = rotation_probs.index(min(rotation_probs))
+    """
+    Here we get the rotation of the module from the second output of the CPPN network.
+    
+    The output ranges between [0,1] and we have 4 rotations available (0, 90, 180, 270).
+    """
+    angle = max(0, int(outputs[1] * 4 - 1e6)) * (np.pi / 2.0)
 
-    return module_type, rotation_index
+    return module_type, angle
 
 
 def __add_child(
@@ -127,8 +130,7 @@ def __add_child(
 
     """Now we anjust the position for the potential new module to fit the attachment point of the parent, additionally we query the CPPN for child type and angle of the child."""
     new_pos = np.array(np.round(position + attachment_point.offset), dtype=np.int64)
-    child_type, child_rotation = __evaluate_cppn(body_net, new_pos, chain_length)
-    angle = child_rotation * (np.pi / 2.0)
+    child_type, angle = __evaluate_cppn(body_net, new_pos, chain_length)
 
     """Here we check whether the CPPN evaluated to place a module and if the module can be set on the parent."""
     can_set = module.module_reference.can_set_child(attachment_index)

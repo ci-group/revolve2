@@ -251,7 +251,8 @@ class Module:
         """
         return self._color
 
-    def set_color(self, color: Color) -> None:
+    @color.setter
+    def color(self, color: Color) -> None:
         """
         Set the color of a module.
 

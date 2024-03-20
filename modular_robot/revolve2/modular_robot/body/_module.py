@@ -123,7 +123,9 @@ class Module:
         self._attachment_points = attachment_points
         self._children = {}
 
-        self._rotation = rotation if isinstance(rotation, float) else rotation.value
+        self._rotation = (
+            rotation if isinstance(rotation, (float, int)) else rotation.value
+        )
 
         self._parent = None
         self._parent_child_index = None

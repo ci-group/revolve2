@@ -4,7 +4,7 @@ from revolve2.simulation.scene.geometry.textures import Texture
 
 
 class Ball(MultiBodySystem):
-    """An intractable ball."""
+    """An interactive ball."""
 
     def __init__(
         self,
@@ -15,7 +15,7 @@ class Ball(MultiBodySystem):
         texture: Texture | None = None,
     ) -> None:
         """
-        Initialize the ball as a plain ModularRobot.
+        Initialize the ball.
 
         :param radius: The radius of the ball.
         :param mass: The mass of the ball.

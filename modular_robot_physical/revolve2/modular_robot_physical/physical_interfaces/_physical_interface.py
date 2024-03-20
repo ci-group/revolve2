@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Sequence
 
+import numpy as np
+from numpy.typing import NDArray
 from pyrr import Vector3
 
 
@@ -74,4 +76,13 @@ class PhysicalInterface(ABC):
 
         :returns: The specific force.
         :raises NotImplementedError: If the IMU is not supported on this hardware.
+        """
+
+    @abstractmethod
+    def get_camera_view(self) -> NDArray[np.uint8]:
+        """
+        Get the current view from the camera.
+
+        :return: The camera view.
+        :raises NotImplementedError: If the Camera is not supported on this hardware.
         """

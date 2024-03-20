@@ -2,7 +2,9 @@ import math
 import time
 from typing import Sequence
 
+import numpy as np
 import pigpio
+from numpy.typing import NDArray
 from pyrr import Vector3
 
 from .._physical_interface import PhysicalInterface
@@ -124,5 +126,13 @@ class V1PhysicalInterface(PhysicalInterface):
         Get the specific force from the IMU.
 
         :raises NotImplementedError: Always.
+        """
+        raise NotImplementedError()
+
+    def get_camera_view(self) -> NDArray[np.uint8]:
+        """
+        Get the current view from the camera.
+
+        :raises NotImplementedError: If the Camera is not supported on this hardware.
         """
         raise NotImplementedError()

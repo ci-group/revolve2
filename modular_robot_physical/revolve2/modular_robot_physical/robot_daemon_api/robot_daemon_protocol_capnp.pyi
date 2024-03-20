@@ -1,9 +1,17 @@
-"""This is an automatically generated stub for `robot_daemon_protocol.capnp`."""
+"""
+This is an automatically generated stub for `robot_daemon_protocol.capnp`.
+
+This file was manually edited to work better with the code tools.
+Added __init__ functions
+Made `dict` into `dict[Any,Any]`
+Formatted file with black
+RoboServer
+"""
 from __future__ import annotations
 
 from contextlib import contextmanager
 from io import BufferedWriter
-from typing import Any, Iterator, Literal, Sequence, overload
+from typing import Any, Iterator, Literal, Sequence
 
 class SetupArgs:
     version: str
@@ -88,7 +96,6 @@ class SetupResponseBuilder(SetupResponse):
 class PinControl:
     pin: int
     target: float
-
     def __init__(self, pin: int, target: float) -> None: ...
     @staticmethod
     @contextmanager
@@ -125,7 +132,6 @@ class PinControlBuilder(PinControl):
 
 class ControlArgs:
     setPins: Sequence[PinControl | PinControlBuilder | PinControlReader]
-
     def __init__(
         self, setPins: Sequence[PinControl | PinControlBuilder | PinControlReader]
     ) -> None: ...
@@ -166,7 +172,6 @@ class ControlArgsBuilder(ControlArgs):
 
 class ReadSensorsArgs:
     readPins: Sequence[int]
-
     def __init__(self, readPins: Sequence[int]) -> None: ...
     @staticmethod
     @contextmanager
@@ -204,7 +209,6 @@ class ReadSensorsArgsBuilder(ReadSensorsArgs):
 class ControlAndReadSensorsArgs:
     setPins: Sequence[PinControl | PinControlBuilder | PinControlReader]
     readPins: Sequence[int]
-
     def __init__(
         self,
         setPins: Sequence[PinControl | PinControlBuilder | PinControlReader],
@@ -249,7 +253,6 @@ class Vector3:
     x: float
     y: float
     z: float
-
     def __init__(self, x: float, y: float, z: float) -> None: ...
     @staticmethod
     @contextmanager
@@ -288,7 +291,6 @@ class Image:
     r: list[int]
     g: list[int]
     b: list[int]
-
     def __init__(self, r: list[int], g: list[int], b: list[int]) -> None: ...
     @staticmethod
     @contextmanager
@@ -330,7 +332,6 @@ class SensorReadings:
     imuSpecificForce: Vector3 | Vector3Builder | Vector3Reader
     imuAngularRate: Vector3 | Vector3Builder | Vector3Reader
     cameraView: Image | ImageBuilder | ImageReader
-
     def __init__(
         self,
         pins: Sequence[float],
@@ -358,17 +359,9 @@ class SensorReadings:
     def to_dict(self) -> dict[Any, Any]: ...
 
 class SensorReadingsReader(SensorReadings):
-    imuOrientation: Vector3Reader
-    imuSpecificForce: Vector3Reader
-    imuAngularRate: Vector3Reader
-    cameraView: ImageReader
     def as_builder(self) -> SensorReadingsBuilder: ...
 
 class SensorReadingsBuilder(SensorReadings):
-    imuOrientation: Vector3 | Vector3Builder | Vector3Reader
-    imuSpecificForce: Vector3 | Vector3Builder | Vector3Reader
-    imuAngularRate: Vector3 | Vector3Builder | Vector3Reader
-    cameraView: Image | ImageBuilder | ImageReader
     @staticmethod
     def from_dict(dictionary: dict[Any, Any]) -> SensorReadingsBuilder: ...
     def copy(self) -> SensorReadingsBuilder: ...

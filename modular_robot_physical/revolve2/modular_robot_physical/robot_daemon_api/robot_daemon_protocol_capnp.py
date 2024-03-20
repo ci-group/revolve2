@@ -1,4 +1,8 @@
-"""This is an automatically generated stub for `robot_daemon_protocol.capnp`."""
+"""
+This is an automatically generated stub for `robot_daemon_protocol.capnp`.
+
+This file was manually edited to contain the RoboServer interface.
+"""
 import os
 
 import capnp  # type: ignore
@@ -33,3 +37,4 @@ ImageReader = Image
 SensorReadings = capnp.load(module_file).SensorReadings
 SensorReadingsBuilder = SensorReadings
 SensorReadingsReader = SensorReadings
+RoboServer = capnp.load(module_file).RoboServer

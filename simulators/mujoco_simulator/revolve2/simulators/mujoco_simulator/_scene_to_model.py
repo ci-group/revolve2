@@ -96,7 +96,6 @@ def scene_to_model(
             rigid_bodies_and_names,
         ),
     ) in enumerate(zip(scene.multi_body_systems, conversions, strict=True)):
-        print(urdf)
         multi_body_system_model = mujoco.MjModel.from_xml_string(urdf)
         multi_body_system_mjcf = _create_tmp_file(multi_body_system_model)
 

@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from pyrr import Matrix33, Quaternion, Vector3
 
 from ._pose import Pose
-from .geometry import Geometry, GeometryBox
+from .geometry import Geometry, GeometryBox, GeometrySphere
 from .sensors import CameraSensor, IMUSensor, Sensor
 
 
@@ -31,7 +31,6 @@ class _AttachedSensors:
                 )
 
 
-@dataclass(kw_only=True)
 class RigidBody:
     """A collection of geometries and physics parameters."""
 
@@ -105,7 +104,7 @@ class RigidBody:
         """
         Calculate the inertia tensor in the local reference frame of this rigid body.
 
-        Only box geometries are currently supported.
+        For more details on the inertia calculations, see https://en.wikipedia.org/wiki/List_of_moments_of_inertia.
 
         :returns: The inertia tensor.
         :raises ValueError: If one of the geometries is not a box.
@@ -117,40 +116,26 @@ class RigidBody:
             if geometry.mass == 0:
                 continue
 
-            if not isinstance(geometry, GeometryBox):
-                raise ValueError(
-                    "Geometries with non-zero mass other than box not yet supported."
-                )
+            match geometry:
+                case GeometryBox():
+                    local_inertia = self._calculate_box_inertia(geometry)
+                case GeometrySphere():
+                    local_inertia = self._calculate_sphere_inertia(geometry)
+                case _:
+                    raise ValueError(
+                        f"Geometries with non-zero mass of type {type(geometry)} are not supported yet."
+                    )
 
-            # calculate inertia in local coordinates
-            local_inertia = Matrix33()
-            local_inertia[0][0] += (
-                geometry.mass
-                * (geometry.aabb.size.y**2 + geometry.aabb.size.z**2)
-                / 12.0
-            )
-            local_inertia[1][1] += (
-                geometry.mass
-                * (geometry.aabb.size.x**2 + geometry.aabb.size.z**2)
-                / 12.0
-            )
-            local_inertia[2][2] += (
-                geometry.mass
-                * (geometry.aabb.size.x**2 + geometry.aabb.size.y**2)
-                / 12.0
-            )
-
-            # convert to global coordinates
             translation = Matrix33()
-            translation[0][0] += geometry.mass * (
+            translation[0, 0] += geometry.mass * (
                 (geometry.pose.position.y - com.y) ** 2
                 + (geometry.pose.position.z - com.z) ** 2
             )
-            translation[1][1] += geometry.mass * (
+            translation[1, 1] += geometry.mass * (
                 (geometry.pose.position.x - com.x) ** 2
                 + (geometry.pose.position.z - com.z) ** 2
             )
-            translation[2][2] += geometry.mass * (
+            translation[2, 2] += geometry.mass * (
                 (geometry.pose.position.x - com.x) ** 2
                 + (geometry.pose.position.y - com.y) ** 2
             )
@@ -159,19 +144,56 @@ class RigidBody:
             global_inertia = (
                 ori_as_mat * local_inertia * ori_as_mat.transpose() + translation
             )
-            # add to rigid body inertia tensor
             inertia += global_inertia
-
         return inertia
+
+    @staticmethod
+    def _calculate_box_inertia(geometry: GeometryBox) -> Matrix33:
+        """
+        Calculate the moment of inertia for a box geometry.
+
+        :param geometry: The geometry.
+        :return: The local inertia.
+        """
+        # calculate inertia in local coordinates
+        local_inertia = Matrix33()
+        local_inertia[0, 0] += (
+            geometry.mass
+            * (geometry.aabb.size.y**2 + geometry.aabb.size.z**2)
+            / 12.0
+        )
+        local_inertia[1, 1] += (
+            geometry.mass
+            * (geometry.aabb.size.x**2 + geometry.aabb.size.z**2)
+            / 12.0
+        )
+        local_inertia[2, 2] += (
+            geometry.mass
+            * (geometry.aabb.size.x**2 + geometry.aabb.size.y**2)
+            / 12.0
+        )
+        return local_inertia
+
+    @staticmethod
+    def _calculate_sphere_inertia(geometry: GeometrySphere) -> Matrix33:
+        """
+        Calculate the moment of inertia for a sphere geometry.
+
+        :param geometry: The geometry.
+        :return: The local inertia.
+        """
+        # calculate inertia in local coordinates
+        local_inertia = Matrix33()
+        local_inertia[0, 0] += 2 * geometry.mass * (geometry.radius**2) / 5
+        local_inertia[1, 1] += 2 * geometry.mass * (geometry.radius**2) / 5
+        local_inertia[2, 2] += 2 * geometry.mass * (geometry.radius**2) / 5
+        return local_inertia
 
     @staticmethod
     def _quaternion_to_rotation_matrix(quat: Quaternion) -> Matrix33:
         # https://automaticaddison.com/how-to-convert-a-quaternion-to-a-rotation-matrix/
 
-        q0 = quat.x
-        q1 = quat.y
-        q2 = quat.z
-        q3 = quat.w
+        q0, q1, q2, q3 = quat
 
         # First row of the rotation matrix
         r00 = 2 * (q0 * q0 + q1 * q1) - 1

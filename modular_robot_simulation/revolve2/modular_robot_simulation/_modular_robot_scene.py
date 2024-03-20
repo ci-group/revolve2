@@ -21,6 +21,8 @@ class ModularRobotScene:
     The robots in the scene.
     This is an owning collection; the robots are assigned ids when they are added, equal to their index in this list.
     """
+    _interactive_objects: list[MultiBodySystem] = field(default_factory=list)
+    """Interactive objects in the scene, that are not robots themselves."""
 
     def add_robot(
         self, robot: ModularRobot, pose: Pose = Pose(), translate_z_aabb: bool = True
@@ -40,6 +42,14 @@ class ModularRobotScene:
                 translate_z_aabb,
             )
         )
+
+    def add_interactive_object(self, objt: MultiBodySystem) -> None:
+        """
+        Add an intractable object to the scene.
+
+        :param objt: The object as a multi body system.
+        """
+        self._interactive_objects.append(objt)
 
     def to_simulation_scene(
         self,
@@ -75,5 +85,8 @@ class ModularRobotScene:
             modular_robot_to_multi_body_system_mapping[
                 UUIDKey(robot)
             ] = multi_body_system
+
+        for interactive_object in self._interactive_objects:
+            scene.add_multi_body_system(interactive_object)
 
         return scene, modular_robot_to_multi_body_system_mapping

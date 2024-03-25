@@ -206,7 +206,7 @@ class Module:
         :param child_index: The child index.
         :return: The boolean value.
         """
-        if self._children.get(child_index) is None:
+        if self._children.get(child_index, True):
             return True
         return False
 

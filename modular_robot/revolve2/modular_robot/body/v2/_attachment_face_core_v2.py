@@ -88,12 +88,11 @@ class AttachmentFaceCoreV2(AttachmentFace):
         module._parent = self
         module._parent_child_index = child_index
         if can_set := self.can_set_child(child_index):
+            self._check_matrix[child_index // 3, child_index % 3] += 1
             self._children[child_index] = module
         else:
             raise KeyError(
-                "Attachment point " + "already populated"
-                if can_set
-                else "occluded by other module"
+                f"Attachment point {'already populated' if can_set else 'occluded by other module'}"
             )
 
     def can_set_child(self, child_index: int) -> bool:
@@ -106,12 +105,14 @@ class AttachmentFaceCoreV2(AttachmentFace):
         check_matrix = self._check_matrix.copy()
         check_matrix[child_index // 3, child_index % 3] += 1
         conv_check = np.zeros(shape=(2, 2), dtype=np.uint8)
+
+        """We use a simple convolution to check if the modules are overlapping."""
         for i, j in product(range(2), repeat=2):
             conv_check[i, j] = np.sum(check_matrix[i : i + 2, j : j + 2])
         if np.max(conv_check) > 1:  # Conflict detected.
             return False
-        if self._children.get(child_index) is None:
-            self._check_matrix = check_matrix
+
+        if self._children.get(child_index, True):  # If there is no module on the attachment point yet.
             return True
         return False
 

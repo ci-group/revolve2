@@ -1,4 +1,5 @@
 """A custom viewer for mujoco with additional features."""
+
 from enum import Enum
 from typing import Any
 

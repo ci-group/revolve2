@@ -19,9 +19,9 @@ class BodyToMultiBodySystemMapping:
     active_hinge_to_joint_hinge: dict[UUIDKey[ActiveHinge], JointHinge] = field(
         init=False, default_factory=dict
     )
-    active_hinge_sensor_to_joint_hinge: dict[
-        UUIDKey[ActiveHingeSensor], JointHinge
-    ] = field(init=False, default_factory=dict)
+    active_hinge_sensor_to_joint_hinge: dict[UUIDKey[ActiveHingeSensor], JointHinge] = (
+        field(init=False, default_factory=dict)
+    )
     imu_to_sim_imu: dict[UUIDKey[IMUSensor], IMUSim] = field(
         init=False, default_factory=dict
     )

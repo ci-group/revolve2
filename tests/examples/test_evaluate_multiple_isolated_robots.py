@@ -1,4 +1,5 @@
 """Tests some of the examples that can just be easily ran as a subprocess."""
+
 import os
 import sys
 from unittest.mock import Mock

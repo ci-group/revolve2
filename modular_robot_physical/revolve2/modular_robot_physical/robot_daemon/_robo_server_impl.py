@@ -102,7 +102,9 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
                                     self._CAREFUL_STEP,
                                 )
                             )
-                        case HardwareType.v2:  # careful mode disabled for v2. enable when running into power failures.
+                        case (
+                            HardwareType.v2
+                        ):  # careful mode disabled for v2. enable when running into power failures.
                             targets.append(desired_target)
 
             for pin, target in zip(pins, targets):

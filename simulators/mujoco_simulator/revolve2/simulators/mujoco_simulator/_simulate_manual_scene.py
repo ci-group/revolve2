@@ -1,4 +1,5 @@
 """Iterative Scene Simulator."""
+
 import logging
 
 import mujoco

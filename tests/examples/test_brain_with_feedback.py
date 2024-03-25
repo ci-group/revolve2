@@ -9,10 +9,12 @@ from ._patched_batch_parameters import make_patched_batch_parameters
 
 def test_brain_with_feedback(mocker: Mock) -> None:
     """
-    Test brain_with_feedback example can complete.
+    Test 2b_brain_with_feedback example can complete.
     :param mocker: The mock object.
     """
-    exp_dir = os.path.join(EXAMPLES_DIR, "brain_with_feedback")
+    exp_dir = os.path.join(
+        EXAMPLES_DIR, "2_modular_robot_basics/2b_brain_with_feedback"
+    )
     # Clear any previously imported modules from examples directory from cache
     clear_exp_modules_from_cache()
     # Add examples directory to path, so we can import them without the examples being packages.

@@ -98,7 +98,7 @@ def __evaluate_cppn(
 
     """We select the module type for the current position using the first output of the CPPN network."""
     types = [None, BrickV2, ActiveHingeV2]
-    target_idx = max(0, int(len(types) * outputs[0] - 1e-6))
+    target_idx = int(outputs[0] % len(types))
     module_type = types[target_idx]
 
     """
@@ -106,7 +106,7 @@ def __evaluate_cppn(
     
     The output ranges between [0,1] and we have 4 rotations available (0, 90, 180, 270).
     """
-    angle = max(0, int(outputs[1] * 4 - 1e6)) * (np.pi / 2.0)
+    angle = int(outputs[1] % 4) * (np.pi / 2.0)
 
     return module_type, angle
 

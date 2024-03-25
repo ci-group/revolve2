@@ -112,7 +112,9 @@ class AttachmentFaceCoreV2(AttachmentFace):
         if np.max(conv_check) > 1:  # Conflict detected.
             return False
 
-        if self._children.get(child_index, True):  # If there is no module on the attachment point yet.
+        if self._children.get(
+            child_index, True
+        ):  # If there is no module on the attachment point yet.
             return True
         return False
 

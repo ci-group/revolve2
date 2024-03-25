@@ -1,4 +1,5 @@
 """Explicit modules of V2 Robot."""
+
 from ._active_hinge_v2 import ActiveHingeV2
 from ._body_v2 import BodyV2
 from ._brick_v2 import BrickV2

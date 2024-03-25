@@ -3,6 +3,7 @@ This is an automatically generated stub for `robot_daemon_protocol.capnp`.
 
 This file was manually edited to contain the RoboServer interface.
 """
+
 import os
 
 import capnp  # type: ignore

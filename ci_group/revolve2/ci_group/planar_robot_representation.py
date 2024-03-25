@@ -1,4 +1,5 @@
 """Draw 2D representations of Modular Robots. Based on Karine Miras` Method."""
+
 import os
 import time
 from typing import Any

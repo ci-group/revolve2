@@ -1,4 +1,5 @@
 """Standard simulation functions and parameters patched for unit test."""
+
 from revolve2.simulation.simulator import BatchParameters
 
 

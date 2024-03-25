@@ -262,9 +262,9 @@ def _add_heightmaps(
         name = f"heightmap_{i_heightmap}"
         hm_kwargs: dict[str, Any] = {}
         if fast_sim:
-            hm_kwargs[
-                "rgba"
-            ] = heightmap.texture.primary_color.to_normalized_rgba_list()
+            hm_kwargs["rgba"] = (
+                heightmap.texture.primary_color.to_normalized_rgba_list()
+            )
         else:
             hm_kwargs["material"] = f"{name}_material"
             __make_material(env_mjcf, name=name, element=heightmap)
@@ -355,9 +355,9 @@ def _add_joint_actuators(
     for joint, name in joints_and_names:
         # Add rotor inertia to joints. This value is arbitrarily chosen and appears stable enough.
         # Fine-tuning the armature value might be needed later.
-        multi_body_system_mjcf.find(
-            namespace="joint", identifier=name
-        ).armature = joint.armature
+        multi_body_system_mjcf.find(namespace="joint", identifier=name).armature = (
+            joint.armature
+        )
         multi_body_system_mjcf.actuator.add(
             "position",
             kp=joint.pid_gain_p,
@@ -389,9 +389,9 @@ def _set_colors_and_materials(
     """
     for geom, name in geoms_and_names:
         if fast_sim:
-            multi_body_system_mjcf.find(
-                "geom", name
-            ).rgba = geom.texture.primary_color.to_normalized_rgba_list()
+            multi_body_system_mjcf.find("geom", name).rgba = (
+                geom.texture.primary_color.to_normalized_rgba_list()
+            )
         else:
             m_name = f"geom_{name}"
             __make_material(multi_body_system_mjcf, name=m_name, element=geom)

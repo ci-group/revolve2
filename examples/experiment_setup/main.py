@@ -1,4 +1,5 @@
 """Main script for the example."""
+
 import logging
 
 import config

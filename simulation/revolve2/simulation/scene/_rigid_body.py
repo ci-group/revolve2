@@ -158,19 +158,13 @@ class RigidBody:
         # calculate inertia in local coordinates
         local_inertia = Matrix33()
         local_inertia[0, 0] += (
-            geometry.mass
-            * (geometry.aabb.size.y**2 + geometry.aabb.size.z**2)
-            / 12.0
+            geometry.mass * (geometry.aabb.size.y**2 + geometry.aabb.size.z**2) / 12.0
         )
         local_inertia[1, 1] += (
-            geometry.mass
-            * (geometry.aabb.size.x**2 + geometry.aabb.size.z**2)
-            / 12.0
+            geometry.mass * (geometry.aabb.size.x**2 + geometry.aabb.size.z**2) / 12.0
         )
         local_inertia[2, 2] += (
-            geometry.mass
-            * (geometry.aabb.size.x**2 + geometry.aabb.size.y**2)
-            / 12.0
+            geometry.mass * (geometry.aabb.size.x**2 + geometry.aabb.size.y**2) / 12.0
         )
         return local_inertia
 

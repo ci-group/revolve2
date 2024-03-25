@@ -19,9 +19,7 @@ from ..geometry import (
 )
 
 
-def multi_body_system_to_urdf(
-    multi_body_system: MultiBodySystem, name: str
-) -> tuple[
+def multi_body_system_to_urdf(multi_body_system: MultiBodySystem, name: str) -> tuple[
     str,
     list[GeometryPlane],
     list[GeometryHeightmap],
@@ -58,9 +56,7 @@ class _URDFConverter:
     planes: list[GeometryPlane]
     heightmaps: list[GeometryHeightmap]
 
-    def build(
-        self, multi_body_system: MultiBodySystem, name: str
-    ) -> tuple[
+    def build(self, multi_body_system: MultiBodySystem, name: str) -> tuple[
         str,
         list[GeometryPlane],
         list[GeometryHeightmap],
@@ -221,18 +217,22 @@ class _URDFConverter:
                 el,
                 "parent",
                 {
-                    "link": rigid_body_name
-                    if joint.rigid_body1.uuid == rigid_body.uuid
-                    else child_name
+                    "link": (
+                        rigid_body_name
+                        if joint.rigid_body1.uuid == rigid_body.uuid
+                        else child_name
+                    )
                 },
             )
             xml.SubElement(
                 el,
                 "child",
                 {
-                    "link": rigid_body_name
-                    if joint.rigid_body1.uuid != rigid_body.uuid
-                    else child_name
+                    "link": (
+                        rigid_body_name
+                        if joint.rigid_body1.uuid != rigid_body.uuid
+                        else child_name
+                    )
                 },
             )
             xyz = link_pose.orientation.inverse * (

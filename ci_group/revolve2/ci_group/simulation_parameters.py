@@ -1,4 +1,5 @@
 """Standard simulation functions and parameters."""
+
 from revolve2.simulation.simulator import BatchParameters
 
 STANDARD_SIMULATION_TIME = 30

@@ -82,9 +82,9 @@ class ModularRobotScene:
             handler.add_robot(
                 robot.brain.make_instance(), body_to_multi_body_system_mapping
             )
-            modular_robot_to_multi_body_system_mapping[
-                UUIDKey(robot)
-            ] = multi_body_system
+            modular_robot_to_multi_body_system_mapping[UUIDKey(robot)] = (
+                multi_body_system
+            )
 
         for interactive_object in self._interactive_objects:
             scene.add_multi_body_system(interactive_object)

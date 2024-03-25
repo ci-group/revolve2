@@ -127,9 +127,10 @@ def __add_child(
     child_type, child_rotation = __evaluate_cppn(body_net, new_pos, chain_length)
     angle = child_rotation * (np.pi / 2.0)
     if child_type is None or not module.module_reference.can_set_child(
-        child := child_type(angle), attachment_index
+        attachment_index
     ):
         return None
+    child = child_type(angle)
     grid[tuple(position)] += 1
     up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
     module.module_reference.set_child(child, attachment_index)

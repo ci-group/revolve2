@@ -1,4 +1,4 @@
-<img  align="right" width="150" height="150"  src="./docs/source/logo.png">
+<img align="right" width="150" height="150"  src="./docs/source/logo_light.png">
 
 # Revolve2
 

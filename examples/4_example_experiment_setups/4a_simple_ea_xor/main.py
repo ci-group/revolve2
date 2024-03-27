@@ -35,13 +35,13 @@ class ParentSelector(Selector):
         self, population: list[Individual], **kwargs: Any
     ) -> tuple[NDArray[np.int_], dict[str, list[Individual]]]:
         """
-        Select pairs of parents using a tournament.
+        Select pairs of parents using a tournament.selection procedure.
 
         :param population: The population to select from.
         :param kwargs: Additional kwargs that are not used in this example.
         :returns: Pairs of indices of selected parents. offspring_size x 2 ints, and the parent population in the KWArgs dict.
         """
-        return np.asarray(
+        final_selection = np.asarray(
             [
                 selection.multiple_unique(
                     2,
@@ -53,7 +53,9 @@ class ParentSelector(Selector):
                 )
                 for _ in range(self._offspring_size)
             ]
-        ), {"parent_population": population}
+        )
+        """We select not the parents directly, but their respective indices for the reproduction step."""
+        return final_selection, {"parent_population": population}
 
 
 class SurvivorSelector(Selector):
@@ -69,7 +71,7 @@ class SurvivorSelector(Selector):
         self, population: list[Individual], **kwargs: Any
     ) -> tuple[list[Individual], dict[Any, Any]]:
         """
-        Select survivors using a tournament.
+        Select survivors using a tournament selection.
 
         :param population: The initial population.
         :param kwargs: Additional kwargs that contain the children to do selection with.
@@ -80,6 +82,11 @@ class SurvivorSelector(Selector):
         if offspring is None:
             raise KeyError("No children passed.")
 
+        """
+        We want to get the survivors for the next generation, using our old population and the new children.
+        We determine the survivors by using a tournament, in which to random robots 'compete' against each other. 
+        This competition is based on the fitness value and the fitter robot will survive.
+        """
         original_survivors, offspring_survivors = population_management.steady_state(
             [i.genotype for i in population],
             [i.fitness for i in population],

@@ -39,7 +39,7 @@ def make_body() -> BodyV2:
 
 def main() -> None:
     """Run the simulation."""
-    # Set up logging to give output of your simulation into the cli.
+    # Set up logging to give output of your simulation into the command line interface (CLI).
     setup_logging()
 
     # Set up a random number generator, used later for the brain.
@@ -48,15 +48,20 @@ def main() -> None:
     # Create a body for the robot.
     body = make_body()
 
-    # Create a brain for the robot.
-    # We choose a 'CPG' brain with random parameters (the exact working will not be explained here).
+    """
+    Here we create a brain for the robot.
+    We choose a 'CPG' brain with random parameters.
+    If you want to know more about CPGs checkout the Methods section in: https://doi.org/10.1038/s41598-023-48338-4. 
+    """
     brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
 
-    # Combine the body and brain into a modular robot.
+    """Once we have a body and a brain we combine it into a ModularRobot."""
     robot = ModularRobot(body, brain)
 
-    # Create a modular robot scene.
-    # This is a combination of one or more modular robots positioned in a given terrain.
+    """
+    To simulate our newly created robot, we create a modular robot scene.
+    This scene is a combination of one or more modular robots positioned in a given terrain.
+    """
     scene = ModularRobotScene(terrain=terrains.flat())
     scene.add_robot(robot)
 
@@ -65,8 +70,10 @@ def main() -> None:
         Ball(radius=0.1, mass=0.1, pose=Pose(Vector3([-0.5, 0.5, 0])))
     )
 
-    # Create a simulator that will perform the simulation.
-    # This tutorial chooses to use Mujoco, but your version of revolve might contain other simulators as well.
+    """
+    After we have the scene ready we create a simulator that will perform the simulation.
+    This tutorial chooses to use Mujoco, but your version of revolve might contain other simulators as well.
+    """
     simulator = LocalSimulator()
 
     # `batch_parameters` are important parameters for simulation.

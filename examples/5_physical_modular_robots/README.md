@@ -6,4 +6,3 @@ Specifically look at *Creating a physical robot* and *Physical Robot Core Setup*
 
 - In `5a_physical_robot_remote` you learn how to control your newly built robot remotely.
 - In `5b_compare_simulated_and_physical_robot` you will be able to check whether your built robot has ben built correctly, by comparing it to the simulation counterpart.
-- 

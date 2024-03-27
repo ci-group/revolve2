@@ -1,7 +1,6 @@
 """Main script for the example."""
 
 import logging
-import pickle
 
 import config
 import multineat

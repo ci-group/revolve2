@@ -8,14 +8,16 @@ from ._clear_example_modules_from_cache import clear_exp_modules_from_cache
 
 def test_robot_bodybrain_ea_database(mocker: Mock, tmpdir: str) -> None:
     """
-    Test if robot_bodybrain_ea_database example can complete.
+    Test if 4d_robot_bodybrain_ea_database example can complete.
 
     The database file is written to a temporary directory, which is automatically deleted after the test.
 
     :param mocker: The mock object.
     :param tmpdir: Temporary directory for spawning database file.
     """
-    exp_dir = os.path.join(EXAMPLES_DIR, "robot_bodybrain_ea_database")
+    exp_dir = os.path.join(
+        EXAMPLES_DIR, "4_example_experiment_setups/4d_robot_bodybrain_ea_database"
+    )
 
     # Clear any previously imported modules from examples directory from cache
     clear_exp_modules_from_cache()

@@ -11,11 +11,13 @@ from ._patched_batch_parameters import make_patched_batch_parameters
 
 def test_evaluate_multiple_isolated_robots(mocker: Mock) -> None:
     """
-    Test evaluate_multiple_isolated_robots example can complete.
+    Test 3c_evaluate_multiple_isolated_robots example can complete.
 
     :param mocker: The mock object.
     """
-    exp_dir = os.path.join(EXAMPLES_DIR, "evaluate_multiple_isolated_robots")
+    exp_dir = os.path.join(
+        EXAMPLES_DIR, "3_experiment_foundations/3c_evaluate_multiple_isolated_robots"
+    )
     # Clear any previously imported modules from examples directory from cache
     clear_exp_modules_from_cache()
     # Add examples directory to path, so we can import them without the examples being packages.

@@ -8,11 +8,13 @@ from ._clear_example_modules_from_cache import clear_exp_modules_from_cache
 
 def test_robot_brain_cmaes(mocker: Mock) -> None:
     """
-    Test robot_brain_cmaes example can complete.
+    Test 4e_robot_brain_cmaes example can complete.
 
     :param mocker: The mock object.
     """
-    exp_dir = os.path.join(EXAMPLES_DIR, "robot_brain_cmaes")
+    exp_dir = os.path.join(
+        EXAMPLES_DIR, "4_example_experiment_setups/4e_robot_brain_cmaes"
+    )
 
     # Clear any previously imported modules from examples directory from cache
     clear_exp_modules_from_cache()

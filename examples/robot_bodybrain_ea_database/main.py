@@ -103,7 +103,7 @@ def find_best_robot(
     :returns: The best individual.
     """
     return max(
-        population + [] if current_best is None else [current_best],
+        population if current_best is None else population + [current_best],
         key=lambda x: x.fitness,
     )
 

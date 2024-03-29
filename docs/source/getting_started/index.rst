@@ -20,6 +20,9 @@ Based on your research topic, certain functionalities in Revolve2 may be of inte
 A good starting point to delve deeper into Revolve2's inner workings is the example directory found in the repository.
 Some examples come in two versions: one with and one without a database.
 It is recommended to explore the examples without the database first to better grasp the significance of this addition.
+The examples are structured in order of progression.
+Starting from the beginning will give you a good understanding once you reached the part that is relevant to you.
+You will find a more thorough explanation of the examples in their respective readme`s.
 
 .. list-table:: Revolve2 examples
    :widths: 25 50 25
@@ -27,56 +30,68 @@ It is recommended to explore the examples without the database first to better g
 
    * - Example
      - Contents
-     - Prequisite examples
-   * - **Simulation**
+     - Prerequisite examples
+   * - **1 Simulator Basics**
      - 
      - 
-   * - simulate single robot
+   * - 1a simulate single robot
      - Simulate and visualize a single modular robot.
      - \-
-   * - evaluate single robot
-     - Evaluate a robot by simulating it and calculating its displacement.
-     - :code:`simulate single robot`
-   * - evaluate multiple isolated robots
-     - Evaluate multiple non-interacting robots concurrently.
-     - :code:`evaluate single robot`
-   * - evaluate multiple interacting robots
-     - Evaluate multiple interacting robots.
-     - :code:`evaluate single robot`
-   * - evaluate multiple isolated robots
-     - Evaluate multiple non-interacting robots concurrently.
-     - :code:`evaluate single robot`
-   * - custom brain
-     - Design your own brain and test it in simulation.
-     - :code:`simulate single robot`
-   * - custom terrain
+   * - 1b custom terrain
      - Design your own terrain and test it in simulation
-     - :code:`simulate single robot`
-   * - **Experiments**
-     - 
-     - 
-   * - experiment setup
+     - :code:`1a simulate single robot`
+   * - **2 Modular Robot Basics**
+     -
+     -
+   * - 2a custom brain
+     - Design your own brain and test it in simulation.
+     - :code:`1a simulate single robot`
+   * - 2b brain with feedback
+     - Design a custom brain that takes sensory input.
+     - :code:`1a simulate single robot`, :code:`2a custom brain`
+   * - **3 Experiment Foundation**
+     -
+     -
+   * - 3a experiment setup
      - Set up your first experiment.
      - \-
-   * - simple ea xor
+   * - 3b evaluate single robot
+     - Evaluate a robot by simulating it and calculating its displacement.
+     - :code:`1a simulate single robot`
+   * - 3c evaluate multiple isolated robots
+     - Evaluate multiple non-interacting robots concurrently.
+     - :code:`3b evaluate single robot`
+   * - 3d evaluate multiple interacting robots
+     - Evaluate multiple interacting robots.
+     - :code:`3b evaluate single robot`
+   * - **4 Example Experiment Setups**
+     -
+     -
+   * - 4a simple ea xor
      - Use an evolutionary algorithm to train a neural network to perform XOR.
-     - :code:`experiment setup`
-   * - simple ea xor database
-     - Similar to :code:`simple ea xor`, but now using a database to store experiment results.
+     - :code:`3a experiment setup`
+   * - 4b simple ea xor database
+     - Similar to :code:`4a simple ea xor`, but now using a database to store experiment results.
        Learn how to read the database for e.g. plotting or recovering crashed experiments.
-     - :code:`simple ea xor`
-   * - robot bodybrain ea
+     - :code:`4a simple ea xor`
+   * - 4c robot bodybrain ea
      - Optimize the bodies and brains of modular robots using an evolutionary algorithm.
-     - :code:`evaluate multiple isolated robots`, :code:`simple ea xor`
-   * - robot bodybrain ea database
-     - Similar to :code:`robot bodybrain ea`, but now using a database to store experiment results.
-     - :code:`robot bodybrain ea`, :code:`simple ea xor database`
-   * - robot brain cmaes
+     - :code:`3c evaluate multiple isolated robots`, :code:`4a simple ea xor`
+   * - 4d robot bodybrain ea database
+     - Similar to :code:`4c robot bodybrain ea`, but now using a database to store experiment results.
+     - :code:`4c robot bodybrain ea`, :code:`4b simple ea xor database`
+   * - 4e robot brain cmaes
      - Optimize the brains of modular robots using CMA-ES.
-     - :code:`evaluate multiple isolated robots`, :code:`simple ea xor`
-   * - robot brain cmaes database
-     - Similar to :code:`robot brain cmaes`, but now using a database to store experiment results.
-     - :code:`robot brain cmaes`, :code:`simple ea xor database`
-   * - run physical robot manually
+     - :code:`3c evaluate multiple isolated robots`, :code:`4a simple ea xor`
+   * - 4f robot brain cmaes database
+     - Similar to :code:`4e robot brain cmaes`, but now using a database to store experiment results.
+     - :code:`4e robot brain cmaes`, :code:`4b simple ea xor database`
+   * - **5 Physical Modular Robots**
+     -
+     -
+   * - 5a physical robot remote
      - Learn how to use your evolved robots in the physical world.
-     - :code:`simulate single robot`
+     - :code:`1a simulate single robot`
+   * - 5b compare simulated and physical robot
+     - Learn how to use your evolved robots in the physical world.
+     - :code:`5a physical robot remote`

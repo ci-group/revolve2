@@ -102,6 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../ci_group/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../ci_group/interactive_objects/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive_objects</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
 </li>
@@ -120,6 +121,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../experimentation/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../experimentation/evolution/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">evolution</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
 </ul>
 </li>
@@ -224,16 +226,25 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActiveHingeBuilder</span></code></a></p></td>
 <td><p>A Builder for Hinges.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.AttachmentFaceBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.AttachmentFaceBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AttachmentFaceBuilder</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActiveHingeSensorBuilder</span></code></a></p></td>
+<td><p>A Builder for Cores.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.AttachmentFaceBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.AttachmentFaceBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AttachmentFaceBuilder</span></code></a></p></td>
 <td><p>A Builder for Attachment Faces.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.BrickBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.BrickBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BrickBuilder</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.BrickBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.BrickBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BrickBuilder</span></code></a></p></td>
 <td><p>A Builder for Bricks.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.Builder" title="modular_robot_simulation._build_multi_body_systems._builders.Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Builder</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.Builder" title="modular_robot_simulation._build_multi_body_systems._builders.Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Builder</span></code></a></p></td>
 <td><p>An abstract builder class.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CameraSensorBuilder</span></code></a></p></td>
+<td><p>A Builder for Cores.</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.CoreBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.CoreBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CoreBuilder</span></code></a></p></td>
+<td><p>A Builder for Cores.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder" title="modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IMUSensorBuilder</span></code></a></p></td>
 <td><p>A Builder for Cores.</p></td>
 </tr>
 </tbody>
@@ -250,6 +261,34 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeBuilder.build">
 <span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_body_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_to_multi_body_system_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../_body_to_multi_body_system_mapping/index.html#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping" title="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping"><span class="pre">modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../_unbuilt_child/index.html#modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild" title="modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild"><span class="pre">modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeBuilder.build" title="Link to this definition"></a></dt>
+<dd><p>Build a module onto the Robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>multi_body_system</strong> – The multi body system of the robot.</p></li>
+<li><p><strong>body_to_multi_body_system_mapping</strong> – A mapping from body to multi-body system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The next children to be built.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActiveHingeSensorBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.ActiveHingeSensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rigid_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.RigidBody</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._builder.Builder" title="modular_robot_simulation._build_multi_body_systems._builders._builder.Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot_simulation._build_multi_body_systems._builders._builder.Builder</span></code></a></p>
+<div class="graphviz"><img src="../../../../_images/inheritance-e8e9dfaa44c07f7b2955413a0f5456b50e2a4298.png" alt="Inheritance diagram of modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder" usemap="#inheritance231c47d1e9" class="inheritance graphviz" /></div>
+<map id="inheritance231c47d1e9" name="inheritance231c47d1e9">
+<area shape="rect" id="node3" href="_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._builder.Builder" target="_top" title="An abstract builder class." alt="" coords="125,5,197,31"/>
+<area shape="rect" id="node2" href="_active_hinge_sensor_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._active_hinge_sensor_builder.ActiveHingeSensorBuilder" target="_top" title="A Builder for Cores." alt="" coords="245,5,436,31"/>
+</map><p>A Builder for Cores.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_body_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_to_multi_body_system_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../_body_to_multi_body_system_mapping/index.html#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping" title="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping"><span class="pre">modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../_unbuilt_child/index.html#modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild" title="modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild"><span class="pre">modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder.build" title="Link to this definition"></a></dt>
 <dd><p>Build a module onto the Robot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -350,6 +389,34 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CameraSensorBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.CameraSensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rigid_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.RigidBody</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.Pose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._builder.Builder" title="modular_robot_simulation._build_multi_body_systems._builders._builder.Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot_simulation._build_multi_body_systems._builders._builder.Builder</span></code></a></p>
+<div class="graphviz"><img src="../../../../_images/inheritance-cc17785806a150a426940265b7790bee321669a3.png" alt="Inheritance diagram of modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder" usemap="#inheritance8108dac341" class="inheritance graphviz" /></div>
+<map id="inheritance8108dac341" name="inheritance8108dac341">
+<area shape="rect" id="node2" href="_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._builder.Builder" target="_top" title="An abstract builder class." alt="" coords="125,5,197,31"/>
+<area shape="rect" id="node3" href="_camera_sensor_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._camera_sensor_builder.CameraSensorBuilder" target="_top" title="A Builder for Cores." alt="" coords="245,5,408,31"/>
+</map><p>A Builder for Cores.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_body_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_to_multi_body_system_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../_body_to_multi_body_system_mapping/index.html#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping" title="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping"><span class="pre">modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../_unbuilt_child/index.html#modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild" title="modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild"><span class="pre">modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder.build" title="Link to this definition"></a></dt>
+<dd><p>Build a module onto the Robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>multi_body_system</strong> – The multi body system of the robot.</p></li>
+<li><p><strong>body_to_multi_body_system_mapping</strong> – A mapping from body to multi-body system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The next children to be built.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.CoreBuilder">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CoreBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.base.Core</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rigid_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.RigidBody</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">slot_pose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.Pose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.CoreBuilder" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._builder.Builder" title="modular_robot_simulation._build_multi_body_systems._builders._builder.Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot_simulation._build_multi_body_systems._builders._builder.Builder</span></code></a></p>
@@ -361,6 +428,34 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.CoreBuilder.build">
 <span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_body_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_to_multi_body_system_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../_body_to_multi_body_system_mapping/index.html#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping" title="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping"><span class="pre">modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../_unbuilt_child/index.html#modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild" title="modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild"><span class="pre">modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.CoreBuilder.build" title="Link to this definition"></a></dt>
+<dd><p>Build a module onto the Robot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>multi_body_system</strong> – The multi body system of the robot.</p></li>
+<li><p><strong>body_to_multi_body_system_mapping</strong> – A mapping from body to multi-body system</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The next children to be built.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IMUSensorBuilder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.sensors.IMUSensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rigid_body</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.RigidBody</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.Pose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imu_location</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._builder.Builder" title="modular_robot_simulation._build_multi_body_systems._builders._builder.Builder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot_simulation._build_multi_body_systems._builders._builder.Builder</span></code></a></p>
+<div class="graphviz"><img src="../../../../_images/inheritance-2755c9c8c5c312a0c88dd6e6fd21b109c523be22.png" alt="Inheritance diagram of modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder" usemap="#inheritance216af8d6ca" class="inheritance graphviz" /></div>
+<map id="inheritance216af8d6ca" name="inheritance216af8d6ca">
+<area shape="rect" id="node2" href="_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._builder.Builder" target="_top" title="An abstract builder class." alt="" coords="125,5,197,31"/>
+<area shape="rect" id="node3" href="_imu_sensor_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._imu_sensor_builder.IMUSensorBuilder" target="_top" title="A Builder for Cores." alt="" coords="245,5,384,31"/>
+</map><p>A Builder for Cores.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder.build">
+<span class="sig-name descname"><span class="pre">build</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">multi_body_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_to_multi_body_system_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../_body_to_multi_body_system_mapping/index.html#modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping" title="modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping"><span class="pre">modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../_unbuilt_child/index.html#modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild" title="modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild"><span class="pre">modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder.build" title="Link to this definition"></a></dt>
 <dd><p>Build a module onto the Robot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

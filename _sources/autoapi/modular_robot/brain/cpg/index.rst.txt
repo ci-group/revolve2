@@ -48,7 +48,7 @@ Functions
    W is a weight matrix that is multiplied by the state array.
    The outputs of the controller are defined by the `outputs`, a list of indices for the state array.
 
-   .. py:method:: control(dt: float, sensor_state: modular_robot.sensor_state._modular_robot_sensor_state.ModularRobotSensorState, control_interface: modular_robot._modular_robot_control_interface.ModularRobotControlInterface) -> None
+   .. py:method:: control(dt: float, sensor_state: modular_robot.sensor_state.ModularRobotSensorState, control_interface: modular_robot._modular_robot_control_interface.ModularRobotControlInterface) -> None
 
       Control the modular robot.
 

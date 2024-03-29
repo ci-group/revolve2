@@ -83,4 +83,13 @@ Classes
       :returns: The angular rate.
 
 
+   .. py:method:: get_camera_view(camera_sensor: simulation.scene.sensors.CameraSensor) -> numpy.typing.NDArray[numpy.uint8]
+      :abstractmethod:
+
+      Get the camera view.
+
+      :param camera_sensor: The camera.
+      :return: The view.
+
+
 

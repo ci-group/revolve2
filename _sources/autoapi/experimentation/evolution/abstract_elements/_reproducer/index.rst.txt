@@ -1,0 +1,54 @@
+:orphan:
+
+:py:mod:`_reproducer`
+=================================================================
+
+.. py:module:: experimentation.evolution.abstract_elements._reproducer
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._reproducer.Reproducer
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._reproducer.TPopulation
+
+
+.. py:data:: TPopulation
+
+   
+
+.. py:class:: Reproducer
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements._reproducer.Reproducer
+      :parts: 1
+
+   A Reproducer object that enables the reproduction of individuals in an evolutionary process.
+
+   .. py:method:: reproduce(population: TPopulation, **kwargs: Any) -> TPopulation
+      :abstractmethod:
+
+      Make Individuals Reproduce.
+
+      :param population: The population.
+      :param kwargs: Additional arguments.
+      :return: The children.
+
+
+

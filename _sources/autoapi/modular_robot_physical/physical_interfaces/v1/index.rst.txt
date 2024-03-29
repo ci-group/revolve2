@@ -95,4 +95,12 @@ Classes
       :raises NotImplementedError: Always.
 
 
+   .. py:method:: get_camera_view() -> numpy.typing.NDArray[numpy.uint8]
+      :abstractmethod:
+
+      Get the current view from the camera.
+
+      :raises NotImplementedError: If the Camera is not supported on this hardware.
+
+
 

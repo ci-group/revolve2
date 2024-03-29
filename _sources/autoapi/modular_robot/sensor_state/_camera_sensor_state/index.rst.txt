@@ -30,7 +30,7 @@ Classes
    The state of a camera sensor.
 
    .. py:property:: image
-      :type: numpy.typing.NDArray[numpy.float_]
+      :type: numpy.typing.NDArray[numpy.uint8]
       :abstractmethod:
 
       Get the current image.

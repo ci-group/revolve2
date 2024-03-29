@@ -1,0 +1,38 @@
+:orphan:
+
+:py:mod:`_geometry_sphere`
+====================================================
+
+.. py:module:: simulation.scene.geometry._geometry_sphere
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.scene.geometry._geometry_sphere.GeometrySphere
+
+
+
+
+.. py:class:: GeometrySphere
+
+
+   Bases: :py:obj:`simulation.scene.geometry._geometry.Geometry`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry._geometry_sphere.GeometrySphere
+      :parts: 1
+
+   Box geometry.
+
+   .. py:attribute:: radius
+      :type: float
+
+      The radius of the sphere.
+
+
+

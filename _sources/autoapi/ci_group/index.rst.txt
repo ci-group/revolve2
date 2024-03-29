@@ -17,6 +17,7 @@ Subpackages
 
    ci_lab_utilities/index.rst
    genotypes/index.rst
+   interactive_objects/index.rst
    morphological_novelty_metric/index.rst
 
 

@@ -1,0 +1,46 @@
+:orphan:
+
+:py:mod:`_open_gl_vision`
+==========================================
+
+.. py:module:: mujoco_simulator._open_gl_vision
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._open_gl_vision.OpenGLVision
+
+
+
+
+.. py:class:: OpenGLVision(model: mujoco.MjModel, camera: mujoco_simulator._abstraction_to_mujoco_mapping.CameraSensorMujoco, headless: bool, open_gl_lib: mujoco_simulator._render_backend.RenderBackend, max_geometries: int = 10000)
+
+
+   A class to enable vision / camera sensors using OpenGl.
+
+   .. py:method:: process(model: mujoco.MjModel, data: mujoco.MjData) -> numpy.typing.NDArray[numpy.uint8]
+
+      Process the current state of the simulation and render it.
+
+      :param model: The mujoco model.
+      :param data: The mujoco data.
+      :return: The rendered image (RGB format).
+
+
+   .. py:method:: get_context(open_gl_lib: mujoco_simulator._render_backend.RenderBackend) -> Any
+      :staticmethod:
+
+      Get the context to be used.
+
+      :param open_gl_lib: The render backend to use.
+      :return: The context type.
+      :raises ValueError: If the backend for OpenGL is not known.
+
+
+

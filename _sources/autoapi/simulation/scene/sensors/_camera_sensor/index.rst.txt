@@ -32,7 +32,17 @@ Classes
    .. py:attribute:: pose
       :type: simulation.scene._pose.Pose
 
+      
+
+   .. py:attribute:: camera_size
+      :type: tuple[int, int]
+
       Pose of the geometry, relative to its parent rigid body.
 
+
+   .. py:attribute:: type
+      :type: str
+
+      
 
 

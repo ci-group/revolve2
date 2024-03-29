@@ -329,7 +329,7 @@ Classes
 
 
 
-.. py:class:: RigidBody
+.. py:class:: RigidBody(initial_pose: simulation.scene._pose.Pose, static_friction: float, dynamic_friction: float, geometries: list[simulation.scene.geometry.Geometry])
 
 
    A collection of geometries and physics parameters.
@@ -345,34 +345,27 @@ Classes
    .. py:attribute:: initial_pose
       :type: simulation.scene._pose.Pose
 
-      Initial pose of the rigid body.
-
-      Relative to its parent multi-body system.
-
+      
 
    .. py:attribute:: static_friction
       :type: float
 
-      Static friction of the body.
-
+      
 
    .. py:attribute:: dynamic_friction
       :type: float
 
-      Dynamic friction of the body.
-
+      
 
    .. py:attribute:: geometries
       :type: list[simulation.scene.geometry.Geometry]
 
-      Geometries describing the shape of the body.
+      
 
+   .. py:attribute:: sensors
+      :type: _AttachedSensors
 
-   .. py:attribute:: imu_sensors
-      :type: list[simulation.scene.sensors.IMUSensor]
-
-      The IMU sensors attached to this rigid body.
-
+      
 
    .. py:method:: mass() -> float
 
@@ -394,7 +387,7 @@ Classes
 
       Calculate the inertia tensor in the local reference frame of this rigid body.
 
-      Only box geometries are currently supported.
+      For more details on the inertia calculations, see https://en.wikipedia.org/wiki/List_of_moments_of_inertia.
 
       :returns: The inertia tensor.
       :raises ValueError: If one of the geometries is not a box.
@@ -512,6 +505,15 @@ Classes
 
       :param imu_sensor: The IMU.
       :returns: The angular rate.
+
+
+   .. py:method:: get_camera_view(camera_sensor: simulation.scene.sensors.CameraSensor) -> numpy.typing.NDArray[numpy.uint8]
+      :abstractmethod:
+
+      Get the camera view.
+
+      :param camera_sensor: The camera.
+      :return: The view.
 
 
 

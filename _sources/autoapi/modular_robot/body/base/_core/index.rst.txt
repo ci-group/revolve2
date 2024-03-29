@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: Core(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+.. py:class:: Core(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float, sensors: list[modular_robot.body.sensors.Sensor])
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -95,11 +95,6 @@ Classes
 
    .. py:attribute:: LEFT
       :value: 3
-
-      
-
-   .. py:attribute:: imu_sensor
-      :type: modular_robot.body.sensors.IMUSensor | None
 
       
 

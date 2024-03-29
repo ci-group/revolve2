@@ -1,0 +1,59 @@
+:orphan:
+
+:py:mod:`_selector`
+===============================================================
+
+.. py:module:: experimentation.evolution.abstract_elements._selector
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._selector.Selector
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._selector.TPopulation
+   experimentation.evolution.abstract_elements._selector.KWArgs
+
+
+.. py:data:: TPopulation
+
+   
+
+.. py:data:: KWArgs
+
+   
+
+.. py:class:: Selector
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements._selector.Selector
+      :parts: 1
+
+   A Selector object that enables selection of individuals in an evolutionary process.
+
+   .. py:method:: select(population: TPopulation, **kwargs: Any) -> tuple[TPopulation, KWArgs]
+      :abstractmethod:
+
+      Select individuals from a population.
+
+      :param population: The population for selection.
+      :param kwargs: Possible metrics for selection.
+      :return: The selected subset of the population and additional kwargs.
+
+
+

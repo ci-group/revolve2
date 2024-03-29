@@ -17,6 +17,7 @@ Classes
    mujoco_simulator._abstraction_to_mujoco_mapping.JointHingeMujoco
    mujoco_simulator._abstraction_to_mujoco_mapping.MultiBodySystemMujoco
    mujoco_simulator._abstraction_to_mujoco_mapping.IMUSensorMujoco
+   mujoco_simulator._abstraction_to_mujoco_mapping.CameraSensorMujoco
    mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping
 
 
@@ -70,6 +71,22 @@ Classes
       
 
 
+.. py:class:: CameraSensorMujoco
+
+
+   Information about a MuJoCo camera sensor.
+
+   .. py:attribute:: camera_id
+      :type: int
+
+      
+
+   .. py:attribute:: camera_size
+      :type: tuple[int, int]
+
+      
+
+
 .. py:class:: AbstractionToMujocoMapping
 
 
@@ -87,6 +104,11 @@ Classes
 
    .. py:attribute:: imu_sensor
       :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.simulation.scene.sensors.IMUSensor], IMUSensorMujoco]
+
+      
+
+   .. py:attribute:: camera_sensor
+      :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.simulation.scene.sensors.CameraSensor], CameraSensorMujoco]
 
       
 

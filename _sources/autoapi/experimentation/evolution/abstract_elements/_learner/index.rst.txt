@@ -1,0 +1,55 @@
+:orphan:
+
+:py:mod:`_learner`
+==============================================================
+
+.. py:module:: experimentation.evolution.abstract_elements._learner
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._learner.Learner
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._learner.TPopulation
+
+
+.. py:data:: TPopulation
+
+   
+
+.. py:class:: Learner
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements._learner.Learner
+      :parts: 1
+
+   A Learner object that enables learning for individuals in an evolutionary process.
+
+   TODO: use link for explanation
+
+   .. py:method:: learn(population: TPopulation) -> TPopulation
+      :abstractmethod:
+
+      Make Individuals from a population learn.
+
+      :param population: The population.
+      :return: The learned population.
+
+
+

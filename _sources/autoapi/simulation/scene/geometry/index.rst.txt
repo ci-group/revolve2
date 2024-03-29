@@ -30,6 +30,7 @@ Classes
    simulation.scene.geometry.GeometryBox
    simulation.scene.geometry.GeometryHeightmap
    simulation.scene.geometry.GeometryPlane
+   simulation.scene.geometry.GeometrySphere
 
 
 
@@ -134,5 +135,22 @@ Classes
       :type: simulation.scene.geometry.textures.Texture
 
       
+
+
+.. py:class:: GeometrySphere
+
+
+   Bases: :py:obj:`simulation.scene.geometry._geometry.Geometry`
+
+   .. autoapi-inheritance-diagram:: simulation.scene.geometry.GeometrySphere
+      :parts: 1
+
+   Box geometry.
+
+   .. py:attribute:: radius
+      :type: float
+
+      The radius of the sphere.
+
 
 

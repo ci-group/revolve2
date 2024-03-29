@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: Brick(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+.. py:class:: Brick(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float, sensors: list[modular_robot.body.sensors.Sensor])
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`

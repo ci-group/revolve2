@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: IMUSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem, core_imu: revolve2.simulation.scene.sensors.IMUSensor)
+.. py:class:: IMUSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem, imu: revolve2.simulation.scene.sensors.IMUSensor)
 
 
    Bases: :py:obj:`revolve2.modular_robot.sensor_state.IMUSensorState`

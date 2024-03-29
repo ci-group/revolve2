@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: Sensor
+.. py:class:: Sensor(rotation: float, position: pyrr.Vector3 = Vector3([0, 0, 0]))
 
 
    Bases: :py:obj:`abc.ABC`
@@ -35,6 +35,22 @@ Classes
       Get the uuid of the sensor.
 
       :return: The uuid.
+
+
+   .. py:property:: rotation
+      :type: float
+
+      Return the rotation of the sensor.
+
+      :return: The rotation.
+
+
+   .. py:property:: position
+      :type: pyrr.Vector3
+
+      Get the position of the sensor on a module.
+
+      :return: The position.
 
 
 

@@ -46,11 +46,6 @@ Classes
 
    Mappings from bodies to multi-body system objects.
 
-   .. py:attribute:: core_imu
-      :type: revolve2.simulation.scene.sensors.IMUSensor
-
-      
-
    .. py:attribute:: multi_body_system
       :type: revolve2.simulation.scene.MultiBodySystem
 
@@ -63,6 +58,16 @@ Classes
 
    .. py:attribute:: active_hinge_sensor_to_joint_hinge
       :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.body.sensors.ActiveHingeSensor], revolve2.simulation.scene.JointHinge]
+
+      
+
+   .. py:attribute:: imu_to_sim_imu
+      :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.body.sensors.IMUSensor], revolve2.simulation.scene.sensors.IMUSensor]
+
+      
+
+   .. py:attribute:: camera_to_sim_camera
+      :type: dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.body.sensors.CameraSensor], revolve2.simulation.scene.sensors.CameraSensor]
 
       
 

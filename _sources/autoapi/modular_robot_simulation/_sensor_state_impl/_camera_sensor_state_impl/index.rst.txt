@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_camera_sensor_state_impl`
+===============================================================================
+
+.. py:module:: modular_robot_simulation._sensor_state_impl._camera_sensor_state_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._sensor_state_impl._camera_sensor_state_impl.CameraSensorStateImpl
+
+
+
+
+.. py:class:: CameraSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem, camera: revolve2.simulation.scene.sensors.CameraSensor)
+
+
+   Bases: :py:obj:`revolve2.modular_robot.sensor_state.CameraSensorState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._sensor_state_impl._camera_sensor_state_impl.CameraSensorStateImpl
+      :parts: 1
+
+   The simulation implementation of the camera sensor state.
+
+   .. py:property:: image
+      :type: numpy.typing.NDArray[numpy.uint8]
+
+      Get the current image.
+
+      :returns: The image.
+
+
+

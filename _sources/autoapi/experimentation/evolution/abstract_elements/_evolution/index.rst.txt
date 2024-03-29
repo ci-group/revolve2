@@ -1,0 +1,54 @@
+:orphan:
+
+:py:mod:`_evolution`
+================================================================
+
+.. py:module:: experimentation.evolution.abstract_elements._evolution
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._evolution.Evolution
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._evolution.TPopulation
+
+
+.. py:data:: TPopulation
+
+   
+
+.. py:class:: Evolution
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements._evolution.Evolution
+      :parts: 1
+
+   An abstract object to encapsulate an evolutionary process.
+
+   .. py:method:: step(population: TPopulation, **kwargs: Any) -> TPopulation
+      :abstractmethod:
+
+      Step the current evolution by one iteration..
+
+      :param population: The current population.
+      :param kwargs: Additional keyword arguments to use in the step.
+      :return: The population resulting from the step
+
+
+

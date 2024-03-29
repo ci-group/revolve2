@@ -20,6 +20,7 @@ Classes
 .. autoapisummary::
 
    modular_robot_simulation._sensor_state_impl.ActiveHingeSensorStateImpl
+   modular_robot_simulation._sensor_state_impl.CameraSensorStateImpl
    modular_robot_simulation._sensor_state_impl.IMUSensorStateImpl
    modular_robot_simulation._sensor_state_impl.ModularRobotSensorStateImpl
 
@@ -45,7 +46,26 @@ Classes
 
 
 
-.. py:class:: IMUSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem, core_imu: revolve2.simulation.scene.sensors.IMUSensor)
+.. py:class:: CameraSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem, camera: revolve2.simulation.scene.sensors.CameraSensor)
+
+
+   Bases: :py:obj:`revolve2.modular_robot.sensor_state.CameraSensorState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._sensor_state_impl.CameraSensorStateImpl
+      :parts: 1
+
+   The simulation implementation of the camera sensor state.
+
+   .. py:property:: image
+      :type: numpy.typing.NDArray[numpy.uint8]
+
+      Get the current image.
+
+      :returns: The image.
+
+
+
+.. py:class:: IMUSensorStateImpl(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem, imu: revolve2.simulation.scene.sensors.IMUSensor)
 
 
    Bases: :py:obj:`revolve2.modular_robot.sensor_state.IMUSensorState`
@@ -102,17 +122,16 @@ Classes
 
       Get the state of the provided IMU sensor.
 
-      :param sensor: The sensor.
-      :returns: The state.
+      :param sensor: The IMU sensor.
+      :returns: The IMU sensor state.
 
 
    .. py:method:: get_camera_sensor_state(sensor: revolve2.modular_robot.body.sensors.CameraSensor) -> revolve2.modular_robot.sensor_state.CameraSensorState
-      :abstractmethod:
 
       Get the state of the camera sensor.
 
-      :param sensor: The sensor.
-      :raises NotImplementedError: It is not implemented.
+      :param sensor: The camera sensor.
+      :returns: The camera sensor state.
 
 
 

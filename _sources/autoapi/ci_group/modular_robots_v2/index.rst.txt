@@ -21,6 +21,9 @@ Functions
    ci_group.modular_robots_v2.all
    ci_group.modular_robots_v2.get
    ci_group.modular_robots_v2.gecko_v2
+   ci_group.modular_robots_v2.spider_v2
+   ci_group.modular_robots_v2.ant_v2
+   ci_group.modular_robots_v2.snake_v2
 
 
 
@@ -45,5 +48,26 @@ Functions
    Sample robot with new HW config.
 
    :returns: the robot
+
+
+.. py:function:: spider_v2() -> revolve2.modular_robot.body.v2.BodyV2
+
+   Get the spider modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: ant_v2() -> revolve2.modular_robot.body.v2.BodyV2
+
+   Get the ant modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: snake_v2() -> revolve2.modular_robot.body.v2.BodyV2
+
+   Get the snake modular robot.
+
+   :returns: the robot.
 
 

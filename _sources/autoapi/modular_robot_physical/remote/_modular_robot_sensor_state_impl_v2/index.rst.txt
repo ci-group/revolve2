@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: ModularRobotSensorStateImplV2(hinge_sensor_mapping: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.sensors.ActiveHingeSensor], int], hinge_positions: dict[int, float], imu_sensor_states: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.sensors.IMUSensor], modular_robot_physical.remote._imu_sensor_state_impl.IMUSensorStateImpl])
+.. py:class:: ModularRobotSensorStateImplV2(hinge_sensor_mapping: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.sensors.ActiveHingeSensor], int], hinge_positions: dict[int, float], imu_sensor_states: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.sensors.IMUSensor], modular_robot_physical.remote._imu_sensor_state_impl.IMUSensorStateImpl], camera_sensor_states: dict[modular_robot_physical._uuid_key.UUIDKey[revolve2.modular_robot.body.sensors.CameraSensor], modular_robot_physical.remote._camera_sensor_state_impl.CameraSensorStateImpl])
 
 
    Bases: :py:obj:`revolve2.modular_robot.sensor_state.ModularRobotSensorState`
@@ -47,12 +47,12 @@ Classes
 
 
    .. py:method:: get_camera_sensor_state(sensor: revolve2.modular_robot.body.sensors.CameraSensor) -> revolve2.modular_robot.sensor_state.CameraSensorState
-      :abstractmethod:
 
       Get the state of the provided camera sensor.
 
       :param sensor: The sensor.
-      :raises NotImplementedError: Always.
+      :raises ValueError: If sensor is not found on the robot.
+      :returns: The camera sensor state.
 
 
 

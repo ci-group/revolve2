@@ -1,0 +1,65 @@
+:py:mod:`evolution`
+===================================
+
+.. py:module:: experimentation.evolution
+
+.. autoapi-nested-parse::
+
+   Concrete Elements for Evolutionary Processes.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   abstract_elements/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.ModularRobotEvolution
+
+
+
+
+.. py:class:: ModularRobotEvolution(parent_selection: experimentation.evolution.abstract_elements.Selector, survivor_selection: experimentation.evolution.abstract_elements.Selector, evaluator: experimentation.evolution.abstract_elements.Evaluator, reproducer: experimentation.evolution.abstract_elements.Reproducer, learner: experimentation.evolution.abstract_elements.Learner | None = None)
+
+
+   Bases: :py:obj:`experimentation.evolution.abstract_elements.Evolution`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.ModularRobotEvolution
+      :parts: 1
+
+   An object to encapsulate the general functionality of an evolutionary process for modular robots.
+
+   .. py:method:: step(population: TPopulation, **kwargs: Any) -> TPopulation
+
+      Step the current evolution by one iteration.
+
+      This implementation follows the following schedule:
+
+          [Parent Selection] ---------> [Reproduction]
+
+                 ^                             |
+                 |                             |
+                 |                             ⌄
+
+          [Survivor Selection] <----- [Evaluation of Children]
+
+      The schedule can be easily adapted and reorganized for your needs.
+
+      :param population: The current population.
+      :param kwargs: Additional keyword arguments to use in the step.
+      :return: The population resulting from the step
+
+
+

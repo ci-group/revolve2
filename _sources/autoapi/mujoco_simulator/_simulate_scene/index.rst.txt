@@ -19,7 +19,7 @@ Functions
 
 
 
-.. py:function:: simulate_scene(scene_id: int, scene: revolve2.simulation.scene.Scene, headless: bool, record_settings: revolve2.simulation.simulator.RecordSettings | None, start_paused: bool, control_step: float, sample_step: float | None, simulation_time: int | None, simulation_timestep: float, cast_shadows: bool, fast_sim: bool) -> list[revolve2.simulation.scene.SimulationState]
+.. py:function:: simulate_scene(scene_id: int, scene: revolve2.simulation.scene.Scene, headless: bool, record_settings: revolve2.simulation.simulator.RecordSettings | None, start_paused: bool, control_step: float, sample_step: float | None, simulation_time: int | None, simulation_timestep: float, cast_shadows: bool, fast_sim: bool, render_backend: mujoco_simulator._render_backend.RenderBackend = RenderBackend.EGL) -> list[revolve2.simulation.scene.SimulationState]
 
    Simulate a scene.
 
@@ -34,6 +34,7 @@ Functions
    :param simulation_timestep: The duration to integrate over during each step of the simulation. In seconds.
    :param cast_shadows: If shadows are cast.
    :param fast_sim: If fancy rendering is disabled.
+   :param render_backend: The backend to be used for rendering (EGL by default and switches to GLFW if no cameras are on the robot).
    :returns: The results of simulation. The number of returned states depends on `sample_step`.
 
 

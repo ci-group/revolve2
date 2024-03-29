@@ -26,7 +26,7 @@ Classes
 
 
 
-.. py:class:: ActiveHinge(rotation: float | modular_robot.body._right_angles.RightAngles, servo1_bounding_box: pyrr.Vector3, servo2_bounding_box: pyrr.Vector3, frame_bounding_box: pyrr.Vector3, frame_offset: float, servo_offset: float, frame_mass: float, servo1_mass: float, servo2_mass: float, joint_offset: float, static_friction: float, dynamic_friction: float, range: float, effort: float, velocity: float, armature: float, pid_gain_p: float, pid_gain_d: float, child_offset: float)
+.. py:class:: ActiveHinge(rotation: float | modular_robot.body._right_angles.RightAngles, servo1_bounding_box: pyrr.Vector3, servo2_bounding_box: pyrr.Vector3, frame_bounding_box: pyrr.Vector3, frame_offset: float, servo_offset: float, frame_mass: float, servo1_mass: float, servo2_mass: float, joint_offset: float, static_friction: float, dynamic_friction: float, range: float, effort: float, velocity: float, armature: float, pid_gain_p: float, pid_gain_d: float, child_offset: float, sensors: list[modular_robot.body.sensors.Sensor])
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -185,14 +185,6 @@ Classes
       :return: The value.
 
 
-   .. py:property:: sensor
-      :type: modular_robot.body.sensors.ActiveHingeSensor | None
-
-      Get the sensor.
-
-      :return: The value.
-
-
    .. py:attribute:: ATTACHMENT
       :value: 0
 
@@ -259,7 +251,7 @@ Classes
 
 
 
-.. py:class:: Brick(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+.. py:class:: Brick(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float, sensors: list[modular_robot.body.sensors.Sensor])
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -326,7 +318,7 @@ Classes
       
 
 
-.. py:class:: Core(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float)
+.. py:class:: Core(rotation: float | modular_robot.body._right_angles.RightAngles, mass: float, bounding_box: pyrr.Vector3, child_offset: float, sensors: list[modular_robot.body.sensors.Sensor])
 
 
    Bases: :py:obj:`modular_robot.body._module.Module`
@@ -402,11 +394,6 @@ Classes
 
    .. py:attribute:: LEFT
       :value: 3
-
-      
-
-   .. py:attribute:: imu_sensor
-      :type: modular_robot.body.sensors.IMUSensor | None
 
       
 

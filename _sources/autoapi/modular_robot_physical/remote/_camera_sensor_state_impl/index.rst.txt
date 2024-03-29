@@ -1,0 +1,40 @@
+:orphan:
+
+:py:mod:`_camera_sensor_state_impl`
+=================================================================
+
+.. py:module:: modular_robot_physical.remote._camera_sensor_state_impl
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.remote._camera_sensor_state_impl.CameraSensorStateImpl
+
+
+
+
+.. py:class:: CameraSensorStateImpl(image: numpy.typing.NDArray[numpy.uint8])
+
+
+   Bases: :py:obj:`revolve2.modular_robot.sensor_state.CameraSensorState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_physical.remote._camera_sensor_state_impl.CameraSensorStateImpl
+      :parts: 1
+
+   CameraSensorState implementation for physical robots.
+
+   .. py:property:: image
+      :type: numpy.typing.NDArray[numpy.uint8]
+
+      Get the current image.
+
+      :returns: The image.
+
+
+

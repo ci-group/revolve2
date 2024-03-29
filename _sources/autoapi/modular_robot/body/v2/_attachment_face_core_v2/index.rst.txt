@@ -101,15 +101,21 @@ Classes
       :return: The attachment points module.
 
 
-   .. py:method:: can_set_child(module: modular_robot.body.Module, child_index: int) -> bool
+   .. py:method:: set_child(module: modular_robot.body.Module, child_index: int) -> None
 
-      Check for conflicts when adding a new attachment point.
+      Attach a module to a slot.
 
-      Note that if there is no conflict in the check this function assumes that the slot is being populated and adjusts the check-matrix as such.
+      :param module: The module to attach.
+      :param child_index: The slot to attach it to.
+      :raises KeyError: If attachment point is already populated or occluded by other module.
 
-      :param module: The module.
-      :param child_index: The index of the attachment point.
-      :return: Whether conflicts occurred.
+
+   .. py:method:: can_set_child(child_index: int) -> bool
+
+      Check if a child can be set on the module.
+
+      :param child_index: The child index.
+      :return: The boolean value.
 
 
 

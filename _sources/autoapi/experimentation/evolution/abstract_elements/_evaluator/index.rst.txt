@@ -1,0 +1,53 @@
+:orphan:
+
+:py:mod:`_evaluator`
+================================================================
+
+.. py:module:: experimentation.evolution.abstract_elements._evaluator
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._evaluator.Evaluator
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements._evaluator.TPopulation
+
+
+.. py:data:: TPopulation
+
+   
+
+.. py:class:: Evaluator
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements._evaluator.Evaluator
+      :parts: 1
+
+   An Evaluator object that enables evaluation of individuals in an evolutionary process.
+
+   .. py:method:: evaluate(population: TPopulation) -> list[float]
+      :abstractmethod:
+
+      Evaluate individuals from a population.
+
+      :param population: The population for evaluation.
+      :return: The results of the evaluation.
+
+
+

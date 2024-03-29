@@ -24,8 +24,8 @@ Classes
 
    A dataclass to store unbuilt children for the builders.
 
-   .. py:attribute:: module
-      :type: revolve2.modular_robot.body.Module
+   .. py:attribute:: child_object
+      :type: revolve2.modular_robot.body.Module | revolve2.modular_robot.body.sensors.Sensor
 
       
 

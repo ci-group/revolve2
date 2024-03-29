@@ -1,0 +1,5 @@
+<map id="inheritance3c4408b358" name="inheritance3c4408b358">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" href="../_builder/index.html#modular_robot_simulation._build_multi_body_systems._builders._builder.Builder" target="_top" title="An abstract builder class." alt="" coords="125,5,197,31"/>
+<area shape="rect" id="node3" href="#modular_robot_simulation._build_multi_body_systems._builders._imu_sensor_builder.IMUSensorBuilder" target="_top" title="A Builder for Cores." alt="" coords="245,5,384,31"/>
+</map>

@@ -41,17 +41,16 @@ Classes
 
       Get the state of the provided IMU sensor.
 
-      :param sensor: The sensor.
-      :returns: The state.
+      :param sensor: The IMU sensor.
+      :returns: The IMU sensor state.
 
 
    .. py:method:: get_camera_sensor_state(sensor: revolve2.modular_robot.body.sensors.CameraSensor) -> revolve2.modular_robot.sensor_state.CameraSensorState
-      :abstractmethod:
 
       Get the state of the camera sensor.
 
-      :param sensor: The sensor.
-      :raises NotImplementedError: It is not implemented.
+      :param sensor: The camera sensor.
+      :returns: The camera sensor state.
 
 
 

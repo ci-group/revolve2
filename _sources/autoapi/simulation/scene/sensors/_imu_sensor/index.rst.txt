@@ -36,4 +36,9 @@ Classes
 
       
 
+   .. py:attribute:: type
+      :type: str
+
+      
+
 

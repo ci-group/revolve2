@@ -1,0 +1,5 @@
+<map id="inheritance8990be3328" name="inheritance8990be3328">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,5,77,31"/>
+<area shape="rect" id="node2" title="The state of a camera sensor." alt="" coords="125,5,276,31"/>
+<area shape="rect" id="node3" href="#modular_robot_simulation._sensor_state_impl._camera_sensor_state_impl.CameraSensorStateImpl" target="_top" title="The simulation implementation of the camera sensor state." alt="" coords="324,5,504,31"/>
+</map>

@@ -20,10 +20,13 @@ Classes
 .. autoapisummary::
 
    modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeBuilder
+   modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder
    modular_robot_simulation._build_multi_body_systems._builders.AttachmentFaceBuilder
    modular_robot_simulation._build_multi_body_systems._builders.BrickBuilder
    modular_robot_simulation._build_multi_body_systems._builders.Builder
+   modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder
    modular_robot_simulation._build_multi_body_systems._builders.CoreBuilder
+   modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder
 
 
 
@@ -37,6 +40,26 @@ Classes
       :parts: 1
 
    A Builder for Hinges.
+
+   .. py:method:: build(multi_body_system: revolve2.simulation.scene.MultiBodySystem, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping) -> list[modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild]
+
+      Build a module onto the Robot.
+
+      :param multi_body_system: The multi body system of the robot.
+      :param body_to_multi_body_system_mapping: A mapping from body to multi-body system
+      :return: The next children to be built.
+
+
+
+.. py:class:: ActiveHingeSensorBuilder(sensor: revolve2.modular_robot.body.sensors.ActiveHingeSensor, rigid_body: revolve2.simulation.scene.RigidBody)
+
+
+   Bases: :py:obj:`modular_robot_simulation._build_multi_body_systems._builders._builder.Builder`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._build_multi_body_systems._builders.ActiveHingeSensorBuilder
+      :parts: 1
+
+   A Builder for Cores.
 
    .. py:method:: build(multi_body_system: revolve2.simulation.scene.MultiBodySystem, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping) -> list[modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild]
 
@@ -109,12 +132,52 @@ Classes
 
 
 
+.. py:class:: CameraSensorBuilder(sensor: revolve2.modular_robot.body.sensors.CameraSensor, rigid_body: revolve2.simulation.scene.RigidBody, pose: revolve2.simulation.scene.Pose)
+
+
+   Bases: :py:obj:`modular_robot_simulation._build_multi_body_systems._builders._builder.Builder`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._build_multi_body_systems._builders.CameraSensorBuilder
+      :parts: 1
+
+   A Builder for Cores.
+
+   .. py:method:: build(multi_body_system: revolve2.simulation.scene.MultiBodySystem, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping) -> list[modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild]
+
+      Build a module onto the Robot.
+
+      :param multi_body_system: The multi body system of the robot.
+      :param body_to_multi_body_system_mapping: A mapping from body to multi-body system
+      :return: The next children to be built.
+
+
+
 .. py:class:: CoreBuilder(module: revolve2.modular_robot.body.base.Core, rigid_body: revolve2.simulation.scene.RigidBody, slot_pose: revolve2.simulation.scene.Pose)
 
 
    Bases: :py:obj:`modular_robot_simulation._build_multi_body_systems._builders._builder.Builder`
 
    .. autoapi-inheritance-diagram:: modular_robot_simulation._build_multi_body_systems._builders.CoreBuilder
+      :parts: 1
+
+   A Builder for Cores.
+
+   .. py:method:: build(multi_body_system: revolve2.simulation.scene.MultiBodySystem, body_to_multi_body_system_mapping: modular_robot_simulation._build_multi_body_systems._body_to_multi_body_system_mapping.BodyToMultiBodySystemMapping) -> list[modular_robot_simulation._build_multi_body_systems._unbuilt_child.UnbuiltChild]
+
+      Build a module onto the Robot.
+
+      :param multi_body_system: The multi body system of the robot.
+      :param body_to_multi_body_system_mapping: A mapping from body to multi-body system
+      :return: The next children to be built.
+
+
+
+.. py:class:: IMUSensorBuilder(sensor: revolve2.modular_robot.body.sensors.IMUSensor, rigid_body: revolve2.simulation.scene.RigidBody, pose: revolve2.simulation.scene.Pose, imu_location: pyrr.Vector3)
+
+
+   Bases: :py:obj:`modular_robot_simulation._build_multi_body_systems._builders._builder.Builder`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation._build_multi_body_systems._builders.IMUSensorBuilder
       :parts: 1
 
    A Builder for Cores.

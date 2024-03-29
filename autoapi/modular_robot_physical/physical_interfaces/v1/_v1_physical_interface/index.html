@@ -102,6 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../../ci_group/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/interactive_objects/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive_objects</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
 </li>
@@ -120,6 +121,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../experimentation/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../experimentation/evolution/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">evolution</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../../experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
 </ul>
 </li>
@@ -316,6 +318,17 @@
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>NotImplementedError</strong> – Always.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="modular_robot_physical.physical_interfaces.v1._v1_physical_interface.V1PhysicalInterface.get_camera_view">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_camera_view</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_physical.physical_interfaces.v1._v1_physical_interface.V1PhysicalInterface.get_camera_view" title="Link to this definition"></a></dt>
+<dd><p>Get the current view from the camera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>NotImplementedError</strong> – If the Camera is not supported on this hardware.</p>
 </dd>
 </dl>
 </dd></dl>

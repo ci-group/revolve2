@@ -16,6 +16,7 @@ Subpackages
    :maxdepth: 3
 
    database/index.rst
+   evolution/index.rst
    optimization/index.rst
 
 

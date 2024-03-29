@@ -1,0 +1,133 @@
+:py:mod:`abstract_elements`
+=====================================================
+
+.. py:module:: experimentation.evolution.abstract_elements
+
+.. autoapi-nested-parse::
+
+   An Abstraction Layer for Elements in an Evolutionary Process.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   experimentation.evolution.abstract_elements.Evaluator
+   experimentation.evolution.abstract_elements.Evolution
+   experimentation.evolution.abstract_elements.Learner
+   experimentation.evolution.abstract_elements.Reproducer
+   experimentation.evolution.abstract_elements.Selector
+
+
+
+
+.. py:class:: Evaluator
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements.Evaluator
+      :parts: 1
+
+   An Evaluator object that enables evaluation of individuals in an evolutionary process.
+
+   .. py:method:: evaluate(population: TPopulation) -> list[float]
+      :abstractmethod:
+
+      Evaluate individuals from a population.
+
+      :param population: The population for evaluation.
+      :return: The results of the evaluation.
+
+
+
+.. py:class:: Evolution
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements.Evolution
+      :parts: 1
+
+   An abstract object to encapsulate an evolutionary process.
+
+   .. py:method:: step(population: TPopulation, **kwargs: Any) -> TPopulation
+      :abstractmethod:
+
+      Step the current evolution by one iteration..
+
+      :param population: The current population.
+      :param kwargs: Additional keyword arguments to use in the step.
+      :return: The population resulting from the step
+
+
+
+.. py:class:: Learner
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements.Learner
+      :parts: 1
+
+   A Learner object that enables learning for individuals in an evolutionary process.
+
+   TODO: use link for explanation
+
+   .. py:method:: learn(population: TPopulation) -> TPopulation
+      :abstractmethod:
+
+      Make Individuals from a population learn.
+
+      :param population: The population.
+      :return: The learned population.
+
+
+
+.. py:class:: Reproducer
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements.Reproducer
+      :parts: 1
+
+   A Reproducer object that enables the reproduction of individuals in an evolutionary process.
+
+   .. py:method:: reproduce(population: TPopulation, **kwargs: Any) -> TPopulation
+      :abstractmethod:
+
+      Make Individuals Reproduce.
+
+      :param population: The population.
+      :param kwargs: Additional arguments.
+      :return: The children.
+
+
+
+.. py:class:: Selector
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: experimentation.evolution.abstract_elements.Selector
+      :parts: 1
+
+   A Selector object that enables selection of individuals in an evolutionary process.
+
+   .. py:method:: select(population: TPopulation, **kwargs: Any) -> tuple[TPopulation, KWArgs]
+      :abstractmethod:
+
+      Select individuals from a population.
+
+      :param population: The population for selection.
+      :param kwargs: Possible metrics for selection.
+      :return: The selected subset of the population and additional kwargs.
+
+
+

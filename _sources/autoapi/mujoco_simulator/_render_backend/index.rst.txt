@@ -1,0 +1,47 @@
+:orphan:
+
+:py:mod:`_render_backend`
+==========================================
+
+.. py:module:: mujoco_simulator._render_backend
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator._render_backend.RenderBackend
+
+
+
+
+.. py:class:: RenderBackend(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator._render_backend.RenderBackend
+      :parts: 1
+
+   Enumerator for rendering backend libraries.
+
+   .. py:attribute:: GLFW
+      :value: 'glfw'
+
+      
+
+   .. py:attribute:: EGL
+      :value: 'egl'
+
+      
+
+   .. py:attribute:: OSMESA
+      :value: 'osmesa'
+
+      
+
+

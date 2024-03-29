@@ -106,6 +106,18 @@ Module Contents
 
    
 
+.. py:data:: Image
+
+   
+
+.. py:data:: ImageBuilder
+
+   
+
+.. py:data:: ImageReader
+
+   
+
 .. py:data:: SensorReadings
 
    

@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: SimulationStateImpl(data: mujoco.MjData, abstraction_to_mujoco_mapping: mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping)
+.. py:class:: SimulationStateImpl(data: mujoco.MjData, abstraction_to_mujoco_mapping: mujoco_simulator._abstraction_to_mujoco_mapping.AbstractionToMujocoMapping, camera_views: dict[int, numpy.typing.NDArray[numpy.uint8]])
 
 
    Bases: :py:obj:`revolve2.simulation.scene.SimulationState`
@@ -79,6 +79,14 @@ Classes
 
       :param imu_sensor: The IMU.
       :returns: The angular rate.
+
+
+   .. py:method:: get_camera_view(camera_sensor: revolve2.simulation.scene.sensors.CameraSensor) -> numpy.typing.NDArray[numpy.uint8]
+
+      Get the current view of the camera.
+
+      :param camera_sensor: The camera.
+      :return: The image (RGB).
 
 
 

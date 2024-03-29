@@ -102,6 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../ci_group/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../ci_group/interactive_objects/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive_objects</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
 </li>
@@ -120,6 +121,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../experimentation/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../experimentation/evolution/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">evolution</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
 </ul>
 </li>
@@ -313,6 +315,20 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The angular rate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.scene._simulation_state.SimulationState.get_camera_view">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_camera_view</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera_sensor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../sensors/index.html#simulation.scene.sensors.CameraSensor" title="simulation.scene.sensors.CameraSensor"><span class="pre">simulation.scene.sensors.CameraSensor</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.uint8</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#simulation.scene._simulation_state.SimulationState.get_camera_view" title="Link to this definition"></a></dt>
+<dd><p>Get the camera view.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>camera_sensor</strong> – The camera.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The view.</p>
 </dd>
 </dl>
 </dd></dl>

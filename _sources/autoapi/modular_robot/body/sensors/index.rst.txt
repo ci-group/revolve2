@@ -25,7 +25,7 @@ Classes
 
 
 
-.. py:class:: ActiveHingeSensor
+.. py:class:: ActiveHingeSensor(rotation: float = 0.0)
 
 
    Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
@@ -36,7 +36,7 @@ Classes
    A sensors for an active hinge that measures its angle.
 
 
-.. py:class:: CameraSensor
+.. py:class:: CameraSensor(position: pyrr.Vector3, rotation: float = 0.0, camera_size: tuple[int, int] = (50, 50))
 
 
    Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
@@ -46,18 +46,24 @@ Classes
 
    A camera for the Modular Robot.
 
-   .. py:attribute:: position
+   .. py:property:: position
       :type: pyrr.Vector3
 
-      
+      Get the position of the camera.
 
-   .. py:attribute:: camera_size
-      :type: revolve2.simulation.scene.vector2.Vector2
-
-      
+      :return: The position.
 
 
-.. py:class:: IMUSensor
+   .. py:property:: camera_size
+      :type: tuple[int, int]
+
+      Get the size of the camera.
+
+      :return: The camera size.
+
+
+
+.. py:class:: IMUSensor(position: pyrr.Vector3, rotation: float = 0.0)
 
 
    Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
@@ -70,7 +76,7 @@ Classes
    Reports specific force(closely related to acceleration), angular rate(closely related to angular velocity), and orientation.
 
 
-.. py:class:: Sensor
+.. py:class:: Sensor(rotation: float, position: pyrr.Vector3 = Vector3([0, 0, 0]))
 
 
    Bases: :py:obj:`abc.ABC`
@@ -86,6 +92,22 @@ Classes
       Get the uuid of the sensor.
 
       :return: The uuid.
+
+
+   .. py:property:: rotation
+      :type: float
+
+      Return the rotation of the sensor.
+
+      :return: The rotation.
+
+
+   .. py:property:: position
+      :type: pyrr.Vector3
+
+      Get the position of the sensor on a module.
+
+      :return: The position.
 
 
 

@@ -102,6 +102,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../ci_group/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/ci_lab_utilities/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ci_lab_utilities</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/genotypes/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">genotypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../ci_group/interactive_objects/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactive_objects</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../ci_group/morphological_novelty_metric/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">morphological_novelty_metric</span></code></a></li>
 </ul>
 </li>
@@ -120,6 +121,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../experimentation/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">experimentation</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../experimentation/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../experimentation/database/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">database</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../experimentation/evolution/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">evolution</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../experimentation/optimization/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optimization</span></code></a></li>
 </ul>
 </li>
@@ -228,11 +230,14 @@
 </table>
 <dl class="py function">
 <dt class="sig sig-object py" id="mujoco_simulator._simulate_manual_scene.simulate_manual_scene">
-<span class="sig-name descname"><span class="pre">simulate_manual_scene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.Scene</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mujoco_simulator._simulate_manual_scene.simulate_manual_scene" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">simulate_manual_scene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.Scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">render_backend</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../_render_backend/index.html#mujoco_simulator._render_backend.RenderBackend" title="mujoco_simulator._render_backend.RenderBackend"><span class="pre">mujoco_simulator._render_backend.RenderBackend</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">RenderBackend.GLFW</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#mujoco_simulator._simulate_manual_scene.simulate_manual_scene" title="Link to this definition"></a></dt>
 <dd><p>Simulate a scene for checking if a robot was built correctly.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>scene</strong> – The scene to simulate.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scene</strong> – The scene to simulate.</p></li>
+<li><p><strong>render_backend</strong> – The render backend.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

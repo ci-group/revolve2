@@ -142,9 +142,9 @@ jobs:
           python-version: 3.11
       - name: Build wheels
         run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
-      - uses: actions/upload-artifact@v4.3.1
+      - uses: actions/upload-artifact@v3
         with:
-          name: echo dist_ $(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
+          name: dist
           path: ./dist/**/*.whl
 
   build_wheels_platform_dependent:
@@ -168,9 +168,9 @@ jobs:
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_MACOS: universal2
           CIBW_ARCHS_LINUX: x86_64
-      - uses: actions/upload-artifact@v4.3.1
+      - uses: actions/upload-artifact@v3
         with:
-          name: echo dist_ ${{ matrix.os }}_$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
+          name: dist
           path: ./dist/**/*.whl
 
   publish:

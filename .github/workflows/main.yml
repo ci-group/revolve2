@@ -144,7 +144,7 @@ jobs:
         run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
       - uses: actions/upload-artifact@v4.3.1
         with:
-          name: dist_$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
+          name: "dist_$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
           path: ./dist/**/*.whl
 
   build_wheels_platform_dependent:
@@ -170,7 +170,7 @@ jobs:
           CIBW_ARCHS_LINUX: x86_64
       - uses: actions/upload-artifact@v4.3.1
         with:
-          name: dist_${{ matrix.os }}_$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
+          name: "dist_${{ matrix.os }}_$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
           path: ./dist/**/*.whl
 
   publish:

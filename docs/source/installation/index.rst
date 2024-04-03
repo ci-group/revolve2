@@ -3,11 +3,13 @@ Installation
 ============
 Revolve2 consists of multiple Python packages.
 Not all packages are required; pick what you need based on your use case. In the following section you will find out what packages you need for your research.
+While Revolve2 works on all OS we strongly recommend using a Linux based system, since this makes installation easier and avoid a lot of issues with building packages.
+If you run into issues building packages on different a OS than a Linux distribution we will not be able to help.
 
 -------------
 Prerequisites
 -------------
-* Python 3.10 or higher.
+* Python 3.10.x or 3.11.x are supported for now.
 * Pip. If you do not have pip for python 3.10, take a look at the get-pip script: `<https://pip.pypa.io/en/stable/installation/>`_.
 * Virtualenv::
 

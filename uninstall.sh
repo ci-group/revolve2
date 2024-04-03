@@ -1,3 +1,4 @@
+# !/bin/bash
 # pip uninstall for every package which name contains 'revolve2'
 packages=$(pip list | grep revolve2 | awk '{print $1}')
 if [ -n "$packages" ]; then

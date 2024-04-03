@@ -3,9 +3,12 @@ import time
 from typing import Callable
 
 import capnp
+import numpy as np
+from numpy.typing import NDArray
 from pyrr import Vector3
 
 from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.body.sensors import CameraSensor, IMUSensor
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
 
 from .._config import Config
@@ -14,6 +17,7 @@ from .._protocol_version import PROTOCOL_VERSION
 from .._standard_port import STANDARD_PORT
 from .._uuid_key import UUIDKey
 from ..robot_daemon_api import robot_daemon_protocol_capnp
+from ._camera_sensor_state_impl import CameraSensorStateImpl
 from ._imu_sensor_state_impl import IMUSensorStateImpl
 from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceImpl
 from ._modular_robot_sensor_state_impl_v1 import ModularRobotSensorStateImplV1
@@ -48,10 +52,9 @@ async def _run_remote_impl(
     manual_mode: bool,
 ) -> None:
     active_hinge_sensor_to_pin = {
-        UUIDKey(key.value.sensor): pin
+        UUIDKey(key.value.sensors.active_hinge_sensor): pin
         for key, pin in config.hinge_mapping.items()
-        if key.value.sensor
-        if not None
+        if key.value.sensors.active_hinge_sensor is not None
     }
 
     # Make controller
@@ -106,7 +109,7 @@ async def _run_remote_impl(
                     )
                 )
             ).response
-            print(f"Battery level is at {sensor_readings.battery*100.0}%.")
+            print(f"Battery level is at {sensor_readings.battery * 100.0}%.")
 
     # Fire prepared callback
     on_prepared()
@@ -155,18 +158,14 @@ async def _run_remote_impl(
                         robot_daemon_protocol_capnp.ReadSensorsArgs(readPins=pins)
                     )
                 ).response
-                if config.modular_robot.body.core.imu_sensor is None:
-                    imu_sensor_states = {}
-                else:
-                    imu_sensor_states = {
-                        UUIDKey(
-                            config.modular_robot.body.core.imu_sensor
-                        ): IMUSensorStateImpl(
-                            _capnp_to_vector3(sensor_readings.imuSpecificForce),
-                            _capnp_to_vector3(sensor_readings.imuAngularRate),
-                            _capnp_to_vector3(sensor_readings.imuOrientation),
-                        )
-                    }
+                imu_sensor_states = _get_imu_sensor_state(
+                    config.modular_robot.body.core.sensors.imu_sensor, sensor_readings
+                )
+                camera_sensor_states = _get_camera_sensor_state(
+                    config.modular_robot.body.core.sensors.camera_sensor,
+                    sensor_readings,
+                )
+
                 sensor_state = ModularRobotSensorStateImplV2(
                     hinge_sensor_mapping=active_hinge_sensor_to_pin,
                     hinge_positions={
@@ -174,6 +173,7 @@ async def _run_remote_impl(
                         for pin, position in zip(pins, sensor_readings.pins)
                     },
                     imu_sensor_states=imu_sensor_states,
+                    camera_sensor_states=camera_sensor_states,
                 )
             case _:
                 raise NotImplementedError("Hardware type not supported.")
@@ -222,18 +222,16 @@ async def _run_remote_impl(
                             )
                         )
                     ).response
-                    if config.modular_robot.body.core.imu_sensor is None:
-                        imu_sensor_states = {}
-                    else:
-                        imu_sensor_states = {
-                            UUIDKey(
-                                config.modular_robot.body.core.imu_sensor
-                            ): IMUSensorStateImpl(
-                                _capnp_to_vector3(sensor_readings.imuSpecificForce),
-                                _capnp_to_vector3(sensor_readings.imuAngularRate),
-                                _capnp_to_vector3(sensor_readings.imuOrientation),
-                            )
-                        }
+
+                    imu_sensor_states = _get_imu_sensor_state(
+                        config.modular_robot.body.core.sensors.imu_sensor,
+                        sensor_readings,
+                    )
+                    camera_sensor_states = _get_camera_sensor_state(
+                        config.modular_robot.body.core.sensors.camera_sensor,
+                        sensor_readings,
+                    )
+
                     sensor_state = ModularRobotSensorStateImplV2(
                         hinge_sensor_mapping=active_hinge_sensor_to_pin,
                         hinge_positions={
@@ -241,10 +239,13 @@ async def _run_remote_impl(
                             for pin, position in zip(pins, sensor_readings.pins)
                         },
                         imu_sensor_states=imu_sensor_states,
+                        camera_sensor_states=camera_sensor_states,
                     )
 
                     if battery_print_timer > 5.0:
-                        print(f"Battery level is at {sensor_readings.battery*100.0}%.")
+                        print(
+                            f"Battery level is at {sensor_readings.battery * 100.0}%."
+                        )
                         battery_print_timer = 0.0
                 case _:
                     raise NotImplementedError("Hardware type not supported.")
@@ -252,6 +253,69 @@ async def _run_remote_impl(
 
 def _capnp_to_vector3(vector: robot_daemon_protocol_capnp.Vector3) -> Vector3:
     return Vector3([vector.x, vector.y, vector.z])
+
+
+def _capnp_to_camera_view(
+    image: robot_daemon_protocol_capnp.Image, camera_size: tuple[int, int]
+) -> NDArray[np.uint8]:
+    """
+    Convert a capnp compatible Image into an NDArray.
+
+    :param image: The capnp Image.
+    :param camera_size: The camera size to reconstruct the image.
+    :return: The NDArray imag.
+    """
+    np_image = np.zeros(shape=(3, *camera_size), dtype=np.uint8)
+    np_image[0] = np.array(image.r).reshape(camera_size).astype(np.uint8)
+    np_image[1] = np.array(image.g).reshape(camera_size).astype(np.uint8)
+    np_image[2] = np.array(image.b).reshape(camera_size).astype(np.uint8)
+    return np_image
+
+
+def _get_imu_sensor_state(
+    imu_sensor: IMUSensor | None,
+    sensor_readings: robot_daemon_protocol_capnp.SensorReadings,
+) -> dict[UUIDKey[IMUSensor], IMUSensorStateImpl]:
+    """
+    Get the IMU sensor state.
+
+    :param imu_sensor: The sensor in question.
+    :param sensor_readings: The sensor readings.
+    :return: The Sensor state.
+    """
+    if imu_sensor is None:
+        return {}
+    else:
+        return {
+            UUIDKey(imu_sensor): IMUSensorStateImpl(
+                _capnp_to_vector3(sensor_readings.imuSpecificForce),
+                _capnp_to_vector3(sensor_readings.imuAngularRate),
+                _capnp_to_vector3(sensor_readings.imuOrientation),
+            )
+        }
+
+
+def _get_camera_sensor_state(
+    camera_sensor: CameraSensor | None,
+    sensor_readings: robot_daemon_protocol_capnp.SensorReadings,
+) -> dict[UUIDKey[CameraSensor], CameraSensorStateImpl]:
+    """
+    Get the camera sensor state.
+
+    :param camera_sensor: The sensor in question.
+    :param sensor_readings: The sensor readings.
+    :return: The Sensor state.
+    """
+    if camera_sensor is None:
+        return {}
+    else:
+        return {
+            UUIDKey(camera_sensor): CameraSensorStateImpl(
+                _capnp_to_camera_view(
+                    sensor_readings.cameraView, camera_sensor.camera_size
+                )
+            )
+        }
 
 
 def run_remote(

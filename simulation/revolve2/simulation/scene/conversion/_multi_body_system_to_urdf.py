@@ -10,12 +10,16 @@ from .._joint_hinge import JointHinge
 from .._multi_body_system import MultiBodySystem
 from .._pose import Pose
 from .._rigid_body import RigidBody
-from ..geometry import Geometry, GeometryBox, GeometryHeightmap, GeometryPlane
+from ..geometry import (
+    Geometry,
+    GeometryBox,
+    GeometryHeightmap,
+    GeometryPlane,
+    GeometrySphere,
+)
 
 
-def multi_body_system_to_urdf(
-    multi_body_system: MultiBodySystem, name: str
-) -> tuple[
+def multi_body_system_to_urdf(multi_body_system: MultiBodySystem, name: str) -> tuple[
     str,
     list[GeometryPlane],
     list[GeometryHeightmap],
@@ -52,9 +56,7 @@ class _URDFConverter:
     planes: list[GeometryPlane]
     heightmaps: list[GeometryHeightmap]
 
-    def build(
-        self, multi_body_system: MultiBodySystem, name: str
-    ) -> tuple[
+    def build(self, multi_body_system: MultiBodySystem, name: str) -> tuple[
         str,
         list[GeometryPlane],
         list[GeometryHeightmap],
@@ -179,6 +181,15 @@ class _URDFConverter:
                             "Heightmap geometry can only be included in static multi-body systems."
                         )
                     self.heightmaps.append(geometry)
+                case GeometrySphere():
+                    self.geometries_and_names.append((geometry, name))
+                    self._add_geometry_sphere(
+                        link=link,
+                        name=name,
+                        geometry=geometry,
+                        link_pose=link_pose,
+                        rigid_body=rigid_body,
+                    )
                 case _:
                     raise ValueError("Geometry not yet supported.")
 
@@ -206,18 +217,22 @@ class _URDFConverter:
                 el,
                 "parent",
                 {
-                    "link": rigid_body_name
-                    if joint.rigid_body1.uuid == rigid_body.uuid
-                    else child_name
+                    "link": (
+                        rigid_body_name
+                        if joint.rigid_body1.uuid == rigid_body.uuid
+                        else child_name
+                    )
                 },
             )
             xml.SubElement(
                 el,
                 "child",
                 {
-                    "link": rigid_body_name
-                    if joint.rigid_body1.uuid != rigid_body.uuid
-                    else child_name
+                    "link": (
+                        rigid_body_name
+                        if joint.rigid_body1.uuid != rigid_body.uuid
+                        else child_name
+                    )
                 },
             )
             xyz = link_pose.orientation.inverse * (
@@ -255,8 +270,8 @@ class _URDFConverter:
 
         return elements
 
+    @staticmethod
     def _add_geometry_box(
-        self,
         link: xml.Element,
         name: str,
         geometry: GeometryBox,
@@ -291,8 +306,42 @@ class _URDFConverter:
             },
         )
 
+    @staticmethod
+    def _add_geometry_sphere(
+        link: xml.Element,
+        name: str,
+        geometry: GeometrySphere,
+        link_pose: Pose,
+        rigid_body: RigidBody,
+    ) -> None:
+        el = xml.SubElement(link, "collision", {"name": name})
+        geometry_xml = xml.SubElement(el, "geometry")
+        xml.SubElement(
+            geometry_xml,
+            "sphere",
+            {"radius": str(geometry.radius)},
+        )
+        xyz = link_pose.orientation.inverse * (
+            rigid_body.initial_pose.position
+            - link_pose.position
+            + rigid_body.initial_pose.orientation * geometry.pose.position
+        )
+        rpy = _quaternion_to_euler(
+            link_pose.orientation.inverse
+            * rigid_body.initial_pose.orientation
+            * geometry.pose.orientation
+        )
+        xml.SubElement(
+            el,
+            "origin",
+            {
+                "rpy": f"{rpy[0]} {rpy[1]} {rpy[2]}",
+                "xyz": f"{xyz[0]} {xyz[1]} {xyz[2]}",
+            },
+        )
+
+    @staticmethod
     def _add_geometry_plane(
-        self,
         link: xml.Element,
         name: str,
         geometry: GeometryPlane,

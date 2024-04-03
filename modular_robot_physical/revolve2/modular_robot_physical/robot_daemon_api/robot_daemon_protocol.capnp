@@ -39,12 +39,19 @@ struct Vector3 {
   z @2 :Float32;
 }
 
+struct Image {
+  r @0 :List(Int32);
+  g @1 :List(Int32);
+  b @2 :List(Int32);
+}
+
 struct SensorReadings {
   pins @0 :List(Float32);
   battery @1 :Float32;
   imuOrientation @2 :Vector3;
   imuSpecificForce @3 :Vector3;
   imuAngularRate @4 :Vector3;
+  cameraView @5 :Image;
 }
 
 interface RoboServer {

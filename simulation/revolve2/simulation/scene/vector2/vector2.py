@@ -1,4 +1,5 @@
 """A representation of a 2d Vector."""
+
 from __future__ import annotations
 
 from numbers import Number

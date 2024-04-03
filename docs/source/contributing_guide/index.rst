@@ -9,6 +9,14 @@ Publishing your contribution
 If you added something to Revolve2 that you would like to share with other people, you can do so by creating a `pull request <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests>`_ (PR) on `GitHub <https://github.com/ci-group/revolve2/pulls>`_.
 The first time you make a contribution to a Revolve2 package your PR should add your name to the ``authors`` list in that package's ``pyproject.toml``.
 
+Note that a general heuristic is, if your addition adds a dependency of another revolve package to the existing dependencies, you might not want to structure it that way.
+For a guideline what can depend on what, look at the package diagram on the main page.
+
+**Important Information before merging your PRs:**
+
+- For merging into the ``development``-branch: Always use `Squash and Merge`.
+- For merging into the ``master``-branch: Always use  `Rebase and Merge`.
+
 ----------------------
 Developer installation
 ----------------------

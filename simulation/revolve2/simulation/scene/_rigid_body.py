@@ -4,15 +4,64 @@ from dataclasses import dataclass, field
 from pyrr import Matrix33, Quaternion, Vector3
 
 from ._pose import Pose
-from .geometry import Geometry, GeometryBox
-from .sensors import IMUSensor
+from .geometry import Geometry, GeometryBox, GeometrySphere
+from .sensors import CameraSensor, IMUSensor, Sensor
 
 
-@dataclass(kw_only=True)
+@dataclass
+class _AttachedSensors:
+    imu_sensors: list[IMUSensor] = field(default_factory=list)
+    camera_sensors: list[CameraSensor] = field(default_factory=list)
+
+    def add_sensor(self, sensor: Sensor) -> None:
+        """
+        Add sensor to the AttachedSensors object.
+
+        :param sensor: The sensor
+        :raises ValueError: If the sensor type is unknown.
+        """
+        match sensor:
+            case IMUSensor():
+                self.imu_sensors.append(sensor)
+            case CameraSensor():
+                self.camera_sensors.append(sensor)
+            case _:
+                raise ValueError(
+                    f"Sensor of type: {type(sensor)} is not defined for _rigid_body._AttachedSensors"
+                )
+
+
 class RigidBody:
     """A collection of geometries and physics parameters."""
 
-    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
+    _uuid: uuid.UUID
+    initial_pose: Pose
+    static_friction: float
+    dynamic_friction: float
+    geometries: list[Geometry]
+    sensors: _AttachedSensors
+
+    def __init__(
+        self,
+        initial_pose: Pose,
+        static_friction: float,
+        dynamic_friction: float,
+        geometries: list[Geometry],
+    ) -> None:
+        """
+        Initialize the rigid body object.
+
+        :param initial_pose: The Initial pose of the rigid body. Relative to its parent multi-body system.
+        :param static_friction: Static friction of the body.
+        :param dynamic_friction: Dynamic friction of the body.
+        :param geometries: Geometries describing the shape of the body.
+        """
+        self._uuid = uuid.uuid1()
+        self.initial_pose = initial_pose
+        self.static_friction = static_friction
+        self.dynamic_friction = dynamic_friction
+        self.geometries = geometries
+        self.sensors = _AttachedSensors()
 
     @property
     def uuid(self) -> uuid.UUID:
@@ -22,25 +71,6 @@ class RigidBody:
         :returns: The uuid.
         """
         return self._uuid
-
-    initial_pose: Pose
-    """
-    Initial pose of the rigid body.
-    
-    Relative to its parent multi-body system.
-    """
-
-    static_friction: float
-    """Static friction of the body."""
-
-    dynamic_friction: float
-    """Dynamic friction of the body."""
-
-    geometries: list[Geometry]
-    """Geometries describing the shape of the body."""
-
-    imu_sensors: list[IMUSensor]
-    """The IMU sensors attached to this rigid body."""
 
     def mass(self) -> float:
         """Get mass of the rigid body.
@@ -74,7 +104,7 @@ class RigidBody:
         """
         Calculate the inertia tensor in the local reference frame of this rigid body.
 
-        Only box geometries are currently supported.
+        For more details on the inertia calculations, see https://en.wikipedia.org/wiki/List_of_moments_of_inertia.
 
         :returns: The inertia tensor.
         :raises ValueError: If one of the geometries is not a box.
@@ -86,40 +116,26 @@ class RigidBody:
             if geometry.mass == 0:
                 continue
 
-            if not isinstance(geometry, GeometryBox):
-                raise ValueError(
-                    "Geometries with non-zero mass other than box not yet supported."
-                )
+            match geometry:
+                case GeometryBox():
+                    local_inertia = self._calculate_box_inertia(geometry)
+                case GeometrySphere():
+                    local_inertia = self._calculate_sphere_inertia(geometry)
+                case _:
+                    raise ValueError(
+                        f"Geometries with non-zero mass of type {type(geometry)} are not supported yet."
+                    )
 
-            # calculate inertia in local coordinates
-            local_inertia = Matrix33()
-            local_inertia[0][0] += (
-                geometry.mass
-                * (geometry.aabb.size.y**2 + geometry.aabb.size.z**2)
-                / 12.0
-            )
-            local_inertia[1][1] += (
-                geometry.mass
-                * (geometry.aabb.size.x**2 + geometry.aabb.size.z**2)
-                / 12.0
-            )
-            local_inertia[2][2] += (
-                geometry.mass
-                * (geometry.aabb.size.x**2 + geometry.aabb.size.y**2)
-                / 12.0
-            )
-
-            # convert to global coordinates
             translation = Matrix33()
-            translation[0][0] += geometry.mass * (
+            translation[0, 0] += geometry.mass * (
                 (geometry.pose.position.y - com.y) ** 2
                 + (geometry.pose.position.z - com.z) ** 2
             )
-            translation[1][1] += geometry.mass * (
+            translation[1, 1] += geometry.mass * (
                 (geometry.pose.position.x - com.x) ** 2
                 + (geometry.pose.position.z - com.z) ** 2
             )
-            translation[2][2] += geometry.mass * (
+            translation[2, 2] += geometry.mass * (
                 (geometry.pose.position.x - com.x) ** 2
                 + (geometry.pose.position.y - com.y) ** 2
             )
@@ -128,19 +144,50 @@ class RigidBody:
             global_inertia = (
                 ori_as_mat * local_inertia * ori_as_mat.transpose() + translation
             )
-            # add to rigid body inertia tensor
             inertia += global_inertia
-
         return inertia
+
+    @staticmethod
+    def _calculate_box_inertia(geometry: GeometryBox) -> Matrix33:
+        """
+        Calculate the moment of inertia for a box geometry.
+
+        :param geometry: The geometry.
+        :return: The local inertia.
+        """
+        # calculate inertia in local coordinates
+        local_inertia = Matrix33()
+        local_inertia[0, 0] += (
+            geometry.mass * (geometry.aabb.size.y**2 + geometry.aabb.size.z**2) / 12.0
+        )
+        local_inertia[1, 1] += (
+            geometry.mass * (geometry.aabb.size.x**2 + geometry.aabb.size.z**2) / 12.0
+        )
+        local_inertia[2, 2] += (
+            geometry.mass * (geometry.aabb.size.x**2 + geometry.aabb.size.y**2) / 12.0
+        )
+        return local_inertia
+
+    @staticmethod
+    def _calculate_sphere_inertia(geometry: GeometrySphere) -> Matrix33:
+        """
+        Calculate the moment of inertia for a sphere geometry.
+
+        :param geometry: The geometry.
+        :return: The local inertia.
+        """
+        # calculate inertia in local coordinates
+        local_inertia = Matrix33()
+        local_inertia[0, 0] += 2 * geometry.mass * (geometry.radius**2) / 5
+        local_inertia[1, 1] += 2 * geometry.mass * (geometry.radius**2) / 5
+        local_inertia[2, 2] += 2 * geometry.mass * (geometry.radius**2) / 5
+        return local_inertia
 
     @staticmethod
     def _quaternion_to_rotation_matrix(quat: Quaternion) -> Matrix33:
         # https://automaticaddison.com/how-to-convert-a-quaternion-to-a-rotation-matrix/
 
-        q0 = quat.x
-        q1 = quat.y
-        q2 = quat.z
-        q3 = quat.w
+        q0, q1, q2, q3 = quat
 
         # First row of the rotation matrix
         r00 = 2 * (q0 * q0 + q1 * q1) - 1

@@ -9,7 +9,7 @@ class CameraSensorState(ABC):
 
     @property
     @abstractmethod
-    def image(self) -> NDArray[np.float_]:
+    def image(self) -> NDArray[np.uint8]:
         """
         Get the current image.
 

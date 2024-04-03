@@ -28,14 +28,14 @@ def random_multineat_genotype(
     genotype = multineat.Genome(
         0,  # ID
         num_inputs,
-        0,  # n_hidden
+        num_inputs,  # ignored for seed_type == 0, specifies number of hidden units if seed_type == 1
         num_outputs,
         False,  # FS_NEAT
         output_activation_func,  # output activation type
-        multineat.ActivationFunction.TANH,  # hidden activation type
-        0,  # seed_type
+        multineat.ActivationFunction.UNSIGNED_SIGMOID,  # hidden activation type
+        1,  # seed_type
         multineat_params,
-        0,  # number of hidden layers
+        1,  # number of hidden layers
     )
 
     for _ in range(num_initial_mutations):

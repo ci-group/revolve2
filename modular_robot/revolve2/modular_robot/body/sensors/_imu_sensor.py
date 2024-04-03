@@ -1,10 +1,8 @@
-import uuid
-from dataclasses import dataclass, field
+from pyrr import Vector3
 
 from ._sensor import Sensor
 
 
-@dataclass
 class IMUSensor(Sensor):
     """
     An inertial measurement unit.
@@ -12,4 +10,11 @@ class IMUSensor(Sensor):
     Reports specific force(closely related to acceleration), angular rate(closely related to angular velocity), and orientation.
     """
 
-    _uuid: uuid.UUID = field(init=False, default_factory=uuid.uuid1)
+    def __init__(self, position: Vector3, rotation: float = 0.0) -> None:
+        """
+        Initialize the IMU sensor.
+
+        :param rotation: The rotation of the IMU.
+        :param position: The position of the IMU.
+        """
+        super().__init__(rotation, position)

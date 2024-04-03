@@ -60,6 +60,7 @@ class CoreV2(Core):
             mass=mass,
             bounding_box=Vector3([0.15, 0.15, 0.15]),
             child_offset=0.0,
+            sensors=[],
         )
 
         """Now we set the attachment faces as the children of the V2 Core."""

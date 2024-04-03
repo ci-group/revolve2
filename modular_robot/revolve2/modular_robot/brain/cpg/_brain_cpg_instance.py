@@ -3,7 +3,7 @@ import numpy.typing as npt
 
 from ..._modular_robot_control_interface import ModularRobotControlInterface
 from ...body.base import ActiveHinge
-from ...sensor_state._modular_robot_sensor_state import ModularRobotSensorState
+from ...sensor_state import ModularRobotSensorState
 from .._brain_instance import BrainInstance
 
 
@@ -47,11 +47,24 @@ class BrainCpgInstance(BrainInstance):
     def _rk45(
         state: npt.NDArray[np.float_], A: npt.NDArray[np.float_], dt: float
     ) -> npt.NDArray[np.float_]:
+        """
+        Calculate the next state using the RK45 method.
+
+        This implementation of the Runge–Kutta–Fehlberg method allows us to improve accuracy of state calculations by comparing solutions at different step sizes.
+        For more info see: See https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta%E2%80%93Fehlberg_method.
+        RK45 is a method of order 4 with an error estimator of order 5 (Fehlberg, E. (1969). Low-order classical Runge-Kutta formulas with stepsize control. NASA Technical Report R-315.).
+
+        :param state: The current state of the network.
+        :param A: The weights matrix of the network.
+        :param dt: The step size (elapsed simulation time).
+        :return: The new state.
+        """
         A1: npt.NDArray[np.float_] = np.matmul(A, state)
         A2: npt.NDArray[np.float_] = np.matmul(A, (state + dt / 2 * A1))
         A3: npt.NDArray[np.float_] = np.matmul(A, (state + dt / 2 * A2))
         A4: npt.NDArray[np.float_] = np.matmul(A, (state + dt * A3))
-        return state + dt / 6 * (A1 + 2 * (A2 + A3) + A4)
+        state = state + dt / 6 * (A1 + 2 * (A2 + A3) + A4)
+        return np.clip(state, a_min=-1, a_max=1)
 
     def control(
         self,

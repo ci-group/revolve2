@@ -1,4 +1,5 @@
 """Iterative Scene Simulator."""
+
 import logging
 
 import mujoco
@@ -11,17 +12,20 @@ from revolve2.simulation.scene import Scene
 
 from ._control_interface_impl import ControlInterfaceImpl
 from ._custom_mujoco_viewer import CustomMujocoViewer, CustomMujocoViewerMode
+from ._render_backend import RenderBackend
 from ._scene_to_model import scene_to_model
 from ._simulation_state_impl import SimulationStateImpl
 
 
 def simulate_manual_scene(
     scene: Scene,
+    render_backend: RenderBackend = RenderBackend.GLFW,
 ) -> None:
     """
     Simulate a scene for checking if a robot was built correctly.
 
     :param scene: The scene to simulate.
+    :param render_backend: The render backend.
     """
     logging.info("Simulating scene")
 
@@ -30,16 +34,15 @@ def simulate_manual_scene(
     )
     data = mujoco.MjData(model)
     viewer = CustomMujocoViewer(
-        model,
-        data,
-        mode=CustomMujocoViewerMode.MANUAL,
+        model, data, mode=CustomMujocoViewerMode.MANUAL, backend=render_backend
     )
 
     # Compute forward dynamics without actually stepping forward in time.
     mujoco.mj_forward(model, data)
 
     control_interface = ControlInterfaceImpl(
-        data=data, abstraction_to_mujoco_mapping=mapping
+        data=data,
+        abstraction_to_mujoco_mapping=mapping,
     )
 
     """Here we set our values for cycling different positions."""
@@ -60,7 +63,7 @@ def simulate_manual_scene(
     try:
         while True:
             simulation_state = SimulationStateImpl(
-                data=data, abstraction_to_mujoco_mapping=mapping
+                data=data, abstraction_to_mujoco_mapping=mapping, camera_views={}
             )
             scene.handler.handle(
                 simulation_state, control_interface, STANDARD_CONTROL_FREQUENCY

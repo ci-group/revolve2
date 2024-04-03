@@ -23,7 +23,7 @@ except Exception as e:
     print("Failed to fix absl logging bug", e)
     pass
 
-from revolve2.simulation.scene import JointHinge, RigidBody, Scene, UUIDKey
+from revolve2.simulation.scene import JointHinge, Motor, RigidBody, Scene, UUIDKey
 from revolve2.simulation.scene.conversion import multi_body_system_to_urdf
 from revolve2.simulation.scene.geometry import (
     Geometry,
@@ -92,6 +92,7 @@ def scene_to_model(
             plane_geometries,
             heightmap_geometries,
             joints_and_names,
+            motors_and_names,
             geoms_and_names,
             rigid_bodies_and_names,
         ),
@@ -114,7 +115,10 @@ def scene_to_model(
         # Add actuation to joints
         _add_joint_actuators(joints_and_names, multi_body_system_mjcf)
 
-        # Add Sensors
+        # Add motors
+        _add_motor_actuators(motors_and_names, multi_body_system_mjcf)
+
+        # Add sensors
         _add_sensors(rigid_bodies_and_names, mbs_i, multi_body_system_mjcf, env_mjcf)
 
         # Add plane geometries
@@ -374,6 +378,28 @@ def _add_joint_actuators(
             name=f"actuator_velocity_{name}",
         )
 
+def _add_motor_actuators(
+    motors_and_names: list[tuple[Motor, str]],
+    multi_body_system_mjcf: mjcf.RootElement,
+) -> None:
+    """
+    Add actuation to the motors.
+
+    :param motors_and_names: The joints.
+    :param multi_body_system_mjcf: The multi body system.
+    """
+    for motor, name in motors_and_names:
+        multi_body_system_mjcf.actuator.add(
+            "motor",
+            ctrllimited="true",
+            ctrlrange=f"{motor.ctrlrange[0]} {motor.ctrlrange[1]}",
+            gear=f"0 0 1 0 0 {motor.motor_gear}",
+            site=multi_body_system_mjcf.find(
+                namespace="site",
+                identifier=name,
+            ),
+            name=f"actuator_motor_{name}",
+        )
 
 def _set_colors_and_materials(
     geoms_and_names: list[tuple[Geometry, str]],

@@ -6,6 +6,7 @@ from ._control_interface import ControlInterface
 from ._joint import Joint
 from ._joint_fixed import JointFixed
 from ._joint_hinge import JointHinge
+from ._motor import Motor
 from ._multi_body_system import MultiBodySystem
 from ._pose import Pose
 from ._rigid_body import RigidBody
@@ -21,6 +22,7 @@ __all__ = [
     "Joint",
     "JointFixed",
     "JointHinge",
+    "Motor",
     "MultiBodySystem",
     "Pose",
     "RigidBody",

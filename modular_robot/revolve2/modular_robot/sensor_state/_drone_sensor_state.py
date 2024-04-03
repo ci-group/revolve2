@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
-from ..body.base._motor_sensor import MotorSensor
+from ..body.base import MotorSensor
 from ._motor_sensor_state import MotorSensorState
 
 
-class AerialRobotSensorState(ABC):
+class DroneSensorState(ABC):
     """The state of modular robot's sensors."""
 
     @abstractmethod

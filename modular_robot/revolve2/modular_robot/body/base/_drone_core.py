@@ -2,8 +2,8 @@ import math
 
 from pyrr import Quaternion, Vector3
 
-from .._color import Color
-from .._module import Module
+from ....aerial_robot.body._color import Color
+from ....aerial_robot.body._module import Module
 
 class Core(Module):
     """The core module of a modular robot."""

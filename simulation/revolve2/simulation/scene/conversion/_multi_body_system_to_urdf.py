@@ -7,6 +7,7 @@ import scipy.spatial.transform
 from pyrr import Quaternion, Vector3
 
 from .._joint_hinge import JointHinge
+from .._motor import Motor
 from .._multi_body_system import MultiBodySystem
 from .._pose import Pose
 from .._rigid_body import RigidBody
@@ -24,6 +25,7 @@ def multi_body_system_to_urdf(multi_body_system: MultiBodySystem, name: str) -> 
     list[GeometryPlane],
     list[GeometryHeightmap],
     list[tuple[JointHinge, str]],
+    list[tuple[Motor, str]],
     list[tuple[Geometry, str]],
     list[tuple[RigidBody, str]],
 ]:
@@ -69,6 +71,7 @@ class _URDFConverter:
         self.multi_body_system = multi_body_system
         self.visited_rigid_bodies = set()
         self.joints_and_names = []
+        self.motors_and_names = []
         self.geometries_and_names = []
         self.rigid_bodies_and_names = []
         self.planes = []
@@ -91,6 +94,7 @@ class _URDFConverter:
             self.planes,
             self.heightmaps,
             self.joints_and_names,
+            self.motors_and_names,
             self.geometries_and_names,
             self.rigid_bodies_and_names,
         )
@@ -267,7 +271,11 @@ class _URDFConverter:
                 child_name,
                 parent_rigid_body=rigid_body,
             )
-
+        for motor_index, motor in enumerate(
+            self.multi_body_system.get_joints_for_rigid_body(rigid_body)
+        ):
+            #TODO How are motors implemented in URDF
+            pass
         return elements
 
     @staticmethod

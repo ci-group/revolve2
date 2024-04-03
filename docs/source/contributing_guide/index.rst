@@ -12,6 +12,11 @@ The first time you make a contribution to a Revolve2 package your PR should add 
 Note that a general heuristic is, if your addition adds a dependency of another revolve package to the existing dependencies, you might not want to structure it that way.
 For a guideline what can depend on what, look at the package diagram on the main page.
 
+**Important Information before merging your PRs:**
+
+- For merging into the ``development``-branch: Always use `Squash and Merge`.
+- For merging into the ``master``-branch: Always use  `Rebase and Merge`.
+
 ----------------------
 Developer installation
 ----------------------

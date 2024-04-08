@@ -5,7 +5,7 @@ from pyrr import Vector3
 from revolve2.modular_robot.body.base import Motor
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody, UUIDKey
 from revolve2.simulation.scene import Motor as MotorSim
-from revolve2.simulation.scene.geometry import GeometryBox
+from revolve2.simulation.scene.geometry import GeometryCylinder
 from revolve2.simulation.scene.geometry.textures import Texture
 
 from .._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
@@ -60,11 +60,12 @@ class MotorBuilder(Builder):
         self._rigid_body.motors.add_motor(motor)
 
         self._rigid_body.geometries.append(
-            GeometryBox(
+            GeometryCylinder(
                 pose=motor_center_pose,
                 mass=self._module.mass,
                 texture=Texture(base_color=convert_color(self._module.color)),
-                aabb=AABB(self._module.frame_bounding_box),
+                radius=self._module.frame_size[0],
+                length=self._module.frame_size[1],
             )
         )
 

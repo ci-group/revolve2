@@ -8,8 +8,8 @@ class Motor(Module):
 
     position: float
     orientation: float
-    rotor_bounding_box: Vector3
-    frame_bounding_box: Vector3
+    rotor_size: list[float] # radius, length
+    frame_size: list[float] # radius, length
     mass : float
     ctrlrange: list[float]
     gear: float
@@ -18,8 +18,8 @@ class Motor(Module):
         self,
         position: Vector3,
         orientation: Quaternion, 
-        rotor_bounding_box: Vector3,
-        frame_bounding_box: Vector3,
+        rotor_size: list[float], # radius, length
+        frame_size: list[float], # radius, length
         mass : float,
         ctrlrange: list[float],
         gear: float
@@ -29,8 +29,8 @@ class Motor(Module):
         """
         self._position = position
         self._orientation = orientation
-        self._rotor_bounding_box = rotor_bounding_box
-        self._frame_bounding_box = frame_bounding_box
+        self._rotor_size = rotor_size
+        self._frame_size = frame_size
         self._mass = mass
         self._ctrlrange = ctrlrange
         self._gear = gear
@@ -53,12 +53,12 @@ class Motor(Module):
         return self._orientation
     
     @property
-    def rotor_bounding_box(self):
-        return self._rotor_bounding_box
+    def rotor_size(self):
+        return self._rotor_size
 
     @property
-    def frame_bounding_box(self):
-        return self._frame_bounding_box
+    def frame_size(self):
+        return self._frame_size
     
     @property
     def mass(self):

@@ -9,7 +9,7 @@ from ._joint import Joint
 from ._pose import Pose
 from ._rigid_body import RigidBody
 from ._uuid_key import UUIDKey
-from .geometry import GeometryBox
+from .geometry import GeometryBox, GeometryCylinder
 
 
 @dataclass(kw_only=True)
@@ -189,18 +189,21 @@ class MultiBodySystem:
         points: list[Vector3] = []
         for rigid_body in self._rigid_bodies:
             for geometry in rigid_body.geometries:
-                if not isinstance(geometry, GeometryBox):
+                if isinstance(geometry, GeometryCylinder):
+                    aabb = Vector3([geometry.radius, geometry.radius, geometry.length])
+                elif isinstance(geometry, GeometryBox):
+                    aabb = geometry.aabb.size
+                else:
                     raise ValueError(
                         "AABB calculation currently only supports GeometryBox."
                     )
-
                 for sign in [0.5, -0.5]:
                     points.append(
                         rigid_body.initial_pose.position
                         + rigid_body.initial_pose.orientation
                         * (
                             geometry.pose.position
-                            + geometry.pose.orientation * (geometry.aabb.size * sign)
+                            + geometry.pose.orientation * (aabb * sign)
                         )
                     )
 

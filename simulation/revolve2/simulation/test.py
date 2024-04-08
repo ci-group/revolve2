@@ -38,7 +38,6 @@ if __name__ == "__main__":
     
     elements = multi_body_system_to_urdf(multi_body_sys1, name="robot")
 
-    print(elements[0])
     # xml file,
     # self.planes,
     # self.heightmaps,

@@ -19,7 +19,7 @@ class MotorV1(Motor):
         super().__init__(
             position=position,
             orientation=orientation,
-            rotor_size=[0.018, 0.018],
+            rotor_size=[0.05, 0.018],
             frame_size=[0.018, 0.018],
             mass=0.025,
             ctrlrange=[0,100],

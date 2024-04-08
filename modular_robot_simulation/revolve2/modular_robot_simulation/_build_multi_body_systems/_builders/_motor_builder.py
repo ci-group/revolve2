@@ -1,7 +1,7 @@
 import copy
-
-from pyrr import Vector3
-
+import numpy as np
+from pyrr import Vector3, Quaternion
+from pyrr.quaternion import rotation_axis, create_from_axis_rotation
 from revolve2.modular_robot.body.base import Motor
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody, UUIDKey
 from revolve2.simulation.scene import Motor as MotorSim
@@ -12,7 +12,6 @@ from .._body_to_multi_body_system_mapping import BodyToMultiBodySystemMapping
 from .._unbuilt_child import UnbuiltChild
 from .._convert_color import convert_color
 from ._builder import Builder
-
 
 class MotorBuilder(Builder):
     """A Builder for Cores."""
@@ -59,6 +58,7 @@ class MotorBuilder(Builder):
         body_to_multi_body_system_mapping.motor_to_sim_motor[UUIDKey(self._module)] = motor
         self._rigid_body.motors.add_motor(motor)
 
+        # The physical motors
         self._rigid_body.geometries.append(
             GeometryCylinder(
                 pose=motor_center_pose,
@@ -69,12 +69,12 @@ class MotorBuilder(Builder):
             )
         )
 
+        # Rotors
         rotor_offset = self._module.orientation * Vector3([0.0, 0.0, self._module.frame_size[1]/2 + self._module.rotor_size[1]/2])
         rotor_pose = Pose(
             self._module.position+rotor_offset,
             self._module.orientation
         )
-
         self._rigid_body.geometries.append(
             GeometryCylinder(
                 pose=rotor_pose,
@@ -85,6 +85,25 @@ class MotorBuilder(Builder):
             )
         )
 
+        # Arms
+        rot_axis=np.array([0.0, 0.0, 1.0])
+        angle = np.pi-np.arctan(np.linalg.norm(np.cross(self._module.position,rot_axis))/np.dot(self._module.position,rot_axis))
+        quat = Quaternion(create_from_axis_rotation(np.cross(self._module.position,rot_axis), angle))
+        arm_pose = Pose(
+            position=self._module.position/2,
+            orientation=quat
+        )
+        arm_length = self._module.position.length
+        self._rigid_body.geometries.append(
+            GeometryCylinder(
+                pose=arm_pose,
+                mass=0.0,
+                texture=Texture(base_color=convert_color(self._module.arm_color)),
+                radius=0.01,
+                length=arm_length,
+            )
+        )
+        
         tasks = []
         for sensor in self._module.sensors.get_all_sensors():
             tasks.append(UnbuiltChild(child_object=sensor, rigid_body=self._rigid_body))

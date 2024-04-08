@@ -1,4 +1,4 @@
-from pyrr import Vector3
+from pyrr import Vector3, Quaternion
 
 from ..base import Motor
 
@@ -10,7 +10,7 @@ class MotorV1(Motor):
     This is a rotary joint.
     """
 
-    def __init__(self, position: float, orientation: float):
+    def __init__(self, position: Vector3, orientation: Quaternion):
         """
         Initialize this object.
 

@@ -69,6 +69,22 @@ class MotorBuilder(Builder):
             )
         )
 
+        rotor_offset = self._module.orientation * Vector3([0.0, 0.0, self._module.frame_size[1]/2 + self._module.rotor_size[1]/2])
+        rotor_pose = Pose(
+            self._module.position+rotor_offset,
+            self._module.orientation
+        )
+
+        self._rigid_body.geometries.append(
+            GeometryCylinder(
+                pose=rotor_pose,
+                mass=0.0,
+                texture=Texture(base_color=convert_color(self._module.rotor_color)),
+                radius=self._module.rotor_size[0],
+                length=self._module.rotor_size[1],
+            )
+        )
+
         tasks = []
         for sensor in self._module.sensors.get_all_sensors():
             tasks.append(UnbuiltChild(child_object=sensor, rigid_body=self._rigid_body))

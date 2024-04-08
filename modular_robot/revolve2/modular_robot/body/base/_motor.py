@@ -38,6 +38,8 @@ class Motor(Module):
         self.num_attachments = 0
         attachment_points = []
         sensors = []
+        self._rotor_color = Color(50, 255, 50, 100)
+
         super().__init__(0.0, Color(50, 50, 255, 255), attachment_points, sensors)
 
     def add_attachment(self, module):
@@ -71,3 +73,11 @@ class Motor(Module):
     @property
     def gear(self):
         return self._gear
+    
+    @property
+    def rotor_color(self) -> Color:
+        return self._rotor_color
+
+    @rotor_color.setter
+    def rotor_color(self, color: Color) -> None:
+        self._rotor_color = color

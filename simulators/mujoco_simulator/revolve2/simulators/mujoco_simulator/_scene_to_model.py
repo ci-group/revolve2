@@ -92,7 +92,6 @@ def scene_to_model(
             plane_geometries,
             heightmap_geometries,
             joints_and_names,
-            motors_and_names,
             geoms_and_names,
             rigid_bodies_and_names,
         ),
@@ -115,11 +114,8 @@ def scene_to_model(
         # Add actuation to joints
         _add_joint_actuators(joints_and_names, multi_body_system_mjcf)
 
-        # Add motors
-        _add_motor_actuators(motors_and_names, multi_body_system_mjcf)
-
-        # Add sensors
-        _add_sensors(rigid_bodies_and_names, mbs_i, multi_body_system_mjcf, env_mjcf)
+        # Add sensors and motors
+        _add_sensors_and_motors(rigid_bodies_and_names, mbs_i, multi_body_system_mjcf, env_mjcf)
 
         # Add plane geometries
         _add_planes(plane_geometries, fast_sim, env_mjcf)
@@ -287,7 +283,7 @@ def _add_heightmaps(
     return heightmaps
 
 
-def _add_sensors(
+def _add_sensors_and_motors(
     rigid_bodies_and_names: list[tuple[RigidBody, str]],
     mbs_i: int,
     multi_body_system_mjcf: mjcf.RootElement,
@@ -345,6 +341,28 @@ def _add_sensors(
                 quat=[*camera.pose.orientation],
             )
 
+        for motor_i, motor in enumerate(rigid_body.motors.motors):
+            '''Here we add the Motors'''
+            motor_site_name = f"{name}_site_motor_{motor_i+1}"
+
+            motor_site = rigid_body_mjcf.add(
+                "site",
+                name=motor_site_name,
+                pos=[*motor.pose.position],
+                quat=[*motor.pose.orientation],
+            )
+
+            multi_body_system_mjcf.actuator.add(
+                "motor",
+                ctrllimited="true",
+                ctrlrange=f"{motor.ctrlrange[0]} {motor.ctrlrange[1]}",
+                gear=f"0 0 1 0 0 {motor.gear}",
+                site=motor_site,
+                name=f"actuator_motor_{name}_{motor_i+1}",
+            )
+        
+        
+
 
 def _add_joint_actuators(
     joints_and_names: list[tuple[JointHinge, str]],
@@ -376,29 +394,6 @@ def _add_joint_actuators(
             kv=joint.pid_gain_d,
             joint=multi_body_system_mjcf.find(namespace="joint", identifier=name),
             name=f"actuator_velocity_{name}",
-        )
-
-def _add_motor_actuators(
-    motors_and_names: list[tuple[Motor, str]],
-    multi_body_system_mjcf: mjcf.RootElement,
-) -> None:
-    """
-    Add actuation to the motors.
-
-    :param motors_and_names: The joints.
-    :param multi_body_system_mjcf: The multi body system.
-    """
-    for motor, name in motors_and_names:
-        multi_body_system_mjcf.actuator.add(
-            "motor",
-            ctrllimited="true",
-            ctrlrange=f"{motor.ctrlrange[0]} {motor.ctrlrange[1]}",
-            gear=f"0 0 1 0 0 {motor.motor_gear}",
-            site=multi_body_system_mjcf.find(
-                namespace="site",
-                identifier=name,
-            ),
-            name=f"actuator_motor_{name}",
         )
 
 def _set_colors_and_materials(

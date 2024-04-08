@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from .body.base import Motor
 
 
-class AerialRobotControlInterface(ABC):
+class DroneControlInterface(ABC):
     """Interface for controlling aerial robots."""
 
     @abstractmethod

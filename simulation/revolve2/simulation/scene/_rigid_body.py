@@ -6,7 +6,7 @@ from pyrr import Matrix33, Quaternion, Vector3
 from ._pose import Pose
 from .geometry import Geometry, GeometryBox, GeometrySphere
 from .sensors import CameraSensor, IMUSensor, Sensor
-
+from ._motor import Motor
 
 @dataclass
 class _AttachedSensors:
@@ -30,7 +30,19 @@ class _AttachedSensors:
                     f"Sensor of type: {type(sensor)} is not defined for _rigid_body._AttachedSensors"
                 )
 
+@dataclass
+class _AttachedMotors:
+    motors: list[Motor] = field(default_factory=list)
 
+    def add_motor(self, motor: Motor) -> None:
+        """
+        Add sensor to the AttachedSensors object.
+
+        :param sensor: The sensor
+        :raises ValueError: If the sensor type is unknown.
+        """
+        self.motors.append(motor)
+            
 class RigidBody:
     """A collection of geometries and physics parameters."""
 
@@ -40,6 +52,7 @@ class RigidBody:
     dynamic_friction: float
     geometries: list[Geometry]
     sensors: _AttachedSensors
+    motors: _AttachedMotors
 
     def __init__(
         self,
@@ -62,6 +75,7 @@ class RigidBody:
         self.dynamic_friction = dynamic_friction
         self.geometries = geometries
         self.sensors = _AttachedSensors()
+        self.motors = _AttachedMotors()
 
     @property
     def uuid(self) -> uuid.UUID:

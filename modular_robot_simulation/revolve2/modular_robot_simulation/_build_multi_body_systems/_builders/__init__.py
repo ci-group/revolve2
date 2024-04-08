@@ -8,6 +8,8 @@ from ._builder import Builder
 from ._camera_sensor_builder import CameraSensorBuilder
 from ._core_builder import CoreBuilder
 from ._imu_sensor_builder import IMUSensorBuilder
+from ._drone_core_builder import DroneCoreBuilder
+from ._motor_builder import MotorBuilder
 
 __all__ = [
     "ActiveHingeBuilder",
@@ -18,4 +20,6 @@ __all__ = [
     "CameraSensorBuilder",
     "CoreBuilder",
     "IMUSensorBuilder",
+    "DroneCoreBuilder",
+    "MotorBuilder",
 ]

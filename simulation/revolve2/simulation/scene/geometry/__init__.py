@@ -5,6 +5,7 @@ from ._geometry_box import GeometryBox
 from ._geometry_heightmap import GeometryHeightmap
 from ._geometry_plane import GeometryPlane
 from ._geometry_sphere import GeometrySphere
+from ._geometry_cylinder import GeometryCylinder
 
 __all__ = [
     "Geometry",
@@ -12,4 +13,5 @@ __all__ = [
     "GeometryHeightmap",
     "GeometryPlane",
     "GeometrySphere",
+    "GeometryCylinder",
 ]

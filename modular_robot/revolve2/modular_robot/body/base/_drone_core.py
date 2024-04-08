@@ -2,15 +2,14 @@ import math
 
 from pyrr import Quaternion, Vector3
 
-from ....aerial_robot.body._color import Color
-from ....aerial_robot.body._module import Module
+from .._color import Color
+from .._module import Module
 
-class Core(Module):
+class DroneCore(Module):
     """The core module of a modular robot."""
 
     def __init__(
         self,
-        rotation: float,
         mass: float,
         bounding_box: Vector3,
     ):
@@ -23,8 +22,11 @@ class Core(Module):
         """
         self._mass = mass
         self._bounding_box = bounding_box
-
-        super().__init__(rotation, Color(255, 50, 50, 255))
+        self.num_attachments = 0
+        attachment_points = []
+        sensors = []
+        ## TODO: Remove rotation from inherited module class
+        super().__init__(0.0, Color(255, 50, 50, 255), attachment_points, sensors)
 
     @property
     def mass(self) -> float:
@@ -44,3 +46,8 @@ class Core(Module):
         :return: Vector3 with sizes of bbox in x,y,z dimension (m).
         """
         return self._bounding_box
+
+    def add_attachment(self, module):
+        self.set_child(module, self.num_attachments)
+        self.num_attachments += 1
+        

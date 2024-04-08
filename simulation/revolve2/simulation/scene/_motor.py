@@ -1,9 +1,7 @@
 import uuid
 from dataclasses import dataclass, field
-from pyrr import Vector3
 
 from ._pose import Pose
-from ._rigid_body import RigidBody
 
 
 @dataclass(kw_only=True)
@@ -24,13 +22,7 @@ class Motor:
     pose: Pose
     """Pose of the joint."""
 
-    site: str 
-    """Site name of motor."""
-
-    axis: Vector3
-    """Directional vector the joint rotates about."""
-
-    ctrlrange: list
+    ctrlrange: list[float]
     """The upper and lower range of the motor. e.g. [0,100]"""
 
     gear: float

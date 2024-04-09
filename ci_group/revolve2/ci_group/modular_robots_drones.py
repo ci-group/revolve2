@@ -31,9 +31,10 @@ def random() -> DroneBodyV1:
         pos = np.random.uniform(-1,1,3)
         while np.linalg.norm(pos) > 1: pos = np.random.uniform(-1,1,3)
         return pos
-
+    
     for _ in range(num_arms):
-        body.core_v1.add_attachment(MotorV1(position=Vector3(random_position()), orientation=random_quaternion()))
+        gear = 0.1*(np.random.randint(2)*2-1)
+        body.core_v1.add_attachment(MotorV1(position=Vector3(random_position()), orientation=random_quaternion(), gear=gear))
 
     return body
 
@@ -50,10 +51,10 @@ def cross() -> DroneBodyV1:
     """
     body = DroneBodyV1()
 
-    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,0.1,0]), orientation=Quaternion()))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,0.1,0]), orientation=Quaternion()))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,-0.1,0]), orientation=Quaternion()))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,-0.1,0]), orientation=Quaternion()))
+    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,0.1,0]), orientation=Quaternion(), gear=-0.1))
+    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,0.1,0]), orientation=Quaternion(), gear=0.1))
+    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,-0.1,0]), orientation=Quaternion(), gear=-0.1))
+    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,-0.1,0]), orientation=Quaternion(), gear=0.1))
 
     return body
 
@@ -70,9 +71,9 @@ def plus() -> DroneBodyV1:
     """
     body = DroneBodyV1()
 
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.0,0.1,0]), orientation=Quaternion()))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,0.0,0]), orientation=Quaternion()))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.0,-0.1,0]), orientation=Quaternion()))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,0.0,0]), orientation=Quaternion()))
+    body.core_v1.add_attachment(MotorV1(position=Vector3([0.0,0.1,0]), orientation=Quaternion(), gear=-0.1))
+    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,0.0,0]), orientation=Quaternion(), gear=0.1))
+    body.core_v1.add_attachment(MotorV1(position=Vector3([0.0,-0.1,0]), orientation=Quaternion(), gear=-0.1))
+    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,0.0,0]), orientation=Quaternion(), gear=0.1))
 
     return body

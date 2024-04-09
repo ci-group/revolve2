@@ -10,7 +10,7 @@ class MotorV1(Motor):
     This is a rotary joint.
     """
 
-    def __init__(self, position: Vector3, orientation: Quaternion):
+    def __init__(self, position: Vector3, orientation: Quaternion, gear : float):
         """
         Initialize this object.
 
@@ -23,5 +23,5 @@ class MotorV1(Motor):
             frame_size=[0.018, 0.018],
             mass=0.025,
             ctrlrange=[0,100],
-            gear=0.1
+            gear=gear
         )

@@ -3,7 +3,7 @@ from pyrr import Vector3
 from ..base import DroneCore
 
 
-class DroneCoreV1(DroneCore):
+class DroneCoreImpl(DroneCore):
     """The core module of a modular robot."""
 
     def __init__(self):

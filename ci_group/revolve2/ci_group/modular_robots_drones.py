@@ -1,10 +1,10 @@
 import numpy as np
 
-from revolve2.modular_robot.body.drone_v1 import MotorV1, DroneBodyV1
+from revolve2.modular_robot.body.drone import MotorImpl, DroneBodyImpl
 from pyrr import Quaternion, Vector3
 
 
-def all() -> list[DroneBodyV1]:
+def all() -> list[DroneBodyImpl]:
     """
     Get a list of all standard module robots.
 
@@ -12,14 +12,14 @@ def all() -> list[DroneBodyV1]:
     """
     return [random(), cross()]
 
-def random() -> DroneBodyV1:
+def random() -> DroneBodyImpl:
     """
     Random drone, randomizing number of motors/arms and where 
     they are positioned and orientated in relation to the core.
 
     :returns: the robot.
     """
-    body = DroneBodyV1()
+    body = DroneBodyImpl()
 
     num_arms = np.random.randint(0,16)
     def random_quaternion():
@@ -34,11 +34,11 @@ def random() -> DroneBodyV1:
     
     for _ in range(num_arms):
         gear = 0.1*(np.random.randint(2)*2-1)
-        body.core_v1.add_attachment(MotorV1(position=Vector3(random_position()), orientation=random_quaternion(), gear=gear))
+        body.core_v1.add_attachment(MotorImpl(position=Vector3(random_position()), orientation=random_quaternion(), gear=gear))
 
     return body
 
-def cross() -> DroneBodyV1:
+def cross() -> DroneBodyImpl:
     """
     Get the cross drone.
     0     0
@@ -49,16 +49,16 @@ def cross() -> DroneBodyV1:
     0     0
     :returns: the robot.
     """
-    body = DroneBodyV1()
+    body = DroneBodyImpl()
 
-    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,0.1,0]), orientation=Quaternion(), gear=-0.1))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,0.1,0]), orientation=Quaternion(), gear=0.1))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,-0.1,0]), orientation=Quaternion(), gear=-0.1))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,-0.1,0]), orientation=Quaternion(), gear=0.1))
+    body.core_v1.add_attachment(MotorImpl(position=Vector3([-0.1,0.1,0]), orientation=Quaternion(), gear=-0.1))
+    body.core_v1.add_attachment(MotorImpl(position=Vector3([0.1,0.1,0]), orientation=Quaternion(), gear=0.1))
+    body.core_v1.add_attachment(MotorImpl(position=Vector3([-0.1,-0.1,0]), orientation=Quaternion(), gear=-0.1))
+    body.core_v1.add_attachment(MotorImpl(position=Vector3([0.1,-0.1,0]), orientation=Quaternion(), gear=0.1))
 
     return body
 
-def plus() -> DroneBodyV1:
+def plus() -> DroneBodyImpl:
     """
     Get the plus drone.
         0  
@@ -69,11 +69,11 @@ def plus() -> DroneBodyV1:
         0
     :returns: the robot.
     """
-    body = DroneBodyV1()
+    body = DroneBodyImpl()
 
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.0,0.1,0]), orientation=Quaternion(), gear=-0.1))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.1,0.0,0]), orientation=Quaternion(), gear=0.1))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([0.0,-0.1,0]), orientation=Quaternion(), gear=-0.1))
-    body.core_v1.add_attachment(MotorV1(position=Vector3([-0.1,0.0,0]), orientation=Quaternion(), gear=0.1))
+    body.core_v1.add_attachment(MotorImpl(position=Vector3([0.0,0.1,0]), orientation=Quaternion(), gear=-0.1))
+    body.core_v1.add_attachment(MotorImpl(position=Vector3([0.1,0.0,0]), orientation=Quaternion(), gear=0.1))
+    body.core_v1.add_attachment(MotorImpl(position=Vector3([0.0,-0.1,0]), orientation=Quaternion(), gear=-0.1))
+    body.core_v1.add_attachment(MotorImpl(position=Vector3([-0.1,0.0,0]), orientation=Quaternion(), gear=0.1))
 
     return body

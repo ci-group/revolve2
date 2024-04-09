@@ -1,18 +1,18 @@
 from ..base._drone_body import DroneBody
-from ._drone_core_v1 import DroneCoreV1
+from ._drone_core import DroneCoreImpl
 
 
-class DroneBodyV1(DroneBody):
+class DroneBodyImpl(DroneBody):
     """Body of a V1 modular robot."""
 
-    _core: DroneCoreV1
+    _core: DroneCoreImpl
 
     def __init__(self) -> None:
         """Initialize this object."""
-        super().__init__(DroneCoreV1())
+        super().__init__(DroneCoreImpl())
 
     @property
-    def core_v1(self) -> DroneCoreV1:
+    def core_v1(self) -> DroneCoreImpl:
         """
         Get the specific v1 core of the body.
 

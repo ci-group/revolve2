@@ -3,7 +3,7 @@ from pyrr import Vector3, Quaternion
 from ..base import Motor
 
 
-class MotorV1(Motor):
+class MotorImpl(Motor):
     """
     An active hinge module for a modular robot.
 

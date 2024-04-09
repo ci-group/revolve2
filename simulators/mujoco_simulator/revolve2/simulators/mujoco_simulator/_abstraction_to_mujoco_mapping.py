@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from revolve2.simulation.scene import JointHinge, MultiBodySystem, UUIDKey
+from revolve2.simulation.scene import JointHinge, Motor, MultiBodySystem, UUIDKey
 from revolve2.simulation.scene.sensors import CameraSensor, IMUSensor
 
 
@@ -11,6 +11,13 @@ class JointHingeMujoco:
     id: int
     ctrl_index_position: int
     ctrl_index_velocity: int
+
+@dataclass
+class MotorMujoco:
+    """Information about a MuJoCo motor."""
+
+    id: int
+    ctrl_index: int
 
 
 @dataclass
@@ -41,6 +48,10 @@ class AbstractionToMujocoMapping:
     """Data to interpret a MuJoCo model using the simulation abstraction."""
 
     hinge_joint: dict[UUIDKey[JointHinge], JointHingeMujoco] = field(
+        init=False, default_factory=dict
+    )
+
+    motor: dict[UUIDKey[Motor], MotorMujoco] = field(
         init=False, default_factory=dict
     )
 

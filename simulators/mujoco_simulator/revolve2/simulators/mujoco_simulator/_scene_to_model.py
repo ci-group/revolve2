@@ -355,7 +355,7 @@ def _add_sensors_and_motors(
             multi_body_system_mjcf.actuator.add(
                 "motor",
                 ctrllimited="true",
-                control_range=f"{motor.control_range[0]} {motor.control_range[1]}",
+                ctrlrange=f"{motor.control_range[0]} {motor.control_range[1]}",
                 gear=f"0 0 1 0 0 {motor.gear}",
                 site=motor_site,
                 name=f"actuator_motor_{name}_{motor_i+1}",

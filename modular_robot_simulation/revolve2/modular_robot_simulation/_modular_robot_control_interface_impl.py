@@ -1,7 +1,7 @@
 import numpy as np
 
 from revolve2.modular_robot import ModularRobotControlInterface
-from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.body.base import ActiveHinge, Motor
 from revolve2.simulation.scene import ControlInterface, UUIDKey
 
 from ._build_multi_body_systems import BodyToMultiBodySystemMapping
@@ -39,4 +39,18 @@ class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
                 UUIDKey(active_hinge)
             ],
             np.clip(target, a_min=-active_hinge.range, a_max=active_hinge.range),
+        )
+
+    def set_motor_target(self, motor: Motor, target: float) -> None:
+        """
+        Set the target for an motor.
+
+        :param motor: The motor to set the target for.
+        :param target: The target to set.
+        """
+        self._simulation_control.set_motor_force(
+            self._body_to_multi_body_system_mapping.motor_to_sim_motor[
+                UUIDKey(motor)
+            ],
+            np.clip(target, a_min=-motor.control_range, a_max=motor.control_range),
         )

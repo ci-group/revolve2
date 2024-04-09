@@ -20,7 +20,7 @@ Here we create and simulate a modular robot, and then calculate how far it moved
 
 # Create a modular robot.
 body = modular_robots_v1.gecko_v1()
-brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)git config pull.rebase false
+brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
 robot = ModularRobot(body, brain)
 
 # Create a scene.

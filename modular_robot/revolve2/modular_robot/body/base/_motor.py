@@ -11,7 +11,7 @@ class Motor(Module):
     rotor_size: list[float] # radius, length
     frame_size: list[float] # radius, length
     mass : float
-    ctrlrange: list[float]
+    control_range: list[float]
     gear: float
 
     def __init__(
@@ -21,7 +21,7 @@ class Motor(Module):
         rotor_size: list[float], # radius, length
         frame_size: list[float], # radius, length
         mass : float,
-        ctrlrange: list[float],
+        control_range: list[float],
         gear: float
     ):
         """
@@ -32,7 +32,7 @@ class Motor(Module):
         self._rotor_size = rotor_size
         self._frame_size = frame_size
         self._mass = mass
-        self._ctrlrange = ctrlrange
+        self._control_range = control_range
         self._gear = gear
 
         self.num_attachments = 0
@@ -68,8 +68,8 @@ class Motor(Module):
         return self._mass
     
     @property
-    def ctrlrange(self):
-        return self._ctrlrange
+    def control_range(self):
+        return self._control_range
     
     @property
     def gear(self):

@@ -22,7 +22,7 @@ class Motor:
     pose: Pose
     """Pose of the joint."""
 
-    ctrlrange: list[float]
+    control_range: list[float]
     """The upper and lower range of the motor. e.g. [0,100]"""
 
     gear: float

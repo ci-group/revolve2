@@ -54,7 +54,7 @@ class MotorBuilder(Builder):
             self._module.orientation,
         )
 
-        motor = MotorSim(pose=motor_center_pose, ctrlrange=self._module._ctrlrange, gear=self._module._gear)
+        motor = MotorSim(pose=motor_center_pose, control_range=self._module._control_range, gear=self._module._gear)
         body_to_multi_body_system_mapping.motor_to_sim_motor[UUIDKey(self._module)] = motor
         self._rigid_body.motors.add_motor(motor)
 

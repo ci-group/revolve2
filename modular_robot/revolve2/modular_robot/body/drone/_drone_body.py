@@ -3,7 +3,7 @@ from ._drone_core import DroneCoreImpl
 
 
 class DroneBodyImpl(DroneBody):
-    """Body of a V1 modular robot."""
+    """Body of a drone modular robot."""
 
     _core: DroneCoreImpl
 
@@ -12,10 +12,10 @@ class DroneBodyImpl(DroneBody):
         super().__init__(DroneCoreImpl())
 
     @property
-    def core_v1(self) -> DroneCoreImpl:
+    def core(self) -> DroneCoreImpl:
         """
-        Get the specific v1 core of the body.
+        Get the specific core of the body.
 
-        :return: The v1 core.
+        :return: The drone core.
         """
         return self._core

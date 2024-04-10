@@ -49,8 +49,8 @@ class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
         :param target: The target to set.
         """
         self._simulation_control.set_motor_force(
-            self._body_to_multi_body_system_mapping.motor_to_sim_motor[
-                UUIDKey(motor)
-            ],
-            np.clip(target, a_min=-motor.control_range, a_max=motor.control_range),
+            self._body_to_multi_body_system_mapping.motor_to_sim_motor[UUIDKey(motor)],
+            np.clip(
+                target, a_min=-motor.control_range[0], a_max=motor.control_range[1]
+            ),
         )

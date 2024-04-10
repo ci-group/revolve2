@@ -1,6 +1,6 @@
 import mujoco
 
-from revolve2.simulation.scene import ControlInterface, JointHinge, UUIDKey, Motor
+from revolve2.simulation.scene import ControlInterface, JointHinge, Motor, UUIDKey
 
 from ._abstraction_to_mujoco_mapping import AbstractionToMujocoMapping
 
@@ -45,20 +45,16 @@ class ControlInterfaceImpl(ControlInterface):
         # Set velocity target
         self._data.ctrl[maybe_hinge_joint_mujoco.ctrl_index_velocity] = 0.0
 
-    def set_motor_force(
-        self, motor: Motor, force: float
-    ) -> None:
+    def set_motor_force(self, motor: Motor, force: float) -> None:
         """
         Set the force of a motor.
 
         :param motor: The motor to set the force for.
-        :param position: The position target.
+        :param force: The force.
         """
         maybe_motor_mujoco = self._abstraction_to_mujoco_mapping.motor.get(
             UUIDKey(motor)
         )
-        assert (
-            maybe_motor_mujoco is not None
-        ), "Hinge joint does not exist in this scene."
-        # Set position target
+        assert maybe_motor_mujoco is not None, "Motor does not exist in this scene."
+        # Set force
         self._data.ctrl[maybe_motor_mujoco.ctrl_index] = force

@@ -12,6 +12,7 @@ class JointHingeMujoco:
     ctrl_index_position: int
     ctrl_index_velocity: int
 
+
 @dataclass
 class MotorMujoco:
     """Information about a MuJoCo motor."""
@@ -51,9 +52,7 @@ class AbstractionToMujocoMapping:
         init=False, default_factory=dict
     )
 
-    motor: dict[UUIDKey[Motor], MotorMujoco] = field(
-        init=False, default_factory=dict
-    )
+    motor: dict[UUIDKey[Motor], MotorMujoco] = field(init=False, default_factory=dict)
 
     multi_body_system: dict[UUIDKey[MultiBodySystem], MultiBodySystemMujoco] = field(
         init=False, default_factory=dict

@@ -25,5 +25,5 @@ class Motor:
     control_range: list[float]
     """The upper and lower range of the motor. e.g. [0,100]"""
 
-    gear: float
+    clockwise_rotation: bool
     """Gear of the motor"""

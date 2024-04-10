@@ -14,12 +14,12 @@ class ModularRobotControlInterface(ABC):
         :param active_hinge: The active hinge to set the target for.
         :param target: The target to set.
         """
-        
+
     @abstractmethod
     def set_motor_target(self, motor: Motor, target: float) -> None:
         """
-        Set the position target for an active hinge.
+        Set the force target for a motor.
 
-        :param active_hinge: The active hinge to set the target for.
-        :param target: The target to set.
+        :param motor: The motor to set the target for.
+        :param target: The force target to set.
         """

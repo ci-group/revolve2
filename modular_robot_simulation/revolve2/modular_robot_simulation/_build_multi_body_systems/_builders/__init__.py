@@ -7,8 +7,8 @@ from ._brick_builder import BrickBuilder
 from ._builder import Builder
 from ._camera_sensor_builder import CameraSensorBuilder
 from ._core_builder import CoreBuilder
-from ._imu_sensor_builder import IMUSensorBuilder
 from ._drone_core_builder import DroneCoreBuilder
+from ._imu_sensor_builder import IMUSensorBuilder
 from ._motor_builder import MotorBuilder
 
 __all__ = [
@@ -19,7 +19,7 @@ __all__ = [
     "Builder",
     "CameraSensorBuilder",
     "CoreBuilder",
-    "IMUSensorBuilder",
     "DroneCoreBuilder",
+    "IMUSensorBuilder",
     "MotorBuilder",
 ]

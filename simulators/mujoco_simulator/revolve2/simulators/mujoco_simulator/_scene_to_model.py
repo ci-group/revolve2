@@ -23,7 +23,7 @@ except Exception as e:
     print("Failed to fix absl logging bug", e)
     pass
 
-from revolve2.simulation.scene import JointHinge, Motor, RigidBody, Scene, UUIDKey
+from revolve2.simulation.scene import JointHinge, RigidBody, Scene, UUIDKey
 from revolve2.simulation.scene.conversion import multi_body_system_to_urdf
 from revolve2.simulation.scene.geometry import (
     Geometry,
@@ -115,7 +115,9 @@ def scene_to_model(
         _add_joint_actuators(joints_and_names, multi_body_system_mjcf)
 
         # Add sensors and motors
-        _add_sensors_and_motors(rigid_bodies_and_names, mbs_i, multi_body_system_mjcf, env_mjcf)
+        _add_sensors_and_motors(
+            rigid_bodies_and_names, mbs_i, multi_body_system_mjcf, env_mjcf
+        )
 
         # Add plane geometries
         _add_planes(plane_geometries, fast_sim, env_mjcf)
@@ -290,7 +292,7 @@ def _add_sensors_and_motors(
     env_mjcf: mjcf.RootElement,
 ) -> None:
     """
-    Add sensors to the model.
+    Add sensors and motors to the model.
 
     :param rigid_bodies_and_names: The rigid bodies and names.
     :param mbs_i: The current index of the multi body system.
@@ -341,8 +343,8 @@ def _add_sensors_and_motors(
                 quat=[*camera.pose.orientation],
             )
 
+        """Here we add the Motors"""
         for motor_i, motor in enumerate(rigid_body.motors.motors):
-            '''Here we add the Motors'''
             motor_site_name = f"{name}_site_motor_{motor_i+1}"
 
             motor_site = rigid_body_mjcf.add(
@@ -351,17 +353,16 @@ def _add_sensors_and_motors(
                 pos=[*motor.pose.position],
                 quat=[*motor.pose.orientation],
             )
+            gear = 0.1 if motor.clockwise_rotation else -0.1
 
             multi_body_system_mjcf.actuator.add(
                 "motor",
                 ctrllimited="true",
                 ctrlrange=f"{motor.control_range[0]} {motor.control_range[1]}",
-                gear=f"0 0 1 0 0 {motor.gear}",
+                gear=f"0 0 1 0 0 {gear}",
                 site=motor_site,
                 name=f"actuator_motor_{name}_{motor_i+1}",
             )
-        
-        
 
 
 def _add_joint_actuators(
@@ -395,6 +396,7 @@ def _add_joint_actuators(
             joint=multi_body_system_mjcf.find(namespace="joint", identifier=name),
             name=f"actuator_velocity_{name}",
         )
+
 
 def _set_colors_and_materials(
     geoms_and_names: list[tuple[Geometry, str]],

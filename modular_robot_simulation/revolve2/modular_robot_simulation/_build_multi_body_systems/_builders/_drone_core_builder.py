@@ -10,17 +10,17 @@ from ._builder import Builder
 
 
 class DroneCoreBuilder(Builder):
-    """A Builder for Cores."""
+    """A Builder for the drone cores."""
 
     _module: DroneCore
 
     def __init__(self, module: DroneCore, rigid_body: RigidBody, pose: Pose):
         """
-        Initialize the Core Builder.
+        Initialize the DroneCore Builder.
 
         :param module: The module to be built.
         :param rigid_body: The rigid body for the module to be built on.
-        :param slot_pose: The slot pose of the module.
+        :param pose: The pose of the module.
         """
         self._module = module
         self._rigid_body = rigid_body
@@ -53,15 +53,20 @@ class DroneCoreBuilder(Builder):
             unbuilt.make_pose(position=self._pose.position)
             tasks.append(unbuilt)
 
-        for child in self._module._children.values():
-            unbuilt = UnbuiltChild(
-                child_object=child,
-                rigid_body=self._rigid_body,
-            )
-            unbuilt.make_pose(
-                position=self._pose.position,
-                orientation=self._pose.orientation
-            )
-            tasks.append(unbuilt)
+        for child_index, attachment_point in self._module.attachment_points.items():
+            child = self._module.children.get(child_index)
+            if child is not None:
+                unbuilt = UnbuiltChild(
+                    child_object=child,
+                    rigid_body=self._rigid_body,
+                )
+                unbuilt.make_pose(
+                    position=self._pose.position
+                    + self._pose.orientation
+                    * attachment_point.orientation
+                    * attachment_point.offset,
+                    orientation=self._pose.orientation * attachment_point.orientation,
+                )
+                tasks.append(unbuilt)
 
         return tasks

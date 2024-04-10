@@ -3,6 +3,7 @@ from abc import ABC, abstractmethod
 from ._joint_hinge import JointHinge
 from ._motor import Motor
 
+
 class ControlInterface(ABC):
     """Interface for controlling a scene during simulation."""
 
@@ -19,9 +20,7 @@ class ControlInterface(ABC):
         pass
 
     @abstractmethod
-    def set_motor_force(
-        self, motor: Motor, force: float
-    ) -> None:
+    def set_motor_force(self, motor: Motor, force: float) -> None:
         """
         Set the force of a motor.
 

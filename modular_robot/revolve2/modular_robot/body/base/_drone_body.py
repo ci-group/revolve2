@@ -1,15 +1,13 @@
-import math
-from typing import Generic, Type, TypeVar
+from typing import Type, TypeVar
 
 import numpy as np
-from numpy.typing import NDArray
-from pyrr import Quaternion, Vector3
 
 from .._module import Module
 from ._drone_core import DroneCore
 
 TModule = TypeVar("TModule", bound=Module)
 TModuleNP = TypeVar("TModuleNP", bound=np.generic)
+
 
 class DroneBody:
     """Body of a modular robot."""

@@ -42,7 +42,8 @@ def random() -> DroneBodyImpl:
         return Quaternion(q)
 
     def random_position() -> npt.NDArray[np.float64]:
-        """Calculate a random 3D position in a sphere with a radius of 1.
+        """
+        Calculate a random 3D position in a sphere with a radius of 1.
 
         :returns: A numpy array with 3 elements, uniformly random in a sphere of 1 radius.
         """
@@ -67,11 +68,6 @@ def random() -> DroneBodyImpl:
 def cross() -> DroneBodyImpl:
     """
     Get the cross drone.
-
-    0     0
-       _
-      |_|
-    0     0
 
     :returns: The robot.
     """
@@ -112,12 +108,6 @@ def cross() -> DroneBodyImpl:
 def plus() -> DroneBodyImpl:
     """
     Get the plus drone.
-
-        0
-        _
-    0  |_|  0
-
-        0
 
     :returns: the robot.
     """

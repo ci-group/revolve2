@@ -82,7 +82,11 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
             title="custom-mujoco-viewer",
             width=width,
             height=height,
+<<<<<<< HEAD
             hide_menus=hide_menus,
+=======
+            hide_menus=False,
+>>>>>>> eaa2b75 (Video Improvements (#525))
         )
 
         self._viewer_mode = mode

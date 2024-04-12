@@ -67,6 +67,8 @@ def simulate_scene(
             start_paused=start_paused,
             render_every_frame=False,
         )
+        viewer.render() # Force window manager to (potentially) update viewport size
+
     camera_viewers = {
         camera.camera_id: OpenGLVision(
             model=model, camera=camera, headless=headless, open_gl_lib=render_backend
@@ -167,7 +169,8 @@ def simulate_scene(
                 viewport=viewer.viewport,
                 con=viewer.ctx,
             )
-            img = np.flip(img, axis=0)  # img is upside down initially
+            # Flip the image and map to OpenCV colormap (BGR -> RGB)
+            img = cv2.cvtColor(np.flipud(img), cv2.COLOR_RGBA2BGR)
             video.write(img)
 
     if not headless or record_settings is not None:

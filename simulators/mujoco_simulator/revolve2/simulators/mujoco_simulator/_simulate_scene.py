@@ -60,9 +60,16 @@ def simulate_scene(
     data = mujoco.MjData(model)
 
     if not headless or record_settings is not None:
+        width, height = (
+            (record_settings.width, record_settings.height)
+            if record_settings is not None
+            else (None, None)
+        )
         viewer = CustomMujocoViewer(
             model,
             data,
+            width=width,
+            height=height,
             backend=render_backend,
             start_paused=start_paused,
             render_every_frame=False,

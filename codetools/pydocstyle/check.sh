@@ -2,4 +2,8 @@
 
 cd "$(dirname "$0")"
 
-pydocstyle ../../actor_controller ../../core ../../examples ../../genotypes ../../rpi_controller ../../runners ../../serialization ../../standard_resources
+packages=$(../read_project_parts.sh)
+
+cd ../..
+
+pydocstyle $packages

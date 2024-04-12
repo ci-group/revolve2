@@ -2,4 +2,8 @@
 
 cd "$(dirname "$0")"
 
-black ../..
+packages=$(../read_project_parts.sh)
+
+cd ../..
+
+black $packages

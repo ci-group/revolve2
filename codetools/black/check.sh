@@ -2,4 +2,8 @@
 
 cd "$(dirname "$0")"
 
-black ../.. --diff --check
+packages=$(../read_project_parts.sh)
+
+cd ../..
+
+black --diff --check $packages

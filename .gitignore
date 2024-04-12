@@ -1,7 +1,12 @@
-.idea
+# Experiment files
+**/log.txt
+*.sqlite
 
 # Visual Studio Code
 .vscode/
+
+# PyCharm/CLion
+.idea
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -135,3 +140,4 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+/ci_group/revolve2/ci_group/morphological_novelty_metric/_calculate_novelty.c

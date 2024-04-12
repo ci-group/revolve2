@@ -2,17 +2,24 @@
 Revolve2 documentation
 ======================
 
-Revolve2 is a Python package for optimization, geared towards modular robots and evolutionary computing.
-Its primary features are a modular robot framework, wrappers around physics simulators, and evolutionary optimizers.
-It consists of multiple smaller python packages and optional supplementary packages that contain varying functionality that is not always required.
+Revolve2 is a collection of Python packages used for researching evolutionary algorithms and modular robotics.
+Its primary features are a modular robot framework, an abstraction layer around physics simulators, and evolutionary algorithms.
+The structure of the packages in Revolve2 is as follows:
+
+.. image:: package_diagram.png
+   :width: 700px
+   :height: 500px
+   :align: center
+
 
 Revolve2's code resides at `<https://github.com/ci-group/revolve2>`_.
 
 .. toctree::
    :maxdepth: 2
 
+   Getting Started <getting_started/index>
    Installation <installation/index>
-   User Guide <user_guide/index>
-   Tutorials <tutorials/index>
-   API Reference <api_reference/revolve2>
-   Development guide <development_guide/index>
+   Introduction to modular robots <introduction_to_modular_robots/index>
+   Creating a physical robot <creating_a_physical_robot/index>
+   Physical Robot Core Setup <physical_robot_core_setup/index>
+   Contributing guide <contributing_guide/index>

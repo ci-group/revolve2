@@ -2,4 +2,8 @@
 
 cd "$(dirname "$0")"
 
-isort --check-only --diff --profile black ../..
+packages=$(../read_project_parts.sh)
+
+cd ../..
+
+isort --check-only --diff --profile black $packages

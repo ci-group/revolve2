@@ -2,4 +2,8 @@
 
 cd "$(dirname "$0")"
 
-isort --profile black ../..
+packages=$(../read_project_parts.sh)
+
+cd ../..
+
+isort --profile black $packages

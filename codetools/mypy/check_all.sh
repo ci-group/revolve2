@@ -1,15 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
 cd "$(dirname "$0")"
 
-../../serialization/run_mypy.sh
-../../actor_controller/run_mypy.sh
-../../rpi_controller/run_mypy.sh
-../../core/run_mypy.sh
-../../genotypes/cppnwin/run_mypy.sh
-../../runners/isaacgym/run_mypy.sh
-../../runners/mujoco/run_mypy.sh
-../../examples/run_mypy.sh
-../../standard_resources/run_mypy.sh
+while read -r package; do
+    echo "$package:"
+    mypy --config-file ./mypy.ini "../../$package"
+done < <(../read_project_parts.sh)

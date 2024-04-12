@@ -9,7 +9,8 @@ description = "Revolve2: MuJoCo simulator."
 readme = "../../README.md"
 authors = [
     "Aart Stuurman <aartstuurman@hotmail.com>",
-    "Oliver Weissl <o.weissl@vu.nl>"
+    "Oliver Weissl <o.weissl@vu.nl>",
+    "Kevin Godin-Dubois <k.j.m.godin-dubois@vu.nl>"
 ]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [

@@ -122,7 +122,9 @@ def scene_to_model(
                 rigid_body_mjcf = multi_body_system_mjcf.find(
                     namespace="body", identifier=name
                 )
-            _add_sensors(rigid_body, name, rigid_body_mjcf, multi_body_system_mjcf, env_mjcf)
+            _add_sensors(
+                rigid_body, name, rigid_body_mjcf, multi_body_system_mjcf, env_mjcf
+            )
             _add_motors(rigid_body, name, rigid_body_mjcf, multi_body_system_mjcf)
 
         # Add plane geometries
@@ -292,21 +294,21 @@ def _add_heightmaps(
 
 
 def _add_sensors(
-    rigid_body : RigidBody,
+    rigid_body: RigidBody,
     name: str,
     rigid_body_mjcf: mjcf.Element,
     multi_body_system_mjcf: mjcf.RootElement,
     env_mjcf: mjcf.RootElement,
 ) -> None:
     """
-    Add sensors and motors to the model.
+    Add sensors to the model.
 
-    :param rigid_bodies_and_names: The rigid bodies and names.
-    :param mbs_i: The current index of the multi body system.
+    :param rigid_body: The rigid body object to add sensors to.
+    :param name: Name of the rigid body.
+    :param rigid_body_mjcf: The rigid body in mujoco format.
     :param multi_body_system_mjcf: The MBS in mujoco format.
     :param env_mjcf: The environment in mujoco format.
     """
-
     """Here we add the IMU Sensors."""
     for imu_i, imu in enumerate(rigid_body.sensors.imu_sensors):
         site_name = f"{name}_site_imu_{imu_i}"
@@ -343,13 +345,21 @@ def _add_sensors(
             quat=[*camera.pose.orientation],
         )
 
+
 def _add_motors(
-    rigid_body : RigidBody,
+    rigid_body: RigidBody,
     name: str,
-    rigid_body_mjcf: int,
+    rigid_body_mjcf: mjcf.Element,
     multi_body_system_mjcf: mjcf.RootElement,
 ) -> None:
-    """Here we add the Motors"""
+    """
+    Add motors to the model.
+
+    :param rigid_body: The rigid body object to add sensors to.
+    :param name: Name of the rigid body.
+    :param rigid_body_mjcf: The rigid body in mujoco format.
+    :param multi_body_system_mjcf: The MBS in mujoco format.
+    """
     for motor_i, motor in enumerate(rigid_body.motors.motors):
         motor_site_name = f"{name}_site_motor_{motor_i+1}"
 

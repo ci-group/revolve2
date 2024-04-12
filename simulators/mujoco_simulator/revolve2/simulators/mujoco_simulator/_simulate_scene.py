@@ -87,7 +87,7 @@ def simulate_scene(
             (viewer.viewport.width, viewer.viewport.height),
         )
 
-        viewer._hide_menu = True
+        viewer._hide_menus = True
 
     last_control_time = 0.0
     last_sample_time = 0.0

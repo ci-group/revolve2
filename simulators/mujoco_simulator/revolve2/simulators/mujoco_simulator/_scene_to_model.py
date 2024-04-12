@@ -114,10 +114,16 @@ def scene_to_model(
         # Add actuation to joints
         _add_joint_actuators(joints_and_names, multi_body_system_mjcf)
 
-        # Add sensors and motors
-        _add_sensors_and_motors(
-            rigid_bodies_and_names, mbs_i, multi_body_system_mjcf, env_mjcf
-        )
+        # Add rigid body related parts: sensors and motors
+        for rigid_body, name in rigid_bodies_and_names:
+            if name == f"mbs{mbs_i}":
+                rigid_body_mjcf = multi_body_system_mjcf.worldbody
+            else:
+                rigid_body_mjcf = multi_body_system_mjcf.find(
+                    namespace="body", identifier=name
+                )
+            _add_sensors(rigid_body, name, rigid_body_mjcf, multi_body_system_mjcf, env_mjcf)
+            _add_motors(rigid_body, name, rigid_body_mjcf, multi_body_system_mjcf)
 
         # Add plane geometries
         _add_planes(plane_geometries, fast_sim, env_mjcf)
@@ -285,9 +291,10 @@ def _add_heightmaps(
     return heightmaps
 
 
-def _add_sensors_and_motors(
-    rigid_bodies_and_names: list[tuple[RigidBody, str]],
-    mbs_i: int,
+def _add_sensors(
+    rigid_body : RigidBody,
+    name: str,
+    rigid_body_mjcf: mjcf.Element,
     multi_body_system_mjcf: mjcf.RootElement,
     env_mjcf: mjcf.RootElement,
 ) -> None:
@@ -299,70 +306,69 @@ def _add_sensors_and_motors(
     :param multi_body_system_mjcf: The MBS in mujoco format.
     :param env_mjcf: The environment in mujoco format.
     """
-    for rigid_body, name in rigid_bodies_and_names:
-        if name == f"mbs{mbs_i}":
-            rigid_body_mjcf = multi_body_system_mjcf.worldbody
-        else:
-            rigid_body_mjcf = multi_body_system_mjcf.find(
-                namespace="body", identifier=name
-            )
 
-        """Here we add the IMU Sensors."""
-        for imu_i, imu in enumerate(rigid_body.sensors.imu_sensors):
-            site_name = f"{name}_site_imu_{imu_i}"
-            rigid_body_mjcf.add(
-                "site",
-                name=site_name,
-                pos=[*imu.pose.position],
-                quat=[*imu.pose.orientation],
-            )
-            gyro_name = f"imu_gyro_{name}_{imu_i}"
-            multi_body_system_mjcf.sensor.add("gyro", name=gyro_name, site=site_name)
-            accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
-            multi_body_system_mjcf.sensor.add(
-                "accelerometer",
-                name=accelerometer_name,
-                site=site_name,
-            )
+    """Here we add the IMU Sensors."""
+    for imu_i, imu in enumerate(rigid_body.sensors.imu_sensors):
+        site_name = f"{name}_site_imu_{imu_i}"
+        rigid_body_mjcf.add(
+            "site",
+            name=site_name,
+            pos=[*imu.pose.position],
+            quat=[*imu.pose.orientation],
+        )
+        gyro_name = f"imu_gyro_{name}_{imu_i}"
+        multi_body_system_mjcf.sensor.add("gyro", name=gyro_name, site=site_name)
+        accelerometer_name = f"imu_accelerometer_{name}_{imu_i}"
+        multi_body_system_mjcf.sensor.add(
+            "accelerometer",
+            name=accelerometer_name,
+            site=site_name,
+        )
 
-        """Here we add camera Sensors."""
-        for camera_i, camera in enumerate(rigid_body.sensors.camera_sensors):
-            camera_name = f"camera_{name}_{camera_i+1}"
-            env_mjcf.worldbody.add(
-                "camera",
-                name=camera_name,
-                mode="fixed",
-                xyaxes="0 -1 0 0 0 1",
-                dclass=env_mjcf.full_identifier,
-            )
-            site_name = f"{name}_site_camera_{camera_i+1}"
-            env_mjcf.worldbody.add(
-                "site",
-                name=site_name,
-                pos=[*camera.pose.position],
-                quat=[*camera.pose.orientation],
-            )
+    """Here we add camera Sensors."""
+    for camera_i, camera in enumerate(rigid_body.sensors.camera_sensors):
+        camera_name = f"camera_{name}_{camera_i+1}"
+        env_mjcf.worldbody.add(
+            "camera",
+            name=camera_name,
+            mode="fixed",
+            xyaxes="0 -1 0 0 0 1",
+            dclass=env_mjcf.full_identifier,
+        )
+        site_name = f"{name}_site_camera_{camera_i+1}"
+        env_mjcf.worldbody.add(
+            "site",
+            name=site_name,
+            pos=[*camera.pose.position],
+            quat=[*camera.pose.orientation],
+        )
 
-        """Here we add the Motors"""
-        for motor_i, motor in enumerate(rigid_body.motors.motors):
-            motor_site_name = f"{name}_site_motor_{motor_i+1}"
+def _add_motors(
+    rigid_body : RigidBody,
+    name: str,
+    rigid_body_mjcf: int,
+    multi_body_system_mjcf: mjcf.RootElement,
+) -> None:
+    """Here we add the Motors"""
+    for motor_i, motor in enumerate(rigid_body.motors.motors):
+        motor_site_name = f"{name}_site_motor_{motor_i+1}"
 
-            motor_site = rigid_body_mjcf.add(
-                "site",
-                name=motor_site_name,
-                pos=[*motor.pose.position],
-                quat=[*motor.pose.orientation],
-            )
-            gear = 0.1 if motor.clockwise_rotation else -0.1
+        motor_site = rigid_body_mjcf.add(
+            "site",
+            name=motor_site_name,
+            pos=[*motor.pose.position],
+            quat=[*motor.pose.orientation],
+        )
+        gear = 0.1 if motor.clockwise_rotation else -0.1
 
-            multi_body_system_mjcf.actuator.add(
-                "motor",
-                ctrllimited="true",
-                ctrlrange=f"{motor.control_range[0]} {motor.control_range[1]}",
-                gear=f"0 0 1 0 0 {gear}",
-                site=motor_site,
-                name=f"actuator_motor_{name}_{motor_i+1}",
-            )
+        multi_body_system_mjcf.actuator.add(
+            "motor",
+            ctrllimited="true",
+            ctrlrange=f"{motor.control_range[0]} {motor.control_range[1]}",
+            gear=f"0 0 1 0 0 {gear}",
+            site=motor_site,
+            name=f"actuator_motor_{name}_{motor_i+1}",
+        )
 
 
 def _add_joint_actuators(

@@ -73,8 +73,8 @@ def simulate_scene(
             backend=render_backend,
             start_paused=start_paused,
             render_every_frame=False,
+            hide_menus=(record_settings is not None),
         )
-        viewer.render()  # Force window manager to (potentially) update viewport size
 
     camera_viewers = {
         camera.camera_id: OpenGLVision(
@@ -91,10 +91,8 @@ def simulate_scene(
             video_file_path,
             fourcc,
             record_settings.fps,
-            (viewer.viewport.width, viewer.viewport.height),
+            viewer.current_viewport_size(),
         )
-
-        viewer._hide_menus = True
 
     last_control_time = 0.0
     last_sample_time = 0.0

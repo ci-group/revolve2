@@ -1,7 +1,7 @@
 """A custom viewer for mujoco with additional features."""
 
 from enum import Enum
-from typing import Any, Optional, Tuple
+from typing import Any, Optional
 
 import glfw
 import mujoco
@@ -222,7 +222,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
                 case _:
                     pass
 
-    def current_viewport_size(self) -> Tuple[int, int]:
+    def current_viewport_size(self) -> tuple[int, int]:
         """
         Grabs the *current* viewport size (and updates the cached values).
 

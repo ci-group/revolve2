@@ -13,5 +13,3 @@ class RecordSettings:
 
     width: Optional[int] = None
     height: Optional[int] = None
-
-    # offscreen: bool = False << For future implementation (student-proof?)

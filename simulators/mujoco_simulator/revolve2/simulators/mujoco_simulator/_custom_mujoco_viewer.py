@@ -82,11 +82,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
             title="custom-mujoco-viewer",
             width=width,
             height=height,
-<<<<<<< HEAD
             hide_menus=hide_menus,
-=======
-            hide_menus=False,
->>>>>>> eaa2b75 (Video Improvements (#525))
         )
 
         self._viewer_mode = mode
@@ -123,7 +119,6 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
                 self._add_overlay(
                     topleft, "[C]ontact forces", "On" if self._contacts else "Off"
                 )
-                self._add_overlay(topleft, "[J]oints", "On" if self._joints else "Off")
                 self._add_overlay(
                     topleft, "[G]raph Viewer", "Off" if self._hide_graph else "On"
                 )

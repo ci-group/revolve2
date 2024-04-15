@@ -51,6 +51,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         height: Optional[int] = None,
         start_paused: bool = False,
         render_every_frame: bool = False,
+        hide_menus: bool = False,
         mode: CustomMujocoViewerMode = CustomMujocoViewerMode.CLASSIC,
     ):
         """
@@ -63,6 +64,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         :param height: The height of the viewer (optional, defaults to screen height)
         :param start_paused: If the simulation starts paused or not.
         :param render_every_frame: If every frame is rendered or not.
+        :param hide_menus: Start with hidden menus?
         :param mode: The mode of the viewer (classic, manual).
         """
         match backend:
@@ -80,7 +82,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
             title="custom-mujoco-viewer",
             width=width,
             height=height,
-            hide_menus=False,
+            hide_menus=hide_menus,
         )
 
         self._viewer_mode = mode
@@ -219,6 +221,17 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
                     self._increment_position()
                 case _:
                     pass
+
+    def current_viewport_size(self) -> tuple[int, int]:
+        """
+        Grabs the *current* viewport size (and updates the cached values).
+
+        :return: the viewport size
+        """
+        self.viewport.width, self.viewport.height = glfw.get_framebuffer_size(
+            self.window
+        )
+        return self.viewport.width, self.viewport.height
 
     def render(self) -> int | None:
         """

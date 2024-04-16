@@ -464,7 +464,7 @@ class MorphologicalMeasures(Generic[TModule]):
         # | num bricks | 0 1 2 3 4 5 6 7 8 9
         # | return val | 0 1 2 3 4 4 5 6 6 7
 
-        return self.num_modules-1 - max(0, (self.num_modules - 3) // 3)
+        return self.num_modules - 1 - max(0, (self.num_modules - 3) // 3)
 
     @property
     def num_double_neighbour_bricks(self) -> int:
@@ -569,8 +569,8 @@ class MorphologicalMeasures(Generic[TModule]):
         if self.max_potential_single_neighbour_modules == 0:
             return 0.0
         return (
-                self.num_single_neighbour_modules
-                / self.max_potential_single_neighbour_modules
+            self.num_single_neighbour_modules
+            / self.max_potential_single_neighbour_modules
         )
 
     @property

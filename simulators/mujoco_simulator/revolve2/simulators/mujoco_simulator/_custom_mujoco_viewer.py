@@ -1,7 +1,7 @@
 """A custom viewer for mujoco with additional features."""
 
 from enum import Enum
-from typing import Any, Optional
+from typing import Any
 
 import glfw
 import mujoco
@@ -47,8 +47,8 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         model: mujoco.MjModel,
         data: mujoco.MjData,
         backend: RenderBackend,
-        width: Optional[int] = None,
-        height: Optional[int] = None,
+        width: int | None = None,
+        height: int | None = None,
         start_paused: bool = False,
         render_every_frame: bool = False,
         hide_menus: bool = False,

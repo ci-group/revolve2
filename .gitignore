@@ -5,8 +5,8 @@
 # Visual Studio Code
 .vscode/
 
-# PyCharm/CLion
-.idea
+# PyCharm
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

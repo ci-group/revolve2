@@ -38,6 +38,7 @@ class MorphologicalMeasures(Generic[TModule]):
     is_2d: bool
 
     core: Core
+    modules: list[Module]
     bricks: list[Brick]
     active_hinges: list[ActiveHinge]
 
@@ -49,6 +50,13 @@ class MorphologicalMeasures(Generic[TModule]):
 
     """Active hinges which have all slots filled with other modules."""
     filled_active_hinges: list[ActiveHinge]
+
+    """
+    Modules that only connect to one other module.
+    
+    This includes children and parents.
+    """
+    single_neighbour_modules: list[Module]
 
     """
     Bricks that are only connected to one other module.
@@ -104,12 +112,14 @@ class MorphologicalMeasures(Generic[TModule]):
         self.grid, self.core_grid_position = body.to_grid()
         self.core = body.core
         self.is_2d = self.__calculate_is_2d_recur(self.core)
+        self.modules = body.find_modules_of_type(Module, exclude=[Core])
         self.bricks = body.find_modules_of_type(Brick)
         self.active_hinges = body.find_modules_of_type(ActiveHinge)
         self.core_is_filled = self.__calculate_core_is_filled()
         self.filled_bricks = self.__calculate_filled_bricks()
         self.filled_active_hinges = self.__calculate_filled_active_hinges()
         self.single_neighbour_bricks = self.__calculate_single_neighbour_bricks()
+        self.single_neighbour_modules = self.__calculate_single_neighbour_modules()
         self.double_neighbour_bricks = self.__calculate_double_neighbour_bricks()
         self.double_neighbour_active_hinges = (
             self.__calculate_double_neighbour_active_hinges()
@@ -167,6 +177,18 @@ class MorphologicalMeasures(Generic[TModule]):
                 [
                     brick.children.get(child_index) is None
                     for child_index in brick.attachment_points.keys()
+                ]
+            )
+        ]
+
+    def __calculate_single_neighbour_modules(self) -> list[Module]:
+        return [
+            module
+            for module in self.modules
+            if all(
+                [
+                    module.children.get(child_index) is None
+                    for child_index in module.attachment_points.keys()
                 ]
             )
         ]
@@ -310,7 +332,7 @@ class MorphologicalMeasures(Generic[TModule]):
 
         :returns: The number of modules.
         """
-        return 1 + self.num_bricks + self.num_active_hinges
+        return 1 + len(self.modules)
 
     @property
     def num_bricks(self) -> int:
@@ -411,7 +433,7 @@ class MorphologicalMeasures(Generic[TModule]):
         ) / self.max_potentionally_filled_core_and_bricks
 
     @property
-    def num_single_neighbour_bricks(self) -> int:
+    def num_single_neighbour_modules(self) -> int:
         """
         Get the number of bricks that are only connected to one other module.
 
@@ -419,10 +441,10 @@ class MorphologicalMeasures(Generic[TModule]):
 
         :returns: The number of bricks.
         """
-        return len(self.single_neighbour_bricks)
+        return len(self.single_neighbour_modules)
 
     @property
-    def max_potential_single_neighbour_bricks(self) -> int:
+    def max_potential_single_neighbour_modules(self) -> int:
         """
         Get the maximum number of bricks that could potentially have only one neighbour if this set of modules was rearranged in an optimal way.
 
@@ -438,30 +460,11 @@ class MorphologicalMeasures(Generic[TModule]):
         #   | | | | |
         #   B B B B B
         #
-        # Active hinges are irrelevant because they can always be placed in between two modules without affecting this number.
-        #
         # Expected sequence:
         # | num bricks | 0 1 2 3 4 5 6 7 8 9
         # | return val | 0 1 2 3 4 4 5 6 6 7
 
-        return self.num_bricks - max(0, (self.num_bricks - 2) // 3)
-
-    @property
-    def single_neighbour_brick_proportion(self) -> float:
-        """
-        Get the ratio between bricks with a single neighbour and with how many bricks that potentionally could have been if this set of modules was rearranged in an optimal way.
-
-        This calculates limb proportion(extremities) from the paper.
-
-        :returns: The proportion.
-        """
-        if self.max_potential_single_neighbour_bricks == 0:
-            return 0.0
-
-        return (
-            self.num_single_neighbour_bricks
-            / self.max_potential_single_neighbour_bricks
-        )
+        return self.num_modules - 1 - max(0, (self.num_modules - 3) // 3)
 
     @property
     def num_double_neighbour_bricks(self) -> int:
@@ -563,7 +566,12 @@ class MorphologicalMeasures(Generic[TModule]):
 
         :returns: Limbs measurement.
         """
-        return self.single_neighbour_brick_proportion
+        if self.max_potential_single_neighbour_modules == 0:
+            return 0.0
+        return (
+            self.num_single_neighbour_modules
+            / self.max_potential_single_neighbour_modules
+        )
 
     @property
     def length_of_limbs(self) -> float:

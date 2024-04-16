@@ -71,7 +71,10 @@ class LocalSimulator(Simulator):
         )
 
         if batch.record_settings is not None:
-            os.makedirs(batch.record_settings.video_directory, exist_ok=False)
+            os.makedirs(
+                batch.record_settings.video_directory,
+                exist_ok=batch.record_settings.overwrite,
+            )
 
         if self._manual_control:
             if self._headless:

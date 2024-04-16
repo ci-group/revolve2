@@ -1,7 +1,7 @@
 """A custom viewer for mujoco with additional features."""
 
 from enum import Enum
-from typing import Any
+from typing import Any, Optional
 
 import glfw
 import mujoco
@@ -47,6 +47,8 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         model: mujoco.MjModel,
         data: mujoco.MjData,
         backend: RenderBackend,
+        width: Optional[int] = None,
+        height: Optional[int] = None,
         start_paused: bool = False,
         render_every_frame: bool = False,
         mode: CustomMujocoViewerMode = CustomMujocoViewerMode.CLASSIC,
@@ -57,6 +59,8 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         :param model: The mujoco models.
         :param data: The mujoco data.
         :param backend: The backend for rendering.
+        :param width: The width of the viewer (optional, defaults to screen width)
+        :param height: The height of the viewer (optional, defaults to screen height)
         :param start_paused: If the simulation starts paused or not.
         :param render_every_frame: If every frame is rendered or not.
         :param mode: The mode of the viewer (classic, manual).
@@ -74,8 +78,8 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
             data,
             mode="window",
             title="custom-mujoco-viewer",
-            width=None,
-            height=None,
+            width=width,
+            height=height,
             hide_menus=False,
         )
 

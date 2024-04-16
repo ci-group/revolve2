@@ -12,7 +12,12 @@ from ._render_backend import RenderBackend
 
 
 class OpenGLVision:
-    """A class to enable vision / camera sensors using OpenGl."""
+    """
+    A class to enable vision / camera sensors using OpenGl.
+
+    This Class is based on an implementation of Kevin Godin-Dubois <k.j.m.godin-dubois@vu.nl>.
+    Thank you very much for this big contribution!
+    """
 
     _open_gl_context: Any
 

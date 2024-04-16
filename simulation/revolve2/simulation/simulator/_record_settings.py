@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
@@ -10,5 +11,5 @@ class RecordSettings:
 
     fps: int = 24
 
-    width: int | None = None
-    height: int | None = None
+    width: Optional[int] = None
+    height: Optional[int] = None

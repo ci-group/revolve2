@@ -3,8 +3,9 @@ from dataclasses import dataclass, field
 
 from pyrr import Matrix33, Quaternion, Vector3
 
+from ._motor import Motor
 from ._pose import Pose
-from .geometry import Geometry, GeometryBox, GeometrySphere
+from .geometry import Geometry, GeometryBox, GeometryCylinder, GeometrySphere
 from .sensors import CameraSensor, IMUSensor, Sensor
 
 
@@ -31,6 +32,19 @@ class _AttachedSensors:
                 )
 
 
+@dataclass
+class _AttachedMotors:
+    motors: list[Motor] = field(default_factory=list)
+
+    def add_motor(self, motor: Motor) -> None:
+        """
+        Add motor to the AttachedMotors object.
+
+        :param motor: The motor.
+        """
+        self.motors.append(motor)
+
+
 class RigidBody:
     """A collection of geometries and physics parameters."""
 
@@ -40,6 +54,7 @@ class RigidBody:
     dynamic_friction: float
     geometries: list[Geometry]
     sensors: _AttachedSensors
+    motors: _AttachedMotors
 
     def __init__(
         self,
@@ -62,6 +77,7 @@ class RigidBody:
         self.dynamic_friction = dynamic_friction
         self.geometries = geometries
         self.sensors = _AttachedSensors()
+        self.motors = _AttachedMotors()
 
     @property
     def uuid(self) -> uuid.UUID:
@@ -121,6 +137,8 @@ class RigidBody:
                     local_inertia = self._calculate_box_inertia(geometry)
                 case GeometrySphere():
                     local_inertia = self._calculate_sphere_inertia(geometry)
+                case GeometryCylinder():
+                    local_inertia = self._calculate_cylinder_inertia(geometry)
                 case _:
                     raise ValueError(
                         f"Geometries with non-zero mass of type {type(geometry)} are not supported yet."
@@ -181,6 +199,26 @@ class RigidBody:
         local_inertia[0, 0] += 2 * geometry.mass * (geometry.radius**2) / 5
         local_inertia[1, 1] += 2 * geometry.mass * (geometry.radius**2) / 5
         local_inertia[2, 2] += 2 * geometry.mass * (geometry.radius**2) / 5
+        return local_inertia
+
+    @staticmethod
+    def _calculate_cylinder_inertia(geometry: GeometryCylinder) -> Matrix33:
+        """
+        Calculate the moment of inertia for a cylinder geometry.
+
+        :param geometry: The geometry.
+        :return: The local inertia.
+        """
+        # calculate inertia in local coordinates
+        local_inertia = Matrix33()
+        # x,y = 1/12 * m (3r^2 + h^2), z = 1/2 * m r^2
+        local_inertia[0, 0] += (
+            geometry.mass * (3 * geometry.radius**2 + geometry.length**2)
+        ) / 12
+        local_inertia[1, 1] += (
+            geometry.mass * (3 * geometry.radius**2 + geometry.length**2)
+        ) / 12
+        local_inertia[2, 2] += 0.5 * geometry.mass * geometry.radius**2
         return local_inertia
 
     @staticmethod

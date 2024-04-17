@@ -1,5 +1,5 @@
 from revolve2.modular_robot import ModularRobotControlInterface
-from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.body.base import ActiveHinge, Motor
 
 from .._uuid_key import UUIDKey
 
@@ -8,6 +8,7 @@ class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
     """Implementation of ModularRobotControlInterface."""
 
     _set_active_hinges: list[tuple[UUIDKey[ActiveHinge], float]]
+    _set_motors: list[tuple[UUIDKey[Motor], float]]
 
     def __init__(self) -> None:
         """Initialize this object."""
@@ -23,3 +24,12 @@ class ModularRobotControlInterfaceImpl(ModularRobotControlInterface):
         :param target: The target to set.
         """
         self._set_active_hinges.append((UUIDKey(active_hinge), target))
+
+    def set_motor_target(self, motor: Motor, target: float) -> None:
+        """
+        Set the target for an motor.
+
+        :param motor: The motor to set the target for.
+        :param target: The target to set.
+        """
+        self._set_motors.append((UUIDKey(motor), target))

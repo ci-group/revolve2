@@ -13,6 +13,7 @@ from .._rigid_body import RigidBody
 from ..geometry import (
     Geometry,
     GeometryBox,
+    GeometryCylinder,
     GeometryHeightmap,
     GeometryPlane,
     GeometrySphere,
@@ -154,12 +155,16 @@ class _URDFConverter:
             match geometry:
                 case GeometryBox():
                     self.geometries_and_names.append((geometry, name))
-                    self._add_geometry_box(
+                    self._add_geometry(
                         link=link,
                         name=name,
                         geometry=geometry,
                         link_pose=link_pose,
                         rigid_body=rigid_body,
+                        geom_type="box",
+                        parameters={
+                            "size": f"{geometry.aabb.size.x} {geometry.aabb.size.y} {geometry.aabb.size.z}"
+                        },
                     )
                 case GeometryPlane():
                     if parent_rigid_body is not None:
@@ -183,12 +188,28 @@ class _URDFConverter:
                     self.heightmaps.append(geometry)
                 case GeometrySphere():
                     self.geometries_and_names.append((geometry, name))
-                    self._add_geometry_sphere(
+                    self._add_geometry(
                         link=link,
                         name=name,
                         geometry=geometry,
                         link_pose=link_pose,
                         rigid_body=rigid_body,
+                        geom_type="sphere",
+                        parameters={"radius": str(geometry.radius)},
+                    )
+                case GeometryCylinder():
+                    self.geometries_and_names.append((geometry, name))
+                    self._add_geometry(
+                        link=link,
+                        name=name,
+                        geometry=geometry,
+                        link_pose=link_pose,
+                        rigid_body=rigid_body,
+                        geom_type="cylinder",
+                        parameters={
+                            "radius": str(geometry.radius),
+                            "length": str(geometry.length),
+                        },
                     )
                 case _:
                     raise ValueError("Geometry not yet supported.")
@@ -271,98 +292,29 @@ class _URDFConverter:
         return elements
 
     @staticmethod
-    def _add_geometry_box(
+    def _add_geometry(
         link: xml.Element,
         name: str,
-        geometry: GeometryBox,
+        geometry: GeometryBox | GeometryCylinder | GeometrySphere,
         link_pose: Pose,
         rigid_body: RigidBody,
+        geom_type: str,
+        parameters: dict[str, str],
     ) -> None:
         el = xml.SubElement(link, "collision", {"name": name})
         geometry_xml = xml.SubElement(el, "geometry")
         xml.SubElement(
             geometry_xml,
-            "box",
-            {
-                "size": f"{geometry.aabb.size.x} {geometry.aabb.size.y} {geometry.aabb.size.z}"
-            },
+            geom_type,
+            parameters,
         )
+
         xyz = link_pose.orientation.inverse * (
             rigid_body.initial_pose.position
             - link_pose.position
             + rigid_body.initial_pose.orientation * geometry.pose.position
         )
-        rpy = _quaternion_to_euler(
-            link_pose.orientation.inverse
-            * rigid_body.initial_pose.orientation
-            * geometry.pose.orientation
-        )
-        xml.SubElement(
-            el,
-            "origin",
-            {
-                "rpy": f"{rpy[0]} {rpy[1]} {rpy[2]}",
-                "xyz": f"{xyz[0]} {xyz[1]} {xyz[2]}",
-            },
-        )
 
-    @staticmethod
-    def _add_geometry_sphere(
-        link: xml.Element,
-        name: str,
-        geometry: GeometrySphere,
-        link_pose: Pose,
-        rigid_body: RigidBody,
-    ) -> None:
-        el = xml.SubElement(link, "collision", {"name": name})
-        geometry_xml = xml.SubElement(el, "geometry")
-        xml.SubElement(
-            geometry_xml,
-            "sphere",
-            {"radius": str(geometry.radius)},
-        )
-        xyz = link_pose.orientation.inverse * (
-            rigid_body.initial_pose.position
-            - link_pose.position
-            + rigid_body.initial_pose.orientation * geometry.pose.position
-        )
-        rpy = _quaternion_to_euler(
-            link_pose.orientation.inverse
-            * rigid_body.initial_pose.orientation
-            * geometry.pose.orientation
-        )
-        xml.SubElement(
-            el,
-            "origin",
-            {
-                "rpy": f"{rpy[0]} {rpy[1]} {rpy[2]}",
-                "xyz": f"{xyz[0]} {xyz[1]} {xyz[2]}",
-            },
-        )
-
-    @staticmethod
-    def _add_geometry_plane(
-        link: xml.Element,
-        name: str,
-        geometry: GeometryPlane,
-        link_pose: Pose,
-        rigid_body: RigidBody,
-    ) -> None:
-        PLANE_BOX_HEIGHT = 0.1
-
-        el = xml.SubElement(link, "collision", {"name": name})
-        geometry_xml = xml.SubElement(el, "geometry")
-        xml.SubElement(
-            geometry_xml,
-            "box",
-            {"size": f"{geometry.size.x} {geometry.size.y} {PLANE_BOX_HEIGHT}"},
-        )
-        xyz = link_pose.orientation.inverse * (
-            rigid_body.initial_pose.position
-            - link_pose.position
-            + rigid_body.initial_pose.orientation
-            * (geometry.pose.position + Vector3([0.0, 0.0, -PLANE_BOX_HEIGHT / 2.0]))
-        )
         rpy = _quaternion_to_euler(
             link_pose.orientation.inverse
             * rigid_body.initial_pose.orientation

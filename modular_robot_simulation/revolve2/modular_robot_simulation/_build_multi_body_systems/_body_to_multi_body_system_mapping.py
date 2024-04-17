@@ -1,12 +1,14 @@
 from dataclasses import dataclass, field
 
-from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.body.base import ActiveHinge, Motor
 from revolve2.modular_robot.body.sensors import (
     ActiveHingeSensor,
     CameraSensor,
     IMUSensor,
 )
-from revolve2.simulation.scene import JointHinge, MultiBodySystem, UUIDKey
+from revolve2.simulation.scene import JointHinge
+from revolve2.simulation.scene import Motor as MotorSim
+from revolve2.simulation.scene import MultiBodySystem, UUIDKey
 from revolve2.simulation.scene.sensors import CameraSensor as CameraSim
 from revolve2.simulation.scene.sensors import IMUSensor as IMUSim
 
@@ -26,5 +28,9 @@ class BodyToMultiBodySystemMapping:
         init=False, default_factory=dict
     )
     camera_to_sim_camera: dict[UUIDKey[CameraSensor], CameraSim] = field(
+        init=False, default_factory=dict
+    )
+
+    motor_to_sim_motor: dict[UUIDKey[Motor], MotorSim] = field(
         init=False, default_factory=dict
     )

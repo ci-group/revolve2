@@ -1,4 +1,11 @@
-from revolve2.modular_robot.body.base import ActiveHinge, AttachmentFace, Brick, Core
+from revolve2.modular_robot.body.base import (
+    ActiveHinge,
+    AttachmentFace,
+    Brick,
+    Core,
+    DroneCore,
+    Motor,
+)
 from revolve2.modular_robot.body.sensors import (
     ActiveHingeSensor,
     CameraSensor,
@@ -13,7 +20,9 @@ from ._builders import (
     Builder,
     CameraSensorBuilder,
     CoreBuilder,
+    DroneCoreBuilder,
     IMUSensorBuilder,
+    MotorBuilder,
 )
 from ._unbuilt_child import UnbuiltChild
 
@@ -68,6 +77,17 @@ def get_builder(unbuilt_child: UnbuiltChild) -> Builder:
                 sensor=unbuilt_child.child_object,
                 rigid_body=unbuilt_child.rigid_body,
                 pose=unbuilt_child.pose,
+            )
+        case DroneCore():
+            return DroneCoreBuilder(
+                module=unbuilt_child.child_object,
+                rigid_body=unbuilt_child.rigid_body,
+                pose=unbuilt_child.pose,
+            )
+        case Motor():
+            return MotorBuilder(
+                module=unbuilt_child.child_object,
+                rigid_body=unbuilt_child.rigid_body,
             )
         case _:
             raise KeyError(

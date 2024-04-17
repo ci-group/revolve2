@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from .body.base import ActiveHinge
+from .body.base import ActiveHinge, Motor
 
 
 class ModularRobotControlInterface(ABC):
@@ -13,4 +13,13 @@ class ModularRobotControlInterface(ABC):
 
         :param active_hinge: The active hinge to set the target for.
         :param target: The target to set.
+        """
+
+    @abstractmethod
+    def set_motor_target(self, motor: Motor, target: float) -> None:
+        """
+        Set the force target for a motor.
+
+        :param motor: The motor to set the target for.
+        :param target: The force target to set.
         """

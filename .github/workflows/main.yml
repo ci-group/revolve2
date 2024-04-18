@@ -144,14 +144,11 @@ jobs:
           python-version: 3.11
       - name: Build wheels
         run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
-      - name: Make dist name
-        id: indep_vars
-        # Replace '/' with '-' and remove '/simulators'
-        run: echo "::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
       - uses: actions/upload-artifact@v4
         with:
-          name: dist_${{ steps.indep_vars.package }}
+          name: dist
           path: ./dist/**/*.whl
+          overwrite: true
 
   build_wheels_platform_dependent:
     needs: read-project-info
@@ -174,14 +171,11 @@ jobs:
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_MACOS: universal2
           CIBW_ARCHS_LINUX: x86_64
-      - name: Make dist name
-        id: dep_vars
-        # Replace '/' with '-' and remove '/simulators'
-        run:  echo "::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
       - uses: actions/upload-artifact@v4
         with:
-          name: dist_${{ matrix.os }}_${{ steps.dep_vars.package }}
+          name: dist
           path: ./dist/**/*.whl
+          overwrite: true
 
   publish:
     runs-on: ubuntu-22.04
@@ -196,10 +190,11 @@ jobs:
       id-token: write
     steps:
       - name: Download dist artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: dist
+          pattern: dist_*
           path: dist
+          merge-multiple: true
       - name: Generate name for package
         # Prepend 'revolve2-', replace '/' with '-' and remove '/simulators'
         run: echo "PACKAGE_URL=https://pypi.org/p/revolve2-$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV

@@ -145,12 +145,12 @@ jobs:
       - name: Build wheels
         run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
       - name: Make dist name
-        id: vars
+        id: indep_vars
         # Replace '/' with '-' and remove '/simulators'
-        run: echo ::set-output name=indep_package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
+        run: echo "::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
       - uses: actions/upload-artifact@v4
         with:
-          name: dist_${{ steps.vars.indep_package }}
+          name: dist_${{ steps.indep_vars.package }}
           path: ./dist/**/*.whl
 
   build_wheels_platform_dependent:
@@ -175,12 +175,12 @@ jobs:
           CIBW_ARCHS_MACOS: universal2
           CIBW_ARCHS_LINUX: x86_64
       - name: Make dist name
-        id: vars
+        id: dep_vars
         # Replace '/' with '-' and remove '/simulators'
-        run:  echo ::set-output name=dep_package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
+        run:  echo "::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
       - uses: actions/upload-artifact@v4
         with:
-          name: dist_${{ matrix.os }}_${{ steps.vars.dep_package }}
+          name: dist_${{ matrix.os }}_${{ steps.dep_vars.package }}
           path: ./dist/**/*.whl
 
   publish:

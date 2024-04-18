@@ -147,7 +147,7 @@ jobs:
       - name: Make dist name
         id: vars
         # Replace '/' with '-' and remove '/simulators'
-        run: echo ::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
+        run: echo ::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
       - uses: actions/upload-artifact@v4
         with:
           name: dist-${{ steps.vars.package }}
@@ -177,7 +177,7 @@ jobs:
       - name: Make dist name
         id: vars
         # Replace '/' with '-' and remove '/simulators'
-        run:  echo ::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
+        run:  echo ::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
       - uses: actions/upload-artifact@v4
         with:
           name: dist-${{ matrix.os }}-${{ steps.vars.package }}

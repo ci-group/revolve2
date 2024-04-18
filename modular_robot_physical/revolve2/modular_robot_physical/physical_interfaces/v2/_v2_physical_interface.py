@@ -8,6 +8,7 @@ from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
 from robohatlib.Robohat import Robohat
+import cv2
 
 from .._physical_interface import PhysicalInterface
 
@@ -182,5 +183,6 @@ class V2PhysicalInterface(PhysicalInterface):
 
         :returns: A dummy image until robohatlib has camera support.
         """
-        image = np.zeros((10,10,3), dtype=int)
+        image = np.zeros((100,100,3), dtype=int)
+        cv2.putText(image, "Dummy Image", color=(255,0,0), thickness=1)
         return image

@@ -180,6 +180,7 @@ class V2PhysicalInterface(PhysicalInterface):
         """
         Get the current view from the camera.
 
-        :raises NotImplementedError: If the Camera is not supported on this hardware.
+        :returns: A dummy image until robohatlib has camera support.
         """
-        raise NotImplementedError()
+        image = np.zeros((10,10,3), dtype=int)
+        return image

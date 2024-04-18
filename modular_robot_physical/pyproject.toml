@@ -33,6 +33,7 @@ typed-argparse = "^0.3.1"
 pycapnp = { version = "^2.0.0b2" }
 pigpio = { version = "^1.78", optional = true }
 revolve2-robohat = { version = "0.5.0", optional = true }
+rpi-lgpio = { version = "0.5", optional = true  }
 # cpnp-stub-generator is disabled because it depends on pycapnp <2.0.0.
 # It is rarely used and by developers only, so we remove it for now and developers can install it manually.
 # If you manually install it make sure you also install the correct pycpanp version afterwards as it will be overridden.
@@ -40,7 +41,10 @@ revolve2-robohat = { version = "0.5.0", optional = true }
 
 [tool.poetry.extras]
 botv1 = ["pigpio"]
-botv2 = ["revolve2-robohat"]
+botv2 = [
+    "revolve2-robohat",
+    "rpi-lgpio"
+]
 remote = []
 dev = [
     "pigpio",

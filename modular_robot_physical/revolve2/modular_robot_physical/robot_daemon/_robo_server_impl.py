@@ -293,7 +293,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         :return: The capnp Image object.
         """
         return robot_daemon_protocol_capnp.Image(
-            r=list(image[0].flatten().astype(int)),
-            g=list(image[1].flatten().astype(int)),
-            b=list(image[2].flatten().astype(int)),
+            r=image[0].flatten().tolist(),
+            g=image[1].flatten().tolist(),
+            b=image[2].flatten().tolist(),
         )

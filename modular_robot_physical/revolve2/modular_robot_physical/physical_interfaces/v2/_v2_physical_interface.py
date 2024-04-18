@@ -183,6 +183,6 @@ class V2PhysicalInterface(PhysicalInterface):
 
         :returns: A dummy image until robohatlib has camera support.
         """
-        image = np.zeros((100,100,3), dtype=int)
-        cv2.putText(image, "Dummy Image", color=(255,0,0), thickness=1)
+        image = np.zeros((3,100,100), dtype=int)
+        cv2.putText(image, "Dummy Image", (10,10), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255,0,0), thickness=1, lineType=2)
         return image

@@ -1,6 +1,7 @@
 import math
 from typing import Sequence
 
+import cv2
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Vector3
@@ -180,6 +181,17 @@ class V2PhysicalInterface(PhysicalInterface):
         """
         Get the current view from the camera.
 
-        :raises NotImplementedError: If the Camera is not supported on this hardware.
+        :returns: A dummy image until robohatlib has camera support.
         """
-        raise NotImplementedError()
+        image = np.zeros((3, 100, 100), dtype=int)
+        cv2.putText(
+            image,
+            "Dummy Image",
+            (10, 10),
+            fontFace=cv2.FONT_HERSHEY_SIMPLEX,
+            fontScale=1,
+            color=(255, 0, 0),
+            thickness=1,
+            lineType=2,
+        )
+        return image

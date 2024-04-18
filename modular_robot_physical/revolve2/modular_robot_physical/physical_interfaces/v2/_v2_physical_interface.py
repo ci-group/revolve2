@@ -9,6 +9,7 @@ from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
 from robohatlib.Robohat import Robohat
+import cv2
 
 from .._physical_interface import PhysicalInterface
 

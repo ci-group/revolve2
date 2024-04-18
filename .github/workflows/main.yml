@@ -192,9 +192,8 @@ jobs:
       - name: Download dist artifact
         uses: actions/download-artifact@v4
         with:
-          pattern: dist_*
+          name: dist
           path: dist
-          merge-multiple: true
       - name: Generate name for package
         # Prepend 'revolve2-', replace '/' with '-' and remove '/simulators'
         run: echo "PACKAGE_URL=https://pypi.org/p/revolve2-$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV

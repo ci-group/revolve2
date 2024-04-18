@@ -44,7 +44,7 @@ jobs:
         python-version: ["3.10", "3.11"]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: install_tools
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5
         with:
           python-version: 3.11
       - name: install_revolve2
@@ -104,7 +104,7 @@ jobs:
         run: make -C docs html
       - name: deploy
         if: ${{ github.ref == 'refs/heads/master' }}
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: docs/build/html
@@ -117,7 +117,7 @@ jobs:
         python-version: [ "3.10", "3.11" ]
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: install virtual display
@@ -139,14 +139,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5
         with:
           python-version: 3.11
       - name: Build wheels
         run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
-      - uses: actions/upload-artifact@v3
+      - name: Make dist name
+        id: vars
+        # Replace '/' with '-' and remove '/simulators'
+        run: echo ::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
+      - uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ steps.vars.package }}
           path: ./dist/**/*.whl
 
   build_wheels_platform_dependent:
@@ -160,7 +164,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           submodules: 'recursive'
-      - uses: actions/setup-python@v5.1.0
+      - uses: actions/setup-python@v5
       - name: Install cibuildwheel
         run: python -m pip install cibuildwheel==2.16.2
       - name: Build wheels
@@ -170,9 +174,13 @@ jobs:
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_MACOS: universal2
           CIBW_ARCHS_LINUX: x86_64
-      - uses: actions/upload-artifact@v3
+      - name: Make dist name
+        id: vars
+        # Replace '/' with '-' and remove '/simulators'
+        run:  echo ::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')"
+      - uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ matrix.os }}-${{ steps.vars.package }}
           path: ./dist/**/*.whl
 
   publish:

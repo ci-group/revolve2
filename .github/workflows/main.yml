@@ -147,10 +147,10 @@ jobs:
       - name: Make dist name
         id: vars
         # Replace '/' with '-' and remove '/simulators'
-        run: echo ::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
+        run: echo ::set-output name=indep_package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ steps.vars.package }}
+          name: dist_${{ steps.vars.indep_package }}
           path: ./dist/**/*.whl
 
   build_wheels_platform_dependent:
@@ -177,10 +177,10 @@ jobs:
       - name: Make dist name
         id: vars
         # Replace '/' with '-' and remove '/simulators'
-        run:  echo ::set-output name=package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
+        run:  echo ::set-output name=dep_package::$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.os }}-${{ steps.vars.package }}
+          name: dist_${{ matrix.os }}_${{ steps.vars.dep_package }}
           path: ./dist/**/*.whl
 
   publish:

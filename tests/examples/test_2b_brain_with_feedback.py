@@ -1,5 +1,3 @@
-"""Tests some of the examples that can just be easily ran as a subprocess."""
-
 import os
 import sys
 from unittest.mock import Mock
@@ -9,14 +7,13 @@ from ._clear_example_modules_from_cache import clear_exp_modules_from_cache
 from ._patched_batch_parameters import make_patched_batch_parameters
 
 
-def test_evaluate_multiple_isolated_robots(mocker: Mock) -> None:
+def test_2b_brain_with_feedback(mocker: Mock) -> None:
     """
-    Test 3c_evaluate_multiple_isolated_robots example can complete.
-
+    Test 2b_brain_with_feedback example can complete.
     :param mocker: The mock object.
     """
     exp_dir = os.path.join(
-        EXAMPLES_DIR, "3_experiment_foundations/3c_evaluate_multiple_isolated_robots"
+        EXAMPLES_DIR, "2_modular_robot_basics/2b_brain_with_feedback"
     )
     # Clear any previously imported modules from examples directory from cache
     clear_exp_modules_from_cache()

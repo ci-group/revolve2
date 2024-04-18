@@ -6,7 +6,7 @@ from ..conftest import EXAMPLES_DIR
 from ._clear_example_modules_from_cache import clear_exp_modules_from_cache
 
 
-def test_robot_bodybrain_ea_database(mocker: Mock, tmpdir: str) -> None:
+def test_4d_robot_bodybrain_ea_database(mocker: Mock, tmpdir: str) -> None:
     """
     Test if 4d_robot_bodybrain_ea_database example can complete.
 

@@ -149,7 +149,7 @@ jobs:
         run: echo "INDEP_PACKAGE=$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
-          name: dist_$INDEP_PACKAGE
+          name: dist_${{ INDEP_PACKAGE }}
           path: ./dist/**/*.whl
 
   build_wheels_platform_dependent:
@@ -178,7 +178,7 @@ jobs:
         run:  echo "DEP_PACKAGE=$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
-          name: dist_${{ matrix.os }}_$DEP_PACKAGE
+          name: dist_${{ matrix.os }}_${{ DEP_PACKAGE }}
           path: ./dist/**/*.whl
 
   publish:

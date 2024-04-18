@@ -144,11 +144,13 @@ jobs:
           python-version: 3.11
       - name: Build wheels
         run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
+      - name: Make dist name
+        # Replace '/' with '-' and remove '/simulators'
+        run: echo "INDEP_PACKAGE=$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist_$INDEP_PACKAGE
           path: ./dist/**/*.whl
-          overwrite: true
 
   build_wheels_platform_dependent:
     needs: read-project-info
@@ -171,11 +173,13 @@ jobs:
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_MACOS: universal2
           CIBW_ARCHS_LINUX: x86_64
+      - name: Make dist name
+        # Replace '/' with '-' and remove '/simulators'
+        run:  echo "DEP_PACKAGE=$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist_${{ matrix.os }}_$DEP_PACKAGE
           path: ./dist/**/*.whl
-          overwrite: true
 
   publish:
     runs-on: ubuntu-22.04
@@ -192,8 +196,9 @@ jobs:
       - name: Download dist artifact
         uses: actions/download-artifact@v4
         with:
-          name: dist
+          pattern: dist_*
           path: dist
+          merge-multiple: true
       - name: Generate name for package
         # Prepend 'revolve2-', replace '/' with '-' and remove '/simulators'
         run: echo "PACKAGE_URL=https://pypi.org/p/revolve2-$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV

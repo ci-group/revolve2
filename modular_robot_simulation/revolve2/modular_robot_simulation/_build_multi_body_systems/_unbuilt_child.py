@@ -23,7 +23,6 @@ class UnbuiltChild:
 
         :param position: The position argument from the parent.
         :param orientation: The orientation of the attachment on the parent.
-        :raises TypeError: If child object type is not known.
         """
         self.pose = Pose(
             position,

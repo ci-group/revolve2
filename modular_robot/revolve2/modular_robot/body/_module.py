@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import uuid
+
 from pyrr import Quaternion
 
 from ._attachment_point import AttachmentPoint
 from ._color import Color
-from ._right_angles import RightAngles
 from .sensors import ActiveHingeSensor, CameraSensor, IMUSensor, Sensor
 
 

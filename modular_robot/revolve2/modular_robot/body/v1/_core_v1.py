@@ -5,7 +5,7 @@ from ..base import Core
 
 
 class CoreV1(Core):
-    """The core module of a modular robot."""
+    """The core module of a v1 modular robot."""
 
     def __init__(self, rotation: float | RightAngles):
         """

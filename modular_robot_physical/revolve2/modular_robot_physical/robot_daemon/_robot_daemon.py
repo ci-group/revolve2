@@ -61,7 +61,7 @@ class _Program:
         """Run the program."""
         self._physical_interface = get_interface(
             hardware_type=self._hardware_type, debug=self._debug, dry=self._dry
-        )
+        )  # Here we define the interface that controls the physical modular robot.
 
         server = await capnp.AsyncIoStream.create_server(
             self._new_connection, "*", STANDARD_PORT

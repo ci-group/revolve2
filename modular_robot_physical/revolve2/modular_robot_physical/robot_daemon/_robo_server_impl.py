@@ -13,9 +13,11 @@ from ..robot_daemon_api import robot_daemon_protocol_capnp
 from ..robot_daemon_api.robot_daemon_protocol_capnp import Image as capnpImage
 from ..robot_daemon_api.robot_daemon_protocol_capnp import Vector3 as capnpVector3
 
+Pin = int
+
 
 class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ignore
-    """Implements the Cap'n Proto interface."""
+    """Implements the Cap'n Proto interface, run on the physical modular robot."""
 
     _CAREFUL_STEP = 0.1
 
@@ -29,10 +31,10 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
     _update_loop_thread: threading.Thread
     _lock: threading.Lock
 
-    _targets: dict[int, float]  # pin -> target
-    _current_targets: dict[int, float]  # pin -> target
+    _targets: dict[Pin, float]  # pin -> target
+    _current_targets: dict[Pin, float]  # pin -> target
 
-    _measured_hinge_positions: dict[int, float]  # pin -> position
+    _measured_hinge_positions: dict[Pin, float]  # pin -> position
     _battery: float
 
     def __init__(
@@ -67,6 +69,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         self._battery = 0.0
 
     def _update_loop(self) -> None:
+        """Update the robot server."""
         assert self._active_pins is not None
 
         while self._enabled:
@@ -220,8 +223,6 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
     ) -> robot_daemon_protocol_capnp.SensorReadings:
         """
         Handle controlAndReadSensors.
-
-        Currently reads nothing.
 
         :param args: Args to the function.
         :returns: The readings.

@@ -1,9 +1,9 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class RenderBackend(Enum):
     """Enumerator for rendering backend libraries."""
 
-    GLFW = "glfw"
-    EGL = "egl"
-    OSMESA = "osmesa"
+    GLFW = auto()
+    EGL = auto()
+    OSMESA = auto()

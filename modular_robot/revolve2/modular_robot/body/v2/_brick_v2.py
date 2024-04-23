@@ -11,7 +11,7 @@ class BrickV2(Brick):
         """
         Initialize this object.
 
-        :param rotation: The modules rotation.
+        :param rotation: The modules' rotation.
         """
         super().__init__(
             rotation=rotation,

@@ -3,7 +3,7 @@ from enum import Enum
 
 
 class RightAngles(Enum):
-    """Standard angles at which  modular robot modules can be attached."""
+    """Standard angles at which some modular robot modules can be attached."""
 
     DEG_0 = 0
     DEG_90 = math.pi / 2.0

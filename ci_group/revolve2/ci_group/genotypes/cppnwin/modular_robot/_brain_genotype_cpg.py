@@ -11,7 +11,7 @@ from revolve2.modular_robot.body.base import Body
 from .._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
 from .._multineat_rng_from_random import multineat_rng_from_random
 from .._random_multineat_genotype import random_multineat_genotype
-from ._brain_cpg_network_neighbor_v1 import BrainCpgNetworkNeighborV1
+from ._brain_cpg_network_neighbor import BrainCpgNetworkNeighbor
 from ._multineat_params import get_multineat_params
 
 _MULTINEAT_PARAMS = get_multineat_params()
@@ -111,11 +111,11 @@ class BrainGenotypeCpg:
             )
         )
 
-    def develop_brain(self, body: Body) -> BrainCpgNetworkNeighborV1:
+    def develop_brain(self, body: Body) -> BrainCpgNetworkNeighbor:
         """
         Develop the genotype into a modular robot.
 
         :param body: The body to develop the brain for.
         :returns: The created robot.
         """
-        return BrainCpgNetworkNeighborV1(genotype=self.brain.genotype, body=body)
+        return BrainCpgNetworkNeighbor(genotype=self.brain.genotype, body=body)

@@ -9,4 +9,4 @@ class GeometryBox(Geometry):
     """Box geometry."""
 
     aabb: AABB
-    """AABB describing the box's shape."""
+    """AABB describing the box's bounding box."""

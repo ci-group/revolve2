@@ -14,7 +14,7 @@ class ModularRobot:
 
     def __init__(self, body: Body, brain: Brain):
         """
-        Initialize this object.
+        Initialize the ModularRobot.
 
         :param body: The body of the modular robot.
         :param brain: The brain of the modular robot.
@@ -26,7 +26,7 @@ class ModularRobot:
     @property
     def uuid(self) -> uuid.UUID:
         """
-        Get the uuid.
+        Get the uuid, used for identification.
 
         :returns: The uuid.
         """

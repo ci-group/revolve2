@@ -13,7 +13,7 @@ class Cpg:
 
 @dataclass(frozen=True, init=False)
 class CpgPair:
-    """A pair of cpgs that assures that the first cpg always has the lowest index."""
+    """A pair of CPGs that assures that the first cpg always has the lowest index."""
 
     # lowest is automatically set to be the lowest state index of the two
     cpg_index_lowest: Cpg
@@ -23,10 +23,10 @@ class CpgPair:
         """
         Initialize this object.
 
-        The order of the provided cpgs is irrelevant.
+        The order of the provided CPGs is irrelevant.
 
-        :param cpg_1: One of the cpgs part of the pair.
-        :param cpg_2: The other cpg part of the pair.
+        :param cpg_1: One of the CPGs part of the pair.
+        :param cpg_2: The other CPG part of the pair.
         """
         # hacky but normal variable setting not possible with frozen enabled
         # https://stackoverflow.com/questions/57893902/how-can-i-set-an-attribute-in-a-frozen-dataclass-custom-init-method
@@ -40,9 +40,9 @@ class CpgPair:
 
 class CpgNetworkStructure:
     """
-    Describes the structure of a cpg network.
+    Describes the structure of a CPG network.
 
-    Can generate parameters for a cpg network, such as the initial state.
+    Can generate parameters for a CPG network, such as the initial state.
     """
 
     cpgs: list[Cpg]
@@ -52,8 +52,8 @@ class CpgNetworkStructure:
         """
         Initialize this object.
 
-        :param cpgs: The cpgs used in the structure.
-        :param connections: The connections between cpgs.
+        :param cpgs: The CPGs used in the structure.
+        :param connections: The connections between CPGs.
         """
         assert isinstance(connections, set)
 
@@ -63,10 +63,10 @@ class CpgNetworkStructure:
     @staticmethod
     def make_cpgs(num_cpgs: int) -> list[Cpg]:
         """
-        Create a list of cpgs.
+        Create a list of CPGs.
 
-        :param num_cpgs: The number of cpgs to create.
-        :returns: The created list of cpgs.
+        :param num_cpgs: The number of CPGs to create.
+        :returns: The created list of CPGs.
         """
         return [Cpg(index) for index in range(num_cpgs)]
 
@@ -141,7 +141,7 @@ class CpgNetworkStructure:
         """
         Get the number of states in a cpg network of this structure.
 
-        This would be twice the number of cpgs.
+        This would be twice the number of CPGs.
 
         :returns: The number of states.
         """
@@ -161,16 +161,16 @@ class CpgNetworkStructure:
     @property
     def num_cpgs(self) -> int:
         """
-        Get the number of cpgs in the structure.
+        Get the number of CPGs in the structure.
 
-        :returns: The number of cpgs.
+        :returns: The number of CPGs.
         """
         return len(self.cpgs)
 
     @property
     def output_indices(self) -> list[int]:
         """
-        Get the index in the state array for each cpg, matching the order the cpgs were provided in.
+        Get the index in the state array for each cpg, matching the order the CPGs were provided in.
 
         :returns: The indices.
         """

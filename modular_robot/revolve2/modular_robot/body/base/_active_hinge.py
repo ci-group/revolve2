@@ -8,7 +8,7 @@ from ..sensors import Sensor
 
 
 class ActiveHinge(Module):
-    """An Active Hinge."""
+    """An Active Hinge Module."""
 
     ATTACHMENT = 0
 
@@ -177,7 +177,7 @@ class ActiveHinge(Module):
         """
         Get the bounding box of the first servo part.
 
-        Sizes are total length, not half length from origin.
+        Sizes are total length, not half-length from origin.
         :return: Vector3 with sizes of bbox in x,y,z dimension (m).
         """
         return self._servo1_bounding_box
@@ -187,7 +187,7 @@ class ActiveHinge(Module):
         """
         Get the bounding box of the second servo part.
 
-        Sizes are total length, not half length from origin.
+        Sizes are total length, not half-length from origin.
         :return: Vector3 with sizes of bbox in x,y,z dimension (m).
         """
         return self._servo2_bounding_box
@@ -197,7 +197,7 @@ class ActiveHinge(Module):
         """
         Get the bounding box of the frame.
 
-        Sizes are total length, not half length from origin.
+        Sizes are total length, not half-length from origin.
         :return: Vector3 with sizes of bbox in x,y,z dimension (m).
         """
         return self._frame_bounding_box
@@ -259,7 +259,7 @@ class ActiveHinge(Module):
     @property
     def armature(self) -> float:
         """
-        Get thearmature of the joint.
+        Get the armature of the joint.
 
         This represents the inertia of the motor itself when nothing is attached.
 

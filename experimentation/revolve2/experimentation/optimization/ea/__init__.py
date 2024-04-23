@@ -1,4 +1,4 @@
-"""Everything related to Evolutionary Algorithms."""
+"""Standardized building blocks related to Evolutionary Algorithms."""
 
 from ._generation import Generation
 from ._individual import Individual

@@ -6,10 +6,10 @@ def active_hinges_to_cpg_network_structure_neighbor(
     active_hinges: list[ActiveHinge],
 ) -> tuple[CpgNetworkStructure, list[tuple[int, ActiveHinge]]]:
     """
-    Create the structure of a cpg network based on a list of active hinges.
+    Create the structure of a CPG network based on a list of active hinges.
 
-    The order of the active hinges matches the order of the cpgs.
-    I.e. every active hinges has a corresponding cpg,
+    The order of the active hinges matches the order of the CPGs.
+    I.e. every active hinges has a corresponding CPG,
     and these are stored in the order the hinges are provided in.
 
     :param active_hinges: The active hinges to base the structure on.

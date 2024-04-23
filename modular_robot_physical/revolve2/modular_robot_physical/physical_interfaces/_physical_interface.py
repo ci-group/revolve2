@@ -16,7 +16,7 @@ class PhysicalInterface(ABC):
 
         This can be a fairly slow operation.
 
-        :param pins: The GPIO pin numbers.
+        :param pins: The GPIO pins.
         :param targets: The target angles.
         """
 
@@ -46,7 +46,7 @@ class PhysicalInterface(ABC):
         """
         Get the current position of multiple servos.
 
-        :param pins: The GPIO pin numbers.
+        :param pins: The GPIO pins.
         :returns: The current positions.
         :raises NotImplementedError: If getting the servo position is not supported on this hardware.
         """

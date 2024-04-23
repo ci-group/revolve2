@@ -1,5 +1,5 @@
 from ..._modular_robot_control_interface import ModularRobotControlInterface
-from ...sensor_state._modular_robot_sensor_state import ModularRobotSensorState
+from ...sensor_state import ModularRobotSensorState
 from .._brain_instance import BrainInstance
 
 
@@ -13,9 +13,9 @@ class BrainDummyInstance(BrainInstance):
         control_interface: ModularRobotControlInterface,
     ) -> None:
         """
-        Control the modular robot.
+        Control nothing.
 
-        Sets the active hinge targets to the values in the state array as defined by the mapping provided in the constructor.
+        This brain does not do anything for control, as it is an empty box.
 
         :param dt: Elapsed seconds since last call to this function.
         :param sensor_state: Interface for reading the current sensor state.

@@ -5,7 +5,7 @@ from ..base import Brick
 
 
 class BrickV1(Brick):
-    """A brick module for a modular robot."""
+    """A brick module for a v1 modular robot."""
 
     def __init__(self, rotation: float | RightAngles):
         """

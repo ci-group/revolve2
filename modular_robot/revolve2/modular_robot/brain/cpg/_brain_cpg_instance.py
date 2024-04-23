@@ -9,7 +9,7 @@ from .._brain_instance import BrainInstance
 
 class BrainCpgInstance(BrainInstance):
     """
-    Cpg network brain.
+    CPG network brain.
 
     A state array that is integrated over time following the differential equation `X'=WX`.
     W is a weight matrix that is multiplied by the state array.
@@ -27,7 +27,7 @@ class BrainCpgInstance(BrainInstance):
         output_mapping: list[tuple[int, ActiveHinge]],
     ) -> None:
         """
-        Initialize this object.
+        Initialize this CPG Brain Instance.
 
         :param initial_state: The initial state of the neural network.
         :param weight_matrix: The weight matrix used during integration.

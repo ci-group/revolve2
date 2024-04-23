@@ -1,3 +1,5 @@
+from pyrr import Vector3
+
 from ._sensor import Sensor
 
 
@@ -10,4 +12,4 @@ class ActiveHingeSensor(Sensor):
 
         :param rotation: The rotation of the IMU.
         """
-        super().__init__(rotation)
+        super().__init__(rotation, Vector3([0, 0, 0]))

@@ -13,4 +13,6 @@ class IMUSensor(Sensor):
     """
 
     pose: Pose
-    type: str = field(default="imu")
+    type: str = field(
+        default="imu"
+    )  # The type attribute is used for the translation into XML formats.

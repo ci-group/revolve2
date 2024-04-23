@@ -11,7 +11,7 @@ class Sensor(ABC):
     _rotation: float
     _position: Vector3
 
-    def __init__(self, rotation: float, position: Vector3 = Vector3([0, 0, 0])) -> None:
+    def __init__(self, rotation: float, position: Vector3) -> None:
         """
         Initialize the sensor.
 
@@ -43,7 +43,7 @@ class Sensor(ABC):
     @property
     def position(self) -> Vector3:
         """
-        Get the position of the sensor on a module.
+        Get the relative position of the sensor on a module.
 
         :return: The position.
         """

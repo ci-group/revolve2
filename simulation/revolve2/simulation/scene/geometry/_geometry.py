@@ -6,11 +6,7 @@ from .textures import Texture
 
 @dataclass(kw_only=True)
 class Geometry:
-    """
-    Geometry describing part of a rigid body shape.
-
-    Currently always a box.
-    """
+    """Geometry describing part of a rigid body shape."""
 
     pose: Pose
     """Pose of the geometry."""

@@ -16,7 +16,11 @@ class _AttachedSensors:
     _imu_sensor: IMUSensor | None
 
     def __init__(self) -> None:
-        """Initialize the AttachedSensors."""
+        """
+        Initialize the AttachedSensors.
+
+        By default, we do not have sensors on base modules.
+        """
         self._camera_sensor = None
         self._imu_sensor = None
         self._active_hinge_sensor = None
@@ -26,7 +30,7 @@ class _AttachedSensors:
         Add a sensor to the attached Sensors of the module.
 
         :param sensor: The sensor.
-        :raises KeyError: If something went wrong with attaching.
+        :raises KeyError: If something went wrong with attaching the sensor.
         """
         match sensor:
             case CameraSensor():
@@ -62,14 +66,29 @@ class _AttachedSensors:
 
     @property
     def imu_sensor(self) -> IMUSensor | None:
+        """
+        Get the potential IMU Sensor.
+
+        :returns: The IMU Sensor or None.
+        """
         return self._imu_sensor
 
     @property
     def active_hinge_sensor(self) -> ActiveHingeSensor | None:
+        """
+        Get the potential Active Hinge Sensor.
+
+        :returns: The ActiveHinge Sensor or None.
+        """
         return self._active_hinge_sensor
 
     @property
     def camera_sensor(self) -> CameraSensor | None:
+        """
+        Get the potential Camera Sensor.
+
+        :returns: The Camera Sensor or None.
+        """
         return self._camera_sensor
 
 
@@ -86,7 +105,7 @@ class Module:
     """
     The parent module of this module.
     
-    None if this module has not yet been added to a body.
+    None if this module has not yet been added to a body or is the origin of the body.
     """
 
     _parent_child_index: int | None
@@ -114,22 +133,20 @@ class Module:
         :param attachment_points: The attachment points available on a module.
         :param sensors: The sensors associated with the module.
         """
-        self._sensors = _AttachedSensors()
-        for sensor in sensors:
-            self._sensors.add_sensor(sensor)
-
+        """Set default values."""
+        self._parent = None
+        self._parent_child_index = None
+        self._children = {}
         self._uuid = uuid.uuid1()
 
+        """Set parsed arguments."""
+        self._sensors = _AttachedSensors()  # Initialize the attached sensors.
+        for sensor in sensors:  # Add all desired sensors to the module.
+            self._sensors.add_sensor(sensor)
         self._attachment_points = attachment_points
-        self._children = {}
-
         self._rotation = (
             rotation if isinstance(rotation, (float, int)) else rotation.value
         )
-
-        self._parent = None
-        self._parent_child_index = None
-
         self._color = color
 
     @property
@@ -155,7 +172,7 @@ class Module:
         """
         Get the parent module of this module.
 
-        None if this module has not yet been added to a body.
+        None if this module has not yet been added to a body or is the origin of the body.
 
         :returns: The parent module of this module, or None if this module has not yet been added to a body.
         """
@@ -183,10 +200,10 @@ class Module:
 
     def set_child(self, module: Module, child_index: int) -> None:
         """
-        Attach a module to a slot.
+        Attach a module to certain AttachmentPoint.
 
         :param module: The module to attach.
-        :param child_index: The slot to attach it to.
+        :param child_index: The index of the AttachmentPoint to attach it to.
         :raises KeyError: If attachment point is already populated.
         """
         assert (
@@ -201,7 +218,7 @@ class Module:
 
     def can_set_child(self, child_index: int) -> bool:
         """
-        Check if a child can be set on the module.
+        Check if a child can be set on a specific attachment point on the module.
 
         :param child_index: The child index.
         :return: The boolean value.

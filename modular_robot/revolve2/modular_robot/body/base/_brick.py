@@ -10,7 +10,7 @@ from ..sensors import Sensor
 
 
 class Brick(Module):
-    """A Brick."""
+    """A Brick Module."""
 
     FRONT = 0
     RIGHT = 1
@@ -32,7 +32,7 @@ class Brick(Module):
 
         :param rotation: The Modules rotation.
         :param mass: The Modules mass (in kg).
-        :param bounding_box: The bounding box. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half length from origin.
+        :param bounding_box: The bounding box. Vector3 with sizes of bbox in x,y,z dimension (m). Sizes are total length, not half-length from origin.
         :param child_offset: The offset of the child for each attachment point.
         :param sensors: The sensors associated with this module.
         """
@@ -122,7 +122,7 @@ class Brick(Module):
         """
         Get the bounding box size.
 
-        Sizes are total length, not half length from origin.
+        Sizes are total length, not half-length from origin.
         :return: Vector3 with sizes of bbox in x,y,z dimension (in m).
         """
         return self._bounding_box

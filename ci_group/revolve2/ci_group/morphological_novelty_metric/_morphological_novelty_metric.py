@@ -9,7 +9,7 @@ from ._coordinate_operations import coords_from_bodies
 from .calculate_novelty import calculate_novelty
 
 _INT_CASTER: int = 10_000
-"""Casting floats to INT allows to mitigate floating-point issues in the distribution reshaping. The higher the number, the more presicion you get."""
+"""Casting floats to INT allows to mitigate floating-point issues in the distribution reshaping. The higher the number, the more precision you get."""
 
 Orientations = list[list[tuple[float, float]]]
 Magnitudes = list[list[float]]
@@ -99,7 +99,7 @@ def _gen_gradient_histogram(
 
 def _normalize_cast_int(histograms: NDArray[np.float64]) -> NDArray[np.int64]:
     """
-    Normalize a matrix (array), making its sum  = _INT_CASTER.
+    Normalize a matrix (array), making its sum = _INT_CASTER.
 
     :param histograms: The histograms to cast and normalize.
     :return: The normalized and cast histograms.

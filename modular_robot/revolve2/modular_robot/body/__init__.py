@@ -1,4 +1,4 @@
-"""Modular robot bodies."""
+"""Objects used for modular robot bodies."""
 
 from ._attachment_point import AttachmentPoint
 from ._color import Color

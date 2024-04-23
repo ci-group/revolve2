@@ -1,4 +1,4 @@
-"""Cpg brains for modular robots."""
+"""CPG brains for modular robots."""
 
 from ._brain_cpg_instance import BrainCpgInstance
 from ._brain_cpg_network_neighbor import BrainCpgNetworkNeighbor

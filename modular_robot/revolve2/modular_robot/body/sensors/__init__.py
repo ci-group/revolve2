@@ -1,4 +1,4 @@
-"""Base Sensors for Modular Robots."""
+"""Sensors for Modular Robots."""
 
 from ._active_hinge_sensor import ActiveHingeSensor
 from ._camera_sensor import CameraSensor

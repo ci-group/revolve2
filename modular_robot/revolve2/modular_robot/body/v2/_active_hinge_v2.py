@@ -7,7 +7,7 @@ from ..sensors import ActiveHingeSensor
 
 class ActiveHingeV2(ActiveHinge):
     """
-    An active hinge module for a modular robot.
+    An active hinge v2 module for a modular robot.
 
     This is a rotary joint.
     """
@@ -38,5 +38,7 @@ class ActiveHingeV2(ActiveHinge):
             pid_gain_p=5.0,
             pid_gain_d=0.05,
             child_offset=0.0583 / 2 + 0.002,
-            sensors=[ActiveHingeSensor()],
+            sensors=[
+                ActiveHingeSensor()
+            ],  # By default, V2 robots have ActiveHinge sensors, since the hardware also supports them natively.
         )

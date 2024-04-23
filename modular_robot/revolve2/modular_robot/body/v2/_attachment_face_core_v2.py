@@ -6,7 +6,7 @@ from pyrr import Quaternion, Vector3
 
 from .. import Module
 from .._attachment_point import AttachmentPoint
-from ..base._attachment_face import AttachmentFace
+from ..base import AttachmentFace
 
 
 class AttachmentFaceCoreV2(AttachmentFace):
@@ -14,7 +14,6 @@ class AttachmentFaceCoreV2(AttachmentFace):
 
     _check_matrix: NDArray[np.uint8]
     _child_offset: Vector3
-
     """
     Check matrix allows us to determine which attachment points can be filled in the face.
     

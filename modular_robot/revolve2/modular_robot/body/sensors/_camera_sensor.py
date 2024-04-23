@@ -6,7 +6,6 @@ from ._sensor import Sensor
 class CameraSensor(Sensor):
     """A camera for the Modular Robot."""
 
-    _position: Vector3
     _camera_size: tuple[int, int]
 
     def __init__(
@@ -19,14 +18,13 @@ class CameraSensor(Sensor):
         Initialize the Camera Sensor.
 
         Note that the camera_size can have a significant impact on performance.
-        For evolution related work sticked to 10x10 for sei fast reulst.
+        For evolution related work stick to 10x10 for fast results.
 
         :param position: The position of the camera.
         :param rotation: The rotation of the camera.
         :param camera_size: The size of the camera image.
         """
-        super().__init__(rotation)
-        self._position = position
+        super().__init__(rotation, position)
         self._camera_size = camera_size
 
     @property

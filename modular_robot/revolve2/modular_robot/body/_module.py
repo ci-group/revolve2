@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import uuid
+from pyrr import Quaternion
 
 from pyrr import Quaternion
 

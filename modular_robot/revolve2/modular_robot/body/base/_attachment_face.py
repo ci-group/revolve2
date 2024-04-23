@@ -1,9 +1,8 @@
-from pyrr import Quaternion
-
 from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
 from .._right_angles import RightAngles
+from pyrr import Quaternion
 
 
 class AttachmentFace(Module):
@@ -29,9 +28,7 @@ class AttachmentFace(Module):
 
         Here we covert the angle of the module to its orientation in space.
         """
-        orientation = Quaternion.from_eulers(
-            [rotation if isinstance(rotation, float) else rotation.value, 0, 0]
-        )
+        orientation = Quaternion.from_eulers([rotation if isinstance(rotation, float) else rotation.value, 0, 0])
         super().__init__(
             orientation=orientation,
             attachment_points=attachment_points,

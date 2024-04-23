@@ -1,4 +1,4 @@
-from pyrr import Vector3, Quaternion
+from pyrr import Quaternion, Vector3
 
 from ._sensor import Sensor
 

@@ -64,12 +64,8 @@ class Core(Module):
 
         Here we covert the angle of the module to its orientation in space.
         """
-        orientation = Quaternion.from_eulers(
-            [rotation if isinstance(rotation, float) else rotation.value, 0, 0]
-        )
-        super().__init__(
-            orientation, Color(255, 50, 50, 255), attachment_points, sensors
-        )
+        orientation = Quaternion.from_eulers([rotation if isinstance(rotation, float) else rotation.value, 0, 0])
+        super().__init__(orientation, Color(255, 50, 50, 255), attachment_points, sensors)
 
     @property
     def mass(self) -> float:

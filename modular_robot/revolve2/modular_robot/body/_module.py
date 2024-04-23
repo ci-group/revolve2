@@ -2,9 +2,10 @@ from __future__ import annotations
 
 import uuid
 
+from pyrr import Quaternion
+
 from ._attachment_point import AttachmentPoint
 from ._color import Color
-from ._right_angles import RightAngles
 from .sensors import ActiveHingeSensor, CameraSensor, IMUSensor, Sensor
 
 
@@ -99,7 +100,7 @@ class Module:
 
     _attachment_points: dict[int, AttachmentPoint]
     _children: dict[int, Module]
-    _rotation: float
+    _orientation: Quaternion
 
     _parent: Module | None
     """
@@ -120,7 +121,7 @@ class Module:
 
     def __init__(
         self,
-        rotation: float | RightAngles,
+        orientation: Quaternion,
         color: Color,
         attachment_points: dict[int, AttachmentPoint],
         sensors: list[Sensor],
@@ -128,7 +129,7 @@ class Module:
         """
         Initialize this object.
 
-        :param rotation: Orientation of this model relative to its parent.
+        :param orientation: Orientation of this model relative to its parent.
         :param color: The color of the module.
         :param attachment_points: The attachment points available on a module.
         :param sensors: The sensors associated with the module.
@@ -144,9 +145,7 @@ class Module:
         for sensor in sensors:  # Add all desired sensors to the module.
             self._sensors.add_sensor(sensor)
         self._attachment_points = attachment_points
-        self._rotation = (
-            rotation if isinstance(rotation, (float, int)) else rotation.value
-        )
+        self._orientation = orientation
         self._color = color
 
     @property
@@ -159,13 +158,13 @@ class Module:
         return self._uuid
 
     @property
-    def rotation(self) -> float:
+    def orientation(self) -> Quaternion:
         """
         Get the orientation of this model relative to its parent.
 
         :returns: The orientation.
         """
-        return self._rotation
+        return self._orientation
 
     @property
     def parent(self) -> Module | None:

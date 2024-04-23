@@ -52,7 +52,18 @@ class Brick(Module):
         }
         self._mass = mass
         self._bounding_box = bounding_box
-        super().__init__(rotation, Color(50, 50, 255, 255), attachment_points, sensors)
+
+        """
+        The base module only has orientation as its parameter since not all modules are square.
+
+        Here we covert the angle of the module to its orientation in space.
+        """
+        orientation = Quaternion.from_eulers(
+            [rotation if isinstance(rotation, float) else rotation.value, 0, 0]
+        )
+        super().__init__(
+            orientation, Color(50, 50, 255, 255), attachment_points, sensors
+        )
 
     @property
     def front(self) -> Module | None:

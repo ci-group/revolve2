@@ -1,3 +1,5 @@
+from pyrr import Quaternion
+
 from .._attachment_point import AttachmentPoint
 from .._color import Color
 from .._module import Module
@@ -22,8 +24,16 @@ class AttachmentFace(Module):
         :param rotation: Orientation of this model relative to its parent.
         :param attachment_points: The attachment points available on a module.
         """
+        """
+        The base module only has orientation as its parameter since not all modules are square.
+
+        Here we covert the angle of the module to its orientation in space.
+        """
+        orientation = Quaternion.from_eulers(
+            [rotation if isinstance(rotation, float) else rotation.value, 0, 0]
+        )
         super().__init__(
-            rotation=rotation,
+            orientation=orientation,
             attachment_points=attachment_points,
             color=Color(255, 255, 255, 255),
             sensors=[],

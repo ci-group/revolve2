@@ -1,4 +1,4 @@
-from pyrr import Vector3
+from pyrr import Quaternion, Vector3
 
 from ._sensor import Sensor
 
@@ -11,7 +11,7 @@ class CameraSensor(Sensor):
     def __init__(
         self,
         position: Vector3,
-        rotation: float = 0.0,
+        orientation: Quaternion = Quaternion(),
         camera_size: tuple[int, int] = (50, 50),
     ) -> None:
         """
@@ -21,20 +21,11 @@ class CameraSensor(Sensor):
         For evolution related work stick to 10x10 for fast results.
 
         :param position: The position of the camera.
-        :param rotation: The rotation of the camera.
+        :param orientation: The rotation of the camera.
         :param camera_size: The size of the camera image.
         """
-        super().__init__(rotation, position)
+        super().__init__(orientation, position)
         self._camera_size = camera_size
-
-    @property
-    def position(self) -> Vector3:
-        """
-        Get the position of the camera.
-
-        :return: The position.
-        """
-        return self._position
 
     @property
     def camera_size(self) -> tuple[int, int]:

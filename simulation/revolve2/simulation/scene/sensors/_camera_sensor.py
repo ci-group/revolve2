@@ -11,4 +11,6 @@ class CameraSensor(Sensor):
     pose: Pose
     camera_size: tuple[int, int]
     """Pose of the geometry, relative to its parent rigid body."""
-    type: str = field(default="camera")
+    type: str = field(
+        default="camera"
+    )  # The type attribute is used for the translation into XML formats.

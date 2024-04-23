@@ -55,7 +55,7 @@ class V1PhysicalInterface(PhysicalInterface):
 
         This can be a fairly slow operation.
 
-        :param pins: The GPIO pin numbers.
+        :param pins: The GPIO pins.
         :param targets: The target angles.
         """
         if not self._dry:
@@ -100,7 +100,7 @@ class V1PhysicalInterface(PhysicalInterface):
         """
         Get the current position of multiple servos.
 
-        :param pins: The GPIO pin numbers.
+        :param pins: The GPIO pins.
         :raises NotImplementedError: If getting the servo position is not supported on this hardware.
         """
         raise NotImplementedError("Getting servo position not supported on v1 harware.")

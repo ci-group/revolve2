@@ -133,7 +133,7 @@ class MorphologicalMeasures(Generic[TModule]):
     @classmethod
     def __calculate_is_2d_recur(cls, module: Module) -> bool:
         return all(
-            [np.isclose(module.rotation, 0.0)]
+            [np.isclose(module.orientation.angle, 0.0)]
             + [cls.__calculate_is_2d_recur(child) for child in module.children.values()]
         )
 

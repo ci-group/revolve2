@@ -24,8 +24,7 @@ class UnbuiltChild:
         :param position: The position argument from the parent.
         :param orientation: The orientation of the attachment on the parent.
         """
-        module_rot = Quaternion.from_eulers([self.child_object.rotation, 0.0, 0.0])
         self.pose = Pose(
             position,
-            orientation * module_rot,
+            orientation * self.child_object.orientation,
         )

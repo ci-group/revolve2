@@ -102,9 +102,16 @@ class ActiveHinge(Module):
                 orientation=Quaternion.from_eulers([0.0, 0.0, 0.0]),
             ),
         }
-
+        """
+        The base module only has orientation as its parameter since not all modules are square.
+        
+        Here we covert the angle of the module to its orientation in space.
+        """
+        orientation = Quaternion.from_eulers(
+            [rotation if isinstance(rotation, float) else rotation.value, 0, 0]
+        )
         super().__init__(
-            rotation, Color(255, 255, 255, 255), attachment_points, sensors
+            orientation, Color(255, 255, 255, 255), attachment_points, sensors
         )
 
         self._sensor = None

@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC
 
-from pyrr import Vector3, Quaternion
+from pyrr import Quaternion, Vector3
 
 
 class Sensor(ABC):

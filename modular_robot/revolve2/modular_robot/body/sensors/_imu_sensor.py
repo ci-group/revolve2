@@ -1,4 +1,4 @@
-from pyrr import Vector3, Quaternion
+from pyrr import Quaternion, Vector3
 
 from ._sensor import Sensor
 
@@ -10,7 +10,9 @@ class IMUSensor(Sensor):
     Reports specific force(closely related to acceleration), angular rate(closely related to angular velocity), and orientation.
     """
 
-    def __init__(self, position: Vector3, orientation: Quaternion = Quaternion()) -> None:
+    def __init__(
+        self, position: Vector3, orientation: Quaternion = Quaternion()
+    ) -> None:
         """
         Initialize the IMU sensor.
 

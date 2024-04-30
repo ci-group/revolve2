@@ -73,12 +73,15 @@ def main() -> None:
     """
     After we have the scene ready we create a simulator that will perform the simulation.
     This tutorial chooses to use Mujoco, but your version of revolve might contain other simulators as well.
+    
+    For mujoco we can select either the `native` mujoco viewer (more performance) or our `custom` viewer (which is more flexible for adjustments).
     """
-    simulator = LocalSimulator()
+    simulator = LocalSimulator(viewer_type="native")
 
     # `batch_parameters` are important parameters for simulation.
     # Here, we use the parameters that are standard in CI Group.
     batch_parameters = make_standard_batch_parameters()
+    batch_parameters.simulation_time = 60  # Here we update our simulation time.
 
     # Simulate the scene.
     # A simulator can run multiple sets of scenes sequentially; it can be reused.

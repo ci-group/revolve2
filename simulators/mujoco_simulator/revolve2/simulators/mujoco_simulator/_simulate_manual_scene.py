@@ -11,10 +11,10 @@ from revolve2.ci_group.simulation_parameters import (
 from revolve2.simulation.scene import Scene
 
 from ._control_interface_impl import ControlInterfaceImpl
-from ._custom_mujoco_viewer import CustomMujocoViewer, CustomMujocoViewerMode
 from ._render_backend import RenderBackend
 from ._scene_to_model import scene_to_model
 from ._simulation_state_impl import SimulationStateImpl
+from .viewers import CustomMujocoViewer, CustomMujocoViewerMode
 
 
 def simulate_manual_scene(
@@ -94,5 +94,5 @@ def simulate_manual_scene(
         """If we press ctrl-C this script will end with the finally clause."""
         pass
     finally:
-        viewer.close()
+        viewer.close_viewer()
         logging.info("Testing done.")

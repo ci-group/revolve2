@@ -7,7 +7,9 @@ import glfw
 import mujoco
 import mujoco_viewer
 
-from ._render_backend import RenderBackend
+from revolve2.simulation.simulator import Viewer
+
+from .._render_backend import RenderBackend
 
 
 class CustomMujocoViewerMode(Enum):
@@ -22,7 +24,7 @@ class CustomMujocoViewerMode(Enum):
     MANUAL = "manual"
 
 
-class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
+class CustomMujocoViewer(Viewer, mujoco_viewer.MujocoViewer):  # type: ignore
     """
     Custom Viewer Object that allows for additional keyboard inputs.
 
@@ -46,6 +48,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         self,
         model: mujoco.MjModel,
         data: mujoco.MjData,
+        *,
         backend: RenderBackend,
         width: int | None = None,
         height: int | None = None,
@@ -53,6 +56,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         render_every_frame: bool = False,
         hide_menus: bool = False,
         mode: CustomMujocoViewerMode = CustomMujocoViewerMode.CLASSIC,
+        **_: Any,
     ):
         """
         Initialize the Viewer.
@@ -66,6 +70,7 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         :param render_every_frame: If every frame is rendered or not.
         :param hide_menus: Start with hidden menus?
         :param mode: The mode of the viewer (classic, manual).
+        :param _: Some unused kwargs.
         """
         match backend:
             case RenderBackend.EGL:
@@ -240,10 +245,41 @@ class CustomMujocoViewer(mujoco_viewer.MujocoViewer):  # type: ignore
         :return: A cycle position if applicable.
         """
         super().render()
-        if self._viewer_mode.value == "manual":
+        if self._viewer_mode == CustomMujocoViewerMode.MANUAL:
             return self._position
         return None
 
     def _increment_position(self) -> None:
         """Increment our cycle position."""
         self._position = (self._position + 1) % 5
+
+    def close_viewer(self) -> None:
+        """Close the viewer."""
+        self.close()
+
+    @property
+    def context(self) -> mujoco.MjrContext:
+        """
+        Get the context.
+
+        :returns: The context.
+        """
+        return self.ctx
+
+    @property
+    def view_port(self) -> mujoco.MjrRect:
+        """
+        Get the view_port.
+
+        :returns: The viewport.
+        """
+        return self.viewport
+
+    @property
+    def can_record(self) -> bool:
+        """
+        Return True.
+
+        :returns: True.
+        """
+        return True

@@ -19,7 +19,7 @@ class Learner(ABC):
     In a robot system with multiple tasks, there are multiple definitions of task performance.
     Task performance can be used to define fitness and/or reward functions.
 
-    For more information wait for Prof. De. A.E. Eiben`s book on evolutionary robotics, or ask him directly.
+    For more information wait for Prof. Dr. A.E. Eiben`s book on evolutionary robotics, or ask him directly.
     """
 
     _reward_function: Evaluator

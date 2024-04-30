@@ -179,6 +179,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -223,14 +224,16 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.body._attachment_point.AttachmentPoint" title="modular_robot.body._attachment_point.AttachmentPoint"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AttachmentPoint</span></code></a></p></td>
-<td><p>An attachment point on the parent module for the child.</p></td>
+<td><p>An attachment point is a theoretical location on the parent module for the child to be attached to.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot.body._attachment_point.AttachmentPoint">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AttachmentPoint</span></span><a class="headerlink" href="#modular_robot.body._attachment_point.AttachmentPoint" title="Link to this definition"></a></dt>
-<dd><p>An attachment point on the parent module for the child.</p>
+<dd><p>An attachment point is a theoretical location on the parent module for the child to be attached to.</p>
+<p>The attachment of a module to its parent is not considered to be a separate AttachmentPoint.
+This class simply is used for potential children to be placed on the correct positions of the current module.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="modular_robot.body._attachment_point.AttachmentPoint.orientation">
 <span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Quaternion</span></em><a class="headerlink" href="#modular_robot.body._attachment_point.AttachmentPoint.orientation" title="Link to this definition"></a></dt>

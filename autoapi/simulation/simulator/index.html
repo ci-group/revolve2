@@ -181,6 +181,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -238,6 +239,9 @@
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#simulation.simulator.Simulator" title="simulation.simulator.Simulator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Simulator</span></code></a></p></td>
 <td><p>Interface for a simulator.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#simulation.simulator.Viewer" title="simulation.simulator.Viewer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Viewer</span></code></a></p></td>
+<td><p>An abstract viewer class, enabling the rendering of simulations.</p></td>
 </tr>
 </tbody>
 </table>
@@ -310,8 +314,23 @@ However, the specific value of this parameter may vary depending on the scenes b
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.simulator.RecordSettings.overwrite">
+<span class="sig-name descname"><span class="pre">overwrite</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#simulation.simulator.RecordSettings.overwrite" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="simulation.simulator.RecordSettings.fps">
 <span class="sig-name descname"><span class="pre">fps</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#simulation.simulator.RecordSettings.fps" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.simulator.RecordSettings.width">
+<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulation.simulator.RecordSettings.width" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="simulation.simulator.RecordSettings.height">
+<span class="sig-name descname"><span class="pre">height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#simulation.simulator.RecordSettings.height" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -334,6 +353,77 @@ However, the specific value of this parameter may vary depending on the scenes b
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>List of simulation states in ascending order of time.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="simulation.simulator.Viewer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Viewer</span></span><a class="headerlink" href="#simulation.simulator.Viewer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<div class="graphviz"><img src="../../../_images/inheritance-caf96791a1c574d45d65e12fc4644e890027c082.png" alt="Inheritance diagram of simulation.simulator.Viewer" usemap="#inheritance165f607bd9" class="inheritance graphviz" /></div>
+<map id="inheritance165f607bd9" name="inheritance165f607bd9">
+<area shape="rect" id="node2" href="_viewer/index.html#simulation.simulator._viewer.Viewer" target="_top" title="An abstract viewer class, enabling the rendering of simulations." alt="" coords="125,5,197,31"/>
+</map><p>An abstract viewer class, enabling the rendering of simulations.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.simulator.Viewer.view_port">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">view_port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#simulation.simulator.Viewer.view_port" title="Link to this definition"></a></dt>
+<dd><p>Get the viewport.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The viewport object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.simulator.Viewer.context">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">context</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span></em><a class="headerlink" href="#simulation.simulator.Viewer.context" title="Link to this definition"></a></dt>
+<dd><p>Return the viewer context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The context object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="simulation.simulator.Viewer.can_record">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">can_record</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#simulation.simulator.Viewer.can_record" title="Link to this definition"></a></dt>
+<dd><p>Check if this viewer can record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The truth.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.simulator.Viewer.close_viewer">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">close_viewer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#simulation.simulator.Viewer.close_viewer" title="Link to this definition"></a></dt>
+<dd><p>Close the viewer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.simulator.Viewer.render">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="headerlink" href="#simulation.simulator.Viewer.render" title="Link to this definition"></a></dt>
+<dd><p>Render the scene on the viewer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Nothing or feedback.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="simulation.simulator.Viewer.current_viewport_size">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">current_viewport_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#simulation.simulator.Viewer.current_viewport_size" title="Link to this definition"></a></dt>
+<dd><p>Get the current viewport size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The size as a tuple.</p>
 </dd>
 </dl>
 </dd></dl>

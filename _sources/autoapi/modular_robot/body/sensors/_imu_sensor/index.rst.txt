@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: IMUSensor(position: pyrr.Vector3, rotation: float = 0.0)
+.. py:class:: IMUSensor(position: pyrr.Vector3, orientation: pyrr.Quaternion = Quaternion())
 
 
    Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`
@@ -27,7 +27,7 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot.body.sensors._imu_sensor.IMUSensor
       :parts: 1
 
-   An inertial measurement unit.
+   An inertial measurement unit (IMU).
 
    Reports specific force(closely related to acceleration), angular rate(closely related to angular velocity), and orientation.
 

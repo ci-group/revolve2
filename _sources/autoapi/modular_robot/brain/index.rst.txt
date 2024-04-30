@@ -70,7 +70,7 @@ Classes
 
    Instances of this class can be stateful.
 
-   .. py:method:: control(dt: float, sensor_state: modular_robot.sensor_state._modular_robot_sensor_state.ModularRobotSensorState, control_interface: modular_robot._modular_robot_control_interface.ModularRobotControlInterface) -> None
+   .. py:method:: control(dt: float, sensor_state: modular_robot.sensor_state.ModularRobotSensorState, control_interface: modular_robot._modular_robot_control_interface.ModularRobotControlInterface) -> None
       :abstractmethod:
 
       Control the modular robot.

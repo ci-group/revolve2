@@ -24,6 +24,9 @@ Classes
 
    A class to enable vision / camera sensors using OpenGl.
 
+   This Class is based on an implementation of Kevin Godin-Dubois <k.j.m.godin-dubois@vu.nl>.
+   Thank you very much for this big contribution!
+
    .. py:method:: process(model: mujoco.MjModel, data: mujoco.MjData) -> numpy.typing.NDArray[numpy.uint8]
 
       Process the current state of the simulation and render it.

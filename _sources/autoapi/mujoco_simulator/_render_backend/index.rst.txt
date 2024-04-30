@@ -30,17 +30,14 @@ Classes
    Enumerator for rendering backend libraries.
 
    .. py:attribute:: GLFW
-      :value: 'glfw'
 
       
 
    .. py:attribute:: EGL
-      :value: 'egl'
 
       
 
    .. py:attribute:: OSMESA
-      :value: 'osmesa'
 
       
 

@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: Module(rotation: float | modular_robot.body._right_angles.RightAngles, color: modular_robot.body._color.Color, attachment_points: dict[int, modular_robot.body._attachment_point.AttachmentPoint], sensors: list[modular_robot.body.sensors.Sensor])
+.. py:class:: Module(orientation: pyrr.Quaternion, color: modular_robot.body._color.Color, attachment_points: dict[int, modular_robot.body._attachment_point.AttachmentPoint], sensors: list[modular_robot.body.sensors.Sensor])
 
 
    Base class for a module for modular robots.
@@ -32,8 +32,8 @@ Classes
       :returns: The uuid.
 
 
-   .. py:property:: rotation
-      :type: float
+   .. py:property:: orientation
+      :type: pyrr.Quaternion
 
       Get the orientation of this model relative to its parent.
 
@@ -45,7 +45,7 @@ Classes
 
       Get the parent module of this module.
 
-      None if this module has not yet been added to a body.
+      None if this module has not yet been added to a body or is the origin of the body.
 
       :returns: The parent module of this module, or None if this module has not yet been added to a body.
 
@@ -94,16 +94,16 @@ Classes
 
    .. py:method:: set_child(module: Module, child_index: int) -> None
 
-      Attach a module to a slot.
+      Attach a module to certain AttachmentPoint.
 
       :param module: The module to attach.
-      :param child_index: The slot to attach it to.
+      :param child_index: The index of the AttachmentPoint to attach it to.
       :raises KeyError: If attachment point is already populated.
 
 
    .. py:method:: can_set_child(child_index: int) -> bool
 
-      Check if a child can be set on the module.
+      Check if a child can be set on a specific attachment point on the module.
 
       :param child_index: The child index.
       :return: The boolean value.

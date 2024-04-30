@@ -21,6 +21,7 @@ Classes
    simulation.simulator.BatchParameters
    simulation.simulator.RecordSettings
    simulation.simulator.Simulator
+   simulation.simulator.Viewer
 
 
 
@@ -94,9 +95,25 @@ Classes
 
       
 
+   .. py:attribute:: overwrite
+      :type: bool
+      :value: False
+
+      
+
    .. py:attribute:: fps
       :type: int
       :value: 24
+
+      
+
+   .. py:attribute:: width
+      :type: int | None
+
+      
+
+   .. py:attribute:: height
+      :type: int | None
 
       
 
@@ -118,6 +135,66 @@ Classes
 
       :param batch: The batch to run.
       :returns: List of simulation states in ascending order of time.
+
+
+
+.. py:class:: Viewer
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.simulator.Viewer
+      :parts: 1
+
+   An abstract viewer class, enabling the rendering of simulations.
+
+   .. py:property:: view_port
+      :type: Any
+      :abstractmethod:
+
+      Get the viewport.
+
+      :returns: The viewport object.
+
+
+   .. py:property:: context
+      :type: Any
+      :abstractmethod:
+
+      Return the viewer context.
+
+      :returns: The context object.
+
+
+   .. py:property:: can_record
+      :type: bool
+      :abstractmethod:
+
+      Check if this viewer can record.
+
+      :returns: The truth.
+
+
+   .. py:method:: close_viewer() -> None
+      :abstractmethod:
+
+      Close the viewer.
+
+
+   .. py:method:: render() -> Any | None
+      :abstractmethod:
+
+      Render the scene on the viewer.
+
+      :returns: Nothing or feedback.
+
+
+   .. py:method:: current_viewport_size() -> tuple[int, int]
+      :abstractmethod:
+
+      Get the current viewport size.
+
+      :returns: The size as a tuple.
 
 
 

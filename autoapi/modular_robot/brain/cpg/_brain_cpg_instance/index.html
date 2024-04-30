@@ -179,6 +179,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -223,7 +224,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance" title="modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BrainCpgInstance</span></code></a></p></td>
-<td><p>Cpg network brain.</p></td>
+<td><p>CPG network brain.</p></td>
 </tr>
 </tbody>
 </table>
@@ -231,11 +232,11 @@
 <dt class="sig sig-object py" id="modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../../body/base/index.html#modular_robot.body.base.ActiveHinge" title="modular_robot.body.base.ActiveHinge"><span class="pre">modular_robot.body.base.ActiveHinge</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../_brain_instance/index.html#modular_robot.brain._brain_instance.BrainInstance" title="modular_robot.brain._brain_instance.BrainInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.brain._brain_instance.BrainInstance</span></code></a></p>
-<div class="graphviz"><img src="../../../../../_images/inheritance-b22c0843617b132a0703e33948c3317980348958.png" alt="Inheritance diagram of modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance" usemap="#inheritance0df126b724" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../../../_images/inheritance-2220cf2f1fb47c35641e32c0844c6313e4985a0a.png" alt="Inheritance diagram of modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance" usemap="#inheritance0df126b724" class="inheritance graphviz" /></div>
 <map id="inheritance0df126b724" name="inheritance0df126b724">
 <area shape="rect" id="node3" href="../../_brain_instance/index.html#modular_robot.brain._brain_instance.BrainInstance" target="_top" title="An instance of a brain that perform the control of a robot." alt="" coords="125,5,236,31"/>
-<area shape="rect" id="node2" href="#modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance" target="_top" title="Cpg network brain." alt="" coords="284,5,420,31"/>
-</map><p>Cpg network brain.</p>
+<area shape="rect" id="node2" href="#modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance" target="_top" title="CPG network brain." alt="" coords="284,5,420,31"/>
+</map><p>CPG network brain.</p>
 <p>A state array that is integrated over time following the differential equation <cite>X’=WX</cite>.
 W is a weight matrix that is multiplied by the state array.
 The outputs of the controller are defined by the <cite>outputs</cite>, a list of indices for the state array.</p>

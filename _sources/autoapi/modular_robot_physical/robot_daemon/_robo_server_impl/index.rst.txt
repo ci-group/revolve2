@@ -19,6 +19,18 @@ Classes
 
 
 
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_physical.robot_daemon._robo_server_impl.Pin
+
+
+.. py:data:: Pin
+
+   
+
 .. py:class:: RoboServerImpl(debug: bool, hardware_type: modular_robot_physical._hardware_type.HardwareType, physical_interface: modular_robot_physical.physical_interfaces.PhysicalInterface)
 
 
@@ -27,7 +39,7 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl
       :parts: 1
 
-   Implements the Cap'n Proto interface.
+   Implements the Cap'n Proto interface, run on the physical modular robot.
 
    .. py:method:: cleanup() -> None
 
@@ -66,8 +78,6 @@ Classes
       :async:
 
       Handle controlAndReadSensors.
-
-      Currently reads nothing.
 
       :param args: Args to the function.
       :returns: The readings.

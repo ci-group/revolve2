@@ -27,7 +27,7 @@ Classes
    .. py:property:: uuid
       :type: uuid.UUID
 
-      Get the uuid.
+      Get the uuid, used for identification.
 
       :returns: The uuid.
 

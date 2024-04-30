@@ -181,6 +181,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -221,7 +222,7 @@
              
   <section id="module-modular_robot.brain.cpg">
 <span id="cpg"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">cpg</span></code><a class="headerlink" href="#module-modular_robot.brain.cpg" title="Link to this heading"></a></h1>
-<p>Cpg brains for modular robots.</p>
+<p>CPG brains for modular robots.</p>
 <section id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -229,7 +230,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.brain.cpg.BrainCpgInstance" title="modular_robot.brain.cpg.BrainCpgInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BrainCpgInstance</span></code></a></p></td>
-<td><p>Cpg network brain.</p></td>
+<td><p>CPG network brain.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modular_robot.brain.cpg.BrainCpgNetworkNeighbor" title="modular_robot.brain.cpg.BrainCpgNetworkNeighbor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BrainCpgNetworkNeighbor</span></code></a></p></td>
 <td><p>A CPG brain with active hinges that are connected if they are within 2 jumps in the modular robot tree structure.</p></td>
@@ -238,10 +239,10 @@
 <td><p>A cpg brain with random weights between neurons.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modular_robot.brain.cpg.BrainCpgNetworkStatic" title="modular_robot.brain.cpg.BrainCpgNetworkStatic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BrainCpgNetworkStatic</span></code></a></p></td>
-<td><p>A CPG brain with cpgs and connections defined by the user.</p></td>
+<td><p>A CPG (central pattern generator) brain with CPGs and connections defined by the user.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.brain.cpg.CpgNetworkStructure" title="modular_robot.brain.cpg.CpgNetworkStructure"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CpgNetworkStructure</span></code></a></p></td>
-<td><p>Describes the structure of a cpg network.</p></td>
+<td><p>Describes the structure of a CPG network.</p></td>
 </tr>
 </tbody>
 </table>
@@ -251,7 +252,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.brain.cpg.active_hinges_to_cpg_network_structure_neighbor" title="modular_robot.brain.cpg.active_hinges_to_cpg_network_structure_neighbor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">active_hinges_to_cpg_network_structure_neighbor</span></code></a>(...)</p></td>
-<td><p>Create the structure of a cpg network based on a list of active hinges.</p></td>
+<td><p>Create the structure of a CPG network based on a list of active hinges.</p></td>
 </tr>
 </tbody>
 </table>
@@ -259,11 +260,11 @@
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.BrainCpgInstance">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgInstance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../body/base/index.html#modular_robot.body.base.ActiveHinge" title="modular_robot.body.base.ActiveHinge"><span class="pre">modular_robot.body.base.ActiveHinge</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.brain.cpg.BrainCpgInstance" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../_brain_instance/index.html#modular_robot.brain._brain_instance.BrainInstance" title="modular_robot.brain._brain_instance.BrainInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.brain._brain_instance.BrainInstance</span></code></a></p>
-<div class="graphviz"><img src="../../../../_images/inheritance-b6938a818cc5dbc48b1acfff5ff6fbc1033876e4.png" alt="Inheritance diagram of modular_robot.brain.cpg.BrainCpgInstance" usemap="#inheritance7c56a0989f" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../../_images/inheritance-3a3fe0c98d9bf736c159a169589c57cc14490774.png" alt="Inheritance diagram of modular_robot.brain.cpg.BrainCpgInstance" usemap="#inheritance7c56a0989f" class="inheritance graphviz" /></div>
 <map id="inheritance7c56a0989f" name="inheritance7c56a0989f">
 <area shape="rect" id="node3" href="../_brain_instance/index.html#modular_robot.brain._brain_instance.BrainInstance" target="_top" title="An instance of a brain that perform the control of a robot." alt="" coords="125,5,236,31"/>
-<area shape="rect" id="node2" href="_brain_cpg_instance/index.html#modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance" target="_top" title="Cpg network brain." alt="" coords="284,5,420,31"/>
-</map><p>Cpg network brain.</p>
+<area shape="rect" id="node2" href="_brain_cpg_instance/index.html#modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance" target="_top" title="CPG network brain." alt="" coords="284,5,420,31"/>
+</map><p>CPG network brain.</p>
 <p>A state array that is integrated over time following the differential equation <cite>X’=WX</cite>.
 W is a weight matrix that is multiplied by the state array.
 The outputs of the controller are defined by the <cite>outputs</cite>, a list of indices for the state array.</p>
@@ -326,11 +327,11 @@ so they will be the same for every controller instance.</p>
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.BrainCpgNetworkStatic">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkStatic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../body/base/index.html#modular_robot.body.base.ActiveHinge" title="modular_robot.body.base.ActiveHinge"><span class="pre">modular_robot.body.base.ActiveHinge</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.brain.cpg.BrainCpgNetworkStatic" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../_brain/index.html#modular_robot.brain._brain.Brain" title="modular_robot.brain._brain.Brain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.brain._brain.Brain</span></code></a></p>
-<div class="graphviz"><img src="../../../../_images/inheritance-8621f4d0923e0b14317179f809820488734b8c21.png" alt="Inheritance diagram of modular_robot.brain.cpg.BrainCpgNetworkStatic" usemap="#inheritancefe353044a6" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../../_images/inheritance-15a2ffcd5b9c89e2668aa717b9852c745833ea00.png" alt="Inheritance diagram of modular_robot.brain.cpg.BrainCpgNetworkStatic" usemap="#inheritancefe353044a6" class="inheritance graphviz" /></div>
 <map id="inheritancefe353044a6" name="inheritancefe353044a6">
 <area shape="rect" id="node2" href="../_brain/index.html#modular_robot.brain._brain.Brain" target="_top" title="The brain of a modular robot." alt="" coords="125,5,197,31"/>
-<area shape="rect" id="node3" href="_brain_cpg_network_static/index.html#modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" target="_top" title="A CPG brain with cpgs and connections defined by the user." alt="" coords="245,5,419,31"/>
-</map><p>A CPG brain with cpgs and connections defined by the user.</p>
+<area shape="rect" id="node3" href="_brain_cpg_network_static/index.html#modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" target="_top" title="A CPG (central pattern generator) brain with CPGs and connections defined by the user." alt="" coords="245,5,419,31"/>
+</map><p>A CPG (central pattern generator) brain with CPGs and connections defined by the user.</p>
 <p>A state vector is integrated over time using a weight matrix which multiplication with the state vector sum defines the derivative of the state vector.
 I.e X’ = WX</p>
 <p>The first <cite>num_output_neurons</cite> in the state vector are the outputs for the controller created by this brain.</p>
@@ -369,8 +370,8 @@ I.e X’ = WX</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.CpgNetworkStructure">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CpgNetworkStructure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cpgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_cpg_network_structure/index.html#modular_robot.brain.cpg._cpg_network_structure.Cpg" title="modular_robot.brain.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connections</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">set</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_cpg_network_structure/index.html#modular_robot.brain.cpg._cpg_network_structure.CpgPair" title="modular_robot.brain.cpg._cpg_network_structure.CpgPair"><span class="pre">CpgPair</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.brain.cpg.CpgNetworkStructure" title="Link to this definition"></a></dt>
-<dd><p>Describes the structure of a cpg network.</p>
-<p>Can generate parameters for a cpg network, such as the initial state.</p>
+<dd><p>Describes the structure of a CPG network.</p>
+<p>Can generate parameters for a CPG network, such as the initial state.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.CpgNetworkStructure.num_connections">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#modular_robot.brain.cpg.CpgNetworkStructure.num_connections" title="Link to this definition"></a></dt>
@@ -386,7 +387,7 @@ I.e X’ = WX</p>
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.CpgNetworkStructure.num_states">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_states</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#modular_robot.brain.cpg.CpgNetworkStructure.num_states" title="Link to this definition"></a></dt>
 <dd><p>Get the number of states in a cpg network of this structure.</p>
-<p>This would be twice the number of cpgs.</p>
+<p>This would be twice the number of CPGs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The number of states.</p>
@@ -397,10 +398,10 @@ I.e X’ = WX</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.CpgNetworkStructure.num_cpgs">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_cpgs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#modular_robot.brain.cpg.CpgNetworkStructure.num_cpgs" title="Link to this definition"></a></dt>
-<dd><p>Get the number of cpgs in the structure.</p>
+<dd><p>Get the number of CPGs in the structure.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The number of cpgs.</p>
+<dd class="field-odd"><p>The number of CPGs.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -408,7 +409,7 @@ I.e X’ = WX</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.CpgNetworkStructure.output_indices">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">output_indices</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#modular_robot.brain.cpg.CpgNetworkStructure.output_indices" title="Link to this definition"></a></dt>
-<dd><p>Get the index in the state array for each cpg, matching the order the cpgs were provided in.</p>
+<dd><p>Get the index in the state array for each cpg, matching the order the CPGs were provided in.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The indices.</p>
@@ -429,13 +430,13 @@ I.e X’ = WX</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.CpgNetworkStructure.make_cpgs">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_cpgs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_cpgs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_cpg_network_structure/index.html#modular_robot.brain.cpg._cpg_network_structure.Cpg" title="modular_robot.brain.cpg._cpg_network_structure.Cpg"><span class="pre">Cpg</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot.brain.cpg.CpgNetworkStructure.make_cpgs" title="Link to this definition"></a></dt>
-<dd><p>Create a list of cpgs.</p>
+<dd><p>Create a list of CPGs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>num_cpgs</strong> – The number of cpgs to create.</p>
+<dd class="field-odd"><p><strong>num_cpgs</strong> – The number of CPGs to create.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The created list of cpgs.</p>
+<dd class="field-even"><p>The created list of CPGs.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -491,9 +492,9 @@ I.e X’ = WX</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="modular_robot.brain.cpg.active_hinges_to_cpg_network_structure_neighbor">
 <span class="sig-name descname"><span class="pre">active_hinges_to_cpg_network_structure_neighbor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active_hinges</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../body/base/index.html#modular_robot.body.base.ActiveHinge" title="modular_robot.body.base.ActiveHinge"><span class="pre">modular_robot.body.base.ActiveHinge</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_cpg_network_structure/index.html#modular_robot.brain.cpg._cpg_network_structure.CpgNetworkStructure" title="modular_robot.brain.cpg._cpg_network_structure.CpgNetworkStructure"><span class="pre">modular_robot.brain.cpg._cpg_network_structure.CpgNetworkStructure</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../body/base/index.html#modular_robot.body.base.ActiveHinge" title="modular_robot.body.base.ActiveHinge"><span class="pre">modular_robot.body.base.ActiveHinge</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot.brain.cpg.active_hinges_to_cpg_network_structure_neighbor" title="Link to this definition"></a></dt>
-<dd><p>Create the structure of a cpg network based on a list of active hinges.</p>
-<p>The order of the active hinges matches the order of the cpgs.
-I.e. every active hinges has a corresponding cpg,
+<dd><p>Create the structure of a CPG network based on a list of active hinges.</p>
+<p>The order of the active hinges matches the order of the CPGs.
+I.e. every active hinges has a corresponding CPG,
 and these are stored in the order the hinges are provided in.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

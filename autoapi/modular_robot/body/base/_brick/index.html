@@ -179,6 +179,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -223,7 +224,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.body.base._brick.Brick" title="modular_robot.body.base._brick.Brick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Brick</span></code></a></p></td>
-<td><p>A Brick.</p></td>
+<td><p>A Brick Module.</p></td>
 </tr>
 </tbody>
 </table>
@@ -231,11 +232,11 @@
 <dt class="sig sig-object py" id="modular_robot.body.base._brick.Brick">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Brick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../_right_angles/index.html#modular_robot.body._right_angles.RightAngles" title="modular_robot.body._right_angles.RightAngles"><span class="pre">modular_robot.body._right_angles.RightAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../sensors/index.html#modular_robot.body.sensors.Sensor" title="modular_robot.body.sensors.Sensor"><span class="pre">modular_robot.body.sensors.Sensor</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.base._brick.Brick" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../_module/index.html#modular_robot.body._module.Module" title="modular_robot.body._module.Module"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.body._module.Module</span></code></a></p>
-<div class="graphviz"><img src="../../../../../_images/inheritance-009b07aa6ae5bd8231436869a66ea3b551f84de0.png" alt="Inheritance diagram of modular_robot.body.base._brick.Brick" usemap="#inheritanceab4e33d6a6" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../../../_images/inheritance-847593c9551c18478f04c89de1856efcf5e30f4d.png" alt="Inheritance diagram of modular_robot.body.base._brick.Brick" usemap="#inheritanceab4e33d6a6" class="inheritance graphviz" /></div>
 <map id="inheritanceab4e33d6a6" name="inheritanceab4e33d6a6">
-<area shape="rect" id="node1" href="#modular_robot.body.base._brick.Brick" target="_top" title="A Brick." alt="" coords="125,5,197,31"/>
+<area shape="rect" id="node1" href="#modular_robot.body.base._brick.Brick" target="_top" title="A Brick Module." alt="" coords="125,5,197,31"/>
 <area shape="rect" id="node2" href="../../_module/index.html#modular_robot.body._module.Module" target="_top" title="Base class for a module for modular robots." alt="" coords="5,5,77,31"/>
-</map><p>A Brick.</p>
+</map><p>A Brick Module.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.body.base._brick.Brick.front">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">front</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../_module/index.html#modular_robot.body._module.Module" title="modular_robot.body._module.Module"><span class="pre">modular_robot.body._module.Module</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#modular_robot.body.base._brick.Brick.front" title="Link to this definition"></a></dt>
@@ -284,7 +285,7 @@
 <dt class="sig sig-object py" id="modular_robot.body.base._brick.Brick.bounding_box">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.body.base._brick.Brick.bounding_box" title="Link to this definition"></a></dt>
 <dd><p>Get the bounding box size.</p>
-<p>Sizes are total length, not half length from origin.
+<p>Sizes are total length, not half-length from origin.
 :return: Vector3 with sizes of bbox in x,y,z dimension (in m).</p>
 </dd></dl>
 

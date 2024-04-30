@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: ActiveHingeSensor(rotation: float = 0.0)
+.. py:class:: ActiveHingeSensor
 
 
    Bases: :py:obj:`modular_robot.body.sensors._sensor.Sensor`

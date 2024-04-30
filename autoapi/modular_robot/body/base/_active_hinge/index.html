@@ -179,6 +179,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -223,7 +224,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.body.base._active_hinge.ActiveHinge" title="modular_robot.body.base._active_hinge.ActiveHinge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ActiveHinge</span></code></a></p></td>
-<td><p>An Active Hinge.</p></td>
+<td><p>An Active Hinge Module.</p></td>
 </tr>
 </tbody>
 </table>
@@ -231,11 +232,11 @@
 <dt class="sig sig-object py" id="modular_robot.body.base._active_hinge.ActiveHinge">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActiveHinge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="../../_right_angles/index.html#modular_robot.body._right_angles.RightAngles" title="modular_robot.body._right_angles.RightAngles"><span class="pre">modular_robot.body._right_angles.RightAngles</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">servo1_bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">servo2_bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_bounding_box</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">servo_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame_mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">servo1_mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">servo2_mass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">joint_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">static_friction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dynamic_friction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">effort</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">velocity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">armature</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid_gain_p</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pid_gain_d</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_offset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sensors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../sensors/index.html#modular_robot.body.sensors.Sensor" title="modular_robot.body.sensors.Sensor"><span class="pre">modular_robot.body.sensors.Sensor</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.base._active_hinge.ActiveHinge" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../_module/index.html#modular_robot.body._module.Module" title="modular_robot.body._module.Module"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.body._module.Module</span></code></a></p>
-<div class="graphviz"><img src="../../../../../_images/inheritance-10788989d2e04399fbc8a0504156e0d3a88f7ef8.png" alt="Inheritance diagram of modular_robot.body.base._active_hinge.ActiveHinge" usemap="#inheritance05b5d997a0" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../../../_images/inheritance-bc77bc2c608661f7bbbc73ab47baf5f06687d96c.png" alt="Inheritance diagram of modular_robot.body.base._active_hinge.ActiveHinge" usemap="#inheritance05b5d997a0" class="inheritance graphviz" /></div>
 <map id="inheritance05b5d997a0" name="inheritance05b5d997a0">
-<area shape="rect" id="node1" href="#modular_robot.body.base._active_hinge.ActiveHinge" target="_top" title="An Active Hinge." alt="" coords="125,5,227,31"/>
+<area shape="rect" id="node1" href="#modular_robot.body.base._active_hinge.ActiveHinge" target="_top" title="An Active Hinge Module." alt="" coords="125,5,227,31"/>
 <area shape="rect" id="node2" href="../../_module/index.html#modular_robot.body._module.Module" target="_top" title="Base class for a module for modular robots." alt="" coords="5,5,77,31"/>
-</map><p>An Active Hinge.</p>
+</map><p>An Active Hinge Module.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.body.base._active_hinge.ActiveHinge.attachment">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">attachment</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../_module/index.html#modular_robot.body._module.Module" title="modular_robot.body._module.Module"><span class="pre">modular_robot.body._module.Module</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#modular_robot.body.base._active_hinge.ActiveHinge.attachment" title="Link to this definition"></a></dt>
@@ -306,7 +307,7 @@
 <dt class="sig sig-object py" id="modular_robot.body.base._active_hinge.ActiveHinge.servo1_bounding_box">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">servo1_bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.body.base._active_hinge.ActiveHinge.servo1_bounding_box" title="Link to this definition"></a></dt>
 <dd><p>Get the bounding box of the first servo part.</p>
-<p>Sizes are total length, not half length from origin.
+<p>Sizes are total length, not half-length from origin.
 :return: Vector3 with sizes of bbox in x,y,z dimension (m).</p>
 </dd></dl>
 
@@ -314,7 +315,7 @@
 <dt class="sig sig-object py" id="modular_robot.body.base._active_hinge.ActiveHinge.servo2_bounding_box">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">servo2_bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.body.base._active_hinge.ActiveHinge.servo2_bounding_box" title="Link to this definition"></a></dt>
 <dd><p>Get the bounding box of the second servo part.</p>
-<p>Sizes are total length, not half length from origin.
+<p>Sizes are total length, not half-length from origin.
 :return: Vector3 with sizes of bbox in x,y,z dimension (m).</p>
 </dd></dl>
 
@@ -322,7 +323,7 @@
 <dt class="sig sig-object py" id="modular_robot.body.base._active_hinge.ActiveHinge.frame_bounding_box">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frame_bounding_box</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.body.base._active_hinge.ActiveHinge.frame_bounding_box" title="Link to this definition"></a></dt>
 <dd><p>Get the bounding box of the frame.</p>
-<p>Sizes are total length, not half length from origin.
+<p>Sizes are total length, not half-length from origin.
 :return: Vector3 with sizes of bbox in x,y,z dimension (m).</p>
 </dd></dl>
 
@@ -395,7 +396,7 @@
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.body.base._active_hinge.ActiveHinge.armature">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">armature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#modular_robot.body.base._active_hinge.ActiveHinge.armature" title="Link to this definition"></a></dt>
-<dd><p>Get thearmature of the joint.</p>
+<dd><p>Get the armature of the joint.</p>
 <p>This represents the inertia of the motor itself when nothing is attached.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -430,6 +431,13 @@
 <dt class="sig sig-object py" id="modular_robot.body.base._active_hinge.ActiveHinge.ATTACHMENT">
 <span class="sig-name descname"><span class="pre">ATTACHMENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#modular_robot.body.base._active_hinge.ActiveHinge.ATTACHMENT" title="Link to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="modular_robot.body.base._active_hinge.ActiveHinge.attachment_points">
+<span class="sig-name descname"><span class="pre">attachment_points</span></span><a class="headerlink" href="#modular_robot.body.base._active_hinge.ActiveHinge.attachment_points" title="Link to this definition"></a></dt>
+<dd><p>The base module only has orientation as its parameter since not all modules are square.</p>
+<p>Here we covert the angle of the module to its orientation in space.</p>
+</dd></dl>
 
 </dd></dl>
 

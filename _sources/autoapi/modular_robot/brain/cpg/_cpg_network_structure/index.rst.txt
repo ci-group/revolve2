@@ -35,7 +35,7 @@ Classes
 .. py:class:: CpgPair(cpg_1: Cpg, cpg_2: Cpg)
 
 
-   A pair of cpgs that assures that the first cpg always has the lowest index.
+   A pair of CPGs that assures that the first cpg always has the lowest index.
 
    .. py:attribute:: cpg_index_lowest
       :type: Cpg
@@ -51,9 +51,9 @@ Classes
 .. py:class:: CpgNetworkStructure(cpgs: list[Cpg], connections: set[CpgPair])
 
 
-   Describes the structure of a cpg network.
+   Describes the structure of a CPG network.
 
-   Can generate parameters for a cpg network, such as the initial state.
+   Can generate parameters for a CPG network, such as the initial state.
 
    .. py:property:: num_connections
       :type: int
@@ -68,7 +68,7 @@ Classes
 
       Get the number of states in a cpg network of this structure.
 
-      This would be twice the number of cpgs.
+      This would be twice the number of CPGs.
 
       :returns: The number of states.
 
@@ -76,15 +76,15 @@ Classes
    .. py:property:: num_cpgs
       :type: int
 
-      Get the number of cpgs in the structure.
+      Get the number of CPGs in the structure.
 
-      :returns: The number of cpgs.
+      :returns: The number of CPGs.
 
 
    .. py:property:: output_indices
       :type: list[int]
 
-      Get the index in the state array for each cpg, matching the order the cpgs were provided in.
+      Get the index in the state array for each cpg, matching the order the CPGs were provided in.
 
       :returns: The indices.
 
@@ -102,10 +102,10 @@ Classes
    .. py:method:: make_cpgs(num_cpgs: int) -> list[Cpg]
       :staticmethod:
 
-      Create a list of cpgs.
+      Create a list of CPGs.
 
-      :param num_cpgs: The number of cpgs to create.
-      :returns: The created list of cpgs.
+      :param num_cpgs: The number of CPGs to create.
+      :returns: The created list of CPGs.
 
 
    .. py:method:: make_connection_weights_matrix(internal_connection_weights: dict[Cpg, float], external_connection_weights: dict[CpgPair, float]) -> numpy.typing.NDArray[numpy.float_]

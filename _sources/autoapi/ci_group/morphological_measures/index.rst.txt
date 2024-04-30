@@ -152,7 +152,7 @@ Attributes
       :returns: The proportion.
 
 
-   .. py:property:: num_single_neighbour_bricks
+   .. py:property:: num_single_neighbour_modules
       :type: int
 
       Get the number of bricks that are only connected to one other module.
@@ -162,7 +162,7 @@ Attributes
       :returns: The number of bricks.
 
 
-   .. py:property:: max_potential_single_neighbour_bricks
+   .. py:property:: max_potential_single_neighbour_modules
       :type: int
 
       Get the maximum number of bricks that could potentially have only one neighbour if this set of modules was rearranged in an optimal way.
@@ -170,16 +170,6 @@ Attributes
       This calculates "l_max" from the paper.
 
       :returns: The calculated number.
-
-
-   .. py:property:: single_neighbour_brick_proportion
-      :type: float
-
-      Get the ratio between bricks with a single neighbour and with how many bricks that potentionally could have been if this set of modules was rearranged in an optimal way.
-
-      This calculates limb proportion(extremities) from the paper.
-
-      :returns: The proportion.
 
 
    .. py:property:: num_double_neighbour_bricks
@@ -327,6 +317,11 @@ Attributes
 
       
 
+   .. py:attribute:: modules
+      :type: list[revolve2.modular_robot.body.Module]
+
+      
+
    .. py:attribute:: bricks
       :type: list[revolve2.modular_robot.body.base.Brick]
 
@@ -352,6 +347,14 @@ Attributes
 
    .. py:attribute:: filled_active_hinges
       :type: list[revolve2.modular_robot.body.base.ActiveHinge]
+
+      Modules that only connect to one other module.
+
+      This includes children and parents.
+
+
+   .. py:attribute:: single_neighbour_modules
+      :type: list[revolve2.modular_robot.body.Module]
 
       Bricks that are only connected to one other module.
 

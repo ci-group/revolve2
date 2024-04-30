@@ -5,7 +5,7 @@
 
 .. autoapi-nested-parse::
 
-   Cpg brains for modular robots.
+   CPG brains for modular robots.
 
 
 
@@ -42,7 +42,7 @@ Functions
    .. autoapi-inheritance-diagram:: modular_robot.brain.cpg.BrainCpgInstance
       :parts: 1
 
-   Cpg network brain.
+   CPG network brain.
 
    A state array that is integrated over time following the differential equation `X'=WX`.
    W is a weight matrix that is multiplied by the state array.
@@ -102,7 +102,7 @@ Functions
    .. autoapi-inheritance-diagram:: modular_robot.brain.cpg.BrainCpgNetworkStatic
       :parts: 1
 
-   A CPG brain with cpgs and connections defined by the user.
+   A CPG (central pattern generator) brain with CPGs and connections defined by the user.
 
    A state vector is integrated over time using a weight matrix which multiplication with the state vector sum defines the derivative of the state vector.
    I.e X' = WX
@@ -132,9 +132,9 @@ Functions
 .. py:class:: CpgNetworkStructure(cpgs: list[Cpg], connections: set[CpgPair])
 
 
-   Describes the structure of a cpg network.
+   Describes the structure of a CPG network.
 
-   Can generate parameters for a cpg network, such as the initial state.
+   Can generate parameters for a CPG network, such as the initial state.
 
    .. py:property:: num_connections
       :type: int
@@ -149,7 +149,7 @@ Functions
 
       Get the number of states in a cpg network of this structure.
 
-      This would be twice the number of cpgs.
+      This would be twice the number of CPGs.
 
       :returns: The number of states.
 
@@ -157,15 +157,15 @@ Functions
    .. py:property:: num_cpgs
       :type: int
 
-      Get the number of cpgs in the structure.
+      Get the number of CPGs in the structure.
 
-      :returns: The number of cpgs.
+      :returns: The number of CPGs.
 
 
    .. py:property:: output_indices
       :type: list[int]
 
-      Get the index in the state array for each cpg, matching the order the cpgs were provided in.
+      Get the index in the state array for each cpg, matching the order the CPGs were provided in.
 
       :returns: The indices.
 
@@ -183,10 +183,10 @@ Functions
    .. py:method:: make_cpgs(num_cpgs: int) -> list[Cpg]
       :staticmethod:
 
-      Create a list of cpgs.
+      Create a list of CPGs.
 
-      :param num_cpgs: The number of cpgs to create.
-      :returns: The created list of cpgs.
+      :param num_cpgs: The number of CPGs to create.
+      :returns: The created list of CPGs.
 
 
    .. py:method:: make_connection_weights_matrix(internal_connection_weights: dict[Cpg, float], external_connection_weights: dict[CpgPair, float]) -> numpy.typing.NDArray[numpy.float_]
@@ -219,10 +219,10 @@ Functions
 
 .. py:function:: active_hinges_to_cpg_network_structure_neighbor(active_hinges: list[modular_robot.body.base.ActiveHinge]) -> tuple[modular_robot.brain.cpg._cpg_network_structure.CpgNetworkStructure, list[tuple[int, modular_robot.body.base.ActiveHinge]]]
 
-   Create the structure of a cpg network based on a list of active hinges.
+   Create the structure of a CPG network based on a list of active hinges.
 
-   The order of the active hinges matches the order of the cpgs.
-   I.e. every active hinges has a corresponding cpg,
+   The order of the active hinges matches the order of the CPGs.
+   I.e. every active hinges has a corresponding CPG,
    and these are stored in the order the hinges are provided in.
 
    :param active_hinges: The active hinges to base the structure on.

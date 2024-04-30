@@ -27,7 +27,7 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot.brain.cpg._brain_cpg_instance.BrainCpgInstance
       :parts: 1
 
-   Cpg network brain.
+   CPG network brain.
 
    A state array that is integrated over time following the differential equation `X'=WX`.
    W is a weight matrix that is multiplied by the state array.

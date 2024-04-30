@@ -32,10 +32,10 @@ Classes
    .. py:method:: set_active_hinge_target(active_hinge: modular_robot.body.base.ActiveHinge, target: float) -> None
       :abstractmethod:
 
-      Set the position target for an active hinge.
+      Set the position target for an active hinge on the modular robot.
 
-      :param active_hinge: The active hinge to set the target for.
-      :param target: The target to set.
+      :param active_hinge: The active hinge object to set the target for.
+      :param target: The target value to set.
 
 
 

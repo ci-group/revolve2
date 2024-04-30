@@ -181,6 +181,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -261,7 +262,7 @@
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.ModularRobot.uuid">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">uuid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uuid.UUID</span></em><a class="headerlink" href="#modular_robot.ModularRobot.uuid" title="Link to this definition"></a></dt>
-<dd><p>Get the uuid.</p>
+<dd><p>Get the uuid, used for identification.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The uuid.</p>
@@ -292,12 +293,12 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot.ModularRobotControlInterface.set_active_hinge_target">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_active_hinge_target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">active_hinge</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="body/base/index.html#modular_robot.body.base.ActiveHinge" title="modular_robot.body.base.ActiveHinge"><span class="pre">modular_robot.body.base.ActiveHinge</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#modular_robot.ModularRobotControlInterface.set_active_hinge_target" title="Link to this definition"></a></dt>
-<dd><p>Set the position target for an active hinge.</p>
+<dd><p>Set the position target for an active hinge on the modular robot.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>active_hinge</strong> – The active hinge to set the target for.</p></li>
-<li><p><strong>target</strong> – The target to set.</p></li>
+<li><p><strong>active_hinge</strong> – The active hinge object to set the target for.</p></li>
+<li><p><strong>target</strong> – The target value to set.</p></li>
 </ul>
 </dd>
 </dl>

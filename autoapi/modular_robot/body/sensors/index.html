@@ -181,6 +181,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -221,7 +222,7 @@
              
   <section id="module-modular_robot.body.sensors">
 <span id="sensors"></span><h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">sensors</span></code><a class="headerlink" href="#module-modular_robot.body.sensors" title="Link to this heading"></a></h1>
-<p>Base Sensors for Modular Robots.</p>
+<p>Sensors for Modular Robots.</p>
 <section id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -235,7 +236,7 @@
 <td><p>A camera for the Modular Robot.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.body.sensors.IMUSensor" title="modular_robot.body.sensors.IMUSensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IMUSensor</span></code></a></p></td>
-<td><p>An inertial measurement unit.</p></td>
+<td><p>An inertial measurement unit (IMU).</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modular_robot.body.sensors.Sensor" title="modular_robot.body.sensors.Sensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Sensor</span></code></a></p></td>
 <td><p>An abstract Sensor Class.</p></td>
@@ -244,7 +245,7 @@
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot.body.sensors.ActiveHingeSensor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActiveHingeSensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.sensors.ActiveHingeSensor" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ActiveHingeSensor</span></span><a class="headerlink" href="#modular_robot.body.sensors.ActiveHingeSensor" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_sensor/index.html#modular_robot.body.sensors._sensor.Sensor" title="modular_robot.body.sensors._sensor.Sensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.body.sensors._sensor.Sensor</span></code></a></p>
 <div class="graphviz"><img src="../../../../_images/inheritance-096f49fed6e2416ae2f0a6e74dcb63d914cef58a.png" alt="Inheritance diagram of modular_robot.body.sensors.ActiveHingeSensor" usemap="#inheritance65b843601c" class="inheritance graphviz" /></div>
 <map id="inheritance65b843601c" name="inheritance65b843601c">
@@ -255,24 +256,13 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot.body.sensors.CameraSensor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CameraSensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(50,</span> <span class="pre">50)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.sensors.CameraSensor" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CameraSensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Quaternion</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Quaternion()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(50,</span> <span class="pre">50)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.sensors.CameraSensor" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_sensor/index.html#modular_robot.body.sensors._sensor.Sensor" title="modular_robot.body.sensors._sensor.Sensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.body.sensors._sensor.Sensor</span></code></a></p>
 <div class="graphviz"><img src="../../../../_images/inheritance-9c464c60755b6ec07329f5579bc87c7b57ef328b.png" alt="Inheritance diagram of modular_robot.body.sensors.CameraSensor" usemap="#inheritanceae07683e16" class="inheritance graphviz" /></div>
 <map id="inheritanceae07683e16" name="inheritanceae07683e16">
 <area shape="rect" id="node3" href="_sensor/index.html#modular_robot.body.sensors._sensor.Sensor" target="_top" title="An abstract Sensor Class." alt="" coords="125,5,197,31"/>
 <area shape="rect" id="node2" href="_camera_sensor/index.html#modular_robot.body.sensors._camera_sensor.CameraSensor" target="_top" title="A camera for the Modular Robot." alt="" coords="245,5,363,31"/>
 </map><p>A camera for the Modular Robot.</p>
-<dl class="py property">
-<dt class="sig sig-object py" id="modular_robot.body.sensors.CameraSensor.position">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.body.sensors.CameraSensor.position" title="Link to this definition"></a></dt>
-<dd><p>Get the position of the camera.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The position.</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.body.sensors.CameraSensor.camera_size">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">camera_size</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#modular_robot.body.sensors.CameraSensor.camera_size" title="Link to this definition"></a></dt>
@@ -288,19 +278,19 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot.body.sensors.IMUSensor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IMUSensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.sensors.IMUSensor" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IMUSensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Quaternion</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Quaternion()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.sensors.IMUSensor" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="_sensor/index.html#modular_robot.body.sensors._sensor.Sensor" title="modular_robot.body.sensors._sensor.Sensor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.body.sensors._sensor.Sensor</span></code></a></p>
-<div class="graphviz"><img src="../../../../_images/inheritance-b45f9eda8d4fe1d6b9baf357c723098c7f82af99.png" alt="Inheritance diagram of modular_robot.body.sensors.IMUSensor" usemap="#inheritanceb42c1b347b" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../../_images/inheritance-e77df6408c8d1719a5945ee87868bef30e5a7212.png" alt="Inheritance diagram of modular_robot.body.sensors.IMUSensor" usemap="#inheritanceb42c1b347b" class="inheritance graphviz" /></div>
 <map id="inheritanceb42c1b347b" name="inheritanceb42c1b347b">
 <area shape="rect" id="node3" href="_sensor/index.html#modular_robot.body.sensors._sensor.Sensor" target="_top" title="An abstract Sensor Class." alt="" coords="125,5,197,31"/>
-<area shape="rect" id="node2" href="_imu_sensor/index.html#modular_robot.body.sensors._imu_sensor.IMUSensor" target="_top" title="An inertial measurement unit." alt="" coords="245,5,337,31"/>
-</map><p>An inertial measurement unit.</p>
+<area shape="rect" id="node2" href="_imu_sensor/index.html#modular_robot.body.sensors._imu_sensor.IMUSensor" target="_top" title="An inertial measurement unit (IMU)." alt="" coords="245,5,337,31"/>
+</map><p>An inertial measurement unit (IMU).</p>
 <p>Reports specific force(closely related to acceleration), angular rate(closely related to angular velocity), and orientation.</p>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot.body.sensors.Sensor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Vector3([0,</span> <span class="pre">0,</span> <span class="pre">0])</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.sensors.Sensor" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Quaternion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pyrr.Vector3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.body.sensors.Sensor" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
 <div class="graphviz"><img src="../../../../_images/inheritance-a52d07451c336ce49d5ffb4ba7eac4e5ccea60be.png" alt="Inheritance diagram of modular_robot.body.sensors.Sensor" usemap="#inheritance1d3d7510d9" class="inheritance graphviz" /></div>
 <map id="inheritance1d3d7510d9" name="inheritance1d3d7510d9">
@@ -318,12 +308,12 @@
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="modular_robot.body.sensors.Sensor.rotation">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#modular_robot.body.sensors.Sensor.rotation" title="Link to this definition"></a></dt>
-<dd><p>Return the rotation of the sensor.</p>
+<dt class="sig sig-object py" id="modular_robot.body.sensors.Sensor.orientation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">orientation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Quaternion</span></em><a class="headerlink" href="#modular_robot.body.sensors.Sensor.orientation" title="Link to this definition"></a></dt>
+<dd><p>Return the orientation of the sensor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The rotation.</p>
+<dd class="field-odd"><p>The orientation.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -331,7 +321,7 @@
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.body.sensors.Sensor.position">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pyrr.Vector3</span></em><a class="headerlink" href="#modular_robot.body.sensors.Sensor.position" title="Link to this definition"></a></dt>
-<dd><p>Get the position of the sensor on a module.</p>
+<dd><p>Get the relative position of the sensor on a module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The position.</p>

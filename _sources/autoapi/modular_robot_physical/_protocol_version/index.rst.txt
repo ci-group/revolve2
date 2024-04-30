@@ -5,6 +5,11 @@
 
 .. py:module:: modular_robot_physical._protocol_version
 
+.. autoapi-nested-parse::
+
+   The version of the communication protocol used.
+
+
 
 Module Contents
 ---------------

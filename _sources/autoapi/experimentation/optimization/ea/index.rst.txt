@@ -5,7 +5,7 @@
 
 .. autoapi-nested-parse::
 
-   Everything related to Evolutionary Algorithms.
+   Standardized building blocks related to Evolutionary Algorithms.
 
 
 

@@ -19,7 +19,7 @@ Classes
 
 
 
-.. py:class:: LocalSimulator(headless: bool = False, start_paused: bool = False, num_simulators: int = 1, cast_shadows: bool = False, fast_sim: bool = False, manual_control: bool = False)
+.. py:class:: LocalSimulator(headless: bool = False, start_paused: bool = False, num_simulators: int = 1, cast_shadows: bool = False, fast_sim: bool = False, manual_control: bool = False, viewer_type: mujoco_simulator.viewers.ViewerType | str = ViewerType.CUSTOM)
 
 
    Bases: :py:obj:`revolve2.simulation.simulator.Simulator`

@@ -29,6 +29,10 @@ Hardware setup for a V2 Robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 For instructions on  how to set up the hardware of a V2 core, refer to `<https://github.com/ci-group/robohat>`_.
 
+**Important:** For the V2 to work properly the `config.txt` on the RPi has to be changed.
+The following file contains the correct config content: `<https://github.com/ci-group/robohat/blob/main/config.txt>`_.
+On the RPi adjust the config in `/boot/config.txt` or on newer systems `/boot/firmware/config.txt`.
+
 ------------------
 Setting up the RPi
 ------------------

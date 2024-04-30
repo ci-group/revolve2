@@ -24,8 +24,6 @@ Classes
 
    Geometry describing part of a rigid body shape.
 
-   Currently always a box.
-
    .. py:attribute:: pose
       :type: simulation.scene._pose.Pose
 

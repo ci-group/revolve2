@@ -40,8 +40,6 @@ Classes
 
    Geometry describing part of a rigid body shape.
 
-   Currently always a box.
-
    .. py:attribute:: pose
       :type: simulation.scene._pose.Pose
 
@@ -76,7 +74,7 @@ Classes
    .. py:attribute:: aabb
       :type: simulation.scene._aabb.AABB
 
-      AABB describing the box's shape.
+      AABB describing the box's bounding box.
 
 
 

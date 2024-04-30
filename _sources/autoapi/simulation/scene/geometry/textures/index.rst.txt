@@ -39,17 +39,14 @@ Classes
    - "SKYBOX": Like "cube" but maps onto the inside of an object.
 
    .. py:attribute:: MAP2D
-      :value: '2d'
 
       
 
    .. py:attribute:: CUBE
-      :value: 'cube'
 
       
 
    .. py:attribute:: SKYBOX
-      :value: 'skybox'
 
       
 

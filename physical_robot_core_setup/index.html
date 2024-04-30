@@ -181,6 +181,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../autoapi/mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../autoapi/mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../autoapi/mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -241,6 +242,9 @@ Also, if you simply want to know how to use a pre-installed physical robot, chec
 <section id="hardware-setup-for-a-v2-robot">
 <h3>Hardware setup for a V2 Robot<a class="headerlink" href="#hardware-setup-for-a-v2-robot" title="Link to this heading"></a></h3>
 <p>For instructions on  how to set up the hardware of a V2 core, refer to <a class="reference external" href="https://github.com/ci-group/robohat">https://github.com/ci-group/robohat</a>.</p>
+<p><strong>Important:</strong> For the V2 to work properly the <cite>config.txt</cite> on the RPi has to be changed.
+The following file contains the correct config content: <a class="reference external" href="https://github.com/ci-group/robohat/blob/main/config.txt">https://github.com/ci-group/robohat/blob/main/config.txt</a>.
+On the RPi adjust the config in <cite>/boot/config.txt</cite> or on newer systems <cite>/boot/firmware/config.txt</cite>.</p>
 </section>
 </section>
 <section id="setting-up-the-rpi">

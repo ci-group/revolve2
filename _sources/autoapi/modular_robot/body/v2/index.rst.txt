@@ -5,7 +5,7 @@
 
 .. autoapi-nested-parse::
 
-   Explicit modules of V2 Robot.
+   Explicit modules of V2 Robots.
 
 
 
@@ -33,7 +33,7 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot.body.v2.ActiveHingeV2
       :parts: 1
 
-   An active hinge module for a modular robot.
+   An active hinge v2 module for a modular robot.
 
    This is a rotary joint.
 
@@ -41,17 +41,20 @@ Classes
 .. py:class:: BodyV2
 
 
-   Bases: :py:obj:`modular_robot.body.base._body.Body`
+   Bases: :py:obj:`modular_robot.body.base.Body`
 
    .. autoapi-inheritance-diagram:: modular_robot.body.v2.BodyV2
       :parts: 1
 
-   Body of a V1 modular robot.
+   Body of a V2 modular robot.
 
    .. py:property:: core_v2
       :type: modular_robot.body.v2._core_v2.CoreV2
 
       Get the specific v2 core of the body.
+
+      This function is usd since the base core has fewer attributes than a V2 core.
+      Using this, allows us to specify the return type without overwriting functions of the base module.
 
       :return: The v2 core.
 

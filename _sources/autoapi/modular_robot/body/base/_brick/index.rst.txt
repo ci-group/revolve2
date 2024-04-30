@@ -27,7 +27,7 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot.body.base._brick.Brick
       :parts: 1
 
-   A Brick.
+   A Brick Module.
 
    .. py:property:: front
       :type: modular_robot.body._module.Module | None
@@ -66,7 +66,7 @@ Classes
 
       Get the bounding box size.
 
-      Sizes are total length, not half length from origin.
+      Sizes are total length, not half-length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (in m).
 
 

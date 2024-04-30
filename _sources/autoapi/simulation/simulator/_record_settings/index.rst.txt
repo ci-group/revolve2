@@ -29,9 +29,25 @@ Classes
 
       
 
+   .. py:attribute:: overwrite
+      :type: bool
+      :value: False
+
+      
+
    .. py:attribute:: fps
       :type: int
       :value: 24
+
+      
+
+   .. py:attribute:: width
+      :type: int | None
+
+      
+
+   .. py:attribute:: height
+      :type: int | None
 
       
 

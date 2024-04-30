@@ -98,4 +98,11 @@ Classes
 
       
 
+   .. py:attribute:: attachment_points
+
+      The base module only has orientation as its parameter since not all modules are square.
+
+      Here we covert the angle of the module to its orientation in space.
+
+
 

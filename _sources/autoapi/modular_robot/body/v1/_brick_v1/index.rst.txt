@@ -27,6 +27,6 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot.body.v1._brick_v1.BrickV1
       :parts: 1
 
-   A brick module for a modular robot.
+   A brick module for a v1 modular robot.
 
 

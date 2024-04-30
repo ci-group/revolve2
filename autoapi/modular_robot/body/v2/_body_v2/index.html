@@ -179,6 +179,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -223,23 +224,25 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.body.v2._body_v2.BodyV2" title="modular_robot.body.v2._body_v2.BodyV2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BodyV2</span></code></a></p></td>
-<td><p>Body of a V1 modular robot.</p></td>
+<td><p>Body of a V2 modular robot.</p></td>
 </tr>
 </tbody>
 </table>
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot.body.v2._body_v2.BodyV2">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BodyV2</span></span><a class="headerlink" href="#modular_robot.body.v2._body_v2.BodyV2" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="../../base/_body/index.html#modular_robot.body.base._body.Body" title="modular_robot.body.base._body.Body"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.body.base._body.Body</span></code></a></p>
-<div class="graphviz"><img src="../../../../../_images/inheritance-dec9db571e2829ce2638bac92e26c89ad1c83225.png" alt="Inheritance diagram of modular_robot.body.v2._body_v2.BodyV2" usemap="#inheritance9512e0fe04" class="inheritance graphviz" /></div>
+<dd><p>Bases: <a class="reference internal" href="../../base/index.html#modular_robot.body.base.Body" title="modular_robot.body.base.Body"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.body.base.Body</span></code></a></p>
+<div class="graphviz"><img src="../../../../../_images/inheritance-fe6a24acc1f4e113cd2c69141a535cef65f4247a.png" alt="Inheritance diagram of modular_robot.body.v2._body_v2.BodyV2" usemap="#inheritance9512e0fe04" class="inheritance graphviz" /></div>
 <map id="inheritance9512e0fe04" name="inheritance9512e0fe04">
 <area shape="rect" id="node1" href="../../base/_body/index.html#modular_robot.body.base._body.Body" target="_top" title="Body of a modular robot." alt="" coords="5,5,77,31"/>
-<area shape="rect" id="node2" href="#modular_robot.body.v2._body_v2.BodyV2" target="_top" title="Body of a V1 modular robot." alt="" coords="125,5,197,31"/>
-</map><p>Body of a V1 modular robot.</p>
+<area shape="rect" id="node2" href="#modular_robot.body.v2._body_v2.BodyV2" target="_top" title="Body of a V2 modular robot." alt="" coords="125,5,197,31"/>
+</map><p>Body of a V2 modular robot.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="modular_robot.body.v2._body_v2.BodyV2.core_v2">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">core_v2</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../_core_v2/index.html#modular_robot.body.v2._core_v2.CoreV2" title="modular_robot.body.v2._core_v2.CoreV2"><span class="pre">modular_robot.body.v2._core_v2.CoreV2</span></a></em><a class="headerlink" href="#modular_robot.body.v2._body_v2.BodyV2.core_v2" title="Link to this definition"></a></dt>
 <dd><p>Get the specific v2 core of the body.</p>
+<p>This function is usd since the base core has fewer attributes than a V2 core.
+Using this, allows us to specify the return type without overwriting functions of the base module.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The v2 core.</p>

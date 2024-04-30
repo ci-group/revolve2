@@ -5,7 +5,7 @@
 
 .. autoapi-nested-parse::
 
-   Base Modules for Robots.
+   Abstract Base Modules for Robots.
 
 
 
@@ -34,7 +34,7 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot.body.base.ActiveHinge
       :parts: 1
 
-   An Active Hinge.
+   An Active Hinge Module.
 
    .. py:property:: attachment
       :type: modular_robot.body._module.Module | None
@@ -89,7 +89,7 @@ Classes
 
       Get the bounding box of the first servo part.
 
-      Sizes are total length, not half length from origin.
+      Sizes are total length, not half-length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (m).
 
 
@@ -98,7 +98,7 @@ Classes
 
       Get the bounding box of the second servo part.
 
-      Sizes are total length, not half length from origin.
+      Sizes are total length, not half-length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (m).
 
 
@@ -107,7 +107,7 @@ Classes
 
       Get the bounding box of the frame.
 
-      Sizes are total length, not half length from origin.
+      Sizes are total length, not half-length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (m).
 
 
@@ -162,7 +162,7 @@ Classes
    .. py:property:: armature
       :type: float
 
-      Get thearmature of the joint.
+      Get the armature of the joint.
 
       This represents the inertia of the motor itself when nothing is attached.
 
@@ -189,6 +189,13 @@ Classes
       :value: 0
 
       
+
+   .. py:attribute:: attachment_points
+
+      The base module only has orientation as its parameter since not all modules are square.
+
+      Here we covert the angle of the module to its orientation in space.
+
 
 
 .. py:class:: AttachmentFace(rotation: float | modular_robot.body._right_angles.RightAngles, attachment_points: dict[int, modular_robot.body._attachment_point.AttachmentPoint])
@@ -230,11 +237,12 @@ Classes
       :raises KeyError: In case an attachment point is not found.
 
 
-   .. py:method:: find_modules_of_type(module_type: Type[TModule]) -> list[TModule]
+   .. py:method:: find_modules_of_type(module_type: Type[TModule], exclude: list[Type[TModule]] | None = None) -> list[TModule]
 
       Find all Modules of a certain type in the robot.
 
       :param module_type: The type.
+      :param exclude: Module types to be excluded in search.
       :return: The list of Modules.
 
 
@@ -259,7 +267,7 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot.body.base.Brick
       :parts: 1
 
-   A Brick.
+   A Brick Module.
 
    .. py:property:: front
       :type: modular_robot.body._module.Module | None
@@ -298,7 +306,7 @@ Classes
 
       Get the bounding box size.
 
-      Sizes are total length, not half length from origin.
+      Sizes are total length, not half-length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (in m).
 
 
@@ -396,5 +404,12 @@ Classes
       :value: 3
 
       
+
+   .. py:attribute:: attachment_points
+
+      The base module only has orientation as its parameter since not all modules are square.
+
+      Here we covert the angle of the module to its orientation in space.
+
 
 

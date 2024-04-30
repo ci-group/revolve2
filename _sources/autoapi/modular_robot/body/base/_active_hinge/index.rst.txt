@@ -27,7 +27,7 @@ Classes
    .. autoapi-inheritance-diagram:: modular_robot.body.base._active_hinge.ActiveHinge
       :parts: 1
 
-   An Active Hinge.
+   An Active Hinge Module.
 
    .. py:property:: attachment
       :type: modular_robot.body._module.Module | None
@@ -82,7 +82,7 @@ Classes
 
       Get the bounding box of the first servo part.
 
-      Sizes are total length, not half length from origin.
+      Sizes are total length, not half-length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (m).
 
 
@@ -91,7 +91,7 @@ Classes
 
       Get the bounding box of the second servo part.
 
-      Sizes are total length, not half length from origin.
+      Sizes are total length, not half-length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (m).
 
 
@@ -100,7 +100,7 @@ Classes
 
       Get the bounding box of the frame.
 
-      Sizes are total length, not half length from origin.
+      Sizes are total length, not half-length from origin.
       :return: Vector3 with sizes of bbox in x,y,z dimension (m).
 
 
@@ -155,7 +155,7 @@ Classes
    .. py:property:: armature
       :type: float
 
-      Get thearmature of the joint.
+      Get the armature of the joint.
 
       This represents the inertia of the motor itself when nothing is attached.
 
@@ -182,5 +182,12 @@ Classes
       :value: 0
 
       
+
+   .. py:attribute:: attachment_points
+
+      The base module only has orientation as its parameter since not all modules are square.
+
+      Here we covert the angle of the module to its orientation in space.
+
 
 

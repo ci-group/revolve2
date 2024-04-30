@@ -51,11 +51,11 @@ Classes
 
    A brain that does nothing.
 
-   .. py:method:: control(dt: float, sensor_state: modular_robot.sensor_state._modular_robot_sensor_state.ModularRobotSensorState, control_interface: modular_robot._modular_robot_control_interface.ModularRobotControlInterface) -> None
+   .. py:method:: control(dt: float, sensor_state: modular_robot.sensor_state.ModularRobotSensorState, control_interface: modular_robot._modular_robot_control_interface.ModularRobotControlInterface) -> None
 
-      Control the modular robot.
+      Control nothing.
 
-      Sets the active hinge targets to the values in the state array as defined by the mapping provided in the constructor.
+      This brain does not do anything for control, as it is an empty box.
 
       :param dt: Elapsed seconds since last call to this function.
       :param sensor_state: Interface for reading the current sensor state.

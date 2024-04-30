@@ -1,0 +1,50 @@
+:orphan:
+
+:py:mod:`_viewer_type`
+===============================================
+
+.. py:module:: mujoco_simulator.viewers._viewer_type
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator.viewers._viewer_type.ViewerType
+
+
+
+
+.. py:class:: ViewerType(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.viewers._viewer_type.ViewerType
+      :parts: 1
+
+   Viewer types available for mujoco.
+
+   .. py:attribute:: NATIVE
+
+      
+
+   .. py:attribute:: CUSTOM
+
+      
+
+   .. py:method:: from_string(value: str) -> ViewerType
+      :staticmethod:
+
+      Get viewer type from string.
+
+      :param value: The value.
+      :returns: The viewer type.
+      :raises ValueError: If the passed value has no viewer type defined.
+
+
+

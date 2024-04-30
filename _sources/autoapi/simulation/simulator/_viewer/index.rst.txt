@@ -1,0 +1,81 @@
+:orphan:
+
+:py:mod:`_viewer`
+======================================
+
+.. py:module:: simulation.simulator._viewer
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   simulation.simulator._viewer.Viewer
+
+
+
+
+.. py:class:: Viewer
+
+
+   Bases: :py:obj:`abc.ABC`
+
+   .. autoapi-inheritance-diagram:: simulation.simulator._viewer.Viewer
+      :parts: 1
+
+   An abstract viewer class, enabling the rendering of simulations.
+
+   .. py:property:: view_port
+      :type: Any
+      :abstractmethod:
+
+      Get the viewport.
+
+      :returns: The viewport object.
+
+
+   .. py:property:: context
+      :type: Any
+      :abstractmethod:
+
+      Return the viewer context.
+
+      :returns: The context object.
+
+
+   .. py:property:: can_record
+      :type: bool
+      :abstractmethod:
+
+      Check if this viewer can record.
+
+      :returns: The truth.
+
+
+   .. py:method:: close_viewer() -> None
+      :abstractmethod:
+
+      Close the viewer.
+
+
+   .. py:method:: render() -> Any | None
+      :abstractmethod:
+
+      Render the scene on the viewer.
+
+      :returns: Nothing or feedback.
+
+
+   .. py:method:: current_viewport_size() -> tuple[int, int]
+      :abstractmethod:
+
+      Get the current viewport size.
+
+      :returns: The size as a tuple.
+
+
+

@@ -179,6 +179,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -223,7 +224,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" title="modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BrainCpgNetworkStatic</span></code></a></p></td>
-<td><p>A CPG brain with cpgs and connections defined by the user.</p></td>
+<td><p>A CPG (central pattern generator) brain with CPGs and connections defined by the user.</p></td>
 </tr>
 </tbody>
 </table>
@@ -231,11 +232,11 @@
 <dt class="sig sig-object py" id="modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrainCpgNetworkStatic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_matrix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">numpy.typing.NDArray</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.float_</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../../../body/base/index.html#modular_robot.body.base.ActiveHinge" title="modular_robot.body.base.ActiveHinge"><span class="pre">modular_robot.body.base.ActiveHinge</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="../../_brain/index.html#modular_robot.brain._brain.Brain" title="modular_robot.brain._brain.Brain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot.brain._brain.Brain</span></code></a></p>
-<div class="graphviz"><img src="../../../../../_images/inheritance-ab1fe395561d62582353a514e7058ffc3e1eda1b.png" alt="Inheritance diagram of modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" usemap="#inheritancea7e09ba63d" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../../../_images/inheritance-bd7ebf927b907b36daa491acd054dae7031f9708.png" alt="Inheritance diagram of modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" usemap="#inheritancea7e09ba63d" class="inheritance graphviz" /></div>
 <map id="inheritancea7e09ba63d" name="inheritancea7e09ba63d">
 <area shape="rect" id="node2" href="../../_brain/index.html#modular_robot.brain._brain.Brain" target="_top" title="The brain of a modular robot." alt="" coords="125,5,197,31"/>
-<area shape="rect" id="node3" href="#modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" target="_top" title="A CPG brain with cpgs and connections defined by the user." alt="" coords="245,5,419,31"/>
-</map><p>A CPG brain with cpgs and connections defined by the user.</p>
+<area shape="rect" id="node3" href="#modular_robot.brain.cpg._brain_cpg_network_static.BrainCpgNetworkStatic" target="_top" title="A CPG (central pattern generator) brain with CPGs and connections defined by the user." alt="" coords="245,5,419,31"/>
+</map><p>A CPG (central pattern generator) brain with CPGs and connections defined by the user.</p>
 <p>A state vector is integrated over time using a weight matrix which multiplication with the state vector sum defines the derivative of the state vector.
 I.e X’ = WX</p>
 <p>The first <cite>num_output_neurons</cite> in the state vector are the outputs for the controller created by this brain.</p>

@@ -179,6 +179,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -223,18 +224,33 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl" title="modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RoboServerImpl</span></code></a></p></td>
-<td><p>Implements the Cap'n Proto interface.</p></td>
+<td><p>Implements the Cap'n Proto interface, run on the physical modular robot.</p></td>
 </tr>
 </tbody>
 </table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_physical.robot_daemon._robo_server_impl.Pin" title="modular_robot_physical.robot_daemon._robo_server_impl.Pin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Pin</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="modular_robot_physical.robot_daemon._robo_server_impl.Pin">
+<span class="sig-name descname"><span class="pre">Pin</span></span><a class="headerlink" href="#modular_robot_physical.robot_daemon._robo_server_impl.Pin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RoboServerImpl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hardware_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../_hardware_type/index.html#modular_robot_physical._hardware_type.HardwareType" title="modular_robot_physical._hardware_type.HardwareType"><span class="pre">modular_robot_physical._hardware_type.HardwareType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">physical_interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../physical_interfaces/index.html#modular_robot_physical.physical_interfaces.PhysicalInterface" title="modular_robot_physical.physical_interfaces.PhysicalInterface"><span class="pre">modular_robot_physical.physical_interfaces.PhysicalInterface</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.RoboServer.Server</span></code></p>
-<div class="graphviz"><img src="../../../../_images/inheritance-c8841719b3c38a43748ec4764e73a316d3c26100.png" alt="Inheritance diagram of modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl" usemap="#inheritancee7fa0cc016" class="inheritance graphviz" /></div>
+<div class="graphviz"><img src="../../../../_images/inheritance-923366c38b0d92be6353a05d3a6a050cef199491.png" alt="Inheritance diagram of modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl" usemap="#inheritancee7fa0cc016" class="inheritance graphviz" /></div>
 <map id="inheritancee7fa0cc016" name="inheritancee7fa0cc016">
-<area shape="rect" id="node1" href="#modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl" target="_top" title="Implements the Cap&#39;n Proto interface." alt="" coords="5,5,132,31"/>
-</map><p>Implements the Cap’n Proto interface.</p>
+<area shape="rect" id="node1" href="#modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl" target="_top" title="Implements the Cap&#39;n Proto interface, run on the physical modular robot." alt="" coords="5,5,132,31"/>
+</map><p>Implements the Cap’n Proto interface, run on the physical modular robot.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl.cleanup">
 <span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl.cleanup" title="Link to this definition"></a></dt>
@@ -285,7 +301,6 @@
 <dt class="sig sig-object py" id="modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl.controlAndReadSensors">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">controlAndReadSensors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.ControlAndReadSensorsArgsReader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_context</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">modular_robot_physical.robot_daemon_api.robot_daemon_protocol_capnp.SensorReadings</span></span></span><a class="headerlink" href="#modular_robot_physical.robot_daemon._robo_server_impl.RoboServerImpl.controlAndReadSensors" title="Link to this definition"></a></dt>
 <dd><p>Handle controlAndReadSensors.</p>
-<p>Currently reads nothing.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>args</strong> – Args to the function.</p>

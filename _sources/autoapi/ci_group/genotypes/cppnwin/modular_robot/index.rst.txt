@@ -27,19 +27,19 @@ Classes
 
 .. autoapisummary::
 
-   ci_group.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighborV1
+   ci_group.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighbor
    ci_group.genotypes.cppnwin.modular_robot.BrainGenotypeCpg
    ci_group.genotypes.cppnwin.modular_robot.BrainGenotypeCpgOrm
 
 
 
 
-.. py:class:: BrainCpgNetworkNeighborV1(genotype: multineat.Genome, body: revolve2.modular_robot.body.base.Body)
+.. py:class:: BrainCpgNetworkNeighbor(genotype: multineat.Genome, body: revolve2.modular_robot.body.base.Body)
 
 
    Bases: :py:obj:`revolve2.modular_robot.brain.cpg.BrainCpgNetworkNeighbor`
 
-   .. autoapi-inheritance-diagram:: ci_group.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighborV1
+   .. autoapi-inheritance-diagram:: ci_group.genotypes.cppnwin.modular_robot.BrainCpgNetworkNeighbor
       :parts: 1
 
    A CPG brain based on `ModularRobotBrainCpgNetworkNeighbor` that creates weights from a CPPNWIN network.
@@ -91,7 +91,7 @@ Classes
       :returns: A newly created genotype.
 
 
-   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor_v1.BrainCpgNetworkNeighborV1
+   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor.BrainCpgNetworkNeighbor
 
       Develop the genotype into a modular robot.
 
@@ -147,7 +147,7 @@ Classes
       :returns: A newly created genotype.
 
 
-   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor_v1.BrainCpgNetworkNeighborV1
+   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor.BrainCpgNetworkNeighbor
 
       Develop the genotype into a modular robot.
 

@@ -1,0 +1,192 @@
+:py:mod:`viewers`
+==================================
+
+.. py:module:: mujoco_simulator.viewers
+
+.. autoapi-nested-parse::
+
+   Different viewer implementations for mujoco.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator.viewers.CustomMujocoViewer
+   mujoco_simulator.viewers.CustomMujocoViewerMode
+   mujoco_simulator.viewers.NativeMujocoViewer
+   mujoco_simulator.viewers.ViewerType
+
+
+
+
+.. py:class:: CustomMujocoViewer(model: mujoco.MjModel, data: mujoco.MjData, *, backend: mujoco_simulator._render_backend.RenderBackend, width: int | None = None, height: int | None = None, start_paused: bool = False, render_every_frame: bool = False, hide_menus: bool = False, mode: CustomMujocoViewerMode = CustomMujocoViewerMode.CLASSIC, **_: Any)
+
+
+   Bases: :py:obj:`revolve2.simulation.simulator.Viewer`, :py:obj:`mujoco_viewer.MujocoViewer`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.viewers.CustomMujocoViewer
+      :parts: 1
+
+   Custom Viewer Object that allows for additional keyboard inputs.
+
+   We need the type ignore since the mujoco_viewer library is not typed properly and therefor the MujocoViewer class cant be resolved.
+
+   .. py:property:: context
+      :type: mujoco.MjrContext
+
+      Get the context.
+
+      :returns: The context.
+
+
+   .. py:property:: view_port
+      :type: mujoco.MjrRect
+
+      Get the view_port.
+
+      :returns: The viewport.
+
+
+   .. py:property:: can_record
+      :type: bool
+
+      Return True.
+
+      :returns: True.
+
+
+   .. py:method:: current_viewport_size() -> tuple[int, int]
+
+      Grabs the *current* viewport size (and updates the cached values).
+
+      :return: the viewport size
+
+
+   .. py:method:: render() -> int | None
+
+      Render the scene.
+
+      :return: A cycle position if applicable.
+
+
+   .. py:method:: close_viewer() -> None
+
+      Close the viewer.
+
+
+
+.. py:class:: CustomMujocoViewerMode(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.viewers.CustomMujocoViewerMode
+      :parts: 1
+
+   Enumerate different viewer modes for the CustomMujocoViewer.
+
+   - CLASSIC mode gives an informative interface for regular simulations.
+   - MANUAL mode gives a cut down interface, specific for targeting robot movement manually.
+
+   .. py:attribute:: CLASSIC
+      :value: 'classic'
+
+      
+
+   .. py:attribute:: MANUAL
+      :value: 'manual'
+
+      
+
+
+.. py:class:: NativeMujocoViewer(model: mujoco.MjModel, data: mujoco.MjData, *, key_callback: Callable[[int], None] | None = None, **_: Any)
+
+
+   Bases: :py:obj:`revolve2.simulation.simulator.Viewer`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.viewers.NativeMujocoViewer
+      :parts: 1
+
+   Native Viewer Object.
+
+   .. py:property:: context
+      :type: mujoco.MjrContext
+
+      Get the context.
+
+      :returns: The context.
+
+
+   .. py:property:: view_port
+      :type: mujoco.MjrRect
+      :abstractmethod:
+
+      Get the view port.
+
+      :raises NotImplementedError: As it is not implemented.
+
+
+   .. py:property:: can_record
+      :type: bool
+
+      Return False.
+
+      :returns: False.
+
+
+   .. py:method:: render() -> int | None
+
+      Render the scene.
+
+      :return: A cycle position if applicable.
+
+
+   .. py:method:: close_viewer() -> None
+
+      Close the viewer.
+
+
+   .. py:method:: current_viewport_size() -> tuple[int, int]
+      :abstractmethod:
+
+      Grabs the *current* viewport size (and updates the cached values).
+
+      :raises NotImplementedError: As it is not implemented.
+
+
+
+.. py:class:: ViewerType(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.viewers.ViewerType
+      :parts: 1
+
+   Viewer types available for mujoco.
+
+   .. py:attribute:: NATIVE
+
+      
+
+   .. py:attribute:: CUSTOM
+
+      
+
+   .. py:method:: from_string(value: str) -> ViewerType
+      :staticmethod:
+
+      Get viewer type from string.
+
+      :param value: The value.
+      :returns: The viewer type.
+      :raises ValueError: If the passed value has no viewer type defined.
+
+
+

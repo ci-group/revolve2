@@ -181,6 +181,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../mujoco_simulator/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mujoco_simulator</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../mujoco_simulator/index.html#subpackages">Subpackages</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../mujoco_simulator/textures/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textures</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../mujoco_simulator/viewers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">viewers</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../../mujoco_simulator/index.html#package-contents">Package Contents</a><ul>
@@ -390,8 +391,8 @@ EvoApplications 2018. Lecture Notes in Computer Science(), vol 10784. Springer, 
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.num_single_neighbour_bricks">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_single_neighbour_bricks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.num_single_neighbour_bricks" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.num_single_neighbour_modules">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_single_neighbour_modules</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.num_single_neighbour_modules" title="Link to this definition"></a></dt>
 <dd><p>Get the number of bricks that are only connected to one other module.</p>
 <p>Both children and parent are counted.</p>
 <dl class="field-list simple">
@@ -402,25 +403,13 @@ EvoApplications 2018. Lecture Notes in Computer Science(), vol 10784. Springer, 
 </dd></dl>
 
 <dl class="py property">
-<dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.max_potential_single_neighbour_bricks">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_potential_single_neighbour_bricks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.max_potential_single_neighbour_bricks" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.max_potential_single_neighbour_modules">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_potential_single_neighbour_modules</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.max_potential_single_neighbour_modules" title="Link to this definition"></a></dt>
 <dd><p>Get the maximum number of bricks that could potentially have only one neighbour if this set of modules was rearranged in an optimal way.</p>
 <p>This calculates “l_max” from the paper.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The calculated number.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.single_neighbour_brick_proportion">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">single_neighbour_brick_proportion</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.single_neighbour_brick_proportion" title="Link to this definition"></a></dt>
-<dd><p>Get the ratio between bricks with a single neighbour and with how many bricks that potentionally could have been if this set of modules was rearranged in an optimal way.</p>
-<p>This calculates limb proportion(extremities) from the paper.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The proportion.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -596,6 +585,11 @@ EvoApplications 2018. Lecture Notes in Computer Science(), vol 10784. Springer, 
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.modules">
+<span class="sig-name descname"><span class="pre">modules</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.Module</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.modules" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.bricks">
 <span class="sig-name descname"><span class="pre">bricks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.base.Brick</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.bricks" title="Link to this definition"></a></dt>
 <dd></dd></dl>
@@ -621,6 +615,13 @@ EvoApplications 2018. Lecture Notes in Computer Science(), vol 10784. Springer, 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.filled_active_hinges">
 <span class="sig-name descname"><span class="pre">filled_active_hinges</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.base.ActiveHinge</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.filled_active_hinges" title="Link to this definition"></a></dt>
+<dd><p>Modules that only connect to one other module.</p>
+<p>This includes children and parents.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ci_group.morphological_measures.MorphologicalMeasures.single_neighbour_modules">
+<span class="sig-name descname"><span class="pre">single_neighbour_modules</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.body.Module</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ci_group.morphological_measures.MorphologicalMeasures.single_neighbour_modules" title="Link to this definition"></a></dt>
 <dd><p>Bricks that are only connected to one other module.</p>
 <p>Both children and parent are counted.</p>
 </dd></dl>

@@ -57,7 +57,7 @@ Classes
    .. py:attribute:: inverse_servos
       :type: dict[int, bool]
 
-      If a servo is mounted in the wrong direction on the body one can fix it by inversing the action.
+      If a servo is mounted in the wrong direction on the body one can fix it by inverting the action.
       inverse_servos allows you to inverse specific servos with their gpio number as key.
 
 

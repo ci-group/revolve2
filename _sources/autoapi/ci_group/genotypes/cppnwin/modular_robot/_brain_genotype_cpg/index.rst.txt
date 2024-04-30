@@ -61,7 +61,7 @@ Classes
       :returns: A newly created genotype.
 
 
-   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor_v1.BrainCpgNetworkNeighborV1
+   .. py:method:: develop_brain(body: revolve2.modular_robot.body.base.Body) -> ci_group.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor.BrainCpgNetworkNeighbor
 
       Develop the genotype into a modular robot.
 

@@ -1,0 +1,82 @@
+:orphan:
+
+:py:mod:`_native_mujoco_viewer`
+========================================================
+
+.. py:module:: mujoco_simulator.viewers._native_mujoco_viewer
+
+.. autoapi-nested-parse::
+
+   The native rendering viewer for mujoco.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   mujoco_simulator.viewers._native_mujoco_viewer.NativeMujocoViewer
+
+
+
+
+.. py:class:: NativeMujocoViewer(model: mujoco.MjModel, data: mujoco.MjData, *, key_callback: Callable[[int], None] | None = None, **_: Any)
+
+
+   Bases: :py:obj:`revolve2.simulation.simulator.Viewer`
+
+   .. autoapi-inheritance-diagram:: mujoco_simulator.viewers._native_mujoco_viewer.NativeMujocoViewer
+      :parts: 1
+
+   Native Viewer Object.
+
+   .. py:property:: context
+      :type: mujoco.MjrContext
+
+      Get the context.
+
+      :returns: The context.
+
+
+   .. py:property:: view_port
+      :type: mujoco.MjrRect
+      :abstractmethod:
+
+      Get the view port.
+
+      :raises NotImplementedError: As it is not implemented.
+
+
+   .. py:property:: can_record
+      :type: bool
+
+      Return False.
+
+      :returns: False.
+
+
+   .. py:method:: render() -> int | None
+
+      Render the scene.
+
+      :return: A cycle position if applicable.
+
+
+   .. py:method:: close_viewer() -> None
+
+      Close the viewer.
+
+
+   .. py:method:: current_viewport_size() -> tuple[int, int]
+      :abstractmethod:
+
+      Grabs the *current* viewport size (and updates the cached values).
+
+      :raises NotImplementedError: As it is not implemented.
+
+
+

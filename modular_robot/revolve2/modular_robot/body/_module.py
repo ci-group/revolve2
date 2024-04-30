@@ -4,8 +4,6 @@ import uuid
 
 from pyrr import Quaternion
 
-from pyrr import Quaternion
-
 from ._attachment_point import AttachmentPoint
 from ._color import Color
 from .sensors import ActiveHingeSensor, CameraSensor, IMUSensor, Sensor

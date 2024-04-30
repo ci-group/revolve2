@@ -7,6 +7,7 @@ from revolve2.simulation.simulator import Batch, Simulator
 
 from ._simulate_manual_scene import simulate_manual_scene
 from ._simulate_scene import simulate_scene
+from .viewers import ViewerType
 
 
 class LocalSimulator(Simulator):
@@ -18,6 +19,7 @@ class LocalSimulator(Simulator):
     _cast_shadows: bool
     _fast_sim: bool
     _manual_control: bool
+    _viewer_type: ViewerType
 
     def __init__(
         self,
@@ -27,6 +29,7 @@ class LocalSimulator(Simulator):
         cast_shadows: bool = False,
         fast_sim: bool = False,
         manual_control: bool = False,
+        viewer_type: ViewerType | str = ViewerType.CUSTOM,
     ):
         """
         Initialize this object.
@@ -37,6 +40,7 @@ class LocalSimulator(Simulator):
         :param cast_shadows: Whether shadows are cast in the simulation.
         :param fast_sim: Whether more complex rendering prohibited.
         :param manual_control: Whether the simulation should be controlled manually.
+        :param viewer_type: The viewer-implementation to use in the local simulator.
         """
         assert (
             headless or num_simulators == 1
@@ -52,6 +56,11 @@ class LocalSimulator(Simulator):
         self._cast_shadows = cast_shadows
         self._fast_sim = fast_sim
         self._manual_control = manual_control
+        self._viewer_type = (
+            ViewerType.from_string(viewer_type)
+            if isinstance(viewer_type, str)
+            else viewer_type
+        )
 
     def simulate_batch(self, batch: Batch) -> list[list[SimulationState]]:
         """
@@ -101,6 +110,7 @@ class LocalSimulator(Simulator):
                         batch.parameters.simulation_timestep,
                         self._cast_shadows,
                         self._fast_sim,
+                        self._viewer_type,
                     )
                     for scene_index, scene in enumerate(batch.scenes)
                 ]
@@ -119,6 +129,7 @@ class LocalSimulator(Simulator):
                     batch.parameters.simulation_timestep,
                     self._cast_shadows,
                     self._fast_sim,
+                    self._viewer_type,
                 )
                 for scene_index, scene in enumerate(batch.scenes)
             ]

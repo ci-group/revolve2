@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import multineat
 import numpy as np
-from base import Base
+from .base import Base
 
 from revolve2.ci_group.genotypes.cppnwin.modular_robot import BrainGenotypeCpgOrm
 from revolve2.ci_group.genotypes.cppnwin.modular_robot.v1 import BodyGenotypeOrmV1

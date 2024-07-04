@@ -2,25 +2,21 @@
 
 import logging
 
-import config
+
 import multineat
 import numpy as np
-from base import Base
-from evaluator import Evaluator
-from experiment import Experiment
-from generation import Generation
-from genotype import Genotype
-from individual import Individual
-from population import Population
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
+import sys
+from revolve2.experimentation.evolution.abstract_elements import Evaluator
+from ..data_structures import Base, Experiment, Genotype, Generation, Individual, Population
+from . import config
 
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
 from revolve2.experimentation.rng import make_rng, seed_from_time
 from revolve2.ci_group.morphological_novelty_metric import get_novelty_from_population
-
 
 def mutate_parents(
         rng: np.random.Generator,
@@ -155,7 +151,7 @@ def run_experiment(dbengine: Engine) -> None:
         session.commit()
 
     # Intialize the evaluator that will be used to evaluate robots.
-    evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS)
+    evaluator = Eval(headless=True, num_simulators=config.NUM_SIMULATORS)
 
     # CPPN innovation databases.
     innov_db_body = multineat.InnovationDatabase()
@@ -233,15 +229,14 @@ def run_experiment(dbengine: Engine) -> None:
             session.add(generation)
             session.commit()
 
-
-def main() -> None:
+def main(objective: str) -> None:
     """Run the program."""
     # Set up logging.
     setup_logging(file_name="mip_log.txt")
 
     # Open the database, only if it does not already exist.
     dbengine = open_database_sqlite(
-        config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
+        f"{f'_{objective}.'.join(config.DATABASE_FILE.split('.'))}", open_method=OpenMethod.NOT_EXISTS_AND_CREATE
     )
     # Create the structure of the database.
     Base.metadata.create_all(dbengine)
@@ -252,4 +247,19 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    sys.path.append("..")
+
+    objective = sys.argv[1]
+    match objective:
+        case "l":
+            from ..tasks import EvaluatorLocomotion as Eval
+        case "s":
+            from ..tasks import EvaluatorSearch as Eval
+        case "o":
+            from ..tasks import EvaluatorObjectManipulation as Eval
+        case _:
+            raise ValueError(f"Unrecognized objective: {objective}")
+    main(objective)
+
+
+

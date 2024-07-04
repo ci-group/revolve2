@@ -6,14 +6,10 @@ import config
 import multineat
 import numpy as np
 import numpy.typing as npt
-from base import Base
-from evaluator import Evaluator
-from experiment import Experiment
-from generation import Generation
-from genotype import Genotype
-from individual import Individual
-from population import Population
+from experiments.data_structures import Base, Experiment, Genotype, Generation, Individual, Population
+from experiments.tasks.evaluator_locomotion import Evaluator
 from sqlalchemy.engine import Engine
+import sys
 from sqlalchemy.orm import Session
 
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
@@ -178,7 +174,7 @@ def run_experiment(dbengine: Engine) -> None:
         session.commit()
 
     # Intialize the evaluator that will be used to evaluate robots.
-    evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS)
+    evaluator = Eval(headless=True, num_simulators=config.NUM_SIMULATORS)
 
     # CPPN innovation databases.
     innov_db_body = multineat.InnovationDatabase()
@@ -267,14 +263,14 @@ def run_experiment(dbengine: Engine) -> None:
             session.commit()
 
 
-def main() -> None:
+def main(objective: str) -> None:
     """Run the program."""
     # Set up logging.
     setup_logging(file_name="tol_log.txt")
 
-    # Open the database, only if it does not already exists.
+    # Open the database, only if it does not already exist.
     dbengine = open_database_sqlite(
-        config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
+        f"{f'_{objective}.'.join(config.DATABASE_FILE.split('.'))}", open_method=OpenMethod.NOT_EXISTS_AND_CREATE
     )
     # Create the structure of the database.
     Base.metadata.create_all(dbengine)
@@ -285,4 +281,18 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    sys.path.append("..")
+
+    objective = sys.argv[1]
+    match objective:
+        case "l":
+            from ..tasks import EvaluatorLocomotion as Eval
+        case "s":
+            from ..tasks import EvaluatorSearch as Eval
+        case "o":
+            from ..tasks import EvaluatorObjectManipulation as Eval
+        case _:
+            raise ValueError(f"Unrecognized objective: {objective}")
+    main(objective)
+
+

@@ -2,6 +2,7 @@
 
 from revolve2.ci_group import fitness_functions, terrains
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
+from revolve2.experimentation.evolution.abstract_elements import Evaluator
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot_simulation import (
     ModularRobotScene,
@@ -11,7 +12,7 @@ from revolve2.modular_robot_simulation import (
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 
-class Evaluator:
+class EvaluatorSearch(Evaluator):
     """Provides evaluation of robots."""
 
     _simulator: LocalSimulator
@@ -60,12 +61,9 @@ class Evaluator:
         )
 
         # Calculate the xy displacements.
-        xy_displacements = [
-            fitness_functions.xy_displacement(
-                states[0].get_modular_robot_simulation_state(robot),
-                states[-1].get_modular_robot_simulation_state(robot),
-            )
+        total_rotations = [
+            fitness_functions.total_rotation([state.get_modular_robot_simulation_state(robot) for state in states])
             for robot, states in zip(robots, scene_states)
         ]
 
-        return xy_displacements
+        return total_rotations

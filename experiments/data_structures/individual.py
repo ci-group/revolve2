@@ -2,8 +2,8 @@
 
 from dataclasses import dataclass
 
-from base import Base
-from genotype import Genotype
+from .base import Base
+from .genotype import Genotype
 import sqlalchemy.orm as orm
 
 from revolve2.experimentation.optimization.ea import Individual as GenericIndividual

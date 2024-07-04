@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import numpy as np
-
 from revolve2.experimentation.database import HasId
 from revolve2.experimentation.optimization.ea import Parameters as GenericParameters
 

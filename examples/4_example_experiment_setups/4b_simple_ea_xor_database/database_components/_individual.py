@@ -4,7 +4,6 @@ from dataclasses import dataclass
 
 import sqlalchemy
 import sqlalchemy.orm as orm
-
 from revolve2.experimentation.database import HasId
 
 from ._base import Base

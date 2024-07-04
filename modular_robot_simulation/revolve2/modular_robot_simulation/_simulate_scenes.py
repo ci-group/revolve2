@@ -3,8 +3,8 @@ from typing import overload
 from revolve2.simulation.simulator import BatchParameters, RecordSettings, Simulator
 
 from ._modular_robot_scene import ModularRobotScene
-from .simulation_states import SceneSimulationState
 from ._to_batch import to_batch
+from .simulation_states import SceneSimulationState
 
 
 @overload
@@ -70,18 +70,23 @@ def simulate_scenes(
     else:
         return_scalar_result = False
 
-    batch, modular_robot_to_multi_body_system_mappings = to_batch(
-        scenes, batch_parameters, record_settings
+    batch, modular_robot_to_multi_body_system_mappings, interactive_objects_batch = (
+        to_batch(scenes, batch_parameters, record_settings)
     )
     simulation_results = simulator.simulate_batch(batch)
 
     results = [
         [
-            SceneSimulationState(state, modular_robot_to_multi_body_system_mapping)
+            SceneSimulationState(
+                state, modular_robot_to_multi_body_system_mapping, interactive_objects
+            )
             for state in simulation_result
         ]
-        for simulation_result, modular_robot_to_multi_body_system_mapping in zip(
-            simulation_results, modular_robot_to_multi_body_system_mappings, strict=True
+        for simulation_result, modular_robot_to_multi_body_system_mapping, interactive_objects in zip(
+            simulation_results,
+            modular_robot_to_multi_body_system_mappings,
+            interactive_objects_batch,
+            strict=True,
         )
     ]
 

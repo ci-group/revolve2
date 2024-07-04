@@ -1,7 +1,6 @@
 """Evaluator class."""
 
 from genotype import Genotype
-
 from revolve2.ci_group import fitness_functions, terrains
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.evolution.abstract_elements import Evaluator as Eval

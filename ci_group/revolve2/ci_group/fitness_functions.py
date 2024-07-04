@@ -1,12 +1,16 @@
 """Standard fitness functions for modular robots."""
 
 import math
-from revolve2.modular_robot_simulation.simulation_states import MultiBodySystemSimulationState
+
+from revolve2.modular_robot_simulation.simulation_states import (
+    MultiBodySystemSimulationState,
+)
 from scipy.spatial.transform import Rotation
 
 
 def xy_displacement(
-        begin_state: MultiBodySystemSimulationState, end_state: MultiBodySystemSimulationState
+    begin_state: MultiBodySystemSimulationState,
+    end_state: MultiBodySystemSimulationState,
 ) -> float:
     """
     Calculate the distance traveled on the xy-plane by a single multi-body-system.
@@ -23,7 +27,9 @@ def xy_displacement(
     )
 
 
-def total_rotation(states: list[MultiBodySystemSimulationState], clockwise: bool = True, axis: int = 2) -> float:
+def total_rotation(
+    states: list[MultiBodySystemSimulationState], clockwise: bool = True, axis: int = 2
+) -> float:
     """
     Calculate the total rotation (in radiant) of the multi-body-system during the simulation.
 
@@ -38,6 +44,10 @@ def total_rotation(states: list[MultiBodySystemSimulationState], clockwise: bool
         *axe, we = states[i + 1].get_pose().orientation
         rot_i, rot_e = Rotation.from_quat([wi, *axi]), Rotation.from_quat([we, *axe])
 
-        angle_i, angle_e = rot_i.as_euler('xyz'), rot_e.as_euler('xyz')
-        angle += - angle_e[axis] + angle_i[axis] if clockwise else angle_e[axis] - angle_i[axis]
+        angle_i, angle_e = rot_i.as_euler("xyz"), rot_e.as_euler("xyz")
+        angle += (
+            -angle_e[axis] + angle_i[axis]
+            if clockwise
+            else angle_e[axis] - angle_i[axis]
+        )
     return angle

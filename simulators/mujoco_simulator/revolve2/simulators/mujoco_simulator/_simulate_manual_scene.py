@@ -3,7 +3,6 @@
 import logging
 
 import mujoco
-
 from revolve2.ci_group.simulation_parameters import (
     STANDARD_CONTROL_FREQUENCY,
     STANDARD_SIMULATION_TIMESTEP,

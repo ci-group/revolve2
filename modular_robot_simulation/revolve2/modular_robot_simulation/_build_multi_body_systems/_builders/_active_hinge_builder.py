@@ -1,5 +1,4 @@
 from pyrr import Quaternion, Vector3
-
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.simulation.scene import (
     AABB,

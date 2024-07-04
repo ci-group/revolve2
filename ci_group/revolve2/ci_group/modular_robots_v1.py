@@ -1,7 +1,6 @@
 """Standard modular robots."""
 
 import numpy as np
-
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 
 

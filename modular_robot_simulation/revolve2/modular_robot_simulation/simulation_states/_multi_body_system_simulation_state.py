@@ -1,4 +1,3 @@
-from revolve2.modular_robot.body import Module
 from revolve2.simulation.scene import MultiBodySystem, Pose, SimulationState
 
 
@@ -10,7 +9,7 @@ class MultiBodySystemSimulationState:
     """The multi-body system corresponding to the multi body system."""
 
     def __init__(
-            self, simulation_state: SimulationState, multi_body_system: MultiBodySystem
+        self, simulation_state: SimulationState, multi_body_system: MultiBodySystem
     ) -> None:
         """
         Initialize this object.

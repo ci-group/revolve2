@@ -6,7 +6,6 @@ from typing import Any
 import glfw
 import mujoco
 import mujoco_viewer
-
 from revolve2.simulation.simulator import Viewer
 
 from .._render_backend import RenderBackend

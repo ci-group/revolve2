@@ -1,5 +1,6 @@
 from revolve2.modular_robot.body import Module
 from revolve2.simulation.scene import Pose
+
 from ._multi_body_system_simulation_state import MultiBodySystemSimulationState
 
 

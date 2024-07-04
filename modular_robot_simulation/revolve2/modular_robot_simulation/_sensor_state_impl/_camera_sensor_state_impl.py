@@ -1,6 +1,5 @@
 import numpy as np
 from numpy.typing import NDArray
-
 from revolve2.modular_robot.sensor_state import CameraSensorState
 from revolve2.simulation.scene import MultiBodySystem, SimulationState
 from revolve2.simulation.scene.sensors import CameraSensor

@@ -6,7 +6,6 @@ import numpy as np
 import numpy.typing as npt
 from noise import pnoise2
 from pyrr import Vector3
-
 from revolve2.modular_robot_simulation import Terrain
 from revolve2.simulation.scene import Pose
 from revolve2.simulation.scene.geometry import GeometryHeightmap, GeometryPlane

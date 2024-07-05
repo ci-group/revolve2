@@ -1,7 +1,6 @@
 import numpy as np
 from numpy.typing import NDArray
-
-from revde.algorithms.recombination import recombination
+from .revde import recombination
 
 
 class DifferentialEvolution:

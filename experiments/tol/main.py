@@ -2,7 +2,7 @@
 
 import logging
 
-import config
+from . import config
 import multineat
 import numpy as np
 import numpy.typing as npt
@@ -22,8 +22,10 @@ from revolve2.modular_robot.brain.cpg._make_cpg_network_structure_neighbor impor
 
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body.base import ActiveHinge, Body
+from revolve2.ci_group.morphological_novelty_metric import get_novelty_from_population
+from ..tasks import EvaluatorSearch, EvaluatorLocomotion, EvaluatorObjectManipulation
 
-from revde_learner import DifferentialEvolution
+from .revde_learner import DifferentialEvolution
 
 N_GEN = 5
 INITIAL_POPULATION_INNER_SIZE = 10
@@ -36,11 +38,10 @@ def get_robot_from_x(body: Body, genome: npt.NDArray, struct: CpgNetworkStructur
     return ModularRobot(body=body, brain=brain)
 
 
-def get_fitnesses(genotypes: list[Genotype], evaluator: Evaluator) -> tuple[list[float], list[float]]:
-    amt_ind = len(genotypes)
+def get_fitnesses(robots: list[ModularRobot], evaluator: Evaluator) -> tuple[list[float], list[float]]:
+    amt_ind = len(robots)
     structs: list[CpgNetworkStructure] = [None] * amt_ind
     des: list[DifferentialEvolution] = [None] * amt_ind
-    robots = [genotype.develop() for genotype in genotypes]
 
     i = 0
     for tmp in robots:
@@ -118,22 +119,8 @@ def select_survivors(
     )
 
     return Population(
-        individuals=[
-                        Individual(
-                            genotype=original_population.individuals[i].genotype,
-                            fitness=original_population.individuals[i].fitness,
-                            age=original_population.individuals[i].age,
-                        )
-                        for i in original_survivors
-                    ]
-                    + [
-                        Individual(
-                            genotype=offspring_population.individuals[i].genotype,
-                            fitness=offspring_population.individuals[i].fitness,
-                            age=offspring_population.individuals[i].age,
-                        )
-                        for i in offspring_survivors
-                    ]
+        individuals=[original_population.individuals[i] for i in original_survivors]
+                    + [offspring_population.individuals[i] for i in offspring_survivors]
     )
 
 
@@ -153,7 +140,7 @@ def find_best_robot(
     )
 
 
-def run_experiment(dbengine: Engine) -> None:
+def run_experiment(dbengine: Engine, evaluator: Evaluator) -> None:
     """
     Run an experiment.
 
@@ -173,9 +160,6 @@ def run_experiment(dbengine: Engine) -> None:
         session.add(experiment)
         session.commit()
 
-    # Intialize the evaluator that will be used to evaluate robots.
-    evaluator = Eval(headless=True, num_simulators=config.NUM_SIMULATORS)
-
     # CPPN innovation databases.
     innov_db_body = multineat.InnovationDatabase()
     innov_db_brain = multineat.InnovationDatabase()
@@ -193,16 +177,16 @@ def run_experiment(dbengine: Engine) -> None:
 
     # Evaluate the initial population.
     logging.info("Evaluating initial population.")
-    rng = make_rng_time_seed()
-
-    initial_fitnesses = get_fitnesses(initial_genotypes, evaluator)
+    initial_robots = [genotype.develop() for genotype in initial_genotypes]
+    initial_fitnesses = get_fitnesses(initial_robots, evaluator)
+    initial_novelty = get_novelty_from_population(initial_robots)
 
     # Create a population of individuals, combining genotype with fitness.
     population = Population(
         individuals=[
-            Individual(genotype=genotype, fitness=fitness, age=0)
-            for genotype, fitness in zip(
-                initial_genotypes, initial_fitnesses, strict=True
+            Individual(genotype=genotype, fitness=fitness, novelty=novelty, age=0)
+            for genotype, fitness, novelty in zip(
+                initial_genotypes, initial_fitnesses, initial_novelty, strict=True
             )
         ]
     )
@@ -233,14 +217,15 @@ def run_experiment(dbengine: Engine) -> None:
             ).mutate(innov_db_body, innov_db_brain, rng)
             for parent1_i, parent2_i in parents
         ]
-
-        offspring_fitnesses = get_fitnesses(offspring_genotypes, evaluator)
+        offspring_robots = [genotype.develop() for genotype in offspring_genotypes]
+        offspring_fitnesses = get_fitnesses(offspring_robots, evaluator)
+        offspring_novelty = get_novelty_from_population(offspring_robots)
 
         # Make an intermediate offspring population.
         offspring_population = Population(
             individuals=[
-                Individual(genotype=genotype, fitness=fitness, age=generation.generation_index + 1,)
-                for genotype, fitness in zip(offspring_genotypes, offspring_fitnesses)
+                Individual(genotype=genotype, fitness=fitness, age=generation.generation_index + 1, novelty=novelty)
+                for genotype, fitness, novelty in zip(offspring_genotypes, offspring_fitnesses, offspring_novelty)
             ]
         )
 
@@ -277,22 +262,22 @@ def main(objective: str) -> None:
 
     # Run the experiment several times.
     for _ in range(config.NUM_REPETITIONS):
-        run_experiment(dbengine)
+        # Intialize the evaluator that will be used to evaluate robots.
+        match objective:
+            case "l":
+                evaluator = EvaluatorLocomotion(headless=True, num_simulators=config.NUM_SIMULATORS)
+            case "s":
+                evaluator = EvaluatorSearch(headless=True, num_simulators=config.NUM_SIMULATORS)
+            case "o":
+                evaluator = EvaluatorObjectManipulation(headless=True, num_simulators=config.NUM_SIMULATORS)
+            case _:
+                raise ValueError(f"Unrecognized objective: {objective}")
+        run_experiment(dbengine, evaluator)
 
 
 if __name__ == "__main__":
     sys.path.append("..")
-
     objective = sys.argv[1]
-    match objective:
-        case "l":
-            from ..tasks import EvaluatorLocomotion as Eval
-        case "s":
-            from ..tasks import EvaluatorSearch as Eval
-        case "o":
-            from ..tasks import EvaluatorObjectManipulation as Eval
-        case _:
-            raise ValueError(f"Unrecognized objective: {objective}")
     main(objective)
 
 

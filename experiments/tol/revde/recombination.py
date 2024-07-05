@@ -1,5 +1,4 @@
 import numpy as np
-from ..utils.distributions import bernoulli
 
 
 def recombination(x, bounds: tuple[int, int], F: float, CR: float):
@@ -19,9 +18,9 @@ def recombination(x, bounds: tuple[int, int], F: float, CR: float):
 
     # uniform crossover
     if CR < 1.:
-        p_1 = bernoulli(CR, y_1.shape)
-        p_2 = bernoulli(CR, y_2.shape)
-        p_3 = bernoulli(CR, y_3.shape)
+        p_1 = np.random.binomial(1, CR, y_1.shape)
+        p_2 = np.random.binomial(1, CR, y_2.shape)
+        p_3 = np.random.binomial(1, CR, y_3.shape)
         y_1 = p_1 * y_1 + (1. - p_1) * x_1
         y_2 = p_2 * y_2 + (1. - p_2) * x_2
         y_3 = p_3 * y_3 + (1. - p_3) * x_3

@@ -12,7 +12,7 @@ def steady_state(
     old_fitnesses: list[Fitness],
     new_genotypes: list[Genotype],
     new_fitnesses: list[Fitness],
-    selection_funct_morphological_innovation_protectionion: Callable[
+    selection_function: Callable[
         [int, list[Genotype], list[Fitness]], npt.NDArray[np.float_]
     ],
 ) -> tuple[list[int], list[int]]:

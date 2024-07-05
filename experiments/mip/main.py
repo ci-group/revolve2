@@ -2,7 +2,6 @@
 
 import logging
 
-
 import multineat
 import numpy as np
 from sqlalchemy.engine import Engine
@@ -17,6 +16,8 @@ from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
 from revolve2.experimentation.rng import make_rng, seed_from_time
 from revolve2.ci_group.morphological_novelty_metric import get_novelty_from_population
+from ..tasks import EvaluatorObjectManipulation, EvaluatorLocomotion, EvaluatorSearch
+
 
 def mutate_parents(
         rng: np.random.Generator,
@@ -61,7 +62,8 @@ def mutate_parents(
     offspring_population = Population(
         individuals=[
             Individual(genotype=genotype, fitness=fitness, age=age, novelty=novelty)
-            for genotype, fitness, age, novelty in zip(offspring_genotypes, offspring_fitnesses, ages, offspring_novelty)
+            for genotype, fitness, age, novelty in
+            zip(offspring_genotypes, offspring_fitnesses, ages, offspring_novelty)
         ]
     )
     return offspring_population
@@ -130,7 +132,7 @@ def find_best_robot(
     )
 
 
-def run_experiment(dbengine: Engine) -> None:
+def run_experiment(dbengine: Engine, evaluator: Evaluator) -> None:
     """
     Run an experiment.
 
@@ -150,9 +152,6 @@ def run_experiment(dbengine: Engine) -> None:
         session.add(experiment)
         session.commit()
 
-    # Intialize the evaluator that will be used to evaluate robots.
-    evaluator = Eval(headless=True, num_simulators=config.NUM_SIMULATORS)
-
     # CPPN innovation databases.
     innov_db_body = multineat.InnovationDatabase()
     innov_db_brain = multineat.InnovationDatabase()
@@ -171,15 +170,15 @@ def run_experiment(dbengine: Engine) -> None:
     # Evaluate the initial population.
     logging.info("Evaluating initial population.")
     initial_robots = [genotype.develop() for genotype in initial_genotypes]
-    initial_fitnesses = evaluator.evaluate(initial_robots)
-    iniital_novelty = get_novelty_from_population(initial_robots)
+    initial_fitness = evaluator.evaluate(initial_robots)
+    initial_novelty = get_novelty_from_population(initial_robots)
 
     # Create a population of individuals, combining genotype with fitness.
     population = Population(
         individuals=[
             Individual(genotype=genotype, fitness=fitness, age=0, novelty=novelty)
             for genotype, fitness, novelty in zip(
-                initial_genotypes, initial_fitnesses, iniital_novelty, strict=True
+                initial_genotypes, initial_fitness, initial_novelty, strict=True
             )
         ]
     )
@@ -229,6 +228,7 @@ def run_experiment(dbengine: Engine) -> None:
             session.add(generation)
             session.commit()
 
+
 def main(objective: str) -> None:
     """Run the program."""
     # Set up logging.
@@ -243,23 +243,20 @@ def main(objective: str) -> None:
 
     # Run the experiment several times.
     for _ in range(config.NUM_REPETITIONS):
-        run_experiment(dbengine)
+        # Intialize the evaluator that will be used to evaluate robots.
+        match objective:
+            case "l":
+                evaluator = EvaluatorLocomotion(headless=True, num_simulators=config.NUM_SIMULATORS)
+            case "s":
+                evaluator = EvaluatorSearch(headless=True, num_simulators=config.NUM_SIMULATORS)
+            case "o":
+                evaluator = EvaluatorObjectManipulation(headless=True, num_simulators=config.NUM_SIMULATORS)
+            case _:
+                raise ValueError(f"Unrecognized objective: {objective}")
+        run_experiment(dbengine, evaluator)
 
 
 if __name__ == "__main__":
     sys.path.append("..")
-
     objective = sys.argv[1]
-    match objective:
-        case "l":
-            from ..tasks import EvaluatorLocomotion as Eval
-        case "s":
-            from ..tasks import EvaluatorSearch as Eval
-        case "o":
-            from ..tasks import EvaluatorObjectManipulation as Eval
-        case _:
-            raise ValueError(f"Unrecognized objective: {objective}")
     main(objective)
-
-
-

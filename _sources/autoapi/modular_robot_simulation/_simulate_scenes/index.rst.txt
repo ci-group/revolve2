@@ -19,8 +19,8 @@ Functions
 
 
 
-.. py:function:: simulate_scenes(simulator: revolve2.simulation.simulator.Simulator, batch_parameters: revolve2.simulation.simulator.BatchParameters, scenes: modular_robot_simulation._modular_robot_scene.ModularRobotScene, record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> list[modular_robot_simulation.simulation_states.SceneSimulationState]
-                 simulate_scenes(simulator: revolve2.simulation.simulator.Simulator, batch_parameters: revolve2.simulation.simulator.BatchParameters, scenes: list[modular_robot_simulation._modular_robot_scene.ModularRobotScene], record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> list[list[modular_robot_simulation.simulation_states.SceneSimulationState]]
+.. py:function:: simulate_scenes(simulator: revolve2.simulation.simulator.Simulator, batch_parameters: revolve2.simulation.simulator.BatchParameters, scenes: modular_robot_simulation._modular_robot_scene.ModularRobotScene, record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> list[modular_robot_simulation._scene_simulation_state.SceneSimulationState]
+                 simulate_scenes(simulator: revolve2.simulation.simulator.Simulator, batch_parameters: revolve2.simulation.simulator.BatchParameters, scenes: list[modular_robot_simulation._modular_robot_scene.ModularRobotScene], record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> list[list[modular_robot_simulation._scene_simulation_state.SceneSimulationState]]
 
    Simulate one or more scenes.
 

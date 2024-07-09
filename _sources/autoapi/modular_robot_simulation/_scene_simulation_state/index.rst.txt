@@ -1,0 +1,36 @@
+:orphan:
+
+:py:mod:`_scene_simulation_state`
+==========================================================
+
+.. py:module:: modular_robot_simulation._scene_simulation_state
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation._scene_simulation_state.SceneSimulationState
+
+
+
+
+.. py:class:: SceneSimulationState(simulation_state: revolve2.simulation.scene.SimulationState, modular_robot_to_multi_body_system_mapping: dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.ModularRobot], revolve2.simulation.scene.MultiBodySystem])
+
+
+   An interface for reading a certain state of a modular robot simulation.
+
+   .. py:method:: get_modular_robot_simulation_state(modular_robot: revolve2.modular_robot.ModularRobot) -> modular_robot_simulation._modular_robot_simulation_state.ModularRobotSimulationState
+
+      Get the simulation state for one of the modular robots in the scene.
+
+      :param modular_robot: The modular robot to get the state for.
+      :returns: The retrieved state.
+      :raises ValueError: If the robot is not in the scene.
+
+
+

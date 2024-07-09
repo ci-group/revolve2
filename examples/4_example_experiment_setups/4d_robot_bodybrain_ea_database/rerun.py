@@ -5,10 +5,11 @@ import logging
 import config
 from database_components import Genotype, Individual
 from evaluator import Evaluator
-from revolve2.experimentation.database import OpenMethod, open_database_sqlite
-from revolve2.experimentation.logging import setup_logging
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
+from revolve2.experimentation.database import OpenMethod, open_database_sqlite
+from revolve2.experimentation.logging import setup_logging
 
 
 def main() -> None:

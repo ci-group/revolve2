@@ -3,6 +3,7 @@
 import config
 import numpy as np
 from evaluator import Evaluator
+
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.brain.cpg import (

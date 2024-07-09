@@ -4,8 +4,9 @@ from dataclasses import dataclass
 
 import multineat
 import numpy as np
-from revolve2.modular_robot.body.base import Body
 from typing_extensions import Self
+
+from revolve2.modular_robot.body.base import Body
 
 from .._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
 from .._multineat_rng_from_random import multineat_rng_from_random

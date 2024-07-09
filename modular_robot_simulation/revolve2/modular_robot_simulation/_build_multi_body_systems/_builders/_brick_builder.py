@@ -1,4 +1,5 @@
 from pyrr import Vector3
+
 from revolve2.modular_robot.body.base import Brick
 from revolve2.simulation.scene import AABB, MultiBodySystem, Pose, RigidBody
 from revolve2.simulation.scene.geometry import GeometryBox

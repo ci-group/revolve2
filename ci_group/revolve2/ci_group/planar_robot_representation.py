@@ -8,6 +8,7 @@ import cairo
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Vector3
+
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.base import ActiveHinge, Body, Brick, Core

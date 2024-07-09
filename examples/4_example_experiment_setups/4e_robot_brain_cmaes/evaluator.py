@@ -4,6 +4,7 @@ import math
 
 import numpy as np
 import numpy.typing as npt
+
 from revolve2.ci_group import fitness_functions, terrains
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.modular_robot import ModularRobot

@@ -11,6 +11,7 @@ import numpy.typing as npt
 from evaluator import Evaluator
 from genotype import Genotype
 from individual import Individual
+
 from revolve2.experimentation.evolution import ModularRobotEvolution
 from revolve2.experimentation.evolution.abstract_elements import Reproducer, Selector
 from revolve2.experimentation.logging import setup_logging

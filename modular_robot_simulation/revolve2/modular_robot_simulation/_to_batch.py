@@ -9,11 +9,7 @@ def to_batch(
     scenes: ModularRobotScene | list[ModularRobotScene],
     batch_parameters: BatchParameters,
     record_settings: RecordSettings | None = None,
-) -> tuple[
-    Batch,
-    list[dict[UUIDKey[ModularRobot], MultiBodySystem]],
-    list[list[UUIDKey[MultiBodySystem]]],
-]:
+) -> tuple[Batch, list[dict[UUIDKey[ModularRobot], MultiBodySystem]]]:
     """
     Convert one or more modular robot scenes to a batch of simulation scenes.
 
@@ -30,8 +26,6 @@ def to_batch(
     ]
 
     batch = Batch(parameters=batch_parameters, record_settings=record_settings)
-    batch.scenes.extend(simulation_scene for simulation_scene, *_ in converted)
+    batch.scenes.extend(simulation_scene for simulation_scene, _ in converted)
 
-    # Unpacking mapping dicts and interactive objects -> results in tuples.
-    mappings, interactive_object_batch = zip(*[values for _, *values in converted])
-    return batch, list(mappings), list(interactive_object_batch)
+    return batch, [mapping for _, mapping in converted]

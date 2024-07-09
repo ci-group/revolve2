@@ -1,6 +1,7 @@
 """Main script for the example."""
 
 from pyrr import Vector3
+
 from revolve2.ci_group import terrains
 from revolve2.ci_group.interactive_objects import Ball
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters

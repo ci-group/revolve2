@@ -4,6 +4,7 @@ from typing import Any, Callable
 
 import mujoco.viewer
 from mujoco.viewer import Handle
+
 from revolve2.simulation.simulator import Viewer
 
 

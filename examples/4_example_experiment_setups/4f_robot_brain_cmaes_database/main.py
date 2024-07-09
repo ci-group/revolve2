@@ -13,6 +13,9 @@ from database_components import (
     Population,
 )
 from evaluator import Evaluator
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import Session
+
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import seed_from_time
@@ -20,8 +23,6 @@ from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.brain.cpg import (
     active_hinges_to_cpg_network_structure_neighbor,
 )
-from sqlalchemy.engine import Engine
-from sqlalchemy.orm import Session
 
 
 def run_experiment(dbengine: Engine) -> None:

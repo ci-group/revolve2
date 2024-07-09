@@ -43,21 +43,17 @@ class ModularRobotScene:
             )
         )
 
-    def add_interactive_object(self, interactive_object: MultiBodySystem) -> None:
+    def add_interactive_object(self, objt: MultiBodySystem) -> None:
         """
         Add an intractable object to the scene.
 
-        :param interactive_object: The object as a multi body system.
+        :param objt: The object as a multi body system.
         """
-        self._interactive_objects.append(interactive_object)
+        self._interactive_objects.append(objt)
 
     def to_simulation_scene(
         self,
-    ) -> tuple[
-        Scene,
-        dict[UUIDKey[ModularRobot], MultiBodySystem],
-        list[UUIDKey[MultiBodySystem]],
-    ]:
+    ) -> tuple[Scene, dict[UUIDKey[ModularRobot], MultiBodySystem]]:
         """
         Convert this to a simulation scene.
 
@@ -68,7 +64,6 @@ class ModularRobotScene:
         modular_robot_to_multi_body_system_mapping: dict[
             UUIDKey[ModularRobot], MultiBodySystem
         ] = {}
-        interactive_objects = []
 
         # Add terrain
         scene.add_multi_body_system(convert_terrain(self.terrain))
@@ -93,6 +88,5 @@ class ModularRobotScene:
 
         for interactive_object in self._interactive_objects:
             scene.add_multi_body_system(interactive_object)
-            interactive_objects.append(UUIDKey(interactive_object))
 
-        return scene, modular_robot_to_multi_body_system_mapping, interactive_objects
+        return scene, modular_robot_to_multi_body_system_mapping

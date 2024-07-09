@@ -5,7 +5,6 @@ import logging
 import cma
 import config
 from evaluator import Evaluator
-
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import seed_from_time
 from revolve2.modular_robot.body.base import ActiveHinge

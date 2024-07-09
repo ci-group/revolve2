@@ -1,5 +1,4 @@
 import numpy as np
-
 from revolve2.modular_robot import ModularRobotControlInterface
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.simulation.scene import ControlInterface, UUIDKey

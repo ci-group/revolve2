@@ -1,7 +1,6 @@
 import copy
 
 from pyrr import Vector3
-
 from revolve2.modular_robot.body.sensors import IMUSensor
 from revolve2.simulation.scene import MultiBodySystem, Pose, RigidBody, UUIDKey
 from revolve2.simulation.scene.sensors import IMUSensor as IMUSim

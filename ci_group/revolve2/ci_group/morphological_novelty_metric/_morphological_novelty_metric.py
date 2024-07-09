@@ -2,7 +2,6 @@ from math import atan2, pi, sqrt
 
 import numpy as np
 from numpy.typing import NDArray
-
 from revolve2.modular_robot import ModularRobot
 
 from ._coordinate_operations import coords_from_bodies

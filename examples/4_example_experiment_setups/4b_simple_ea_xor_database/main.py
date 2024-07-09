@@ -15,14 +15,13 @@ from database_components import (
 )
 from evaluate import Evaluator
 from numpy.typing import NDArray
-from sqlalchemy.engine import Engine
-from sqlalchemy.orm import Session
-
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from revolve2.experimentation.evolution.abstract_elements import Reproducer, Selector
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
 from revolve2.experimentation.rng import make_rng, make_rng_time_seed, seed_from_time
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import Session
 
 
 class ParentSelector(Selector):

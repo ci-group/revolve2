@@ -1,5 +1,4 @@
 from pyrr import Vector3
-
 from revolve2.modular_robot.sensor_state import IMUSensorState
 
 

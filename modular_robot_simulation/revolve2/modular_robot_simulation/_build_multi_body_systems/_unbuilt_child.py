@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 
 from pyrr import Quaternion, Vector3
-
 from revolve2.modular_robot.body import Module
 from revolve2.modular_robot.body.sensors import Sensor
 from revolve2.simulation.scene import Pose, RigidBody

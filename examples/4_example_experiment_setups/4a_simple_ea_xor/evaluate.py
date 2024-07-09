@@ -3,7 +3,6 @@
 import numpy as np
 import numpy.typing as npt
 from genotype import Genotype
-
 from revolve2.experimentation.evolution.abstract_elements import Evaluator as Eval
 
 

@@ -3,11 +3,10 @@ from __future__ import annotations
 import multineat
 import numpy as np
 import sqlalchemy.orm as orm
+from revolve2.modular_robot.body.base import Body
 from sqlalchemy import event
 from sqlalchemy.engine import Connection
 from typing_extensions import Self
-
-from revolve2.modular_robot.body.base import Body
 
 from .._multineat_rng_from_random import multineat_rng_from_random
 from .._random_multineat_genotype import random_multineat_genotype

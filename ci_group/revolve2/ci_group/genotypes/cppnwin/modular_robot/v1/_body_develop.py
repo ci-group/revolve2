@@ -6,7 +6,6 @@ import multineat
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Quaternion, Vector3
-
 from revolve2.modular_robot.body import AttachmentPoint, Module
 from revolve2.modular_robot.body.v1 import ActiveHingeV1, BodyV1, BrickV1
 

@@ -3,7 +3,6 @@
 import math
 
 from pyrr import Quaternion, Vector3
-
 from revolve2.ci_group.modular_robots_v2 import gecko_v2
 from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging

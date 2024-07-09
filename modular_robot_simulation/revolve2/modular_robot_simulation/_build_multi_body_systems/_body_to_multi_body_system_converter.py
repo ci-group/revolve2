@@ -2,7 +2,6 @@ import logging
 from collections import deque
 
 from pyrr import Quaternion, Vector3
-
 from revolve2.modular_robot.body.base import Body
 from revolve2.simulation.scene import MultiBodySystem, Pose, RigidBody
 

@@ -19,7 +19,7 @@ Functions
 
 
 
-.. py:function:: to_batch(scenes: modular_robot_simulation._modular_robot_scene.ModularRobotScene | list[modular_robot_simulation._modular_robot_scene.ModularRobotScene], batch_parameters: revolve2.simulation.simulator.BatchParameters, record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> tuple[revolve2.simulation.simulator.Batch, list[dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.ModularRobot], revolve2.simulation.scene.MultiBodySystem]]]
+.. py:function:: to_batch(scenes: modular_robot_simulation._modular_robot_scene.ModularRobotScene | list[modular_robot_simulation._modular_robot_scene.ModularRobotScene], batch_parameters: revolve2.simulation.simulator.BatchParameters, record_settings: revolve2.simulation.simulator.RecordSettings | None = None) -> tuple[revolve2.simulation.simulator.Batch, list[dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.ModularRobot], revolve2.simulation.scene.MultiBodySystem]], list[list[revolve2.simulation.scene.UUIDKey[revolve2.simulation.scene.MultiBodySystem]]]]
 
    Convert one or more modular robot scenes to a batch of simulation scenes.
 

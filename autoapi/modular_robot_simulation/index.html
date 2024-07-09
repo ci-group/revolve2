@@ -21,7 +21,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="simulation" href="../simulation/index.html" />
+    <link rel="next" title="simulation_states" href="simulation_states/index.html" />
     <link rel="prev" title="robot_daemon_protocol_capnp" href="../modular_robot_physical/robot_daemon_api/robot_daemon_protocol_capnp/index.html" /> 
 </head>
 
@@ -163,6 +163,10 @@
 </ul>
 </li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_simulation</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="simulation_states/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation_states</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#package-contents">Package Contents</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#classes">Classes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#functions">Functions</a></li>
@@ -221,6 +225,14 @@
   <section id="module-modular_robot_simulation">
 <span id="modular-robot-simulation"></span><h1><a class="reference internal" href="#module-modular_robot_simulation" title="modular_robot_simulation"><code class="xref py py-mod docutils literal notranslate"><span class="pre">modular_robot_simulation</span></code></a><a class="headerlink" href="#module-modular_robot_simulation" title="Link to this heading"></a></h1>
 <p>Everything for the simulation of modular robots.</p>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="simulation_states/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">simulation_states</span></code></a></li>
+</ul>
+</div>
+</section>
 <section id="package-contents">
 <h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -229,12 +241,6 @@
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_simulation.ModularRobotScene" title="modular_robot_simulation.ModularRobotScene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModularRobotScene</span></code></a></p></td>
 <td><p>A scene of modular robots in a terrain.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#modular_robot_simulation.ModularRobotSimulationState" title="modular_robot_simulation.ModularRobotSimulationState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ModularRobotSimulationState</span></code></a></p></td>
-<td><p>The state of a modular robot at some moment in a simulation.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#modular_robot_simulation.SceneSimulationState" title="modular_robot_simulation.SceneSimulationState"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SceneSimulationState</span></code></a></p></td>
-<td><p>An interface for reading a certain state of a modular robot simulation.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#modular_robot_simulation.Terrain" title="modular_robot_simulation.Terrain"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Terrain</span></code></a></p></td>
 <td><p>Terrain consising of only static geometry.</p></td>
@@ -281,18 +287,18 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot_simulation.ModularRobotScene.add_interactive_object">
-<span class="sig-name descname"><span class="pre">add_interactive_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#modular_robot_simulation.ModularRobotScene.add_interactive_object" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">add_interactive_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interactive_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#modular_robot_simulation.ModularRobotScene.add_interactive_object" title="Link to this definition"></a></dt>
 <dd><p>Add an intractable object to the scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>objt</strong> – The object as a multi body system.</p>
+<dd class="field-odd"><p><strong>interactive_object</strong> – The object as a multi body system.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="modular_robot_simulation.ModularRobotScene.to_simulation_scene">
-<span class="sig-name descname"><span class="pre">to_simulation_scene</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.Scene</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.ModularRobot</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">revolve2.simulation.scene.MultiBodySystem</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation.ModularRobotScene.to_simulation_scene" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">to_simulation_scene</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.Scene</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.ModularRobot</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">revolve2.simulation.scene.MultiBodySystem</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.MultiBodySystem</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation.ModularRobotScene.to_simulation_scene" title="Link to this definition"></a></dt>
 <dd><p>Convert this to a simulation scene.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -303,86 +309,11 @@
 
 </dd></dl>
 
-<dl class="py class">
-<dt class="sig sig-object py" id="modular_robot_simulation.ModularRobotSimulationState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModularRobotSimulationState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.SimulationState</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multi_body_system</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.MultiBodySystem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_simulation.ModularRobotSimulationState" title="Link to this definition"></a></dt>
-<dd><p>The state of a modular robot at some moment in a simulation.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="modular_robot_simulation.ModularRobotSimulationState.get_pose">
-<span class="sig-name descname"><span class="pre">get_pose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.simulation.scene.Pose</span></span></span><a class="headerlink" href="#modular_robot_simulation.ModularRobotSimulationState.get_pose" title="Link to this definition"></a></dt>
-<dd><p>Get the pose of the modular robot.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The retrieved pose.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="modular_robot_simulation.ModularRobotSimulationState.get_module_relative_pose">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_module_relative_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.Module</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.simulation.scene.Pose</span></span></span><a class="headerlink" href="#modular_robot_simulation.ModularRobotSimulationState.get_module_relative_pose" title="Link to this definition"></a></dt>
-<dd><p>Get the pose of a module, relative to its parent module’s reference frame.</p>
-<p>In case there is no parent(the core), this is equal to getting the absolute pose.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>module</strong> – The module to get the pose for.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The relative pose.</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – Always.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="modular_robot_simulation.ModularRobotSimulationState.get_module_absolute_pose">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_module_absolute_pose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.body.Module</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">revolve2.simulation.scene.Pose</span></span></span><a class="headerlink" href="#modular_robot_simulation.ModularRobotSimulationState.get_module_absolute_pose" title="Link to this definition"></a></dt>
-<dd><p>Get the pose of this module, relative the global reference frame.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>module</strong> – The module to get the pose for.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The absolute pose.</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>NotImplementedError</strong> – Always.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="modular_robot_simulation.SceneSimulationState">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SceneSimulationState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulation_state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.scene.SimulationState</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modular_robot_to_multi_body_system_mapping</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.simulation.scene.UUIDKey</span><span class="p"><span class="pre">[</span></span><span class="pre">revolve2.modular_robot.ModularRobot</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">revolve2.simulation.scene.MultiBodySystem</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#modular_robot_simulation.SceneSimulationState" title="Link to this definition"></a></dt>
-<dd><p>An interface for reading a certain state of a modular robot simulation.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="modular_robot_simulation.SceneSimulationState.get_modular_robot_simulation_state">
-<span class="sig-name descname"><span class="pre">get_modular_robot_simulation_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modular_robot</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.modular_robot.ModularRobot</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="_modular_robot_simulation_state/index.html#modular_robot_simulation._modular_robot_simulation_state.ModularRobotSimulationState" title="modular_robot_simulation._modular_robot_simulation_state.ModularRobotSimulationState"><span class="pre">modular_robot_simulation._modular_robot_simulation_state.ModularRobotSimulationState</span></a></span></span><a class="headerlink" href="#modular_robot_simulation.SceneSimulationState.get_modular_robot_simulation_state" title="Link to this definition"></a></dt>
-<dd><p>Get the simulation state for one of the modular robots in the scene.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>modular_robot</strong> – The modular robot to get the state for.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The retrieved state.</p>
-</dd>
-<dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ValueError</strong> – If the robot is not in the scene.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
 <dl class="py function">
 <dt class="sig sig-object py" id="modular_robot_simulation.simulate_scenes">
-<span class="sig-name descname"><span class="pre">simulate_scenes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.Simulator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.BatchParameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scenes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_modular_robot_scene/index.html#modular_robot_simulation._modular_robot_scene.ModularRobotScene" title="modular_robot_simulation._modular_robot_scene.ModularRobotScene"><span class="pre">modular_robot_simulation._modular_robot_scene.ModularRobotScene</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.RecordSettings</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_scene_simulation_state/index.html#modular_robot_simulation._scene_simulation_state.SceneSimulationState" title="modular_robot_simulation._scene_simulation_state.SceneSimulationState"><span class="pre">modular_robot_simulation._scene_simulation_state.SceneSimulationState</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation.simulate_scenes" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">simulate_scenes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.Simulator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.BatchParameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scenes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="_modular_robot_scene/index.html#modular_robot_simulation._modular_robot_scene.ModularRobotScene" title="modular_robot_simulation._modular_robot_scene.ModularRobotScene"><span class="pre">modular_robot_simulation._modular_robot_scene.ModularRobotScene</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.RecordSettings</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="simulation_states/index.html#modular_robot_simulation.simulation_states.SceneSimulationState" title="modular_robot_simulation.simulation_states.SceneSimulationState"><span class="pre">modular_robot_simulation.simulation_states.SceneSimulationState</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#modular_robot_simulation.simulate_scenes" title="Link to this definition"></a></dt>
 <dt class="sig sig-object py">
-<span class="sig-name descname"><span class="pre">simulate_scenes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.Simulator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.BatchParameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scenes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_modular_robot_scene/index.html#modular_robot_simulation._modular_robot_scene.ModularRobotScene" title="modular_robot_simulation._modular_robot_scene.ModularRobotScene"><span class="pre">modular_robot_simulation._modular_robot_scene.ModularRobotScene</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.RecordSettings</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_scene_simulation_state/index.html#modular_robot_simulation._scene_simulation_state.SceneSimulationState" title="modular_robot_simulation._scene_simulation_state.SceneSimulationState"><span class="pre">modular_robot_simulation._scene_simulation_state.SceneSimulationState</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
+<span class="sig-name descname"><span class="pre">simulate_scenes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">simulator</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.Simulator</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.BatchParameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scenes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="_modular_robot_scene/index.html#modular_robot_simulation._modular_robot_scene.ModularRobotScene" title="modular_robot_simulation._modular_robot_scene.ModularRobotScene"><span class="pre">modular_robot_simulation._modular_robot_scene.ModularRobotScene</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">record_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">revolve2.simulation.simulator.RecordSettings</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="simulation_states/index.html#modular_robot_simulation.simulation_states.SceneSimulationState" title="modular_robot_simulation.simulation_states.SceneSimulationState"><span class="pre">modular_robot_simulation.simulation_states.SceneSimulationState</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span></dt>
 <dd><p>Simulate one or more scenes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

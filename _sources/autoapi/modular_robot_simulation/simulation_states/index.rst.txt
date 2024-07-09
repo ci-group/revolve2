@@ -1,0 +1,96 @@
+:py:mod:`simulation_states`
+====================================================
+
+.. py:module:: modular_robot_simulation.simulation_states
+
+.. autoapi-nested-parse::
+
+   A collection of simulation states.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   modular_robot_simulation.simulation_states.ModularRobotSimulationState
+   modular_robot_simulation.simulation_states.MultiBodySystemSimulationState
+   modular_robot_simulation.simulation_states.SceneSimulationState
+
+
+
+
+.. py:class:: ModularRobotSimulationState
+
+
+   Bases: :py:obj:`modular_robot_simulation.simulation_states._multi_body_system_simulation_state.MultiBodySystemSimulationState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation.simulation_states.ModularRobotSimulationState
+      :parts: 1
+
+   The state of a modular robot at some moment in a simulation.
+
+   .. py:method:: get_module_relative_pose(module: revolve2.modular_robot.body.Module) -> revolve2.simulation.scene.Pose
+      :abstractmethod:
+
+      Get the pose of a module, relative to its parent module's reference frame.
+
+      In case there is no parent(the core), this is equal to getting the absolute pose.
+
+      :param module: The module to get the pose for.
+      :returns: The relative pose.
+      :raises NotImplementedError: Always.
+
+
+   .. py:method:: get_module_absolute_pose(module: revolve2.modular_robot.body.Module) -> revolve2.simulation.scene.Pose
+      :abstractmethod:
+
+      Get the pose of this module, relative the global reference frame.
+
+      :param module: The module to get the pose for.
+      :returns: The absolute pose.
+      :raises NotImplementedError: Always.
+
+
+
+.. py:class:: MultiBodySystemSimulationState(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem)
+
+
+   The state of a multi body system at some moment in a simulation.
+
+   .. py:method:: get_pose() -> revolve2.simulation.scene.Pose
+
+      Get the pose of the multi body system.
+
+      :returns: The retrieved pose.
+
+
+
+.. py:class:: SceneSimulationState(simulation_state: revolve2.simulation.scene.SimulationState, modular_robot_to_multi_body_system_mapping: dict[revolve2.simulation.scene.UUIDKey[revolve2.modular_robot.ModularRobot], revolve2.simulation.scene.MultiBodySystem], interactive_objects: list[revolve2.simulation.scene.UUIDKey[revolve2.simulation.scene.MultiBodySystem]])
+
+
+   An interface for reading a certain state of a modular robot simulation.
+
+   .. py:method:: get_modular_robot_simulation_state(modular_robot: revolve2.modular_robot.ModularRobot) -> modular_robot_simulation.simulation_states._modular_robot_simulation_state.ModularRobotSimulationState
+
+      Get the simulation state for one of the modular robots in the scene.
+
+      :param modular_robot: The modular robot to get the state for.
+      :returns: The retrieved state.
+      :raises ValueError: If the robot is not in the scene.
+
+
+   .. py:method:: get_interactive_object_simulation_state(interactive_object: revolve2.simulation.scene.MultiBodySystem) -> modular_robot_simulation.simulation_states._multi_body_system_simulation_state.MultiBodySystemSimulationState
+
+      Get the simulation state for one of the interactive objects in the scene.
+
+      :param interactive_object: The interactive object to get the state for.
+      :returns: The retrieved state.
+      :raises ValueError: If the interactive object is not in the scene.
+
+
+

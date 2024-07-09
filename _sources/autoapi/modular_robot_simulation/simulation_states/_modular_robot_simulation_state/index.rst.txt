@@ -1,9 +1,9 @@
 :orphan:
 
 :py:mod:`_modular_robot_simulation_state`
-==================================================================
+====================================================================================
 
-.. py:module:: modular_robot_simulation._modular_robot_simulation_state
+.. py:module:: modular_robot_simulation.simulation_states._modular_robot_simulation_state
 
 
 Module Contents
@@ -14,22 +14,20 @@ Classes
 
 .. autoapisummary::
 
-   modular_robot_simulation._modular_robot_simulation_state.ModularRobotSimulationState
+   modular_robot_simulation.simulation_states._modular_robot_simulation_state.ModularRobotSimulationState
 
 
 
 
-.. py:class:: ModularRobotSimulationState(simulation_state: revolve2.simulation.scene.SimulationState, multi_body_system: revolve2.simulation.scene.MultiBodySystem)
+.. py:class:: ModularRobotSimulationState
 
+
+   Bases: :py:obj:`modular_robot_simulation.simulation_states._multi_body_system_simulation_state.MultiBodySystemSimulationState`
+
+   .. autoapi-inheritance-diagram:: modular_robot_simulation.simulation_states._modular_robot_simulation_state.ModularRobotSimulationState
+      :parts: 1
 
    The state of a modular robot at some moment in a simulation.
-
-   .. py:method:: get_pose() -> revolve2.simulation.scene.Pose
-
-      Get the pose of the modular robot.
-
-      :returns: The retrieved pose.
-
 
    .. py:method:: get_module_relative_pose(module: revolve2.modular_robot.body.Module) -> revolve2.simulation.scene.Pose
       :abstractmethod:

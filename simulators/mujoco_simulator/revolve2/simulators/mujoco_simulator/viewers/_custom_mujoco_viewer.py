@@ -244,7 +244,7 @@ class CustomMujocoViewer(Viewer, mujoco_viewer.MujocoViewer):  # type: ignore
 
         :return: A cycle position if applicable.
         """
-        super().render()
+        mujoco_viewer.MujocoViewer.render(self)
         if self._viewer_mode == CustomMujocoViewerMode.MANUAL:
             return self._position
         return None

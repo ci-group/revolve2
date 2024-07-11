@@ -16,6 +16,7 @@ class Viewer(ABC):
 
         :returns: Nothing or feedback.
         """
+        raise NotImplementedError
 
     @abstractmethod
     def current_viewport_size(self) -> tuple[int, int]:

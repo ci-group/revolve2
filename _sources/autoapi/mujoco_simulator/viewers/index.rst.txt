@@ -28,14 +28,12 @@ Classes
 .. py:class:: CustomMujocoViewer(model: mujoco.MjModel, data: mujoco.MjData, *, backend: mujoco_simulator._render_backend.RenderBackend, width: int | None = None, height: int | None = None, start_paused: bool = False, render_every_frame: bool = False, hide_menus: bool = False, mode: CustomMujocoViewerMode = CustomMujocoViewerMode.CLASSIC, **_: Any)
 
 
-   Bases: :py:obj:`revolve2.simulation.simulator.Viewer`, :py:obj:`mujoco_viewer.MujocoViewer`
+   Bases: :py:obj:`revolve2.simulation.simulator.Viewer`
 
    .. autoapi-inheritance-diagram:: mujoco_simulator.viewers.CustomMujocoViewer
       :parts: 1
 
    Custom Viewer Object that allows for additional keyboard inputs.
-
-   We need the type ignore since the mujoco_viewer library is not typed properly and therefor the MujocoViewer class cant be resolved.
 
    .. py:property:: context
       :type: mujoco.MjrContext

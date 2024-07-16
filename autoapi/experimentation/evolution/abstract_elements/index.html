@@ -305,7 +305,12 @@
 <map id="inheritance5a5ed123ec" name="inheritance5a5ed123ec">
 <area shape="rect" id="node2" href="_learner/index.html#experimentation.evolution.abstract_elements._learner.Learner" target="_top" title="A Learner object that enables learning for individuals in an evolutionary process." alt="" coords="125,5,197,31"/>
 </map><p>A Learner object that enables learning for individuals in an evolutionary process.</p>
-<p>TODO: use link for explanation</p>
+<p>The learner is dependent on its reward function, which is: a measure that drives learning.
+Depending on the learning method used, the reward can simply equal task performance.</p>
+<p>Task performance on the other hand is a measure that reflects how well a task is performed.
+In a robot system with multiple tasks, there are multiple definitions of task performance.
+Task performance can be used to define fitness and/or reward functions.</p>
+<p>For more information wait for Prof. Dr. A.E. Eiben`s book on evolutionary robotics, or ask him directly.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="experimentation.evolution.abstract_elements.Learner.learn">
 <em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">learn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">TPopulation</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TPopulation</span></span></span><a class="headerlink" href="#experimentation.evolution.abstract_elements.Learner.learn" title="Link to this definition"></a></dt>

@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-modular-robot-physical"
-version = "1.2.0"
+version = "1.2.1"
 description = "Revolve2: Everything for physical modular robot control. This package is intended to be installed on the modular robot hardware."
 readme = "../README.md"
 authors = [
@@ -27,7 +27,7 @@ packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-revolve2-modular-robot = "1.2.0"
+revolve2-modular-robot = "1.2.1"
 pyrr = "^0.10.3"
 typed-argparse = "^0.3.1"
 pycapnp = { version = "^2.0.0b2" }

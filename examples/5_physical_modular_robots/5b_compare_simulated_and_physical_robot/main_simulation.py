@@ -1,10 +1,10 @@
 """Simulate the modular robot for comparison with the physical counterpart."""
 
+from revolve2.modular_robot_simulation import test_robot
+from revolve2.simulators.mujoco_simulator import LocalSimulator
 from revolve2.standards import terrains
 from revolve2.standards.modular_robots_v2 import gecko_v2
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
-from revolve2.modular_robot_simulation import test_robot
-from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 
 def main() -> None:

@@ -1,7 +1,5 @@
 """Main script for the example."""
 
-from revolve2.standards import terrains
-from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot import ModularRobot, ModularRobotControlInterface
 from revolve2.modular_robot.body import RightAngles
@@ -10,6 +8,8 @@ from revolve2.modular_robot.brain import Brain, BrainInstance
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco_simulator import LocalSimulator
+from revolve2.standards import terrains
+from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 
 
 def make_body() -> (

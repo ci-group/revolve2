@@ -2,8 +2,6 @@
 
 from genotype import Genotype
 
-from revolve2.standards import fitness_functions, terrains
-from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.evolution.abstract_elements import Evaluator as Eval
 from revolve2.modular_robot_simulation import (
     ModularRobotScene,
@@ -11,6 +9,8 @@ from revolve2.modular_robot_simulation import (
     simulate_scenes,
 )
 from revolve2.simulators.mujoco_simulator import LocalSimulator
+from revolve2.standards import fitness_functions, terrains
+from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 
 
 class Evaluator(Eval):

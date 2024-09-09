@@ -2,14 +2,14 @@
 
 import logging
 
-from revolve2.standards import fitness_functions, modular_robots_v2, terrains
-from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco_simulator import LocalSimulator
+from revolve2.standards import fitness_functions, modular_robots_v2, terrains
+from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 
 
 def main() -> None:

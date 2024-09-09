@@ -71,7 +71,7 @@ Each package can be installed using: ::
      - requires
      -
    * - standards
-     - Standard tools, parameters, terrains, robots and more for simulations and experiments
+     - Standard tools, parameters, terrains, robots and more for simulations and experiments.
      - :code:`modular_robot_simulation`
      - **!**
    * - experimentation

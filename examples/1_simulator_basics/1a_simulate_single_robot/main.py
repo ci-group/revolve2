@@ -2,7 +2,7 @@
 
 from pyrr import Vector3
 
-from revolve2.standards import terrains  
+from revolve2.standards import terrains
 from revolve2.standards.interactive_objects import Ball
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging

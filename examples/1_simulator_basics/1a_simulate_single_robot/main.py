@@ -2,7 +2,7 @@
 
 from pyrr import Vector3
 
-from revolve2.standards import terrains  # You should explore the "standards" module as it contains lots of preimplemented elements you can use!
+from revolve2.standards import terrains  
 from revolve2.standards.interactive_objects import Ball
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
@@ -27,6 +27,7 @@ def make_body() -> BodyV2:
     # From here, other modular can be attached.
     # Modules can be attached in a rotated fashion.
     # This can be any angle, although the original design takes into account only multiples of 90 degrees.
+    # You should explore the "standards" module as it contains lots of preimplemented elements you can use!
     body = BodyV2()
     body.core_v2.left_face.bottom = ActiveHingeV2(RightAngles.DEG_0)
     body.core_v2.left_face.bottom.attachment = ActiveHingeV2(RightAngles.DEG_0)

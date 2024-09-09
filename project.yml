@@ -8,7 +8,7 @@ platform_independent_packages:
   - simulation
   - simulators/mujoco_simulator
 platform_dependent_packages:
-  - ci_group
+  - standards
 examples:
   - 1_simulator_basics/1a_simulate_single_robot
   - 1_simulator_basics/1b_custom_terrain

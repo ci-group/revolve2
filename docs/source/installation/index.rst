@@ -70,8 +70,8 @@ Each package can be installed using: ::
      - Description
      - requires
      -
-   * - ci_group
-     - Computational Intelligence Group experimentation tools and standards.
+   * - standards
+     - Standard tools, parameters, terrains, robots and more for simulations and experiments
      - :code:`modular_robot_simulation`
      - **!**
    * - experimentation

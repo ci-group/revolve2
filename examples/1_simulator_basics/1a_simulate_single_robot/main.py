@@ -2,9 +2,9 @@
 
 from pyrr import Vector3
 
-from revolve2.ci_group import terrains
-from revolve2.ci_group.interactive_objects import Ball
-from revolve2.ci_group.simulation_parameters import make_standard_batch_parameters
+from revolve2.standards import terrains  # You should explore the "standards" module as it contains lots of preimplemented elements you can use!
+from revolve2.standards.interactive_objects import Ball
+from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot

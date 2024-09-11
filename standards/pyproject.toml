@@ -8,9 +8,9 @@ requires = [
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "revolve2-ci-group"
+name = "revolve2-standards"
 version = "1.2.1"
-description = "Revolve2: Computational Intelligence Group experimentation tools and standards."
+description = "Revolve2: Standard tools, parameters, terrains, robots and more for simulations and experiments."
 readme = "../README.md"
 authors = [
     "Aart Stuurman <aartstuurman@hotmail.com>",
@@ -30,11 +30,11 @@ classifiers = [
 ]
 packages = [{ include = "revolve2" }]
 include = [
-    { path = "revolve2/ci_group/morphological_novelty_metric/calculate_novelty*.*", format = "wheel" },
+    { path = "revolve2/standards/morphological_novelty_metric/calculate_novelty*.*", format = "wheel" },
 ]
 
 [tool.poetry.build]
-script = "revolve2/ci_group/morphological_novelty_metric/_build_cmodule.py"
+script = "revolve2/standards/morphological_novelty_metric/_build_cmodule.py"
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"

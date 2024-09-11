@@ -1,6 +1,6 @@
 """Configuration parameters for this example."""
 
-from revolve2.ci_group.modular_robots_v2 import gecko_v2
+from revolve2.standards.modular_robots_v2 import gecko_v2
 
 DATABASE_FILE = "database.sqlite"
 NUM_REPETITIONS = 5

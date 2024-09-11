@@ -9,6 +9,6 @@ class MapType(Enum):
     - "CUBE": Wraps the texture around a cube object.
     - "SKYBOX": Like "cube" but maps onto the inside of an object.
     """
-    MAP2D = '2d'
-    CUBE = 'cube'
-    SKYBOX = 'skybox'
+    MAP2D = "2d"
+    CUBE = "cube"
+    SKYBOX = "skybox"

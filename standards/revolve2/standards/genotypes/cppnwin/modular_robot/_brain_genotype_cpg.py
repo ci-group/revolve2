@@ -111,11 +111,19 @@ class BrainGenotypeCpg:
             )
         )
 
-    def develop_brain(self, body: Body) -> BrainCpgNetworkNeighbor:
+    def develop_brain(
+        self, body: Body, passive_connections: bool
+    ) -> BrainCpgNetworkNeighbor:
         """
         Develop the genotype into a modular robot.
 
         :param body: The body to develop the brain for.
+        :param passive_connections: Wether to add CPGs also to passive body modules. The passive module CPGs will
+        not produce output and serve more as communication bridges.
         :returns: The created robot.
         """
-        return BrainCpgNetworkNeighbor(genotype=self.brain.genotype, body=body)
+        return BrainCpgNetworkNeighbor(
+            genotype=self.brain.genotype,
+            body=body,
+            passive_connections=passive_connections,
+        )

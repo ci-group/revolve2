@@ -57,7 +57,7 @@ def main() -> None:
     Of course, you can replace this with your own robot, such as one you have optimized using an evolutionary algorithm.
     """
     body, hinges = make_body()
-    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
+    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng, passive_connections=False)
     robot = ModularRobot(body, brain)
 
     """

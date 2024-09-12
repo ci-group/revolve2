@@ -7,6 +7,7 @@ from pyrr import Quaternion, Vector3
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
+from revolve2.modular_robot.body._module import Module
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_simulation import (
     ModularRobotScene,
@@ -91,8 +92,12 @@ def main() -> None:
 
     # Create a robot
     body = gecko_v2()
-    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
+    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng, passive_connections=False)
     robot = ModularRobot(body, brain)
+
+    # You can inspect the number of modules and weight matrix like this
+    print(f"Body Modules: {len(body.find_modules_of_type(Module))}")
+    print(f"Brain Weights: {len(brain._weight_matrix)}")
 
     # Create the scene.
     scene = ModularRobotScene(terrain=make_custom_terrain())

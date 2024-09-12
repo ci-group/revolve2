@@ -19,15 +19,19 @@ class BrainCpgNetworkNeighbor(ModularRobotBrainCpgNetworkNeighbor):
 
     _genotype: multineat.Genome
 
-    def __init__(self, genotype: multineat.Genome, body: Body):
+    def __init__(
+        self, genotype: multineat.Genome, body: Body, passive_connections: bool
+    ):
         """
         Initialize this object.
 
         :param genotype: A multineat genome used for determining weights.
         :param body: The body of the robot.
+        :param passive_connections: Wether to add CPGs also to passive body modules. The passive module CPGs will
+        not produce output and serve more as communication bridges.
         """
         self._genotype = genotype
-        super().__init__(body)
+        super().__init__(body, passive_connections)
 
     def _make_weights(
         self,

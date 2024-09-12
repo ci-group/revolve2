@@ -4,6 +4,7 @@ from abc import abstractmethod
 import numpy as np
 import numpy.typing as npt
 
+from ...body._module import Module
 from ...body.base import ActiveHinge, Body
 from .._brain import Brain
 from .._brain_instance import BrainInstance
@@ -24,13 +25,16 @@ class BrainCpgNetworkNeighbor(Brain):
     _weight_matrix: npt.NDArray[np.float_]  # nxn matrix matching number of neurons
     _output_mapping: list[tuple[int, ActiveHinge]]
 
-    def __init__(self, body: Body) -> None:
+    def __init__(self, body: Body, passive_connections: bool) -> None:
         """
         Initialize this object.
 
         :param body: The body to create the cpg network and brain for.
+        :param passive_connections: Wether to add CPGs also to passive body modules. The passive module CPGs will
+        not produce output and serve more as communication bridges.
         """
-        active_hinges = body.find_modules_of_type(ActiveHinge)
+        add_cpg_to = Module if passive_connections else ActiveHinge
+        active_hinges = body.find_modules_of_type(add_cpg_to)
         (
             cpg_network_structure,
             self._output_mapping,

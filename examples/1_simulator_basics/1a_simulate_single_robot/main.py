@@ -54,7 +54,7 @@ def main() -> None:
     We choose a 'CPG' brain with random parameters.
     If you want to know more about CPGs checkout the Methods section in: https://doi.org/10.1038/s41598-023-48338-4. 
     """
-    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
+    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng, passive_connections=False)
 
     """Once we have a body and a brain we combine it into a ModularRobot."""
     robot = ModularRobot(body, brain)

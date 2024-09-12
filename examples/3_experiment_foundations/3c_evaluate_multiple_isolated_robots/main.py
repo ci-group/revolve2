@@ -27,7 +27,10 @@ def main() -> None:
         modular_robots_v1.snake_v1(),
         modular_robots_v1.spider_v1(),
     ]
-    brains = [BrainCpgNetworkNeighborRandom(body, rng) for body in bodies]
+    brains = [
+        BrainCpgNetworkNeighborRandom(body, rng, passive_connections=False)
+        for body in bodies
+    ]
     robots = [ModularRobot(body, brain) for body, brain in zip(bodies, brains)]
 
     # Create a flat terrain

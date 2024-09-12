@@ -14,15 +14,19 @@ class BrainCpgNetworkNeighborRandom(BrainCpgNetworkNeighbor):
 
     _rng: np.random.Generator
 
-    def __init__(self, body: Body, rng: np.random.Generator) -> None:
+    def __init__(
+        self, body: Body, rng: np.random.Generator, passive_connections: bool
+    ) -> None:
         """
         Initialize this object.
 
         :param body: The body to create the cpg network and brain for.
         :param rng: Random number generator used for generating the weights.
+        :param passive_connections: Wether to add CPGs also to passive body modules. The passive module CPGs will
+        not produce output and serve more as communication bridges.
         """
         self._rng = rng
-        super().__init__(body)
+        super().__init__(body, passive_connections)
 
     def _make_weights(
         self,

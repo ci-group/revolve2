@@ -47,7 +47,7 @@ class Evaluator(Eval):
         :param population: The robots to simulate.
         :returns: Fitnesses of the robots.
         """
-        robots = [genotype.develop() for genotype in population]
+        robots = [genotype.develop(passive_connections=False) for genotype in population]
         # Create the scenes.
         scenes = []
         for robot in robots:

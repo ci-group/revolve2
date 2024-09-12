@@ -22,7 +22,7 @@ def main() -> None:
 
     # Create the robot.
     body = modular_robots_v2.gecko_v2()
-    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng)
+    brain = BrainCpgNetworkNeighborRandom(body=body, rng=rng, passive_connections=False)
     robot = ModularRobot(body, brain)
 
     # Create the scene.

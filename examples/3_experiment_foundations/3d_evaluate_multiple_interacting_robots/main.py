@@ -30,7 +30,10 @@ def main() -> None:
         modular_robots_v2.snake_v2(),
         modular_robots_v2.spider_v2(),
     ]
-    brains = [BrainCpgNetworkNeighborRandom(body, rng) for body in bodies]
+    brains = [
+        BrainCpgNetworkNeighborRandom(body, rng, passive_connections=False)
+        for body in bodies
+    ]
     robots = [ModularRobot(body, brain) for body, brain in zip(bodies, brains)]
 
     """

@@ -30,7 +30,6 @@ class BrainCpgNetworkNeighbor(ModularRobotBrainCpgNetworkNeighbor):
         :param passive_connections: Wether to add CPGs also to passive body modules. The passive module CPGs will
         not produce output and serve more as communication bridges.
         """
-
         self._genotype = genotype
         super().__init__(body, passive_connections)
 

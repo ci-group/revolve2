@@ -77,12 +77,14 @@ class Genotype(BodyGenotypeV2, BrainGenotypeCpg):
 
         return Genotype(body=body.body, brain=brain.brain)
 
-    def develop(self) -> ModularRobot:
+    def develop(self, passive_connections: bool) -> ModularRobot:
         """
         Develop the genotype into a modular robot.
 
+        :param passive_connections: Wether to add CPGs also to passive body modules. The passive module CPGs will
+        not produce output and serve more as communication bridges.
         :returns: The created robot.
         """
         body = self.develop_body()
-        brain = self.develop_brain(body=body)
+        brain = self.develop_brain(body=body, passive_connections=passive_connections)
         return ModularRobot(body=body, brain=brain)

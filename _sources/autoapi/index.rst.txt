@@ -6,7 +6,7 @@ This page contains auto-generated API reference documentation [#f1]_.
 .. toctree::
    :titlesonly:
 
-   /autoapi/ci_group/index
+   /autoapi/standards/index
    /autoapi/experimentation/index
    /autoapi/modular_robot/index
    /autoapi/modular_robot_physical/index

@@ -1,0 +1,22 @@
+:py:mod:`calculate_novelty`
+==================================================================
+
+.. py:module:: standards.morphological_novelty_metric.calculate_novelty
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   standards.morphological_novelty_metric.calculate_novelty.calculate_novelty
+
+
+
+.. py:function:: calculate_novelty(histograms: numpy.typing.NDArray[numpy.int64], amount_instances: int, histogram_size: int) -> numpy.typing.NDArray[numpy.float64]
+
+

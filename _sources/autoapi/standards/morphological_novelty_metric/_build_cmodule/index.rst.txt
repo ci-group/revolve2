@@ -1,0 +1,28 @@
+:orphan:
+
+:py:mod:`_build_cmodule`
+===============================================================
+
+.. py:module:: standards.morphological_novelty_metric._build_cmodule
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   standards.morphological_novelty_metric._build_cmodule.build
+
+
+
+.. py:function:: build() -> None
+
+   Build the morphological novelty shared object.
+
+   :raises OSError: If the users OS is not Windows or UNIX-based.
+
+

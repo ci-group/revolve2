@@ -1,0 +1,29 @@
+:orphan:
+
+:py:mod:`_multineat_rng_from_random`
+================================================================
+
+.. py:module:: standards.genotypes.cppnwin._multineat_rng_from_random
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   standards.genotypes.cppnwin._multineat_rng_from_random.multineat_rng_from_random
+
+
+
+.. py:function:: multineat_rng_from_random(rng: numpy.random.Generator) -> multineat.RNG
+
+   Create a multineat rng object from a numpy rng state.
+
+   :param rng: The numpy rng.
+   :returns: The multineat rng.
+
+

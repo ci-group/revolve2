@@ -1,0 +1,20 @@
+:py:mod:`genotypes`
+=============================
+
+.. py:module:: standards.genotypes
+
+.. autoapi-nested-parse::
+
+   Genotypes for evolutionary algorithms.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   cppnwin/index.rst
+
+

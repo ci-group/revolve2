@@ -1,0 +1,76 @@
+:orphan:
+
+:py:mod:`_body_genotype_orm_v1`
+============================================================================
+
+.. py:module:: standards.genotypes.cppnwin.modular_robot.v1._body_genotype_orm_v1
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   standards.genotypes.cppnwin.modular_robot.v1._body_genotype_orm_v1.BodyGenotypeOrmV1
+
+
+
+
+.. py:class:: BodyGenotypeOrmV1
+
+
+   Bases: :py:obj:`sqlalchemy.orm.MappedAsDataclass`
+
+   .. autoapi-inheritance-diagram:: standards.genotypes.cppnwin.modular_robot.v1._body_genotype_orm_v1.BodyGenotypeOrmV1
+      :parts: 1
+
+   SQLAlchemy model for a CPPNWIN body genotype.
+
+   .. py:attribute:: body
+      :type: multineat.Genome
+
+      
+
+   .. py:method:: random_body(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BodyGenotypeOrmV1
+      :classmethod:
+
+      Create a random genotype.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: The created genotype.
+
+
+   .. py:method:: mutate_body(innov_db: multineat.InnovationDatabase, rng: numpy.random.Generator) -> BodyGenotypeOrmV1
+
+      Mutate this genotype.
+
+      This genotype will not be changed; a mutated copy will be returned.
+
+      :param innov_db: Multineat innovation database. See Multineat library.
+      :param rng: Random number generator.
+      :returns: A mutated copy of the provided genotype.
+
+
+   .. py:method:: crossover_body(parent1: typing_extensions.Self, parent2: typing_extensions.Self, rng: numpy.random.Generator) -> BodyGenotypeOrmV1
+      :classmethod:
+
+      Perform crossover between two genotypes.
+
+      :param parent1: The first genotype.
+      :param parent2: The second genotype.
+      :param rng: Random number generator.
+      :returns: A newly created genotype.
+
+
+   .. py:method:: develop_body() -> revolve2.modular_robot.body.v1.BodyV1
+
+      Develop the genotype into a modular robot.
+
+      :returns: The created robot.
+
+
+

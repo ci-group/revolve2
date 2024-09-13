@@ -1,0 +1,35 @@
+:py:mod:`interactive_objects`
+=======================================
+
+.. py:module:: standards.interactive_objects
+
+.. autoapi-nested-parse::
+
+   Interactive objects for the moduler robots to play with.
+
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   standards.interactive_objects.Ball
+
+
+
+
+.. py:class:: Ball(radius: float, mass: float, pose: revolve2.simulation.scene.Pose = Pose(), is_static: bool = False, texture: revolve2.simulation.scene.geometry.textures.Texture | None = None)
+
+
+   Bases: :py:obj:`revolve2.simulation.scene.MultiBodySystem`
+
+   .. autoapi-inheritance-diagram:: standards.interactive_objects.Ball
+      :parts: 1
+
+   An interactive ball.
+
+

@@ -1,0 +1,51 @@
+:py:mod:`planar_robot_representation`
+===============================================
+
+.. py:module:: standards.planar_robot_representation
+
+.. autoapi-nested-parse::
+
+   Draw 2D representations of Modular Robots. Based on Karine Miras` Method.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   standards.planar_robot_representation.draw_robots
+   standards.planar_robot_representation.draw_robot
+
+
+
+.. py:function:: draw_robots(robots: list[revolve2.modular_robot.ModularRobot] | list[revolve2.modular_robot.body.base.Body], scale: int = 100, path: str | None = None) -> None
+
+   Draw multiple robots at once.
+
+   How to use:
+    >>> robots: list[revolve2.modular_robot.ModularRobot] | list[revolve2.modular_robot.body.base.Body]
+    >>> draw_robots(robots, path="<your desired path to save the image to>")
+
+   :param robots: The robots.
+   :param scale: The scale for the robots to be drawn.
+   :param path: The path for the output files.
+
+
+.. py:function:: draw_robot(robot: revolve2.modular_robot.ModularRobot | revolve2.modular_robot.body.base.Body, scale: int = 100, path: str | None = None) -> None
+
+   Draw a 2D representation for a modular robots body.
+
+   How to use:
+    >>> robot: revolve2.modular_robot.ModularRobot | revolve2.modular_robot.body.base.Body
+    >>> draw_robot(robot, path="<your desired path to save the image to>")
+
+   :param robot: Supply the robot as a ModularRobot object, or the body directly as a Body object.
+   :param scale: Allows to set the size of the drawing.
+   :param path: The path to save images to.
+
+

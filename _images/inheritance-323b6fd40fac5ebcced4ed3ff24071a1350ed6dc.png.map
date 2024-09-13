@@ -1,0 +1,5 @@
+<map id="inheritanced866324b9f" name="inheritanced866324b9f">
+<area shape="rect" id="node1" title="Helper class that provides a standard way to create an ABC using" alt="" coords="5,29,77,55"/>
+<area shape="rect" id="node2" title="The brain of a modular robot." alt="" coords="125,29,197,55"/>
+<area shape="rect" id="node3" href="#standards.genotypes.cppnwin.modular_robot._brain_cpg_network_neighbor.BrainCpgNetworkNeighbor" target="_top" title="A CPG brain based on `ModularRobotBrainCpgNetworkNeighbor` that creates weights from a CPPNWIN network." alt="" coords="245,29,440,55"/>
+</map>

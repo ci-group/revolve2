@@ -1,0 +1,22 @@
+:py:mod:`cppnwin`
+=====================================
+
+.. py:module:: standards.genotypes.cppnwin
+
+.. autoapi-nested-parse::
+
+   CPPNWIN genotype.
+
+   That is, Compositional Pattern-Producing Network With Innovation Numbers.
+
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   modular_robot/index.rst
+
+

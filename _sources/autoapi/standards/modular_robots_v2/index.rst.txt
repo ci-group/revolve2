@@ -1,0 +1,73 @@
+:py:mod:`modular_robots_v2`
+=====================================
+
+.. py:module:: standards.modular_robots_v2
+
+.. autoapi-nested-parse::
+
+   Standard modular robots.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   standards.modular_robots_v2.all
+   standards.modular_robots_v2.get
+   standards.modular_robots_v2.gecko_v2
+   standards.modular_robots_v2.spider_v2
+   standards.modular_robots_v2.ant_v2
+   standards.modular_robots_v2.snake_v2
+
+
+
+.. py:function:: all() -> list[revolve2.modular_robot.body.v2.BodyV2]
+
+   Get a list of all standard module robots.
+
+   :returns: The list of robots.
+
+
+.. py:function:: get(name: str) -> revolve2.modular_robot.body.v2.BodyV2
+
+   Get a robot by name.
+
+   :param name: The name of the robot to get.
+   :returns: The robot with that name.
+   :raises ValueError: When a robot with that name does not exist.
+
+
+.. py:function:: gecko_v2() -> revolve2.modular_robot.body.v2.BodyV2
+
+   Sample robot with new HW config.
+
+   :returns: the robot
+
+
+.. py:function:: spider_v2() -> revolve2.modular_robot.body.v2.BodyV2
+
+   Get the spider modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: ant_v2() -> revolve2.modular_robot.body.v2.BodyV2
+
+   Get the ant modular robot.
+
+   :returns: the robot.
+
+
+.. py:function:: snake_v2() -> revolve2.modular_robot.body.v2.BodyV2
+
+   Get the snake modular robot.
+
+   :returns: the robot.
+
+

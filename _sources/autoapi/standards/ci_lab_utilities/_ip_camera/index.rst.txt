@@ -1,0 +1,45 @@
+:orphan:
+
+:py:mod:`_ip_camera`
+===============================================
+
+.. py:module:: standards.ci_lab_utilities._ip_camera
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   standards.ci_lab_utilities._ip_camera.IPCamera
+
+
+
+
+.. py:class:: IPCamera(camera_location: str, recording_path: str | None = None, image_dimensions: tuple[int, int] = (1920, 1080), distortion_coefficients: numpy.typing.NDArray[numpy.float_] = np.array([[-0.2976428547328032], [3.2508343621538445], [-17.38410840159056], [30.01965021834286]]), camera_matrix: numpy.typing.NDArray[numpy.float_] = np.array([[1490.4374643604199, 0.0, 990.6557248821284], [0.0, 1490.6535480621505, 544.6243597123726], [0.0, 0.0, 1.0]]), fps: int = 30)
+
+
+   A general class to steam and record from IP cameras via opencv.
+
+   How to use:
+   >>> address = "rtsp://<user>:<password>@<ip>:<port (554)>/..."
+   >>> camera = IPCamera(camera_location=address, recording_path="<example_path>")
+   >>> camera.start(display=True, record=True)
+
+   If you are experiencing XDG_SESSION_TYPE error messages because of wayland use the following code before you start the recording:
+   >>> import os
+   >>> os.environ["XDG_SESSION_TYPE"] = "xcb"
+   >>> os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
+
+   .. py:method:: start(record: bool = False, display: bool = True) -> None
+
+      Start the camera.
+
+      :param record: Whether to record.
+      :param display: Whether to display the video stream.
+
+
+

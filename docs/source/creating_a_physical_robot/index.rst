@@ -23,12 +23,12 @@ If you are a maintainer of your research group, :ref:`take a look at the guide o
 Brick and active hinge modules
 ==============================
 
-.. image:: ../brick.png
+.. image:: ../isotropic_brick.png
    :width: 45%
 .. image:: ../active_hinge.png
    :width: 45%
 
-Ask around your research group if brick and hinge modules are readily available.
+Ask around your research group if brick (isotropic) and hinge modules are readily available.
 If not, see :ref:`creating_a_physical_robot/index:3D printing and assembling modules`.
 
 Bolts for attaching modules
@@ -58,7 +58,7 @@ Route the wires from the active hinges into the core and plug them in as display
 Make sure the ground (dark) wire is oriented correctly.
 Note the numbers of the pins you attach your active hinges to. These will be used later when controlling the robot.
 
-Try to connect the active hinges to pins that are far apart. Neirby pins run on the same power management system which can be a problem when hinges draw too much power leading to a power failure and stuttering movement.
+Try to connect the active hinges to pins that are far apart. Nearby pins run on the same power management system which can be a problem when hinges draw too much power leading to a power failure and stuttering movement.
 
 .. image:: ./active_hinge_to_core.png
   :width: 45%
@@ -70,9 +70,11 @@ Try to connect the active hinges to pins that are far apart. Neirby pins run on 
 Bricks and active hinges can be 3D printed using the files at `<https://github.com/ci-group/revolve-models/tree/master/v2>`_.
 If you are working in a research group that is already using Revolve2, this step is probably not necessary and modules are already available.
 
-If you arrive at this step it is likely that you also do not have servos and you may have to order those.
-Exact specs are not available, but keep in mind that you need to be able to read the current position of the servo (or be able to physically alter the servo to provide that, which is often possible).
-Of course, keep in mind the form factor and possibly adjust the 3d model before printing.
+To actuate your robot, we have provided a sufficient number of servos for students and researchers. The servo model is DSS-M15, and the exact specifications can be found at `<https://w3.icshop.com.tw/pd/368040600012/datasheet.pdf>`_.
+We offer three servo cable lengths—55cm, 70cm, and 95cm—depending on your robot's design.
+Choose the appropriate length accordingly. The servos have been modified by our electronics lab to include angle readout functionality.
+Please note that if you are not part of our research group, you will need a way to read the current position of the servo or physically
+modify the servo to enable this feature, which is often possible.
 To assemble an active hinge you will need screws. These will either come with the bought servo, or you have to find matching ones.
 
 .. image:: ./assemble_servo_1.png

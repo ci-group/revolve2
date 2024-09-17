@@ -241,7 +241,11 @@ Also, if you simply want to know how to use a pre-installed physical robot, chec
 </section>
 <section id="hardware-setup-for-a-v2-robot">
 <h3>Hardware setup for a V2 Robot<a class="headerlink" href="#hardware-setup-for-a-v2-robot" title="Link to this heading"></a></h3>
-<p>For instructions on  how to set up the hardware of a V2 core, refer to <a class="reference external" href="https://github.com/ci-group/robohat">https://github.com/ci-group/robohat</a>.</p>
+<ul class="simple">
+<li><p><strong>To power on the device</strong>, the user must press the power-on switch. When the switch is pressed, the LED will blink three times. After the blinking period, the LED will flash multiple times. The user should release the power switch before the flashing stops. If the button is released after the flashing has finished, nothing will happen. Note: The device can only be turned on if the battery has sufficient capacity.</p></li>
+<li><p><strong>To turn off the device</strong>, follow the same procedure: press and hold the button while the LED blinks, and release it while the LED is flashing.</p></li>
+</ul>
+<p>For more instructions on  how to set up the hardware of a V2 core, refer to <a class="reference external" href="https://github.com/ci-group/robohat">https://github.com/ci-group/robohat</a>.</p>
 <p><strong>Important:</strong> For the V2 to work properly the <cite>config.txt</cite> on the RPi has to be changed.
 The following file contains the correct config content: <a class="reference external" href="https://github.com/ci-group/robohat/blob/main/config.txt">https://github.com/ci-group/robohat/blob/main/config.txt</a>.
 On the RPi adjust the config in <cite>/boot/config.txt</cite> or on newer systems <cite>/boot/firmware/config.txt</cite>.</p>
@@ -254,7 +258,7 @@ On the RPi adjust the config in <cite>/boot/config.txt</cite> or on newer system
 <li><p>Flash the SD card with Raspberry Pi OS (previously Raspbian). Some Important notes:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>If you are required to pick a username and password, it is recommended to pick <code class="code docutils literal notranslate"><span class="pre">pi</span></code> and <code class="code docutils literal notranslate"><span class="pre">raspberry</span></code>. These are the defaults for most RPi installations.</p></li>
+<li><p>If you are required to pick a username and password, it is recommended to pick <code class="code docutils literal notranslate"><span class="pre">pi</span></code> and <code class="code docutils literal notranslate"><span class="pre">raspberry</span></code>. For now, all the heads are set by default with <code class="code docutils literal notranslate"><span class="pre">robo`</span></code> as the username and <code class="code docutils literal notranslate"><span class="pre">test</span></code> as the password.</p></li>
 <li><p>Reminder for CI Group people: if you select a keyboard layout, pick <cite>English(US)</cite>. It can always be changed using the <cite>raspi-config</cite> tool on the RPi.</p></li>
 <li><p>When setting up the Wi-Fi connection, select your Country. (CI-Group Wi-Fi: <em>ThymioNet</em>)</p></li>
 </ul>
@@ -271,8 +275,8 @@ On the RPi adjust the config in <cite>/boot/config.txt</cite> or on newer system
 </ul>
 </div></blockquote>
 </li>
-<li><p>If you want to SSH and don’t know the IP of the RPi, you can use <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">nmap</span> <span class="pre">-sP</span> <span class="pre">&lt;your</span> <span class="pre">ip&gt;</span></code> on your machine to find all clients on your network.</p></li>
-<li><p><strong>For V2 robots:</strong> You can establish a serial connection with the AUX input on the hat. To do so, connect the robohat with your device using a cable. Then use the following command to access the robohat: <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">screen</span> <span class="pre">&lt;port</span> <span class="pre">to</span> <span class="pre">connect&gt;</span> <span class="pre">115200</span></code>.</p>
+<li><p>If you want to SSH and don’t know the IP of the RPi, you can use <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">nmap</span> <span class="pre">-sn</span> <span class="pre">&lt;your</span> <span class="pre">ip&gt;</span></code> on your machine to find all clients on your network.</p></li>
+<li><p><strong>For V2 robots:</strong> You can establish a serial connection using the AUX input on the hat. To do so, first connect the RoboHat to your device using a cable. Then, before powering on the device, use the following command to access the RoboHat: <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">screen</span> <span class="pre">&lt;port</span> <span class="pre">to</span> <span class="pre">connect&gt;</span> <span class="pre">115200</span></code>. If you first power on and then run the command, the terminal might show nothing because there is no data written to the serial port.</p>
 <blockquote>
 <div><ul class="simple">
 <li><p>For linux users, the port is usually: <code class="code docutils literal notranslate"><span class="pre">/dev/ttyUSB0</span></code>.</p></li>
@@ -280,10 +284,19 @@ On the RPi adjust the config in <cite>/boot/config.txt</cite> or on newer system
 </ul>
 </div></blockquote>
 </li>
+<li><dl class="simple">
+<dt>If <cite>screen</cite> is not very smooth somehow, you can use PuTTY instead.</dt><dd><ul class="simple">
+<li><p>To install it on Linux <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">putty</span></code></p></li>
+<li><p>To connect to the serial port <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">putty</span> <span class="pre">/dev/ttyUSB0</span> <span class="pre">-serial</span> <span class="pre">-sercfg</span> <span class="pre">115200,8,n,1,N</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </div></blockquote>
 </li>
 </ol>
+<a class="reference internal image-reference" href="../_images/core_serial_port.png"><img alt="../_images/core_serial_port.png" class="align-center" src="../_images/core_serial_port.png" style="width: 45%;" /></a>
 </section>
 <section id="install-revolve2-on-the-rpi">
 <h2>Install Revolve2 on the RPi<a class="headerlink" href="#install-revolve2-on-the-rpi" title="Link to this heading"></a></h2>

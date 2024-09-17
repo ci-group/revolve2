@@ -233,9 +233,9 @@ If you are a maintainer of your research group, <a class="reference internal" hr
 </section>
 <section id="brick-and-active-hinge-modules">
 <h3>Brick and active hinge modules<a class="headerlink" href="#brick-and-active-hinge-modules" title="Link to this heading"></a></h3>
-<a class="reference internal image-reference" href="../_images/brick.png"><img alt="../_images/brick.png" src="../_images/brick.png" style="width: 45%;" /></a>
+<a class="reference internal image-reference" href="../_images/isotropic_brick.png"><img alt="../_images/isotropic_brick.png" src="../_images/isotropic_brick.png" style="width: 45%;" /></a>
 <a class="reference internal image-reference" href="../_images/active_hinge.png"><img alt="../_images/active_hinge.png" src="../_images/active_hinge.png" style="width: 45%;" /></a>
-<p>Ask around your research group if brick and hinge modules are readily available.
+<p>Ask around your research group if brick (isotropic) and hinge modules are readily available.
 If not, see <a class="reference internal" href="#d-printing-and-assembling-modules"><span class="std std-ref">3D printing and assembling modules</span></a>.</p>
 </section>
 <section id="bolts-for-attaching-modules">
@@ -254,16 +254,18 @@ Note that when connecting to the core nuts are not required as thread is embedde
 Route the wires from the active hinges into the core and plug them in as displayed on the photo.
 Make sure the ground (dark) wire is oriented correctly.
 Note the numbers of the pins you attach your active hinges to. These will be used later when controlling the robot.</p>
-<p>Try to connect the active hinges to pins that are far apart. Neirby pins run on the same power management system which can be a problem when hinges draw too much power leading to a power failure and stuttering movement.</p>
+<p>Try to connect the active hinges to pins that are far apart. Nearby pins run on the same power management system which can be a problem when hinges draw too much power leading to a power failure and stuttering movement.</p>
 <a class="reference internal image-reference" href="../_images/active_hinge_to_core.png"><img alt="How to connect an active hinge to the core" src="../_images/active_hinge_to_core.png" style="width: 45%;" /></a>
 </section>
 <section id="d-printing-and-assembling-modules">
 <h2>3D printing and assembling modules<a class="headerlink" href="#d-printing-and-assembling-modules" title="Link to this heading"></a></h2>
 <p>Bricks and active hinges can be 3D printed using the files at <a class="reference external" href="https://github.com/ci-group/revolve-models/tree/master/v2">https://github.com/ci-group/revolve-models/tree/master/v2</a>.
 If you are working in a research group that is already using Revolve2, this step is probably not necessary and modules are already available.</p>
-<p>If you arrive at this step it is likely that you also do not have servos and you may have to order those.
-Exact specs are not available, but keep in mind that you need to be able to read the current position of the servo (or be able to physically alter the servo to provide that, which is often possible).
-Of course, keep in mind the form factor and possibly adjust the 3d model before printing.
+<p>To actuate your robot, we have provided a sufficient number of servos for students and researchers. The servo model is DSS-M15, and the exact specifications can be found at <a class="reference external" href="https://w3.icshop.com.tw/pd/368040600012/datasheet.pdf">https://w3.icshop.com.tw/pd/368040600012/datasheet.pdf</a>.
+We offer three servo cable lengths—55cm, 70cm, and 95cm—depending on your robot’s design.
+Choose the appropriate length accordingly. The servos have been modified by our electronics lab to include angle readout functionality.
+Please note that if you are not part of our research group, you will need a way to read the current position of the servo or physically
+modify the servo to enable this feature, which is often possible.
 To assemble an active hinge you will need screws. These will either come with the bought servo, or you have to find matching ones.</p>
 <a class="reference internal image-reference" href="../_images/assemble_servo_1.png"><img alt="../_images/assemble_servo_1.png" src="../_images/assemble_servo_1.png" style="width: 17%;" /></a>
 <a class="reference internal image-reference" href="../_images/assemble_servo_2.png"><img alt="../_images/assemble_servo_2.png" src="../_images/assemble_servo_2.png" style="width: 17%;" /></a>

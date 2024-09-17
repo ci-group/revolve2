@@ -27,7 +27,10 @@ Hardware setup for a V1 Robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Hardware setup for a V2 Robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-For instructions on  how to set up the hardware of a V2 core, refer to `<https://github.com/ci-group/robohat>`_.
+* **To power on the device**, the user must press the power-on switch. When the switch is pressed, the LED will blink three times. After the blinking period, the LED will flash multiple times. The user should release the power switch before the flashing stops. If the button is released after the flashing has finished, nothing will happen. Note: The device can only be turned on if the battery has sufficient capacity.
+* **To turn off the device**, follow the same procedure: press and hold the button while the LED blinks, and release it while the LED is flashing.
+
+For more instructions on  how to set up the hardware of a V2 core, refer to `<https://github.com/ci-group/robohat>`_.
 
 **Important:** For the V2 to work properly the `config.txt` on the RPi has to be changed.
 The following file contains the correct config content: `<https://github.com/ci-group/robohat/blob/main/config.txt>`_.
@@ -40,7 +43,7 @@ This step is the same for all types of hardware.
 
 #. Flash the SD card with Raspberry Pi OS (previously Raspbian). Some Important notes:
 
-    * If you are required to pick a username and password, it is recommended to pick :code:`pi` and :code:`raspberry`. These are the defaults for most RPi installations.
+    * If you are required to pick a username and password, it is recommended to pick :code:`pi` and :code:`raspberry`. For now, all the heads are set by default with :code:`robo`` as the username and :code:`test` as the password.
     * Reminder for CI Group people: if you select a keyboard layout, pick `English(US)`. It can always be changed using the `raspi-config` tool on the RPi.
     * When setting up the Wi-Fi connection, select your Country. (CI-Group Wi-Fi: *ThymioNet*)
 
@@ -51,11 +54,20 @@ This step is the same for all types of hardware.
 
         * Hint: SSH is not enabled by default. The simplest way to enable it is using the :code:`raspi-config`.
 
-    * If you want to SSH and don't know the IP of the RPi, you can use :code:`sudo nmap -sP <your ip>` on your machine to find all clients on your network.
-    * **For V2 robots:** You can establish a serial connection with the AUX input on the hat. To do so, connect the robohat with your device using a cable. Then use the following command to access the robohat: :code:`sudo screen <port to connect> 115200`.
+    * If you want to SSH and don't know the IP of the RPi, you can use :code:`sudo nmap -sn <your ip>` on your machine to find all clients on your network.
+    * **For V2 robots:** You can establish a serial connection using the AUX input on the hat. To do so, first connect the RoboHat to your device using a cable. Then, before powering on the device, use the following command to access the RoboHat: :code:`sudo screen <port to connect> 115200`. If you first power on and then run the command, the terminal might show nothing because there is no data written to the serial port.
 
         * For linux users, the port is usually: :code:`/dev/ttyUSB0`.
         * For mac users the port is usually: :code:`/dev/cu.usbserial`.
+
+    * If `screen` is not very smooth somehow, you can use PuTTY instead.
+        * To install it on Linux :code:`sudo apt-get install putty`
+        * To connect to the serial port :code:`sudo putty /dev/ttyUSB0 -serial -sercfg 115200,8,n,1,N`.
+
+.. image:: ../core_serial_port.png
+    :width: 45%
+    :align: center
+
 
 ---------------------------
 Install Revolve2 on the RPi

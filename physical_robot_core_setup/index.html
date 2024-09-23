@@ -88,6 +88,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#v1-additional-steps">V1 Additional Steps</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#test-your-robot-in-the-real-world">Test your robot in the real world</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../contributing_guide/index.html">Contributing guide</a><ul>
@@ -258,7 +259,7 @@ On the RPi adjust the config in <cite>/boot/config.txt</cite> or on newer system
 <li><p>Flash the SD card with Raspberry Pi OS (previously Raspbian). Some Important notes:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>If you are required to pick a username and password, it is recommended to pick <code class="code docutils literal notranslate"><span class="pre">pi</span></code> and <code class="code docutils literal notranslate"><span class="pre">raspberry</span></code>. For now, all the heads are set by default with <code class="code docutils literal notranslate"><span class="pre">robo`</span></code> as the username and <code class="code docutils literal notranslate"><span class="pre">test</span></code> as the password.</p></li>
+<li><p>If you are required to pick a username and password, it is recommended to pick <code class="code docutils literal notranslate"><span class="pre">pi</span></code> and <code class="code docutils literal notranslate"><span class="pre">raspberry</span></code>. For now, all the heads are set by default with <code class="code docutils literal notranslate"><span class="pre">robo</span></code> as the username and <code class="code docutils literal notranslate"><span class="pre">test</span></code> as the password.</p></li>
 <li><p>Reminder for CI Group people: if you select a keyboard layout, pick <cite>English(US)</cite>. It can always be changed using the <cite>raspi-config</cite> tool on the RPi.</p></li>
 <li><p>When setting up the Wi-Fi connection, select your Country. (CI-Group Wi-Fi: <em>ThymioNet</em>)</p></li>
 </ul>
@@ -339,6 +340,8 @@ To check your os version you can run <code class="code docutils literal notransl
 <li><p>V1: <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;revolve2-modular_robot_physical[botv1]</span> <span class="pre">&#64;</span> <span class="pre">git+https://github.com/ci-group/revolve2.git&#64;&lt;revolve_version&gt;#subdirectory=modular_robot_physical&quot;</span></code>.</p></li>
 <li><p>V2: <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;revolve2-modular_robot_physical[botv2]</span> <span class="pre">&#64;</span> <span class="pre">git+https://github.com/ci-group/revolve2.git&#64;&lt;revolve_version&gt;#subdirectory=modular_robot_physical&quot;</span></code>.</p></li>
 </ul>
+<p>For example, if you want to install the version tagged as 1.2.2, the command would be:
+<code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;revolve2-modular_robot_physical[botv2]</span> <span class="pre">&#64;</span> <span class="pre">git+https://github.com/ci-group/revolve2.git&#64;1.2.2#subdirectory=modular_robot_physical&quot;</span></code></p>
 </div></blockquote>
 </li>
 <li><dl>
@@ -346,10 +349,9 @@ To check your os version you can run <code class="code docutils literal notransl
 <li><p>Create a systemd service file: <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">nano</span> <span class="pre">/etc/systemd/system/robot-daemon.service</span></code></p></li>
 <li><p>Add the following content to the file (note: fill in the missing information):</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ini
-<span class="o">[</span>Unit<span class="o">]</span>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>Unit<span class="o">]</span>
 <span class="nv">Description</span><span class="o">=</span>Revolve2<span class="w"> </span>physical<span class="w"> </span>robot<span class="w"> </span>daemon
-<span class="nv">After</span><span class="o">=</span>network-online.target<span class="w"> </span>&lt;add<span class="w"> </span>this<span class="w"> </span><span class="k">for</span><span class="w"> </span>v1<span class="w"> </span>robots<span class="w"> </span>as<span class="w"> </span>well:<span class="w"> </span><span class="s1">&#39;pigpiod.service&#39;</span>&gt;
+<span class="nv">After</span><span class="o">=</span>network-online.target<span class="w"> </span>&lt;add<span class="w"> </span>this<span class="w"> </span><span class="k">for</span><span class="w"> </span>v1<span class="w"> </span>robots<span class="w"> </span>as<span class="w"> </span>well:<span class="w"> </span><span class="s1">&#39;pigpiod.service&#39;</span>,<span class="w"> </span>otherwise<span class="w"> </span>remove<span class="w"> </span>this<span class="w"> </span>option&gt;
 
 <span class="o">[</span>Service<span class="o">]</span>
 <span class="nv">Type</span><span class="o">=</span>simple
@@ -385,8 +387,7 @@ To check your os version you can run <code class="code docutils literal notransl
 <li><p>Create a systemd service file: <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">nano</span> <span class="pre">/etc/systemd/system/pigpiod.service</span></code></p></li>
 <li><p>Add the following content to the file:</p>
 <blockquote>
-<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ini
-<span class="o">[</span>Unit<span class="o">]</span>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>Unit<span class="o">]</span>
 <span class="nv">Description</span><span class="o">=</span>Pigpio<span class="w"> </span>Daemon
 <span class="nv">After</span><span class="o">=</span>network-online.target
 
@@ -411,6 +412,12 @@ To check your os version you can run <code class="code docutils literal notransl
 </li>
 </ul>
 </section>
+</section>
+<section id="test-your-robot-in-the-real-world">
+<h2>Test your robot in the real world<a class="headerlink" href="#test-your-robot-in-the-real-world" title="Link to this heading"></a></h2>
+<p>There are two examples (<a class="reference external" href="https://github.com/ci-group/revolve2/tree/master/examples/5_physical_modular_robots">https://github.com/ci-group/revolve2/tree/master/examples/5_physical_modular_robots</a>) you can run to control your newly built robot remotely and check whether it has been built correctly. Please make changes according to your robot’s configuration, such as the robot’s hostname and the pin IDs.</p>
+<p><strong>5a_physical_robot_remote</strong>: Control a physical modular robot by running its brain locally on your computer and streaming movement instructions to the physical modular robot.</p>
+<p><strong>5b_compare_simulated_and_physical_robot</strong>: Create a physical robot with a simulated twin. You will use two separate scripts, one for the simulated robot and one for the physical robot. With this duplicate you can check whether you have built the physical robot correctly, by comparing it to its simulated counterpart.</p>
 </section>
 </section>
 

@@ -43,7 +43,7 @@ This step is the same for all types of hardware.
 
 #. Flash the SD card with Raspberry Pi OS (previously Raspbian). Some Important notes:
 
-    * If you are required to pick a username and password, it is recommended to pick :code:`pi` and :code:`raspberry`. For now, all the heads are set by default with :code:`robo`` as the username and :code:`test` as the password.
+    * If you are required to pick a username and password, it is recommended to pick :code:`pi` and :code:`raspberry`. For now, all the heads are set by default with :code:`robo` as the username and :code:`test` as the password.
     * Reminder for CI Group people: if you select a keyboard layout, pick `English(US)`. It can always be changed using the `raspi-config` tool on the RPi.
     * When setting up the Wi-Fi connection, select your Country. (CI-Group Wi-Fi: *ThymioNet*)
 
@@ -106,16 +106,18 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
     * V1: :code:`pip install "revolve2-modular_robot_physical[botv1] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
     * V2: :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
 
+    For example, if you want to install the version tagged as 1.2.2, the command would be:
+    :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@1.2.2#subdirectory=modular_robot_physical"`
+
 #. Set up the Revolve2 physical robot daemon:
     #. Create a systemd service file: :code:`sudo nano /etc/systemd/system/robot-daemon.service`
     #. Add the following content to the file (note: fill in the missing information):
 
         .. code-block:: bash
 
-            ini
             [Unit]
             Description=Revolve2 physical robot daemon
-            After=network-online.target <add this for v1 robots as well: 'pigpiod.service'>
+            After=network-online.target <add this for v1 robots as well: 'pigpiod.service', otherwise remove this option>
 
             [Service]
             Type=simple
@@ -146,7 +148,6 @@ If you use V1 hardware setup requires additional steps:
 
         .. code-block:: bash
 
-            ini
             [Unit]
             Description=Pigpio Daemon
             After=network-online.target

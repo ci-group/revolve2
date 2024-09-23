@@ -164,3 +164,12 @@ If you use V1 hardware setup requires additional steps:
 
     #. These settings are identical to the settings for the robot-daemon.
     #. Enable and start the service: :code:`sudo systemctl daemon-reload` & :code:`sudo systemctl enable pigpiod` & :code:`sudo systemctl start pigpiod`.
+
+-------------------------------------------
+Test your robot in the real world
+-------------------------------------------
+There are two examples (https://github.com/ci-group/revolve2/tree/master/examples/5_physical_modular_robots) you can run to control your newly built robot remotely and check whether it has been built correctly.
+
+**5a_physical_robot_remote**: Control a physical modular robot by running its brain locally on your computer and streaming movement instructions to the physical modular robot.
+
+**5b_compare_simulated_and_physical_robot**: Create a physical robot with a simulated twin. You will use two separate scripts, one for the simulated robot and one for the physical robot. With this duplicate you can check whether you have built the physical robot correctly, by comparing it to its simulated counterpart.

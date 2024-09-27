@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from queue import Queue
 from typing import Any
+
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 import multineat
 import numpy as np
 from numpy.typing import NDArray
@@ -23,7 +23,7 @@ class __Module:
 
 def develop(
     genotype: multineat.Genome,
-    visualize: bool = False  # Add a flag to control visualization
+    visualize: bool = False,  # Add a flag to control visualization
 ) -> BodyV2:
     """
     Develop a CPPNWIN genotype into a modular robot body with step-by-step visualization.
@@ -33,14 +33,20 @@ def develop(
     :returns: The created body.
     """
     max_parts = 20  # Determine the maximum parts available for a robot's body.
-    body_net = multineat.NeuralNetwork()  # Instantiate the CPPN network for body construction.
+    body_net = (
+        multineat.NeuralNetwork()
+    )  # Instantiate the CPPN network for body construction.
     genotype.BuildPhenotype(body_net)  # Build the CPPN from the genotype of the robot.
 
     to_explore: Queue[__Module] = Queue()  # Queue used to build the robot.
-    grid = np.zeros(shape=(max_parts * 2 + 1, max_parts * 2 + 1, max_parts * 2 + 1), dtype=np.uint8)
+    grid = np.zeros(
+        shape=(max_parts * 2 + 1, max_parts * 2 + 1, max_parts * 2 + 1), dtype=np.uint8
+    )
     body = BodyV2()
 
-    core_position = Vector3([max_parts + 1, max_parts + 1, max_parts + 1], dtype=np.int_)
+    core_position = Vector3(
+        [max_parts + 1, max_parts + 1, max_parts + 1], dtype=np.int_
+    )
     grid[tuple(core_position)] = 1
     part_count = 1
 
@@ -58,8 +64,8 @@ def develop(
     # Prepare for visualization if enabled
     if visualize:
         fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        plt.show(block=False)  
+        ax = fig.add_subplot(111, projection="3d")
+        plt.show(block=False)
 
     while not to_explore.empty():
         module = to_explore.get()
@@ -93,7 +99,9 @@ def __evaluate_cppn(
     :returns: (module type, angle)
     """
     x, y, z = position
-    assert isinstance(x, np.int_), f"Error: The position is not of type int. Type: {type(x)}."
+    assert isinstance(
+        x, np.int_
+    ), f"Error: The position is not of type int. Type: {type(x)}."
     body_net.Input([1.0, x, y, z, chain_length])  # 1.0 is the bias input
     body_net.ActivateAllLayers()
     outputs = body_net.Output()
@@ -155,7 +163,9 @@ def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     cos_angle: int = int(round(np.cos(rotation.angle)))
     sin_angle: int = int(round(np.sin(rotation.angle)))
 
-    vec: Vector3 = a * cos_angle + sin_angle * b.cross(a) + (1 - cos_angle) * b.dot(a) * b
+    vec: Vector3 = (
+        a * cos_angle + sin_angle * b.cross(a) + (1 - cos_angle) * b.dot(a) * b
+    )
     return vec
 
 
@@ -169,21 +179,21 @@ def __vec3_int(vector: Vector3) -> Vector3[np.int_]:
     return Vector3(list(map(lambda v: int(round(v)), vector)), dtype=np.int64)
 
 
-def __visualize_structure(grid, ax):
+def __visualize_structure(grid: NDArray[np.uint8], ax: plt.Axes) -> None:
     """
     Visualize the structure of the robot's body using Matplotlib.
-    
+
     :param grid: The 3D grid containing the robot body.
     :param ax: The Matplotlib Axes3D object to draw on.
     """
     ax.clear()
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('Z')
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Z")
 
     # Get the occupied grid positions
     x, y, z = np.nonzero(grid)
 
-    ax.scatter(x, y, z, c='r', marker='o')
+    ax.scatter(x, y, z, c="r", marker="o")
     plt.draw()
-    plt.pause(0.5)  
+    plt.pause(0.5)

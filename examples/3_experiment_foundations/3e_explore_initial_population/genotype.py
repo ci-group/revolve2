@@ -39,6 +39,7 @@ class Genotype(BodyGenotypeV2, BrainGenotypeCpg):
     def develop(self, visualize: bool = False) -> ModularRobot:
         """
         Develop the genotype into a modular robot.
+
         :param visualize: Wether to plot the mapping from genotype to phenotype.
         :returns: The created robot.
         """

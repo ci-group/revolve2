@@ -18,6 +18,7 @@ examples:
   - 3_experiment_foundations/3b_evaluate_single_robot
   - 3_experiment_foundations/3c_evaluate_multiple_isolated_robots
   - 3_experiment_foundations/3d_evaluate_multiple_interacting_robots
+  - 3_experiment_foundations/3e_explore_initial_population
   - 4_example_experiment_setups/4a_simple_ea_xor
   - 4_example_experiment_setups/4b_simple_ea_xor_database
   - 4_example_experiment_setups/4c_robot_bodybrain_ea

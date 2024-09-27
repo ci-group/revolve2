@@ -1,8 +1,17 @@
 """Main script for the example."""
 
 import logging
+import random
 
+import config
+import multineat
+import numpy as np
+from evaluator import Evaluator
+from genotype import Genotype
+from individual import Individual
 from pyrr import Vector3
+from scipy.spatial import distance
+from sklearn.neighbors import KDTree
 
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng_time_seed
@@ -11,42 +20,46 @@ from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulation.scene import Pose
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 from revolve2.standards import terrains
-from revolve2.standards.simulation_parameters import make_standard_batch_parameters
-from genotype import Genotype  
-from individual import Individual 
-import multineat
-import config
-from evaluator import Evaluator
-import random
-import numpy as np
-
-from revolve2.standards.morphological_novelty_metric import get_novelty_from_population
 from revolve2.standards.morphological_measures import MorphologicalMeasures
-from sklearn.neighbors import KDTree
-import numpy as np
-from scipy.spatial import distance
+from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 
-def calculate_morphological_features(robot: ModularRobot) -> dict:
+
+def calculate_morphological_features(robot: ModularRobot) -> dict[str, float]:
     """
     Calculate the morphological features for a given robot using the MorphologicalMeasures class.
 
     :param robot: A ModularRobot object.
     :returns: A dictionary with the calculated morphological features.
     """
-    measures = MorphologicalMeasures(robot.body) # Explore this class and the referenced paper to learn more about the traits
+    measures: MorphologicalMeasures[np.generic] = MorphologicalMeasures(
+        robot.body
+    )  # Explore this class and the referenced paper to learn more about the traits
     features = {
-        'symmetry': measures.symmetry,
-        'proportion': measures.proportion_2d if measures.is_2d else 0,  # Use 0 for 3D robots
-        'coverage': measures.coverage,
-        'extremities_prop': measures.limbs,  
-        'extensiveness_prop': measures.length_of_limbs,  
-        'hinge_prop': measures.num_active_hinges / measures.num_modules if measures.num_modules > 0 else 0,
-        'hinge_ratio': measures.num_active_hinges / measures.num_bricks if measures.num_bricks > 0 else 0,
-        'branching_prop': measures.branching,  
+        "symmetry": measures.symmetry,
+        "proportion": (
+            measures.proportion_2d if measures.is_2d else 0
+        ),  # Use 0 for 3D robots
+        "coverage": measures.coverage,
+        "extremities_prop": measures.limbs,
+        "extensiveness_prop": measures.length_of_limbs,
+        "hinge_prop": (
+            measures.num_active_hinges / measures.num_modules
+            if measures.num_modules > 0
+            else 0
+        ),
+        "hinge_ratio": (
+            measures.num_active_hinges / measures.num_bricks
+            if measures.num_bricks > 0
+            else 0
+        ),
+        "branching_prop": measures.branching,
     }
     return features
 
-def calculate_euclidean_diversity(morphological_features: list[dict]) -> float:
+
+def calculate_euclidean_diversity(
+    morphological_features: list[dict[str, float]]
+) -> float:
     """
     Calculate the Euclidean diversity of the population using morphological features.
 
@@ -71,7 +84,8 @@ def calculate_euclidean_diversity(morphological_features: list[dict]) -> float:
     avg_euclidean_diversity = total_distance / count if count > 0 else 0
     return avg_euclidean_diversity
 
-def calculate_kdtree_diversity(morphological_features: list[dict]) -> float:
+
+def calculate_kdtree_diversity(morphological_features: list[dict[str, float]]) -> float:
     """
     Calculate the diversity of the population using KDTree for nearest neighbors.
 
@@ -80,20 +94,22 @@ def calculate_kdtree_diversity(morphological_features: list[dict]) -> float:
     """
     # Convert feature dictionaries to feature vectors and buld a Kdtree
     feature_vectors = [list(features.values()) for features in morphological_features]
-    kdtree = KDTree(feature_vectors, leaf_size=30, metric='euclidean')
+    kdtree = KDTree(feature_vectors, leaf_size=30, metric="euclidean")
 
     # Compute the distances of each robot to its k nearest neighbors
-    k = len(morphological_features) - 1  # Using k-1 because the nearest neighbor is the point itself
+    k = (
+        len(morphological_features) - 1
+    )  # Using k-1 because the nearest neighbor is the point itself
     distances, _ = kdtree.query(feature_vectors, k=k)
 
     # Calculate the average diversity as the mean distance to nearest neighbors
-    avg_kdtree_diversity = np.mean([np.mean(dist) for dist in distances])
+    avg_kdtree_diversity: float = np.mean([np.mean(dist) for dist in distances])
 
     return avg_kdtree_diversity
 
+
 def main() -> None:
     """Run the simulation."""
-
     # Set up logging.
     setup_logging()
 
@@ -113,14 +129,16 @@ def main() -> None:
         for _ in range(config.POPULATION_SIZE)
     ]
 
-    # Evaluate the initial population.
-    logging.info("Evaluating initial population.")
-
     # You can choose to not evaluate the robots if all you want is to visualize the morphologies or compute diversity to save time
     if config.EVALUATE:
-        initial_fitnesses = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS).evaluate(initial_genotypes)
+        logging.info("Evaluating initial population.")
+        initial_fitnesses = Evaluator(
+            headless=True, num_simulators=config.NUM_SIMULATORS
+        ).evaluate(initial_genotypes)
     else:
-        initial_fitnesses = [random.uniform(0.0, 1.0) for _ in range(len(initial_genotypes))]
+        initial_fitnesses = [
+            random.uniform(0.0, 1.0) for _ in range(len(initial_genotypes))
+        ]
 
     # Create a population of individuals, combining genotype with fitness.
     population = [
@@ -129,7 +147,9 @@ def main() -> None:
     ]
 
     # Create the robot bodies from the genotypes of the population
-    robots = [individual.genotype.develop(config.VISUALIZE_MAP) for individual in population]
+    robots = [
+        individual.genotype.develop(config.VISUALIZE_MAP) for individual in population
+    ]
 
     # Calculate the morphological features for each robot in the population
     morphological_features = []
@@ -139,7 +159,9 @@ def main() -> None:
 
     # Calculate the Euclidean-based morphological diversity of the population
     euclidean_diversity = calculate_euclidean_diversity(morphological_features)
-    print(f"Euclidean-based morphological diversity of the population: {euclidean_diversity}")
+    print(
+        f"Euclidean-based morphological diversity of the population: {euclidean_diversity}"
+    )
 
     # Calculate the KDTree-based morphological diversity of the population
     kdtree_diversity = calculate_kdtree_diversity(morphological_features)
@@ -153,7 +175,7 @@ def main() -> None:
         scene.add_robot(individual, pose=Pose(Vector3([i, 0.0, 0.0])))
         i += 1
 
-    # Declare the simulators and simulation parameters. 
+    # Declare the simulators and simulation parameters.
     simulator = LocalSimulator(viewer_type="custom", headless=False)
     batch_parameters = make_standard_batch_parameters()
     batch_parameters.simulation_time = 1000
@@ -170,6 +192,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-

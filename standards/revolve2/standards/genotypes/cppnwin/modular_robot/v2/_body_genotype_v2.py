@@ -109,10 +109,10 @@ class BodyGenotypeV2:
             )
         )
 
-    def develop_body(self) -> BodyV2:
+    def develop_body(self, visualize: bool = False) -> BodyV2:
         """
         Develop the genotype into a modular robot.
-
+        :param visualize: Wether to plot the mapping from genotype to phenotype for visualization.
         :returns: The created robot.
         """
-        return develop(self.body.genotype)
+        return develop(self.body.genotype, visualize=visualize)

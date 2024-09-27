@@ -154,11 +154,11 @@ def __add_child(
 
     return __Module(position, forward, up, chain_length, child)
 
-  
+
 def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
     Rotate vector a, a given angle around b.
-    
+
     :param a: Vector a.
     :param b: Vector b.
     :param rotation: The quaternion for rotation.
@@ -182,7 +182,7 @@ def __vec3_int(vector: Vector3) -> Vector3[np.int_]:
     """
     return Vector3(list(map(lambda v: int(round(v)), vector)), dtype=np.int64)
 
-  
+
 def __visualize_structure(grid: NDArray[np.uint8], ax: plt.Axes) -> None:
     """
     Visualize the structure of the robot's body using Matplotlib.

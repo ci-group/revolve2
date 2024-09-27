@@ -27,7 +27,10 @@ Hardware setup for a V1 Robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Hardware setup for a V2 Robot
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-For instructions on  how to set up the hardware of a V2 core, refer to `<https://github.com/ci-group/robohat>`_.
+* **To power on the device**, the user must press the power-on switch. When the switch is pressed, the LED will blink three times. After the blinking period, the LED will flash multiple times. The user should release the power switch before the flashing stops. If the button is released after the flashing has finished, nothing will happen. Note: The device can only be turned on if the battery has sufficient capacity.
+* **To turn off the device**, follow the same procedure: press and hold the button while the LED blinks, and release it while the LED is flashing.
+
+For more instructions on  how to set up the hardware of a V2 core, refer to `<https://github.com/ci-group/robohat>`_.
 
 **Important:** For the V2 to work properly the `config.txt` on the RPi has to be changed.
 The following file contains the correct config content: `<https://github.com/ci-group/robohat/blob/main/config.txt>`_.
@@ -40,7 +43,7 @@ This step is the same for all types of hardware.
 
 #. Flash the SD card with Raspberry Pi OS (previously Raspbian). Some Important notes:
 
-    * If you are required to pick a username and password, it is recommended to pick :code:`pi` and :code:`raspberry`. These are the defaults for most RPi installations.
+    * If you are required to pick a username and password, it is recommended to pick :code:`pi` and :code:`raspberry`. For now, all the heads are set by default with :code:`robo` as the username and :code:`test` as the password.
     * Reminder for CI Group people: if you select a keyboard layout, pick `English(US)`. It can always be changed using the `raspi-config` tool on the RPi.
     * When setting up the Wi-Fi connection, select your Country. (CI-Group Wi-Fi: *ThymioNet*)
 
@@ -51,11 +54,20 @@ This step is the same for all types of hardware.
 
         * Hint: SSH is not enabled by default. The simplest way to enable it is using the :code:`raspi-config`.
 
-    * If you want to SSH and don't know the IP of the RPi, you can use :code:`sudo nmap -sP <your ip>` on your machine to find all clients on your network.
-    * **For V2 robots:** You can establish a serial connection with the AUX input on the hat. To do so, connect the robohat with your device using a cable. Then use the following command to access the robohat: :code:`sudo screen <port to connect> 115200`.
+    * If you want to SSH and don't know the IP of the RPi, you can use :code:`sudo nmap -sn <your ip>` on your machine to find all clients on your network.
+    * **For V2 robots:** You can establish a serial connection using the AUX input on the hat. To do so, first connect the RoboHat to your device using a cable. Then, before powering on the device, use the following command to access the RoboHat: :code:`sudo screen <port to connect> 115200`. If you first power on and then run the command, the terminal might show nothing because there is no data written to the serial port.
 
         * For linux users, the port is usually: :code:`/dev/ttyUSB0`.
         * For mac users the port is usually: :code:`/dev/cu.usbserial`.
+
+    * If `screen` is not very smooth somehow, you can use PuTTY instead.
+        * To install it on Linux :code:`sudo apt-get install putty`
+        * To connect to the serial port :code:`sudo putty /dev/ttyUSB0 -serial -sercfg 115200,8,n,1,N`.
+
+.. image:: ../core_serial_port.png
+    :width: 45%
+    :align: center
+
 
 ---------------------------
 Install Revolve2 on the RPi
@@ -94,16 +106,18 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
     * V1: :code:`pip install "revolve2-modular_robot_physical[botv1] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
     * V2: :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
 
+    For example, if you want to install the version tagged as 1.2.2, the command would be:
+    :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@1.2.2#subdirectory=modular_robot_physical"`
+
 #. Set up the Revolve2 physical robot daemon:
     #. Create a systemd service file: :code:`sudo nano /etc/systemd/system/robot-daemon.service`
     #. Add the following content to the file (note: fill in the missing information):
 
         .. code-block:: bash
 
-            ini
             [Unit]
             Description=Revolve2 physical robot daemon
-            After=network-online.target <add this for v1 robots as well: 'pigpiod.service'>
+            After=network-online.target <add this for v1 robots as well: 'pigpiod.service', otherwise remove this option>
 
             [Service]
             Type=simple
@@ -134,7 +148,6 @@ If you use V1 hardware setup requires additional steps:
 
         .. code-block:: bash
 
-            ini
             [Unit]
             Description=Pigpio Daemon
             After=network-online.target
@@ -152,3 +165,12 @@ If you use V1 hardware setup requires additional steps:
 
     #. These settings are identical to the settings for the robot-daemon.
     #. Enable and start the service: :code:`sudo systemctl daemon-reload` & :code:`sudo systemctl enable pigpiod` & :code:`sudo systemctl start pigpiod`.
+
+-------------------------------------------
+Test your robot in the real world
+-------------------------------------------
+There are two examples (https://github.com/ci-group/revolve2/tree/master/examples/5_physical_modular_robots) you can run to control your newly built robot remotely and check whether it has been built correctly. Please make changes according to your robot's configuration, such as the robot's hostname and the pin IDs.
+
+**5a_physical_robot_remote**: Control a physical modular robot by running its brain locally on your computer and streaming movement instructions to the physical modular robot.
+
+**5b_compare_simulated_and_physical_robot**: Create a physical robot with a simulated twin. You will use two separate scripts, one for the simulated robot and one for the physical robot. With this duplicate you can check whether you have built the physical robot correctly, by comparing it to its simulated counterpart.

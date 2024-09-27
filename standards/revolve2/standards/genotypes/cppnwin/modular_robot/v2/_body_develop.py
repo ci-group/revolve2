@@ -37,7 +37,6 @@ def develop(
         multineat.NeuralNetwork()
     )  # Instantiate the CPPN network for body construction.
     genotype.BuildPhenotype(body_net)  # Build the CPPN from the genotype of the robot.
-
     to_explore: Queue[__Module] = Queue()  # Queue used to build the robot.
     grid = np.zeros(
         shape=(max_parts * 2 + 1, max_parts * 2 + 1, max_parts * 2 + 1), dtype=np.uint8
@@ -111,7 +110,11 @@ def __evaluate_cppn(
     target_idx = max(0, int(outputs[0] * len(types) - 1e-6))
     module_type = types[target_idx]
 
-    """Here we get the rotation of the module from the second output of the CPPN network."""
+    """
+    Here we get the rotation of the module from the second output of the CPPN network.
+    
+    The output ranges between [0,1] and we have 4 rotations available (0, 90, 180, 270).
+    """
     angle = max(0, int(outputs[0] * 4 - 1e-6)) * (np.pi / 2.0)
 
     return module_type, angle
@@ -143,6 +146,7 @@ def __add_child(
     if (child_type is None) or (not can_set):
         return None
 
+    """Now we know we want a child on the parent and we instantiate it, add the position to the grid and adjust the up direction for the new module."""
     child = child_type(angle)
     grid[tuple(position)] += 1
     up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
@@ -150,11 +154,11 @@ def __add_child(
 
     return __Module(position, forward, up, chain_length, child)
 
-
+  
 def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
     Rotate vector a, a given angle around b.
-
+    
     :param a: Vector a.
     :param b: Vector b.
     :param rotation: The quaternion for rotation.
@@ -178,7 +182,7 @@ def __vec3_int(vector: Vector3) -> Vector3[np.int_]:
     """
     return Vector3(list(map(lambda v: int(round(v)), vector)), dtype=np.int64)
 
-
+  
 def __visualize_structure(grid: NDArray[np.uint8], ax: plt.Axes) -> None:
     """
     Visualize the structure of the robot's body using Matplotlib.

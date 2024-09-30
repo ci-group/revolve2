@@ -156,7 +156,10 @@ class CpgNetworkStructure:
         :param value: The value to use for all states
         :returns: The array of states.
         """
-        return np.full(self.num_states, value)
+        _half = self.num_states // 2
+        mask = np.hstack([np.full(_half, 1), np.full(_half, -1)])
+
+        return mask * value
 
     @property
     def num_cpgs(self) -> int:

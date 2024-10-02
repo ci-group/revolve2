@@ -1,5 +1,4 @@
 import mujoco
-import numpy as np
 
 from revolve2.simulation.scene import ControlInterface, JointHinge, UUIDKey
 
@@ -43,10 +42,7 @@ class ControlInterfaceImpl(ControlInterface):
         ), "Hinge joint does not exist in this scene."
 
         # Set position target
-        current = self._data.ctrl[maybe_hinge_joint_mujoco.ctrl_index_position]
-        baseline = 0.05
-        step = np.clip(position - current, -baseline, baseline)
-        self._data.ctrl[maybe_hinge_joint_mujoco.ctrl_index_position] += step
+        self._data.ctrl[maybe_hinge_joint_mujoco.ctrl_index_position] = position
 
         # Set velocity target
         self._data.ctrl[maybe_hinge_joint_mujoco.ctrl_index_velocity] = 0.0

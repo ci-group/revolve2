@@ -113,7 +113,7 @@ class BodyGenotypeV2:
         """
         Develop the genotype into a modular robot.
 
-        :param visualize: Wether to plot the mapping from genotype to phenotype for visualization.
+        :param visualize: Whether to plot the mapping from genotype to phenotype for visualization.
         :returns: The created robot.
         """
         return develop(self.body.genotype, visualize=visualize)

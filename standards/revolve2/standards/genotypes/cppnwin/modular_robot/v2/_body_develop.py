@@ -26,7 +26,9 @@ def develop(
     visualize: bool = False,  # Add a flag to control visualization
 ) -> BodyV2:
     """
-    Develop a CPPNWIN genotype into a modular robot body with step-by-step visualization.
+    Develop a CPPNWIN genotype into a modular robot body with optional step-by-step visualization.
+
+    It is important that the genotype was created using a compatible function.
 
     :param genotype: The genotype to create the body from.
     :param visualize: Whether to visualize the body development process.
@@ -137,14 +139,15 @@ def __add_child(
     if grid[tuple(position)] > 0:
         return None
 
-    """Now we adjust the position for the potential new module to fit the attachment point of the parent."""
+    """Now we adjust the position for the potential new module to fit the attachment point of the parent, 
+    additionally we query the CPPN for child type and angle of the child"""
     new_pos = np.array(np.round(position + attachment_point.offset), dtype=np.int64)
     child_type, angle = __evaluate_cppn(body_net, new_pos, chain_length)
 
-    """Check if we can place a child and if so, create the module."""
+    """Here we check whether the CPPN evaluated to place a module and if the module can be set on the parent."""
     can_set = module.module_reference.can_set_child(attachment_index)
     if (child_type is None) or (not can_set):
-        return None
+        return None  # No module will be placed.
 
     """Now we know we want a child on the parent and we instantiate it, add the position to the grid and adjust the up direction for the new module."""
     child = child_type(angle)
@@ -157,7 +160,7 @@ def __add_child(
 
 def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
-    Rotate vector a, a given angle around b.
+    Rotates vector a around the axis defined by vector b by an angle defined in the rotation quaternion. Rodrigues' rotation formula is used.
 
     :param a: Vector a.
     :param b: Vector b.

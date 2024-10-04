@@ -33,7 +33,7 @@ def random_multineat_genotype(
         False,  # FS_NEAT
         output_activation_func,  # output activation type
         multineat.ActivationFunction.UNSIGNED_SIGMOID,  # hidden activation type
-        1,  # seed_type
+        0,  # seed_type
         multineat_params,
         1,  # number of hidden layers
     )

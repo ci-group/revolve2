@@ -45,7 +45,9 @@ def make_body() -> (
         body.core_v2.right_face.bottom.attachment,
     )
     """Add a camera sensor to the core."""
-    body.core.add_sensor(CameraSensor(position=Vector3([0, 0, 0]), camera_size=(480, 640)))
+    body.core.add_sensor(
+        CameraSensor(position=Vector3([0, 0, 0]), camera_size=(480, 640))
+    )
     return body, active_hinges
 
 

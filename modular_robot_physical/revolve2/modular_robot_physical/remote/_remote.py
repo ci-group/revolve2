@@ -247,7 +247,7 @@ async def _run_remote_impl(
                     if display_camera_view:
                         _display_camera_view(
                             config.modular_robot.body.core.sensors.camera_sensor,
-                            sensor_readings
+                            sensor_readings,
                         )
 
                     if battery_print_timer > 5.0:

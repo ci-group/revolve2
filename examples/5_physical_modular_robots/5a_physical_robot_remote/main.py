@@ -107,6 +107,7 @@ def main() -> None:
         hostname="localhost",  # "Set the robot IP here.
         debug=True,
         on_prepared=on_prepared,
+        camera_mode=False,
     )
     """
     Note that theoretically if you want the robot to be self controlled and not dependant on a external remote, you can run this script on the robot locally.

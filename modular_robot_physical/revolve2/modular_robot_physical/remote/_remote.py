@@ -49,7 +49,7 @@ async def _run_remote_impl(
     port: int,
     debug: bool,
     manual_mode: bool,
-    camera_mode: bool,
+    display_camera_view: bool,
 ) -> None:
     active_hinge_sensor_to_pin = {
         UUIDKey(key.value.sensors.active_hinge_sensor): pin
@@ -244,9 +244,11 @@ async def _run_remote_impl(
                     )
 
                     # Display camera image
-                    if camera_mode:
-                        capnp_image = sensor_readings.cameraView
-                        _display_camera_view(capnp_image)
+                    if display_camera_view:
+                        _display_camera_view(
+                            config.modular_robot.body.core.sensors.camera_sensor,
+                            sensor_readings
+                        )
 
                     if battery_print_timer > 5.0:
                         print(
@@ -271,11 +273,11 @@ def _capnp_to_camera_view(
     :param camera_size: The camera size to reconstruct the image.
     :return: The NDArray imag.
     """
-    np_image = np.zeros(shape=(3, *camera_size), dtype=np.uint8)
-    np_image[0] = np.array(image.r).reshape(camera_size).astype(np.uint8)
-    np_image[1] = np.array(image.g).reshape(camera_size).astype(np.uint8)
-    np_image[2] = np.array(image.b).reshape(camera_size).astype(np.uint8)
-    return np_image
+    r_channel = np.array(image.r, dtype=np.uint8).reshape((camera_size[0], camera_size[1]))
+    g_channel = np.array(image.g, dtype=np.uint8).reshape((camera_size[0], camera_size[1]))
+    b_channel = np.array(image.b, dtype=np.uint8).reshape((camera_size[0], camera_size[1]))
+    rgb_image = cv2.merge((r_channel, g_channel, b_channel)).astype(np.uint8)
+    return rgb_image
 
 
 def _get_imu_sensor_state(
@@ -325,20 +327,21 @@ def _get_camera_sensor_state(
 
 
 def _display_camera_view(
-        camera_view: robot_daemon_protocol_capnp.Image
+    camera_sensor: CameraSensor | None,
+    sensor_readings: robot_daemon_protocol_capnp.SensorReadings,
 ) -> None:
     """
-    Convert Cap'n Proto image back to an ND array for OpenCV and display it
-    """
-    height = 480
-    width = 640
-    r_channel = np.array(camera_view.r, dtype=np.uint8).reshape((height, width))
-    g_channel = np.array(camera_view.g, dtype=np.uint8).reshape((height, width))
-    b_channel = np.array(camera_view.b, dtype=np.uint8).reshape((height, width))
-    rgb_image = cv2.merge((r_channel, g_channel, b_channel))
+    Display a camera view from the camera readings.
 
-    cv2.imshow("Captured Image", rgb_image)
-    cv2.waitKey(1)
+    :param camera_sensor: The sensor in question.
+    :param sensor_readings: The sensor readings.
+    """
+    if camera_sensor is None:
+        print("No camera sensor found.")
+    else:
+        rgb_image = _capnp_to_camera_view(sensor_readings.cameraView, camera_sensor.camera_size)
+        cv2.imshow("Captured Image", rgb_image)
+        cv2.waitKey(1)
 
 
 def run_remote(
@@ -348,7 +351,7 @@ def run_remote(
     port: int = STANDARD_PORT,
     debug: bool = False,
     manual_mode: bool = False,
-    camera_mode: bool = False,
+    display_camera_view: bool = False,
 ) -> None:
     """
     Control a robot remotely, running the controller on your local machine.
@@ -359,7 +362,7 @@ def run_remote(
     :param port: Port the robot daemon uses.
     :param debug: Enable debug messages.
     :param manual_mode: Enable manual controls for the robot, ignoring the brain.
-    :param camera_mode: Display the camera view of the robot.
+    :param display_camera_view: Display the camera view of the robot.
     """
     asyncio.run(
         capnp.run(
@@ -370,7 +373,7 @@ def run_remote(
                 port=port,
                 debug=debug,
                 manual_mode=manual_mode,
-                camera_mode=camera_mode,
+                display_camera_view=display_camera_view,
             )
         )
     )

@@ -23,6 +23,7 @@ from ._modular_robot_control_interface_impl import ModularRobotControlInterfaceI
 from ._modular_robot_sensor_state_impl_v1 import ModularRobotSensorStateImplV1
 from ._modular_robot_sensor_state_impl_v2 import ModularRobotSensorStateImplV2
 
+
 def _active_hinge_targets_to_pin_controls(
     config: Config, active_hinges_and_targets: list[tuple[UUIDKey[ActiveHinge], float]]
 ) -> list[robot_daemon_protocol_capnp.PinControl]:

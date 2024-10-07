@@ -184,5 +184,5 @@ class V2PhysicalInterface(PhysicalInterface):
 
         :returns: An image captured from robohatlib.
         """
-        image = self.cam.get_capture_array()
+        image = self.cam.get_capture_array().astype(np.uint8)
         return image

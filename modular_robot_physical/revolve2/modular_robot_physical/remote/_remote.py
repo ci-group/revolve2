@@ -207,10 +207,6 @@ async def _run_remote_impl(
             pin_controls = _active_hinge_targets_to_pin_controls(
                 config, control_interface._set_active_hinges
             )
-            # Display camera image
-            if camera_mode:
-                capnp_image = sensor_readings.cameraView
-                _display_camera_view(capnp_image)
 
             match hardware_type:
                 case HardwareType.v1:
@@ -246,6 +242,11 @@ async def _run_remote_impl(
                         imu_sensor_states=imu_sensor_states,
                         camera_sensor_states=camera_sensor_states,
                     )
+
+                    # Display camera image
+                    if camera_mode:
+                        capnp_image = sensor_readings.cameraView
+                        _display_camera_view(capnp_image)
 
                     if battery_print_timer > 5.0:
                         print(

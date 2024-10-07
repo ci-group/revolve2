@@ -1,15 +1,13 @@
 """An example on how to remote control a physical modular robot."""
 
+from pyrr import Vector3
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.body.sensors import CameraSensor
 from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
-from revolve2.modular_robot.brain.dummy import BrainDummy
-from revolve2.modular_robot.body.sensors import CameraSensor
-from pyrr import Vector3
-
 from revolve2.modular_robot_physical import Config, UUIDKey
 from revolve2.modular_robot_physical.remote import run_remote
 

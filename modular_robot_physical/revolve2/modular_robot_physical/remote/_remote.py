@@ -273,9 +273,15 @@ def _capnp_to_camera_view(
     :param camera_size: The camera size to reconstruct the image.
     :return: The NDArray imag.
     """
-    r_channel = np.array(image.r, dtype=np.uint8).reshape((camera_size[0], camera_size[1]))
-    g_channel = np.array(image.g, dtype=np.uint8).reshape((camera_size[0], camera_size[1]))
-    b_channel = np.array(image.b, dtype=np.uint8).reshape((camera_size[0], camera_size[1]))
+    r_channel = np.array(image.r, dtype=np.uint8).reshape(
+        (camera_size[0], camera_size[1])
+    )
+    g_channel = np.array(image.g, dtype=np.uint8).reshape(
+        (camera_size[0], camera_size[1])
+    )
+    b_channel = np.array(image.b, dtype=np.uint8).reshape(
+        (camera_size[0], camera_size[1])
+    )
     rgb_image = cv2.merge((r_channel, g_channel, b_channel)).astype(np.uint8)
     return rgb_image
 
@@ -339,7 +345,9 @@ def _display_camera_view(
     if camera_sensor is None:
         print("No camera sensor found.")
     else:
-        rgb_image = _capnp_to_camera_view(sensor_readings.cameraView, camera_sensor.camera_size)
+        rgb_image = _capnp_to_camera_view(
+            sensor_readings.cameraView, camera_sensor.camera_size
+        )
         cv2.imshow("Captured Image", rgb_image)
         cv2.waitKey(1)
 

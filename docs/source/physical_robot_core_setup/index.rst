@@ -39,6 +39,8 @@ On the RPi adjust the config in `/boot/config.txt` or on newer systems `/boot/fi
 ------------------
 Setting up the RPi
 ------------------
+**Note**: For students in the CI Group, the RPi is already set up. All RPis are flashed with the same image, so the following steps are not necessary. Additionally, there should be an IP address on the head, allowing you to SSH into it. However, be aware that there will always be ongoing development changes in the revolve2-modular-robot_physical and revolve2-robohat packages, so make sure to pip install the latest version in your virtual environment.
+
 This step is the same for all types of hardware.
 
 #. Flash the SD card with Raspberry Pi OS (previously Raspbian). Some Important notes:

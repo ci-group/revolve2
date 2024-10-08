@@ -1,13 +1,13 @@
 import math
 from typing import Sequence
 
-import cv2
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Vector3
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig
+from robohatlib.hal.Camera import Camera
 from robohatlib.Robohat import Robohat
 
 from .._physical_interface import PhysicalInterface
@@ -84,6 +84,7 @@ class V2PhysicalInterface(PhysicalInterface):
             self._robohat.init(servoboard_1_datas_list, servoboard_2_datas_list)
             self._robohat.do_buzzer_beep()
             self._robohat.set_servo_direct_mode(_mode=True)
+            self.cam: Camera = self._robohat.get_camera()
 
     def set_servo_targets(self, pins: list[int], targets: list[float]) -> None:
         """
@@ -181,17 +182,7 @@ class V2PhysicalInterface(PhysicalInterface):
         """
         Get the current view from the camera.
 
-        :returns: A dummy image until robohatlib has camera support.
+        :returns: An image captured from robohatlib.
         """
-        image = np.zeros((3, 100, 100), dtype=int)
-        cv2.putText(
-            image,
-            "Dummy Image",
-            (10, 10),
-            fontFace=cv2.FONT_HERSHEY_SIMPLEX,
-            fontScale=1,
-            color=(255, 0, 0),
-            thickness=1,
-            lineType=2,
-        )
+        image = self.cam.get_capture_array().astype(np.uint8)
         return image

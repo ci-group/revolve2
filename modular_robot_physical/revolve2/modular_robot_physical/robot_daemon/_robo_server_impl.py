@@ -293,8 +293,9 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         :param image: The NDArray image.
         :return: The capnp Image object.
         """
+        # Convert each channel to a list of Int32 for Cap'n Proto
         return robot_daemon_protocol_capnp.Image(
-            r=image[0].flatten().tolist(),
-            g=image[1].flatten().tolist(),
-            b=image[2].flatten().tolist(),
+            r=image[:, :, 0].astype(np.int32).flatten().tolist(),
+            g=image[:, :, 1].astype(np.int32).flatten().tolist(),
+            b=image[:, :, 2].astype(np.int32).flatten().tolist(),
         )

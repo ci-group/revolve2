@@ -19,13 +19,14 @@ Functions
 
 
 
-.. py:function:: develop(genotype: multineat.Genome) -> revolve2.modular_robot.body.v2.BodyV2
+.. py:function:: develop(genotype: multineat.Genome, visualize: bool = False) -> revolve2.modular_robot.body.v2.BodyV2
 
-   Develop a CPPNWIN genotype into a modular robot body.
+   Develop a CPPNWIN genotype into a modular robot body with optional step-by-step visualization.
 
    It is important that the genotype was created using a compatible function.
 
    :param genotype: The genotype to create the body from.
-   :returns: The create body.
+   :param visualize: Whether to visualize the body development process.
+   :returns: The created body.
 
 

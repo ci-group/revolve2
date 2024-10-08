@@ -97,7 +97,7 @@ Classes
 
       Get the current view from the camera.
 
-      :returns: A dummy image until robohatlib has camera support.
+      :returns: An image captured from robohatlib.
 
 
 

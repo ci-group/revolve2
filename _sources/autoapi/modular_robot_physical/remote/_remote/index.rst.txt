@@ -19,7 +19,7 @@ Functions
 
 
 
-.. py:function:: run_remote(config: modular_robot_physical._config.Config, hostname: str, on_prepared: Callable[[], None] = lambda: None, port: int = STANDARD_PORT, debug: bool = False, manual_mode: bool = False) -> None
+.. py:function:: run_remote(config: modular_robot_physical._config.Config, hostname: str, on_prepared: Callable[[], None] = lambda: None, port: int = STANDARD_PORT, debug: bool = False, manual_mode: bool = False, display_camera_view: bool = False) -> None
 
    Control a robot remotely, running the controller on your local machine.
 
@@ -29,5 +29,6 @@ Functions
    :param port: Port the robot daemon uses.
    :param debug: Enable debug messages.
    :param manual_mode: Enable manual controls for the robot, ignoring the brain.
+   :param display_camera_view: Display the camera view of the robot.
 
 

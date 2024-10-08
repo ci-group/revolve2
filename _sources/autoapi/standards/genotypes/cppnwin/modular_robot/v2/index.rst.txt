@@ -120,10 +120,11 @@ Classes
       :returns: A newly created genotype.
 
 
-   .. py:method:: develop_body() -> revolve2.modular_robot.body.v2.BodyV2
+   .. py:method:: develop_body(visualize: bool = False) -> revolve2.modular_robot.body.v2.BodyV2
 
       Develop the genotype into a modular robot.
 
+      :param visualize: Whether to plot the mapping from genotype to phenotype for visualization.
       :returns: The created robot.
 
 

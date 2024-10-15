@@ -8,8 +8,7 @@ from numpy.typing import NDArray
 from pyrr import Quaternion, Vector3
 
 from revolve2.modular_robot.body import AttachmentPoint, Module
-from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
-
+from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2Large
 
 @dataclass
 class __Module:
@@ -97,7 +96,7 @@ def __evaluate_cppn(
     outputs = body_net.Output()
 
     """We select the module type for the current position using the first output of the CPPN network."""
-    types = [None, BrickV2, ActiveHingeV2]
+    types = [None, BrickV2Large, ActiveHingeV2]
     target_idx = max(0, int(outputs[0] * len(types) - 1e-6))
     module_type = types[target_idx]
 

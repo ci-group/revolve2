@@ -39,7 +39,8 @@ On the RPi adjust the config in `/boot/config.txt` or on newer systems `/boot/fi
 ------------------
 Setting up the RPi
 ------------------
-**Note**: For students in the CI Group, the RPi is already set up. All RPis are flashed with the same image, so the following steps are not necessary. Additionally, there should be an IP address on the head, allowing you to SSH into it. However, be aware that there will always be ongoing development changes in the revolve2-modular-robot_physical and revolve2-robohat packages, so make sure to pip install the latest version in your virtual environment.
+**Note**: For students in the CI Group, the RPi is already set up. All RPis are flashed with the same image, so the following steps are not necessary. Additionally, there should be an IP address on the head, allowing you to SSH into it under the *ThymioNet* Wi-Fi. However, be aware that the IP might change from time to time. If you find the IP doesn't work, use the serial connection to log in and obtain the correct IP. For instructions on how to establish a serial connection, please refer to the section below.
+Also, note that ongoing development changes will continue in revolve2-modular-robot_physical and revolve2-robohat packages, so make sure to pip install the latest version in your virtual environment.
 
 This step is the same for all types of hardware.
 
@@ -135,6 +136,7 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
     #. Here, the :code:`Nice=-10` line sets a high priority for the daemon (lower values are higher priority, with -20 being the highest priority). The :code:`-l` option in the :code:`ExecStart` line tells :code:`robot-daemon` to only listen on the localhost interface. The :code:`-n localhost` option ensures that robot-daemon only runs if it can connect to localhost (preventing certain failure cases).
     #. Enable and start the service: :code:`sudo systemctl daemon-reload` & :code:`sudo systemctl enable robot-daemon` & :code:`sudo systemctl start robot-daemon`.
     #. Check if it is running properly using: :code:`sudo systemctl status robot-daemon`
+    #. If it's not running properly, check the logs using: :code:`journalctl -u robot-daemon -e`
 
 ^^^^^^^^^^^^^^^^^^^
 V1 Additional Steps

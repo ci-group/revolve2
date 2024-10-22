@@ -7,7 +7,6 @@ import cv2
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Vector3
-
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.sensors import CameraSensor, IMUSensor
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
@@ -327,7 +326,9 @@ def _get_camera_sensor_state(
     else:
         image = sensor_readings.cameraView
         if list(image.r) == [0] and list(image.g) == [0] and list(image.b) == [0]:
-            raise RuntimeError("Camera image is emtpy. Are you sure you have attached a camera?")
+            raise RuntimeError(
+                "Camera image is emtpy. Are you sure you have attached a camera?"
+            )
         return {
             UUIDKey(camera_sensor): CameraSensorStateImpl(
                 _capnp_to_camera_view(
@@ -352,7 +353,9 @@ def _display_camera_view(
     else:
         image = sensor_readings.cameraView
         if list(image.r) == [0] and list(image.g) == [0] and list(image.b) == [0]:
-            raise RuntimeError("Camera image is emtpy. Are you sure you have attached a camera?")
+            raise RuntimeError(
+                "Camera image is emtpy. Are you sure you have attached a camera?"
+            )
         rgb_image = _capnp_to_camera_view(
             sensor_readings.cameraView, camera_sensor.camera_size
         )

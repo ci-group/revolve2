@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Vector3
+
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.sensors import CameraSensor, IMUSensor
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState

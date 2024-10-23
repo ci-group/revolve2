@@ -43,7 +43,7 @@ def make_body() -> (
         body.core_v2.right_face.bottom,
         body.core_v2.right_face.bottom.attachment,
     )
-    """Add a camera sensor to the core."""
+    """Here we add a camera sensor to the core. If you don't have a physical camera attached, uncomment this line."""
     body.core.add_sensor(
         CameraSensor(position=Vector3([0, 0, 0]), camera_size=(480, 640))
     )

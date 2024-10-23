@@ -321,10 +321,16 @@ def _get_camera_sensor_state(
     :param camera_sensor: The sensor in question.
     :param sensor_readings: The sensor readings.
     :return: The Sensor state.
+    :raises RuntimeError: If the camera image is empty.
     """
     if camera_sensor is None:
         return {}
     else:
+        image = sensor_readings.cameraView
+        if list(image.r) == [0] and list(image.g) == [0] and list(image.b) == [0]:
+            raise RuntimeError(
+                "Camera image is emtpy. Are you sure you have attached a camera?"
+            )
         return {
             UUIDKey(camera_sensor): CameraSensorStateImpl(
                 _capnp_to_camera_view(
@@ -343,10 +349,16 @@ def _display_camera_view(
 
     :param camera_sensor: The sensor in question.
     :param sensor_readings: The sensor readings.
+    :raises RuntimeError: If the camera image is empty.
     """
     if camera_sensor is None:
-        print("No camera sensor found.")
+        print("No camera added in the body.")
     else:
+        image = sensor_readings.cameraView
+        if list(image.r) == [0] and list(image.g) == [0] and list(image.b) == [0]:
+            raise RuntimeError(
+                "Camera image is emtpy. Are you sure you have attached a camera?"
+            )
         rgb_image = _capnp_to_camera_view(
             sensor_readings.cameraView, camera_sensor.camera_size
         )

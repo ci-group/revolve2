@@ -321,6 +321,7 @@ def _get_camera_sensor_state(
     :param camera_sensor: The sensor in question.
     :param sensor_readings: The sensor readings.
     :return: The Sensor state.
+    :raises RuntimeError: If the camera image is empty.
     """
     if camera_sensor is None:
         return {}
@@ -348,6 +349,7 @@ def _display_camera_view(
 
     :param camera_sensor: The sensor in question.
     :param sensor_readings: The sensor readings.
+    :raises RuntimeError: If the camera image is empty.
     """
     if camera_sensor is None:
         print("No camera added in the body.")

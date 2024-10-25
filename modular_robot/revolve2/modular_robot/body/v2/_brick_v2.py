@@ -17,7 +17,7 @@ class BrickV2(Brick):
         super().__init__(
             rotation=rotation,
             bounding_box=Vector3([w, h, d]),
-            mass=0.06043,
+            mass=0.05664,
             child_offset=d / 2.0,
             sensors=[],
         )

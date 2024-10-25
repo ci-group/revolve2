@@ -10,8 +10,9 @@ from ._attachment_face_core_v2 import AttachmentFaceCoreV2
 class CoreV2(Core):
     """The core module of a modular robot."""
 
-    _BATTERY_MASS = 0.39712  # in kg
-    _FRAME_MASS = 1.0644  # in kg
+    _BATTERY_MASS = 0.39676  # in kg
+    _FRAME_MASS = 0.9783  # in kg
+
 
     _horizontal_offset = 0.029  # The horizontal offset for attachment positions (in m).
     _vertical_offset = 0.032  # The vertical offset for attachment positions (in m).

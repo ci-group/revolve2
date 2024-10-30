@@ -117,7 +117,7 @@ def __evaluate_cppn(
     
     The output ranges between [0,1] and we have 4 rotations available (0, 90, 180, 270).
     """
-    angle = max(0, int(outputs[0] * 4 - 1e-6)) * (np.pi / 2.0)
+    angle = max(0, int(outputs[1] * 4 - 1e-6)) * (np.pi / 2.0)
 
     return module_type, angle
 

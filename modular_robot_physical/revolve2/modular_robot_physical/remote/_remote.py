@@ -7,7 +7,6 @@ import cv2
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Vector3
-
 from revolve2.modular_robot.body.base import ActiveHinge
 from revolve2.modular_robot.body.sensors import CameraSensor, IMUSensor
 from revolve2.modular_robot.sensor_state import ModularRobotSensorState
@@ -327,9 +326,10 @@ def _get_camera_sensor_state(
         return {}
     else:
         image = sensor_readings.cameraView
-        if list(image.r) == [0] and list(image.g) == [0] and list(image.b) == [0]:
+        if len(image.r) == 0 and len(image.g) == 0 and len(image.b) == 0:
             raise RuntimeError(
-                "Camera image is emtpy. Are you sure you have attached a camera?"
+                "Camera image is empty. Are you sure you have attached a camera? "
+                "If you don't want to get the camera state, don't add it to the body."
             )
         return {
             UUIDKey(camera_sensor): CameraSensorStateImpl(
@@ -352,13 +352,13 @@ def _display_camera_view(
     :raises RuntimeError: If the camera image is empty.
     """
     if camera_sensor is None:
-        print("No camera added in the body.")
+        raise RuntimeError(
+            "Can't display camera because there is no camera added in the body"
+        )
     else:
         image = sensor_readings.cameraView
-        if list(image.r) == [0] and list(image.g) == [0] and list(image.b) == [0]:
-            raise RuntimeError(
-                "Camera image is emtpy. Are you sure you have attached a camera?"
-            )
+        if len(image.r) == 0 and len(image.g) == 0 and len(image.b) == 0:
+            raise RuntimeError("Image is emtpy so nothing can be displayed")
         rgb_image = _capnp_to_camera_view(
             sensor_readings.cameraView, camera_sensor.camera_size
         )

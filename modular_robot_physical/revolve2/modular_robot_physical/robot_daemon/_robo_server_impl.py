@@ -256,7 +256,6 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
                 pins_readings.append(value)
 
             battery = self._physical_interface.get_battery_level()
-
             imu_orientation = self._physical_interface.get_imu_orientation()
             imu_specific_force = self._physical_interface.get_imu_specific_force()
             imu_angular_rate = self._physical_interface.get_imu_angular_rate()
@@ -284,7 +283,7 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         )
 
     @staticmethod
-    def _camera_view_to_capnp(image: NDArray[np.uint8]) -> capnpImage:
+    def _camera_view_to_capnp(image: NDArray[np.uint8] | None) -> capnpImage:
         """
         Convert an image as an NDArray into an capnp compatible Image.
 
@@ -294,8 +293,15 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
         :return: The capnp Image object.
         """
         # Convert each channel to a list of Int32 for Cap'n Proto
-        return robot_daemon_protocol_capnp.Image(
-            r=image[:, :, 0].astype(np.int32).flatten().tolist(),
-            g=image[:, :, 1].astype(np.int32).flatten().tolist(),
-            b=image[:, :, 2].astype(np.int32).flatten().tolist(),
-        )
+        if image is None:
+            return robot_daemon_protocol_capnp.Image(
+                r=[],
+                g=[],
+                b=[],
+            )
+        else:
+            return robot_daemon_protocol_capnp.Image(
+                r=image[:, :, 0].astype(np.int32).flatten().tolist(),
+                g=image[:, :, 1].astype(np.int32).flatten().tolist(),
+                b=image[:, :, 2].astype(np.int32).flatten().tolist(),
+            )

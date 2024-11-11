@@ -261,14 +261,14 @@ class RoboServerImpl(robot_daemon_protocol_capnp.RoboServer.Server):  # type: ig
             imu_angular_rate = self._physical_interface.get_imu_angular_rate()
             camera_view = self._physical_interface.get_camera_view()
 
-            return robot_daemon_protocol_capnp.SensorReadings(
-                pins=pins_readings,
-                battery=battery,
-                imuOrientation=self._vector3_to_capnp(imu_orientation),
-                imuSpecificForce=self._vector3_to_capnp(imu_specific_force),
-                imuAngularRate=self._vector3_to_capnp(imu_angular_rate),
-                cameraView=self._camera_view_to_capnp(camera_view),
-            )
+        return robot_daemon_protocol_capnp.SensorReadings(
+            pins=pins_readings,
+            battery=battery,
+            imuOrientation=self._vector3_to_capnp(imu_orientation),
+            imuSpecificForce=self._vector3_to_capnp(imu_specific_force),
+            imuAngularRate=self._vector3_to_capnp(imu_angular_rate),
+            cameraView=self._camera_view_to_capnp(camera_view),
+        )
 
     @staticmethod
     def _vector3_to_capnp(vector: Vector3) -> capnpVector3:

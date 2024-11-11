@@ -4,7 +4,6 @@ from typing import Optional, Sequence
 import numpy as np
 from numpy.typing import NDArray
 from pyrr import Vector3
-
 from robohatlib.hal.assemblyboard.PwmPlug import PwmPlug
 from robohatlib.hal.assemblyboard.servo.ServoData import ServoData
 from robohatlib.hal.assemblyboard.ServoAssemblyConfig import ServoAssemblyConfig

@@ -1,5 +1,5 @@
 import math
-from typing import Sequence
+from typing import Optional, Sequence
 
 import numpy as np
 from numpy.typing import NDArray
@@ -178,11 +178,18 @@ class V2PhysicalInterface(PhysicalInterface):
             raise RuntimeError("Could not get IMU acceleration reading!")
         return Vector3(accel)
 
-    def get_camera_view(self) -> NDArray[np.uint8]:
+    def get_camera_view(self) -> Optional[NDArray[np.uint8]]:
         """
         Get the current view from the camera.
 
         :returns: An image captured from robohatlib.
         """
-        image = self.cam.get_capture_array().astype(np.uint8)
-        return image
+        try:
+            image = self.cam.get_capture_array()
+            if image is None:
+                print("No image captured (camera may not be available).")
+                return None
+            return image.astype(np.uint8)
+        except RuntimeError as e:
+            print(f"Runtime error encountered: {e}")
+            return None

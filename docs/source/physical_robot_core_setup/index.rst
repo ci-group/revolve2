@@ -39,7 +39,7 @@ On the RPi adjust the config in `/boot/config.txt` or on newer systems `/boot/fi
 ------------------
 Setting up the RPi
 ------------------
-**Note**: For students in the CI Group, the RPi is already set up. All RPis are flashed with the same image, so the following steps are not necessary. Additionally, there should be an IP address on the head, allowing you to SSH into it under the *ThymioNet* Wi-Fi. However, be aware that the IP might change from time to time. If you find the IP doesn't work, use the serial connection to log in and obtain the correct IP. For instructions on how to establish a serial connection, please refer to the section below.
+**Note**: For students in the CI Group, the RPi is already set up. If the heads are labeled as `flashed`, it means they are already flashed with the setup image, so the following steps are unnecessary. Additionally, the flashed heads are already connected to the *ThymioNet* Wi-Fi. However, the IP address on the head changes from time to time, so you should use the serial connection to log in and obtain the correct IP address. For instructions on how to establish a serial connection, please refer to the section below.
 Also, note that ongoing development changes will continue in revolve2-modular-robot_physical and revolve2-robohat packages, so make sure to pip install the latest version in your virtual environment.
 
 This step is the same for all types of hardware.

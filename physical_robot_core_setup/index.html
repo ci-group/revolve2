@@ -254,7 +254,8 @@ On the RPi adjust the config in <cite>/boot/config.txt</cite> or on newer system
 </section>
 <section id="setting-up-the-rpi">
 <h2>Setting up the RPi<a class="headerlink" href="#setting-up-the-rpi" title="Link to this heading"></a></h2>
-<p><strong>Note</strong>: For students in the CI Group, the RPi is already set up. All RPis are flashed with the same image, so the following steps are not necessary. Additionally, there should be an IP address on the head, allowing you to SSH into it. However, be aware that there will always be ongoing development changes in the revolve2-modular-robot_physical and revolve2-robohat packages, so make sure to pip install the latest version in your virtual environment.</p>
+<p><strong>Note</strong>: For students in the CI Group, the RPi is already set up. If the heads are labeled as <cite>flashed</cite>, it means they are already flashed with the setup image, so the following steps are unnecessary. Additionally, the flashed heads are already connected to the <em>ThymioNet</em> Wi-Fi. However, the IP address on the head changes from time to time, so you should use the serial connection to log in and obtain the correct IP address. For instructions on how to establish a serial connection, please refer to the section below.
+Also, note that ongoing development changes will continue in revolve2-modular-robot_physical and revolve2-robohat packages, so make sure to pip install the latest version in your virtual environment.</p>
 <p>This step is the same for all types of hardware.</p>
 <ol class="arabic">
 <li><p>Flash the SD card with Raspberry Pi OS (previously Raspbian). Some Important notes:</p>
@@ -341,8 +342,8 @@ To check your os version you can run <code class="code docutils literal notransl
 <li><p>V1: <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;revolve2-modular_robot_physical[botv1]</span> <span class="pre">&#64;</span> <span class="pre">git+https://github.com/ci-group/revolve2.git&#64;&lt;revolve_version&gt;#subdirectory=modular_robot_physical&quot;</span></code>.</p></li>
 <li><p>V2: <code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;revolve2-modular_robot_physical[botv2]</span> <span class="pre">&#64;</span> <span class="pre">git+https://github.com/ci-group/revolve2.git&#64;&lt;revolve_version&gt;#subdirectory=modular_robot_physical&quot;</span></code>.</p></li>
 </ul>
-<p>For example, if you want to install the version tagged as 1.2.2, the command would be:
-<code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;revolve2-modular_robot_physical[botv2]</span> <span class="pre">&#64;</span> <span class="pre">git+https://github.com/ci-group/revolve2.git&#64;1.2.2#subdirectory=modular_robot_physical&quot;</span></code></p>
+<p>For example, if you want to install the version tagged as 1.2.3, the command would be:
+<code class="code docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">&quot;revolve2-modular_robot_physical[botv2]</span> <span class="pre">&#64;</span> <span class="pre">git+https://github.com/ci-group/revolve2.git&#64;1.2.3#subdirectory=modular_robot_physical&quot;</span></code></p>
 </div></blockquote>
 </li>
 <li><dl>
@@ -371,6 +372,7 @@ To check your os version you can run <code class="code docutils literal notransl
 <li><p>Here, the <code class="code docutils literal notranslate"><span class="pre">Nice=-10</span></code> line sets a high priority for the daemon (lower values are higher priority, with -20 being the highest priority). The <code class="code docutils literal notranslate"><span class="pre">-l</span></code> option in the <code class="code docutils literal notranslate"><span class="pre">ExecStart</span></code> line tells <code class="code docutils literal notranslate"><span class="pre">robot-daemon</span></code> to only listen on the localhost interface. The <code class="code docutils literal notranslate"><span class="pre">-n</span> <span class="pre">localhost</span></code> option ensures that robot-daemon only runs if it can connect to localhost (preventing certain failure cases).</p></li>
 <li><p>Enable and start the service: <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">daemon-reload</span></code> &amp; <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">enable</span> <span class="pre">robot-daemon</span></code> &amp; <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">start</span> <span class="pre">robot-daemon</span></code>.</p></li>
 <li><p>Check if it is running properly using: <code class="code docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">systemctl</span> <span class="pre">status</span> <span class="pre">robot-daemon</span></code></p></li>
+<li><p>If it’s not running properly, check the logs using: <code class="code docutils literal notranslate"><span class="pre">journalctl</span> <span class="pre">-u</span> <span class="pre">robot-daemon</span> <span class="pre">-e</span></code></p></li>
 </ol>
 </dd>
 </dl>

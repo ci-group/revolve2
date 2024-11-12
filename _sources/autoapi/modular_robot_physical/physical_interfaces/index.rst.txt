@@ -133,7 +133,7 @@ Functions
       :raises NotImplementedError: If the IMU is not supported on this hardware.
 
 
-   .. py:method:: get_camera_view() -> numpy.typing.NDArray[numpy.uint8]
+   .. py:method:: get_camera_view() -> Optional[numpy.typing.NDArray[numpy.uint8]]
       :abstractmethod:
 
       Get the current view from the camera.

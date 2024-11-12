@@ -93,7 +93,7 @@ Classes
       :raises RuntimeError: When imu could not be read.
 
 
-   .. py:method:: get_camera_view() -> numpy.typing.NDArray[numpy.uint8]
+   .. py:method:: get_camera_view() -> Optional[numpy.typing.NDArray[numpy.uint8]]
 
       Get the current view from the camera.
 

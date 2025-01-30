@@ -225,6 +225,7 @@ class Module:
         if self._children.get(child_index, True):
             return True
         return False
+        # return child_index not in self._children or not self._children[child_index]
 
     def neighbours(self, within_range: int) -> list[Module]:
         """

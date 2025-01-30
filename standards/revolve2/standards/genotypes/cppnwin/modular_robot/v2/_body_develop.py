@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from queue import Queue
 from typing import Any
 
+import matplotlib.pyplot as plt
 import multineat
 import numpy as np
 from numpy.typing import NDArray
@@ -22,28 +23,26 @@ class __Module:
 
 def develop(
     genotype: multineat.Genome,
+    visualize: bool = False,  # Add a flag to control visualization
 ) -> BodyV2:
     """
-    Develop a CPPNWIN genotype into a modular robot body.
+    Develop a CPPNWIN genotype into a modular robot body with optional step-by-step visualization.
 
     It is important that the genotype was created using a compatible function.
 
     :param genotype: The genotype to create the body from.
-    :returns: The create body.
+    :param visualize: Whether to visualize the body development process.
+    :returns: The created body.
     """
-    max_parts = 20  # Determine the maximum parts available for a robots body.
+    max_parts = 20  # Determine the maximum parts available for a robot's body.
     body_net = (
         multineat.NeuralNetwork()
     )  # Instantiate the CPPN network for body construction.
-    genotype.BuildPhenotype(body_net)  # Build the CPPN from the genotype of the robot.
-
-    to_explore: Queue[__Module] = (
-        Queue()
-    )  # Here we have a queue that is used to build our robot.
+    genotype.BuildCPPN(body_net)  # Build the CPPN from the genotype of the robot.
+    to_explore: Queue[__Module] = Queue()  # Queue used to build the robot.
     grid = np.zeros(
         shape=(max_parts * 2 + 1, max_parts * 2 + 1, max_parts * 2 + 1), dtype=np.uint8
     )
-
     body = BodyV2()
 
     core_position = Vector3(
@@ -63,6 +62,12 @@ def develop(
             )
         )
 
+    # Prepare for visualization if enabled
+    if visualize:
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection="3d")
+        plt.show(block=False)
+
     while not to_explore.empty():
         module = to_explore.get()
 
@@ -72,6 +77,12 @@ def develop(
                 if child is not None:
                     to_explore.put(child)
                     part_count += 1
+                    if visualize:
+                        __visualize_structure(grid, ax)
+
+    if visualize:
+        plt.pause(0.001)  # Allow the plot to update smoothly
+
     return body
 
 
@@ -106,7 +117,7 @@ def __evaluate_cppn(
     
     The output ranges between [0,1] and we have 4 rotations available (0, 90, 180, 270).
     """
-    angle = max(0, int(outputs[0] * 4 - 1e-6)) * (np.pi / 2.0)
+    angle = max(0, int(outputs[1] * 4 - 1e-6)) * (np.pi / 2.0)
 
     return module_type, angle
 
@@ -128,7 +139,8 @@ def __add_child(
     if grid[tuple(position)] > 0:
         return None
 
-    """Now we anjust the position for the potential new module to fit the attachment point of the parent, additionally we query the CPPN for child type and angle of the child."""
+    """Now we adjust the position for the potential new module to fit the attachment point of the parent, 
+    additionally we query the CPPN for child type and angle of the child"""
     new_pos = np.array(np.round(position + attachment_point.offset), dtype=np.int64)
     child_type, angle = __evaluate_cppn(body_net, new_pos, chain_length)
 
@@ -143,18 +155,12 @@ def __add_child(
     up = __rotate(module.up, forward, Quaternion.from_eulers([angle, 0, 0]))
     module.module_reference.set_child(child, attachment_index)
 
-    return __Module(
-        position,
-        forward,
-        up,
-        chain_length,
-        child,
-    )
+    return __Module(position, forward, up, chain_length, child)
 
 
 def __rotate(a: Vector3, b: Vector3, rotation: Quaternion) -> Vector3:
     """
-    Rotates vector a, a given angle around b.
+    Rotates vector a around the axis defined by vector b by an angle defined in the rotation quaternion. Rodrigues' rotation formula is used.
 
     :param a: Vector a.
     :param b: Vector b.
@@ -178,3 +184,23 @@ def __vec3_int(vector: Vector3) -> Vector3[np.int_]:
     :return: The integer vector.
     """
     return Vector3(list(map(lambda v: int(round(v)), vector)), dtype=np.int64)
+
+
+def __visualize_structure(grid: NDArray[np.uint8], ax: plt.Axes) -> None:
+    """
+    Visualize the structure of the robot's body using Matplotlib.
+
+    :param grid: The 3D grid containing the robot body.
+    :param ax: The Matplotlib Axes3D object to draw on.
+    """
+    ax.clear()
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Z")
+
+    # Get the occupied grid positions
+    x, y, z = np.nonzero(grid)
+
+    ax.scatter(x, y, z, c="r", marker="o")
+    plt.draw()
+    plt.pause(0.5)

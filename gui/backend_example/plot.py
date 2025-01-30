@@ -20,7 +20,7 @@ def main() -> None:
     setup_logging()
     
     dbengine = open_database_sqlite(
-        "../viewer/"+config.DATABASE_FILE, open_method=OpenMethod.OPEN_IF_EXISTS
+        "../resources/"+config.DATABASE_FILE, open_method=OpenMethod.OPEN_IF_EXISTS
     )
 
     df = pandas.read_sql(

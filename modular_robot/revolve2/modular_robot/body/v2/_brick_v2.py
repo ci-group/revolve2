@@ -13,11 +13,10 @@ class BrickV2(Brick):
 
         :param rotation: The modules' rotation.
         """
-        w, h, d = 0.075, 0.075, 0.075
         super().__init__(
             rotation=rotation,
-            bounding_box=Vector3([w, h, d]),
+            bounding_box=Vector3([0.06288625, 0.06288625, 0.0603]),
             mass=0.06043,
-            child_offset=d / 2.0,
+            child_offset=0.06288625 / 2.0,
             sensors=[],
         )

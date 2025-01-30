@@ -38,7 +38,7 @@ def develop(
     body_net = (
         multineat.NeuralNetwork()
     )  # Instantiate the CPPN network for body construction.
-    genotype.BuildPhenotype(body_net)  # Build the CPPN from the genotype of the robot.
+    genotype.BuildCPPN(body_net)  # Build the CPPN from the genotype of the robot.
     to_explore: Queue[__Module] = Queue()  # Queue used to build the robot.
     grid = np.zeros(
         shape=(max_parts * 2 + 1, max_parts * 2 + 1, max_parts * 2 + 1), dtype=np.uint8

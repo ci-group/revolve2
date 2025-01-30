@@ -36,7 +36,7 @@ class BrainCpgNetworkNeighbor(ModularRobotBrainCpgNetworkNeighbor):
         body: Body,
     ) -> tuple[list[float], list[float]]:
         brain_net = multineat.NeuralNetwork()
-        self._genotype.BuildPhenotype(brain_net)
+        self._genotype.BuildCPPN(brain_net)
 
         internal_weights = [
             self._evaluate_network(

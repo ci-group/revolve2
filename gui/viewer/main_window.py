@@ -3,7 +3,8 @@ from PyQt5.QtWidgets import (
       QWidget, QVBoxLayout, QLabel,
         QComboBox, QPushButton, QMessageBox,
           QLineEdit, QHBoxLayout,QStackedWidget)
-from parsing import get_functions_from_file, get_function_names_from_init, get_config_parameters_from_file, save_config_parameters
+from parsing import (get_functions_from_file, get_config_parameters_from_file, 
+                     save_config_parameters, get_selection_names_from_init, get_files_from_path)
 import subprocess
 
 
@@ -29,8 +30,9 @@ class RobotEvolutionGUI(QMainWindow):
         self.evolution_parameters = get_config_parameters_from_file(self.path_evolution_parameters)
         self.is_generational = self.evolution_parameters.get("GENERATIONAL")
         
-        self.selection_path = "/home/aronf/Desktop/EvolutionaryComputing/work/revolve2/experimentation/revolve2/experimentation/optimization/ea/selection/"
-        self.selection_functions = get_function_names_from_init(self.selection_path)
+        self.selection_functions = get_selection_names_from_init()
+
+        self.database_path = "../resources/databases/"
 
         # Step 1: Define Robot Phenotypes
         self.tab_widget.addTab(self.create_phenotype_tab(), "Robot Phenotypes")
@@ -74,8 +76,11 @@ class RobotEvolutionGUI(QMainWindow):
             print("No active simulation to stop.")
 
     def plot_results(self):
-        # Run the plot script
-        subprocess.Popen(["python", "../backend_example/plot.py"])
+        selected_file = self.database_dropdown.currentText()
+        if selected_file:  # Ensure a file is selected
+            subprocess.Popen(["python", "../backend_example/plot.py", selected_file])
+        else:
+            print("No database selected.")
 
     def save_config_changes(self, file_path, inputs):
         """Update a config with new values from the GUI."""
@@ -297,14 +302,28 @@ class RobotEvolutionGUI(QMainWindow):
         layout.addWidget(stop_button)
         widget.setLayout(layout)
         return widget
-    
+        
     def create_plot_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("Plot Results"))
+        input_layout = QHBoxLayout()
+        
+        label = QLabel("Plot Results from Database:")
+        self.combo_box = QComboBox()
+        self.combo_box.addItems(get_files_from_path(self.database_path))
+
+        input_layout.addWidget(label)
+        input_layout.addWidget(self.combo_box)
+
+        input_layout.setStretch(0, 1)  # Label takes less space
+        input_layout.setStretch(1, 3)  # Dropdown takes more space
+
         plot_button = QPushButton("Plot Results")
         plot_button.clicked.connect(self.plot_results)
+
+        layout.addLayout(input_layout)
         layout.addWidget(plot_button)
+
         widget.setLayout(layout)
         return widget
 

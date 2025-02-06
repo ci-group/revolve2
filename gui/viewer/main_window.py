@@ -2,11 +2,10 @@ from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QTabWidget,
       QWidget, QVBoxLayout, QLabel,
         QComboBox, QPushButton, QMessageBox,
-          QLineEdit, QHBoxLayout, QButtonGroup,
-            QStackedWidget)
+          QLineEdit, QHBoxLayout,QStackedWidget)
 from parsing import get_functions_from_file, get_function_names_from_init, get_config_parameters_from_file, save_config_parameters
 import subprocess
-import os
+
 
 class RobotEvolutionGUI(QMainWindow):
     def __init__(self):
@@ -151,13 +150,13 @@ class RobotEvolutionGUI(QMainWindow):
         # Generational View
         self.view1 = QWidget()
         v1_layout = QVBoxLayout()
-        v1_layout.addWidget(QLabel("<b>Generational GA Parameters</b>"))
+        v1_layout.addWidget(QLabel("<b>Non-Overlapping (comma) Generations</b>"))
         self.view1.setLayout(v1_layout)
 
         # Steady-State View
         self.view2 = QWidget()
         v2_layout = QVBoxLayout()
-        v2_layout.addWidget(QLabel("<b>Steady-State GA Parameters</b>"))
+        v2_layout.addWidget(QLabel("<b>Overlapping (plus) Generations</b>"))
         self.view2.setLayout(v2_layout)
 
         self.inputs_evolution = {}
@@ -228,10 +227,10 @@ class RobotEvolutionGUI(QMainWindow):
         """Update the UI based on the current mode."""
         if self.is_generational:
             self.stacked_widget.setCurrentWidget(self.view1)
-            self.switch_button.setText("Switch to Steady-State")
+            self.switch_button.setText("Switch to Overlapping")
         else:
             self.stacked_widget.setCurrentWidget(self.view2)
-            self.switch_button.setText("Switch to Generational")
+            self.switch_button.setText("Switch to Non-Overlapping")
 
     def create_environment_tab(self):
         widget = QWidget()

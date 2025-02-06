@@ -2,7 +2,7 @@
 
 import logging
 
-import config
+import sys
 from database_components import Genotype, Individual
 from evaluator import Evaluator
 from sqlalchemy import select
@@ -16,9 +16,10 @@ def main() -> None:
     """Perform the rerun."""
     setup_logging()
 
-    # Load the best individual from the database.
+    database_path = f"../resources/databases/{sys.argv[1]}"
+    
     dbengine = open_database_sqlite(
-        config.DATABASE_FILE, open_method=OpenMethod.OPEN_IF_EXISTS
+        database_path, open_method=OpenMethod.OPEN_IF_EXISTS
     )
 
     with Session(dbengine) as ses:

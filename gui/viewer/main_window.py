@@ -34,8 +34,8 @@ class RobotEvolutionGUI(QMainWindow):
 
         self.database_path = "../resources/databases/"
 
-        # Step 1: Define Robot Phenotypes
-        self.tab_widget.addTab(self.create_phenotype_tab(), "Robot Phenotypes")
+        # # Step 1: Define Robot Phenotypes
+        # self.tab_widget.addTab(self.create_phenotype_tab(), "Robot Phenotypes")
 
         # Step 2: Define Environment
         self.tab_widget.addTab(self.create_environment_tab(), "Environment & Task")
@@ -50,13 +50,15 @@ class RobotEvolutionGUI(QMainWindow):
         self.tab_widget.addTab(self.create_ea_tab(), "Evolutionary Algorithm")
 
         # Step 6: Selection
-        self.tab_widget.addTab(self.create_selection_tab(), "Selection Algorithms")
+        self.tab_widget.addTab(self.create_selection_tab(), "Selection Algorithms (UNDER DEVELOPMENT)")
 
         # Step 7: Simulator Selection
         self.tab_widget.addTab(self.create_simulation_parameters_tab(), "Physics Simulator")
 
         # Step 8: Run Simulation
         self.tab_widget.addTab(self.create_run_simulation_tab(), "Run Simulation")
+
+        self.tab_widget.addTab(self.create_rerun_tab(), "Visualize Best Individual")
 
         # Step 9: Plot Results
         self.tab_widget.addTab(self.create_plot_tab(), "Plot Results")
@@ -76,9 +78,16 @@ class RobotEvolutionGUI(QMainWindow):
             print("No active simulation to stop.")
 
     def plot_results(self):
-        selected_file = self.database_dropdown.currentText()
+        selected_file = self.database_dropdown_plot.currentText()
         if selected_file:  # Ensure a file is selected
             subprocess.Popen(["python", "../backend_example/plot.py", selected_file])
+        else:
+            print("No database selected.")
+
+    def rerun(self):
+        selected_file = self.database_dropdown_rerun.currentText()
+        if selected_file:  # Ensure a file is selected
+            subprocess.Popen(["python", "../backend_example/rerun.py", selected_file])
         else:
             print("No database selected.")
 
@@ -101,16 +110,16 @@ class RobotEvolutionGUI(QMainWindow):
 
         QMessageBox.information(self, "Success", "Config file updated!")
 
-    def create_phenotype_tab(self):
-        widget = QWidget()
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("Define Robot Phenotypes"))
-        # Dropdown for phenotypes
-        phenotypes_dropdown = QComboBox()
-        phenotypes_dropdown.addItems(["Phenotype A", "Phenotype B", "Phenotype C"])
-        layout.addWidget(phenotypes_dropdown)
-        widget.setLayout(layout)
-        return widget
+    # def create_phenotype_tab(self):
+    #     widget = QWidget()
+    #     layout = QVBoxLayout()
+    #     layout.addWidget(QLabel("Define Robot Phenotypes"))
+    #     # Dropdown for phenotypes
+    #     phenotypes_dropdown = QComboBox()
+    #     phenotypes_dropdown.addItems(["Phenotype A", "Phenotype B", "Phenotype C"])
+    #     layout.addWidget(phenotypes_dropdown)
+    #     widget.setLayout(layout)
+    #     return widget
 
     def create_genotype_tab(self):
         widget = QWidget()
@@ -132,6 +141,7 @@ class RobotEvolutionGUI(QMainWindow):
     def create_selection_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
+        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT<b>"))
         layout.addWidget(QLabel("Define Parent and Surivor Selection Types"))
         parent_dropdown = QComboBox()
         parent_dropdown.addItems(self.selection_functions)
@@ -309,17 +319,41 @@ class RobotEvolutionGUI(QMainWindow):
         input_layout = QHBoxLayout()
         
         label = QLabel("Plot Results from Database:")
-        self.combo_box = QComboBox()
-        self.combo_box.addItems(get_files_from_path(self.database_path))
+        self.database_dropdown_plot = QComboBox()
+        self.database_dropdown_plot.addItems(get_files_from_path(self.database_path))
 
         input_layout.addWidget(label)
-        input_layout.addWidget(self.combo_box)
+        input_layout.addWidget(self.database_dropdown_plot)
 
         input_layout.setStretch(0, 1)  # Label takes less space
         input_layout.setStretch(1, 3)  # Dropdown takes more space
 
         plot_button = QPushButton("Plot Results")
         plot_button.clicked.connect(self.plot_results)
+
+        layout.addLayout(input_layout)
+        layout.addWidget(plot_button)
+
+        widget.setLayout(layout)
+        return widget
+    
+    def create_rerun_tab(self):
+        widget = QWidget()
+        layout = QVBoxLayout()
+        input_layout = QHBoxLayout()
+        
+        label = QLabel("Visualize Best Individual from Database:")
+        self.database_dropdown_rerun = QComboBox()
+        self.database_dropdown_rerun.addItems(get_files_from_path(self.database_path))
+
+        input_layout.addWidget(label)
+        input_layout.addWidget(self.database_dropdown_rerun)
+
+        input_layout.setStretch(0, 1)  # Label takes less space
+        input_layout.setStretch(1, 3)  # Dropdown takes more space
+
+        plot_button = QPushButton("Visualize")
+        plot_button.clicked.connect(self.rerun)
 
         layout.addLayout(input_layout)
         layout.addWidget(plot_button)

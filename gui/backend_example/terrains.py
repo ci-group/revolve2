@@ -32,10 +32,10 @@ def flat(size: Vector2 = Vector2([20.0, 20.0])) -> Terrain:
 
 
 def crater(
-    size: tuple[float, float],
-    ruggedness: float,
-    curviness: float,
-    granularity_multiplier: float = 1.0,
+    size= [50, 50],
+    ruggedness= 0.5,
+    curviness=1,
+    granularity_multiplier= 1.0,
 ) -> Terrain:
     r"""
     Create a crater-like terrain with rugged floor using a heightmap.

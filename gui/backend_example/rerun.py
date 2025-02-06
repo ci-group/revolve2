@@ -21,6 +21,8 @@ def main() -> None:
     dbengine = open_database_sqlite(
         database_path, open_method=OpenMethod.OPEN_IF_EXISTS
     )
+    
+    # terrain =  sys.argv[2]
 
     with Session(dbengine) as ses:
         row = ses.execute(

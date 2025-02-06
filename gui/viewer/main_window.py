@@ -37,36 +37,28 @@ class RobotEvolutionGUI(QMainWindow):
         # # Step 1: Define Robot Phenotypes
         # self.tab_widget.addTab(self.create_phenotype_tab(), "Robot Phenotypes")
 
-        # Step 2: Define Environment
         self.tab_widget.addTab(self.create_environment_tab(), "Environment & Task")
 
-        # Step 3: Define Genotypes
         self.tab_widget.addTab(self.create_genotype_tab(), "Robot Genotypes")
 
-        # Step 4: Fitness Function
         self.tab_widget.addTab(self.create_fitness_tab(), "Fitness Function")
 
-        # Step 5: Evolution Parameters
         self.tab_widget.addTab(self.create_ea_tab(), "Evolutionary Algorithm")
 
-        # Step 6: Selection
         self.tab_widget.addTab(self.create_selection_tab(), "Selection Algorithms (UNDER DEVELOPMENT)")
 
-        # Step 7: Simulator Selection
         self.tab_widget.addTab(self.create_simulation_parameters_tab(), "Physics Simulator")
 
-        # Step 8: Run Simulation
         self.tab_widget.addTab(self.create_run_simulation_tab(), "Run Simulation")
 
         self.tab_widget.addTab(self.create_rerun_tab(), "Visualize Best Individual")
 
-        # Step 9: Plot Results
         self.tab_widget.addTab(self.create_plot_tab(), "Plot Results")
 
 
     def run_simulation(self):
-        # Run the simulation
-        self.simulation_process = subprocess.Popen(["python", "../backend_example/main_from_gui.py"])
+        terrain = self.environment_dropdown.currentText()
+        self.simulation_process = subprocess.Popen(["python", "../backend_example/main_from_gui.py", terrain])
 
     def stop_simulation(self):
         """Stop the running simulation."""
@@ -124,7 +116,7 @@ class RobotEvolutionGUI(QMainWindow):
     def create_genotype_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("UNDER CONSTRUCTION:\n Define Mutation and Crossover Operators"))
+        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - \n Define Mutation and Crossover Operators"))
         # Mutation operator
         mutation_dropdown = QComboBox()
         mutation_dropdown.addItems(["Operator A", "Operator B", "Operator C"])
@@ -250,14 +242,14 @@ class RobotEvolutionGUI(QMainWindow):
     def create_environment_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("Define Environment and Task"))
+        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Environment and Task"))
         # Environment settings
         layout.addWidget(QLabel("Environment Terrains: "))
-        environment_dropdown = QComboBox()  # Example: Environment parameter input
-        environment_dropdown.addItems(self.terrains.keys())
-        layout.addWidget(environment_dropdown)
+        self.environment_dropdown = QComboBox()  # Example: Environment parameter input
+        self.environment_dropdown.addItems(self.terrains.keys())
+        layout.addWidget(self.environment_dropdown)
         widget.setLayout(layout)
-        layout
+
         # Task selection
         task_dropdown = QComboBox()
         task_dropdown.addItems(["Task 1", "Task 2", "Task 3"])
@@ -266,10 +258,10 @@ class RobotEvolutionGUI(QMainWindow):
         widget.setLayout(layout)
         return widget
 
-    def create_fitness_tab(self):
+    def create_fitness_tab(self): # under development
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("Define Fitness Function"))
+        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Fitness Function"))
         fitness_dropdown = QComboBox()
         fitness_dropdown.addItems(self.fitness_functions.keys())
         layout.addWidget(fitness_dropdown)

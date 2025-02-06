@@ -1,3 +1,4 @@
+
 <img align="right" width="150" height="150"  src="./docs/source/logo_light.png">
 
 # Revolve2
@@ -50,3 +51,8 @@ xy_displacement = fitness_functions.xy_displacement(
     robot_state_begin, robot_state_end
 )
 ```
+
+## Furthermore you can beta test the new GUI by running:
+`cd gui/viewer/` 
+
+`python main_window.py`

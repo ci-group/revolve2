@@ -9,7 +9,9 @@ from revolve2.modular_robot_simulation import (
     simulate_scenes,
 )
 from revolve2.simulators.mujoco_simulator import LocalSimulator
-from revolve2.standards import fitness_functions, terrains
+
+import sys
+import fitness_functions, terrains
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 
 
@@ -23,6 +25,7 @@ class Evaluator(Eval):
         self,
         headless: bool,
         num_simulators: int,
+        terrain=terrains.flat()
     ) -> None:
         """
         Initialize this object.
@@ -33,8 +36,10 @@ class Evaluator(Eval):
         self._simulator = LocalSimulator(
             headless=headless, num_simulators=num_simulators
         )
-        self._terrain = terrains.flat()
-
+        if terrain != terrains.flat():
+            self._terrain = eval("terrains."+terrain+"()")
+        else:
+            self._terrain = terrains.flat()
     def evaluate(
         self,
         population: list[Genotype],

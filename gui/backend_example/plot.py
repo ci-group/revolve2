@@ -9,6 +9,7 @@ from sqlalchemy import select
 from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from revolve2.experimentation.logging import setup_logging
 import argparse
+import sys
 
 def argument_parser() -> argparse.ArgumentParser:
     """Create an argument parser."""
@@ -18,9 +19,11 @@ def argument_parser() -> argparse.ArgumentParser:
 def main() -> None:
     """Run the program."""
     setup_logging()
+
+    database_path = f"../resources/databases/{sys.argv[1]}"
     
     dbengine = open_database_sqlite(
-        "../resources/"+config.DATABASE_FILE, open_method=OpenMethod.OPEN_IF_EXISTS
+        database_path, open_method=OpenMethod.OPEN_IF_EXISTS
     )
 
     df = pandas.read_sql(

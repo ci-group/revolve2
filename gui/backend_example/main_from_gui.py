@@ -128,7 +128,7 @@ def main() -> None:
 
     # Open the database, only if it does not already exists.
     dbengine = open_database_sqlite(
-        f"{datetime.now()}"+config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
+        "../resources/databases/"+f"{datetime.now()}"+config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
     )
     # Create the structure of the database.
     Base.metadata.create_all(dbengine)

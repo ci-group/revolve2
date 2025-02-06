@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-modular-robot-physical"
-version = "1.2.2"
+version = "1.2.3"
 description = "Revolve2: Everything for physical modular robot control. This package is intended to be installed on the modular robot hardware."
 readme = "../README.md"
 authors = [
@@ -27,13 +27,14 @@ packages = [{ include = "revolve2" }]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.12"
-revolve2-modular-robot = "1.2.2"
+revolve2-modular-robot = "1.2.3"
 pyrr = "^0.10.3"
 typed-argparse = "^0.3.1"
 pycapnp = { version = "^2.0.0b2" }
 pigpio = { version = "^1.78", optional = true }
-revolve2-robohat = { version = "0.5.0", optional = true }
+revolve2-robohat = { version = "0.6.3", optional = true }
 rpi-lgpio = { version = "0.5", optional = true  }
+opencv-python = "^4.10.0.84"
 # cpnp-stub-generator is disabled because it depends on pycapnp <2.0.0.
 # It is rarely used and by developers only, so we remove it for now and developers can install it manually.
 # If you manually install it make sure you also install the correct pycpanp version afterwards as it will be overridden.

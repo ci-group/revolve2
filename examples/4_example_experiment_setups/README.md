@@ -9,4 +9,5 @@ Additionally you will learn hwo to use the evolution abstraction layer in Revolv
 - `4d_robot_bodybrain_ea_database` is the same example, with the addition of databases to allow for data storage.
 - If you want to add learning into your experiments look at `4e_robot_brain_cmaes`, in which we add learning to a **single** robot.
 - `4f_robot_brain_cmaes_database` does the same thing as the previous example with the addition of a database.
+- Finally you can learn about the exploration of the initial population and their morphological features in `4g_explore_initial_population`
 

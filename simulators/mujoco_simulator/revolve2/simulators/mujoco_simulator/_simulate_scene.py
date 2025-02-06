@@ -179,7 +179,11 @@ def simulate_scene(
         if not headless or (
             record_settings is not None and time >= last_video_time + video_step
         ):
-            viewer.render()
+            _status = viewer.render()
+
+            # Check if simulation was closed
+            if _status == -1:
+                break
 
         # capture video frame if it's time
         if record_settings is not None and time >= last_video_time + video_step:

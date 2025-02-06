@@ -80,7 +80,10 @@ class _MujocoViewerBackend(mujoco_viewer.MujocoViewer):  # type: ignore
 
         :return: A cycle position if applicable.
         """
-        super().render()
+        if self.is_alive:
+            super().render()
+        else:
+            return -1
         if self._viewer_mode == CustomMujocoViewerMode.MANUAL:
             return self._position
         return None

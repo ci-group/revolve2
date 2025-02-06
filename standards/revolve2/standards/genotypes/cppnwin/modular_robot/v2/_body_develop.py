@@ -204,3 +204,43 @@ def __visualize_structure(grid: NDArray[np.uint8], ax: plt.Axes) -> None:
     ax.scatter(x, y, z, c="r", marker="o")
     plt.draw()
     plt.pause(0.5)
+
+
+def __visualize_structure(grid: NDArray[np.uint8], ax: plt.Axes) -> None:
+    """
+    Visualize the structure of the robot's body using Matplotlib.
+
+    :param grid: The 3D grid containing the robot body.
+    :param ax: The Matplotlib Axes3D object to draw on.
+    """
+    ax.clear()
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Z")
+
+    # Get the occupied grid positions
+    x, y, z = np.nonzero(grid)
+
+    ax.scatter(x, y, z, c="r", marker="o")
+    plt.draw()
+    plt.pause(0.5)
+
+
+def __visualize_structure(grid: NDArray[np.uint8], ax: plt.Axes) -> None:
+    """
+    Visualize the structure of the robot's body using Matplotlib.
+
+    :param grid: The 3D grid containing the robot body.
+    :param ax: The Matplotlib Axes3D object to draw on.
+    """
+    ax.clear()
+    ax.set_xlabel("X")
+    ax.set_ylabel("Y")
+    ax.set_zlabel("Z")
+
+    # Get the occupied grid positions
+    x, y, z = np.nonzero(grid)
+
+    ax.scatter(x, y, z, c="r", marker="o")
+    plt.draw()
+    plt.pause(0.5)

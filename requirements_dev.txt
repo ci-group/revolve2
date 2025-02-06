@@ -12,4 +12,5 @@
 -r ./examples/4_example_experiment_setups/4d_robot_bodybrain_ea_database/requirements.txt
 -r ./examples/4_example_experiment_setups/4f_robot_brain_cmaes_database/requirements.txt
 -r ./examples/4_example_experiment_setups/4b_simple_ea_xor_database/requirements.txt
+-r ./examples/4_example_experiment_setups/4g_explore_initial_population/requirements.txt
 -r ./tests/requirements.txt

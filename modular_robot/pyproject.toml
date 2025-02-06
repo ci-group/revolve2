@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-modular-robot"
-version = "1.2.3"
+version = "1.2.2"
 description = "Revolve2: Everything for defining modular robots."
 readme = "../README.md"
 authors = [

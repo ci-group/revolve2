@@ -1,9 +1,12 @@
 """An example on how to remote control a physical modular robot."""
 
+from pyrr import Vector3
+
 from revolve2.experimentation.rng import make_rng_time_seed
 from revolve2.modular_robot import ModularRobot
 from revolve2.modular_robot.body import RightAngles
 from revolve2.modular_robot.body.base import ActiveHinge
+from revolve2.modular_robot.body.sensors import CameraSensor
 from revolve2.modular_robot.body.v2 import ActiveHingeV2, BodyV2, BrickV2
 from revolve2.modular_robot.brain.cpg import BrainCpgNetworkNeighborRandom
 from revolve2.modular_robot_physical import Config, UUIDKey
@@ -39,6 +42,10 @@ def make_body() -> (
         body.core_v2.left_face.bottom.attachment,
         body.core_v2.right_face.bottom,
         body.core_v2.right_face.bottom.attachment,
+    )
+    """Here we add a camera sensor to the core. If you don't have a physical camera attached, uncomment this line."""
+    body.core.add_sensor(
+        CameraSensor(position=Vector3([0, 0, 0]), camera_size=(480, 640))
     )
     return body, active_hinges
 
@@ -100,6 +107,7 @@ def main() -> None:
     Create a Remote for the physical modular robot.
     Make sure to target the correct hardware type and fill in the correct IP and credentials.
     The debug flag is turned on. If the remote complains it cannot keep up, turning off debugging might improve performance.
+    If you want to display the camera view, set display_camera_view to True.
     """
     print("Initializing robot..")
     run_remote(
@@ -107,6 +115,7 @@ def main() -> None:
         hostname="localhost",  # "Set the robot IP here.
         debug=True,
         on_prepared=on_prepared,
+        display_camera_view=False,
     )
     """
     Note that theoretically if you want the robot to be self controlled and not dependant on a external remote, you can run this script on the robot locally.

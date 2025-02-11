@@ -14,6 +14,7 @@ examples:
   - 1_simulator_basics/1b_custom_terrain
   - 2_modular_robot_basics/2a_custom_brain
   - 2_modular_robot_basics/2b_brain_with_feedback
+  - 2_modular_robot_basics/2c_custom_parts
   - 3_experiment_foundations/3a_experiment_setup
   - 3_experiment_foundations/3b_evaluate_single_robot
   - 3_experiment_foundations/3c_evaluate_multiple_isolated_robots

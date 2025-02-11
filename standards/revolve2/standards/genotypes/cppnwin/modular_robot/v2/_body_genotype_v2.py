@@ -8,10 +8,18 @@ from typing_extensions import Self
 
 from revolve2.modular_robot.body.v2 import BodyV2
 
-from revolve2.standards.genotypes.cppnwin._multineat_genotype_pickle_wrapper import MultineatGenotypePickleWrapper
-from revolve2.standards.genotypes.cppnwin._multineat_rng_from_random import multineat_rng_from_random
-from revolve2.standards.genotypes.cppnwin._random_multineat_genotype import random_multineat_genotype
-from revolve2.standards.genotypes.cppnwin.modular_robot._multineat_params import get_multineat_params
+from revolve2.standards.genotypes.cppnwin._multineat_genotype_pickle_wrapper import (
+    MultineatGenotypePickleWrapper,
+)
+from revolve2.standards.genotypes.cppnwin._multineat_rng_from_random import (
+    multineat_rng_from_random,
+)
+from revolve2.standards.genotypes.cppnwin._random_multineat_genotype import (
+    random_multineat_genotype,
+)
+from revolve2.standards.genotypes.cppnwin.modular_robot._multineat_params import (
+    get_multineat_params,
+)
 from revolve2.standards.genotypes.cppnwin.modular_robot.v2._body_develop import develop
 
 
@@ -43,7 +51,7 @@ class BodyGenotypeV2:
                 innov_db=innov_db,
                 rng=multineat_rng,
                 multineat_params=cls._MULTINEAT_PARAMS,
-                output_activation_func=multineat.ActivationFunction.UNSIGNED_SIGMOID, # changed  from UNSIGNED_SIGMOID
+                output_activation_func=multineat.ActivationFunction.UNSIGNED_SIGMOID,  # changed  from UNSIGNED_SIGMOID
                 num_inputs=5,  # bias(always 1), pos_x, pos_y, pos_z, chain_length
                 num_outputs=2,  # block_type, rotation_type
                 num_initial_mutations=cls._NUM_INITIAL_MUTATIONS,
@@ -72,14 +80,14 @@ class BodyGenotypeV2:
             MultineatGenotypePickleWrapper(
                 self.body.genotype.MutateWithConstraints(
                     False,
-                    multineat.SearchMode.BLENDED, # meaning that mutation can complexify or simplify
+                    multineat.SearchMode.BLENDED,  # meaning that mutation can complexify or simplify
                     innov_db,
                     self._MULTINEAT_PARAMS,
                     multineat_rng,
                 )
             )
         )
-    
+
     """
         Genome Genome::MutateWithConstraints(bool t_baby_is_clone, const SearchMode a_searchMode,
           InnovationDatabase &a_innov_database, const Parameters &a_Parameters, RNG &a_RNG) const
@@ -122,7 +130,7 @@ class BodyGenotypeV2:
                 )
             )
         )
-    
+
     """
         Genome Genome::MateWithConstraints(Genome const& a_dad, bool a_averagemating, bool a_interspecies,
           RNG &a_RNG, Parameters const& a_Parameters) const {

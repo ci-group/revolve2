@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Sequence
+from typing import Sequence
 
 import numpy as np
 from numpy.typing import NDArray
@@ -79,7 +79,7 @@ class PhysicalInterface(ABC):
         """
 
     @abstractmethod
-    def get_camera_view(self) -> Optional[NDArray[np.uint8]]:
+    def get_camera_view(self) -> NDArray[np.uint8]:
         """
         Get the current view from the camera.
 

@@ -6,5 +6,3 @@ Here you will learn about a few things that are important in almost all experime
 - In `3b_evaluate_single_robot` we will see how you can evaluate robots in ane experiment.
 - Since evaluating one robot is not very interesting in `3c_evaluate_multiple_isolated_robots` you will see how this evaluation can be done for a population of robots.
 - Alternatively if you want multiple robots interacting with each other look into example `3d_evaluate_multiple_interacting_robots`.
-
-

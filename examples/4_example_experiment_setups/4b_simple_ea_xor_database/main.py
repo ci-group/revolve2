@@ -91,8 +91,8 @@ class SurvivorSelector(Selector):
         original_survivors, offspring_survivors = population_management.steady_state(
             [i.genotype for i in population.individuals],
             [i.fitness for i in population.individuals],
-            [i.genotype for i in offspring],
-            [i.fitness for i in offspring],
+            [i.genotype for i in offspring.individuals],
+            [i.fitness for i in offspring.individuals],
             lambda n, genotypes, fitnesses: selection.multiple_unique(
                 n,
                 genotypes,
@@ -112,8 +112,8 @@ class SurvivorSelector(Selector):
                 ]
                 + [
                     Individual(
-                        genotype=offspring[i].genotype,
-                        fitness=offspring[i].fitness,
+                        genotype=offspring.individuals[i].genotype,
+                        fitness=offspring.individuals[i].fitness,
                     )
                     for i in offspring_survivors
                 ]
@@ -145,10 +145,11 @@ class CrossoverReproducer(Reproducer):
         )  # We select the population of parents that were passed in KWArgs of the parent selector object.
         if parents is None:
             raise KeyError("No children passed.")
+        #print(type(parents))
         offspring = [
             Genotype.crossover(
-                parents[parent1_i].genotype,
-                parents[parent2_i].genotype,
+                parents.individuals[parent1_i].genotype,
+                parents.individuals[parent2_i].genotype,
                 self._rng,
                 num_parameters=config.NUM_PARAMETERS,
             ).mutate(

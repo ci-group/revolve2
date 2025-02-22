@@ -146,7 +146,7 @@ jobs:
         run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
       - uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ matrix.package }}-${{ github.run_id }}
           path: ./dist/**/*.whl
 
   build_wheels_platform_dependent:
@@ -172,7 +172,7 @@ jobs:
           CIBW_ARCHS_LINUX: x86_64
       - uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-${{ matrix.package }}-${{ github.run_id }}
           path: ./dist/**/*.whl
 
   publish:
@@ -190,8 +190,9 @@ jobs:
       - name: Download dist artifact
         uses: actions/download-artifact@v4
         with:
-          name: dist
+          pattern: dist-*
           path: dist
+          merge-multiple: true
       - name: Generate name for package
         # Prepend 'revolve2-', replace '/' with '-' and remove '/simulators'
         run: echo "PACKAGE_URL=https://pypi.org/p/revolve2-$(echo ${{ matrix.package }} | sed 's/_/-/g' | sed 's/simulators\///g')" >> $GITHUB_ENV

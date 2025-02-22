@@ -179,7 +179,7 @@ jobs:
         shell: bash
         run: |
           SAFE_PACKAGE=$(echo "${{ matrix.package }}" | sed 's/\//-/g')
-          echo "ARTIFACT_NAME=dist-${SAFE_PACKAGE}-${{ github.run_id }}" >> $GITHUB_ENV
+          echo "ARTIFACT_NAME=dist-${SAFE_PACKAGE}-${{ matrix.os }}-${{ github.run_id }}" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.ARTIFACT_NAME }}

@@ -144,9 +144,11 @@ jobs:
           python-version: 3.11
       - name: Build wheels
         run: pip wheel --no-deps ./${{ matrix.package }} -w ./dist/${{ matrix.package }}
+      - name: Generate artifact name
+        run: echo "ARTIFACT_NAME=dist-$(echo ${{ matrix.package }} | sed 's/\//-/g')-${{ github.run_id }}" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.package }}-${{ github.run_id }}
+          name: ${{ env.ARTIFACT_NAME }}
           path: ./dist/**/*.whl
 
   build_wheels_platform_dependent:
@@ -170,9 +172,11 @@ jobs:
           CIBW_ARCHS_WINDOWS: AMD64
           CIBW_ARCHS_MACOS: universal2
           CIBW_ARCHS_LINUX: x86_64
+      - name: Generate artifact name
+        run: echo "ARTIFACT_NAME=dist-$(echo ${{ matrix.package }} | sed 's/\//-/g')-${{ github.run_id }}" >> $GITHUB_ENV
       - uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.package }}-${{ github.run_id }}
+          name: ${{ env.ARTIFACT_NAME }}
           path: ./dist/**/*.whl
 
   publish:

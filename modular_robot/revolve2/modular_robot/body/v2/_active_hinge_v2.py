@@ -27,7 +27,7 @@ class ActiveHingeV2(ActiveHinge):
             frame_offset=0.04495,
             servo1_bounding_box=Vector3([0.05125, 0.0512, 0.020]),
             servo2_bounding_box=Vector3([0.002, 0.052, 0.052]),
-            frame_mass=0.01632,
+            frame_mass=0.01144,
             servo1_mass=0.058,
             servo2_mass=0.025,
             servo_offset=0.0239,

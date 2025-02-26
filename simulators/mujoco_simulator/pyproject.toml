@@ -11,6 +11,7 @@ authors = [
     "Aart Stuurman <aartstuurman@hotmail.com>",
     "Oliver Weissl <o.weissl@vu.nl>",
     "Kevin Godin-Dubois <k.j.m.godin-dubois@vu.nl>",
+    "Andres Garcia <a.a.garciarincon@student.vu.nl>"
 ]
 repository = "https://github.com/ci-group/revolve2"
 classifiers = [

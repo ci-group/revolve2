@@ -14,3 +14,4 @@ class Experiment(Base, HasId):
 
     # The seed for the rng.
     rng_seed: orm.Mapped[int] = orm.mapped_column(nullable=False)
+    terrain: orm.Mapped[str] = orm.mapped_column(nullable=False)

@@ -10,8 +10,8 @@ from revolve2.modular_robot_simulation import (
 )
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
-import sys
-import fitness_functions, terrains
+import fitness_functions
+import terrains
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 
 
@@ -25,7 +25,8 @@ class Evaluator(Eval):
         self,
         headless: bool,
         num_simulators: int,
-        terrain=terrains.flat()
+        terrain="flat",
+        fitness_function="xy_displacement"
     ) -> None:
         """
         Initialize this object.
@@ -36,10 +37,9 @@ class Evaluator(Eval):
         self._simulator = LocalSimulator(
             headless=headless, num_simulators=num_simulators
         )
-        if terrain != terrains.flat():
-            self._terrain = eval("terrains."+terrain+"()")
-        else:
-            self._terrain = terrains.flat()
+        self._terrain = eval("terrains."+terrain+"()")
+        self._fitness_function = fitness_function
+
     def evaluate(
         self,
         population: list[Genotype],
@@ -67,13 +67,12 @@ class Evaluator(Eval):
             scenes=scenes,
         )
 
-        # Calculate the xy displacements.
-        xy_displacements = [
-            fitness_functions.xy_displacement(
-                states[0].get_modular_robot_simulation_state(robot),
-                states[-1].get_modular_robot_simulation_state(robot),
-            )
+        # Calculate the fitnesses.
+        fitness_function = getattr(fitness_functions, self._fitness_function)
+        fitnesses = [
+            fitness_function(states[0].get_modular_robot_simulation_state(robot),
+                             states[-1].get_modular_robot_simulation_state(robot))
             for robot, states in zip(robots, scene_states)
         ]
 
-        return xy_displacements
+        return fitnesses

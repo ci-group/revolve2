@@ -3,10 +3,11 @@ from PyQt5.QtWidgets import (
       QWidget, QVBoxLayout, QLabel,
         QComboBox, QPushButton, QMessageBox,
           QLineEdit, QHBoxLayout,QStackedWidget)
-from parsing import (get_functions_from_file, get_config_parameters_from_file, 
+from gui.viewer.parsing import (get_functions_from_file, get_config_parameters_from_file, 
                      save_config_parameters, get_selection_names_from_init, get_files_from_path)
 import subprocess
 import os
+import sys
 
 class RobotEvolutionGUI(QMainWindow):
     def __init__(self):
@@ -19,20 +20,24 @@ class RobotEvolutionGUI(QMainWindow):
         self.tab_widget = QTabWidget(self)
         self.setCentralWidget(self.tab_widget)
 
-        self.fitness_functions = get_functions_from_file("../backend_example/fitness_functions.py")
-        
-        self.terrains = get_functions_from_file("../backend_example/terrains.py")
-        
-        self.path_simulation_parameters = "../backend_example/config_simulation_parameters.py"
+        # Get the absolute path to the project root (revolve2/)
+        PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+
+        # Use absolute paths
+        self.fitness_functions = get_functions_from_file(os.path.join(PROJECT_ROOT, "gui/backend_example/fitness_functions.py"))
+        self.terrains = get_functions_from_file(os.path.join(PROJECT_ROOT, "gui/backend_example/terrains.py"))
+
+        self.path_simulation_parameters = os.path.join(PROJECT_ROOT, "gui/backend_example/config_simulation_parameters.py")
         self.simulation_parameters = get_config_parameters_from_file(self.path_simulation_parameters)
-        
-        self.path_evolution_parameters = "../backend_example/config.py"
+
+        self.path_evolution_parameters = os.path.join(PROJECT_ROOT, "gui/backend_example/config.py")
         self.evolution_parameters = get_config_parameters_from_file(self.path_evolution_parameters)
         self.is_generational = self.evolution_parameters.get("GENERATIONAL")
-        
+
         self.selection_functions = get_selection_names_from_init()
 
-        self.database_path = "../resources/databases/"
+        self.database_path = os.path.join(PROJECT_ROOT, "gui/resources/databases/")
+
 
         if not os.path.exists(self.database_path):
             os.makedirs(self.database_path)
@@ -64,7 +69,8 @@ class RobotEvolutionGUI(QMainWindow):
 
     def run_simulation(self):
         terrain = self.environment_dropdown.currentText()
-        self.simulation_process = subprocess.Popen(["python", "../backend_example/main_from_gui.py", terrain])
+        fitness_function = self.fitness_dropdown.currentText()
+        self.simulation_process = subprocess.Popen(["python", "gui/backend_example/main_from_gui.py", terrain, fitness_function])
 
     def stop_simulation(self):
         """Stop the running simulation."""
@@ -78,14 +84,14 @@ class RobotEvolutionGUI(QMainWindow):
     def plot_results(self):
         selected_file = self.database_dropdown_plot.currentText()
         if selected_file:  # Ensure a file is selected
-            subprocess.Popen(["python", "../backend_example/plot.py", selected_file])
+            subprocess.Popen(["python", "gui/backend_example/plot.py", selected_file])
         else:
             print("No database selected.")
 
     def rerun(self):
         selected_file = self.database_dropdown_rerun.currentText()
         if selected_file:  # Ensure a file is selected
-            subprocess.Popen(["python", "../backend_example/rerun.py", selected_file])
+            subprocess.Popen(["python", "gui/backend_example/rerun.py", selected_file])
         else:
             print("No database selected.")
 
@@ -268,9 +274,9 @@ class RobotEvolutionGUI(QMainWindow):
         widget = QWidget()
         layout = QVBoxLayout()
         layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Fitness Function"))
-        fitness_dropdown = QComboBox()
-        fitness_dropdown.addItems(self.fitness_functions.keys())
-        layout.addWidget(fitness_dropdown)
+        self.fitness_dropdown = QComboBox()
+        self.fitness_dropdown.addItems(self.fitness_functions.keys())
+        layout.addWidget(self.fitness_dropdown)
         widget.setLayout(layout)
         return widget
 

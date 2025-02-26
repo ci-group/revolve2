@@ -25,7 +25,7 @@ from revolve2.experimentation.evolution.abstract_elements import Reproducer, Sel
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.optimization.ea import population_management, selection
 from revolve2.experimentation.rng import make_rng, seed_from_time
-
+from revolve2.standards import terrains
 
 class ParentSelector(Selector):
     """Selector class for parent selection."""

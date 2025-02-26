@@ -25,6 +25,7 @@ from revolve2.experimentation.evolution import ModularRobotEvolution
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng, seed_from_time
 
+import sys
 
 def run_experiment(dbengine: Engine) -> None:
     """
@@ -38,9 +39,11 @@ def run_experiment(dbengine: Engine) -> None:
     # Set up the random number generator.
     rng_seed = seed_from_time()
     rng = make_rng(rng_seed)
+    terrain = sys.argv[1]
+    fitness_function = sys.argv[2]
 
     # Create and save the experiment instance.
-    experiment = Experiment(rng_seed=rng_seed)
+    experiment = Experiment(rng_seed=rng_seed, terrain=terrain)
     logging.info("Saving experiment configuration.")
     with Session(dbengine) as session:
         session.add(experiment)
@@ -59,7 +62,7 @@ def run_experiment(dbengine: Engine) -> None:
     - crossover_reproducer: Allows us to generate offspring from parents.
     - modular_robot_evolution: The evolutionary process as a object that can be iterated.
     """
-    evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS)
+    evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS, terrain=terrain, fitness_function=fitness_function)
     parent_selector = ParentSelector(offspring_size=config.OFFSPRING_SIZE, rng=rng)
     survivor_selector = SurvivorSelector(rng=rng)
     crossover_reproducer = CrossoverReproducer(rng=rng, innov_db_body=innov_db_body, innov_db_brain=innov_db_brain)
@@ -128,7 +131,7 @@ def main() -> None:
 
     # Open the database, only if it does not already exists.
     dbengine = open_database_sqlite(
-        "../resources/databases/"+f"{datetime.now()}"+config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
+        "gui/resources/databases/"+f"{datetime.now()}"+config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
     )
     # Create the structure of the database.
     Base.metadata.create_all(dbengine)

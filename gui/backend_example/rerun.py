@@ -3,7 +3,7 @@
 import logging
 
 import sys
-from database_components import Genotype, Individual
+from database_components import Genotype, Individual, Experiment
 from evaluator import Evaluator
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -22,7 +22,6 @@ def main() -> None:
         database_path, open_method=OpenMethod.OPEN_IF_EXISTS
     )
     
-    # terrain =  sys.argv[2]
 
     with Session(dbengine) as ses:
         row = ses.execute(
@@ -35,11 +34,16 @@ def main() -> None:
 
         genotype = row[0]
         fitness = row[1]
+        terrain_str = ses.execute(
+            select(Experiment.terrain)
+        ).one()[0]
+
+    print(str(terrain_str))
 
     logging.info(f"Best fitness: {fitness}")
 
     # Create the evaluator.
-    evaluator = Evaluator(headless=False, num_simulators=1)
+    evaluator = Evaluator(headless=False, num_simulators=1, terrain=terrain_str)
 
     # Show the robot.
     evaluator.evaluate([genotype])

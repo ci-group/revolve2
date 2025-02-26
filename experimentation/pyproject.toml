@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "revolve2-experimentation"
-version = "1.2.3"
+version = "1.2.4"
 description = "Revolve2: Tools for experimentation."
 readme = "../README.md"
 authors = [

@@ -109,8 +109,8 @@ Setting up Revolve2 on the robot requires different steps, depending on the hard
     * V1: :code:`pip install "revolve2-modular_robot_physical[botv1] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
     * V2: :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@<revolve_version>#subdirectory=modular_robot_physical"`.
 
-    For example, if you want to install the version tagged as 1.2.3, the command would be:
-    :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@1.2.3#subdirectory=modular_robot_physical"`
+    For example, if you want to install the version tagged as 1.2.4, the command would be:
+    :code:`pip install "revolve2-modular_robot_physical[botv2] @ git+https://github.com/ci-group/revolve2.git@1.2.4#subdirectory=modular_robot_physical"`
 
 #. Set up the Revolve2 physical robot daemon:
     #. Create a systemd service file: :code:`sudo nano /etc/systemd/system/robot-daemon.service`

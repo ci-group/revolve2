@@ -266,7 +266,7 @@
 <p>The generic parameter <cite>TPopulation</cite> refers to the user-defined population type.
 This parameter cannot be a forward reference.</p>
 <p>For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyGeneration</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">Generation</span><span class="p">[</span><span class="n">MyPopulation</span><span class="p">]):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyGeneration</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">Generation</span><span class="p">[</span><span class="n">MyPopulation</span><span class="p">]):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_generation&quot;</span>
 </pre></div>
 </div>
@@ -296,7 +296,7 @@ The metaclass argument <cite>population_table</cite> must contain the name of th
 which should have an <cite>id</cite> field that will be used as a foreign key reference.
 This parameter cannot be a forward reference.</p>
 <p>For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyIndividual</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">Individual</span><span class="p">[</span><span class="n">MyGenotype</span><span class="p">],</span> <span class="n">population_table</span><span class="o">=</span><span class="s2">&quot;my_population&quot;</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyIndividual</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">Individual</span><span class="p">[</span><span class="n">MyGenotype</span><span class="p">],</span> <span class="n">population_table</span><span class="o">=</span><span class="s2">&quot;my_population&quot;</span><span class="p">):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_individual&quot;</span>
 </pre></div>
 </div>
@@ -346,7 +346,7 @@ This parameter cannot be a forward reference.</p>
 <p>The generic parameter <cite>TIndividual</cite> refers to the user-defined individual type.
 This parameter cannot be a forward reference.</p>
 <p>For example:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">MyPopulation</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">Population</span><span class="p">[</span><span class="n">MyIndividual</span><span class="p">]):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">MyPopulation</span><span class="p">(</span><span class="n">Base</span><span class="p">,</span> <span class="n">Population</span><span class="p">[</span><span class="n">MyIndividual</span><span class="p">]):</span>
     <span class="n">__tablename__</span> <span class="o">=</span> <span class="s2">&quot;my_population&quot;</span>
 </pre></div>
 </div>

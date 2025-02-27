@@ -70,7 +70,11 @@ class RobotEvolutionGUI(QMainWindow):
 
 
     def run_simulation(self):
-        terrain = self.environment_dropdown.currentText()
+        current_terrain = self.environment_list.currentItem()
+        if current_terrain:
+            terrain = current_terrain.text()
+        else:
+            terrain = "flat"
         fitness_function = self.fitness_dropdown.currentText()
         self.simulation_process = subprocess.Popen(["python", "gui/backend_example/main_from_gui.py", terrain, fitness_function])
 

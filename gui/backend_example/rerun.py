@@ -16,7 +16,7 @@ def main() -> None:
     """Perform the rerun."""
     setup_logging()
 
-    database_path = f"../resources/databases/{sys.argv[1]}"
+    database_path = f"gui/resources/databases/{sys.argv[1]}"
     
     dbengine = open_database_sqlite(
         database_path, open_method=OpenMethod.OPEN_IF_EXISTS

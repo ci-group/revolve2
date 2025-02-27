@@ -47,14 +47,11 @@ class RobotEvolutionGUI(QMainWindow):
         else:
             pass
 
-        # # Step 1: Define Robot Phenotypes
-        # self.tab_widget.addTab(self.create_phenotype_tab(), "Robot Phenotypes")
-
-        self.tab_widget.addTab(self.create_environment_tab(), "Environment & Task")
+        self.tab_widget.addTab(self.create_environment_tab(), "Environment")
 
         self.tab_widget.addTab(self.create_genotype_tab(), "Robot Genotypes")
 
-        self.tab_widget.addTab(self.create_fitness_tab(), "Fitness Function")
+        self.tab_widget.addTab(self.create_fitness_tab(), "Task and Fitness Function")
 
         self.tab_widget.addTab(self.create_ea_tab(), "Evolutionary Algorithm")
 
@@ -91,6 +88,7 @@ class RobotEvolutionGUI(QMainWindow):
         selected_file = self.database_dropdown_plot.currentText()
         if selected_file:  # Ensure a file is selected
             subprocess.Popen(["python", "gui/backend_example/plot.py", selected_file])
+            QMessageBox.information(self, "Success", "Figure saved to 'gui/resources/figures/'")
         else:
             print("No database selected.")
 
@@ -119,17 +117,6 @@ class RobotEvolutionGUI(QMainWindow):
         save_config_parameters(file_path, new_values)
 
         QMessageBox.information(self, "Success", "Config file updated!")
-
-    # def create_phenotype_tab(self):
-    #     widget = QWidget()
-    #     layout = QVBoxLayout()
-    #     layout.addWidget(QLabel("Define Robot Phenotypes"))
-    #     # Dropdown for phenotypes
-    #     phenotypes_dropdown = QComboBox()
-    #     phenotypes_dropdown.addItems(["Phenotype A", "Phenotype B", "Phenotype C"])
-    #     layout.addWidget(phenotypes_dropdown)
-    #     widget.setLayout(layout)
-    #     return widget
 
     def create_genotype_tab(self):
         widget = QWidget()

@@ -46,8 +46,6 @@ def x_speed_Miras2021(begin_state: ModularRobotSimulationState, end_state: Modul
     # Begin and end Position
     begin_position = begin_state.get_pose().position
     end_position = end_state.get_pose().position
-    # simulation_time = 30
-    print("simulation time : ", simulation_time)
 
     x_distance = abs(end_position.x - begin_position.x)
 

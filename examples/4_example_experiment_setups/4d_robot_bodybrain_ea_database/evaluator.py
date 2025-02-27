@@ -33,7 +33,7 @@ class Evaluator(Eval):
         self._simulator = LocalSimulator(
             headless=headless, num_simulators=num_simulators
         )
-        self._terrain = terrains.flat()
+        self._terrain = terrains.rugged_heightmap()
 
     def evaluate(
         self,

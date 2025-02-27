@@ -1,7 +1,7 @@
 """Plot fitness over generations for all experiments, averaged."""
-
-import config
+import matplotlib
 import matplotlib.pyplot as plt
+matplotlib.use('Qt5Agg')
 import pandas
 from database_components import Experiment, Generation, Individual, Population
 from sqlalchemy import select
@@ -20,7 +20,7 @@ def main() -> None:
     """Run the program."""
     setup_logging()
 
-    database_path = f"../resources/databases/{sys.argv[1]}"
+    database_path = f"gui/resources/databases/{sys.argv[1]}"
     
     dbengine = open_database_sqlite(
         database_path, open_method=OpenMethod.OPEN_IF_EXISTS
@@ -101,7 +101,8 @@ def main() -> None:
     plt.ylabel("Fitness")
     plt.title("Mean and max fitness across repetitions with std as shade")
     plt.legend()
-    plt.show()
+    plt.savefig(f"gui/resources/figures/{sys.argv[1]}.png")
+    plt.close()
 
 
 if __name__ == "__main__":

@@ -26,28 +26,6 @@ def xy_displacement(
         + (begin_position.y - end_position.y) ** 2
     )
 
-# def x_speed_Miras2021(x_distance: float, simulation_time = float) -> float:
-#     """Goal:
-#         Calculate the fitness for speed in x direction for a single modular robot according to 
-#             Miras (2021).
-#     -------------------------------------------------------------------------------------------
-#     Input:
-#         x_distance: The distance traveled in the x direction.
-#         simulation_time: The time of the simulation.
-#     -------------------------------------------------------------------------------------------
-#     Output:
-#         The calculated fitness.
-#     """
-#     # Begin and end Position
-
-#     # Calculate the speed in x direction
-#     vx = float((x_distance / simulation_time) * 100)
-#     if vx > 0:
-#         return vx
-#     elif vx == 0:
-#         return -0.1
-#     else:
-#         return vx / 10
     
 def x_speed_Miras2021(begin_state: ModularRobotSimulationState, end_state: ModularRobotSimulationState, simulation_time=STANDARD_SIMULATION_TIME) -> float:
     """Goal:
@@ -82,31 +60,31 @@ def x_speed_Miras2021(begin_state: ModularRobotSimulationState, end_state: Modul
     else:
         return vx / 10
     
-def x_efficiency(xbest: float, eexp: float, simulation_time: float) -> float:
-    """Goal:
-        Calculate the efficiency of a robot for locomotion in x direction.
-    -------------------------------------------------------------------------------------------
-    Input:
-        xbest: The furthest distance traveled in the x direction.
-        eexp: The energy expended.
-        simulation_time: The time of the simulation.
-    -------------------------------------------------------------------------------------------
-    Output:
-        The calculated fitness.
-    """
-    def food(xbest, bmet):
-        # Get food
-        if xbest <= 0:
-            return 0
-        else:
-            food = (xbest / 0.05) * (80 * bmet)
-            return food
+# def x_efficiency(xbest: float, eexp: float, simulation_time: float) -> float:
+#     """Goal:
+#         Calculate the efficiency of a robot for locomotion in x direction.
+#     -------------------------------------------------------------------------------------------
+#     Input:
+#         xbest: The furthest distance traveled in the x direction.
+#         eexp: The energy expended.
+#         simulation_time: The time of the simulation.
+#     -------------------------------------------------------------------------------------------
+#     Output:
+#         The calculated fitness.
+#     """
+#     def food(xbest, bmet):
+#         # Get food
+#         if xbest <= 0:
+#             return 0
+#         else:
+#             food = (xbest / 0.05) * (80 * bmet)
+#             return food
     
-    def scale_EEXP(eexp, bmet):
-        return eexp / 346 * (80 * bmet)
+#     def scale_EEXP(eexp, bmet):
+#         return eexp / 346 * (80 * bmet)
     
-    # Get baseline metabolism
-    bmet = 80
-    battery = -bmet * simulation_time + food(xbest, bmet) - scale_EEXP(eexp, bmet)
+#     # Get baseline metabolism
+#     bmet = 80
+#     battery = -bmet * simulation_time + food(xbest, bmet) - scale_EEXP(eexp, bmet)
     
-    return battery
+#     return battery

@@ -29,13 +29,11 @@ def flat(size: Vector2 = Vector2([20.0, 20.0])) -> Terrain:
             )
         ]
     )
-
-
 def crater(
-    size: tuple[float, float],
-    ruggedness: float,
-    curviness: float,
-    granularity_multiplier: float = 1.0,
+    size=[20, 20],
+    ruggedness= 0.3,
+    curviness=5,
+    granularity_multiplier= 1.5,
 ) -> Terrain:
     r"""
     Create a crater-like terrain with rugged floor using a heightmap.
@@ -86,6 +84,62 @@ def crater(
             )
         ]
     )
+
+# def crater(
+#     size: tuple[float, float],
+#     ruggedness: float,
+#     curviness: float,
+#     granularity_multiplier: float = 1.0,
+# ) -> Terrain:
+#     r"""
+#     Create a crater-like terrain with rugged floor using a heightmap.
+
+#     It will look like::
+
+#         |            |
+#          \_        .'
+#            '.,^_..'
+
+#     A combination of the rugged and bowl heightmaps.
+
+#     :param size: Size of the crater.
+#     :param ruggedness: How coarse the ground is.
+#     :param curviness: Height of the edges of the crater.
+#     :param granularity_multiplier: Multiplier for how many edges are used in the heightmap.
+#     :returns: The created terrain.
+#     """
+#     NUM_EDGES = 100  # arbitrary constant to get a nice number of edges
+
+#     num_edges = (
+#         int(NUM_EDGES * size[0] * granularity_multiplier),
+#         int(NUM_EDGES * size[1] * granularity_multiplier),
+#     )
+
+#     rugged = rugged_heightmap(
+#         size=size,
+#         num_edges=num_edges,
+#         density=1.5,
+#     )
+#     bowl = bowl_heightmap(num_edges=num_edges)
+
+#     max_height = ruggedness + curviness
+#     if max_height == 0.0:
+#         heightmap = np.zeros(num_edges)
+#         max_height = 1.0
+#     else:
+#         heightmap = (ruggedness * rugged + curviness * bowl) / (ruggedness + curviness)
+
+#     return Terrain(
+#         static_geometry=[
+#             GeometryHeightmap(
+#                 pose=Pose(),
+#                 mass=0.0,
+#                 size=Vector3([size[0], size[1], max_height]),
+#                 base_thickness=0.1 + ruggedness,
+#                 heights=heightmap,
+#             )
+#         ]
+#     )
 
 
 def rugged_heightmap(

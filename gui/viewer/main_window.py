@@ -1,8 +1,10 @@
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QTabWidget,
-      QWidget, QVBoxLayout, QLabel,
+      QWidget, QVBoxLayout, QLabel, 
         QComboBox, QPushButton, QMessageBox,
-          QLineEdit, QHBoxLayout,QStackedWidget)
+          QLineEdit, QHBoxLayout,QStackedWidget,
+            QListWidget, QListWidgetItem)
+from PyQt5.QtGui import QIcon, QPixmap
 from gui.viewer.parsing import (get_functions_from_file, get_config_parameters_from_file, 
                      save_config_parameters, get_selection_names_from_init, get_files_from_path)
 import subprocess
@@ -21,22 +23,22 @@ class RobotEvolutionGUI(QMainWindow):
         self.setCentralWidget(self.tab_widget)
 
         # Get the absolute path to the project root (revolve2/)
-        PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+        self.PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
         # Use absolute paths
-        self.fitness_functions = get_functions_from_file(os.path.join(PROJECT_ROOT, "gui/backend_example/fitness_functions.py"))
-        self.terrains = get_functions_from_file(os.path.join(PROJECT_ROOT, "gui/backend_example/terrains.py"))
+        self.fitness_functions = get_functions_from_file(os.path.join(self.PROJECT_ROOT, "gui/backend_example/fitness_functions.py"))
+        self.terrains = get_functions_from_file(os.path.join(self.PROJECT_ROOT, "gui/backend_example/terrains.py"))
 
-        self.path_simulation_parameters = os.path.join(PROJECT_ROOT, "gui/backend_example/config_simulation_parameters.py")
+        self.path_simulation_parameters = os.path.join(self.PROJECT_ROOT, "gui/backend_example/config_simulation_parameters.py")
         self.simulation_parameters = get_config_parameters_from_file(self.path_simulation_parameters)
 
-        self.path_evolution_parameters = os.path.join(PROJECT_ROOT, "gui/backend_example/config.py")
+        self.path_evolution_parameters = os.path.join(self.PROJECT_ROOT, "gui/backend_example/config.py")
         self.evolution_parameters = get_config_parameters_from_file(self.path_evolution_parameters)
         self.is_generational = self.evolution_parameters.get("GENERATIONAL")
 
         self.selection_functions = get_selection_names_from_init()
 
-        self.database_path = os.path.join(PROJECT_ROOT, "gui/resources/databases/")
+        self.database_path = os.path.join(self.PROJECT_ROOT, "gui/resources/databases/")
 
 
         if not os.path.exists(self.database_path):
@@ -254,29 +256,75 @@ class RobotEvolutionGUI(QMainWindow):
     def create_environment_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Environment and Task"))
+        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Environment"))
         # Environment settings
         layout.addWidget(QLabel("Environment Terrains: "))
-        self.environment_dropdown = QComboBox()  # Example: Environment parameter input
-        self.environment_dropdown.addItems(self.terrains.keys())
-        layout.addWidget(self.environment_dropdown)
+
+        # Create a horizontal layout for the list and image
+        h_layout = QHBoxLayout()
+
+        self.environment_list = QListWidget()  # Example: Environment parameter input
+
+        # Path to the directory containing terrain images
+        terrain_images_path = os.path.join(self.PROJECT_ROOT, "gui/resources/terrain_images")
+
+        # Add items with icons to the list
+        for terrain_name in self.terrains.keys():
+            icon_path = os.path.join(terrain_images_path, f"{terrain_name}.png")
+            item = QListWidgetItem(terrain_name)
+            if os.path.exists(icon_path):
+                icon = QIcon(QPixmap(icon_path).scaled(32, 32, aspectRatioMode=1))
+                item.setIcon(icon)
+            self.environment_list.addItem(item)
+
+        h_layout.addWidget(self.environment_list, 1)  # Set stretch factor for the list
+
+        # QLabel to display the larger image
+        self.terrain_image_label = QLabel()
+        h_layout.addWidget(self.terrain_image_label, 3)  # Set higher stretch factor for the image
+
+        # Add the horizontal layout to the main layout
+        layout.addLayout(h_layout)
+
+        # Connect the list to the update function
+        self.environment_list.itemClicked.connect(self.update_terrain_image)
+
         widget.setLayout(layout)
+
+        # Set the initial image to the first item in the list
+        if self.environment_list.count() > 0:
+            self.environment_list.setCurrentRow(0)
+            self.update_terrain_image(self.environment_list.item(0))
+
+        return widget
+    
+    def update_terrain_image(self, item):
+        terrain_name = item.text()
+        terrain_images_path = os.path.join(self.PROJECT_ROOT, "gui/resources/terrain_images")
+        image_path = os.path.join(terrain_images_path, f"{terrain_name}.png")
+        if os.path.exists(image_path):
+            pixmap = QPixmap(image_path).scaled(self.terrain_image_label.size(), aspectRatioMode=1)
+            self.terrain_image_label.setPixmap(pixmap)
+        else:
+            self.terrain_image_label.clear()
+
+    def create_fitness_tab(self):  # under development
+        widget = QWidget()
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Task and Fitness Function"))
 
         # Task selection
         task_dropdown = QComboBox()
         task_dropdown.addItems(["Task 1", "Task 2", "Task 3"])
         layout.addWidget(QLabel("Target Task:"))
         layout.addWidget(task_dropdown)
-        widget.setLayout(layout)
-        return widget
 
-    def create_fitness_tab(self): # under development
-        widget = QWidget()
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Fitness Function"))
+        # Fitness function selection
         self.fitness_dropdown = QComboBox()
         self.fitness_dropdown.addItems(self.fitness_functions.keys())
+        layout.addWidget(QLabel("Fitness Function:"))
         layout.addWidget(self.fitness_dropdown)
+
         widget.setLayout(layout)
         return widget
 

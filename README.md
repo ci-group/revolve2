@@ -53,6 +53,5 @@ xy_displacement = fitness_functions.xy_displacement(
 ```
 
 ## Furthermore you can beta test the new GUI by running:
-`cd gui/viewer/` 
 
-`python main_window.py`
+`python -m gui.viewer.main_window`

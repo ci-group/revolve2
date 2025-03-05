@@ -72,14 +72,12 @@ class MovementBrainInstance(BrainInstance):
         
         if self.movement_type == "sine_wave":
             self._apply_sine_wave(control_interface)
-        elif self.movement_type == "tripod_gait":
-            self._apply_tripod_gait(control_interface)
         elif self.movement_type == "wave_gait":
             self._apply_wave_gait(control_interface)
         elif self.movement_type == "alternating":
             self._apply_alternating(control_interface)
-        elif self.movement_type == "standing_wave":
-            self._apply_standing_wave(control_interface)
+        elif self.movement_type == "gecko_walk":
+            self._apply_gecko_walk(control_interface)
         else:
             # Default to sine wave if unknown pattern
             self._apply_sine_wave(control_interface)
@@ -90,15 +88,6 @@ class MovementBrainInstance(BrainInstance):
             phase = i * self.phase_offset
             angle = self.amplitude * math.sin(2 * math.pi * self.frequency * self.time_passed + phase)
             # Scale to the actual range of the hinge
-            control_interface.set_active_hinge_target(hinge, angle * 1.048)
-    
-    def _apply_tripod_gait(self, control_interface: ModularRobotControlInterface) -> None:
-        """Apply a tripod gait pattern (good for hexapods)."""
-        for i, hinge in enumerate(self.active_hinges):
-            # Group hinges into two tripods (0,2,4 and 1,3,5)
-            group = i % 2
-            phase = group * math.pi  # 180 degree phase shift between groups
-            angle = self.amplitude * math.sin(2 * math.pi * self.frequency * self.time_passed + phase)
             control_interface.set_active_hinge_target(hinge, angle * 1.048)
     
     def _apply_wave_gait(self, control_interface: ModularRobotControlInterface) -> None:
@@ -118,14 +107,49 @@ class MovementBrainInstance(BrainInstance):
             angle = direction * self.amplitude * math.sin(2 * math.pi * self.frequency * self.time_passed)
             control_interface.set_active_hinge_target(hinge, angle * 1.048)
     
-    def _apply_standing_wave(self, control_interface: ModularRobotControlInterface) -> None:
-        """Apply a standing wave pattern."""
-        num_hinges = len(self.active_hinges)
-        for i, hinge in enumerate(self.active_hinges):
-            # Create a standing wave pattern
-            position_factor = math.sin(math.pi * i / (num_hinges - 1)) if num_hinges > 1 else 1
-            angle = self.amplitude * position_factor * math.sin(2 * math.pi * self.frequency * self.time_passed)
-            control_interface.set_active_hinge_target(hinge, angle * 1.048)
+    def _apply_gecko_walk(self, control_interface: ModularRobotControlInterface) -> None:
+        """
+        Apply a specialized walking gait for the gecko robot.
+        
+        For gecko_v2, the hinge indices are typically:
+        - 0, 1: Front legs (left and right)
+        - 2, 3, 4, 5: Back legs (left and right pairs)
+        
+        This pattern creates a diagonal gait where diagonal legs move together:
+        - Front left + Back right inner
+        - Front right + Back left inner
+        - Back left outer + Back right outer (in opposite phase)
+        """
+        # Base timing
+        t = 2 * math.pi * self.frequency * self.time_passed
+        
+        # Front legs (0 and 1) move in alternating pattern
+        front_left = self.amplitude * math.sin(t)
+        front_right = self.amplitude * math.sin(t + math.pi)  # 180° out of phase
+        
+        # Back legs - make extremities on same side move in opposite phases
+        # Left side: outer (2) and inner (4) are opposite
+        back_left_outer = self.amplitude * math.sin(t + math.pi * 0.5)  # 90° phase shift
+        back_left_inner = self.amplitude * math.sin(t + math.pi * 1.5)  # 270° phase shift (opposite)
+        
+        # Right side: outer (3) and inner (5) are opposite
+        back_right_outer = self.amplitude * math.sin(t + math.pi * 1.5)  # 270° phase shift
+        back_right_inner = self.amplitude * math.sin(t + math.pi * 0.5)  # 90° phase shift (opposite)
+        
+        # Apply the calculated angles to the hinges
+        if len(self.active_hinges) >= 6:
+            # Front legs
+            control_interface.set_active_hinge_target(self.active_hinges[0], front_left * 1.048)
+            control_interface.set_active_hinge_target(self.active_hinges[1], front_right * 1.048)
+            
+            # Back legs - assuming indices 2,3,4,5 are the back legs
+            control_interface.set_active_hinge_target(self.active_hinges[2], back_left_outer * 1.048)
+            control_interface.set_active_hinge_target(self.active_hinges[3], back_right_outer * 1.048)
+            control_interface.set_active_hinge_target(self.active_hinges[4], back_left_inner * 1.048)
+            control_interface.set_active_hinge_target(self.active_hinges[5], back_right_inner * 1.048)
+        else:
+            # Fallback if we don't have enough hinges
+            self._apply_wave_gait(control_interface)
 
 
 class MovementBrain(Brain):
@@ -234,10 +258,9 @@ def create_control_gui(brain: MovementBrain, robot_type: str):
     
     movement_patterns = [
         "sine_wave", 
-        "tripod_gait", 
         "wave_gait", 
         "alternating", 
-        "standing_wave"
+        "gecko_walk"  # Keep only the four specified patterns
     ]
     
     pattern_var = StringVar(value=brain.movement_type)
@@ -290,7 +313,7 @@ def create_control_gui(brain: MovementBrain, robot_type: str):
     
     amp_slider = Scale(
         amp_frame, 
-        from_=0.0, 
+        from_=0.1, 
         to=1.0, 
         resolution=0.05, 
         orient=tk.HORIZONTAL,
@@ -330,30 +353,30 @@ def create_control_gui(brain: MovementBrain, robot_type: str):
     
     Label(preset_frame, text="Presets:").pack(side=tk.LEFT)
     
-    # Preset: Forward movement - not really working yet
+    # Preset: Forward movement - optimized for gecko_v2
     def preset_forward():
-        pattern_var.set("wave_gait")
-        freq_slider.set(0.8)
+        pattern_var.set("gecko_walk")  # Use the specialized gecko walk pattern
+        freq_slider.set(1.5)
         amp_slider.set(0.7)
-        phase_slider.set(0.4)
+        phase_slider.set(0.5)
         brain.update_parameters(
-            movement_type="wave_gait",
-            frequency=0.8,
+            movement_type="gecko_walk",
+            frequency=1.5,
             amplitude=0.7,
-            phase_offset=0.4
+            phase_offset=0.5
         )
     
     # Preset: Turn movement
     def preset_turn():
-        pattern_var.set("sine_wave")
+        pattern_var.set("wave_gait")
         freq_slider.set(0.7)
         amp_slider.set(0.6)
-        phase_slider.set(0.5)
+        phase_slider.set(0.4)
         brain.update_parameters(
-            movement_type="sine_wave",
+            movement_type="wave_gait",
             frequency=0.7,
             amplitude=0.6,
-            phase_offset=0.5
+            phase_offset=0.4
         )
     
     Button(preset_frame, text="Forward", command=preset_forward).pack(side=tk.LEFT, padx=5)
@@ -390,9 +413,9 @@ def main() -> None:
     # Create the movement brain with default parameters
     brain = MovementBrain(
         active_hinges=active_hinges,
-        movement_type="wave_gait",  # Changed default to wave_gait for better forward movement
-        frequency=0.7,
-        amplitude=0.6,
+        movement_type="gecko_walk",  # Use the specialized gecko walk pattern by default
+        frequency=1.0,
+        amplitude=0.7,
         phase_offset=0.5,
     )
     

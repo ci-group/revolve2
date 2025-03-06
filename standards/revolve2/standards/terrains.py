@@ -33,7 +33,7 @@ def crater(
     size=[20, 20],
     ruggedness= 0.3,
     curviness=5,
-    granularity_multiplier= 1.5,
+    granularity_multiplier= .5,
 ) -> Terrain:
     r"""
     Create a crater-like terrain with rugged floor using a heightmap.
@@ -52,19 +52,29 @@ def crater(
     :param granularity_multiplier: Multiplier for how many edges are used in the heightmap.
     :returns: The created terrain.
     """
-    NUM_EDGES = 100  # arbitrary constant to get a nice number of edges
+    num_edges = 100  # arbitrary constant to get a nice number of edges
 
     num_edges = (
-        int(NUM_EDGES * size[0] * granularity_multiplier),
-        int(NUM_EDGES * size[1] * granularity_multiplier),
+        int(num_edges * size[0] * granularity_multiplier),
+        int(num_edges * size[1] * granularity_multiplier),
+    )
+    OCTAVE = 10
+    C1 = 4.0  # arbitrary constant to get nice noise
+
+    rugged = np.fromfunction(
+        np.vectorize(
+            lambda y, x: pnoise2(
+                x / num_edges[0] * C1 * size[0] * granularity_multiplier,
+                y / num_edges[1] * C1 * size[1] * granularity_multiplier,
+                OCTAVE,
+            ),
+            otypes=[float],
+        ),
+        num_edges,
+        dtype=float,
     )
 
-    rugged = rugged_heightmap(
-        size=size,
-        num_edges=num_edges,
-        density=1.5,
-    )
-    bowl = bowl_heightmap(num_edges=num_edges)
+    bowl = bowl_heightmap()
 
     max_height = ruggedness + curviness
     if max_height == 0.0:
@@ -79,7 +89,7 @@ def crater(
                 pose=Pose(),
                 mass=0.0,
                 size=Vector3([size[0], size[1], max_height]),
-                base_thickness=0.1 + ruggedness,
+                base_thickness=0.01 + ruggedness,
                 heights=heightmap,
             )
         ]

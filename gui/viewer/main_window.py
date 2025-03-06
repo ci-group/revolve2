@@ -5,11 +5,14 @@ from PyQt5.QtWidgets import (
           QLineEdit, QHBoxLayout,QStackedWidget,
             QListWidget, QListWidgetItem)
 from PyQt5.QtGui import QIcon, QPixmap
+from revolve2.simulation.scene.vector2 import Vector2
 from gui.viewer.parsing import (get_functions_from_file, get_config_parameters_from_file, 
                      save_config_parameters, get_selection_names_from_init, get_files_from_path)
 import subprocess
 import os
 import sys
+import signal
+import time
 
 class RobotEvolutionGUI(QMainWindow):
     def __init__(self):
@@ -49,9 +52,9 @@ class RobotEvolutionGUI(QMainWindow):
 
         self.tab_widget.addTab(self.create_environment_tab(), "Environment")
 
-        self.tab_widget.addTab(self.create_genotype_tab(), "Robot Genotypes")
-
         self.tab_widget.addTab(self.create_fitness_tab(), "Task and Fitness Function")
+        
+        self.tab_widget.addTab(self.create_genotype_tab(), "Robot Genotypes")
 
         self.tab_widget.addTab(self.create_ea_tab(), "Evolutionary Algorithm")
 
@@ -66,21 +69,52 @@ class RobotEvolutionGUI(QMainWindow):
         self.tab_widget.addTab(self.create_plot_tab(), "Plot Results")
 
 
-    def run_simulation(self):
-        current_terrain = self.environment_list.currentItem()
-        if current_terrain:
-            terrain = current_terrain.text()
-        else:
-            terrain = "flat"
+    def run_simulation(self):        
         fitness_function = self.fitness_dropdown.currentText()
-        self.simulation_process = subprocess.Popen(["python", "gui/backend_example/main_from_gui.py", terrain, fitness_function])
+        terrain = self.gather_terrain_params()
+        command = f"python gui/backend_example/main_from_gui.py {terrain} {fitness_function}"
+        print(f"Running simulation with command: {command}")
+        self.simulation_process = subprocess.Popen(command, shell=True)
+
 
     def stop_simulation(self):
         """Stop the running simulation."""
         if self.simulation_process and self.simulation_process.poll() is None:
-            self.simulation_process.terminate()  
-            self.simulation_process.wait()
-            print("Simulation stopped successfully.")
+            try:
+                # On Windows
+                if os.name == 'nt':
+                    # Forcefully terminate the process tree
+                    subprocess.run(['taskkill', '/F', '/T', '/PID', str(self.simulation_process.pid)], 
+                                stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+                # On Unix/Linux/Mac
+                else:
+                    # Try to kill the process group
+                    os.killpg(os.getpgid(self.simulation_process.pid), signal.SIGTERM)
+                    # Give it a moment to terminate
+                    time.sleep(0.5)
+                    # If it's still running, force kill
+                    if self.simulation_process.poll() is None:
+                        os.killpg(os.getpgid(self.simulation_process.pid), signal.SIGKILL)
+                
+                # Wait with timeout to avoid hanging
+                try:
+                    self.simulation_process.wait(timeout=2)
+                    print("Simulation stopped successfully.")
+                except subprocess.TimeoutExpired:
+                    print("Simulation process did not terminate within timeout, but was forcefully killed.")
+                    
+            except Exception as e:
+                print(f"Error stopping simulation: {e}")
+                # Try one more time with basic terminate
+                try:
+                    self.simulation_process.terminate()
+                    self.simulation_process.wait(timeout=1)
+                    print("Simulation stopped using fallback method.")
+                except:
+                    print("Failed to stop simulation process. It may still be running.")
+                    
+            # Reset the process reference regardless of outcome
+            self.simulation_process = None
         else:
             print("No active simulation to stop.")
 
@@ -140,17 +174,59 @@ class RobotEvolutionGUI(QMainWindow):
         layout = QVBoxLayout()
         layout.addWidget(QLabel("<b>UNDER DEVELOPMENT<b>"))
         layout.addWidget(QLabel("Define Parent and Surivor Selection Types"))
+        
         parent_dropdown = QComboBox()
         parent_dropdown.addItems(self.selection_functions)
         layout.addWidget(QLabel("Parent Selection: "))
         layout.addWidget(parent_dropdown)
-        # Crossover operator
+
+        # Parent selection parameters
+        self.parent_params_layout = QVBoxLayout()
+        layout.addLayout(self.parent_params_layout)
+        
+        # Connect parent dropdown to update function
+        parent_dropdown.currentIndexChanged.connect(
+            lambda: self.update_selection_params(parent_dropdown, self.parent_params_layout)
+            )
+        
         survivor_dropdown = QComboBox()
         survivor_dropdown.addItems(self.selection_functions)
         layout.addWidget(QLabel("Survivor Selection:"))
         layout.addWidget(survivor_dropdown)
+        
+        # Survivor selection parameters
+        self.survivor_params_layout = QVBoxLayout()
+        layout.addLayout(self.survivor_params_layout)
+        
+        # Connect survivor dropdown to update function
+        survivor_dropdown.currentIndexChanged.connect(
+            lambda: self.update_selection_params(survivor_dropdown, self.survivor_params_layout)
+            )
+
         widget.setLayout(layout)
+
         return widget
+    
+    def update_selection_params(self, dropdown, params_layout):
+        """Update the parameter input fields based on the selected function."""
+        # Clear existing parameter input fields
+        for i in reversed(range(params_layout.count())):
+            params_layout.itemAt(i).widget().setParent(None)
+        
+        selection_params = {
+            "tournament": ["k"],
+            # Add more selection functions and their parameters here
+        }
+        
+        selected_function = dropdown.currentText()
+        if selected_function in selection_params:
+            for param in selection_params[selected_function]:
+                input_layout = QHBoxLayout()
+                input_label = QLabel(f"{param}:")
+                input_field = QLineEdit()
+                input_layout.addWidget(input_label)
+                input_layout.addWidget(input_field)
+                params_layout.addLayout(input_layout)
 
     def create_ea_tab(self):
         widget = QWidget()
@@ -277,16 +353,20 @@ class RobotEvolutionGUI(QMainWindow):
         # Add the horizontal layout to the main layout
         layout.addLayout(h_layout)
 
-        # Connect the list to the update function
-        self.environment_list.itemClicked.connect(self.update_terrain_image)
+        # Terrain parameters layout
+        self.terrain_params_layout = QVBoxLayout()
+        layout.addLayout(self.terrain_params_layout)
 
+        # Connect the list to the update function
+        self.environment_list.currentItemChanged.connect(lambda: self.update_terrain_image(self.environment_list.currentItem()))
+        self.environment_list.currentItemChanged.connect(lambda: self.update_terrain_params(self.environment_list.currentItem(), self.terrain_params_layout))
         widget.setLayout(layout)
 
         # Set the initial image to the first item in the list
         if self.environment_list.count() > 0:
             self.environment_list.setCurrentRow(0)
             self.update_terrain_image(self.environment_list.item(0))
-
+            self.update_terrain_params(self.environment_list.item(0), self.terrain_params_layout)
         return widget
     
     def update_terrain_image(self, item):
@@ -298,6 +378,104 @@ class RobotEvolutionGUI(QMainWindow):
             self.terrain_image_label.setPixmap(pixmap)
         else:
             self.terrain_image_label.clear()
+
+    def update_terrain_params(self, item, params_layout):
+        """Update the parameter input fields based on the selected terrain."""
+        if item is None:
+            return
+        
+        # Clear existing parameter input fields and layouts
+        while params_layout.count():
+            layout_item = params_layout.takeAt(0)
+            
+            # If the item is a widget
+            if layout_item.widget():
+                layout_item.widget().deleteLater()
+            # If the item is a layout
+            elif layout_item.layout():
+                # Clear the child layout
+                child_layout = layout_item.layout()
+                while child_layout.count():
+                    child_item = child_layout.takeAt(0)
+                    if child_item.widget():
+                        child_item.widget().deleteLater()
+                # Now we can delete the layout
+                child_layout.deleteLater()
+
+        terrain_params = {
+            "flat": {
+                "size": Vector2([20.0, 20.0])
+            },
+            "crater": {
+                "size": [20, 20],
+                "ruggedness": 0.3,
+                "curviness": 5,
+                "granularity_multiplier": 0.5
+            },
+            "rugged_heightmap": {
+                "size": [20, 20],
+                "num_edges": 100,
+                "density": 0.5,
+                "hillyness": 0.5
+            },
+            "bowl_heightmap": {
+                "size": [20, 20],
+                "granularity_multiplier": 0.5
+            },
+            # Add more terrains and their parameters here
+        }
+        
+        selected_terrain = item.text()
+        if selected_terrain in terrain_params:
+            for param, value in terrain_params[selected_terrain].items():
+                input_layout = QHBoxLayout()
+                input_label = QLabel(f"{param}:")
+                input_field = QLineEdit(str(value))
+                input_layout.addWidget(input_label)
+                input_layout.addWidget(input_field)
+                params_layout.addLayout(input_layout)
+
+    def gather_terrain_params(self):
+        """Gather terrain parameters from the GUI."""
+        current_terrain = self.environment_list.currentItem()
+        if current_terrain:
+            terrain = current_terrain.text()
+        else:
+            terrain = "flat"
+        
+        # Collect terrain parameters
+        terrain_params = {}
+        
+        # We need to iterate through all layouts in the terrain_params_layout
+        for i in range(self.terrain_params_layout.count()):
+            layout_item = self.terrain_params_layout.itemAt(i)
+            
+            # If the item is a layout (which it should be based on your update_terrain_params method)
+            if layout_item.layout():
+                param_layout = layout_item.layout()
+                # First widget is label, second is the input field
+                if param_layout.count() >= 2:
+                    label_item = param_layout.itemAt(0)
+                    input_item = param_layout.itemAt(1)
+                    
+                    if label_item and label_item.widget() and input_item and input_item.widget():
+                        label = label_item.widget()
+                        input_field = input_item.widget()
+                        
+                        # Extract parameter name from label (remove the ":" at the end)
+                        param_name = label.text().rstrip(":")
+                        
+                        # Get parameter value from QLineEdit
+                        if isinstance(input_field, QLineEdit):
+                            param_value = input_field.text()
+                            terrain_params[param_name] = param_value
+        
+        # Convert terrain parameters to a string format
+        terrain_params_str = str(",".join([f"{key}={value}" for key, value in terrain_params.items()]))
+
+        terrain = f'"{terrain}({terrain_params_str})"'
+
+        return terrain
 
     def create_fitness_tab(self):  # under development
         widget = QWidget()

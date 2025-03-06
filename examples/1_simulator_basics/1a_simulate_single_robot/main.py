@@ -63,7 +63,7 @@ def main() -> None:
     To simulate our newly created robot, we create a modular robot scene.
     This scene is a combination of one or more modular robots positioned in a given terrain.
     """
-    scene = ModularRobotScene(terrain=terrains.bowl_heightmap())
+    scene = ModularRobotScene(terrain=terrains.crater())
     scene.add_robot(robot)
 
     # Additionally to robots you can also add interactive objects to the scene.

@@ -31,28 +31,6 @@ def get_functions_from_file(file_path):
     }
     return functions
 
-def get_function_names_from_init(folder_path):
-    """
-    Import the __init__.py file from the given folder and extract the function names listed in the __all__ variable.
-    """
-
-    init_file = os.path.join(folder_path, "__init__.py")
-    if not os.path.exists(init_file):
-        raise FileNotFoundError(f"__init__.py not found in folder: {folder_path}")
-    
-    # Dynamically load the __init__.py file
-    module_name = os.path.basename(folder_path)  # Use folder name as module name
-    spec = importlib.util.spec_from_file_location(module_name, init_file)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    
-    # Extract function names from __all__ list in __init__.py
-    if hasattr(module, "__all__"):
-        module.__all__.remove('multiple_unique')
-        return module.__all__
-    else:
-        raise AttributeError(f"__all__ not found in {init_file}")
-    
 def get_selection_names_from_init():
     """
     Import the __init__.py file from the given folder and extract the function names listed in the __all__ variable.
@@ -90,6 +68,7 @@ def get_selection_names_from_init():
     if hasattr(module, "__all__"):
         if 'multiple_unique' in module.__all__:
             module.__all__.remove('multiple_unique')  # Remove specific function if needed
+            module.__all__.remove('pareto_frontier')  # Remove specific function if needed
         return module.__all__
     else:
         raise AttributeError(f"__all__ not found in {init_file}")

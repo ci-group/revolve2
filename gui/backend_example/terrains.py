@@ -54,19 +54,29 @@ def crater(
     :param granularity_multiplier: Multiplier for how many edges are used in the heightmap.
     :returns: The created terrain.
     """
-    NUM_EDGES = 100  # arbitrary constant to get a nice number of edges
+    num_edges = 100  # arbitrary constant to get a nice number of edges
 
     num_edges = (
-        int(NUM_EDGES * size[0] * granularity_multiplier),
-        int(NUM_EDGES * size[1] * granularity_multiplier),
+        int(num_edges * size[0] * granularity_multiplier),
+        int(num_edges * size[1] * granularity_multiplier),
+    )
+    OCTAVE = 10
+    C1 = 4.0  # arbitrary constant to get nice noise
+
+    rugged = np.fromfunction(
+        np.vectorize(
+            lambda y, x: pnoise2(
+                x / num_edges[0] * C1 * size[0] * granularity_multiplier,
+                y / num_edges[1] * C1 * size[1] * granularity_multiplier,
+                OCTAVE,
+            ),
+            otypes=[float],
+        ),
+        num_edges,
+        dtype=float,
     )
 
-    rugged = rugged_heightmap(
-        size=size,
-        num_edges=num_edges,
-        density=.5,
-    )
-    bowl = bowl_heightmap(num_edges=num_edges)
+    bowl = bowl_heightmap()
 
     max_height = ruggedness + curviness
     if max_height == 0.0:
@@ -89,9 +99,10 @@ def crater(
 
 
 def rugged_heightmap(
-    size: tuple[float, float] = (20, 20),
+    size: tuple[float, float] = [20, 20],
     num_edges: float = 100,
     density: float = 0.5,
+    hillyness: float = 1,
 ) -> npt.NDArray[np.float_]:
     """
     Create a rugged terrain heightmap.
@@ -118,18 +129,21 @@ def rugged_heightmap(
 
     heightmap = np.fromfunction(
         np.vectorize(
-            lambda y, x: pnoise2(
-                x / num_edges[0] * C1 * size[0] * density,
-                y / num_edges[1] * C1 * size[1] * density,
-                OCTAVE,
+            lambda y, x: np.clip(
+                pnoise2(
+                    x / num_edges[0] * C1 * size[0] * density,
+                    y / num_edges[1] * C1 * size[1] * density,
+                    OCTAVE,
+                ) * hillyness,
+                0, 1
             ),
-            otypes=[float],
+            otypes=[float]
         ),
         num_edges,
         dtype=float,
     )
 
-    max_height = 1.0  # The height of the edges of the bowl
+    max_height = 1
 
     return Terrain(
         static_geometry=[
@@ -145,7 +159,7 @@ def rugged_heightmap(
 
 
 def bowl_heightmap(
-    size: tuple[float, float] = (20, 20),
+    size: tuple[float, float] = [20, 20],
     granularity_multiplier: float = .5,
 ) -> Terrain:
     r"""
@@ -189,7 +203,7 @@ def bowl_heightmap(
         dtype=float,
     )
 
-    max_height = 5.0  # The height of the edges of the bowl
+    max_height = 1  # The height of the edges of the bowl
 
     return Terrain(
         static_geometry=[

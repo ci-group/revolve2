@@ -37,7 +37,7 @@ class Evaluator(Eval):
         self._simulator = LocalSimulator(
             headless=headless, num_simulators=num_simulators
         )
-        self._terrain = eval("terrains."+terrain+"()")
+        self._terrain = eval(f"terrains.{terrain}")
         self._fitness_function = fitness_function
 
     def evaluate(

@@ -13,13 +13,14 @@ from revolve2.simulation.scene.geometry import GeometryHeightmap, GeometryPlane
 from revolve2.simulation.scene.vector2 import Vector2
 
 
-def flat(size: Vector2 = Vector2([20.0, 20.0])) -> Terrain:
+def flat(size=[20.0, 20.0]) -> Terrain:
     """
     Create a flat plane terrain.
 
     :param size: Size of the plane.
     :returns: The created terrain.
     """
+    size = Vector2(size)
     return Terrain(
         static_geometry=[
             GeometryPlane(

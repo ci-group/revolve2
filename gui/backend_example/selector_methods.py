@@ -2,7 +2,7 @@ from revolve2.experimentation.evolution.abstract_elements import Selector
 from revolve2.experimentation.optimization.ea import population_management, selection
 import numpy as np
 import numpy.typing as npt
-from typing import Any
+from typing import Any, Callable, Dict
 from database_components import (
     Individual,
     Population,
@@ -16,10 +16,12 @@ class ParentSelector(Selector):
 
     rng: np.random.Generator
     offspring_size: int
+    selection_func: Callable
+    selection_params: Dict[str, Any]
 
     def __init__(self, offspring_size: int, rng: np.random.Generator,
                 generational=config.GENERATIONAL, steady_state=config.STEADY_STATE,
-                selection_func=selection.tournament) -> None:
+                selection_func=selection.tournament, selection_params: Dict[str, Any] = None) -> None:
         """
         Initialize the parent selector.
 
@@ -31,7 +33,7 @@ class ParentSelector(Selector):
         self.generational = generational
         self.steady_state = steady_state
         self.selection_func = selection_func
-
+        self.selection_params = selection_params if selection_params is not None else {}
 
     def select(
         self, population: Population, **kwargs: Any
@@ -43,6 +45,16 @@ class ParentSelector(Selector):
         :param kwargs: Other parameters.
         :return: The parent pairs.
         """
+
+        if self.selection_func == selection.tournament:
+            selection_function = lambda _, fitnesses: self.selection_func(
+                rng=self.rng, fitnesses=fitnesses, **self.selection_params
+            )
+        else:
+            selection_function = lambda _, fitnesses: self.selection_func(
+                fitnesses=fitnesses, n=self.offspring_size, **self.selection_params
+            )
+
         if self.generational:
             return np.array(
                 [
@@ -52,8 +64,7 @@ class ParentSelector(Selector):
                         population=[individual.genotype for individual in population.individuals],
                         fitnesses=[individual.fitness for individual in population.individuals],
                         
-                        selection_function=lambda _, fitnesses: self.selection_func(
-                            rng=self.rng, fitnesses=fitnesses, k=2),
+                        selection_function=selection_function,
                     )
                     for _ in range(self.offspring_size)
                 ],
@@ -67,8 +78,7 @@ class ParentSelector(Selector):
                         population=[individual.genotype for individual in population.individuals],
                         fitnesses=[individual.fitness for individual in population.individuals],
                         
-                        selection_function=lambda _, fitnesses: self.selection_func(
-                            rng=self.rng, fitnesses=fitnesses, k=2),
+                        selection_function=selection_function,
                     )
                     for _ in range(self.offspring_size)
                 ],
@@ -78,9 +88,13 @@ class SurvivorSelector(Selector):
     """Selector class for survivor selection."""
 
     rng: np.random.Generator
+    selection_func: Callable
+    selection_params: Dict[str, Any]
+
 
     def __init__(self, rng: np.random.Generator, generational=config.GENERATIONAL,
-                 steady_state=config.STEADY_STATE, selection_func=selection.tournament) -> None:
+                 steady_state=config.STEADY_STATE, selection_func=selection.tournament,
+                 selection_params: Dict[str, Any] = None) -> None:
         """
         Initialize the parent selector.
 
@@ -90,6 +104,7 @@ class SurvivorSelector(Selector):
         self.generational = generational
         self.steady_state = steady_state
         self.selection_func = selection_func
+        self.selection_params = selection_params if selection_params is not None else {}
 
     def select(
         self, population: Population, **kwargs: Any
@@ -108,6 +123,15 @@ class SurvivorSelector(Selector):
             raise ValueError(
                 "No offspring was passed with positional argument 'children' and / or 'child_task_performance'."
             )
+        
+        if self.selection_func == selection.tournament:
+            selection_function = lambda _, fitnesses: self.selection_func(
+                rng=self.rng, fitnesses=fitnesses, **self.selection_params
+            )
+        else:
+            selection_function = lambda _, fitnesses: self.selection_func(
+                fitnesses=fitnesses, n=len(population), **self.selection_params
+            )
 
         if self.generational:
             original_survivors, offspring_survivors = population_management.generational(
@@ -119,9 +143,7 @@ class SurvivorSelector(Selector):
                     selection_size=n,
                     population=genotypes,
                     fitnesses=fitnesses,
-                    selection_function=lambda _, fitnesses: self.selection_func(
-                        rng=self.rng, fitnesses=fitnesses, k=2
-                    ),
+                    selection_function=selection_function,
                 ),
             )
 
@@ -137,9 +159,7 @@ class SurvivorSelector(Selector):
                     selection_size=n,
                     population=genotypes,
                     fitnesses=fitnesses,
-                    selection_function=lambda _, fitnesses: self.selection_func(
-                        rng=self.rng, fitnesses=fitnesses, k=2
-                    ),
+                    selection_function=selection_function,
                 ),
             )
 

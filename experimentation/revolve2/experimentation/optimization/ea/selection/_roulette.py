@@ -7,8 +7,8 @@ from ._supports_lt import SupportsLt
 Genotype = TypeVar("Genotype")
 Fitness = TypeVar("Fitness", bound=SupportsLt)
 
-
-def roulette(n: int, genotypes: list[Genotype], fitnesses: list[Fitness]) -> list[int]:
+# Force n to be passed as a keyword argument
+def roulette(fitnesses: list[Fitness], *, n: int) -> list[int]:
     """
     Perform roulette wheel selection to choose n genotypes probabilistically based on fitness.
 

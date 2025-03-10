@@ -5,7 +5,6 @@ from PyQt5.QtWidgets import (
           QLineEdit, QHBoxLayout,QStackedWidget,
             QListWidget, QListWidgetItem)
 from PyQt5.QtGui import QIcon, QPixmap
-from revolve2.simulation.scene.vector2 import Vector2
 from gui.viewer.parsing import (get_functions_from_file, get_config_parameters_from_file, 
                      save_config_parameters, get_selection_names_from_init, get_files_from_path)
 import subprocess
@@ -72,7 +71,10 @@ class RobotEvolutionGUI(QMainWindow):
     def run_simulation(self):        
         fitness_function = self.fitness_dropdown.currentText()
         terrain = self.gather_terrain_params()
-        command = f"python gui/backend_example/main_from_gui.py {terrain} {fitness_function}"
+        parent_selection, parent_selection_params = self.gather_selection_params(self.parent_dropdown, self.parent_params_layout)
+        survival_selection, survival_selection_params = self.gather_selection_params(self.survivor_dropdown, self.survivor_params_layout)
+
+        command = f"python gui/backend_example/main_from_gui.py {terrain} {fitness_function} {parent_selection} {parent_selection_params} {survival_selection} {survival_selection_params}"
         print(f"Running simulation with command: {command}")
         self.simulation_process = subprocess.Popen(command, shell=True)
 
@@ -175,58 +177,111 @@ class RobotEvolutionGUI(QMainWindow):
         layout.addWidget(QLabel("<b>UNDER DEVELOPMENT<b>"))
         layout.addWidget(QLabel("Define Parent and Surivor Selection Types"))
         
-        parent_dropdown = QComboBox()
-        parent_dropdown.addItems(self.selection_functions)
+        self.parent_dropdown = QComboBox()
+        self.parent_dropdown.addItems(self.selection_functions)
         layout.addWidget(QLabel("Parent Selection: "))
-        layout.addWidget(parent_dropdown)
+        layout.addWidget(self.parent_dropdown)
 
         # Parent selection parameters
         self.parent_params_layout = QVBoxLayout()
         layout.addLayout(self.parent_params_layout)
         
         # Connect parent dropdown to update function
-        parent_dropdown.currentIndexChanged.connect(
-            lambda: self.update_selection_params(parent_dropdown, self.parent_params_layout)
+        self.parent_dropdown.currentIndexChanged.connect(
+            lambda: self.update_selection_params(self.parent_dropdown, self.parent_params_layout)
             )
         
-        survivor_dropdown = QComboBox()
-        survivor_dropdown.addItems(self.selection_functions)
+        self.survivor_dropdown = QComboBox()
+        self.survivor_dropdown.addItems(self.selection_functions)
         layout.addWidget(QLabel("Survivor Selection:"))
-        layout.addWidget(survivor_dropdown)
+        layout.addWidget(self.survivor_dropdown)
         
         # Survivor selection parameters
         self.survivor_params_layout = QVBoxLayout()
         layout.addLayout(self.survivor_params_layout)
         
         # Connect survivor dropdown to update function
-        survivor_dropdown.currentIndexChanged.connect(
-            lambda: self.update_selection_params(survivor_dropdown, self.survivor_params_layout)
+        self.survivor_dropdown.currentIndexChanged.connect(
+            lambda: self.update_selection_params(self.survivor_dropdown, self.survivor_params_layout)
             )
 
         widget.setLayout(layout)
 
         return widget
     
-    def update_selection_params(self, dropdown, params_layout):
+    def update_selection_params(self, item, params_layout):
         """Update the parameter input fields based on the selected function."""
-        # Clear existing parameter input fields
-        for i in reversed(range(params_layout.count())):
-            params_layout.itemAt(i).widget().setParent(None)
+        if item is None:
+            return
+        
+        # Clear existing parameter input fields and layouts
+        while params_layout.count():
+            layout_item = params_layout.takeAt(0)
+            
+            # If the item is a widget
+            if layout_item.widget():
+                layout_item.widget().deleteLater()
+            # If the item is a layout
+            elif layout_item.layout():
+                # Clear the child layout
+                child_layout = layout_item.layout()
+                while child_layout.count():
+                    child_item = child_layout.takeAt(0)
+                    if child_item.widget():
+                        child_item.widget().deleteLater()
+                # Now we can delete the layout
+                child_layout.deleteLater()
         
         selection_params = {
-            "tournament": ["k"],
-            # Add more selection functions and their parameters here
+            "tournament": {"k" : 2}
         }
-        
-        selected_function = dropdown.currentText()
+
+        selected_function = item.currentText()
         if selected_function in selection_params:
-            for param in selection_params[selected_function]:
+            for param, value in selection_params[selected_function].items():
                 input_layout = QHBoxLayout()
                 input_label = QLabel(f"{param}:")
-                input_field = QLineEdit()
+                input_field = QLineEdit(str(value))
                 input_layout.addWidget(input_label)
                 input_layout.addWidget(input_field)
                 params_layout.addLayout(input_layout)
+
+    def gather_selection_params(self, selection_dropdown, selection_params_layout):
+        """Gather selection parameters from the GUI."""
+        current_selection = selection_dropdown.currentText()
+        if current_selection:
+            selection_params = {}
+            
+            # We need to iterate through all layouts in the selection_params_layout
+            for i in range(selection_params_layout.count()):
+                layout_item = selection_params_layout.itemAt(i)
+                
+                # If the item is a layout (which it should be based on your update_selection_params method)
+                if layout_item.layout():
+                    param_layout = layout_item.layout()
+                    # First widget is label, second is the input field
+                    if param_layout.count() >= 2:
+                        label_item = param_layout.itemAt(0)
+                        input_item = param_layout.itemAt(1)
+                        
+                        if label_item and label_item.widget() and input_item and input_item.widget():
+                            label = label_item.widget()
+                            input_field = input_item.widget()
+                            
+                            # Extract parameter name from label (remove the ":" at the end)
+                            param_name = label.text().rstrip(":")
+                            
+                            # Get parameter value from QLineEdit
+                            if isinstance(input_field, QLineEdit):
+                                param_value = input_field.text()
+                                selection_params[param_name] = param_value
+            
+            selection = f'"{current_selection}"'
+            # Convert selection parameters to a string format
+            selection_params_str = str(",".join([f"{key}={value}" for key, value in selection_params.items()]))
+            selection_params_str = f'"{selection_params_str}"'
+
+            return selection, selection_params_str
 
     def create_ea_tab(self):
         widget = QWidget()
@@ -404,7 +459,7 @@ class RobotEvolutionGUI(QMainWindow):
 
         terrain_params = {
             "flat": {
-                "size": Vector2([20.0, 20.0])
+                "size": [20, 20]
             },
             "crater": {
                 "size": [20, 20],

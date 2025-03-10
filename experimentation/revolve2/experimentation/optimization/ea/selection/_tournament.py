@@ -4,8 +4,8 @@ import numpy as np
 
 Fitness = TypeVar("Fitness")
 
-
-def tournament(rng: np.random.Generator, fitnesses: list[Fitness], k: int) -> int:
+# Force k to be passed as a keyword argument
+def tournament(fitnesses: list[Fitness], rng: np.random.Generator, * ,k: int) -> int:
     """
     Perform tournament selection and return the index of the best individual.
 

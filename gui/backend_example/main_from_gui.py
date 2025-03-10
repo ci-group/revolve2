@@ -41,6 +41,12 @@ def run_experiment(dbengine: Engine) -> None:
     rng = make_rng(rng_seed)
     terrain = sys.argv[1]
     fitness_function = sys.argv[2]
+    parent_selection_function = sys.argv[3]
+    parent_selection_function_params = sys.argv[4]
+    print(f"{parent_selection_function_params}")
+    survivor_selection_function = sys.argv[5]
+    survivor_selection_function_params = sys.argv[6]
+
 
     # Create and save the experiment instance.
     experiment = Experiment(rng_seed=rng_seed, terrain=terrain)
@@ -63,8 +69,8 @@ def run_experiment(dbengine: Engine) -> None:
     - modular_robot_evolution: The evolutionary process as a object that can be iterated.
     """
     evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS, terrain=terrain, fitness_function=fitness_function)
-    parent_selector = ParentSelector(offspring_size=config.OFFSPRING_SIZE, rng=rng)
-    survivor_selector = SurvivorSelector(rng=rng)
+    parent_selector = ParentSelector(offspring_size=config.OFFSPRING_SIZE, rng=rng, selection_func=parent_selection_function, selection_params=parent_selection_function_params)
+    survivor_selector = SurvivorSelector(rng=rng, selection_func=survivor_selection_function, selection_params=survivor_selection_function_params)
     crossover_reproducer = CrossoverReproducer(rng=rng, innov_db_body=innov_db_body, innov_db_brain=innov_db_brain)
 
     modular_robot_evolution = ModularRobotEvolution(

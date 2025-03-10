@@ -6,13 +6,12 @@ from ._supports_lt import SupportsLt
 Genotype = TypeVar("Genotype")
 Fitness = TypeVar("Fitness", bound=SupportsLt)
 
-
-def topn(n: int, genotypes: list[Genotype], fitnesses: list[Fitness]) -> list[int]:
+# Force n to be passed as a keyword argument
+def topn(fitnesses: list[Fitness], *, n: int) -> list[int]:
     """
     Get indices of the top n genotypes sorted by their fitness.
 
     :param n: The number of genotypes to select.
-    :param genotypes: The genotypes. Ignored, but argument kept for function signature compatibility with other selection functions/
     :param fitnesses: Fitnesses of the genotypes.
     :returns: Indices of the selected genotypes.
     """

@@ -16,12 +16,12 @@ class ParentSelector(Selector):
 
     rng: np.random.Generator
     offspring_size: int
-    selection_func: Callable
+    selection_func: str
     selection_params: Dict[str, Any]
 
     def __init__(self, offspring_size: int, rng: np.random.Generator,
                 generational=config.GENERATIONAL, steady_state=config.STEADY_STATE,
-                selection_func=selection.tournament, selection_params: Dict[str, Any] = None) -> None:
+                selection_func="tournament", selection_params: Dict[str, Any] = None) -> None:
         """
         Initialize the parent selector.
 
@@ -45,14 +45,14 @@ class ParentSelector(Selector):
         :param kwargs: Other parameters.
         :return: The parent pairs.
         """
-
-        if self.selection_func == selection.tournament:
-            selection_function = lambda _, fitnesses: self.selection_func(
-                rng=self.rng, fitnesses=fitnesses, **self.selection_params
+       
+        if self.selection_func == "tournament":
+            selection_function = lambda _, fitnesses: selection.tournament(
+                fitnesses=fitnesses, rng=self.rng, **self.selection_params
             )
         else:
-            selection_function = lambda _, fitnesses: self.selection_func(
-                fitnesses=fitnesses, n=self.offspring_size, **self.selection_params
+            selection_function = lambda _, fitnesses: getattr(selection, self.selection_func)(
+                fitnesses=fitnesses, **self.selection_params
             )
 
         if self.generational:
@@ -124,15 +124,15 @@ class SurvivorSelector(Selector):
                 "No offspring was passed with positional argument 'children' and / or 'child_task_performance'."
             )
         
-        if self.selection_func == selection.tournament:
-            selection_function = lambda _, fitnesses: self.selection_func(
-                rng=self.rng, fitnesses=fitnesses, **self.selection_params
+        if self.selection_func == "tournament":
+            selection_function = lambda _, fitnesses: selection.tournament(
+                fitnesses=fitnesses, rng=self.rng, **self.selection_params
             )
         else:
-            selection_function = lambda _, fitnesses: self.selection_func(
-                fitnesses=fitnesses, n=len(population), **self.selection_params
+            selection_function = lambda _, fitnesses: getattr(selection, self.selection_func)(
+                fitnesses=fitnesses, **self.selection_params
             )
-
+            
         if self.generational:
             original_survivors, offspring_survivors = population_management.generational(
                 old_genotypes=[i.genotype for i in population.individuals],

@@ -4,6 +4,7 @@ import math
 
 import numpy as np
 import numpy.typing as npt
+from typing import Union, Tuple, List
 from noise import pnoise2
 from pyrr import Vector3
 
@@ -31,6 +32,68 @@ def flat(size=[20.0, 20.0]) -> Terrain:
         ]
     )
 
+def tilted_flat(
+    size: Union[List[float], Tuple[float, float]] = [20.0, 20.0],
+    tilt_angle: float = 30,
+    tilt_direction: Union[List[float], Tuple[float, float]] = [1.0, 0.0]
+) -> Terrain:
+    """
+    Create a tilted flat plane terrain.
+    
+    Parameters:
+    -----------
+    size : List[float] or Tuple[float, float]
+        Size of the plane along x and y axes.
+    tilt_angle : float
+        The tilt angle in radians.
+    tilt_direction : List[float] or Tuple[float, float]
+        Direction vector (x, y) of the tilt.
+        
+    Returns:
+    --------
+    Terrain
+        The created tilted terrain.
+    """
+    # Convert size to Vector2
+    size_vec = Vector2(size)
+    
+    # convert tilt angle to radians
+    tilt_angle = math.radians(tilt_angle)
+
+    # Normalize tilt direction
+    tilt_dir = np.array(tilt_direction)
+    tilt_dir_norm = tilt_dir / np.linalg.norm(tilt_dir)
+    
+    # Create rotation quaternion for the tilt
+    # We need to find the axis of rotation, which is perpendicular to the tilt direction
+    # and the up vector [0, 0, 1]
+    tilt_axis = np.cross(np.array([0, 0, 1]), np.append(tilt_dir_norm, 0))[:3]
+    
+    if np.linalg.norm(tilt_axis) < 1e-6:
+        # If tilt direction is along z-axis, use x-axis as rotation axis
+        tilt_axis = np.array([1, 0, 0])
+    else:
+        tilt_axis = tilt_axis / np.linalg.norm(tilt_axis)
+    
+    # Create quaternion (x, y, z, w) from axis-angle representation
+    # Note: We're using the convention [x, y, z, w] but some systems use [w, x, y, z]
+    qx = tilt_axis[0] * np.sin(tilt_angle / 2)
+    qy = tilt_axis[1] * np.sin(tilt_angle / 2)
+    qz = tilt_axis[2] * np.sin(tilt_angle / 2)
+    qw = np.cos(tilt_angle / 2)
+    
+    # Create pose with rotation
+    pose = Pose(orientation=[qw, qx, qy, qz])  # Using [w, x, y, z] format
+    
+    return Terrain(
+        static_geometry=[
+            GeometryPlane(
+                pose=pose,
+                mass=0.0,
+                size=size_vec,
+            )
+        ]
+    )
 
 def crater(
     size=[20, 20],

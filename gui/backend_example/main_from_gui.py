@@ -39,13 +39,18 @@ def run_experiment(dbengine: Engine) -> None:
     # Set up the random number generator.
     rng_seed = seed_from_time()
     rng = make_rng(rng_seed)
+
+
     terrain = sys.argv[1]
     fitness_function = sys.argv[2]
     parent_selection_function = sys.argv[3]
     parent_selection_function_params = sys.argv[4]
-    print(f"{parent_selection_function_params}")
     survivor_selection_function = sys.argv[5]
     survivor_selection_function_params = sys.argv[6]
+
+    # create dictionaries from selection params
+    parent_selection_function_params = eval(parent_selection_function_params)
+    survivor_selection_function_params = eval(survivor_selection_function_params)
 
 
     # Create and save the experiment instance.

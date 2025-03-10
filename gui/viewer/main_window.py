@@ -208,7 +208,7 @@ class RobotEvolutionGUI(QMainWindow):
         widget.setLayout(layout)
 
         return widget
-    
+        
     def update_selection_params(self, item, params_layout):
         """Update the parameter input fields based on the selected function."""
         if item is None:
@@ -217,7 +217,6 @@ class RobotEvolutionGUI(QMainWindow):
         # Clear existing parameter input fields and layouts
         while params_layout.count():
             layout_item = params_layout.takeAt(0)
-            
             # If the item is a widget
             if layout_item.widget():
                 layout_item.widget().deleteLater()
@@ -232,10 +231,21 @@ class RobotEvolutionGUI(QMainWindow):
                 # Now we can delete the layout
                 child_layout.deleteLater()
         
+        # Fixed the missing closing brace
         selection_params = {
-            "tournament": {"k" : 2}
-        }
+            "tournament": {
+                "k": 2
+            },
+            "roulette": {
+                "n": 20
+            },   
+            "topn": {
+                "n" : 20
+            }
 
+            # Add more selection functions and their parameters here
+        }
+        
         selected_function = item.currentText()
         if selected_function in selection_params:
             for param, value in selection_params[selected_function].items():
@@ -251,11 +261,9 @@ class RobotEvolutionGUI(QMainWindow):
         current_selection = selection_dropdown.currentText()
         if current_selection:
             selection_params = {}
-            
             # We need to iterate through all layouts in the selection_params_layout
             for i in range(selection_params_layout.count()):
                 layout_item = selection_params_layout.itemAt(i)
-                
                 # If the item is a layout (which it should be based on your update_selection_params method)
                 if layout_item.layout():
                     param_layout = layout_item.layout()
@@ -263,25 +271,28 @@ class RobotEvolutionGUI(QMainWindow):
                     if param_layout.count() >= 2:
                         label_item = param_layout.itemAt(0)
                         input_item = param_layout.itemAt(1)
-                        
                         if label_item and label_item.widget() and input_item and input_item.widget():
                             label = label_item.widget()
                             input_field = input_item.widget()
-                            
                             # Extract parameter name from label (remove the ":" at the end)
                             param_name = label.text().rstrip(":")
-                            
                             # Get parameter value from QLineEdit
                             if isinstance(input_field, QLineEdit):
                                 param_value = input_field.text()
+                                try:
+                                    # Convert to int or float if possible
+                                    param_value = int(param_value)
+                                except ValueError:
+                                    try:
+                                        param_value = float(param_value)
+                                    except ValueError:
+                                        pass  # Keep as string
                                 selection_params[param_name] = param_value
             
             selection = f'"{current_selection}"'
-            # Convert selection parameters to a string format
-            selection_params_str = str(",".join([f"{key}={value}" for key, value in selection_params.items()]))
-            selection_params_str = f'"{selection_params_str}"'
-
-            return selection, selection_params_str
+            selection_params_dict = f'"{selection_params}"'            
+                        
+            return selection, selection_params_dict
 
     def create_ea_tab(self):
         widget = QWidget()
@@ -461,6 +472,12 @@ class RobotEvolutionGUI(QMainWindow):
             "flat": {
                 "size": [20, 20]
             },
+            "tilted_flat": {
+                "size": [20, 20],
+                "tilt_angle": 30,
+                "tilt_direction": [1, 0]
+            }
+            ,
             "crater": {
                 "size": [20, 20],
                 "ruggedness": 0.3,

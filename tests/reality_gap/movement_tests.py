@@ -15,7 +15,7 @@ from revolve2.modular_robot.sensor_state import ModularRobotSensorState
 from revolve2.modular_robot_simulation import ModularRobotScene, simulate_scenes
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 from revolve2.standards import terrains
-from revolve2.standards.modular_robots_v2 import gecko_v2, ant_v2, spider_v2, snake_v2
+from revolve2.standards.modular_robots_v2 import gecko_v2
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 
 

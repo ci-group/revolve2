@@ -20,10 +20,10 @@ from revolve2.standards.modular_robots_v2 import gecko_v2
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 
 # Global variables for tracking robot state and distance
-robot_reference = None
-initial_robot_state = None
-current_robot_state = None
 distance_traveled = 0.0
+
+# Global variable for simulation duration
+simulation_duration = 30.0  # Default value
 
 
 class DistanceTravelBrainInstance(BrainInstance):
@@ -199,11 +199,78 @@ class DistanceTravelBrain(Brain):
                     setattr(self._instance, key, value)
 
 
-def create_control_gui(brain: DistanceTravelBrain) -> None:
+def run_simulation(duration: float) -> None:
+    """
+    Run the simulation with the specified duration.
+    
+    Args:
+        duration: The duration of the simulation in seconds.
+    """
+    # Setup
+    setup_logging()
+    body = gecko_v2()
+
+    # Find all active hinges in the body
+    active_hinges = body.find_modules_of_type(ActiveHinge)
+    
+    # Print information about the active hinges for reference
+    print(f"Found {len(active_hinges)} active hinges in the gecko body")
+    for i, hinge in enumerate(active_hinges):
+        print(f"Hinge {i}: {hinge}")
+
+    # Create the brain with movement enabled from the start
+    brain = DistanceTravelBrain(
+        active_hinges=active_hinges,
+        frequency=1.0,
+        amplitude=0.7,
+        phase_offset=0.5,
+        is_active=True,  # Start with movement enabled
+    )
+    
+    # Create the modular robot
+    robot = ModularRobot(body, brain)
+
+    # Create the scene with a flat terrain
+    scene = ModularRobotScene(terrain=terrains.flat())
+    scene.add_robot(robot)
+
+    # Set up the simulator
+    simulator = LocalSimulator(
+        viewer_type="custom",  # Use custom viewer for better visualization
+        headless=False,
+        manual_control=False,  # Disable manual control as we're using programmed movements
+    )
+
+    # Configure simulation parameters
+    batch_parameters = make_standard_batch_parameters()
+    batch_parameters.simulation_time = duration  # Use the user-specified duration
+
+    # Run the simulation
+    scene_states = simulate_scenes(
+        simulator=simulator,
+        batch_parameters=batch_parameters,
+        scenes=scene,
+    )
+    
+    # Get the state at the beginning and end of the simulation
+    initial_state = scene_states[0]
+    initial_robot_state = initial_state.get_modular_robot_simulation_state(robot)
+    final_state = scene_states[-1]
+    final_robot_state = final_state.get_modular_robot_simulation_state(robot)
+    
+    # Calculate final distance traveled
+    global distance_traveled
+    distance_traveled = fitness_functions.xy_displacement(
+        initial_robot_state, final_robot_state
+    )
+    print(f"\nDistance traveled: {distance_traveled:.5f} meters")
+
+
+def create_control_gui() -> None:
     """Create a GUI for controlling the robot movement."""
     root = tk.Tk()
     root.title("Distance Travel Test")
-    root.geometry("500x400")
+    root.geometry("400x300")
     
     # Target duration input
     target_frame = Frame(root)
@@ -219,243 +286,71 @@ def create_control_gui(brain: DistanceTravelBrain) -> None:
     start_frame = Frame(root)
     start_frame.grid(row=1, column=0, pady=10, padx=10, sticky="ew")
     
-    Label(start_frame, text="Movement:").pack(side=tk.LEFT)
-    
-    # Start time for timer
-    start_time = [None]
-    target_duration = [None]
-    timer_active = [False]
-    
-    def start_movement():
-        global initial_robot_state, current_robot_state
-        
+    def start_simulation():
         try:
             # Parse and validate the target duration
             duration = float(target_var.get())
             if duration <= 0 or duration > 60:
                 raise ValueError("Duration must be between 0 and 60 seconds")
             
-            # Store the target duration
-            target_duration[0] = duration
-            
             # Update UI
-            start_button.config(state="disabled")
-            target_entry.config(state="disabled")  # Disable editing during test
-            close_button.config(state="normal")  # Enable the close button
+            status_label.config(text=f"Starting simulation for {duration:.1f} seconds...", fg="blue")
+            root.update()
             
-            # Start the timer
-            start_time[0] = time.time()
-            timer_active[0] = True
+            # Close the UI window
+            root.destroy()
             
-            # Reset initial position when starting
-            initial_robot_state = current_robot_state
+            # Run the simulation in the main thread
+            run_simulation(duration)
             
-            # Start the movement
-            brain.update_parameters(is_active=True)
-            
-            # Start the timer check
-            check_timer()
         except ValueError as e:
-            print(f"Error: {e}")
+            status_label.config(text=f"Error: {e}", fg="red")
             return
-    
-    def check_timer():
-        if not timer_active[0]:
-            return
-            
-        if start_time[0] is not None and target_duration[0] is not None:
-            elapsed = time.time() - start_time[0]
-            
-            if elapsed >= target_duration[0]:
-                # Time's up - stop the movement
-                brain.update_parameters(is_active=False)
-                
-                # Update UI to show test is complete
-                timer_label.config(text="Test Complete!", fg="green", font=("Arial", 12, "bold"))
-                timer_active[0] = False
-            else:
-                # Check again in 100ms
-                root.after(100, check_timer)
-    
-    def close_and_get_displacement():
-        # Exit the program to end the simulation
-        print("\nClosing simulation to calculate displacement...")
-        sys.exit(0)
     
     start_button = Button(
         start_frame, 
-        text="START",  
+        text="START SIMULATION",  
         bg="green",    
-        command=start_movement,
-        width=10,
+        command=start_simulation,
+        width=20,
         height=2
     )
-    start_button.pack(side=tk.LEFT, padx=10)
+    start_button.pack(padx=10)
     
-    # Close button (initially disabled)
-    close_button = Button(
-        start_frame, 
-        text="Close & Get Displacement",  
-        command=close_and_get_displacement,
-        width=20,
-        height=2,
-        state="disabled"
-    )
-    close_button.pack(side=tk.LEFT, padx=10)
+    # Status label
+    status_frame = Frame(root)
+    status_frame.grid(row=2, column=0, pady=10, padx=10, sticky="ew")
     
-    # Timer status label
-    timer_frame = Frame(root)
-    timer_frame.grid(row=2, column=0, pady=5, padx=10, sticky="ew")
+    status_label = Label(status_frame, text="Enter duration and press START", font=("Arial", 12))
+    status_label.pack()
     
-    timer_label = Label(timer_frame, text="Ready to start test", font=("Arial", 12))
-    timer_label.pack()
+    # Instructions
+    instructions_frame = Frame(root)
+    instructions_frame.grid(row=3, column=0, pady=20, padx=10, sticky="ew")
     
-    # Distance and time display
-    info_frame = Frame(root)
-    info_frame.grid(row=3, column=0, pady=20, padx=10, sticky="ew")
+    instructions = """
+    Instructions:
+    1. Enter a test duration (1-60 seconds)
+    2. Press START to run the simulation
+    3. The robot will move for the specified time
+    4. Final distance will be shown in the console
+    """
     
-    # Distance traveled
-    distance_frame = Frame(info_frame)
-    distance_frame.pack(fill=tk.X, pady=5)
-    
-    Label(distance_frame, text="Distance Traveled:", font=("Arial", 12)).pack(side=tk.LEFT)
-    distance_label = Label(distance_frame, text="0.00 m", font=("Arial", 12, "bold"))
-    distance_label.pack(side=tk.RIGHT)
-    
-    # Elapsed time
-    time_frame = Frame(info_frame)
-    time_frame.pack(fill=tk.X, pady=5)
-    
-    Label(time_frame, text="Elapsed Time:", font=("Arial", 12)).pack(side=tk.LEFT)
-    time_label = Label(time_frame, text="0.00 s", font=("Arial", 12, "bold"))
-    time_label.pack(side=tk.RIGHT)
-    
-    # Target time display
-    target_display_frame = Frame(info_frame)
-    target_display_frame.pack(fill=tk.X, pady=5)
-    
-    Label(target_display_frame, text="Target Duration:", font=("Arial", 12)).pack(side=tk.LEFT)
-    target_label = Label(target_display_frame, text="30.00 s", font=("Arial", 12, "bold"))
-    target_label.pack(side=tk.RIGHT)
-    
-    # Progress display
-    progress_frame = Frame(info_frame)
-    progress_frame.pack(fill=tk.X, pady=10)
-    
-    Label(progress_frame, text="Progress:", font=("Arial", 12)).pack(side=tk.LEFT)
-    progress_label = Label(progress_frame, text="0.0%", font=("Arial", 12, "bold"))
-    progress_label.pack(side=tk.RIGHT)
-    
-    # Update function for the UI
-    def update_ui():
-        if root.winfo_exists():
-            # Update distance traveled
-            global distance_traveled
-            distance_label.config(text=f"{distance_traveled:.2f} m")
-            
-            # Update target duration
-            try:
-                target_duration_val = float(target_var.get())
-                target_label.config(text=f"{target_duration_val:.2f} s")
-                
-                # Update progress percentage
-                if start_time[0] is not None and target_duration_val > 0:
-                    elapsed = time.time() - start_time[0]
-                    progress = min(100.0, (elapsed / target_duration_val) * 100)
-                    progress_label.config(text=f"{progress:.1f}%")
-                    time_label.config(text=f"{elapsed:.2f} s")
-                else:
-                    progress_label.config(text="0.0%")
-                    time_label.config(text="0.00 s")
-            except ValueError:
-                target_label.config(text="Invalid")
-                progress_label.config(text="N/A")
-            
-            # Schedule the next update
-            root.after(100, update_ui)
-    
-    # Start the UI update loop
-    update_ui()
+    Label(instructions_frame, text=instructions, justify=tk.LEFT).pack()
     
     # Make sure the window appears in front
     root.lift()
     root.attributes('-topmost', True)
     root.after_idle(root.attributes, '-topmost', False)
     
-    # Update the window to ensure proper sizing before mainloop
-    root.update_idletasks()
-    
+    # Start the UI main loop
     root.mainloop()
 
 
 def main() -> None:
     """Run the distance travel test simulation."""
-    # Setup
-    setup_logging()
-    body = gecko_v2()
-
-    # Find all active hinges in the body
-    active_hinges = body.find_modules_of_type(ActiveHinge)
-    
-    # Print information about the active hinges for reference
-    print(f"Found {len(active_hinges)} active hinges in the gecko body")
-    for i, hinge in enumerate(active_hinges):
-        print(f"Hinge {i}: {hinge}")
-
-    # Create the brain with default parameters
-    brain = DistanceTravelBrain(
-        active_hinges=active_hinges,
-        frequency=1.0,
-        amplitude=0.7,
-        phase_offset=0.5,
-        is_active=False,  # Start with movement disabled
-    )
-    
-    # Create the modular robot
-    global robot_reference
-    robot = ModularRobot(body, brain)
-    robot_reference = robot
-
-    # Create the scene with a flat terrain
-    scene = ModularRobotScene(terrain=terrains.flat())
-    scene.add_robot(robot)
-
-    # Set up the simulator
-    simulator = LocalSimulator(
-        viewer_type="custom",  # Use custom viewer for better visualization
-        headless=False,
-        manual_control=False,  # Disable manual control as we're using programmed movements
-    )
-
-    # Configure simulation parameters
-    batch_parameters = make_standard_batch_parameters()
-    batch_parameters.simulation_time = 120  # Longer simulation time for testing
-
-    # Start GUI in a separate thread
-    threading.Thread(target=lambda: create_control_gui(brain), daemon=True).start()
-
-    # Run the simulation with a callback to update distance
-    scene_states = simulate_scenes(
-        simulator=simulator,
-        batch_parameters=batch_parameters,
-        scenes=scene,
-    )
-    
-    # This code won't be reached during normal execution since simulate_scenes blocks
-    # until simulation is complete, but we include it for completeness
-    global initial_robot_state, current_robot_state, distance_traveled
-    
-    # Get the state at the beginning of the simulation
-    initial_state = scene_states[0]
-    initial_robot_state = initial_state.get_modular_robot_simulation_state(robot)
-    final_state = scene_states[-1]
-    final_robot_state = final_state.get_modular_robot_simulation_state(robot)
-    
-    # Calculate final distance traveled for each state update
-    distance_traveled = fitness_functions.xy_displacement(
-        initial_robot_state, final_robot_state
-    )
-    print(f"Distance traveled: {distance_traveled:.2f} meters")
+    # Start with just the UI
+    create_control_gui()
 
 
 if __name__ == "__main__":

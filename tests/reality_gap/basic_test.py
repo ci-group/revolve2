@@ -1,4 +1,4 @@
-"""Test script to measure robot travel distance."""
+"""Test script to measure robot travel distance over a specified time."""
 
 import time
 import math
@@ -6,6 +6,7 @@ import numpy as np
 import tkinter as tk
 from tkinter import Frame, Label, Button, Entry, StringVar
 import threading
+import sys
 
 from revolve2.experimentation.logging import setup_logging
 from revolve2.modular_robot import ModularRobot, ModularRobotControlInterface
@@ -17,6 +18,12 @@ from revolve2.simulators.mujoco_simulator import LocalSimulator
 from revolve2.standards import terrains, fitness_functions
 from revolve2.standards.modular_robots_v2 import gecko_v2
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
+
+# Global variables for tracking robot state and distance
+robot_reference = None
+initial_robot_state = None
+current_robot_state = None
+distance_traveled = 0.0
 
 
 class DistanceTravelBrainInstance(BrainInstance):
@@ -120,9 +127,8 @@ class DistanceTravelBrainInstance(BrainInstance):
         else:
             # Fallback if we don't have enough hinges
             for i, hinge in enumerate(self.active_hinges):
-                phase = i * self.phase_offset
-                angle = self.amplitude * math.sin(2 * math.pi * self.frequency * self.time_passed + phase)
-                control_interface.set_active_hinge_target(hinge, angle * 1.048)
+                angle = self.amplitude * math.sin(t + i * self.phase_offset * math.pi) * 1.048
+                control_interface.set_active_hinge_target(hinge, angle)
 
 
 class DistanceTravelBrain(Brain):
@@ -134,7 +140,7 @@ class DistanceTravelBrain(Brain):
     phase_offset: float
     is_active: bool
     _instance: DistanceTravelBrainInstance | None
-
+    
     def __init__(
         self, 
         active_hinges: list[ActiveHinge],
@@ -161,7 +167,12 @@ class DistanceTravelBrain(Brain):
         self._instance = None
 
     def make_instance(self) -> DistanceTravelBrainInstance:
-        """Create an instance of this brain."""
+        """
+        Create an instance of this brain.
+
+        Returns:
+            The brain instance.
+        """
         self._instance = DistanceTravelBrainInstance(
             active_hinges=self.active_hinges,
             frequency=self.frequency,
@@ -170,108 +181,138 @@ class DistanceTravelBrain(Brain):
             is_active=self.is_active,
         )
         return self._instance
-    
-    def update_parameters(
-        self, 
-        frequency: float = None,
-        amplitude: float = None,
-        phase_offset: float = None,
-        is_active: bool = None,
-    ) -> None:
+
+    def update_parameters(self, **kwargs) -> None:
         """
-        Update the movement parameters.
-        
+        Update the brain parameters.
+
         Args:
-            frequency: Oscillation frequency in Hz.
-            amplitude: Maximum angle amplitude (0.0-1.0).
-            phase_offset: Phase offset between adjacent hinges.
-            is_active: Whether movement is active.
+            **kwargs: Parameters to update.
         """
-        if frequency is not None:
-            self.frequency = frequency
-            if self._instance is not None:
-                self._instance.frequency = frequency
-        
-        if amplitude is not None:
-            self.amplitude = amplitude
-            if self._instance is not None:
-                self._instance.amplitude = amplitude
-        
-        if phase_offset is not None:
-            self.phase_offset = phase_offset
-            if self._instance is not None:
-                self._instance.phase_offset = phase_offset
+        # Update brain parameters
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
                 
-        if is_active is not None:
-            self.is_active = is_active
-            if self._instance is not None:
-                self._instance.is_active = is_active
+                # Also update the instance if it exists
+                if self._instance is not None and hasattr(self._instance, key):
+                    setattr(self._instance, key, value)
 
 
-# Global variables to track distance
-initial_robot_state = None
-current_robot_state = None
-distance_traveled = 0.0
-robot_reference = None
-
-
-def create_control_gui(brain: DistanceTravelBrain):
-    """Create a GUI for controlling the distance travel test."""
+def create_control_gui(brain: DistanceTravelBrain) -> None:
+    """Create a GUI for controlling the robot movement."""
     root = tk.Tk()
     root.title("Distance Travel Test")
-    root.geometry("500x350")
+    root.geometry("500x400")
     
-    # Configure grid
-    root.grid_columnconfigure(0, weight=1)
-    
-    # Target distance input
+    # Target duration input
     target_frame = Frame(root)
     target_frame.grid(row=0, column=0, pady=10, padx=10, sticky="ew")
     
-    Label(target_frame, text="Target Distance (m):").pack(side=tk.LEFT)
+    Label(target_frame, text="Test Duration (s):").pack(side=tk.LEFT)
     
-    target_var = StringVar(value="2.0")
+    target_var = StringVar(value="30.0")
     target_entry = Entry(target_frame, textvariable=target_var, width=10)
     target_entry.pack(side=tk.LEFT, padx=10)
     
-    # On/Off toggle button
-    toggle_frame = Frame(root)
-    toggle_frame.grid(row=1, column=0, pady=10, padx=10, sticky="ew")
+    # Start button
+    start_frame = Frame(root)
+    start_frame.grid(row=1, column=0, pady=10, padx=10, sticky="ew")
     
-    Label(toggle_frame, text="Movement:").pack(side=tk.LEFT)
+    Label(start_frame, text="Movement:").pack(side=tk.LEFT)
     
     # Start time for timer
     start_time = [None]
+    target_duration = [None]
+    timer_active = [False]
     
-    def toggle_movement():
-        global initial_robot_state
-        new_state = not brain.is_active
-        brain.update_parameters(is_active=new_state)
+    def start_movement():
+        global initial_robot_state, current_robot_state
         
-        if new_state:
-            # Starting movement
-            toggle_button.config(text="STOP", bg="red")
+        try:
+            # Parse and validate the target duration
+            duration = float(target_var.get())
+            if duration <= 0 or duration > 60:
+                raise ValueError("Duration must be between 0 and 60 seconds")
+            
+            # Store the target duration
+            target_duration[0] = duration
+            
+            # Update UI
+            start_button.config(state="disabled")
+            target_entry.config(state="disabled")  # Disable editing during test
+            close_button.config(state="normal")  # Enable the close button
+            
+            # Start the timer
             start_time[0] = time.time()
+            timer_active[0] = True
+            
             # Reset initial position when starting
             initial_robot_state = current_robot_state
-        else:
-            # Stopping movement
-            toggle_button.config(text="START", bg="green")
-            start_time[0] = None
+            
+            # Start the movement
+            brain.update_parameters(is_active=True)
+            
+            # Start the timer check
+            check_timer()
+        except ValueError as e:
+            print(f"Error: {e}")
+            return
     
-    toggle_button = Button(
-        toggle_frame, 
+    def check_timer():
+        if not timer_active[0]:
+            return
+            
+        if start_time[0] is not None and target_duration[0] is not None:
+            elapsed = time.time() - start_time[0]
+            
+            if elapsed >= target_duration[0]:
+                # Time's up - stop the movement
+                brain.update_parameters(is_active=False)
+                
+                # Update UI to show test is complete
+                timer_label.config(text="Test Complete!", fg="green", font=("Arial", 12, "bold"))
+                timer_active[0] = False
+            else:
+                # Check again in 100ms
+                root.after(100, check_timer)
+    
+    def close_and_get_displacement():
+        # Exit the program to end the simulation
+        print("\nClosing simulation to calculate displacement...")
+        sys.exit(0)
+    
+    start_button = Button(
+        start_frame, 
         text="START",  
         bg="green",    
-        command=toggle_movement,
+        command=start_movement,
         width=10,
         height=2
     )
-    toggle_button.pack(side=tk.LEFT, padx=10)
+    start_button.pack(side=tk.LEFT, padx=10)
+    
+    # Close button (initially disabled)
+    close_button = Button(
+        start_frame, 
+        text="Close & Get Displacement",  
+        command=close_and_get_displacement,
+        width=20,
+        height=2,
+        state="disabled"
+    )
+    close_button.pack(side=tk.LEFT, padx=10)
+    
+    # Timer status label
+    timer_frame = Frame(root)
+    timer_frame.grid(row=2, column=0, pady=5, padx=10, sticky="ew")
+    
+    timer_label = Label(timer_frame, text="Ready to start test", font=("Arial", 12))
+    timer_label.pack()
     
     # Distance and time display
     info_frame = Frame(root)
-    info_frame.grid(row=2, column=0, pady=20, padx=10, sticky="ew")
+    info_frame.grid(row=3, column=0, pady=20, padx=10, sticky="ew")
     
     # Distance traveled
     distance_frame = Frame(info_frame)
@@ -289,12 +330,12 @@ def create_control_gui(brain: DistanceTravelBrain):
     time_label = Label(time_frame, text="0.00 s", font=("Arial", 12, "bold"))
     time_label.pack(side=tk.RIGHT)
     
-    # Target distance display
+    # Target time display
     target_display_frame = Frame(info_frame)
     target_display_frame.pack(fill=tk.X, pady=5)
     
-    Label(target_display_frame, text="Target Distance:", font=("Arial", 12)).pack(side=tk.LEFT)
-    target_label = Label(target_display_frame, text="2.00 m", font=("Arial", 12, "bold"))
+    Label(target_display_frame, text="Target Duration:", font=("Arial", 12)).pack(side=tk.LEFT)
+    target_label = Label(target_display_frame, text="30.00 s", font=("Arial", 12, "bold"))
     target_label.pack(side=tk.RIGHT)
     
     # Progress display
@@ -312,25 +353,23 @@ def create_control_gui(brain: DistanceTravelBrain):
             global distance_traveled
             distance_label.config(text=f"{distance_traveled:.2f} m")
             
-            # Update target distance
+            # Update target duration
             try:
-                target_distance = float(target_var.get())
-                target_label.config(text=f"{target_distance:.2f} m")
+                target_duration_val = float(target_var.get())
+                target_label.config(text=f"{target_duration_val:.2f} s")
                 
                 # Update progress percentage
-                if target_distance > 0:
-                    progress = min(100.0, (distance_traveled / target_distance) * 100)
+                if start_time[0] is not None and target_duration_val > 0:
+                    elapsed = time.time() - start_time[0]
+                    progress = min(100.0, (elapsed / target_duration_val) * 100)
                     progress_label.config(text=f"{progress:.1f}%")
+                    time_label.config(text=f"{elapsed:.2f} s")
                 else:
                     progress_label.config(text="0.0%")
+                    time_label.config(text="0.00 s")
             except ValueError:
                 target_label.config(text="Invalid")
                 progress_label.config(text="N/A")
-            
-            # Update elapsed time
-            if start_time[0] is not None:
-                elapsed = time.time() - start_time[0]
-                time_label.config(text=f"{elapsed:.2f} s")
             
             # Schedule the next update
             root.after(100, update_ui)
@@ -409,14 +448,14 @@ def main() -> None:
     # Get the state at the beginning of the simulation
     initial_state = scene_states[0]
     initial_robot_state = initial_state.get_modular_robot_simulation_state(robot)
+    final_state = scene_states[-1]
+    final_robot_state = final_state.get_modular_robot_simulation_state(robot)
     
-    # Calculate distance for each state update
-    for state in scene_states[1:]:
-        current_robot_state = state.get_modular_robot_simulation_state(robot)
-        if initial_robot_state is not None:
-            distance_traveled = fitness_functions.xy_displacement(
-                initial_robot_state, current_robot_state
-            )
+    # Calculate final distance traveled for each state update
+    distance_traveled = fitness_functions.xy_displacement(
+        initial_robot_state, final_robot_state
+    )
+    print(f"Distance traveled: {distance_traveled:.2f} meters")
 
 
 if __name__ == "__main__":

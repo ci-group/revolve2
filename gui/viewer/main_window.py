@@ -475,28 +475,28 @@ class RobotEvolutionGUI(QMainWindow):
 
         terrain_params = {
             "flat": {
-                "size": [20, 20]
+                "size": [10, 10]
             },
             "tilted_flat": {
-                "size": [20, 20],
+                "size": [10, 10],
                 "tilt_angle": 30,
                 "tilt_direction": [1, 0]
             }
             ,
             "crater": {
-                "size": [20, 20],
+                "size": [10, 10],
                 "ruggedness": 0.3,
                 "curviness": 5,
                 "granularity_multiplier": 0.5
             },
             "rugged_heightmap": {
-                "size": [20, 20],
+                "size": [10, 10],
                 "num_edges": 100,
                 "density": 0.5,
                 "hillyness": 0.5
             },
             "bowl_heightmap": {
-                "size": [20, 20],
+                "size": [10, 10],
                 "granularity_multiplier": 0.5
             },
             # Add more terrains and their parameters here

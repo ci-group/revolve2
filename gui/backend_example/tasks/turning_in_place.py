@@ -19,14 +19,18 @@ def circular_trajectory(simulation_states: list[ModularRobotSimulationState], ra
     Output:
         The calculated fitness.
     """
+    
     # Get the center of the circle
-
     center = simulation_states[0].get_pose().position
     center.x += radius
 
     # Calculate the distance from the center
     distances = [
-        math.sqrt(abs((state.get_pose().position.x - center.x) ** 2 + (state.get_pose().position.y - center.y) ** 2  - radius ** 2))
+        math.sqrt(
+            abs((state.get_pose().position.x - center.x) ** 2
+              + (state.get_pose().position.y - center.y) ** 2
+                  - radius ** 2)
+                )
         for state in simulation_states
     ]
 

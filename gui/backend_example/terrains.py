@@ -14,7 +14,7 @@ from revolve2.simulation.scene.geometry import GeometryHeightmap, GeometryPlane
 from revolve2.simulation.scene.vector2 import Vector2
 
 
-def flat(size=[20.0, 20.0]) -> Terrain:
+def flat(size=[10.0, 10.0]) -> Terrain:
     """
     Create a flat plane terrain.
 
@@ -33,7 +33,7 @@ def flat(size=[20.0, 20.0]) -> Terrain:
     )
 
 def tilted_flat(
-    size: Union[List[float], Tuple[float, float]] = [20.0, 20.0],
+    size: Union[List[float], Tuple[float, float]] = [10.0, 10.0],
     tilt_angle: float = 30,
     tilt_direction: Union[List[float], Tuple[float, float]] = [1.0, 0.0]
 ) -> Terrain:
@@ -96,7 +96,7 @@ def tilted_flat(
     )
 
 def crater(
-    size=[20, 20],
+    size=[10, 10],
     ruggedness= 0.3,
     curviness=5,
     granularity_multiplier= .5,
@@ -163,7 +163,7 @@ def crater(
 
 
 def rugged_heightmap(
-    size: tuple[float, float] = [20, 20],
+    size: tuple[float, float] = [10, 10],
     num_edges: float = 100,
     density: float = 0.5,
     hillyness: float = 1,
@@ -223,7 +223,7 @@ def rugged_heightmap(
 
 
 def bowl_heightmap(
-    size: tuple[float, float] = [20, 20],
+    size: tuple[float, float] = [10, 10],
     granularity_multiplier: float = .5,
 ) -> Terrain:
     r"""
@@ -267,7 +267,7 @@ def bowl_heightmap(
         dtype=float,
     )
 
-    max_height = 1  # The height of the edges of the bowl
+    max_height = 3  # The height of the edges of the bowl
 
     return Terrain(
         static_geometry=[

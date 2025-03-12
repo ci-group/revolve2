@@ -72,6 +72,26 @@ def get_selection_names_from_init():
         return module.__all__
     else:
         raise AttributeError(f"__all__ not found in {init_file}")
+    
+
+def get_task_names_from_init():
+    """
+    Import the __init__.py file from the given folder and extract the function names listed in the __all__ variable.
+    """
+    # Get the script's directory
+    script_path = Path(__file__).resolve()
+    
+    # Dynamically find the root of your project (assuming 'revolve2' is the project root)
+    for parent in script_path.parents:
+        if parent.name == "revolve2":
+            project_root = parent
+            break
+    else:
+        raise FileNotFoundError("Could not determine the project root (revolve2).")
+
+    # Define the correct selection path dynamically
+    selection_path = project_root 
+    
 
 def get_config_parameters_from_file(file_path):
     """Dynamically load variables from a config file as a dictionary."""

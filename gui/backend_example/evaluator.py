@@ -11,6 +11,7 @@ from revolve2.modular_robot_simulation import (
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
 import fitness_functions
+from tasks import gait_learning, turning_in_place, uphill_locomotion
 import terrains
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 import matplotlib.pyplot as plt
@@ -36,6 +37,7 @@ class Evaluator(Eval):
         headless: bool,
         num_simulators: int,
         terrain="flat",
+        task: str = "gait_learning",
         fitness_function="xy_displacement"
     ) -> None:
         """
@@ -48,6 +50,7 @@ class Evaluator(Eval):
             headless=headless, num_simulators=num_simulators
         )
         self._terrain = eval(f"terrains.{terrain}")
+        self._task = eval(task)
         self._fitness_function = fitness_function
 
     def evaluate(
@@ -78,9 +81,10 @@ class Evaluator(Eval):
         )
 
         # Calculate the fitnesses.
-        fitness_function = getattr(fitness_functions, self._fitness_function)
+        print(self._task)
+        fitness_function = getattr(self._task, self._fitness_function)
                
-        if fitness_function is fitness_functions.circular_trajectory:
+        if fitness_function is turning_in_place.circular_trajectory:
             fitnesses = [
                 fitness_function(
                     [states[i].get_modular_robot_simulation_state(robot)

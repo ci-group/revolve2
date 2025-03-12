@@ -69,12 +69,13 @@ class RobotEvolutionGUI(QMainWindow):
 
 
     def run_simulation(self):        
+        task = self.task_dropdown.currentText()
         fitness_function = self.fitness_dropdown.currentText()
         terrain = self.gather_terrain_params()
         parent_selection, parent_selection_params = self.gather_selection_params(self.parent_dropdown, self.parent_params_layout)
         survival_selection, survival_selection_params = self.gather_selection_params(self.survivor_dropdown, self.survivor_params_layout)
 
-        command = f"python gui/backend_example/main_from_gui.py {terrain} {fitness_function} {parent_selection} {parent_selection_params} {survival_selection} {survival_selection_params}"
+        command = f'python gui/backend_example/main_from_gui.py {terrain} "{task}" {fitness_function} {parent_selection} {parent_selection_params} {survival_selection} {survival_selection_params}'
         print(f"Running simulation with command: {command}")
         self.simulation_process = subprocess.Popen(command, shell=True)
 
@@ -207,6 +208,10 @@ class RobotEvolutionGUI(QMainWindow):
 
         widget.setLayout(layout)
 
+        # Automatically update parameters for the initial selection
+        self.update_selection_params(self.parent_dropdown, self.parent_params_layout)
+        self.update_selection_params(self.survivor_dropdown, self.survivor_params_layout)        
+
         return widget
         
     def update_selection_params(self, item, params_layout):
@@ -237,10 +242,10 @@ class RobotEvolutionGUI(QMainWindow):
                 "k": 2
             },
             "roulette": {
-                "n": 20
+                "n": 1
             },   
             "topn": {
-                "n" : 20
+                "n" : 1
             }
 
             # Add more selection functions and their parameters here
@@ -548,26 +553,48 @@ class RobotEvolutionGUI(QMainWindow):
         terrain = f'"{terrain}({terrain_params_str})"'
 
         return terrain
-
+        
     def create_fitness_tab(self):  # under development
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Task and Fitness Function"))
+        layout.addWidget(QLabel("Define Task and Fitness Function"))
 
         # Task selection
-        task_dropdown = QComboBox()
-        task_dropdown.addItems(["Task 1", "Task 2", "Task 3"])
+        self.task_dropdown = QComboBox()
+
+        # gather tasks from the backend/tasks folder
+        tasks_path = os.path.join(self.PROJECT_ROOT, "gui/backend_example/tasks")
+        task_files = get_files_from_path(tasks_path)
+        task_files.remove("__init__.py")
+        task_names = [os.path.splitext(task)[0] for task in task_files]  # Remove .py extension to make it more readable
+        self.task_dropdown.addItems(task_names)
+
         layout.addWidget(QLabel("Target Task:"))
-        layout.addWidget(task_dropdown)
+        layout.addWidget(self.task_dropdown)
 
         # Fitness function selection
         self.fitness_dropdown = QComboBox()
-        self.fitness_dropdown.addItems(self.fitness_functions.keys())
         layout.addWidget(QLabel("Fitness Function:"))
         layout.addWidget(self.fitness_dropdown)
 
+        # Connect task dropdown to update fitness functions
+        self.task_dropdown.currentIndexChanged.connect(self.update_fitness_functions)
+
+        # Automatically update fitness functions for the initial selection
+        self.update_fitness_functions()
+
         widget.setLayout(layout)
         return widget
+
+    def update_fitness_functions(self):
+        """Update the fitness functions based on the selected task."""
+        selected_task = self.task_dropdown.currentText()
+        tasks_path = os.path.join(self.PROJECT_ROOT, "gui/backend_example/tasks")
+        task_file_path = os.path.join(tasks_path, f"{selected_task}.py")  # Add .py extension back
+        fitness_functions = get_functions_from_file(task_file_path)
+
+        self.fitness_dropdown.clear()
+        self.fitness_dropdown.addItems(fitness_functions.keys())
 
     def create_simulation_parameters_tab(self):
         widget = QWidget()

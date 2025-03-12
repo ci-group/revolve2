@@ -82,7 +82,7 @@ class Evaluator(Eval):
         # Get the fitness function from the correct task file.
         fitness_function = getattr(self._task, self._fitness_function)
                
-        # Calculate fitnesses
+        # Need the entirety of the trajectory to evaluate turning in place.
         if fitness_function is turning_in_place.circular_trajectory:
             fitnesses = [
                 fitness_function(
@@ -91,6 +91,8 @@ class Evaluator(Eval):
                         radius=.25)
                 for robot, states in zip(robots, scene_states) 
             ]
+            
+        # Initial and final states are enough for the other tasks.
         else:
             fitnesses = [
                 fitness_function(states[0].get_modular_robot_simulation_state(robot),

@@ -10,7 +10,6 @@ from revolve2.modular_robot_simulation import (
 )
 from revolve2.simulators.mujoco_simulator import LocalSimulator
 
-import fitness_functions
 from tasks import gait_learning, turning_in_place, uphill_locomotion
 import terrains
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
@@ -80,10 +79,10 @@ class Evaluator(Eval):
             scenes=scenes,
         )
 
-        # Calculate the fitnesses.
-        print(self._task)
+        # Get the fitness function from the correct task file.
         fitness_function = getattr(self._task, self._fitness_function)
                
+        # Calculate fitnesses
         if fitness_function is turning_in_place.circular_trajectory:
             fitnesses = [
                 fitness_function(
@@ -92,7 +91,6 @@ class Evaluator(Eval):
                         radius=.25)
                 for robot, states in zip(robots, scene_states) 
             ]
-
         else:
             fitnesses = [
                 fitness_function(states[0].get_modular_robot_simulation_state(robot),
@@ -100,11 +98,10 @@ class Evaluator(Eval):
                 for robot, states in zip(robots, scene_states)
             ]
 
-        to_visualize = [[states[i].get_modular_robot_simulation_state(robot) for i in range(len(states))]
-                         for robot, states in zip(robots, scene_states)]
-
         # visualize path of the robot
         if len(population) == 1:
+            to_visualize = [[states[i].get_modular_robot_simulation_state(robot) for i in range(len(states))]
+                    for robot, states in zip(robots, scene_states)]
             visualize_path(to_visualize[0])
 
         return fitnesses

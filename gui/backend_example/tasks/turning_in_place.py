@@ -1,4 +1,4 @@
-"""Fitness functions corresponding to turning in place for modular robots."""
+"""Fitness functions for turning in place."""
 
 import math
 import os

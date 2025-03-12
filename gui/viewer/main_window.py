@@ -28,7 +28,7 @@ class RobotEvolutionGUI(QMainWindow):
         self.PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 
         # Use absolute paths
-        self.fitness_functions = get_functions_from_file(os.path.join(self.PROJECT_ROOT, "gui/backend_example/fitness_functions.py"))
+        # self.fitness_functions = get_functions_from_file(os.path.join(self.PROJECT_ROOT, "gui/backend_example/fitness_functions.py"))
         self.terrains = get_functions_from_file(os.path.join(self.PROJECT_ROOT, "gui/backend_example/terrains.py"))
 
         self.path_simulation_parameters = os.path.join(self.PROJECT_ROOT, "gui/backend_example/config_simulation_parameters.py")

@@ -13,7 +13,17 @@ from revolve2.simulators.mujoco_simulator import LocalSimulator
 import fitness_functions
 import terrains
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
+import matplotlib.pyplot as plt
+plt.switch_backend('Agg')
 
+
+def visualize_path(states):
+    x = [state.get_pose().position.x for state in states]
+    y = [state.get_pose().position.y for state in states]
+    plt.plot(x, y)
+
+    plt.savefig(f'path_{x[-1], y[-1]}.png')
+    plt.close()
 
 class Evaluator(Eval):
     """Provides evaluation of robots."""
@@ -69,10 +79,28 @@ class Evaluator(Eval):
 
         # Calculate the fitnesses.
         fitness_function = getattr(fitness_functions, self._fitness_function)
-        fitnesses = [
-            fitness_function(states[0].get_modular_robot_simulation_state(robot),
-                             states[-1].get_modular_robot_simulation_state(robot))
-            for robot, states in zip(robots, scene_states)
-        ]
+               
+        if fitness_function is fitness_functions.circular_trajectory:
+            fitnesses = [
+                fitness_function(
+                    [states[i].get_modular_robot_simulation_state(robot)
+                      for i in range(len(states))],
+                        radius=.25)
+                for robot, states in zip(robots, scene_states) 
+            ]
+
+        else:
+            fitnesses = [
+                fitness_function(states[0].get_modular_robot_simulation_state(robot),
+                                states[-1].get_modular_robot_simulation_state(robot))
+                for robot, states in zip(robots, scene_states)
+            ]
+
+        to_visualize = [[states[i].get_modular_robot_simulation_state(robot) for i in range(len(states))]
+                         for robot, states in zip(robots, scene_states)]
+
+        # visualize path of the robot
+        if len(population) == 1:
+            visualize_path(to_visualize[0])
 
         return fitnesses

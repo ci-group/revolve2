@@ -1,1 +1,2 @@
-PyQt5>=5.15.11
+PyQt5>=5.5.0
+opencv-python-headless

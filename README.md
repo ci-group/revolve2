@@ -55,3 +55,19 @@ xy_displacement = fitness_functions.xy_displacement(
 ## Furthermore you can beta test the new GUI by running:
 
 `python -m gui.viewer.main_window`
+
+Note: If you experience the following error when trying to plot through the GUI.
+
+```
+ qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "<your-path>/ci-group/revolve2/.venv/lib/python3.11/site-packages/cv2/qt/plugins" even though it was found.
+This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+
+Available platform plugins are: xcb, eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayland, wayland-xcomposite-egl, wayland-xcomposite-glx, webgl.
+```
+
+Run the following commands to fix it:
+`pip uninstall opencv-python-headless`
+`pip install opencv-python-headless`
+
+Should do the trick.
+

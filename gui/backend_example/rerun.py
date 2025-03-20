@@ -38,8 +38,6 @@ def main() -> None:
             select(Experiment.terrain)
         ).one()[0]
 
-    print(str(terrain_str))
-
     logging.info(f"Best fitness: {fitness}")
 
     # Create the evaluator.

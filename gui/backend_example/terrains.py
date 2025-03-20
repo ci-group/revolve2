@@ -259,7 +259,23 @@ def crater(
         dtype=float,
     )
 
-    bowl = bowl_heightmap()
+    bowl =  np.fromfunction(
+        np.vectorize(
+            lambda y, x: (
+                (x / num_edges[0] * 2.0 - 1.0) ** 2
+                + (y / num_edges[1] * 2.0 - 1.0) ** 2
+                if math.sqrt(
+                    (x / num_edges[0] * 2.0 - 1.0) ** 2
+                    + (y / num_edges[1] * 2.0 - 1.0) ** 2
+                )
+                <= 1.0
+                else 0.0
+            ),
+            otypes=[float],
+        ),
+        num_edges,
+        dtype=float,
+    )
 
     max_height = ruggedness + curviness
     if max_height == 0.0:

@@ -98,6 +98,7 @@ def get_selection_names_from_init():
         if 'multiple_unique' in module.__all__:
             module.__all__.remove('multiple_unique')  # Remove specific function if needed
             module.__all__.remove('pareto_frontier')  # Remove specific function if needed
+            module.__all__.remove('multiple_with_replacement')  # Remove specific function if needed
         return module.__all__
     else:
         raise AttributeError(f"__all__ not found in {init_file}")

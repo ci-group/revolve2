@@ -26,11 +26,9 @@ def multiple_with_replacement(
     assert selection_size <= len(population)
 
     selected_individuals = []
-    for _ in range(selection_size):
-        new_individual = False
-        while new_individual is False:
-            selected_individual = selection_function(population, fitnesses)
-            if selected_individual not in selected_individuals:
-                selected_individuals.append(selected_individual)
-                new_individual = True
+
+    while len(selected_individuals) < selection_size:
+        selected_individual = selection_function(population, fitnesses)
+        selected_individuals.append(selected_individual)
+
     return np.array(selected_individuals)

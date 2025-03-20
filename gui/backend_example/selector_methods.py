@@ -50,39 +50,34 @@ class ParentSelector(Selector):
             selection_function = lambda _, fitnesses: selection.tournament(
                 fitnesses=fitnesses, rng=self.rng, **self.selection_params
             )
+            return np.array(
+                [
+                    selection.multiple_unique(
+                        selection_size=2,
+                        
+                        population=[individual.genotype for individual in population.individuals],
+                        fitnesses=[individual.fitness for individual in population.individuals],
+                        
+                        selection_function=selection_function,
+                    )
+                    for _ in range(self.offspring_size)
+                ],
+            ), {"parent_population": population}
+            
         else:
             selection_function = lambda _, fitnesses: getattr(selection, self.selection_func)(
                 fitnesses=fitnesses, **self.selection_params
             )
 
-        if self.generational:
             return np.array(
-                [
-                    selection.multiple_unique(
-                        selection_size=2,
-                        
-                        population=[individual.genotype for individual in population.individuals],
-                        fitnesses=[individual.fitness for individual in population.individuals],
-                        
-                        selection_function=selection_function,
-                    )
-                    for _ in range(self.offspring_size)
-                ],
-            ), {"parent_population": population}
-        else:
-            return np.array(
-                [
-                    selection.multiple_unique(
-                        selection_size=2,
-                        
-                        population=[individual.genotype for individual in population.individuals],
-                        fitnesses=[individual.fitness for individual in population.individuals],
-                        
-                        selection_function=selection_function,
-                    )
-                    for _ in range(self.offspring_size)
-                ],
-            ), {"parent_population": population}
+                selection.multiple_with_replacement(
+                    selection_size=self.offspring_size,
+                    population=[individual.genotype for individual in population.individuals],
+                    fitnesses=[individual.fitness for individual in population.individuals],
+                    selection_function=selection_function,
+                )
+                , {"parent_population": population}
+            )
 
 class SurvivorSelector(Selector):
     """Selector class for survivor selection."""
@@ -128,40 +123,72 @@ class SurvivorSelector(Selector):
             selection_function = lambda _, fitnesses: selection.tournament(
                 fitnesses=fitnesses, rng=self.rng, **self.selection_params
             )
+            if self.generational:
+                original_survivors, offspring_survivors = population_management.generational(
+                    old_genotypes=[i.genotype for i in population.individuals],
+                    old_fitnesses=[i.fitness for i in population.individuals],
+                    new_genotypes=offspring,
+                    new_fitnesses=offspring_fitness,
+                    selection_function=lambda n, genotypes, fitnesses: selection.multiple_unique(
+                        selection_size=n,
+                        population=genotypes,
+                        fitnesses=fitnesses,
+                        selection_function=selection_function,
+                    ),
+                )
+
+            else:
+                original_survivors, offspring_survivors = population_management.steady_state(
+                    
+                    old_genotypes=[i.genotype for i in population.individuals],
+                    old_fitnesses=[i.fitness for i in population.individuals],
+                    new_genotypes=offspring,
+                    new_fitnesses=offspring_fitness,
+
+                    selection_function=lambda n, genotypes, fitnesses: selection.multiple_unique(
+                        selection_size=n,
+                        population=genotypes,
+                        fitnesses=fitnesses,
+                        selection_function=selection_function,
+                    ),
+                )
         else:
             selection_function = lambda _, fitnesses: getattr(selection, self.selection_func)(
                 fitnesses=fitnesses, **self.selection_params
             )
+
+            if self.generational:
+                original_survivors, offspring_survivors = population_management.generational(
+                    old_genotypes=[i.genotype for i in population.individuals],
+                    old_fitnesses=[i.fitness for i in population.individuals],
+                    new_genotypes=offspring,
+                    new_fitnesses=offspring_fitness,
+                    
+                    selection_function=lambda n, genotypes, fitnesses: selection.multiple_with_replacement(
+                        selection_size=n,
+                        population=genotypes,
+                        fitnesses=fitnesses,
+                        selection_function=selection_function,
+                    ),
+                )
+
+            else:
+                original_survivors, offspring_survivors = population_management.steady_state(
+                    
+                    old_genotypes=[i.genotype for i in population.individuals],
+                    old_fitnesses=[i.fitness for i in population.individuals],
+                    new_genotypes=offspring,
+                    new_fitnesses=offspring_fitness,
+
+                    selection_function=lambda n, genotypes, fitnesses: selection.multiple_with_replacement(
+                        selection_size=n,
+                        population=genotypes,
+                        fitnesses=fitnesses,
+                        selection_function=selection_function,
+                    ),
+                )
             
-        if self.generational:
-            original_survivors, offspring_survivors = population_management.generational(
-                old_genotypes=[i.genotype for i in population.individuals],
-                old_fitnesses=[i.fitness for i in population.individuals],
-                new_genotypes=offspring,
-                new_fitnesses=offspring_fitness,
-                selection_function=lambda n, genotypes, fitnesses: selection.multiple_unique(
-                    selection_size=n,
-                    population=genotypes,
-                    fitnesses=fitnesses,
-                    selection_function=selection_function,
-                ),
-            )
 
-        else:
-            original_survivors, offspring_survivors = population_management.steady_state(
-                
-                old_genotypes=[i.genotype for i in population.individuals],
-                old_fitnesses=[i.fitness for i in population.individuals],
-                new_genotypes=offspring,
-                new_fitnesses=offspring_fitness,
-
-                selection_function=lambda n, genotypes, fitnesses: selection.multiple_unique(
-                    selection_size=n,
-                    population=genotypes,
-                    fitnesses=fitnesses,
-                    selection_function=selection_function,
-                ),
-            )
 
         return (
             Population(

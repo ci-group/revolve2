@@ -53,7 +53,7 @@ class RobotEvolutionGUI(QMainWindow):
 
         self.tab_widget.addTab(self.create_fitness_tab(), "Task and Fitness Function")
         
-        self.tab_widget.addTab(self.create_genotype_tab(), "Robot Genotypes")
+        self.tab_widget.addTab(self.create_genotype_tab(), "Robot Body Genotypes")
 
         self.tab_widget.addTab(self.create_ea_tab(), "Evolutionary Algorithm")
 
@@ -309,7 +309,7 @@ class RobotEvolutionGUI(QMainWindow):
         self.view1 = QWidget()
         v1_layout = QVBoxLayout()
         v1_layout.addWidget(QLabel("<b>Non-Overlapping (comma) Generations</b>"))
-        v1_layout.addWidget(QLabel("Parent Size <= Offspring Size"))
+        v1_layout.addWidget(QLabel("Note: Parent Size <= Offspring Size"))
         self.view1.setLayout(v1_layout)
 
         # Steady-State View
@@ -334,7 +334,7 @@ class RobotEvolutionGUI(QMainWindow):
                 self.inputs_evolution["STEADY_STATE"] = False
                 continue
 
-            if key == "SIMULATION_TIME":
+            if key == "FITNESS_EVAL_DURATION":
                 comment_label = QLabel("(seconds)")
                 input_layout.addWidget(input_label)
                 input_layout.addWidget(input_field)
@@ -357,7 +357,7 @@ class RobotEvolutionGUI(QMainWindow):
                 self.inputs_evolution["STEADY_STATE"] = True
                 continue
             
-            if key == "SIMULATION_TIME":
+            if key == "FITNESS_EVAL_DURATION":
                 comment_label = QLabel("(seconds)")
                 input_layout.addWidget(input_label)
                 input_layout.addWidget(input_field)
@@ -637,14 +637,14 @@ class RobotEvolutionGUI(QMainWindow):
     def create_run_simulation_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("Run Simulation"))
-        run_button = QPushButton("Run Simulation")
+        layout.addWidget(QLabel("Run Evolution"))
+        run_button = QPushButton("Run Evolution")
         run_button.clicked.connect(self.run_simulation)
         layout.addWidget(run_button)
         widget.setLayout(layout)
 
-        layout.addWidget(QLabel("Stop Simulation"))
-        stop_button = QPushButton("Stop Simulation")
+        layout.addWidget(QLabel("Stop Evolution"))
+        stop_button = QPushButton("Stop Evolution")
         stop_button.clicked.connect(self.stop_simulation)
         layout.addWidget(stop_button)
         widget.setLayout(layout)

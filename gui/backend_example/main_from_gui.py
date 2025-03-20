@@ -24,7 +24,7 @@ from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from revolve2.experimentation.evolution import ModularRobotEvolution
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng, seed_from_time
-import simulation_parameters as simulation_config
+import config_simulation_parameters as simulation_config
 
 import sys
 

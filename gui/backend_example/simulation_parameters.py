@@ -2,10 +2,10 @@
 
 from revolve2.simulation.simulator import BatchParameters
 from config_simulation_parameters import SAMPLING_FREQUENCY, SIMULATION_TIMESTEP, CONTROL_FREQUENCY
-from config import SIMULATION_TIME
+from config import FITNESS_EVAL_DURATION
 
 def make_batch_parameters(
-    simulation_time: int = SIMULATION_TIME,
+    simulation_time: int = FITNESS_EVAL_DURATION,
     sampling_frequency: float | None = SAMPLING_FREQUENCY,
     simulation_timestep: float = SIMULATION_TIMESTEP,
     control_frequency: float = CONTROL_FREQUENCY,

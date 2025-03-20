@@ -6,7 +6,7 @@ import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
 from revolve2.modular_robot_simulation import ModularRobotSimulationState
-from revolve2.gui.backend_example.config_simulation_parameters import STANDARD_SIMULATION_TIME
+from revolve2.gui.backend_example.config import FITNESS_EVAL_DURATION
 
 
 def xy_displacement(
@@ -27,7 +27,7 @@ def xy_displacement(
     )
 
     
-def x_speed_Miras2021(begin_state: ModularRobotSimulationState, end_state: ModularRobotSimulationState, simulation_time=STANDARD_SIMULATION_TIME) -> float:
+def x_speed_Miras2021(begin_state: ModularRobotSimulationState, end_state: ModularRobotSimulationState, simulation_time=FITNESS_EVAL_DURATION) -> float:
     """Goal:
         Calculate the fitness for speed in x direction for a single modular robot according to 
             Miras (2021).

@@ -24,6 +24,7 @@ from revolve2.experimentation.database import OpenMethod, open_database_sqlite
 from revolve2.experimentation.evolution import ModularRobotEvolution
 from revolve2.experimentation.logging import setup_logging
 from revolve2.experimentation.rng import make_rng, seed_from_time
+import simulation_parameters as simulation_config
 
 import sys
 
@@ -74,7 +75,7 @@ def run_experiment(dbengine: Engine) -> None:
     - crossover_reproducer: Allows us to generate offspring from parents.
     - modular_robot_evolution: The evolutionary process as a object that can be iterated.
     """
-    evaluator = Evaluator(headless=True, num_simulators=config.NUM_SIMULATORS, terrain=terrain, task=task, fitness_function=fitness_function)
+    evaluator = Evaluator(headless=True, num_simulators=simulation_config.NUM_SIMULATORS, terrain=terrain, task=task, fitness_function=fitness_function)
     parent_selector = ParentSelector(offspring_size=config.OFFSPRING_SIZE, rng=rng, selection_func=parent_selection_function, selection_params=parent_selection_function_params)
     survivor_selector = SurvivorSelector(rng=rng, selection_func=survivor_selection_function, selection_params=survivor_selection_function_params)
     crossover_reproducer = CrossoverReproducer(rng=rng, innov_db_body=innov_db_body, innov_db_brain=innov_db_brain)

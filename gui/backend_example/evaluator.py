@@ -35,9 +35,9 @@ class Evaluator(Eval):
         self,
         headless: bool,
         num_simulators: int,
-        terrain="flat",
+        terrain: str = "flat",
         task: str = "gait_learning",
-        fitness_function="xy_displacement"
+        fitness_function: str ="xy_displacement"
     ) -> None:
         """
         Initialize this object.

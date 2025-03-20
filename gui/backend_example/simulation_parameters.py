@@ -1,14 +1,14 @@
 """Standard simulation functions and parameters."""
 
 from revolve2.simulation.simulator import BatchParameters
-from config_simulation_parameters import STANDARD_SIMULATION_TIME, STANDARD_SAMPLING_FREQUENCY, STANDARD_SIMULATION_TIMESTEP, STANDARD_CONTROL_FREQUENCY
+from config_simulation_parameters import SAMPLING_FREQUENCY, SIMULATION_TIMESTEP, CONTROL_FREQUENCY
+from config import SIMULATION_TIME
 
-
-def make_standard_batch_parameters(
-    simulation_time: int = STANDARD_SIMULATION_TIME,
-    sampling_frequency: float | None = STANDARD_SAMPLING_FREQUENCY,
-    simulation_timestep: float = STANDARD_SIMULATION_TIMESTEP,
-    control_frequency: float = STANDARD_CONTROL_FREQUENCY,
+def make_batch_parameters(
+    simulation_time: int = SIMULATION_TIME,
+    sampling_frequency: float | None = SAMPLING_FREQUENCY,
+    simulation_timestep: float = SIMULATION_TIMESTEP,
+    control_frequency: float = CONTROL_FREQUENCY,
 ) -> BatchParameters:
     """
     Create batch parameters as standardized within the CI Group.

@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QTabWidget,
       QWidget, QVBoxLayout, QLabel, 
@@ -138,7 +139,7 @@ class RobotEvolutionGUI(QMainWindow):
 
     def save_config_changes(self, file_path, inputs):
         """Update a config with new values from the GUI."""
-        new_values = {}
+        new_values = OrderedDict()
         for key, input_field in inputs.items():
             if type(input_field) == bool:
                 new_values[key] = input_field
@@ -175,7 +176,6 @@ class RobotEvolutionGUI(QMainWindow):
     def create_selection_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT<b>"))
         layout.addWidget(QLabel("Define Parent and Surivor Selection Types"))
         
         self.parent_dropdown = QComboBox()
@@ -310,6 +310,7 @@ class RobotEvolutionGUI(QMainWindow):
         self.view1 = QWidget()
         v1_layout = QVBoxLayout()
         v1_layout.addWidget(QLabel("<b>Non-Overlapping (comma) Generations</b>"))
+        v1_layout.addWidget(QLabel("Parent Size <= Offspring Size"))
         self.view1.setLayout(v1_layout)
 
         # Steady-State View
@@ -320,16 +321,26 @@ class RobotEvolutionGUI(QMainWindow):
 
         self.inputs_evolution = {}
 
-        # Add parameter fields for generational views
+        # Add parameter fields for generational views 
+        # (comment that parent pop <= offspring pop)
+        
         for key, value in self.evolution_parameters.items():
             input_layout = QHBoxLayout()
             input_label = QLabel(f"{key}:")
             input_field = QLineEdit(str(value))
             self.inputs_evolution[key] = input_field
+            
             if key in ["GENERATIONAL", "STEADY_STATE"]:
                 self.inputs_evolution["GENERATIONAL"] = True
                 self.inputs_evolution["STEADY_STATE"] = False
                 continue
+
+            if key == "SIMULATION_TIME":
+                comment_label = QLabel("(seconds)")
+                input_layout.addWidget(input_label)
+                input_layout.addWidget(input_field)
+                input_layout.addWidget(comment_label)
+
             else:
                 input_layout.addWidget(input_label)
                 input_layout.addWidget(input_field)
@@ -341,10 +352,18 @@ class RobotEvolutionGUI(QMainWindow):
             input_label = QLabel(f"{key}:")
             input_field = QLineEdit(str(value))
             self.inputs_evolution[key] = input_field
+            
             if key in ["GENERATIONAL", "STEADY_STATE"]:  
                 self.inputs_evolution["GENERATIONAL"] = False
                 self.inputs_evolution["STEADY_STATE"] = True
                 continue
+            
+            if key == "SIMULATION_TIME":
+                comment_label = QLabel("(seconds)")
+                input_layout.addWidget(input_label)
+                input_layout.addWidget(input_field)
+                input_layout.addWidget(comment_label)
+            
             else:
                 input_layout.addWidget(input_label)
                 input_layout.addWidget(input_field)
@@ -394,9 +413,7 @@ class RobotEvolutionGUI(QMainWindow):
     def create_environment_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - Define Environment"))
-        # Environment settings
-        layout.addWidget(QLabel("Environment Terrains: "))
+        layout.addWidget(QLabel("Define Environment"))
 
         # Create a horizontal layout for the list and image
         h_layout = QHBoxLayout()

@@ -2,7 +2,7 @@ import importlib.util
 import inspect
 import os
 from pathlib import Path
-
+from collections import OrderedDict
 
 def get_files_from_path(db_directory):
     """Populate the dropdown with files from the directory."""
@@ -74,14 +74,42 @@ def get_selection_names_from_init():
         raise AttributeError(f"__all__ not found in {init_file}")
     
 def get_config_parameters_from_file(file_path):
-    """Dynamically load variables from a config file as a dictionary."""
+    """Dynamically load variables from a config file as a dictionary with preserved order."""
     if not os.path.exists(file_path):
         with open(file_path, "w") as f:
             f.write("# Default config file\n")
+    
+    # Read the file to get the order of variables
+    with open(file_path, "r") as f:
+        lines = f.readlines()
+    
+    # Extract variable names in order of appearance
+    ordered_keys = []
+    for line in lines:
+        line = line.strip()
+        if line and not line.startswith("#"):
+            # Extract the variable name before the equals sign
+            if "=" in line:
+                key = line.split("=")[0].strip()
+                ordered_keys.append(key)
+    
+    # Now load the module to get the actual values
     spec = importlib.util.spec_from_file_location("config", file_path)
     config = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(config)
-    return {key: getattr(config, key) for key in dir(config) if (not key.startswith("__"))}
+    
+    # Create OrderedDict with keys in the original order
+    result = OrderedDict()
+    for key in ordered_keys:
+        if hasattr(config, key):
+            result[key] = getattr(config, key)
+    
+    # Add any remaining keys that might have been missed
+    for key in dir(config):
+        if not key.startswith("__") and key not in result:
+            result[key] = getattr(config, key)
+    
+    return result
 
 def save_config_parameters(file_path, values):
     """Save the modified values back to a config file."""

@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QTabWidget,
       QWidget, QVBoxLayout, QLabel, 
@@ -139,7 +138,7 @@ class RobotEvolutionGUI(QMainWindow):
 
     def save_config_changes(self, file_path, inputs):
         """Update a config with new values from the GUI."""
-        new_values = OrderedDict()
+        new_values = {}
         for key, input_field in inputs.items():
             if type(input_field) == bool:
                 new_values[key] = input_field
@@ -514,6 +513,7 @@ class RobotEvolutionGUI(QMainWindow):
             },
             "bowl_heightmap": {
                 "size": [10, 10],
+                "max_height": 2.0,
                 "granularity_multiplier": 0.5
             },
             # Add more terrains and their parameters here
@@ -699,7 +699,6 @@ class RobotEvolutionGUI(QMainWindow):
         return widget
 
 if __name__ == "__main__":
-    import sys
     app = QApplication(sys.argv)
     window = RobotEvolutionGUI()
     window.show()

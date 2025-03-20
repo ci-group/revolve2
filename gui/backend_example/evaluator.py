@@ -1,7 +1,7 @@
 """Evaluator class."""
 
 from database_components import Genotype
-
+import datetime
 from revolve2.experimentation.evolution.abstract_elements import Evaluator as Eval
 from revolve2.modular_robot_simulation import (
     ModularRobotScene,
@@ -20,9 +20,10 @@ plt.switch_backend('Agg')
 def visualize_path(states):
     x = [state.get_pose().position.x for state in states]
     y = [state.get_pose().position.y for state in states]
-    plt.plot(x, y)
+    timestamp = datetime.datetime.now()
 
-    plt.savefig(f'path_{x[-1], y[-1]}.png')
+    plt.plot(x, y)
+    plt.savefig(f'gui/resources/figures/path_{timestamp}.png')
     plt.close()
 
 class Evaluator(Eval):

@@ -122,14 +122,6 @@ class RobotEvolutionGUI(QMainWindow):
         else:
             print("No active simulation to stop.")
 
-    # def plot_results(self):
-    #     selected_file = self.database_dropdown_plot.currentText()
-    #     if selected_file:  # Ensure a file is selected
-    #         subprocess.Popen(["python", "gui/backend_example/plot.py", selected_file])
-    #         # QMessageBox.information(self, "Success", "Figure saved to 'gui/resources/figures/'")
-    #     else:
-    #         print("No database selected.")
-
     def plot_results(self):
         """
         Plot results in the embedded plot widget

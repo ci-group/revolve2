@@ -14,17 +14,7 @@ from tasks import gait_learning, turning_in_place, uphill_locomotion
 import terrains
 from revolve2.standards.simulation_parameters import make_standard_batch_parameters
 import matplotlib.pyplot as plt
-plt.switch_backend('Agg')
-
-
-def visualize_path(states):
-    x = [state.get_pose().position.x for state in states]
-    y = [state.get_pose().position.y for state in states]
-    timestamp = datetime.datetime.now()
-
-    plt.plot(x, y)
-    plt.savefig(f'gui/resources/figures/path_{timestamp}.png')
-    plt.close()
+plt.switch_backend('Qt5Agg')
 
 class Evaluator(Eval):
     """Provides evaluation of robots."""
@@ -108,3 +98,13 @@ class Evaluator(Eval):
             visualize_path(to_visualize[0])
 
         return fitnesses
+
+def visualize_path(states):
+    x = [state.get_pose().position.x for state in states]
+    y = [state.get_pose().position.y for state in states]
+    timestamp = datetime.datetime.now()
+
+    plt.plot(x, y)
+    plt.show()
+    plt.savefig(f'gui/resources/figures/path_{timestamp}.png')
+    plt.close()

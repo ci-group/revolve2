@@ -68,6 +68,16 @@ class ParentSelector(Selector):
             selection_function = lambda _, fitnesses: getattr(selection, self.selection_func)(
                 fitnesses=fitnesses, **self.selection_params
             )
+            print("parent selection function", selection_function)
+            print("selection params", self.selection_params)
+            print(np.array(
+                selection.multiple_with_replacement(
+                    selection_size=self.offspring_size,
+                    population=[individual.genotype for individual in population.individuals],
+                    fitnesses=[individual.fitness for individual in population.individuals],
+                    selection_function=selection_function,
+                )
+            ))
 
             return np.array(
                 selection.multiple_with_replacement(
@@ -156,6 +166,7 @@ class SurvivorSelector(Selector):
             selection_function = lambda _, fitnesses: getattr(selection, self.selection_func)(
                 fitnesses=fitnesses, **self.selection_params
             )
+            print("survivor selection function", selection_function)
 
             if self.generational:
                 original_survivors, offspring_survivors = population_management.generational(

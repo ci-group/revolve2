@@ -12,6 +12,7 @@ import os
 import sys
 import signal
 import time
+from gui.viewer.results_viewer import EmbeddedPlotWidget
 
 class RobotEvolutionGUI(QMainWindow):
     def __init__(self):
@@ -121,13 +122,35 @@ class RobotEvolutionGUI(QMainWindow):
         else:
             print("No active simulation to stop.")
 
+    # def plot_results(self):
+    #     selected_file = self.database_dropdown_plot.currentText()
+    #     if selected_file:  # Ensure a file is selected
+    #         subprocess.Popen(["python", "gui/backend_example/plot.py", selected_file])
+    #         # QMessageBox.information(self, "Success", "Figure saved to 'gui/resources/figures/'")
+    #     else:
+    #         print("No database selected.")
+
     def plot_results(self):
-        selected_file = self.database_dropdown_plot.currentText()
-        if selected_file:  # Ensure a file is selected
-            subprocess.Popen(["python", "gui/backend_example/plot.py", selected_file])
-            QMessageBox.information(self, "Success", "Figure saved to 'gui/resources/figures/'")
-        else:
-            print("No database selected.")
+        """
+        Plot results in the embedded plot widget
+        """
+        try:
+            # Get selected database
+            selected_file = self.database_dropdown_plot.currentText()
+            
+            if selected_file:
+                # Construct full database path
+                database_path = os.path.join(self.database_path, selected_file)
+                
+                # Plot in embedded widget
+                self.embedded_plot.plot_fitness(database_path)
+            else:
+                print("No database selected.")
+        
+        except Exception as e:
+            print(f"Error plotting results: {e}")
+            # Optionally show an error message box
+            QMessageBox.warning(self, "Plot Error", str(e))
 
     def rerun(self):
         selected_file = self.database_dropdown_rerun.currentText()
@@ -175,10 +198,19 @@ class RobotEvolutionGUI(QMainWindow):
     def create_selection_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
-        layout.addWidget(QLabel("Define Parent and Surivor Selection Types"))
+        layout.addWidget(QLabel("Define Parent and Survivor Selection Types"))
         
+        # Mapping for display names and internal names
+        self.selection_display_to_internal = {
+            "Tournament": "tournament",
+            "Roulette Wheel": "roulette",
+            "Top-N": "topn"
+        }
+        self.selection_internal_to_display = {v: k for k, v in self.selection_display_to_internal.items()}
+
+        # Parent selection dropdown
         self.parent_dropdown = QComboBox()
-        self.parent_dropdown.addItems(self.selection_functions)
+        self.parent_dropdown.addItems(self.selection_internal_to_display.values())
         layout.addWidget(QLabel("Parent Selection: "))
         layout.addWidget(self.parent_dropdown)
 
@@ -189,10 +221,11 @@ class RobotEvolutionGUI(QMainWindow):
         # Connect parent dropdown to update function
         self.parent_dropdown.currentIndexChanged.connect(
             lambda: self.update_selection_params(self.parent_dropdown, self.parent_params_layout)
-            )
+        )
         
+        # Survivor selection dropdown
         self.survivor_dropdown = QComboBox()
-        self.survivor_dropdown.addItems(self.selection_functions)
+        self.survivor_dropdown.addItems(self.selection_internal_to_display.values())
         layout.addWidget(QLabel("Survivor Selection:"))
         layout.addWidget(self.survivor_dropdown)
         
@@ -203,7 +236,7 @@ class RobotEvolutionGUI(QMainWindow):
         # Connect survivor dropdown to update function
         self.survivor_dropdown.currentIndexChanged.connect(
             lambda: self.update_selection_params(self.survivor_dropdown, self.survivor_params_layout)
-            )
+        )
 
         widget.setLayout(layout)
 
@@ -212,7 +245,7 @@ class RobotEvolutionGUI(QMainWindow):
         self.update_selection_params(self.survivor_dropdown, self.survivor_params_layout)        
 
         return widget
-        
+
     def update_selection_params(self, item, params_layout):
         """Update the parameter input fields based on the selected function."""
         if item is None:
@@ -221,36 +254,27 @@ class RobotEvolutionGUI(QMainWindow):
         # Clear existing parameter input fields and layouts
         while params_layout.count():
             layout_item = params_layout.takeAt(0)
-            # If the item is a widget
             if layout_item.widget():
                 layout_item.widget().deleteLater()
-            # If the item is a layout
             elif layout_item.layout():
-                # Clear the child layout
                 child_layout = layout_item.layout()
                 while child_layout.count():
                     child_item = child_layout.takeAt(0)
                     if child_item.widget():
                         child_item.widget().deleteLater()
-                # Now we can delete the layout
                 child_layout.deleteLater()
         
-        # Fixed the missing closing brace
+        # Selection parameters
         selection_params = {
-            "tournament": {
-                "k": 2
-            },
-            "roulette": {
-                "n": 1
-            },   
-            "topn": {
-                "n" : 1
-            }
-
-            # Add more selection functions and their parameters here
+            "tournament": {"k": 2},
+            "roulette": {"n": 1},
+            "topn": {"n": 1}
         }
         
-        selected_function = item.currentText()
+        # Get the internal name from the display name
+        selected_function_display = item.currentText()
+        selected_function = self.selection_display_to_internal.get(selected_function_display, None)
+
         if selected_function in selection_params:
             for param, value in selection_params[selected_function].items():
                 input_layout = QHBoxLayout()
@@ -262,42 +286,37 @@ class RobotEvolutionGUI(QMainWindow):
 
     def gather_selection_params(self, selection_dropdown, selection_params_layout):
         """Gather selection parameters from the GUI."""
-        current_selection = selection_dropdown.currentText()
+        current_selection_display = selection_dropdown.currentText()
+        current_selection = self.selection_display_to_internal.get(current_selection_display, None)
+
         if current_selection:
             selection_params = {}
-            # We need to iterate through all layouts in the selection_params_layout
             for i in range(selection_params_layout.count()):
                 layout_item = selection_params_layout.itemAt(i)
-                # If the item is a layout (which it should be based on your update_selection_params method)
                 if layout_item.layout():
                     param_layout = layout_item.layout()
-                    # First widget is label, second is the input field
                     if param_layout.count() >= 2:
                         label_item = param_layout.itemAt(0)
                         input_item = param_layout.itemAt(1)
                         if label_item and label_item.widget() and input_item and input_item.widget():
                             label = label_item.widget()
                             input_field = input_item.widget()
-                            # Extract parameter name from label (remove the ":" at the end)
                             param_name = label.text().rstrip(":")
-                            # Get parameter value from QLineEdit
                             if isinstance(input_field, QLineEdit):
                                 param_value = input_field.text()
                                 try:
-                                    # Convert to int or float if possible
                                     param_value = int(param_value)
                                 except ValueError:
                                     try:
                                         param_value = float(param_value)
                                     except ValueError:
-                                        pass  # Keep as string
+                                        pass
                                 selection_params[param_name] = param_value
             
             selection = f'"{current_selection}"'
             selection_params_dict = f'"{selection_params}"'            
                         
-            return selection, selection_params_dict
-
+        return selection, selection_params_dict
     def create_ea_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
@@ -309,7 +328,7 @@ class RobotEvolutionGUI(QMainWindow):
         self.view1 = QWidget()
         v1_layout = QVBoxLayout()
         v1_layout.addWidget(QLabel("<b>Non-Overlapping (comma) Generations</b>"))
-        v1_layout.addWidget(QLabel("Note: Parent Size <= Offspring Size"))
+        v1_layout.addWidget(QLabel("Note: Population Size <= Offspring Size"))
         self.view1.setLayout(v1_layout)
 
         # Steady-State View
@@ -649,31 +668,7 @@ class RobotEvolutionGUI(QMainWindow):
         layout.addWidget(stop_button)
         widget.setLayout(layout)
         return widget
-        
-    def create_plot_tab(self):
-        widget = QWidget()
-        layout = QVBoxLayout()
-        input_layout = QHBoxLayout()
-        
-        label = QLabel("Plot Results from Database:")
-        self.database_dropdown_plot = QComboBox()
-        self.database_dropdown_plot.addItems(get_files_from_path(self.database_path))
 
-        input_layout.addWidget(label)
-        input_layout.addWidget(self.database_dropdown_plot)
-
-        input_layout.setStretch(0, 1)  # Label takes less space
-        input_layout.setStretch(1, 3)  # Dropdown takes more space
-
-        plot_button = QPushButton("Plot Results")
-        plot_button.clicked.connect(self.plot_results)
-
-        layout.addLayout(input_layout)
-        layout.addWidget(plot_button)
-
-        widget.setLayout(layout)
-        return widget
-    
     def create_rerun_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
@@ -686,17 +681,90 @@ class RobotEvolutionGUI(QMainWindow):
         input_layout.addWidget(label)
         input_layout.addWidget(self.database_dropdown_rerun)
 
-        input_layout.setStretch(0, 1)  # Label takes less space
-        input_layout.setStretch(1, 3)  # Dropdown takes more space
+        input_layout.setStretch(0, 1)  
+        input_layout.setStretch(1, 3)  
 
         plot_button = QPushButton("Visualize")
         plot_button.clicked.connect(self.rerun)
 
+        refresh_button = QPushButton("Refresh")
+        refresh_button.clicked.connect(lambda: self.refresh_database("rerun"))
+
         layout.addLayout(input_layout)
         layout.addWidget(plot_button)
-
+        layout.addWidget(refresh_button)
         widget.setLayout(layout)
+
         return widget
+    
+    def create_plot_tab(self):
+        widget = QWidget()
+        layout = QVBoxLayout()
+        input_layout = QHBoxLayout()
+        
+        label = QLabel("Plot Results from Database:")
+        self.database_dropdown_plot = QComboBox()
+        self.database_dropdown_plot.addItems(get_files_from_path(self.database_path))
+
+        self.embedded_plot = EmbeddedPlotWidget()
+        input_layout.addWidget(label)
+        input_layout.addWidget(self.database_dropdown_plot)
+
+        input_layout.setStretch(0, 1)  
+        input_layout.setStretch(1, 3) 
+
+        plot_button = QPushButton("Plot Results")
+        plot_button.clicked.connect(self.plot_results)
+
+        refresh_button = QPushButton("Refresh")
+        refresh_button.clicked.connect(lambda: self.refresh_database("plot"))
+
+        layout.addLayout(input_layout)
+        layout.addWidget(plot_button)
+        layout.addWidget(self.embedded_plot)
+        layout.addWidget(refresh_button)
+        widget.setLayout(layout)
+
+        return widget
+    
+    def refresh_database(self, type):
+        """
+        Refresh the database dropdown specific to the rerun tab
+        """
+        if type == "rerun":
+            try:
+                # Clear existing items
+                self.database_dropdown_rerun.clear()
+                
+                # Get and add new files
+                files = get_files_from_path(self.database_path)
+                
+                # Add files to dropdown
+                if files:
+                    self.database_dropdown_rerun.addItems(files)
+                else:
+                    print("No database files found")
+                    self.database_dropdown_rerun.addItem("No databases found")
+            
+            except Exception as e:
+                print(f"Error refreshing rerun database dropdown: {e}")
+        else:
+            try:
+                # Clear existing items
+                self.database_dropdown_plot.clear()
+
+                # Get and add new files
+                files = get_files_from_path(self.database_path)
+                
+                # Add files to dropdown
+                if files:
+                    self.database_dropdown_plot.addItems(files)
+                else:
+                    print("No database files found")
+                    self.database_dropdown_plot.addItem("No databases found")
+            
+            except Exception as e:
+                print(f"Error refreshing rerun database dropdown: {e}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

@@ -150,6 +150,8 @@ class EmbeddedPlotWidgetDynamic(QWidget):
         self.is_updating = False
         self.num_generations = 10
 
+        self.draw_base_plot(self.figure.add_subplot(111))
+
     def set_database_path(self, database_path):
         self.database_path = database_path
 

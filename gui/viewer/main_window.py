@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import (
           QLineEdit, QHBoxLayout,QStackedWidget,
             QListWidget, QListWidgetItem)
 from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import QTimer
 from gui.viewer.parsing import (get_functions_from_file, get_config_parameters_from_file, 
                      save_config_parameters, get_selection_names_from_init, get_files_from_path)
 import subprocess
@@ -12,7 +13,7 @@ import os
 import sys
 import signal
 import time
-from gui.viewer.results_viewer import EmbeddedPlotWidget
+from gui.viewer.results_viewer import EmbeddedPlotWidget, EmbeddedPlotWidgetDynamic
 
 class RobotEvolutionGUI(QMainWindow):
     def __init__(self):
@@ -54,7 +55,7 @@ class RobotEvolutionGUI(QMainWindow):
 
         self.tab_widget.addTab(self.create_fitness_tab(), "Task and Fitness Function")
         
-        self.tab_widget.addTab(self.create_genotype_tab(), "Robot Body Genotypes")
+        # self.tab_widget.addTab(self.create_genotype_tab(), "Robot Body Genotypes")
 
         self.tab_widget.addTab(self.create_ea_tab(), "Evolutionary Algorithm")
 
@@ -80,6 +81,20 @@ class RobotEvolutionGUI(QMainWindow):
         print(f"Running simulation with command: {command}")
         self.simulation_process = subprocess.Popen(command, shell=True)
 
+        # Start a timer to check for the newest database after a short delay
+        self.check_new_database_timer = QTimer(self)
+        self.check_new_database_timer.timeout.connect(self.update_database_path)
+        self.check_new_database_timer.start(2000)  # Check every 2 seconds
+
+    def update_database_path(self):
+        new_db = self.get_newest_database()
+        
+        if new_db:
+            print("Newest database found: ", new_db)
+            self.plot_widget.set_database_path(new_db)
+            self.check_new_database_timer.stop()  # Stop checking once found
+        else:
+            print("Waiting for the new database to be created...")
 
     def stop_simulation(self):
         """Stop the running simulation."""
@@ -170,22 +185,22 @@ class RobotEvolutionGUI(QMainWindow):
 
         QMessageBox.information(self, "Success", "Config file updated!")
 
-    def create_genotype_tab(self):
-        widget = QWidget()
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - \n Define Mutation and Crossover Operators"))
-        # Mutation operator
-        mutation_dropdown = QComboBox()
-        mutation_dropdown.addItems(["Operator A", "Operator B", "Operator C"])
-        layout.addWidget(QLabel("Mutation Operator:"))
-        layout.addWidget(mutation_dropdown)
-        # Crossover operator
-        crossover_dropdown = QComboBox()
-        crossover_dropdown.addItems(["Operator X", "Operator Y", "Operator Z"])
-        layout.addWidget(QLabel("Crossover Operator:"))
-        layout.addWidget(crossover_dropdown)
-        widget.setLayout(layout)
-        return widget
+    # def create_genotype_tab(self):
+    #     widget = QWidget()
+    #     layout = QVBoxLayout()
+    #     layout.addWidget(QLabel("<b>UNDER DEVELOPMENT</b> - \n Define Mutation and Crossover Operators"))
+    #     # Mutation operator
+    #     mutation_dropdown = QComboBox()
+    #     mutation_dropdown.addItems(["Operator A", "Operator B", "Operator C"])
+    #     layout.addWidget(QLabel("Mutation Operator:"))
+    #     layout.addWidget(mutation_dropdown)
+    #     # Crossover operator
+    #     crossover_dropdown = QComboBox()
+    #     crossover_dropdown.addItems(["Operator X", "Operator Y", "Operator Z"])
+    #     layout.addWidget(QLabel("Crossover Operator:"))
+    #     layout.addWidget(crossover_dropdown)
+    #     widget.setLayout(layout)
+    #     return widget
     
     def create_selection_tab(self):
         widget = QWidget()
@@ -309,6 +324,7 @@ class RobotEvolutionGUI(QMainWindow):
             selection_params_dict = f'"{selection_params}"'            
                         
         return selection, selection_params_dict
+    
     def create_ea_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
@@ -648,17 +664,32 @@ class RobotEvolutionGUI(QMainWindow):
     def create_run_simulation_tab(self):
         widget = QWidget()
         layout = QVBoxLayout()
+        
+        # Label for run evolution
         layout.addWidget(QLabel("Run Evolution"))
+        
+        # Run button
         run_button = QPushButton("Run Evolution")
         run_button.clicked.connect(self.run_simulation)
-        layout.addWidget(run_button)
-        widget.setLayout(layout)
+        
+        # Plot widget
+        self.plot_widget = EmbeddedPlotWidgetDynamic(update_interval=500)  # Update every 0.5 seconds
+        num_generations = self.evolution_parameters.get("NUM_GENERATIONS")
+        self.plot_widget.set_num_generations(num_generations)
 
+        # Add widgets to layout in the correct order
+        layout.addWidget(run_button)
+        layout.addWidget(self.plot_widget)
+        
+        # Label and stop button
         layout.addWidget(QLabel("Stop Evolution"))
         stop_button = QPushButton("Stop Evolution")
         stop_button.clicked.connect(self.stop_simulation)
         layout.addWidget(stop_button)
+        
+        # Set the layout (do this only once)
         widget.setLayout(layout)
+        
         return widget
 
     def create_rerun_tab(self):
@@ -757,6 +788,21 @@ class RobotEvolutionGUI(QMainWindow):
             
             except Exception as e:
                 print(f"Error refreshing rerun database dropdown: {e}")
+
+    def get_newest_database(self):
+        """Get the newest database file in the database directory."""
+        try:
+            # List all files in the database directory
+            files = [os.path.join(self.database_path, f) for f in os.listdir(self.database_path) if os.path.isfile(os.path.join(self.database_path, f))]
+            
+            # Sort files by modification time (newest first)
+            newest_file = max(files, key=os.path.getmtime) if files else None
+            
+            return newest_file
+        except Exception as e:
+            print(f"Error getting newest database: {e}")
+            return None
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

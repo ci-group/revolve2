@@ -14,7 +14,7 @@ def multiple_with_replacement(
     selection_function: Callable[[list[TIndividual], list[TFitness]], int],
 ) -> npt.NDArray[np.float_]:
     """
-    Select multiple distinct individuals from a population using the provided selection function.
+    Select multiple individuals from a population using the provided selection function.
 
     :param selection_size: Amount of of individuals to select.
     :param population: List of individuals to select from.

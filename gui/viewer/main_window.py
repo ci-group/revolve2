@@ -644,12 +644,19 @@ class RobotEvolutionGUI(QMainWindow):
         widget = QWidget()
         layout = QVBoxLayout()
         layout.addWidget(QLabel("Edit Simulation Parameters"))
+        layout.addWidget(QLabel("Note: Advanced settings, only change them if you know what you are doing..."))
         self.inputs_simulation = {}
         for key, value in self.simulation_parameters.items():
             input_layout = QHBoxLayout()
             input_label = QLabel(f"{key}:")
             input_field = QLineEdit(str(value))
             self.inputs_simulation[key] = input_field
+            if key == "NUM_SIMULATORS":
+                comment_label = QLabel("(the number of cores your CPU has, this might not be the number you see now)")
+                input_layout.addWidget(input_label)
+                input_layout.addWidget(input_field)
+                input_layout.addWidget(comment_label)
+
             input_layout.addWidget(input_label)
             input_layout.addWidget(input_field)
             layout.addLayout(input_layout)

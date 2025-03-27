@@ -680,9 +680,8 @@ class RobotEvolutionGUI(QMainWindow):
         run_button.clicked.connect(self.run_simulation)
         
         # Plot widget
-        self.plot_widget = EmbeddedPlotWidgetDynamic(update_interval=500)  # Update every 0.5 seconds
         num_generations = self.evolution_parameters.get("NUM_GENERATIONS")
-        self.plot_widget.set_num_generations(num_generations)
+        self.plot_widget = EmbeddedPlotWidgetDynamic(update_interval=500, num_generations=num_generations)  # Update every 0.5 seconds
 
         # Add widgets to layout in the correct order
         layout.addWidget(run_button)

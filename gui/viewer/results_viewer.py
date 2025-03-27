@@ -124,7 +124,7 @@ class EmbeddedPlotWidget(QWidget):
 
 
 class EmbeddedPlotWidgetDynamic(QWidget):
-    def __init__(self, parent=None, update_interval=1000):
+    def __init__(self, parent=None, num_generations=10, update_interval=1000):
         super().__init__(parent)
         
         # Create a layout for the widget
@@ -148,7 +148,7 @@ class EmbeddedPlotWidgetDynamic(QWidget):
         
         # Flag to prevent multiple simultaneous updates
         self.is_updating = False
-        self.num_generations = 10
+        self.num_generations = num_generations
 
         self.draw_base_plot(self.figure.add_subplot(111))
 
@@ -192,7 +192,6 @@ class EmbeddedPlotWidgetDynamic(QWidget):
             )
 
             if df.empty or not ((df["generation_index"] == 0) & df["fitness"].notna()).any():
-                print("Waiting for the first generation to complete...")
                 self.draw_base_plot(ax)  # Show base plot
                 return
 

@@ -49,6 +49,8 @@ def run_experiment(dbengine: Engine) -> None:
     parent_selection_function_params = sys.argv[5]
     survivor_selection_function = sys.argv[6]
     survivor_selection_function_params = sys.argv[7]
+    terrain_params = sys.argv[8]
+
 
     # create dictionaries from selection params
     parent_selection_function_params = eval(parent_selection_function_params)
@@ -75,7 +77,7 @@ def run_experiment(dbengine: Engine) -> None:
     - crossover_reproducer: Allows us to generate offspring from parents.
     - modular_robot_evolution: The evolutionary process as a object that can be iterated.
     """
-    evaluator = Evaluator(headless=True, num_simulators=simulation_config.NUM_SIMULATORS, terrain=terrain, task=task, fitness_function=fitness_function)
+    evaluator = Evaluator(headless=True, num_simulators=simulation_config.NUM_SIMULATORS, terrain=terrain, terrain_params=terrain_params ,task=task, fitness_function=fitness_function)
     parent_selector = ParentSelector(offspring_size=config.OFFSPRING_SIZE, rng=rng, selection_func=parent_selection_function, selection_params=parent_selection_function_params)
     survivor_selector = SurvivorSelector(rng=rng, selection_func=survivor_selection_function, selection_params=survivor_selection_function_params)
     crossover_reproducer = CrossoverReproducer(rng=rng, innov_db_body=innov_db_body, innov_db_brain=innov_db_brain)

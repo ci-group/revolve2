@@ -366,6 +366,7 @@ class RobotEvolutionGUI(QMainWindow):
 
             if key == "FITNESS_EVAL_DURATION":
                 comment_label = QLabel("(seconds)")
+                comment_label.setToolTip("This is how long a single robot will be evaluated for.")
                 input_layout.addWidget(input_label)
                 input_layout.addWidget(input_field)
                 input_layout.addWidget(comment_label)

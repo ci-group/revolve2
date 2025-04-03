@@ -73,11 +73,11 @@ class RobotEvolutionGUI(QMainWindow):
     def run_simulation(self):        
         task = self.task_dropdown.currentText()
         fitness_function = self.fitness_dropdown.currentText()
-        terrain = self.gather_terrain_params()
+        terrain, terrain_params = self.gather_terrain_params()
         parent_selection, parent_selection_params = self.gather_selection_params(self.parent_dropdown, self.parent_params_layout)
         survival_selection, survival_selection_params = self.gather_selection_params(self.survivor_dropdown, self.survivor_params_layout)
 
-        command = f'python gui/backend_example/main_from_gui.py {terrain} "{task}" {fitness_function} {parent_selection} {parent_selection_params} {survival_selection} {survival_selection_params}'
+        command = f'python gui/backend_example/main_from_gui.py {terrain} "{task}" {fitness_function} {parent_selection} {parent_selection_params} {survival_selection} {survival_selection_params} "{terrain_params}"'
         print(f"Running simulation with command: {command}")
         self.simulation_process = subprocess.Popen(command, shell=True)
 
@@ -218,7 +218,9 @@ class RobotEvolutionGUI(QMainWindow):
         # Parent selection dropdown
         self.parent_dropdown = QComboBox()
         self.parent_dropdown.addItems(self.selection_internal_to_display.values())
-        layout.addWidget(QLabel("Parent Selection: "))
+        self.parent_dropdown.setToolTip("Click the dropdown to choose the parent selection method to be used by your evolutionary algorithm.")
+        parent_title = QLabel("Parent Selection: ")
+        layout.addWidget(parent_title)
         layout.addWidget(self.parent_dropdown)
 
         # Parent selection parameters
@@ -233,6 +235,7 @@ class RobotEvolutionGUI(QMainWindow):
         # Survivor selection dropdown
         self.survivor_dropdown = QComboBox()
         self.survivor_dropdown.addItems(self.selection_internal_to_display.values())
+        self.survivor_dropdown.setToolTip("Click the dropdown to choose the survival selection method to be used by your evolutionary algorithm.")
         layout.addWidget(QLabel("Survivor Selection:"))
         layout.addWidget(self.survivor_dropdown)
         
@@ -596,7 +599,7 @@ class RobotEvolutionGUI(QMainWindow):
 
         terrain = f'"{terrain}({terrain_params_str})"'
 
-        return terrain
+        return terrain, terrain_params
         
     def create_fitness_tab(self):  # under development
         widget = QWidget()

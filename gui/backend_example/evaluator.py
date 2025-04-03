@@ -27,6 +27,7 @@ class Evaluator(Eval):
         headless: bool,
         num_simulators: int,
         terrain: str = "flat",
+        terrain_params: str = "",
         task: str = "gait_learning",
         fitness_function: str ="xy_displacement"
     ) -> None:
@@ -40,6 +41,11 @@ class Evaluator(Eval):
             headless=headless, num_simulators=num_simulators
         )
         self._terrain = eval(f"terrains.{terrain}")
+        if terrain_params != "":
+            self._terrain_params = eval(terrain_params)
+            print("terrain_params are : ", self._terrain_params)
+            print("terrain params_type is: ", type(self._terrain_params))
+            
         self._task = eval(task)
         self._fitness_function = fitness_function
 
@@ -79,8 +85,26 @@ class Evaluator(Eval):
                 fitness_function(
                     [states[i].get_modular_robot_simulation_state(robot)
                       for i in range(len(states))],
-                        radius=.25)
+                        radius=.15)
                 for robot, states in zip(robots, scene_states) 
+            ]
+
+        elif fitness_function is turning_in_place.turn_360_fitness:
+            fitnesses = [
+                fitness_function(
+                    [states[i].get_modular_robot_simulation_state(robot)
+                      for i in range(len(states))]
+                      )
+                for robot, states in zip(robots, scene_states) 
+            ]
+
+        elif fitness_function is uphill_locomotion.uphill_displacement:
+            fitnesses = [
+                fitness_function(states[0].get_modular_robot_simulation_state(robot),
+                                states[-1].get_modular_robot_simulation_state(robot),
+                                tilt_angle=float(self._terrain_params['tilt_angle']),
+                                tilt_direction=eval(self._terrain_params['tilt_direction']))
+                for robot, states in zip(robots, scene_states)
             ]
             
         # Initial and final states are enough for the other tasks.
@@ -105,6 +129,6 @@ def visualize_path(states):
     timestamp = datetime.datetime.now()
 
     plt.plot(x, y)
-    plt.show()
     plt.savefig(f'gui/resources/figures/path_{timestamp}.png')
+    plt.show()
     plt.close()

@@ -273,16 +273,40 @@ def main() -> None:
     setup_logging(file_name="log.txt")
 
     """
-    We open the database, only if it does not already exist.
-    If it did something when wrong in a previous run of this program, and we must manually figure out what to do with the existing database.
-    (maybe throw away?)
+    Try to create a new database. If it exists, we must decide manually how to handle it.
     """
-    dbengine = open_database_sqlite(
-        config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
-    )
-    # Create the structure of the database.
-    # Take a look at the 'Base' class.
-    Base.metadata.create_all(dbengine)
+    try:
+        dbengine = open_database_sqlite(
+            config.DATABASE_FILE, open_method=OpenMethod.NOT_EXISTS_AND_CREATE
+        )
+        # Create the structure of the database.
+        Base.metadata.create_all(dbengine)
+    except RuntimeError as e:
+        if "database exists" in str(e):
+            while True:
+                print("\nDatabase already exists. Choose an option:")
+                print("1. Erase existing database and create new one")
+                print("2. Continue with existing database")
+                choice = input("Enter your choice (1 or 2): ")
+                
+                if choice == "1":
+                    # Overwrite existing database
+                    dbengine = open_database_sqlite(
+                        config.DATABASE_FILE, open_method=OpenMethod.OVERWITE_IF_EXISTS
+                    )
+                    Base.metadata.create_all(dbengine)
+                    break
+                elif choice == "2":
+                    # Use existing database
+                    dbengine = open_database_sqlite(
+                        config.DATABASE_FILE, open_method=OpenMethod.OPEN_IF_EXISTS
+                    )
+                    break
+                else:
+                    print("Invalid choice. Please enter 1 or 2.")
+        else:
+            # If it's some other error, raise it
+            raise e
 
     # We are running several repetitions of the same experiment.
     for _ in range(config.NUM_REPETITIONS):

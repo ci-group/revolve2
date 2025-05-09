@@ -12,3 +12,6 @@ pytest -s
 ```
 
 For more info, see the [pytest docs](https://docs.pytest.org/).
+
+# Running reality gap tests
+Refer to the README in the reality_gap folder.

@@ -178,8 +178,6 @@ class ParallelRobotController:
     
     def on_prepared(self) -> None:
         """Called when the physical robot is prepared."""
-        print("Physical robot ready. Press Enter to start.")
-        input()
         self.phys_running = True
     
     def start_simulation(self):

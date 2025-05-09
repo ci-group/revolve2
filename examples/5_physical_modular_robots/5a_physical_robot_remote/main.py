@@ -44,9 +44,9 @@ def make_body() -> (
         body.core_v2.right_face.bottom.attachment,
     )
     """Here we add a camera sensor to the core. If you don't have a physical camera attached, uncomment this line."""
-    body.core.add_sensor(
-        CameraSensor(position=Vector3([0, 0, 0]), camera_size=(480, 640))
-    )
+    # body.core.add_sensor(
+    #     CameraSensor(position=Vector3([0, 0, 0]), camera_size=(480, 640))
+    # )
     return body, active_hinges
 
 
@@ -79,10 +79,10 @@ def main() -> None:
     """
     hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {
-        UUIDKey(hinge_1): 21,
-        UUIDKey(hinge_2): 26,
-        UUIDKey(hinge_3): 20,
-        UUIDKey(hinge_4): 21,
+        UUIDKey(hinge_1): 0,
+        UUIDKey(hinge_2): 1,
+        UUIDKey(hinge_3): 2,
+        UUIDKey(hinge_4): 13,
     }
 
     """
@@ -112,7 +112,7 @@ def main() -> None:
     print("Initializing robot..")
     run_remote(
         config=config,
-        hostname="localhost",  # "Set the robot IP here.
+        hostname="10.15.3.39",  # "Set the robot IP here.
         debug=True,
         on_prepared=on_prepared,
         display_camera_view=False,

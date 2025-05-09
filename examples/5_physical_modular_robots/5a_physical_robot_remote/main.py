@@ -79,10 +79,10 @@ def main() -> None:
     """
     hinge_1, hinge_2, hinge_3, hinge_4 = hinges
     hinge_mapping = {
-        UUIDKey(hinge_1): 0,
-        UUIDKey(hinge_2): 1,
-        UUIDKey(hinge_3): 2,
-        UUIDKey(hinge_4): 13,
+        UUIDKey(hinge_1): 21,
+        UUIDKey(hinge_2): 26,
+        UUIDKey(hinge_3): 20,
+        UUIDKey(hinge_4): 21,
     }
 
     """
